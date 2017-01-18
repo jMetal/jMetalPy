@@ -4,4 +4,4 @@ I have just started a new project called jMetalPy. The initial idea is not to wr
 
 There is no code yet. Any ideas about how the project structure, coding style, useful tools (I'm using PyCharm), etc. are welcome. The starting point is the jMetal architecture:
 
-![jMetal architecture](resources/jMetalarchitecture.png)
+![jMetal architecture](resources/jMetal5UML.png)
