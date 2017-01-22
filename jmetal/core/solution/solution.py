@@ -10,8 +10,8 @@ class Solution(Generic[T]):
 
     def __init__(self, number_of_objectives: int, number_of_variables: int):
         self.objective = []
-        self.attribute = {}
         self.variable = []
+        self.attribute = {}
         self.number_of_objectives = number_of_objectives
         self.number_of_variables = number_of_variables
 
@@ -28,7 +28,10 @@ class Solution(Generic[T]):
         return self.variable[index]
 
     def get_number_of_objectives(self) -> int:
-        return len(self.number_of_objectives)
+        return self.number_of_objectives
+
+    def get_number_of_variables(self) -> int:
+        return self.number_of_variables
 
     def set_attribute(self, key: Any, value: Any) -> None:
         self.attributes[key] = value
