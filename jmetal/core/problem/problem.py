@@ -1,5 +1,4 @@
 from typing import TypeVar, Generic
-from jmetal.core.solution.solution import Solution
 
 S = TypeVar('S')
 
