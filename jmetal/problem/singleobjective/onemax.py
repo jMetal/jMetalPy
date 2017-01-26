@@ -23,7 +23,7 @@ class OneMax(BinaryProblem):
 
     def create_solution(self) -> BinarySolution:
         new_solution = BinarySolution(number_of_variables=1, number_of_objectives=1)
-        new_solution.variables = \
+        new_solution.variables[0] = \
             [True if random.randint(0, 1) == 0 else False for i in range(self.number_of_bits)]
 
         return new_solution

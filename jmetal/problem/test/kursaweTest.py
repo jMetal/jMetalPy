@@ -18,6 +18,7 @@ class TestMethods(unittest.TestCase):
         problem = Kursawe()
         self.assertEqual(3, problem.number_of_variables)
         self.assertEqual(2, problem.number_of_objectives)
+        self.assertEqual(0, problem.number_of_constraints)
 
         self.assertEqual([-5.0, -5.0, -5.0], problem.lower_bound)
         self.assertEqual([5.0, 5.0, 5.0], problem.upper_bound)
@@ -26,16 +27,18 @@ class TestMethods(unittest.TestCase):
         problem = Kursawe(5)
         self.assertEqual(5, problem.number_of_variables)
         self.assertEqual(2, problem.number_of_objectives)
+        self.assertEqual(0, problem.number_of_constraints)
 
         self.assertEqual([-5.0, -5.0, -5.0, -5.0, -5.0], problem.lower_bound)
         self.assertEqual([5.0, 5.0, 5.0, 5.0, 5.0], problem.upper_bound)
 
-    def test_should_constructor_create_a_valid_float_solution(self):
+    def test_should_create_solution_create_a_valid_float_solution(self):
         problem = Kursawe(3)
         solution = problem.create_solution()
 
         self.assertEqual(3, solution.number_of_variables)
         self.assertEqual(2, solution.number_of_objectives)
+        self.assertEqual(0, problem.number_of_constraints)
 
         self.assertEqual([-5.0, -5.0, -5.0], problem.lower_bound)
         self.assertEqual([5.0, 5.0, 5.0], problem.upper_bound)
