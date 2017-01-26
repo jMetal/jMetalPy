@@ -8,8 +8,8 @@ __author__ = "Antonio J. Nebro"
 
 class Solution(Generic[T]):
 
-    def __init__(self, number_of_objectives: int, number_of_variables: int):
-        self.objective = []
+    def __init__(self, number_of_variables: int, number_of_objectives: int):
+        self.objective = [0.0 for x in range(number_of_objectives)]
         self.variable = []
         self.attribute = {}
         self.number_of_objectives = number_of_objectives

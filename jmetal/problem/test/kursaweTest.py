@@ -1,6 +1,6 @@
 import unittest
 
-from jmetal.core.solution.solution import Solution
+from jmetal.problem.multiobjective.kursawe import Kursawe
 
 __author__ = "Antonio J. Nebro"
 
@@ -11,11 +11,11 @@ class TestMethods(unittest.TestCase):
         pass
 
     def test_should_constructor_create_a_non_null_object(self):
-        solution = Solution[int](3, 2)
-        self.assertIsNotNone(solution)
+        problem = Kursawe(3)
+        self.assertIsNotNone(problem)
 
-    def test_should_constructor_create_a_valid_solution_of_ints(self):
-        solution = Solution[int](3, 2)
+    def test_should_constructor_create_a_valid_problem(self):
+        problem = Kursawe(3)
         self.assertEqual(3, solution.get_number_of_variables())
         self.assertEqual(2, solution.get_number_of_objectives())
 

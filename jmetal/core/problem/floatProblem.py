@@ -23,10 +23,10 @@ class FloatProblem(FloatSolution):
     def set_upper_bounds(self, upper_bound_list: []) -> None:
         self.upper_bound = upper_bound_list
 
-    def evaluate(self, solution: S):
+    def evaluate(self, solution: FloatSolution):
         pass
 
-    def create_solution(self)->S:
+    def create_solution(self)->FloatSolution:
         pass
 
 
