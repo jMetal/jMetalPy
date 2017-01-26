@@ -13,12 +13,8 @@ class Kursawe(FloatProblem):
         self.number_of_variables = number_of_variables
         self.number_of_constraints = 0
 
-        upper_bound = [5.0 for i in range(number_of_variables)]
-        lower_bound = [-5.0 for i in range(number_of_variables)]
-
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
+        self.lower_bound = [-5.0 for i in range(number_of_variables)]
+        self.upper_bound = [5.0 for i in range(number_of_variables)]
 
     def evaluate(self, solution: FloatSolution):
         '''
@@ -36,8 +32,8 @@ class Kursawe(FloatProblem):
 
             fx[1] += pow(abs(solution.variables[i]), 0.8) + 5.0 * sin(pow(solution.variables[i], 3.0))
 
-            solution.set_objective(0, fx[0])
-            solution.set_objective(1, fx[1])
+            solution.objectives[0] = fx[0]
+            solution.objectives[1] = fx[1]
 
     def create_solution(self) -> FloatSolution:
         new_solution = FloatSolution(self.number_of_variables, self.number_of_objectives, self.lower_bound, self.upper_bound)

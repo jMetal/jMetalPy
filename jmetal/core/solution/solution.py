@@ -1,4 +1,4 @@
-from typing import Any, TypeVar, Generic
+from typing import Any, TypeVar, Generic, List
 
 T = TypeVar('T')
 
@@ -13,22 +13,22 @@ class Solution(Generic[T]):
         self.number_of_variables = number_of_variables
 
         self.objectives = [0.0 for x in range(self.number_of_objectives)]
-        self.variables = []
+        self.variables = [[] for x in range(self.number_of_variables)]
         self.attributes = {}
 
     '''
 
     def set_objective(self, index: int, value: float) -> None:
-        self.objective[index] = value
+        self.objectives[index] = value
 
     def get_objective(self, index: int) -> float:
-        return self.objective[index]
+        return self.objectives[index]
 
     def set_variable(self, index: int, value: T) -> None:
-        self.variable[index] = value
+        self.variables[index] = value
 
     def get_objective(self, index: int) -> T:
-        return self.variable[index]
+        return self.variables[index]
 
     def get_number_of_objectives(self) -> int:
         return self.number_of_objectives

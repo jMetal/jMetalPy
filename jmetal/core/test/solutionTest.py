@@ -25,10 +25,10 @@ class TestMethods(unittest.TestCase):
         self.assertEqual(3, solution.number_of_variables)
         self.assertEqual(2, solution.number_of_objectives)
 
-    def test_should_constructor_create_a_non_none_objective_list(self):
+    def test_should_constructor_create_a_non_null_objective_list(self):
         solution = Solution[float](3, 2)
 
-        self.assertIsNotNone(solution.objective)
+        self.assertIsNotNone(solution.objectives)
 
 if __name__ == '__main__':
     unittest.main()
