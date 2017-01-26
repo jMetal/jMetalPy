@@ -14,21 +14,34 @@ class TestMethods(unittest.TestCase):
         problem = Kursawe(3)
         self.assertIsNotNone(problem)
 
-    def test_should_constructor_create_a_valid_problem(self):
+    def test_should_constructor_create_a_valid_problem_with_default_settings(self):
+        problem = Kursawe()
+        self.assertEqual(3, problem.number_of_variables)
+        self.assertEqual(2, problem.number_of_objectives)
+
+        self.assertEqual([-5.0, -5.0, -5.0], problem.lower_bound)
+        self.assertEqual([5.0, 5.0, 5.0], problem.upper_bound)
+
+    def test_should_constructor_create_a_valid_problem_with_5_variables(self):
+        problem = Kursawe(5)
+        self.assertEqual(5, problem.number_of_variables)
+        self.assertEqual(2, problem.number_of_objectives)
+
+        self.assertEqual([-5.0, -5.0, -5.0, -5.0, -5.0], problem.lower_bound)
+        self.assertEqual([5.0, 5.0, 5.0, 5.0, 5.0], problem.upper_bound)
+
+    def test_should_constructor_create_a_valid_float_solution(self):
         problem = Kursawe(3)
-        self.assertEqual(3, solution.get_number_of_variables())
-        self.assertEqual(2, solution.get_number_of_objectives())
+        solution = problem.create_solution()
 
-    def test_should_constructor_create_a_valid_solution_of_floats(self):
-        solution = Solution[float](3, 2)
+        self.assertEqual(3, solution.number_of_variables)
+        self.assertEqual(2, solution.number_of_objectives)
 
-        self.assertEqual(3, solution.get_number_of_variables())
-        self.assertEqual(2, solution.get_number_of_objectives())
+        self.assertEqual([-5.0, -5.0, -5.0], problem.lower_bound)
+        self.assertEqual([5.0, 5.0, 5.0], problem.upper_bound)
 
-    def test_should_constructor_create_a_non_none_objective_list(self):
-        solution = Solution[float](3.3, 2.42)
-
-        self.assertIsNotNone(solution.objective)
+        self.assertTrue(solution.variables[0] >= -5.0)
+        self.assertTrue(solution.variables[0] <= 5.0)
 
 if __name__ == '__main__':
     unittest.main()

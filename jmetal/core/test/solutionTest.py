@@ -16,17 +16,17 @@ class TestMethods(unittest.TestCase):
 
     def test_should_constructor_create_a_valid_solution_of_ints(self):
         solution = Solution[int](3, 2)
-        self.assertEqual(3, solution.get_number_of_variables())
-        self.assertEqual(2, solution.get_number_of_objectives())
+        self.assertEqual(3, solution.number_of_variables)
+        self.assertEqual(2, solution.number_of_objectives)
 
     def test_should_constructor_create_a_valid_solution_of_floats(self):
         solution = Solution[float](3, 2)
 
-        self.assertEqual(3, solution.get_number_of_variables())
-        self.assertEqual(2, solution.get_number_of_objectives())
+        self.assertEqual(3, solution.number_of_variables)
+        self.assertEqual(2, solution.number_of_objectives)
 
     def test_should_constructor_create_a_non_none_objective_list(self):
-        solution = Solution[float](3.3, 2.42)
+        solution = Solution[float](3, 2)
 
         self.assertIsNotNone(solution.objective)
 

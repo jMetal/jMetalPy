@@ -9,11 +9,14 @@ __author__ = "Antonio J. Nebro"
 class Solution(Generic[T]):
 
     def __init__(self, number_of_variables: int, number_of_objectives: int):
-        self.objective = [0.0 for x in range(number_of_objectives)]
-        self.variable = []
-        self.attribute = {}
         self.number_of_objectives = number_of_objectives
         self.number_of_variables = number_of_variables
+
+        self.objectives = [0.0 for x in range(self.number_of_objectives)]
+        self.variables = []
+        self.attributes = {}
+
+    '''
 
     def set_objective(self, index: int, value: float) -> None:
         self.objective[index] = value
@@ -38,3 +41,5 @@ class Solution(Generic[T]):
 
     def get_attribute(self, key: Any) -> Any:
         return self.attributes[key]
+
+    '''

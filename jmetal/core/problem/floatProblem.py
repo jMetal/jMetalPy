@@ -11,6 +11,13 @@ class FloatProblem(FloatSolution):
     def __init__(self):
         pass
 
+    def evaluate(self, solution: FloatSolution):
+        pass
+
+    def create_solution(self)->FloatSolution:
+        pass
+
+    '''
     def get_lower_bound(self, index: int) -> float:
         return self.lower_bound[index]
 
@@ -23,10 +30,7 @@ class FloatProblem(FloatSolution):
     def set_upper_bounds(self, upper_bound_list: []) -> None:
         self.upper_bound = upper_bound_list
 
-    def evaluate(self, solution: FloatSolution):
-        pass
+    '''
 
-    def create_solution(self)->FloatSolution:
-        pass
 
 
