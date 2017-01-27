@@ -1,4 +1,5 @@
 from typing import TypeVar
+
 from jmetal.core.solution.binarySolution import BinarySolution
 
 S = TypeVar('S')

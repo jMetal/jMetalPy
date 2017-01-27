@@ -1,5 +1,6 @@
-from jmetal.core.solution.solution import Solution
 from typing import List
+
+from jmetal.core.solution.solution import Solution
 
 """ Class representing float solutions """
 __author__ = "Antonio J. Nebro"

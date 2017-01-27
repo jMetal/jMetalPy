@@ -1,7 +1,8 @@
+import random
 from math import sqrt, exp, pow, sin
+
 from jmetal.core.problem.floatProblem import FloatProblem
 from jmetal.core.solution.floatSolution import FloatSolution
-import random
 
 """ Class representing problem Kursawe """
 __author__ = "Antonio J. Nebro"

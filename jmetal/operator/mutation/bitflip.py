@@ -3,11 +3,11 @@ import random
 from jmetal.core.problem.binaryProblem import BinaryProblem
 from jmetal.core.solution.binarySolution import BinarySolution
 
-""" Class representing problem Kursawe """
+""" Class implementing the binary BitFlip mutation operator """
 __author__ = "Antonio J. Nebro"
 
 
-class OneMax(BinaryProblem):
+class BitFlip(MutationOperator):
     def __init__(self, number_of_bits: int = 256):
         self.number_of_bits = number_of_bits
         self.number_of_objectives = 1
