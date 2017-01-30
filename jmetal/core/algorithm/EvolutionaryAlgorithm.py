@@ -1,20 +1,20 @@
 from typing import TypeVar, Generic, List
 
-Solution = TypeVar('S')
-Result = TypeVar('R')
+S = TypeVar('S')
+R = TypeVar('R')
 
 """ Class representing evolutionary algorithms """
 __author__ = "Antonio J. Nebro"
 
 
-class EvolutionaryAlgorithm((Generic[Solution], Result)):
+class EvolutionaryAlgorithm(Generic[S], R):
     def __init__(self):
-        self.population = List[Solution]
+        self.population = List[S]
 
-    def create_initial_population(self) -> List[Solution]:
+    def create_initial_population(self) -> List[S]:
         pass
 
-    def evaluate_population(self, population: List[Solution]) -> List[Solution]:
+    def evaluate_population(self, population: List[S]) -> List[S]:
         pass
 
     def init_progress(self) -> None:
@@ -23,19 +23,19 @@ class EvolutionaryAlgorithm((Generic[Solution], Result)):
     def is_stopping_condition_reached(self) -> bool:
         pass
 
-    def selection(self, population: List[Solution]) -> List[Solution]:
+    def selection(self, population: List[S]) -> List[S]:
         pass
 
-    def reproduction(self, population: List[Solution]) -> List[Solution]:
+    def reproduction(self, population: List[S]) -> List[S]:
         pass
 
-    def replacement(self, population: List[Solution], offspring_population: List[Solution]) -> List[Solution]:
+    def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
         pass
 
     def update_progress(self):
         pass
 
-    def get_result(self)->Result:
+    def get_result(self)->R:
         pass
 
     def run(self):
