@@ -15,6 +15,7 @@ class OneMax(BinaryProblem):
         self.number_of_constraints = 0
 
     def evaluate(self, solution: BinarySolution):
+        print("ONE max: evaluate called()")
         counter_of_ones = 0
         for bits in solution.variables[0]:
             if bits:
@@ -28,3 +29,7 @@ class OneMax(BinaryProblem):
             [True if random.randint(0, 1) == 0 else False for i in range(self.number_of_bits)]
 
         return new_solution
+
+    def get_name(self):
+        return "OneMax"
+

@@ -15,7 +15,6 @@ class BitFlip(MutationOperator[BinarySolution]):
         for i in range(solution.number_of_variables):
             for j in range(len(solution.variables[i])):
                 rand = random.random()
-                print(rand, self.probability)
                 if rand <= self.probability:
                     solution.variables[i][j] = True if solution.variables[i][j] == False else False
 

@@ -1,5 +1,6 @@
 from typing import TypeVar
 
+from jmetal.core.problem.problem import Problem
 from jmetal.core.solution.floatSolution import FloatSolution
 
 S = TypeVar('S')
@@ -8,7 +9,7 @@ S = TypeVar('S')
 __author__ = "Antonio J. Nebro"
 
 
-class FloatProblem(FloatSolution):
+class FloatProblem(Problem[FloatSolution]):
     def __init__(self):
         pass
 

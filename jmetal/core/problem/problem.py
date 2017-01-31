@@ -18,4 +18,7 @@ class Problem(Generic[S]):
     def create_solution(self)->S:
         pass
 
+    def get_name(self) -> str:
+        pass
+
 
