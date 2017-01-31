@@ -12,7 +12,6 @@ __author__ = "Antonio J. Nebro"
 class EvolutionaryAlgorithm(Generic[S, R]):
     def __init__(self):
         self.population = []
-        print("EA constructor")
 
     def create_initial_population(self) -> List[S]:
         pass
@@ -51,3 +50,6 @@ class EvolutionaryAlgorithm(Generic[S, R]):
             offspring_population = self.evaluate_population(offspring_population)
             self.population = self.replacement(self.population, offspring_population)
             self.update_progress()
+
+    def get_name(self):
+        pass

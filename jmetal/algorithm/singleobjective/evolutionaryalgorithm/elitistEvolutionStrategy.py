@@ -22,16 +22,12 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
     def __init__(self, problem: Problem[S], mu: int, lambdA: int,
                  max_evaluations: int, mutation_operator: MutationOperator[S]):
         super(ElitistEvolutionStrategy, self).__init__()
-        print("INIT EA")
         self.problem = problem
         self.mu = mu
         self.lambdA = lambdA
         self.max_evaluations = max_evaluations
         self.mutation_operator = mutation_operator
         self.evaluations = 0
-        print("MU: " + str(self.mu))
-        print("Problem: " + self.problem.get_name())
-        print("Max Evals: " + str(self.max_evaluations))
 
     def init_progress(self):
         self.evaluations = self.mu
@@ -70,7 +66,6 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         for solution in offspring_population:
             self.population.append(solution)
 
-        #population.sort(key=lambda s: s.objectives[0], reverse=True)
         population.sort(key=lambda s: s.objectives[0])
 
         new_population = []
@@ -82,20 +77,5 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
     def get_result(self) -> R:
         return self.population[0]
 
-algorithm = ElitistEvolutionStrategy[BinarySolution, BinarySolution]\
-    (OneMax(256), mu=1, lambdA=1, max_evaluations= 5000, mutation_operator=BitFlip(1.0/256))
-
-algorithm.run()
-result = algorithm.get_result()
-print("Solution: " + str(result.variables[0]))
-print("Fitness:  " + str(result.objectives[0]))
-
-
-print("------")
-algorithm = ElitistEvolutionStrategy[FloatSolution, FloatSolution]\
-    (Sphere(), mu=10, lambdA=10, max_evaluations= 50000, mutation_operator=Polynomial(1.0/10.0))
-
-algorithm.run()
-result = algorithm.get_result()
-print("Solution: " + str(result.variables))
-print("Fitness:  " + str(result.objectives[0]))
+    def get_name(self):
+        return "("+str(self.mu)+ "+" + str(self.lambdA)+")ES"
