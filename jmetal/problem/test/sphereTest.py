@@ -65,6 +65,10 @@ class TestMethods(unittest.TestCase):
         self.assertTrue(solution.variables[0] >= -5.12)
         self.assertTrue(solution.variables[0] <= 5.12)
 
+    def test_should_get_name_return_the_right_name(self):
+        problem = Sphere()
+        self.assertEqual("Sphere", problem.get_name())
+
 if __name__ == '__main__':
     unittest.main()
 

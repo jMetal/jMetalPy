@@ -52,6 +52,10 @@ class TestMethods(unittest.TestCase):
         problem.evaluate(solution)
         self.assertEqual(0.0, solution.objectives[0])
 
+    def test_should_get_name_return_the_right_name(self):
+        problem = OneMax()
+        self.assertEqual("OneMax", problem.get_name())
+
 if __name__ == '__main__':
     unittest.main()
 

@@ -48,6 +48,10 @@ class TestMethods(unittest.TestCase):
         self.assertTrue(solution.variables[0] >= -5.0)
         self.assertTrue(solution.variables[0] <= 5.0)
 
+    def test_should_get_name_return_the_right_name(self):
+        problem = Kursawe()
+        self.assertEqual("Kursawe", problem.get_name())
+
 if __name__ == '__main__':
     unittest.main()
 

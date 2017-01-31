@@ -7,7 +7,6 @@ __author__ = "Antonio J. Nebro"
 
 
 class Solution(Generic[T]):
-
     def __init__(self, number_of_variables: int, number_of_objectives: int):
         self.number_of_objectives = number_of_objectives
         self.number_of_variables = number_of_variables
