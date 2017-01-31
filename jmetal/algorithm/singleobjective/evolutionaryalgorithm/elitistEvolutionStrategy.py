@@ -70,7 +70,8 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         for solution in offspring_population:
             self.population.append(solution)
 
-        population.sort(key=lambda s: s.objectives[0], reverse=True)
+        #population.sort(key=lambda s: s.objectives[0], reverse=True)
+        population.sort(key=lambda s: s.objectives[0])
 
         new_population = []
         for i in range(self.mu):
@@ -81,7 +82,6 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
     def get_result(self) -> R:
         return self.population[0]
 
-
 algorithm = ElitistEvolutionStrategy[BinarySolution, BinarySolution]\
     (OneMax(256), mu=1, lambdA=1, max_evaluations= 5000, mutation_operator=BitFlip(1.0/256))
 
@@ -91,8 +91,9 @@ print("Solution: " + str(result.variables[0]))
 print("Fitness:  " + str(result.objectives[0]))
 
 
+print("------")
 algorithm = ElitistEvolutionStrategy[FloatSolution, FloatSolution]\
-    (Sphere(), mu=1, lambdA=1, max_evaluations= 5000, mutation_operator=Polynomial(1.0/10.0))
+    (Sphere(), mu=10, lambdA=10, max_evaluations= 50000, mutation_operator=Polynomial(1.0/10.0))
 
 algorithm.run()
 result = algorithm.get_result()

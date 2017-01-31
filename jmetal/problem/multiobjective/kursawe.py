@@ -17,13 +17,10 @@ class Kursawe(FloatProblem):
         self.lower_bound = [-5.0 for i in range(number_of_variables)]
         self.upper_bound = [5.0 for i in range(number_of_variables)]
 
+        FloatSolution.lower_bound = self.lower_bound
+        FloatSolution.upper_bound = self.upper_bound
+
     def evaluate(self, solution: FloatSolution):
-        '''
-
-        :param solution:
-        :return:
-        '''
-
         fx = [0.0 for x in range(self.number_of_objectives)]
         for i in range(self.number_of_variables):
             xi = solution.variables[i] * solution.variables[i]
@@ -35,13 +32,6 @@ class Kursawe(FloatProblem):
 
         solution.objectives[0] = fx[0]
         solution.objectives[1] = fx[1]
-
-    def create_solution(self) -> FloatSolution:
-        new_solution = FloatSolution(self.number_of_variables, self.number_of_objectives, self.lower_bound, self.upper_bound)
-        new_solution.variables = \
-            [random.uniform(self.lower_bound[i]*1.0, self.upper_bound[i]*1.0) for i in range(self.number_of_variables)]
-
-        return new_solution
 
     def get_name(self):
         return "Kursawe"

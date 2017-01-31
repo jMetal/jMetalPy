@@ -5,10 +5,10 @@ __author__ = "Antonio J. Nebro"
 
 
 class FloatSolution(Solution[float]):
-    def __init__(self, number_of_variables:int, number_of_objectives: int, lower_bound = [], upper_bound=[]):
+    lower_bound = []
+    upper_bound = []
+    def __init__(self, number_of_variables:int, number_of_objectives: int):
         super(FloatSolution, self).__init__(number_of_variables, number_of_objectives)
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
 
     '''
     def get_lower_bound(self, index: int) -> float:

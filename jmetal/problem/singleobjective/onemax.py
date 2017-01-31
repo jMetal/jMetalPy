@@ -20,7 +20,7 @@ class OneMax(BinaryProblem):
             if bits:
                 counter_of_ones += 1
 
-        solution.objectives[0] = counter_of_ones
+        solution.objectives[0] = -1.0 * counter_of_ones
 
     def create_solution(self) -> BinarySolution:
         new_solution = BinarySolution(number_of_variables=1, number_of_objectives=1)

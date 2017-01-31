@@ -13,7 +13,7 @@ class Solution(Generic[T]):
         self.number_of_variables = number_of_variables
 
         self.objectives = [0.0 for x in range(self.number_of_objectives)]
-        self.variables = [[] for x in range(self.number_of_variables)]
+        self.variables = [T]
         self.attributes = {}
 
     '''

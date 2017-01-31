@@ -31,13 +31,23 @@ class TestMethods(unittest.TestCase):
     def test_should_the_solution_remain_unchanged_if_the_probability_is_zero(self):
         operator = Polynomial(0.0)
         solution = FloatSolution(number_of_variables=2, number_of_objectives=1)
-        solution.variables[0] = [1.0, 2.0, 3.0]
-        solution.variables[1] = [-1.0, 4.0, 5.0]
-        solution.upper_bound = []
+        solution.variables = [1.0, 2.0, 3.0]
+        FloatSolution.lower_bound = [-5, -5, -5]
+        FloatSolution.upper_bound = [5, 5, 5]
 
         mutated_solution = operator.execute(solution)
-        self.assertEqual([1.0, 2.0, 3.0], mutated_solution.variables[0])
-        self.assertEqual([-1.0, 4.0, 5.0], mutated_solution.variables[1])
+        self.assertEqual([1.0, 2.0, 3.0], mutated_solution.variables)
+
+    def test_should_the_solution_change__if_the_probability_is_one(self):
+        operator = Polynomial(1.0)
+        solution = FloatSolution(number_of_variables=2, number_of_objectives=1)
+        solution.variables = [1.0, 2.0, 3.0]
+        FloatSolution.lower_bound = [-5, -5, -5]
+        FloatSolution.upper_bound = [5, 5, 5]
+
+        mutated_solution = operator.execute(solution)
+
+        self.assertNotEqual([1.0, 2.0, 3.0], mutated_solution.variables)
 
 if __name__ == '__main__':
     unittest.main()
