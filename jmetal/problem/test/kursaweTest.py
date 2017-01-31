@@ -37,7 +37,9 @@ class TestMethods(unittest.TestCase):
         solution = problem.create_solution()
 
         self.assertEqual(3, solution.number_of_variables)
+        self.assertEqual(3, len(solution.variables))
         self.assertEqual(2, solution.number_of_objectives)
+        self.assertEqual(2, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints)
 
         self.assertEqual([-5.0, -5.0, -5.0], problem.lower_bound)

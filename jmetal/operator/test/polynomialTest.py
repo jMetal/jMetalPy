@@ -33,6 +33,7 @@ class TestMethods(unittest.TestCase):
         solution = FloatSolution(number_of_variables=2, number_of_objectives=1)
         solution.variables[0] = [1.0, 2.0, 3.0]
         solution.variables[1] = [-1.0, 4.0, 5.0]
+        solution.upper_bound = []
 
         mutated_solution = operator.execute(solution)
         self.assertEqual([1.0, 2.0, 3.0], mutated_solution.variables[0])

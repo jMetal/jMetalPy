@@ -15,7 +15,6 @@ class Polynomial(MutationOperator[FloatSolution]):
     def execute(self, solution: FloatSolution) -> FloatSolution:
         for i in range(solution.number_of_variables):
             rand = random.random()
-            print(rand, self.probability)
             if rand <= self.probability:
                 y = solution.variables[i]
                 yl = solution.lower_bound[i]

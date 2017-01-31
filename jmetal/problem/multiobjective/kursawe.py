@@ -33,14 +33,15 @@ class Kursawe(FloatProblem):
 
             fx[1] += pow(abs(solution.variables[i]), 0.8) + 5.0 * sin(pow(solution.variables[i], 3.0))
 
-            solution.objectives[0] = fx[0]
-            solution.objectives[1] = fx[1]
+        solution.objectives[0] = fx[0]
+        solution.objectives[1] = fx[1]
 
     def create_solution(self) -> FloatSolution:
         new_solution = FloatSolution(self.number_of_variables, self.number_of_objectives, self.lower_bound, self.upper_bound)
         new_solution.variables = \
-            [random.uniform(self.lower_bound[i]*1.0, self.upper_bound[i]*1.0) for x in range(self.number_of_variables)
-             for i in range(self.number_of_variables)]
+            [random.uniform(self.lower_bound[i]*1.0, self.upper_bound[i]*1.0) for i in range(self.number_of_variables)]
 
         return new_solution
 
+    def get_name(self):
+        return "Kursawe"
