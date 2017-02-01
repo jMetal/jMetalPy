@@ -6,6 +6,8 @@ from jmetal.operator.mutation.bitflip import BitFlip
 from jmetal.operator.mutation.polynomial import Polynomial
 from jmetal.problem.singleobjective.onemax import OneMax
 from jmetal.problem.singleobjective.sphere import Sphere
+import jmetal.core.solution as sol
+
 
 
 def main():
