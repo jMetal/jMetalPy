@@ -1,4 +1,3 @@
-from jmetal.algorithm.singleobjective.evolutionaryalgorithm.elitistEvolutionStrategy import ElitistEvolutionStrategy
 from jmetal.algorithm.singleobjective.evolutionaryalgorithm.nonElitistEvolutionStrategy import \
     NonElitistEvolutionStrategy
 from jmetal.core.solution.binarySolution import BinarySolution

@@ -1,7 +1,5 @@
 from typing import TypeVar, Generic, List
 
-from jmetal.core.solution.binarySolution import BinarySolution
-
 S = TypeVar('S')
 R = TypeVar('R')
 

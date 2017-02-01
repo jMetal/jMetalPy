@@ -1,6 +1,3 @@
-import random
-from math import sqrt, exp, pow, sin
-
 from jmetal.core.problem.floatProblem import FloatProblem
 from jmetal.core.solution.floatSolution import FloatSolution
 

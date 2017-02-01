@@ -1,16 +1,8 @@
-from typing import TypeVar, Generic, List
-from copy import deepcopy
+from typing import TypeVar, List
 
 from jmetal.algorithm.singleobjective.evolutionaryalgorithm.elitistEvolutionStrategy import ElitistEvolutionStrategy
 from jmetal.core.operator.mutationoperator import MutationOperator
-from jmetal.core.algorithm.evolutionaryAlgorithm import EvolutionaryAlgorithm
 from jmetal.core.problem.problem import Problem
-from jmetal.core.solution.binarySolution import BinarySolution
-from jmetal.core.solution.floatSolution import FloatSolution
-from jmetal.operator.mutation.bitflip import BitFlip
-from jmetal.operator.mutation.polynomial import Polynomial
-from jmetal.problem.singleobjective.onemax import OneMax
-from jmetal.problem.singleobjective.sphere import Sphere
 
 """ Class representing elitist evolution strategy algorithms """
 __author__ = "Antonio J. Nebro"
