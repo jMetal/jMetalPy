@@ -18,7 +18,7 @@ class CrossoverOperator(Operator[List[Source], List[Result]]):
 
         self.probability = probability
 
-    def execute(self, source: Source) -> Source:
+    def execute(self, source: Source) -> Result:
         pass
 
     def get_number_of_parents(self) -> int:
