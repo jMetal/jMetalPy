@@ -20,3 +20,6 @@ class CrossoverOperator(Operator[List[Source], List[Result]]):
 
     def execute(self, source: Source) -> Source:
         pass
+
+    def get_number_of_parents(self) -> int:
+        pass
