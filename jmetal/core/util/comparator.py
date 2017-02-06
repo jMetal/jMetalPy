@@ -11,30 +11,24 @@ def dominance_comparator(solution1: Solution, solution2: Solution, epsilon: floa
     elif len(solution1.objectives) != len(solution2.objectives):
         raise Exception("The solutions have different number of objectives")
 
-    solution1_dominates = False
-    solution2_dominates = False
+    best_is_one = 0
+    best_is_two = 0
 
     for i in range(solution1.number_of_objectives):
         value1 = solution1.objectives[i]
         value2 = solution2.objectives[i]
+        v1 = value1 / (1.0 + epsilon)
+        v2 = value2 / (1.0 + epsilon)
         if (value1 / (1.0 + epsilon)) < value2:
-            flag = -1
-        elif (value2 / (1.0 + epsilon)) < value1:
-            flag = 1
-        else:
-            flag = 0
+            best_is_one = 1
+        if (value2 / (1.0 + epsilon)) < value1:
+            best_is_two = 1
 
-        if flag == -1:
-            solution1_dominates = True
-
-        if flag == 1:
-            solution2_dominates = True
-
-    if solution1_dominates == solution2_dominates:
-        result = 0
-    elif solution1_dominates:
+    if best_is_one > best_is_two:
         result = -1
-    else:
+    elif best_is_two > best_is_one:
         result = 1
+    else:
+        result = 0
 
     return result
