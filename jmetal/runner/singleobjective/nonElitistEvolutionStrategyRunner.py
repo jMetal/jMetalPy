@@ -9,7 +9,6 @@ from jmetal.problem.singleobjective.sphere import Sphere
 import jmetal.core.solution as sol
 
 
-
 def main():
     binary_example()
     print()
