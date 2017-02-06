@@ -15,11 +15,13 @@ R = TypeVar('R')
 
 
 class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
-    def __init__(self, problem: Problem[S], population_size: int,
+    def __init__(self,
+                 problem: Problem[S],
+                 population_size: int,
                  max_evaluations: int,
                  mutation_operator: MutationOperator[S],
                  crossover_operator: CrossoverOperator[S, S],
-                 selection_operator: SelectionOperator[S]):
+                 selection_operator: SelectionOperator[List[S],S]):
         super(GenerationalGeneticAlgorithm, self).__init__()
         self.problem = problem
         self.population_size = population_size
@@ -62,7 +64,7 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         self.__check_number_of_parents(population, number_of_parents_to_combine)
 
         offspring_population = []
-        for i in range(self.population_size):
+        for i in range(0, self.population_size, number_of_parents_to_combine):
             parents = []
             for j in range(number_of_parents_to_combine):
                 parents.append(population[i+j])
@@ -84,8 +86,8 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
 
         offspring_population.sort(key=lambda s: s.objectives[0])
 
-        offspring_population.remove(len(offspring_population-1))
-        offspring_population.remove(len(offspring_population-1))
+        offspring_population.pop()
+        offspring_population.pop()
 
         return offspring_population
 
@@ -93,8 +95,8 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         return self.population[0]
 
     def get_name(self):
-        return "("+str(self.mu)+ "+" + str(self.lambdA)+")ES"
+        return "Generational Genetic Algorithm"
 
     def __check_number_of_parents(self, population: List[S], number_of_parents_for_crossover: int) -> bool:
-        if self.population_size // number_of_parents_for_crossover != 0:
+        if self.population_size % number_of_parents_for_crossover != 0:
             raise Exception("Wrong number of parents")

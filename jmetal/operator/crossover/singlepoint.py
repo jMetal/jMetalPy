@@ -24,7 +24,7 @@ class SinglePoint(CrossoverOperator[BinarySolution, BinarySolution]):
             total_number_of_bits = parents[0].get_total_number_of_bits()
 
             # 2. Calculate the point to make the crossover
-            crossover_point = random.uniform(0, total_number_of_bits - 1)
+            crossover_point = random.randrange(0, total_number_of_bits)
 
             # 3. Compute the variable containing the crossover bit
             variable_to_cut = 0
