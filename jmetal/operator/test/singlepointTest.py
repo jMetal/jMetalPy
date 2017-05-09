@@ -77,7 +77,6 @@ class TestMethods(unittest.TestCase):
         self.assertEqual([True, False, False, False, True, True], offspring[0].variables[0])
         self.assertEqual([False, True, False, True, True, False], offspring[1].variables[0])
 
-
     @mock.patch('random.randrange')
     def test_should_the_operator_work_with_a_solution_with_three_binary_variables(self, random_call):
         operator = SinglePoint(1.0)
