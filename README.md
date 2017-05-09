@@ -6,7 +6,7 @@ Any ideas about how the structure the project, coding style, useful tools (I'm u
 
 ![jMetal architecture](resources/jMetal5UML.png)
 
-# Current status
+# Current status (May 9th 2017)
 The current implementation contains the following features: 
 * Algorithms (single-objective)
   * (mu+lamba)Evolution Strategy
