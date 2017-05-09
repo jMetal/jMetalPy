@@ -14,10 +14,10 @@ def main():
 
 
 def binary_example() -> None:
-    bits = 256
+    bits = 512
     problem = OneMax(bits)
     algorithm = ElitistEvolutionStrategy[BinarySolution, BinarySolution]\
-        (problem, mu=1, lambdA=10, max_evaluations= 5000, mutation_operator=BitFlip(1.0/bits))
+        (problem, mu=1, lambdA=10, max_evaluations= 25000, mutation_operator=BitFlip(1.0/bits))
 
     algorithm.run()
     result = algorithm.get_result()

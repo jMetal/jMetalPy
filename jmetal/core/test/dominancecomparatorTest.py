@@ -1,7 +1,7 @@
 import unittest
 
 from jmetal.core.solution.floatSolution import FloatSolution
-from jmetal.core.util.comparator import dominance_comparator
+from jmetal.core.util.dominancecomparator import dominance_comparator
 
 __author__ = "Antonio J. Nebro"
 
@@ -115,47 +115,6 @@ class TestMethods(unittest.TestCase):
         solution2.objectives = [-2.0, 5.0, 10.0]
 
         self.assertEqual(0, dominance_comparator(solution, solution2))
-
-    def test_should_dominance_comparator_work_properly_with_epsilon_greater_than_zero_case_a(self):
-        '''
-        Case e: solution1 has objectives [5.0, 9.0] and solution2 has [5.0, 8.99]
-        and epsilon = 0.01
-        '''
-        solution = FloatSolution(3, 2)
-        solution2 = FloatSolution(3, 2)
-
-        solution.objectives = [5.0, 9.0]
-        solution2.objectives = [5.0, 8.99]
-
-        self.assertEqual(0, dominance_comparator(solution, solution2, 0.01))
-
-
-    def test_should_dominance_comparator_work_properly_with_epsilon_greater_than_zero_case_b(self):
-        '''
-        Case e: solution1 has objectives [5.0, 9.0] and solution2 has [5.0, 8.9]
-        and epsilon = 0.01
-        '''
-        solution = FloatSolution(3, 2)
-        solution2 = FloatSolution(3, 2)
-
-        solution.objectives = [5.0, 9.0]
-        solution2.objectives = [5.0, 8.9]
-
-        self.assertEqual(1, dominance_comparator(solution, solution2, 0.01))
-
-    def test_should_dominance_comparator_work_properly_with_epsilon_greater_than_zero_case_c(self):
-        '''
-        Case e: solution1 has objectives [5.0, 8.9] and solution2 has [5.0, 9.0]
-        and epsilon = 0.01
-        '''
-        solution = FloatSolution(3, 2)
-        solution2 = FloatSolution(3, 2)
-
-        solution.objectives = [5.0, 8.9]
-        solution2.objectives = [5.0, 9.0]
-
-        self.assertEqual(-1, dominance_comparator(solution, solution2, 0.01))
-
 
 if __name__ == '__main__':
     unittest.main()

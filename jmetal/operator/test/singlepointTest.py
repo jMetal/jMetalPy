@@ -3,10 +3,8 @@ from unittest import mock
 
 from jmetal.core.solution.binarySolution import BinarySolution
 from jmetal.operator.crossover.singlepoint import SinglePoint
-from jmetal.operator.mutation.bitflip import BitFlip
 
 __author__ = "Antonio J. Nebro"
-
 
 class TestMethods(unittest.TestCase):
 
@@ -40,8 +38,6 @@ class TestMethods(unittest.TestCase):
         self.assertEqual([True, False, False, True, True, False], offspring[0].variables[0])
         self.assertEqual([False, True, False, False, True, False], offspring[1].variables[0])
 
-
-    #@mock.patch('random.random')
     @mock.patch('random.uniform')
     def test_should_the_operator_work_if_the_first_bit_is_selected(self, random_call):
         operator = SinglePoint(1.0)

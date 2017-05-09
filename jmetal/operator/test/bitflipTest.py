@@ -23,6 +23,7 @@ class TestMethods(unittest.TestCase):
         with self.assertRaises(Exception):
             BitFlip(2)
 
+    # comentario
     def test_should_constructor_raise_an_exception_if_the_probability_is_lower_than_zero(self):
         with self.assertRaises(Exception):
             BitFlip(-12)

@@ -17,12 +17,10 @@ def dominance_comparator(solution1: Solution, solution2: Solution, epsilon: floa
     for i in range(solution1.number_of_objectives):
         value1 = solution1.objectives[i]
         value2 = solution2.objectives[i]
-        v1 = value1 / (1.0 + epsilon)
-        v2 = value2 / (1.0 + epsilon)
         if value1 != value2:
-            if (value1 / (1.0 + epsilon)) < value2:
+            if value1 < value2:
                 best_is_one = 1
-            if (value2 / (1.0 + epsilon)) < value1:
+            if value2 < value1:
                 best_is_two = 1
 
     if best_is_one > best_is_two:

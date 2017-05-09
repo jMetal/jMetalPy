@@ -11,7 +11,6 @@ __author__ = "Antonio J. Nebro"
 S = TypeVar('S')
 R = TypeVar('R')
 
-
 class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
     def __init__(self, problem: Problem[S], mu: int, lambdA: int,
                  max_evaluations: int, mutation_operator: MutationOperator[S]):

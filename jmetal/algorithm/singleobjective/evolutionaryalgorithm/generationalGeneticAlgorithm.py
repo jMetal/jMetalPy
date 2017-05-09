@@ -13,7 +13,6 @@ __author__ = "Antonio J. Nebro"
 S = TypeVar('S')
 R = TypeVar('R')
 
-
 class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
     def __init__(self,
                  problem: Problem[S],
@@ -44,6 +43,8 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         population = []
         for i in range(self.population_size):
             population.append(self.problem.create_solution())
+
+        p = (population.append(self.problem.create_solution()) for i in range (self.population_size))
         return population
 
     def evaluate_population(self, population: List[S]):
