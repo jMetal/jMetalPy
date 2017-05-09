@@ -38,7 +38,7 @@ class TestMethods(unittest.TestCase):
         self.assertEqual([True, False, False, True, True, False], offspring[0].variables[0])
         self.assertEqual([False, True, False, False, True, False], offspring[1].variables[0])
 
-    @mock.patch('random.uniform')
+    @mock.patch('random.randrange')
     def test_should_the_operator_work_if_the_first_bit_is_selected(self, random_call):
         operator = SinglePoint(1.0)
         solution1 = BinarySolution(number_of_variables=1, number_of_objectives=1)
@@ -51,7 +51,7 @@ class TestMethods(unittest.TestCase):
         self.assertEqual([False, True, False, False, True, False], offspring[0].variables[0])
         self.assertEqual([True, False, False, True, True, False], offspring[1].variables[0])
 
-    @mock.patch('random.uniform')
+    @mock.patch('random.randrange')
     def test_should_the_operator_work_if_the_last_bit_is_selected(self, random_call):
         operator = SinglePoint(1.0)
         solution1 = BinarySolution(number_of_variables=1, number_of_objectives=1)
@@ -64,7 +64,7 @@ class TestMethods(unittest.TestCase):
         self.assertEqual([True, False, False, True, True, True], offspring[0].variables[0])
         self.assertEqual([False, True, False, False, True, False], offspring[1].variables[0])
 
-    @mock.patch('random.uniform')
+    @mock.patch('random.randrange')
     def test_should_the_operator_work_if_the_third_bit_is_selected(self, random_call):
         operator = SinglePoint(1.0)
         solution1 = BinarySolution(number_of_variables=1, number_of_objectives=1)
@@ -78,7 +78,7 @@ class TestMethods(unittest.TestCase):
         self.assertEqual([False, True, False, True, True, False], offspring[1].variables[0])
 
 
-    @mock.patch('random.uniform')
+    @mock.patch('random.randrange')
     def test_should_the_operator_work_with_a_solution_with_three_binary_variables(self, random_call):
         operator = SinglePoint(1.0)
         solution1 = BinarySolution(number_of_variables=3, number_of_objectives=1)
