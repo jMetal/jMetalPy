@@ -9,8 +9,21 @@ Any ideas about how the structure the project, coding style, useful tools (I'm u
 # Current status
 The current implementation contains the following features: 
 * Algorithms (single-objective)
- * (mu+lamba)Evolution Strategy
- * (mu,lamba)Evolution Strategy
- * Generational Genetic algorithm
+  * (mu+lamba)Evolution Strategy
+  * (mu,lamba)Evolution Strategy
+  * Generational Genetic algorithm
 * Problems (multi-objective)
- * Kursawe
+  * Kursawe
+* Problems (single-objective)
+  * Sphere
+  * OneMax
+* Encoding
+  * Float
+  * Binary
+* Operators
+  * SBX Crossover
+  * Single Point Crossover
+  * Polynomial Mutation
+  * Bit Flip Mutation
+  * Binary Tournament Selection
+
