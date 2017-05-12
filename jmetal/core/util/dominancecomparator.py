@@ -3,7 +3,7 @@ from math import floor
 from jmetal.core.solution.solution import Solution
 
 
-def dominance_comparator(solution1: Solution, solution2: Solution, epsilon: float = 0.0) -> int:
+def dominance_comparator(solution1, solution2, epsilon = 0.0):
     if solution1 is None:
         raise Exception("The solution1 is None")
     elif solution2 is None:
