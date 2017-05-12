@@ -8,7 +8,7 @@ __author__ = "Antonio J. Nebro"
 
 
 class Kursawe(FloatProblem):
-    def __init__(self, number_of_variables: int = 3):
+    def __init__(self, number_of_variables = 3):
         self.number_of_objectives = 2
         self.number_of_variables = number_of_variables
         self.number_of_constraints = 0
@@ -19,7 +19,7 @@ class Kursawe(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution):
         fx = [0.0 for x in range(self.number_of_objectives)]
         for i in range(self.number_of_variables):
             xi = solution.variables[i] * solution.variables[i]
