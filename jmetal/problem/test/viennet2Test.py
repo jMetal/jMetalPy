@@ -48,7 +48,6 @@ class TestMethods(unittest.TestCase):
         self.assertAlmostEqual(solution2.objectives[1], -11.8818055555);
         self.assertAlmostEqual(solution2.objectives[2], -11.1532369747);
 
-
     def test_should_get_name_return_the_right_name(self):
         problem = Viennet2()
         self.assertEqual("Viennet2", problem.get_name())

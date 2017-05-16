@@ -19,11 +19,9 @@ class Viennet2(FloatProblem):
         x0 = solution.variables[0]
         x1 = solution.variables[1]
 
-
         f1 = (x0 - 2) * (x0 - 2) / 2.0 + (x1 + 1) * (x1 + 1) / 13.0 + 3.0
         f2 = (x0 + x1 - 3.0) * (x0 + x1 - 3.0) / 36.0 + (-x0 + x1 + 2.0) * (-x0 + x1 + 2.0) / 8.0 - 17.0
         f3 = (x0 + 2 * x1 - 1) * (x0 + 2 * x1 - 1) / 175.0 + (2 * x1 - x0) * (2 * x1 - x0) / 17.0 - 13.0
-
 
         solution.objectives[0] = f1
         solution.objectives[1] = f2

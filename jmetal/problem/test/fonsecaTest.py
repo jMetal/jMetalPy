@@ -46,7 +46,6 @@ class TestMethods(unittest.TestCase):
 
         problem.evaluate(solution1)
 
-
         self.assertAlmostEqual(solution1.objectives[0], 0.991563628, 4);
         self.assertAlmostEqual(solution1.objectives[1], 0.999663388, 4);
 

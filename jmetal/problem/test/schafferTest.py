@@ -38,6 +38,7 @@ class TestMethods(unittest.TestCase):
 
     def test_should_create_solution_return_right_evaluation_values(self):
         problem = Schaffer()
+
         solution1 = problem.create_solution()
         solution2 = problem.create_solution()
         solution1.variables[0] = 3
