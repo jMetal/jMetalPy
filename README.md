@@ -14,6 +14,9 @@ The current implementation contains the following features:
   * Generational Genetic algorithm
 * Problems (multi-objective)
   * Kursawe
+  * Fonseca
+  * Schaffer
+  * Viennet2
 * Problems (single-objective)
   * Sphere
   * OneMax
@@ -25,5 +28,8 @@ The current implementation contains the following features:
   * Single Point Crossover
   * Polynomial Mutation
   * Bit Flip Mutation
+  * Simple Random Mutation
+  * Null Mutation
+  * Uniform Mutation
   * Binary Tournament Selection
 
