@@ -11,6 +11,8 @@ S = TypeVar('S')
 class NaryRandomSolution(SelectionOperator[List[S], S]):
     def __init__(self, number_of_solutions_to_be_returned:int = 1):
         super(NaryRandomSolution, self).__init__()
+        if number_of_solutions_to_be_returned<0:
+            raise Exception("The number of solutions to be returned must be positive integer")
         self.number_of_solutions_to_be_returned = number_of_solutions_to_be_returned
 
     def execute(self, solution_list: List[S]) -> S:
