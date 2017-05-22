@@ -15,11 +15,11 @@ R = TypeVar('R')
 
 class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
     def __init__(self,
-                 problem: Problem[S],
-                 population_size: int,
-                 max_evaluations: int,
-                 mutation_operator: MutationOperator[S],
-                 crossover_operator: CrossoverOperator[S, S],
+                 Problem,
+                 population_size,
+                 max_evaluations,
+                 mutation_operator,
+                 crossover_operator,
                  selection_operator: SelectionOperator[List[S],S]):
         super(GenerationalGeneticAlgorithm, self).__init__()
         self.problem = problem
@@ -36,10 +36,10 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
     def update_progress(self):
         self.evaluations += self.population_size
 
-    def is_stopping_condition_reached(self) -> bool:
+    def is_stopping_condition_reached(self):
         return self.evaluations >= self.max_evaluations
 
-    def create_initial_population(self) -> List[S]:
+    def create_initial_population(self):
         population = []
         for i in range(self.population_size):
             population.append(self.problem.create_solution())
@@ -47,12 +47,12 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         p = (population.append(self.problem.create_solution()) for i in range (self.population_size))
         return population
 
-    def evaluate_population(self, population: List[S]):
+    def evaluate_population(self, population):
         for solution in population:
             self.problem.evaluate(solution)
         return population
 
-    def selection(self, population: List[S]):
+    def selection(self, population):
         mating_population = []
         for i in range(self.population_size):
             solution = self.selection_operator.execute(self.population)
@@ -60,7 +60,7 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
 
         return mating_population
 
-    def reproduction(self, population: List[S]):
+    def reproduction(self, population):
         number_of_parents_to_combine = self.crossover_operator.get_number_of_parents()
         self.__check_number_of_parents(population, number_of_parents_to_combine)
 
@@ -78,8 +78,7 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
 
         return offspring_population
 
-    def replacement(self, population: List[S], offspring_population: List[S])\
-            -> List[S]:
+    def replacement(self, population, offspring_population):
         population.sort(key=lambda s: s.objectives[0])
 
         offspring_population.append(population[0])
@@ -92,12 +91,12 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
 
         return offspring_population
 
-    def get_result(self) -> R:
+    def get_result(self):
         return self.population[0]
 
     def get_name(self):
         return "Generational Genetic Algorithm"
 
-    def __check_number_of_parents(self, population: List[S], number_of_parents_for_crossover: int) -> bool:
+    def __check_number_of_parents(self, population, number_of_parents_for_crossover):
         if self.population_size % number_of_parents_for_crossover != 0:
             raise Exception("Wrong number of parents")
