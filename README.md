@@ -18,15 +18,12 @@ All developers should follow these guidelines:
 
 #### PEP8!
 
-  - Import a HTML file and watch it magically convert to Markdown
-  - Drag and drop images (requires your Dropbox account be linked)
+> **Note:** <i>Pending definition.</i>
 
 #### Structure!
 
-  - Import a HTML file and watch it magically convert to Markdown
-  - Drag and drop images (requires your Dropbox account be linked)
+> **Note:** <i>Pending definition.</i>
 
 #### Python3.5!
 
-  - Import a HTML file and watch it magically convert to Markdown
-  - Drag and drop images (requires your Dropbox account be linked)
+> **Note:** <i>Pending definition.</i>
