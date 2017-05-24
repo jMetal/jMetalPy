@@ -18,7 +18,7 @@ All developers should follow these guidelines:
   - Respect the initial structure
 
 
-#### PEP8!
+### PEP8!
 
 It is really important to follow some standards when a team develops an application. If all team members format the code in the same format, then it is much easier to read the code. PEP8 is Python's style guide. It's a set of rules for how to format your Python code.
 
@@ -36,7 +36,7 @@ Class names should normally use the **CapWords** convention.
 There are many more style standards in PEP8! &nbsp; &rarr; [PEP8 documentation](https://www.python.org/dev/peps/pep-0008). </br>
 The most appropriate is to use an IDE that has support for PEP8. For example, [PyCharm](https://www.jetbrains.com/pycharm/).
 
-#### Object-oriented programming!
+### Object-oriented programming!
 
 Object-oriented programming should be the single programming paradigm used. Avoiding as far as possible, imperative and functional programming.
 
@@ -50,11 +50,11 @@ Object-oriented programming should be the single programming paradigm used. Avoi
 (atributos publicos salvo que se requiera de logica en los accesos a los atributos, y dibujo de getter/setter)
 
 
-#### Python 3.5!
+### Python 3.5!
 
 > **Note:** <i>Pending definition.</i>
 
-#### Structure!
+### Structure!
 
 > **Note:** <i>Pending definition.</i>
 
