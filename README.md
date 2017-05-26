@@ -67,7 +67,9 @@ Since this way of accessing the attribute is not commonly used in Python:
 
 ### Python 3.5!
 
+We use the new features of python 3. Specifically, up to version **3.5**.  ...
 > **Note:** <i>Pending definition.</i>
+
 
 ### Structure!
 
