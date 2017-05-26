@@ -48,16 +48,16 @@ In classes, we directly access the attributes, which are usually defined as publ
 
 ![jMetal architecture](resources/without_getter_setter.png)
 
-Only in the case that we want to implement additional logic in the accesses to the attributes we define getter/setter methods, **but always through the use of the property annotation or the property function**:
+Only when we want to implement additional logic in the accesses to the attributes we define getter/setter methods, **but always by using the property annotation or the ***property*** function**:
 
 ![jMetal architecture](resources/property_annotation.png)
 ![jMetal architecture](resources/property_functional.png)
 
-By using property, we continue to access the attributes directly:
+By using ***property***, we continue to access the attributes directly:
 
 ![jMetal architecture](resources/good_access.png)
 
-Do not use getter/setter methods without the property annotation or the property function:
+Do not use getter/setter methods without the *property* annotation or the *property* function:
 
 ![jMetal architecture](resources/with_getter_setter.png)
 
