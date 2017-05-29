@@ -2,11 +2,11 @@ class Observable(object):
     def register(self, observer):
         pass
 
-    def unregister(self, observer):
+    def deregister(self, observer):
         pass
 
-    def unregister_all(self):
+    def deregister_all(self):
         pass
 
-    def update_observers(self, *args, **kwargs):
+    def notify_all(self, *args, **kwargs):
         pass

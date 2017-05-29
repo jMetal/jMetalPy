@@ -6,7 +6,6 @@ from jmetal.operator.mutation.bitflip import BitFlip
 from jmetal.operator.mutation.polynomial import Polynomial
 from jmetal.problem.singleobjective.onemax import OneMax
 from jmetal.problem.singleobjective.sphere import Sphere
-import jmetal.core.solution as sol
 
 
 def main():
@@ -15,6 +14,7 @@ def main():
     float_example()
     print()
     run_as_a_thread()
+
 
 def binary_example() -> None:
     bits = 512
@@ -42,6 +42,7 @@ def float_example() -> None:
     print("Problem: " + problem.get_name())
     print("Solution: " + str(result.variables))
     print("Fitness:  " + str(result.objectives[0]))
+
 
 def run_as_a_thread() -> None:
     variables = 10
