@@ -48,7 +48,7 @@ In classes, we directly access the attributes, which are usually defined as publ
 
 ![jMetal architecture](resources/without_getter_setter.png)
 
-Only when we want to implement additional logic in the accesses to the attributes we define getter/setter methods, **but always by using the property annotation or the ***property*** function**:
+Only when we want to **implement additional logic in the accesses to the attributes** we define getter/setter methods, but **always by using the property annotation or the ***property*** function**:
 
 ![jMetal architecture](resources/property_annotation.png)
 ![jMetal architecture](resources/property_functional.png)
@@ -67,7 +67,26 @@ Since this way of accessing the attribute is not commonly used in Python:
 
 ### Python 3.5!
 
-We use the new features of python 3. Specifically, up to version **3.5**.  ...
+We use the new features of python 3. Concretely, up to version **3.5**.
+
+#### Typing
+
+We **always** define types in the parameters of the arguments and the return value:
+
+![jMetal architecture](resources/types_in_methods.png)
+
+#### Abstract class
+
+We can define abstract classes (ABCs) in Python:
+
+![jMetal architecture](resources/abstract.png)
+
+In the case that we want to define an **interface** class, it is done in the same way. We just have to define all the methods of the class as abstract.
+
+#### Generic class
+
+The generic classes inherit from abc.ABCMeta, so they are abstract classes and abstract methods can be used.
+
 > **Note:** <i>Pending definition.</i>
 
 
