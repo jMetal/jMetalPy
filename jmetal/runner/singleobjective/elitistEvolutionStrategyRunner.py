@@ -17,7 +17,11 @@ def binary_example() -> None:
     bits = 512
     problem = OneMax(bits)
     algorithm = ElitistEvolutionStrategy[BinarySolution, BinarySolution]\
-        (problem, mu=1, lambdA=10, max_evaluations= 25000, mutation_operator=BitFlip(1.0/bits))
+        (problem,
+         mu=1,
+         lambdA=10,
+         max_evaluations=25000,
+         mutation_operator=BitFlip(1.0/bits))
 
     algorithm.run()
     result = algorithm.get_result()
@@ -31,7 +35,11 @@ def float_example() -> None:
     variables = 10
     problem = Sphere(variables)
     algorithm = ElitistEvolutionStrategy[FloatSolution, FloatSolution]\
-        (problem, mu=10, lambdA=10, max_evaluations= 50000, mutation_operator=Polynomial(1.0/variables))
+        (problem,
+         mu=10,
+         lambdA=10,
+         max_evaluations=50000,
+         mutation_operator=Polynomial(1.0/variables))
 
     algorithm.run()
     result = algorithm.get_result()
