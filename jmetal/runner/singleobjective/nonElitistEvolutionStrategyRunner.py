@@ -13,7 +13,8 @@ def main():
     binary_example()
     print()
     float_example()
-
+    print()
+    run_as_a_thread()
 
 def binary_example() -> None:
     bits = 512
@@ -39,6 +40,22 @@ def float_example() -> None:
     result = algorithm.get_result()
     print("Algorithm: " + algorithm.get_name())
     print("Problem: " + problem.get_name())
+    print("Solution: " + str(result.variables))
+    print("Fitness:  " + str(result.objectives[0]))
+
+def run_as_a_thread() -> None:
+    variables = 10
+    problem = Sphere(variables)
+    algorithm = NonElitistEvolutionStrategy[FloatSolution, FloatSolution]\
+        (problem, mu=10, lambdA=10, max_evaluations= 50000, mutation_operator=Polynomial(1.0/variables))
+
+    algorithm.start()
+    print("Algorithm (running as a thread): " + algorithm.get_name())
+    print("Problem: " + problem.get_name())
+    algorithm.join()
+
+    result = algorithm.get_result()
+
     print("Solution: " + str(result.variables))
     print("Fitness:  " + str(result.objectives[0]))
 

@@ -1,3 +1,4 @@
+import threading
 from typing import TypeVar, Generic, List
 
 S = TypeVar('S')
@@ -7,8 +8,9 @@ R = TypeVar('R')
 __author__ = "Antonio J. Nebro"
 
 
-class EvolutionaryAlgorithm(Generic[S, R]):
+class EvolutionaryAlgorithm(Generic[S, R], threading.Thread):
     def __init__(self):
+        threading.Thread.__init__(self)
         self.population = []
 
     def create_initial_population(self) -> List[S]:
