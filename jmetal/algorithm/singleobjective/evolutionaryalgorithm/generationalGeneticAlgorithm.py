@@ -39,11 +39,10 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
 
     def update_progress(self):
         self.evaluations += self.population_size
-        #self.observable.update_observers(self.evaluations, self.population[0], self.population)
-        kwargs = {'evaluations': self.evaluations,
+        observable_data = {'evaluations': self.evaluations,
                   'population': self.population,
                   'best' : self.population[0]}
-        self.observable.update_observers(**kwargs)
+        self.observable.update_observers(**observable_data)
 
     def is_stopping_condition_reached(self) -> bool:
         return self.evaluations >= self.max_evaluations

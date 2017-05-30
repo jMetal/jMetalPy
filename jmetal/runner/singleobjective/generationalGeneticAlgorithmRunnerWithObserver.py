@@ -10,7 +10,6 @@ from jmetal.operator.selection.binarytournament import BinaryTournament
 from jmetal.problem.singleobjective.onemax import OneMax
 from jmetal.problem.singleobjective.sphere import Sphere
 
-
 def main():
     float_example()
 
@@ -43,6 +42,7 @@ def float_example() -> None:
     print("Problem: " + problem.get_name())
     print("Solution: " + str(result.variables))
     print("Fitness:  " + str(result.objectives[0]))
+
 
 if __name__ == '__main__':
     main()
