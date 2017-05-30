@@ -13,10 +13,10 @@ from jmetal.problem.singleobjective.sphere import Sphere
 def main():
     float_example()
 
+
 class AlgorithmObserver(Observer):
     def update(self, *args, **kwargs):
-        print("Evaluations: " + str(kwargs["evaluations"]))
-        print("Evaluations: " + str(kwargs["best"].objectives[0]))
+        print("Evaluations: " + str(kwargs["evaluations"]) + ". Best fitness: " + str(kwargs["best"].objectives[0]))
 
 
 def float_example() -> None:
