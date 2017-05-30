@@ -6,6 +6,8 @@ from jmetal.core.operator.crossoveroperator import CrossoverOperator
 from jmetal.core.operator.mutationoperator import MutationOperator
 from jmetal.core.operator.selectionoperator import SelectionOperator
 from jmetal.core.problem.problem import Problem
+from jmetal.core.util.observer.impl.defaultobservable import DefaultObservable
+from jmetal.core.util.observer.observable import Observable
 
 """ Class representing generational genetic algorithms """
 __author__ = "Antonio J. Nebro"
@@ -20,7 +22,8 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
                  max_evaluations: int,
                  mutation_operator: MutationOperator[S],
                  crossover_operator: CrossoverOperator[S, S],
-                 selection_operator: SelectionOperator[List[S],S]):
+                 selection_operator: SelectionOperator[List[S],S],
+                 observable: Observable = DefaultObservable()):
         super(GenerationalGeneticAlgorithm, self).__init__()
         self.problem = problem
         self.population_size = population_size
@@ -29,12 +32,17 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         self.crossover_operator = crossover_operator
         self.selection_operator = selection_operator
         self.evaluations = 0
+        self.observable = observable
 
     def init_progress(self):
         self.evaluations = self.population_size
 
     def update_progress(self):
         self.evaluations += self.population_size
+        observable_data = {'evaluations': self.evaluations,
+                  'population': self.population,
+                  'best' : self.population[0]}
+        self.observable.update_observers(**observable_data)
 
     def is_stopping_condition_reached(self) -> bool:
         return self.evaluations >= self.max_evaluations

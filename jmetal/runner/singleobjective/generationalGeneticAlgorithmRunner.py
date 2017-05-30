@@ -54,6 +54,7 @@ def run_as_a_thread_example() -> None:
     print("Solution: " + str(result.variables))
     print("Fitness:  " + str(result.objectives[0]))
 
+
 def float_example() -> None:
     variables = 10
     problem = Sphere(variables)
