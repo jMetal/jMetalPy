@@ -3,7 +3,7 @@ from typing import List, TypeVar
 
 from jmetal.core.operator.selectionoperator import SelectionOperator
 from jmetal.core.solution.solution import Solution
-from jmetal.core.util.dominancecomparator import dominance_comparator
+from jmetal.core.util.comparator import dominance_comparator
 
 """ Class implementing a binary tournament selection operator """
 __author__ = "Antonio J. Nebro"

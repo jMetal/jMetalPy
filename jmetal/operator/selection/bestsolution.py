@@ -1,7 +1,7 @@
 from typing import List, TypeVar
 
 from jmetal.core.operator.selectionoperator import SelectionOperator
-from jmetal.core.util.dominancecomparator import dominance_comparator
+from jmetal.core.util.comparator import dominance_comparator
 
 """ Class implementing a best solution selection operator """
 

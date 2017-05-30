@@ -3,7 +3,6 @@ import unittest
 from jmetal.core.util.observer.impl.defaultobservable import DefaultObservable
 from jmetal.core.util.observer.observer import Observer
 
-from mockito import mock, when
 
 class TestMethods(unittest.TestCase):
     def setUp(self):

@@ -1,7 +1,6 @@
 from typing import TypeVar, Generic, List
 
-from jmetal.core.util.dominancecomparator import dominance_comparator
-from jmetal.core.util.equalsolutionscomparator import EqualSolutionsComparator
+from jmetal.core.util.comparator import dominance_comparator, equal_solutions_comparator
 
 S = TypeVar('S')
 
@@ -27,7 +26,7 @@ class NonDominatedSolutionListArchive(Generic[S]):
                     is_dominated = True
                     break;
                 elif is_dominated_flag == 0:
-                    if EqualSolutionsComparator(solution, current_solution) == 0:
+                    if equal_solutions_comparator(solution, current_solution) == 0:
                         is_contained = True
                         break;
 
