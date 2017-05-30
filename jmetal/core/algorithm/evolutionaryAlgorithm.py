@@ -12,6 +12,7 @@ class EvolutionaryAlgorithm(Generic[S, R], threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
         self.population = []
+        self.observable = None
 
     def create_initial_population(self) -> List[S]:
         pass
