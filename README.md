@@ -89,7 +89,6 @@ The generic classes inherit from abc.ABCMeta, so they are abstract classes and a
 
 > **Note:** <i>Pending definition.</i>
 
-
 ### Structure!
 
 > **Note:** <i>Pending definition.</i>
