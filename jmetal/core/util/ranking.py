@@ -18,10 +18,16 @@ class Ranking(List[S]):
 
 class DominanceRanking(Ranking[List[S]]):
     def __init__(self):
-        self.ranked_sublists = []
+        self.ranked_sublists = [[]]
 
     def compute_ranking(self, solution_List: List[S]):
-        pass
+        dominate_Me = []
+        i_dominate = [[]]
+        front = [[]]
+
+        # Initialize the fronts
+        for i in range(0, len(solution_List)+1):
+            front.append([])
 
 
 
