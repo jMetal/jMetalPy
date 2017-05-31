@@ -1,8 +1,7 @@
 import unittest
 
-from jmetal.core.solution.integerSolution import IntegerSolution
-from jmetal.operator.mutation.integerpolynomial import IntegerPolynomial
-
+from jmetal.core.solution import IntegerSolution
+from jmetal.operator.mutation import IntegerPolynomial
 
 
 class TestMethods(unittest.TestCase):

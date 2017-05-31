@@ -1,7 +1,7 @@
 import unittest
 
-from jmetal.core.solution.floatSolution import FloatSolution
-from jmetal.operator.mutation.uniform import Uniform
+from jmetal.core.solution import FloatSolution
+from jmetal.operator.mutation import Uniform
 
 
 class TestMethods(unittest.TestCase):

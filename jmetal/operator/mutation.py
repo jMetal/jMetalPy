@@ -1,16 +1,13 @@
 import random
-from jmetal.core.operator import MutationOperator
-from jmetal.core.solution import BinarySolution
 
-<<<<<<< HEAD:jmetal/operator/mutation/bitflip.py
-from jmetal.core.operator.mutationoperator import MutationOperator
-from jmetal.core.solution.binarySolution import BinarySolution
+from jmetal.core.operator import Mutation
+from jmetal.core.solution import BinarySolution, Solution, FloatSolution, IntegerSolution
 
 """ Class implementing the binary BitFlip mutation operator """
 __author__ = "Antonio J. Nebro"
 
 
-class BitFlip(MutationOperator[BinarySolution]):
+class BitFlip(Mutation[BinarySolution]):
     def __init__(self, probability: float):
         super(BitFlip, self).__init__(probability=probability)
 
@@ -23,29 +20,120 @@ class BitFlip(MutationOperator[BinarySolution]):
 
         return solution
 
-=======
-__author__ = "Antonio J. Nebro"
+
+class Null(Mutation[Solution]):
+    def __init__(self):
+        super(Null, self).__init__(probability=0)
+
+    def execute(self, solution: Solution) -> Solution:
+        return solution
 
 
-class BitFlip(MutationOperator):
-    """ Class implementing the binary BitFlip mutation operator """
+class Polynomial(Mutation[FloatSolution]):
+    def __init__(self, probability: float, distribution_index: float = 0.20):
+        super(Polynomial, self).__init__(probability=probability)
+        self.distribution_index = distribution_index
 
-    def __init__(self, number_of_bits: int = 256):
-        self.number_of_bits = number_of_bits
-        self.number_of_objectives = 1
-        self.number_of_variables = 1
-        self.number_of_constraints = 0
+    def execute(self, solution: FloatSolution) -> FloatSolution:
+        for i in range(solution.number_of_variables):
+            rand = random.random()
+            if rand <= self.probability:
+                y = solution.variables[i]
+                yl = solution.lower_bound[i]
+                yu = solution.upper_bound[i]
+                if yl == yu:
+                    y = yl
+                else:
+                    delta1 = (y - yl) / (yu - yl)
+                    delta2 = (yu - y) / (yu - yl)
+                    rnd = random.random()
+                    mut_pow = 1.0 / (self.distribution_index + 1.0)
+                    if rnd <= 0.5:
+                        xy = 1.0 - delta1
+                        val = 2.0 * rnd + (1.0 - 2.0 * rnd) * (pow(xy, self.distribution_index + 1.0))
+                        deltaq = pow(val, mut_pow) - 1.0
+                    else:
+                        xy = 1.0 - delta2
+                        val = 2.0 * (1.0 - rnd) + 2.0 * (rnd - 0.5) * (pow(xy, self.distribution_index + 1.0));
+                        deltaq = 1.0 - pow(val, mut_pow)
 
-    def evaluate(self, solution: BinarySolution) -> None:
-        counter_of_ones = 0
-        for bits in solution.variables[0]:
-            if bits:
-                counter_of_ones += 1
-        solution.objectives[0] = counter_of_ones
+                    y += deltaq * (yu - yl)
+                    if y < solution.lower_bound[i]:
+                        y = solution.lower_bound[i]
+                    if y > solution.upper_bound[i]:
+                        y = solution.upper_bound[i]
 
-    def create_solution(self) -> BinarySolution:
-        new_solution = BinarySolution(number_of_variables=1, number_of_objectives=1)
-        new_solution.variables[0] = \
-            [True if random.randint(0, 1) == 0 else False for i in range(self.number_of_bits)]
-        return new_solution
->>>>>>> 0c3a3b5ecb116c4ec22fd8540d233f554fdd700a:jmetal/operator/mutation.py
+                solution.variables[i] = y
+
+        return solution
+
+
+class IntegerPolynomial(Mutation[IntegerSolution]):
+    def __init__(self, probability: float, distribution_index: float = 0.20):
+        super(IntegerPolynomial, self).__init__(probability=probability)
+        self.distribution_index = distribution_index
+
+    def execute(self, solution: IntegerSolution) -> IntegerSolution:
+        for i in range(solution.number_of_variables):
+            if random.random() <= self.probability:
+                y = solution.variables[i]
+                yl = solution.lower_bound[i]
+                yu = solution.upper_bound[i]
+                if yl == yu:
+                    y = yl
+                else:
+                    delta1 = (y - yl) / (yu - yl)
+                    delta2 = (yu - y) / (yu - yl)
+                    mutPow = 1.0 / (self.distribution_index + 1.0)
+                    rnd = random.random()
+                    if rnd<=0.5:
+                        xy = 1.0 - delta1
+                        val = 2.0 * rnd + (1.0 - 2.0 * rnd) * (xy ** (self.distribution_index + 1.0))
+                        deltaq = val**mutPow - 1.0
+                    else:
+                        xy = 1.0 - delta2
+                        val = 2.0 * (1.0 - rnd) + 2.0 * (rnd - 0.5) * (xy**(self.distribution_index + 1.0))
+                        deltaq = 1.0 - val**mutPow
+
+                    y += deltaq * (yu - yl)
+                    if y < solution.lower_bound[i]:
+                        y = solution.lower_bound[i]
+                    if y > solution.upper_bound[i]:
+                        y = solution.upper_bound[i]
+
+                solution.variables[i] = int(round(y))
+        return solution
+
+
+class SimpleRandom(Mutation[FloatSolution]):
+    def __init__(self, probability: float):
+        super(SimpleRandom, self).__init__(probability=probability)
+
+    def execute(self, solution: FloatSolution) -> FloatSolution:
+        for i in range(solution.number_of_variables):
+            rand = random.random()
+            if rand <= self.probability:
+                solution.variables[i] = solution.lower_bound[i] + (solution.upper_bound[i] - solution.lower_bound[i]) * random.random()
+        return solution
+
+
+class Uniform(Mutation[FloatSolution]):
+    def __init__(self, probability: float, perturbation: float = 0.5):
+        super(Uniform, self).__init__(probability=probability)
+        self.perturbation = perturbation
+
+    def execute(self, solution: FloatSolution) -> FloatSolution:
+        for i in range(solution.number_of_variables):
+            rand = random.random()
+            if rand <= self.probability:
+                tmp = (random.random() - 0.5) * self.perturbation;
+                tmp+= solution.variables[i]
+
+                if tmp < solution.lower_bound[i]:
+                    tmp = solution.lower_bound[i]
+                elif tmp > solution.upper_bound[i]:
+                    tmp = solution.upper_bound[i]
+
+                solution.variables[i] = tmp
+
+        return solution

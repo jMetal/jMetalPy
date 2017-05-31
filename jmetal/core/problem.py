@@ -5,6 +5,19 @@ __author__ = "Antonio J. Nebro"
 
 S = TypeVar('S')
 
+class Problem(Generic[S]):
+    """ Class representing problems """
+
+    def __init__(self):
+        self.number_of_variables = 0
+        self.number_of_objectives = 0
+        self.number_of_constraints = 0
+
+    def evaluate(self, solution: S) -> None:
+        pass
+
+    def create_solution(self) -> S:
+        pass
 
 class BinaryProblem(BinarySolution):
     """ Class representing float problems """
@@ -25,17 +38,3 @@ class FloatProblem(FloatSolution):
     def create_solution(self) -> FloatSolution:
         pass
 
-
-class Problem(Generic[S]):
-    """ Class representing problems """
-
-    def __init__(self):
-        self.number_of_variables = 0
-        self.number_of_objectives = 0
-        self.number_of_constraints = 0
-
-    def evaluate(self, solution: S) -> None:
-        pass
-
-    def create_solution(self) -> S:
-        pass

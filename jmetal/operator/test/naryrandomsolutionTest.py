@@ -1,7 +1,7 @@
 import unittest
 
-from jmetal.core.solution.floatSolution import FloatSolution
-from jmetal.operator.selection.naryrandomsolution import NaryRandomSolution
+from jmetal.core.solution import FloatSolution
+from jmetal.operator.selection import NaryRandomSolution
 
 
 class TestMethods(unittest.TestCase):

@@ -41,3 +41,9 @@ class FloatSolution(Solution[float]):
         self.upper_bound = upper_bound
 
 
+class IntegerSolution(Solution[int]):
+    def __init__(self, number_of_variables:int, number_of_objectives: int, lower_bound: List=list(),
+                 upper_bound: List=list()):
+        super(IntegerSolution, self).__init__(number_of_variables, number_of_objectives)
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound

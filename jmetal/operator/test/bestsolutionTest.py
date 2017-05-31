@@ -1,7 +1,7 @@
 import unittest
 
-from jmetal.core.solution.floatSolution import FloatSolution
-from jmetal.operator.selection.bestsolution import BestSolution
+from jmetal.core.solution import FloatSolution
+from jmetal.operator.selection import BestSolution
 
 
 class TestMethods(unittest.TestCase):

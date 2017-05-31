@@ -1,8 +1,7 @@
 import unittest
 
-from jmetal.core.solution.floatSolution import FloatSolution
-from jmetal.core.solution.binarySolution import BinarySolution
-from jmetal.operator.mutation.null import Null
+from jmetal.core.solution import FloatSolution, BinarySolution
+from jmetal.operator.mutation import Null
 
 
 class TestMethods(unittest.TestCase):

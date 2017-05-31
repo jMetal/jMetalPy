@@ -1,7 +1,7 @@
 import unittest
 
-from jmetal.core.solution.binarySolution import BinarySolution
-from jmetal.operator.mutation.bitflip import BitFlip
+from jmetal.core.solution import BinarySolution
+from jmetal.operator.mutation import BitFlip
 
 __author__ = "Antonio J. Nebro"
 

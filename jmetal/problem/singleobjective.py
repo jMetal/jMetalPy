@@ -1,6 +1,6 @@
 import random
-from jmetal.core.problem import BinaryProblem
-from jmetal.core.solution import BinarySolution
+from jmetal.core.problem import BinaryProblem, FloatProblem
+from jmetal.core.solution import BinarySolution, FloatSolution
 
 __author__ = "Antonio J. Nebro"
 
@@ -19,12 +19,8 @@ class OneMax(BinaryProblem):
         for bits in solution.variables[0]:
             if bits:
                 counter_of_ones += 1
-<<<<<<< HEAD:jmetal/problem/singleobjective/onemax.py
 
         solution.objectives[0] = -1.0 * counter_of_ones
-=======
-        solution.objectives[0] = counter_of_ones
->>>>>>> 0c3a3b5ecb116c4ec22fd8540d233f554fdd700a:jmetal/problem/singleobjective.py
 
     def create_solution(self) -> BinarySolution:
         new_solution = BinarySolution(number_of_variables=1, number_of_objectives=1)
@@ -35,3 +31,24 @@ class OneMax(BinaryProblem):
     def get_name(self):
         return "OneMax"
 
+class Sphere(FloatProblem):
+    def __init__(self, number_of_variables: int = 10):
+        self.number_of_objectives = 1
+        self.number_of_variables = number_of_variables
+        self.number_of_constraints = 0
+
+        self.lower_bound = [-5.12 for i in range(number_of_variables)]
+        self.upper_bound = [5.12 for i in range(number_of_variables)]
+
+        FloatSolution.lower_bound = self.lower_bound
+        FloatSolution.upper_bound = self.upper_bound
+
+    def evaluate(self, solution: FloatSolution):
+        total = 0.0
+        for x in solution.variables:
+            total += x * x
+
+        solution.objectives[0] = total
+
+    def get_name(self):
+        return "Sphere"

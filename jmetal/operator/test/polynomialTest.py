@@ -1,7 +1,7 @@
 import unittest
 
-from jmetal.core.solution.floatSolution import FloatSolution
-from jmetal.operator.mutation.polynomial import Polynomial
+from jmetal.core.solution import FloatSolution
+from jmetal.operator.mutation import Polynomial
 
 __author__ = "Antonio J. Nebro"
 

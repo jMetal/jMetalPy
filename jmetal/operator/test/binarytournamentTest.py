@@ -2,10 +2,8 @@ import unittest
 from hamcrest import *
 from typing import List
 
-from jmetal.core.solution.binarySolution import BinarySolution
-from jmetal.core.solution.floatSolution import FloatSolution
-from jmetal.operator.mutation.bitflip import BitFlip
-from jmetal.operator.selection.binarytournament import BinaryTournament
+from jmetal.core.solution import FloatSolution
+from jmetal.operator.selection import BinaryTournament
 
 __author__ = "Antonio J. Nebro"
 

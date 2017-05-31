@@ -1,8 +1,8 @@
 import unittest
 from unittest import mock
 
-from jmetal.core.solution.binarySolution import BinarySolution
-from jmetal.operator.crossover.singlepoint import SinglePoint
+from jmetal.core.solution import BinarySolution
+from jmetal.operator.crossover import SinglePoint
 
 __author__ = "Antonio J. Nebro"
 

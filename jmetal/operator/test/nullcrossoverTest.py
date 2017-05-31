@@ -1,9 +1,6 @@
 import unittest
 from unittest import mock
 
-from jmetal.core.solution.binarySolution import BinarySolution
-from jmetal.core.solution.floatSolution import FloatSolution
-from jmetal.operator.crossover.null import Null
 
 class TestMethods(unittest.TestCase):
 
