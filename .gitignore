@@ -18,7 +18,6 @@ venv
 env
 .idea
 *.pyc
-/*.fasta
 __pycache__
 build
 dist
