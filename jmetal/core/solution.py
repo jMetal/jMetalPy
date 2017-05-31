@@ -1,10 +1,20 @@
 from typing import List, Generic, TypeVar
-from jmetal.core.solution.solution import Solution
 
 __author__ = "Antonio J. Nebro"
 
 BitSet = List[bool]
 T = TypeVar('T')
+
+
+class Solution(Generic[T]):
+    """ Class representing solutions """
+
+    def __init__(self, number_of_variables: int, number_of_objectives: int):
+        self.number_of_objectives = number_of_objectives
+        self.number_of_variables = number_of_variables
+        self.objectives = [0.0 for x in range(self.number_of_objectives)]
+        self.variables = [[] for x in range(self.number_of_variables)]
+        self.attributes = {}
 
 
 class BinarySolution(Solution[BitSet]):
@@ -31,12 +41,3 @@ class FloatSolution(Solution[float]):
         self.upper_bound = upper_bound
 
 
-class Solution(Generic[T]):
-    """ Class representing solutions """
-
-    def __init__(self, number_of_variables: int, number_of_objectives: int):
-        self.number_of_objectives = number_of_objectives
-        self.number_of_variables = number_of_variables
-        self.objectives = [0.0 for x in range(self.number_of_objectives)]
-        self.variables = [[] for x in range(self.number_of_variables)]
-        self.attributes = {}

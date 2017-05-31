@@ -1,6 +1,5 @@
 from typing import Generic, TypeVar
-from jmetal.core.solution.binarySolution import BinarySolution
-from jmetal.core.solution.floatSolution import FloatSolution
+from jmetal.core.solution import BinarySolution, FloatSolution
 
 __author__ = "Antonio J. Nebro"
 
