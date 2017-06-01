@@ -15,15 +15,10 @@ venv
 env
 .idea
 *.pyc
-<<<<<<< HEAD
 .coverage
-htmlcov
-=======
 __pycache__/
 build
 dist
 *.spec
 coverage.xml
-.coverage
 *.egg-info
->>>>>>> 0c3a3b5ecb116c4ec22fd8540d233f554fdd700a
