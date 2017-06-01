@@ -5,7 +5,7 @@ from jmetal.core.solution import BinarySolution
 from jmetal.operator.crossover import Null, SinglePoint
 
 
-class NullCrossoverTestCase(unittest.TestCase):
+class NullCrossoverTestCases(unittest.TestCase):
 
     def setUp(self):
         pass
@@ -30,7 +30,7 @@ class NullCrossoverTestCase(unittest.TestCase):
         self.assertEqual([False, True, False, False, True, False], offspring[1].variables[0])
 
 
-class SinglePointTestCase(unittest.TestCase):
+class SinglePointTestCases(unittest.TestCase):
     def setUp(self):
         pass
 

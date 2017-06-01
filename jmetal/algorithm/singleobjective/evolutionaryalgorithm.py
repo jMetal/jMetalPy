@@ -4,7 +4,7 @@ from typing import TypeVar, List
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
-from jmetal.util.observer.observable import Observable, DefaultObservable
+from jmetal.util.observable import Observable, DefaultObservable
 
 """ Class representing elitist evolution strategy algorithms """
 __author__ = "Antonio J. Nebro"

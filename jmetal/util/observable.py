@@ -1,3 +1,6 @@
+from abc import ABCMeta, abstractmethod
+
+
 class Observable(object):
     def register(self, observer):
         pass
@@ -9,6 +12,20 @@ class Observable(object):
         pass
 
     def notify_all(self, *args, **kwargs):
+        pass
+
+
+class Observer(object):
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def update(self, *args, **kwargs):
+        '''
+        Update method
+        :param args:
+        :param kwargs:
+        :return:
+        '''
         pass
 
 class DefaultObservable(Observable):
@@ -30,3 +47,5 @@ class DefaultObservable(Observable):
     def notify_all(self, *args, **kwargs):
         for observer in self.observers:
             observer.update(*args, **kwargs)
+
+
