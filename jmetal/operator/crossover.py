@@ -140,8 +140,8 @@ class SinglePoint(Crossover[BinarySolution, BinarySolution]):
 
             # 6. Apply the crossover to the other variables
             for i in range(variable_to_cut + 1, parents[0].number_of_variables):
-                offspring[0].variables[i] = deepcopy(parents[1].variables[i])
-                offspring[1].variables[i] = deepcopy(parents[0].variables[i])
+                offspring[0].variables[i] = copy.deepcopy(parents[1].variables[i])
+                offspring[1].variables[i] = copy.deepcopy(parents[0].variables[i])
 
         return offspring
 

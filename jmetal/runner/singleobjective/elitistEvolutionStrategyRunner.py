@@ -1,4 +1,4 @@
-from jmetal.algorithm.singleobjective.evolutionaryalgorithm.evolutionaryalgorithm import ElitistEvolutionStrategy
+from jmetal.algorithm.singleobjective.evolutionaryalgorithm import ElitistEvolutionStrategy
 from jmetal.core.solution import BinarySolution, FloatSolution
 from jmetal.operator.mutation import BitFlip, Polynomial
 from jmetal.problem.singleobjectiveproblem import OneMax, Sphere

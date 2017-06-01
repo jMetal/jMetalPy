@@ -1,6 +1,6 @@
 import unittest
 
-from jmetal.core.solution.integerSolution import IntegerSolution
+from jmetal.core.solution import IntegerSolution
 
 
 class TestMethods(unittest.TestCase):

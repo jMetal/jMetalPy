@@ -1,4 +1,4 @@
-from jmetal.algorithm.singleobjective.evolutionaryalgorithm.evolutionaryalgorithm import GenerationalGeneticAlgorithm
+from jmetal.algorithm.singleobjective.evolutionaryalgorithm import GenerationalGeneticAlgorithm
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
@@ -39,7 +39,6 @@ def float_example() -> None:
     print("Problem: " + problem.get_name())
     print("Solution: " + str(result.variables))
     print("Fitness:  " + str(result.objectives[0]))
-
 
 if __name__ == '__main__':
     main()

@@ -1,6 +1,6 @@
 import unittest
 
-from jmetal.core.solution.floatSolution import FloatSolution
+from jmetal.core.solution import FloatSolution
 
 __author__ = "Antonio J. Nebro"
 
