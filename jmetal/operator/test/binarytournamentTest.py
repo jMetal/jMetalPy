@@ -1,6 +1,6 @@
 import unittest
+
 from hamcrest import *
-from typing import List
 
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.selection import BinaryTournament

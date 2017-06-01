@@ -1,7 +1,8 @@
 from typing import TypeVar, List, Generic
 
 from jmetal.core.problem.problem import Problem
-from jmetal.core.util.nondominatedsolutionlistarchive import NonDominatedSolutionListArchive
+
+from jmetal.util.nondominatedsolutionlistarchive import NonDominatedSolutionListArchive
 
 """ Class representing simple random search algorithms """
 
@@ -19,7 +20,6 @@ class RandomSearch(Generic[S]):
             new_solution = self.problem.create_solution()
             self.problem.evaluate(new_solution)
             self.archive.add(new_solution)
-
 
     def get_name(self):
         return "Random Search Algorithm"

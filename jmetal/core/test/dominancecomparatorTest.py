@@ -1,7 +1,8 @@
 import unittest
 
 from jmetal.core.solution.floatSolution import FloatSolution
-from jmetal.core.util.comparator import dominance_comparator
+
+from jmetal.util.comparator import dominance_comparator
 
 __author__ = "Antonio J. Nebro"
 

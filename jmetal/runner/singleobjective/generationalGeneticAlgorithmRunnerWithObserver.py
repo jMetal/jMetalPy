@@ -1,14 +1,11 @@
-from jmetal.algorithm.singleobjective.evolutionaryalgorithm.generationalGeneticAlgorithm import GenerationalGeneticAlgorithm
-from jmetal.core.solution.binarySolution import BinarySolution
-from jmetal.core.solution.floatSolution import FloatSolution
-from jmetal.core.util.observer.observer import Observer
-from jmetal.operator.crossover.SBX import SBX
-from jmetal.operator.crossover.singlepoint import SinglePoint
-from jmetal.operator.mutation.bitflip import BitFlip
-from jmetal.operator.mutation.polynomial import Polynomial
-from jmetal.operator.selection.binarytournament import BinaryTournament
-from jmetal.problem.singleobjective.onemax import OneMax
-from jmetal.problem.singleobjective.sphere import Sphere
+from jmetal.algorithm.singleobjective.evolutionaryalgorithm.evolutionaryalgorithm import GenerationalGeneticAlgorithm
+from jmetal.core.solution import FloatSolution
+from jmetal.operator.crossover import SBX
+from jmetal.operator.mutation import Polynomial
+from jmetal.operator.selection import BinaryTournament
+from jmetal.problem.singleobjective import Sphere
+from jmetal.util.observer.observer import Observer
+
 
 def main():
     float_example()
@@ -26,9 +23,9 @@ def float_example() -> None:
         problem,
         population_size = 100,
         max_evaluations = 25000,
-        mutation_operator = Polynomial(1.0/variables, distribution_index=20),
-        crossover_operator = SBX(1.0, distribution_index=20),
-        selection_operator = BinaryTournament())
+        mutation = Polynomial(1.0/variables, distribution_index=20),
+        crossover = SBX(1.0, distribution_index=20),
+        selection = BinaryTournament())
 
     observer = AlgorithmObserver()
 

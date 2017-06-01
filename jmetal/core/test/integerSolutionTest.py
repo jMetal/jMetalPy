@@ -2,6 +2,7 @@ import unittest
 
 from jmetal.core.solution.integerSolution import IntegerSolution
 
+
 class TestMethods(unittest.TestCase):
 
     def setUp(self):

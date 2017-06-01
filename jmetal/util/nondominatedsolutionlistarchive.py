@@ -1,6 +1,6 @@
 from typing import TypeVar, Generic, List
 
-from jmetal.core.util.comparator import dominance_comparator, equal_solutions_comparator
+from jmetal.util.comparator import dominance_comparator, equal_solutions_comparator
 
 S = TypeVar('S')
 

@@ -2,6 +2,7 @@ import unittest
 
 from jmetal.problem.multiobjective.fonseca import Fonseca
 
+
 class TestMethods(unittest.TestCase):
 
     def setUp(self):

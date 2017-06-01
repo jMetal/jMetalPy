@@ -1,4 +1,5 @@
 import random
+
 from jmetal.core.problem import BinaryProblem, FloatProblem
 from jmetal.core.solution import BinarySolution, FloatSolution
 

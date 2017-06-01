@@ -1,9 +1,8 @@
 import unittest
 
 from jmetal.core.solution.floatSolution import FloatSolution
-from jmetal.core.solution.integerSolution import IntegerSolution
 
-from jmetal.core.util.nondominatedsolutionlistarchive import NonDominatedSolutionListArchive
+from jmetal.util.nondominatedsolutionlistarchive import NonDominatedSolutionListArchive
 
 
 class TestMethods(unittest.TestCase):

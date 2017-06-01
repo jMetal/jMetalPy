@@ -1,4 +1,5 @@
 import unittest
+
 from jmetal.problem.singleobjective import OneMax
 
 __author__ = "Antonio J. Nebro"

@@ -1,10 +1,7 @@
-from jmetal.algorithm.singleobjective.evolutionaryalgorithm.elitistEvolutionStrategy import ElitistEvolutionStrategy
-from jmetal.core.solution.binarySolution import BinarySolution
-from jmetal.core.solution.floatSolution import FloatSolution
-from jmetal.operator.mutation.bitflip import BitFlip
-from jmetal.operator.mutation.polynomial import Polynomial
-from jmetal.problem.singleobjective.onemax import OneMax
-from jmetal.problem.singleobjective.sphere import Sphere
+from jmetal.algorithm.singleobjective.evolutionaryalgorithm.evolutionaryalgorithm import ElitistEvolutionStrategy
+from jmetal.core.solution import BinarySolution, FloatSolution
+from jmetal.operator.mutation import BitFlip, Polynomial
+from jmetal.problem.singleobjective import OneMax, Sphere
 
 
 def main():

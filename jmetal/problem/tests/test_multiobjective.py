@@ -1,4 +1,5 @@
 import unittest
+
 from jmetal.problem.multiobjective import Kursawe
 
 __author__ = "Antonio J. Nebro"

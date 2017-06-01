@@ -1,5 +1,4 @@
 import unittest
-from unittest import mock
 
 
 class TestMethods(unittest.TestCase):

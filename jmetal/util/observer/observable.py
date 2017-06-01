@@ -1,5 +1,15 @@
-from jmetal.core.util.observer.observable import Observable
+class Observable(object):
+    def register(self, observer):
+        pass
 
+    def deregister(self, observer):
+        pass
+
+    def deregister_all(self):
+        pass
+
+    def notify_all(self, *args, **kwargs):
+        pass
 
 class DefaultObservable(Observable):
     def __init__(self):

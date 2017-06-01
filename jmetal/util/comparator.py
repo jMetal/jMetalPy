@@ -1,4 +1,4 @@
-from jmetal.core.solution.solution import Solution
+from jmetal.core.solution import Solution
 
 
 def dominance_comparator(solution1: Solution, solution2: Solution) -> int:

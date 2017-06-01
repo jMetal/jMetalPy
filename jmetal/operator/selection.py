@@ -2,7 +2,7 @@ import random
 from typing import List, TypeVar
 
 from jmetal.core.operator import Selection
-from jmetal.core.util.comparator import dominance_comparator
+from jmetal.util.comparator import dominance_comparator
 
 """ Class implementing a best solution selection operator """
 

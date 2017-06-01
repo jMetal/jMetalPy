@@ -2,6 +2,7 @@ import unittest
 
 from jmetal.problem.multiobjective.schaffer import Schaffer
 
+
 class TestMethods(unittest.TestCase):
 
     def setUp(self):
