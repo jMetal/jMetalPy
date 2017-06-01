@@ -1,6 +1,6 @@
 import unittest
 
-from jmetal.problem.singleobjective.sphere import Sphere
+from jmetal.problem.singleobjectiveproblem.sphere import Sphere
 
 __author__ = "Antonio J. Nebro"
 

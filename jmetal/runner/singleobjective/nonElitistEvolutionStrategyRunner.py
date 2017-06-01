@@ -1,7 +1,7 @@
 from jmetal.algorithm.singleobjective.evolutionaryalgorithm.evolutionaryalgorithm import NonElitistEvolutionStrategy
 from jmetal.core.solution import BinarySolution, FloatSolution
-from jmetal.operator.mutation import Polynomial
-from jmetal.problem.singleobjective import OneMax, Sphere
+from jmetal.operator.mutation import Polynomial, BitFlip
+from jmetal.problem.singleobjectiveproblem import OneMax, Sphere
 
 
 def main():
@@ -16,7 +16,7 @@ def binary_example() -> None:
     bits = 512
     problem = OneMax(bits)
     algorithm = NonElitistEvolutionStrategy[BinarySolution, BinarySolution]\
-        (problem, mu=1, lambdA=10, max_evaluations= 50000, mutation_operator=BitFlip(1.0/bits))
+        (problem, mu=1, lambdA=10, max_evaluations= 50000, mutation=BitFlip(1.0/bits))
 
     algorithm.run()
     result = algorithm.get_result()
@@ -30,7 +30,7 @@ def float_example() -> None:
     variables = 10
     problem = Sphere(variables)
     algorithm = NonElitistEvolutionStrategy[FloatSolution, FloatSolution]\
-        (problem, mu=10, lambdA=10, max_evaluations= 50000, mutation_operator=Polynomial(1.0/variables))
+        (problem, mu=10, lambdA=10, max_evaluations= 50000, mutation=Polynomial(1.0/variables))
 
     algorithm.run()
     result = algorithm.get_result()
@@ -44,7 +44,7 @@ def run_as_a_thread() -> None:
     variables = 10
     problem = Sphere(variables)
     algorithm = NonElitistEvolutionStrategy[FloatSolution, FloatSolution]\
-        (problem, mu=10, lambdA=10, max_evaluations= 50000, mutation_operator=Polynomial(1.0/variables))
+        (problem, mu=10, lambdA=10, max_evaluations= 50000, mutation=Polynomial(1.0/variables))
 
     algorithm.start()
     print("Algorithm (running as a thread): " + algorithm.get_name())

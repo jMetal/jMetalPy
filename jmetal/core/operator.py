@@ -12,6 +12,8 @@ class Operator(Generic[Source, Result]):
     def execute(self, source: Source) -> Result:
         pass
 
+    def get_name(self):
+        pass
 
 class Mutation(Operator[Source, Source]):
     """ Class representing mutation operators """
@@ -23,6 +25,7 @@ class Mutation(Operator[Source, Source]):
             raise Exception("The probability is lower than zero: " + str(probability))
 
         self.probability = probability
+
     def execute(self, source: Source) -> Source:
         pass
 
@@ -40,6 +43,7 @@ class Crossover(Operator[List[Source], List[Result]]):
 
     def get_number_of_parents(self) -> int:
         pass
+
 
 class Selection(Operator[Source, Result]):
     def __init__(self):

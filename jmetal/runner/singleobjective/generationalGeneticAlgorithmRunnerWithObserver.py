@@ -3,7 +3,7 @@ from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament
-from jmetal.problem.singleobjective import Sphere
+from jmetal.problem.singleobjectiveproblem import Sphere
 from jmetal.util.observer.observer import Observer
 
 

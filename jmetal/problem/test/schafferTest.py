@@ -1,6 +1,6 @@
 import unittest
 
-from jmetal.problem.multiobjective.schaffer import Schaffer
+from jmetal.problem.multiobjectiveproblem.schaffer import Schaffer
 
 
 class TestMethods(unittest.TestCase):

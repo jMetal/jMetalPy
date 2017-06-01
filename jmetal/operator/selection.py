@@ -13,6 +13,9 @@ class BinaryTournament(Selection[List[S], S]):
     def __init__(self):
         super(BinaryTournament, self).__init__()
 
+    def get_name(self):
+        return "Bynary tournament selection"
+
     def execute(self, solution_list: List[S]) -> S:
         result = None
         if solution_list is None:

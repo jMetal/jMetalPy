@@ -25,7 +25,7 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         self.mu = mu
         self.lambdA = lambdA
         self.max_evaluations = max_evaluations
-        self.mutation_operator = mutation
+        self.mutation = mutation
         self.evaluations = 0
 
     def init_progress(self):
@@ -56,7 +56,7 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         for solution in population:
             for j in range((int)(self.lambdA / self.mu)):
                 new_solution = deepcopy(solution)
-                offspring_population.append(self.mutation_operator.execute(new_solution))
+                offspring_population.append(self.mutation.execute(new_solution))
 
         return offspring_population
 

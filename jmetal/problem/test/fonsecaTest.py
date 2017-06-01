@@ -1,6 +1,6 @@
 import unittest
 
-from jmetal.problem.multiobjective.fonseca import Fonseca
+from jmetal.problem.multiobjectiveproblem.fonseca import Fonseca
 
 
 class TestMethods(unittest.TestCase):

@@ -25,6 +25,9 @@ class Null(Mutation[Solution]):
     def __init__(self):
         super(Null, self).__init__(probability=0)
 
+    def get_name(self):
+        return "Null mutation"
+
     def execute(self, solution: Solution) -> Solution:
         return solution
 
@@ -33,6 +36,9 @@ class Polynomial(Mutation[FloatSolution]):
     def __init__(self, probability: float, distribution_index: float = 0.20):
         super(Polynomial, self).__init__(probability=probability)
         self.distribution_index = distribution_index
+
+    def get_name(self):
+        return "Polynomial mutation"
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
         for i in range(solution.number_of_variables):
@@ -73,6 +79,9 @@ class IntegerPolynomial(Mutation[IntegerSolution]):
         super(IntegerPolynomial, self).__init__(probability=probability)
         self.distribution_index = distribution_index
 
+    def get_name(self):
+        return "Polynomial mutation (Integer)"
+
     def execute(self, solution: IntegerSolution) -> IntegerSolution:
         for i in range(solution.number_of_variables):
             if random.random() <= self.probability:
@@ -109,6 +118,9 @@ class SimpleRandom(Mutation[FloatSolution]):
     def __init__(self, probability: float):
         super(SimpleRandom, self).__init__(probability=probability)
 
+    def get_name(self):
+        return "Simple random mutation"
+
     def execute(self, solution: FloatSolution) -> FloatSolution:
         for i in range(solution.number_of_variables):
             rand = random.random()
@@ -121,6 +133,9 @@ class Uniform(Mutation[FloatSolution]):
     def __init__(self, probability: float, perturbation: float = 0.5):
         super(Uniform, self).__init__(probability=probability)
         self.perturbation = perturbation
+
+    def get_name(self):
+        return "Uniform mutation"
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
         for i in range(solution.number_of_variables):

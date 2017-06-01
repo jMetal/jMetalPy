@@ -1,15 +1,15 @@
 from jmetal.algorithm.singleobjective.evolutionaryalgorithm.evolutionaryalgorithm import ElitistEvolutionStrategy
 from jmetal.core.solution import BinarySolution, FloatSolution
 from jmetal.operator.mutation import BitFlip, Polynomial
-from jmetal.problem.singleobjective import OneMax, Sphere
+from jmetal.problem.singleobjectiveproblem import OneMax, Sphere
 
 
 def main():
-    binary_example()
-    print()
+    #binary_example()
+    #print()
     float_example()
-    print()
-    run_as_a_thread()
+    ##print()
+    #run_as_a_thread()
 
 
 def binary_example() -> None:
@@ -20,7 +20,7 @@ def binary_example() -> None:
          mu=1,
          lambdA=10,
          max_evaluations=25000,
-         mutation_operator=BitFlip(1.0/bits))
+         mutation=BitFlip(1.0/bits))
 
     algorithm.run()
     result = algorithm.get_result()
@@ -38,7 +38,7 @@ def float_example() -> None:
          mu=10,
          lambdA=10,
          max_evaluations=50000,
-         mutation_operator=Polynomial(1.0/variables))
+         mutation=Polynomial(1.0/variables))
 
     algorithm.run()
     result = algorithm.get_result()
@@ -55,7 +55,7 @@ def run_as_a_thread() -> None:
          mu=10,
          lambdA=10,
          max_evaluations=50000,
-         mutation_operator=Polynomial(1.0/variables))
+         mutation=Polynomial(1.0/variables))
 
     algorithm.start()
     print("Algorithm (running as a thread): " + algorithm.get_name())

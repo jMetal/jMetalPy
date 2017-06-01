@@ -1,6 +1,6 @@
 import unittest
 
-from jmetal.problem.multiobjective.viennet2 import Viennet2
+from jmetal.problem.multiobjectiveproblem.viennet2 import Viennet2
 
 
 class TestMethods(unittest.TestCase):

@@ -54,6 +54,7 @@ class Fonseca(FloatProblem):
     def get_name(self):
         return "Fonseca"
 
+
 class Schaffer(FloatProblem):
     def __init__(self):
         self.number_of_variables = 1
@@ -74,6 +75,7 @@ class Schaffer(FloatProblem):
 
     def get_name(self):
         return "Schaffer"
+
 
 class Viennet2(FloatProblem):
     def __init__(self):
