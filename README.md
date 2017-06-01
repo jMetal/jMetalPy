@@ -6,7 +6,12 @@ Any ideas about how the structure the project, coding style, useful tools (I'm u
 
 ![jMetal architecture](resources/jMetal5UML.png)
 
-# Current status (May 9th 2017)
+# Last changes (June 1st 2017)
+* The package organization has been simplified to make it more "Python-ish".
+* The [`EvolutionaryAlgorithm`](https://github.com/jMetal/jMetalPy/blob/master/jmetal/core/algorithm.py) class interits from `threading.Thread`, the any evolutionary algorithm can run as a thread. This class also contains an `Observable` field, so observer entities can register and will notified with algorithm information. 
+* [Four examples](https://github.com/jMetal/jMetalPy/blob/master/jmetal/core/algorithm.py) of configuring and running three different single-objective algorithms are provided.
+
+# Current status (June 1st 2017)
 The current implementation contains the following features: 
 * Algorithms (single-objective)
   * (mu+lamba)Evolution Strategy
