@@ -13,3 +13,5 @@ hs_err_pid*
 
 __pycache__
 .idea
+venv
+env
