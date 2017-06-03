@@ -4,15 +4,19 @@ from typing import TypeVar, Generic, List
 S = TypeVar('S')
 R = TypeVar('R')
 
-""" Class representing evolutionary algorithms """
-__author__ = "Antonio J. Nebro"
 
-
-class EvolutionaryAlgorithm(Generic[S, R], threading.Thread):
+class Algorithm(Generic[S, R], threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
-        self.population = []
         self.observable = None
+
+    def run(self):
+        pass
+
+class EvolutionaryAlgorithm(Algorithm[S, R]):
+    def __init__(self):
+        super(EvolutionaryAlgorithm,self).__init__()
+        self.population = []
 
     def create_initial_population(self) -> List[S]:
         pass

@@ -1,8 +1,8 @@
 from typing import TypeVar, List
 
+from jmetal.util.comparator import dominance_comparator
+
 S = TypeVar('S')
-
-
 
 
 class Ranking(List[S]):
@@ -21,14 +21,35 @@ class DominanceRanking(Ranking[List[S]]):
         self.ranked_sublists = [[]]
 
     def compute_ranking(self, solution_List: List[S]):
-        dominate_Me = []
-        i_dominate = [[]]
-        front = [[]]
+        dominate_me = []
+        i_dominate = []
 
         # Initialize the fronts
         for i in range(0, len(solution_List)+1):
-            front.append([])
+            self.ranked_sublists.append([])
 
+        for i in range(len(solution_List)):
+            i_dominate.add([])
+            dominate_me[i] = 0
+
+        for p in range(len(solution_List)-1):
+            for q in range(p+1, len(solution_List)):
+                dominance_test_result = dominance_comparator(solution_List[p], solution_List[q])
+                if dominance_test_result is 1:
+                    i_dominate[p].append(q)
+                    dominate_me[q] += 1
+                elif dominance_test_result is -1:
+                    i_dominate[q].append(p)
+                    dominate_me[p] += 1
+
+        for i in range(len(solution_List)):
+            if dominate_me[i] is 0:
+                self.ranked_sublists[0].append(i)
+                solution_List[i].attributes["ranking"] = 0
+
+        # obtain the rest of fronts
+
+        return self.ranked_sublists
 
 
 """
