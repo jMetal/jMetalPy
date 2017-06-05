@@ -126,8 +126,6 @@ Python is not Java. In Java, you cannot, by design, have more than one class in 
 
 In Python, **it is appropriate to group several classes into a single .py file. For that reason, the .py files are called modules.**
 
-
-> **Note:** <i>Pending definition.</i>
-
+[link](resources/prueba.md)
 
 
