@@ -12,10 +12,10 @@ Any ideas about how the structure the project, coding style, useful tools (I'm u
 
 All developers should follow these guidelines:
 
-  - [Follow style guide for python code: PEP8](pages/code_style.md)
-  - [Object-oriented programming](pages/poo.md)
-  - [Incorporate the new features of Python 3.5](pages/features_python3.md)
-  - [Respect the initial structure](pages/project_structure.md)
+  - [Follow style guide for python code: PEP8](resources/pages/code_style.md)
+  - [Object-oriented programming](resources/pages/poo.md)
+  - [Incorporate the new features of Python 3.5](resources/pages/features_python3.md)
+  - [Respect the initial structure](resources/pages/project_structure.md)
 
 
 
