@@ -37,7 +37,7 @@ NOTE: The generic classes inherit from abc.ABCMeta, so they are abstract classes
 ![jMetal architecture](../../resources/generic_class1.png)
 ![jMetal architecture](../../resources/generic_class2.png)
 
-In the code below, the IDE displays a warning in the call to the *add_car()* method when adding the car, since the 3rd parameter of the init must be a *str* type, as defined in the *add_car()* method of the *Parking* class.
+In the code below, the IDE displays a **warning** in the call to the *add_car()* method when adding the car, since the 3rd parameter of the init must be a *str* type, as defined in the *add_car()* method of the *Parking* class.
 
 ![jMetal architecture](../../resources/instance_with_generic_class_wearning.png)
 
