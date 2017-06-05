@@ -97,9 +97,9 @@ In the code below, the IDE displays a **warning**, since the 2nd parameter is a 
 
 ![jMetal architecture](resources/instance_with_generic_types2_wearning.png)
 
-The generic classes inherit from abc.ABCMeta, so they are abstract classes and abstract methods can be used.
-
 Example of use of **generic class**. When the class inherits from *Generic[...]*, the class is defined as generic. In this way we can indicate the types that will have the values of the generic types, when using the class as type. Look at the *add_car()* method of the *Parking* class.
+
+NOTE: The generic classes inherit from abc.ABCMeta, so they are abstract classes and __abstract methods can be used__.
 
 ![jMetal architecture](resources/generic_class1.png)
 ![jMetal architecture](resources/generic_class2.png)
