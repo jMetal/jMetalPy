@@ -45,10 +45,10 @@ When inheriting from generic classes, some type variables could be fixed:
 
 ![jMetal architecture](../../resources/generic_types_fixed.png)
 
-Inheritance from non-generic class to generic class:
+Example of inheritance from non-generic class to generic class:
 
 ![jMetal architecture](../../resources/inheritance_non_generic_to_generic.png)
 
-Inheritance from generic class to another generic class:
+Example of inheritance from generic class to another generic class:
 
 ![jMetal architecture](../../resources/inheritance_generic_to_generic.png)
