@@ -52,3 +52,5 @@ Example of inheritance from non-generic class to generic class:
 Example of inheritance from generic class to another generic class:
 
 ![jMetal architecture](../../resources/inheritance_generic_to_generic.png)
+
+There are more features in Python3.5! &nbsp; &rarr; [Python3.5 documentation](https://docs.python.org/3.5/contents.html). </br>
