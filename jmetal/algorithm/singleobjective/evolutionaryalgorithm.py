@@ -26,7 +26,6 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         self.lambdA = lambdA
         self.max_evaluations = max_evaluations
         self.mutation = mutation
-        self.evaluations = 0
 
     def init_progress(self):
         self.evaluations = self.mu

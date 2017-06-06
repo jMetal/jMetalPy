@@ -9,9 +9,14 @@ class Algorithm(Generic[S, R], threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
         self.observable = None
+        self.evaluations = 0
 
     def run(self):
         pass
+
+    def get_name(self):
+        pass
+
 
 class EvolutionaryAlgorithm(Algorithm[S, R]):
     def __init__(self):
@@ -56,5 +61,3 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
             self.population = self.replacement(self.population, offspring_population)
             self.update_progress()
 
-    def get_name(self):
-        pass
