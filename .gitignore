@@ -15,10 +15,10 @@ venv
 env
 .idea
 *.pyc
+.coverage
 __pycache__/
 build
 dist
 *.spec
 coverage.xml
-.coverage
 *.egg-info
