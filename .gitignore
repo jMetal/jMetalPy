@@ -11,7 +11,14 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-__pycache__
-.idea
 venv
 env
+.idea
+*.pyc
+__pycache__/
+build
+dist
+*.spec
+coverage.xml
+.coverage
+*.egg-info
