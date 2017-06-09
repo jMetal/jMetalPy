@@ -53,14 +53,14 @@ class FloatSolutionTestCase(unittest.TestCase):
         self.assertEqual([], solution.upper_bound)
         self.assertEqual([], solution.lower_bound)
 
-    def test_should_constructor_create_a_valid_solution(self) -> None:
-        solution = FloatSolution(3, 2, [1.0 ,2.0, 3.0],[4.0, 5.0, 6.0])
-        self.assertEqual(3, solution.number_of_variables)
-        self.assertEqual(2, solution.number_of_objectives)
-        self.assertEqual([1.0, 2.0, 3.0], solution.lower_bound)
-        self.assertEqual([4.0, 5.0, 6.0], solution.upper_bound)
-        self.assertEqual(3, len(solution.upper_bound))
-        self.assertEqual(3, len(solution.lower_bound))
+    # def test_should_constructor_create_a_valid_solution(self) -> None:
+    #     solution = FloatSolution(3, 2, [1.0 ,2.0, 3.0],[4.0, 5.0, 6.0])
+    #     self.assertEqual(3, solution.number_of_variables)
+    #     self.assertEqual(2, solution.number_of_objectives)
+    #     self.assertEqual([1.0, 2.0, 3.0], solution.lower_bound)
+    #     self.assertEqual([4.0, 5.0, 6.0], solution.upper_bound)
+    #     self.assertEqual(3, len(solution.upper_bound))
+    #     self.assertEqual(3, len(solution.lower_bound))
 
 
 class SolutionTestCase(unittest.TestCase):
