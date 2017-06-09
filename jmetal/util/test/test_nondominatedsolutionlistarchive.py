@@ -1,6 +1,6 @@
 import unittest
 
-from jmetal.core.solution import FloatSolution, Solution
+from jmetal.core.solution import Solution
 from jmetal.util.nondominatedsolutionlistarchive import NonDominatedSolutionListArchive
 
 

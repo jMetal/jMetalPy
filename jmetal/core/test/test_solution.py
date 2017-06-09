@@ -1,6 +1,5 @@
 import unittest
 
-from jmetal.core.problem import BinaryProblem
 from jmetal.core.solution import BinarySolution, FloatSolution, Solution
 
 __author__ = "Antonio J. Nebro"

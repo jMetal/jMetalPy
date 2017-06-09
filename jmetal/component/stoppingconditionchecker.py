@@ -1,5 +1,3 @@
-import jmetal.core.algorithm
-
 class StoppingConditionChecker():
     def __init__(self, **kwargs):
         self.algorithm_data = kwargs

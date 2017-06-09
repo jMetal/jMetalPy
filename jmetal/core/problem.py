@@ -1,7 +1,6 @@
 import random
 from typing import Generic, TypeVar
 
-
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
 
 __author__ = "Antonio J. Nebro"
