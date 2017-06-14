@@ -19,23 +19,18 @@ Some branches are temporary, and others are constant throughout the life of the 
 > > * Where does this branch emerge? This branch always emerge from the develop branch
 > > * When I finish the correction in my fix branch, which branch to merge into?: You always merge feature branch into develop branch
 
-> * *hotfix/<task-id>-<description>*: Cuando estemos corrigiendo de emergencia una incidencia en producción, creamos una rama local con el prefijo "hotfix/", a continuación, le indicamos el nº de tarea que RedMine nos ha suministrado con la tarea que estemos haciendo, agregamos un guión "-" y le indicamos un nombre acorde a la funcionalidad que estemos corrigiendo.
-> > * ¿De dónde sale esta rama?: Siempre sale de la rama master
-> > * ¿A qué rama hago el merge cuando acabo el desarrollo?: Siempre merge a la rama master y develop
+> * *hotfix/<task-id>-<description>*: When we are correcting an emergency incidence in production, we create a local branch with the prefix "hotfix/", then only if there is a task id, we indicate it and we add a hyphen. The following we indicate a description according to the functionality that we are correcting. The words are separated by hyphens.
+> > * Where does this branch emerge?: This branch always emerge from the master branch
+> > * When I finish the correction in my hotfix branch, which branch to merge into?: This branch always emerge from the master and develop branch
 
 ![jMetal architecture](../../resources/WorkflowGitBranches.png)
 
-* Pasos a seguir cuando estás creando o vas a trabajar en una rama de cualquier tipo (feature / fix / hotfix):
-> * Si estás creando la rama, oriéntala siempre a la funcionalidad y no metas contenido de otra tareas :)
-> * 1º) Si eres quien ha creado la rama, inmediatamente después de crearla en local, súbela al servidor Git remoto, desde ese momento tienes garantizado que el sistema de integración estará verificando tu código desde el primer momento.
-> * 2º) Cada vez que realices un "commit", en la medida de lo posible, envía un push al servidor, cada push desencadenará el lanzamiento automatizado de las pruebas, test, etc.
-> * 3º) Una vez finalizado el desarrollo, habiendo realizado un push al servidor Git remoto, y viendo que Jenkins ha compilado y pasado la fase de test sin problema, solicita pull request a los miembros del equipo.
-> * 4º) Cuando >= 75% de las personas a las que les solicitaste la pull request hayan validado la pull...
-> > * Merge a la rama develop local, incluir la opción como argumento "--no--ff". Ej.: git merge feature/47-aaa --no-ff
-> > * Push al servidor remoto de tu rama develop
-> > * Borra la rama remota en la que estabas trabajando
-> > * Borra la rama local en la que estabas trabajando
+* Steps to follow when you are creating or going to work on a branch of any kind (feature/fix/hotfix):
+> * 1º) After you create your branch (feature/fix/hotfix) locally, upload it to the remote Git server. The integration system will verify your code from the outset.
+> * 2º) Each time you commit, as much as possible, you send a push to the server. Each push will trigger the automated launch of the tests, etc.
+> * 3º) Once the development is finished, having done a push to the remote Git server, and that the test phase has passed without problem, you create an pull request:
+https://help.github.com/articles/creating-a-pull-request/
+<br>NOTE:Do not forget to remove your branch (feature/fix/hotfix) once the merge has been made.
 
-* Comandos básicos de GIT:
-> * git fetch --prune: Realiza limpieza de los punteros de ramas de tu servidor local, que ya no existen en el servidor remoto
-> * git -c user.name="userName" -c user.email="name@domain.es" commit -m "Comment": Permite realizar un commit incluyendo en el commit en concreto, el usuario y correo electrónico
+* Some useful Git commands:
+> * git fetch --prune: Cleaning branches removed and bringing new branches
