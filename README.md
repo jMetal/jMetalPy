@@ -51,5 +51,4 @@ All developers should follow these guidelines:
   - [Object-oriented programming](resources/pages/poo.md)
   - [Incorporate the new features of Python 3.5](resources/pages/features_python3.md)
   - [Respect the initial structure](resources/pages/project_structure.md)
-
-
+  - [How to create auto documentation using compatible code](resources/pages/auto_doc.md)
