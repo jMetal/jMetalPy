@@ -30,7 +30,7 @@ Some branches are temporary, and others are constant throughout the life of the 
     2. Each time you commit, as much as possible, you send a push to the server. Each push will trigger the automated launch of the tests, etc.
     3. Once the development is finished, having done a push to the remote Git server, and that the test phase has passed without problem, you create an pull request:
 https://help.github.com/articles/creating-a-pull-request/
-<br>NOTE:Do not forget to remove your branch (feature/fix/hotfix) once the merge has been made.
+<br>NOTE: Do not forget to remove your branch (feature/fix/hotfix) once the merge has been made.
 
 * Some useful Git commands:
     * git fetch --prune: Cleaning branches removed and bringing new branches
