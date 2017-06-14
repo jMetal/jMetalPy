@@ -16,7 +16,7 @@ We can define abstract classes (ABCs) in Python:
 
 In the case that we want to define an **interface** class, it is done in the same way. We just have to define all the methods of the class as abstract.
 
-### Generic classes and types
+### Generic types
 
 Example of use of generic types:
 
@@ -30,7 +30,9 @@ In the code below, the IDE displays a **warning**, since the 2nd parameter is a 
 
 ![jMetal architecture](../../resources/instance_with_generic_types2_wearning.png)
 
-Example of use of **generic class**. When the class inherits from *Generic[...]*, the class is defined as generic. In this way we can indicate the types that will have the values of the generic types, when using the class as type. Look at the *add_car()* method of the *Parking* class.
+### Generic class
+
+When the class inherits from *Generic[...]*, the **class is defined as generic**. In this way we can indicate the types that will have the values of the generic types, when using the class as type. Look at the *add_car()* method of the *Parking* class.
 
 NOTE: The generic classes inherit from abc.ABCMeta, so they are abstract classes and **abstract methods can be used** .
 
