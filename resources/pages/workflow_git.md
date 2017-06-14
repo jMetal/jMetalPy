@@ -25,12 +25,12 @@ Some branches are temporary, and others are constant throughout the life of the 
 
 ![jMetal architecture](../../resources/WorkflowGitBranches.png)
 
-* Steps to follow when you are creating or going to work on a branch of any kind (feature/fix/hotfix):
-    1. After you create your branch (feature/fix/hotfix) locally, upload it to the remote Git server. The integration system will verify your code from the outset.
+* Steps to follow when you are creating or going to work on a branch of any kind (feature / fix / hotfix):
+    1. After you create your branch (feature / fix / hotfix) locally, upload it to the remote Git server. The integration system will verify your code from the outset.
     2. Each time you commit, as much as possible, you send a push to the server. Each push will trigger the automated launch of the tests, etc.
     3. Once the development is finished, having done a push to the remote Git server, and that the test phase has passed without problem, you create an pull request:
 https://help.github.com/articles/creating-a-pull-request/
-<br>NOTE: Do not forget to remove your branch (feature/fix/hotfix) once the merge has been made.
+<br>NOTE: Do not forget to remove your branch (feature / fix / hotfix) once the merge has been made.
 
 * Some useful Git commands:
     * git fetch --prune: Cleaning branches removed and bringing new branches
