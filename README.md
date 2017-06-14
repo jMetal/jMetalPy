@@ -47,6 +47,7 @@ The current implementation contains the following features:
 
 All developers should follow these guidelines:
 
+  - [Git WorkFlow](resources/pages/workflow_git.md)
   - [Follow style guide for python code: PEP8](resources/pages/code_style.md)
   - [Object-oriented programming](resources/pages/poo.md)
   - [Incorporate the new features of Python 3.5](resources/pages/features_python3.md)
