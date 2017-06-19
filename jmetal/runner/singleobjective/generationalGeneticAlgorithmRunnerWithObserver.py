@@ -7,15 +7,45 @@ from jmetal.problem.singleobjectiveproblem import Sphere
 from jmetal.util.observable import Observer
 
 
+import pyqtgraph as pg
+from pyqtgraph.Qt import QtCore, QtGui
+import numpy as np
+
+
+
+
 def main():
     float_example()
 
 
 class AlgorithmObserver(Observer):
+
+    def __init__(self) -> None:
+        # Configure graphic window
+        win = pg.GraphicsWindow()
+        win.setWindowTitle('Algorithm observer')
+
+        # Load char
+        p1 = win.addPlot()
+        p2 = win.addPlot()
+
+        # Load data
+        self.data1 = np.random.normal(size=300)
+        self.curve1 = p1.plot(self.data1)
+        self.curve2 = p2.plot(self.data1)
+        self.ptr1 = 0
+
     def update(self, *args, **kwargs):
         print("Evaluations: " + str(kwargs["evaluations"]) +
               ". Best fitness: " + str(kwargs["best"].objectives[0]) +
               ". Computing time: " + str(kwargs["computing time"]))
+        self.data1[:-1] = self[1:]  # shift data in the array one sample left
+        # (see also: np.roll)
+        self.data1[-1] = np.random.normal()
+        self.curve1.setData(self.data1)
+        self.ptr1 += 1
+        self.curve2.setData(self.data1)
+        self.curve2.setPos(self.ptr1, 0)
 
 
 def float_example() -> None:
