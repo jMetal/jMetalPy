@@ -13,7 +13,9 @@ def main():
 
 class AlgorithmObserver(Observer):
     def update(self, *args, **kwargs):
-        print("Evaluations: " + str(kwargs["evaluations"]) + ". Best fitness: " + str(kwargs["best"].objectives[0]))
+        print("Evaluations: " + str(kwargs["evaluations"]) +
+              ". Best fitness: " + str(kwargs["best"].objectives[0]) +
+              ". Computing time: " + str(kwargs["computing time"]))
 
 
 def float_example() -> None:

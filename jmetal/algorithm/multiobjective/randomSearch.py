@@ -2,7 +2,7 @@ from typing import TypeVar, List, Generic
 
 from jmetal.core.problem.problem import Problem
 
-from jmetal.util.nondominatedsolutionlistarchive import NonDominatedSolutionListArchive
+from jmetal.component.nondominatedsolutionlistarchive import NonDominatedSolutionListArchive
 
 """ Class representing simple random search algorithms """
 

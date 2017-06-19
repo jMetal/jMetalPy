@@ -1,7 +1,7 @@
 import unittest
 
+from jmetal.component.nondominatedsolutionlistarchive import NonDominatedSolutionListArchive
 from jmetal.core.solution import Solution
-from jmetal.util.nondominatedsolutionlistarchive import NonDominatedSolutionListArchive
 
 
 class TestMethods(unittest.TestCase):
