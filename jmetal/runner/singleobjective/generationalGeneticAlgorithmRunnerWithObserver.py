@@ -5,13 +5,10 @@ from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament
 from jmetal.problem.singleobjectiveproblem import Sphere
 from jmetal.util.observable import Observer
-
-
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtCore, QtGui
 import numpy as np
-
-
+import sys
 
 
 def main():
@@ -21,13 +18,18 @@ def main():
 class AlgorithmObserver(Observer):
 
     def __init__(self) -> None:
-        # Configure graphic window
-        win = pg.GraphicsWindow()
-        win.setWindowTitle('Algorithm observer')
 
-        # Load char
-        p1 = win.addPlot()
-        p2 = win.addPlot()
+        # timer refresh
+        # timer = pg.QtCore.QTimer()
+        # timer.timeout.connect(self.update())
+
+        # Configure graphic window
+        self.win = pg.GraphicsWindow()
+        self.win.setWindowTitle('Algorithm observer')
+
+        # Load chart
+        p1 = self.win.addPlot()
+        p2 = self.win.addPlot()
 
         # Load data
         self.data1 = np.random.normal(size=300)
@@ -35,13 +37,17 @@ class AlgorithmObserver(Observer):
         self.curve2 = p2.plot(self.data1)
         self.ptr1 = 0
 
+        if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
+            QtGui.QApplication.instance().exec_()
+
     def update(self, *args, **kwargs):
+
         print("Evaluations: " + str(kwargs["evaluations"]) +
               ". Best fitness: " + str(kwargs["best"].objectives[0]) +
               ". Computing time: " + str(kwargs["computing time"]))
-        self.data1[:-1] = self[1:]  # shift data in the array one sample left
-        # (see also: np.roll)
+        self.data1[:-1] = self.data1[1:]  # shift data in the array one sample left
         self.data1[-1] = np.random.normal()
+
         self.curve1.setData(self.data1)
         self.ptr1 += 1
         self.curve2.setData(self.data1)
@@ -71,6 +77,7 @@ def float_example() -> None:
     print("Problem: " + problem.get_name())
     print("Solution: " + str(result.variables))
     print("Fitness:  " + str(result.objectives[0]))
+
 
 if __name__ == '__main__':
     main()
