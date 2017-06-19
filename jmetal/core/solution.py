@@ -31,7 +31,6 @@ class BinarySolution(Solution[BitSet]):
 
         return total
 
-
 class FloatSolution(Solution[float]):
     """ Class representing float solutions """
 

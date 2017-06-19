@@ -16,7 +16,7 @@ def binary_example() -> None:
     bits = 512
     problem = OneMax(bits)
     algorithm = NonElitistEvolutionStrategy[BinarySolution, BinarySolution]\
-        (problem, mu=1, lambdA=10, max_evaluations= 50000, mutation=BitFlip(1.0/bits))
+        (problem, mu=1, lambdA=10, max_evaluations= 25000, mutation=BitFlip(1.0/bits))
 
     algorithm.run()
     result = algorithm.get_result()
@@ -24,6 +24,7 @@ def binary_example() -> None:
     print("Problem: " + problem.get_name())
     print("Solution: " + str(result.variables[0]))
     print("Fitness:  " + str(result.objectives[0]))
+    print("Computing time: " + str(algorithm.total_computing_time))
 
 
 def float_example() -> None:
@@ -38,6 +39,7 @@ def float_example() -> None:
     print("Problem: " + problem.get_name())
     print("Solution: " + str(result.variables))
     print("Fitness:  " + str(result.objectives[0]))
+    print("Computing time: " + str(algorithm.total_computing_time))
 
 
 def run_as_a_thread() -> None:
@@ -55,6 +57,7 @@ def run_as_a_thread() -> None:
 
     print("Solution: " + str(result.variables))
     print("Fitness:  " + str(result.objectives[0]))
+    print("Computing time: " + str(algorithm.total_computing_time))
 
 if __name__ == '__main__':
     main()

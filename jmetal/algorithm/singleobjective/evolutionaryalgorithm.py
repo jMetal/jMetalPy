@@ -1,5 +1,6 @@
 from copy import deepcopy
 from typing import TypeVar, List
+import time
 
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
@@ -73,6 +74,7 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         return new_population
 
     def get_result(self) -> R:
+        self.total_computing_time = self.get_current_computing_time()
         return self.population[0]
 
     def get_name(self):
@@ -128,7 +130,8 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         self.evaluations += self.population_size
         observable_data = {'evaluations': self.evaluations,
                            'population': self.population,
-                           'best': self.population[0]}
+                           'best': self.population[0],
+                           'computing time': self.get_current_computing_time()}
         self.observable.notify_all(**observable_data)
 
     def is_stopping_condition_reached(self) -> bool:
@@ -188,6 +191,7 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         return offspring_population
 
     def get_result(self) -> R:
+        self.total_computing_time = self.get_current_computing_time()
         return self.population[0]
 
     def get_name(self):

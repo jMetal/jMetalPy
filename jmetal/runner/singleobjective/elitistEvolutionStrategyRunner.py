@@ -5,11 +5,11 @@ from jmetal.problem.singleobjectiveproblem import OneMax, Sphere
 
 
 def main():
-    #binary_example()
+    binary_example()
     #print()
     float_example()
     ##print()
-    #run_as_a_thread()
+    run_as_a_thread()
 
 
 def binary_example() -> None:
@@ -28,6 +28,7 @@ def binary_example() -> None:
     print("Problem: " + problem.get_name())
     print("Solution: " + str(result.variables[0]))
     print("Fitness:  " + str(result.objectives[0]))
+    print("Computing time: " + str(algorithm.total_computing_time))
 
 
 def float_example() -> None:
@@ -46,6 +47,7 @@ def float_example() -> None:
     print("Problem: " + problem.get_name())
     print("Solution: " + str(result.variables))
     print("Fitness:  " + str(result.objectives[0]))
+    print("Computing time: " + str(algorithm.total_computing_time))
 
 def run_as_a_thread() -> None:
     variables = 10
@@ -65,6 +67,8 @@ def run_as_a_thread() -> None:
     result = algorithm.get_result()
     print("Solution: " + str(result.variables))
     print("Fitness:  " + str(result.objectives[0]))
+    print("Computing time: " + str(algorithm.total_computing_time))
+
 
 if __name__ == '__main__':
     main()
