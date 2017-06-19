@@ -85,7 +85,7 @@ def float_example_changing_the_stopping_condition() -> None:
 
     class GGA2(GenerationalGeneticAlgorithm[FloatSolution, FloatSolution]):
         def is_stopping_condition_reached(self):
-            return self.get_current_computing_time() > 2
+            return self.get_current_computing_time() > 3
 
     algorithm = GGA2(
         problem,

@@ -66,6 +66,7 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
         pass
 
     def run(self):
+        super(EvolutionaryAlgorithm, self).run()
         self.population = self.create_initial_population()
         self.population = self.evaluate_population(self.population)
         self.init_progress()
