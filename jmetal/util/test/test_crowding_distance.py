@@ -8,11 +8,11 @@ class CrowdingDistanceTestCases(unittest.TestCase):
     def setUp(self):
         self.crowding = CrowdingDistance()
 
-    def should_the_crowding_distance_of_an_empty_set_do_nothing(self):
+    def test_should_the_crowding_distance_of_an_empty_set_do_nothing(self):
         solution_list = []
         self.crowding.compute_density_estimator(solution_list)
 
-    def should_the_crowding_distance_of_single_solution_be_infinity(self):
+    def test_should_the_crowding_distance_of_single_solution_be_infinity(self):
         solution = Solution(3, 3)
         solution_list = [solution]
 
@@ -21,7 +21,7 @@ class CrowdingDistanceTestCases(unittest.TestCase):
 
         self.assertEqual(float("inf"), value)
 
-    def should_the_crowding_distance_of_two_solutions_be_infinity(self):
+    def test_should_the_crowding_distance_of_two_solutions_be_infinity(self):
         solution1 = Solution(3, 3)
         solution2 = Solution(3, 3)
         solution_list = [solution1, solution2]
@@ -33,7 +33,7 @@ class CrowdingDistanceTestCases(unittest.TestCase):
         self.assertEqual(float("inf"), value_from_solution1)
         self.assertEqual(float("inf"), value_from_solution2)
 
-    def should_the_crowding_distance_of_three_solutions_correctly_assigned(self):
+    def test_should_the_crowding_distance_of_three_solutions_correctly_assigned(self):
         solution1 = Solution(2, 2)
         solution2 = Solution(2, 2)
         solution3 = Solution(2, 2)
@@ -57,7 +57,7 @@ class CrowdingDistanceTestCases(unittest.TestCase):
         self.assertEqual(float("inf"), value_from_solution2)
         self.assertEqual(2.0, value_from_solution3)
 
-    def should_the_crowding_distance_of_four_solutions_correctly_assigned(self):
+    def test_should_the_crowding_distance_of_four_solutions_correctly_assigned(self):
         solution1 = Solution(2, 2)
         solution2 = Solution(2, 2)
         solution3 = Solution(2, 2)
