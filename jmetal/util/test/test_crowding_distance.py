@@ -84,3 +84,7 @@ class CrowdingDistanceTestCases(unittest.TestCase):
         self.assertEqual(float("inf"), value_from_solution1)
         self.assertEqual(float("inf"), value_from_solution2)
         self.assertGreater(value_from_solution3, value_from_solution4)
+
+
+if __name__ == "__main__":
+    unittest.main()
