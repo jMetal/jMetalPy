@@ -56,6 +56,43 @@ class DominanceRankingTestCases(unittest.TestCase):
         self.assertEqual(solution, ranking[0][0])
         self.assertEqual(solution2, ranking[1][0])
 
+    def test_should_ranking_of_a_population_with_three_dominated_solutions_return_three_subfronts(self):
+        solution = Solution(2, 2)
+        solution.objectives = [2, 3]
+        solution2 = Solution(2, 2)
+        solution2.objectives = [3, 6]
+        solution3 = Solution(2,2)
+        solution3.objectives = [4, 8]
+        solution_list = [solution, solution2, solution3]
+
+        ranking = self.ranking.compute_ranking(solution_list)
+
+        self.assertEqual(3, len(ranking))
+        self.assertEqual(1, len(ranking[0]))
+        self.assertEqual(1, len(ranking[1]))
+        self.assertEqual(1, len(ranking[2]))
+        self.assertEqual(solution, ranking[0][0])
+        self.assertEqual(solution2, ranking[1][0])
+        self.assertEqual(solution3, ranking[2][0])
+
+    def should_ranking_of_a_population_with_five_solutions_work_properly(self):
+        solution = Solution(2, 2)
+        solution.objectives = [1.0, 0.0]
+        solution2 = Solution(2, 2)
+        solution2.objectives = [0.6, 0.6]
+        solution3 = Solution(2, 2)
+        solution3.objectives = [0.5, 0.5]
+        solution4 = Solution(2,2)
+        solution4.objectives[1.1, 0.0]
+        solution5 = Solution(2,2)
+        solution5.objectives[1.0,0.0]
+        solution_list = [solution, solution2, solution3, solution4, solution5]
+
+        ranking = self.ranking.compute_ranking(solution_list)
+
+        self.assertEqual(2, len(ranking))
+        self.assertEqual(3, len(ranking[0]))
+        self.assertEqual(2, len(ranking[1]))
 
 if __name__ == "__main__":
     unittest.main()
