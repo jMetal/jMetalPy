@@ -28,7 +28,7 @@ class DominanceRanking(Ranking[List[S]]):
         i_dominate = [[] for i in range(len(solution_list))]
 
         # front[i] contains the list of solutions belonging to front i
-        front = [[] for i in range(len(solution_list))]
+        front = [[] for i in range(len(solution_list)+1)]
 
         # Initialize the fronts
         #for i in range(0, len(solution_List)+1):
@@ -54,10 +54,31 @@ class DominanceRanking(Ranking[List[S]]):
                 front[0].append(i)
                 solution_list[i].attributes["ranking"] = 0
 
-        self.ranked_sublists.append(front[0])
+        #self.ranked_sublists.append(front[0])
 
         i = 0
-        while front[i] is not None:
+        while (len(front[i]) != 0):
+            i += 1
+            for p in front[i-1]:
+                if p <= len(i_dominate):
+                    for q in i_dominate[p]:
+                        index = q
+                        dominate_me[index] -= 1
+                        if dominate_me[index] is 0:
+                            front[i].append(index)
+                            solution_list[index].attributes["ranking"] = i
+
+        self.ranked_sublists = [[]] * i
+        for j in range(i):
+            Q =[0]*len(front[j])
+            for k in range(len(front[j])):
+                Q[k] = solution_list[front[j][k]]
+                #self.ranked_sublists[j].append(solution_list[k])
+            self.ranked_sublists[j] = Q
+
+        """
+        i = 0
+        while len(front[i]) is not None:
             Q = []
             for p in front[i]:
                 for q in i_dominate[p]:
@@ -69,9 +90,7 @@ class DominanceRanking(Ranking[List[S]]):
             i += 1
             if Q is not []:
                 self.ranked_sublists.append(Q)
-
-        # obtain the rest of fronts
-
+        """
 
         return self.ranked_sublists
 
