@@ -28,10 +28,10 @@ class DominanceRanking(Ranking[List[S]]):
         i_dominate = [[] for i in range(len(solution_list))]
 
         # front[i] contains the list of solutions belonging to front i
-        front = [[] for i in range(len(solution_list)+1)]
+        front = [[] for i in range(len(solution_list) + 1)]
 
-        for p in range(len(solution_list)-1):
-            for q in range(p+1, len(solution_list)):
+        for p in range(len(solution_list) - 1):
+            for q in range(p + 1, len(solution_list)):
                 dominance_test_result = dominance_comparator(solution_list[p], solution_list[q])
                 if dominance_test_result is -1:
                     i_dominate[p].append(q)
@@ -48,7 +48,7 @@ class DominanceRanking(Ranking[List[S]]):
         i = 0
         while (len(front[i]) != 0):
             i += 1
-            for p in front[i-1]:
+            for p in front[i - 1]:
                 if p <= len(i_dominate):
                     for q in i_dominate[p]:
                         index = q
@@ -59,11 +59,9 @@ class DominanceRanking(Ranking[List[S]]):
 
         self.ranked_sublists = [[]] * i
         for j in range(i):
-            Q =[0]*len(front[j])
+            Q = [0] * len(front[j])
             for k in range(len(front[j])):
                 Q[k] = solution_list[front[j][k]]
             self.ranked_sublists[j] = Q
 
         return self.ranked_sublists
-
-

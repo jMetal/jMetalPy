@@ -61,7 +61,7 @@ class DominanceRankingTestCases(unittest.TestCase):
         solution.objectives = [2, 3]
         solution2 = Solution(2, 2)
         solution2.objectives = [3, 6]
-        solution3 = Solution(2,2)
+        solution3 = Solution(2, 2)
         solution3.objectives = [4, 8]
         solution_list = [solution, solution2, solution3]
 
@@ -76,8 +76,6 @@ class DominanceRankingTestCases(unittest.TestCase):
         self.assertEqual(solution3, ranking[2][0])
 
     def test_should_ranking_of_a_population_with_five_solutions_work_properly(self):
-
-
         solution1 = Solution(2, 2)
         solution2 = Solution(2, 2)
         solution3 = Solution(2, 2)
@@ -107,6 +105,7 @@ class DominanceRankingTestCases(unittest.TestCase):
         self.assertEqual(solution5, ranking[0][2])
         self.assertEqual(solution4, ranking[1][0])
         self.assertEqual(solution2, ranking[1][1])
+
 
 if __name__ == "__main__":
     unittest.main()
