@@ -4,9 +4,11 @@ from jmetal.algorithm.singleobjective.evolutionaryalgorithm import GenerationalG
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
 from jmetal.util.observable import Observable, DefaultObservable
+from jmetal.util.ranking import DominanceRanking
 
 S = TypeVar('S')
 R = TypeVar('R')
+
 
 class NSGAII(GenerationalGeneticAlgorithm[S, R]):
     def __init__(self,
@@ -29,9 +31,23 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
 
     def replacement(self, population: List[S], offspring_population: List[S]) \
             -> List[S]:
-
         join_population = population + offspring_population
+        return RankingAndCrowdingDistanceSelection(self.population_size).execute(join_population)
 
-        # RANKING AND CROWDING SELECTION
 
-        return join_population
+class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
+    def __init__(self, max_population_size:int):
+        super(RankingAndCrowdingDistanceSelection, self).__init__()
+        self.max_population_size = max_population_size
+
+    def execute(self, solution_list: List[S]) -> List[S]:
+        ranking = DominanceRanking()
+        ranked_lists = ranking.compute_ranking(solution_list)
+
+        ranking_index = 0
+        new_solution_list = []
+        while len(new_solution_list) < self.max_population_size:
+            if (ranked_lists[ranking_index]):
+                pass
+
+
