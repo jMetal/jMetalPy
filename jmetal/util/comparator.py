@@ -37,7 +37,7 @@ def equal_solutions_comparator(solution1: Solution, solution2: Solution) -> int:
     elif solution2 is None:
         return -1
 
-    dominate1 = 0;
+    dominate1 = 0
     dominate2 = 0
 
     for i in range(len(solution1.objectives)):

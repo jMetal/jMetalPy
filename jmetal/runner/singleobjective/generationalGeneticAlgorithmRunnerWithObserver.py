@@ -19,6 +19,8 @@ class AlgorithmObserver(Observer):
     def __init__(self) -> None:
         self.window = DataStreamWindow()
         self.chart = Chart()
+        self.chart.left_label = 'Objectives'
+        self.chart.bottom_label = 'Evaluations'
         self.window.charts_list.append(self.chart)
         DataStreamWindowBS().launch_window(self.window)
 
