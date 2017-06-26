@@ -22,7 +22,7 @@ class DominanceRankingTestCases(unittest.TestCase):
 
         ranking = self.ranking.compute_ranking(solution_list)
 
-        self.assertEqual(1, len(ranking))
+        self.assertEqual(1, self.ranking.get_number_of_subfronts())
         self.assertEqual(solution, ranking[0][0])
 
     def test_should_compute_ranking_return_a_subfront_if_the_solution_list_contains_two_nondominated_solutions(self):
@@ -34,9 +34,8 @@ class DominanceRankingTestCases(unittest.TestCase):
 
         ranking = self.ranking.compute_ranking(solution_list)
 
-        self.assertEqual(1, len(ranking))
-        self.assertEqual(2, len(ranking[0]))
-
+        self.assertEqual(1, self.ranking.get_number_of_subfronts())
+        self.assertEqual(2, len(self.ranking.get_subfront(0)))
         self.assertEqual(solution, ranking[0][0])
         self.assertEqual(solution2, ranking[0][1])
 
@@ -50,9 +49,9 @@ class DominanceRankingTestCases(unittest.TestCase):
 
         ranking = self.ranking.compute_ranking(solution_list)
 
-        self.assertEqual(2, len(ranking))
-        self.assertEqual(1, len(ranking[0]))
-        self.assertEqual(1, len(ranking[1]))
+        self.assertEqual(2, self.ranking.get_number_of_subfronts())
+        self.assertEqual(1, len(self.ranking.get_subfront(0)))
+        self.assertEqual(1, len(self.ranking.get_subfront(1)))
         self.assertEqual(solution, ranking[0][0])
         self.assertEqual(solution2, ranking[1][0])
 
@@ -67,10 +66,10 @@ class DominanceRankingTestCases(unittest.TestCase):
 
         ranking = self.ranking.compute_ranking(solution_list)
 
-        self.assertEqual(3, len(ranking))
-        self.assertEqual(1, len(ranking[0]))
-        self.assertEqual(1, len(ranking[1]))
-        self.assertEqual(1, len(ranking[2]))
+        self.assertEqual(3, self.ranking.get_number_of_subfronts())
+        self.assertEqual(1, len(self.ranking.get_subfront(0)))
+        self.assertEqual(1, len(self.ranking.get_subfront(1)))
+        self.assertEqual(1, len(self.ranking.get_subfront(2)))
         self.assertEqual(solution, ranking[0][0])
         self.assertEqual(solution2, ranking[1][0])
         self.assertEqual(solution3, ranking[2][0])
@@ -97,9 +96,9 @@ class DominanceRankingTestCases(unittest.TestCase):
 
         ranking = self.ranking.compute_ranking(solution_list)
 
-        self.assertEqual(2, len(ranking))
-        self.assertEqual(3, len(ranking[0]))
-        self.assertEqual(2, len(ranking[1]))
+        self.assertEqual(2, self.ranking.get_number_of_subfronts())
+        self.assertEqual(3, len(self.ranking.get_subfront(0)))
+        self.assertEqual(2, len(self.ranking.get_subfront(1)))
         self.assertEqual(solution1, ranking[0][0])
         self.assertEqual(solution3, ranking[0][1])
         self.assertEqual(solution5, ranking[0][2])
