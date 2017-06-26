@@ -1,3 +1,6 @@
+from graphtiny.bs import DataStreamWindowBS, ChartBS
+from graphtiny.domain import DataStreamWindow, Chart
+
 from jmetal.algorithm.singleobjective.evolutionaryalgorithm import GenerationalGeneticAlgorithm
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
@@ -12,10 +15,18 @@ def main():
 
 
 class AlgorithmObserver(Observer):
+
+    def __init__(self) -> None:
+        self.window = DataStreamWindow()
+        self.chart = Chart()
+        self.window.charts_list.append(self.chart)
+        DataStreamWindowBS().launch_window(self.window)
+
     def update(self, *args, **kwargs):
         print("Evaluations: " + str(kwargs["evaluations"]) +
               ". Best fitness: " + str(kwargs["best"].objectives[0]) +
               ". Computing time: " + str(kwargs["computing time"]))
+        ChartBS().set_data_stream(self.chart, kwargs["evaluations"], kwargs["best"].objectives[0])
 
 
 def float_example() -> None:
