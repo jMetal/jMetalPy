@@ -44,7 +44,7 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
     def execute(self, solution_list: List[S]) -> List[S]:
         ranking = DominanceRanking()
         crowding_distance = CrowdingDistance()
-        ranked_lists = ranking.compute_ranking(solution_list)
+        ranking.compute_ranking(solution_list)
 
         ranking_index = 0
         new_solution_list = []
@@ -55,7 +55,7 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
             else:
                 subfront = ranking.get_subfront(ranking_index)
                 crowding_distance.compute_density_estimator(subfront)
-                sorted_subfront = sorted(subfront, key=lambda x: x.attributes["distance"])
+                sorted_subfront = sorted(subfront, key=lambda x: x.attributes["distance"], reverse=True)
                 for i in range((self.max_population_size - len(new_solution_list) - 1)):
                     new_solution_list.append(sorted_subfront[i])
 
