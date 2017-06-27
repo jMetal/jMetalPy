@@ -22,6 +22,9 @@ dist
 *.spec
 coverage.xml
 *.egg-info
+.cache
+pytest-env
+*.zip
 
 # Avoid documentation
 auto-docs/build

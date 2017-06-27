@@ -3,7 +3,7 @@ import unittest
 from jmetal.util.observable import DefaultObservable, Observer
 
 
-class TestMethods(unittest.TestCase):
+class ObservableTestCases(unittest.TestCase):
     def setUp(self):
         self.observable = DefaultObservable()
 

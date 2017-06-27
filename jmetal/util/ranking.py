@@ -69,12 +69,8 @@ class DominanceRanking(Ranking[List[S]]):
             i += 1
             if Q is not []:
                 self.ranked_sublists.append(Q)
-
         # obtain the rest of fronts
-
-
         return self.ranked_sublists
-
 
 """
 public class DominanceRanking <S extends Solution<?>>
