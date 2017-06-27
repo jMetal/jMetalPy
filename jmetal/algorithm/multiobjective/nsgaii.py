@@ -3,6 +3,7 @@ from typing import TypeVar, List
 from jmetal.algorithm.singleobjective.evolutionaryalgorithm import GenerationalGeneticAlgorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
+from jmetal.util.crowding_distance import CrowdingDistance
 from jmetal.util.observable import Observable, DefaultObservable
 from jmetal.util.ranking import DominanceRanking
 
@@ -36,18 +37,26 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
 
 
 class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
-    def __init__(self, max_population_size:int):
+    def __init__(self, max_population_size: int):
         super(RankingAndCrowdingDistanceSelection, self).__init__()
         self.max_population_size = max_population_size
 
     def execute(self, solution_list: List[S]) -> List[S]:
         ranking = DominanceRanking()
+        crowding_distance = CrowdingDistance()
         ranked_lists = ranking.compute_ranking(solution_list)
 
         ranking_index = 0
         new_solution_list = []
         while len(new_solution_list) < self.max_population_size:
-            if (ranked_lists[ranking_index]):
-                pass
+            if len(ranking.get_subfront(ranking_index)) < self.max_population_size - len(new_solution_list):
+                new_solution_list = new_solution_list + ranking.get_subfront(ranking_index)
+                ranking_index += 1
+            else:
+                subfront = ranking.get_subfront(ranking_index)
+                crowding_distance.compute_density_estimator(subfront)
+                sorted_subfront = sorted(subfront, key=lambda x: x.attributes["distance"])
+                for i in range((self.max_population_size - len(new_solution_list) - 1)):
+                    new_solution_list.append(sorted_subfront[i])
 
-
+        return new_solution_list
