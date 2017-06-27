@@ -56,7 +56,7 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
                 subfront = ranking.get_subfront(ranking_index)
                 crowding_distance.compute_density_estimator(subfront)
                 sorted_subfront = sorted(subfront, key=lambda x: x.attributes["distance"], reverse=True)
-                for i in range((self.max_population_size - len(new_solution_list) - 1)):
+                for i in range((self.max_population_size - len(new_solution_list))):
                     new_solution_list.append(sorted_subfront[i])
 
         return new_solution_list
