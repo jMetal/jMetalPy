@@ -17,8 +17,6 @@ class Algorithm(Generic[S, R], threading.Thread):
         self.evaluations = 0
         self.start_comuting_time = 0
         self.total_computing_time = 0
-        logger.info('Start algorithm ' + self.get_name())
-
 
     def run(self):
         self.start_computing_time = time.process_time()
