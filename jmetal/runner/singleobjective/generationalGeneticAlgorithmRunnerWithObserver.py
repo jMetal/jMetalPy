@@ -13,8 +13,17 @@ from jmetal.util.observable import Observer
 def main():
     float_example()
 
+class TerminalAlgorithmObserver(Observer):
 
-class AlgorithmObserver(Observer):
+    def __init__(self) -> None:
+        pass
+
+    def update(self, *args, **kwargs):
+        print("Evaluations: " + str(kwargs["evaluations"]) +
+              ". Best fitness: " + str(kwargs["best"].objectives[0]) +
+              ". Computing time: " + str(kwargs["computing time"]))
+
+class ChartAlgorithmObserver(Observer):
 
     def __init__(self) -> None:
         self.window = DataStreamWindow()
@@ -25,10 +34,7 @@ class AlgorithmObserver(Observer):
         DataStreamWindowBS().launch_window(self.window)
 
     def update(self, *args, **kwargs):
-        print("Evaluations: " + str(kwargs["evaluations"]) +
-              ". Best fitness: " + str(kwargs["best"].objectives[0]) +
-              ". Computing time: " + str(kwargs["computing time"]))
-        ChartBS().set_data_stream(self.chart, kwargs["evaluations"], kwargs["best"].objectives[0])
+        ChartBS().set_data_stream(self.chart, kwargs["computing time"], kwargs["best"].objectives[0])
 
 
 def float_example() -> None:
@@ -42,9 +48,11 @@ def float_example() -> None:
         crossover = SBX(1.0, distribution_index=20),
         selection = BinaryTournament())
 
-    observer = AlgorithmObserver()
+    observer1 = ChartAlgorithmObserver()
+    observer2 = TerminalAlgorithmObserver()
 
-    algorithm.observable.register(observer=observer)
+    algorithm.observable.register(observer=observer1)
+    algorithm.observable.register(observer=observer2)
 
     algorithm.start()
     algorithm.join()
