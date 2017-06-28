@@ -80,6 +80,7 @@ class DominanceRankingTestCases(unittest.TestCase):
         solution3 = Solution(2, 2)
         solution4 = Solution(2, 2)
         solution5 = Solution(2, 2)
+        solution6 = Solution(2, 2)
 
         solution1.objectives[0] = 1.0
         solution1.objectives[1] = 0.0
@@ -92,7 +93,10 @@ class DominanceRankingTestCases(unittest.TestCase):
         solution5.objectives[0] = 0.0
         solution5.objectives[1] = 1.0
 
-        solution_list = [solution1, solution2, solution3, solution4, solution5]
+        solution6.objectives[0] = 1.05
+        solution6.objectives[1] = 0.1
+
+        solution_list = [solution1, solution2, solution3, solution4, solution5, solution6]
 
         ranking = self.ranking.compute_ranking(solution_list)
 
