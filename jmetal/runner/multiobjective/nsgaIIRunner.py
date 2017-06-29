@@ -6,7 +6,7 @@ from jmetal.core.solution import BinarySolution, FloatSolution
 from jmetal.operator.crossover import SinglePoint, SBX
 from jmetal.operator.mutation import BitFlip, Polynomial
 from jmetal.operator.selection import BinaryTournament
-from jmetal.problem.multiobjectiveproblem import Fonseca
+from jmetal.problem.multiobjectiveproblem import Fonseca, Kursawe
 from jmetal.problem.singleobjectiveproblem import OneMax, Sphere
 
 import logging
@@ -24,7 +24,7 @@ def main():
     #float_example_changing_the_stopping_condition()
 
 def float_example() -> None:
-    problem = Fonseca()
+    problem = Kursawe(3)
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
         problem,
         population_size = 100,

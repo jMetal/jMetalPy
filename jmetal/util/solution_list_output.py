@@ -24,4 +24,4 @@ class SolutionListOutput(Generic[S]):
                 for function_value in solution.objectives:
                     print(function_value)
                     of.write(str(function_value) + " ")
-
+                of.write("\n")

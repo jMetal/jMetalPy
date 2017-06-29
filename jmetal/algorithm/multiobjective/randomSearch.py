@@ -1,13 +1,13 @@
 from typing import TypeVar, List, Generic
 
-from jmetal.core.problem.problem import Problem
-
 from jmetal.component.nondominatedsolutionlistarchive import NonDominatedSolutionListArchive
+from jmetal.core.problem import Problem
 
 """ Class representing simple random search algorithms """
 
 
 S = TypeVar('S')
+
 
 class RandomSearch(Generic[S]):
     def __init__(self, problem:Problem[S], max_evaluations:int):

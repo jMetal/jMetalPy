@@ -15,7 +15,6 @@ def main():
 
 
 class AlgorithmObserver(Observer):
-
     def __init__(self) -> None:
         self.window = DataStreamWindow()
         self.chart = Chart()
@@ -36,11 +35,11 @@ def float_example() -> None:
     problem = Sphere(variables)
     algorithm = GenerationalGeneticAlgorithm[FloatSolution, FloatSolution](
         problem,
-        population_size = 100,
-        max_evaluations = 25000,
-        mutation = Polynomial(1.0/variables, distribution_index=20),
-        crossover = SBX(1.0, distribution_index=20),
-        selection = BinaryTournament())
+        population_size=100,
+        max_evaluations=25000,
+        mutation=Polynomial(1.0 / variables, distribution_index=20),
+        crossover=SBX(1.0, distribution_index=20),
+        selection=BinaryTournament())
 
     observer = AlgorithmObserver()
 
@@ -54,6 +53,7 @@ def float_example() -> None:
     print("Problem: " + problem.get_name())
     print("Solution: " + str(result.variables))
     print("Fitness:  " + str(result.objectives[0]))
+
 
 if __name__ == '__main__':
     main()
