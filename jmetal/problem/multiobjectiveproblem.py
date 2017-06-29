@@ -34,6 +34,7 @@ class Kursawe(FloatProblem):
     def get_name(self):
         return "Kursawe"
 
+
 class Fonseca(FloatProblem):
     def __init__(self):
         self.number_of_variables = 3

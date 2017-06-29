@@ -24,7 +24,7 @@ def main():
     #float_example_changing_the_stopping_condition()
 
 def float_example() -> None:
-    problem = Kursawe(3)
+    problem = Fonseca()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
         problem,
         population_size = 100,
