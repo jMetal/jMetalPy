@@ -8,7 +8,7 @@ from jmetal.util.observable import Observable, DefaultObservable
 from jmetal.util.ranking import DominanceRanking
 
 S = TypeVar('S')
-R = TypeVar('R')
+R = TypeVar(List[S])
 
 
 class NSGAII(GenerationalGeneticAlgorithm[S, R]):
@@ -20,20 +20,26 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
                  crossover: Crossover[S, S],
                  selection: Selection[List[S], S],
                  observable: Observable = DefaultObservable()):
-        super(GenerationalGeneticAlgorithm, self).__init__(
+        super(NSGAII, self).__init__(
             problem,
             population_size,
             max_evaluations,
             mutation,
             crossover,
             selection,
-            observable
-        )
+            observable)
 
     def replacement(self, population: List[S], offspring_population: List[S]) \
             -> List[S]:
         join_population = population + offspring_population
         return RankingAndCrowdingDistanceSelection(self.population_size).execute(join_population)
+
+    def get_name(self):
+        return "NSGA-II"
+
+    def get_result(self) -> R:
+        self.total_computing_time = self.get_current_computing_time()
+        return self.population
 
 
 class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
