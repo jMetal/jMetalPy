@@ -84,17 +84,15 @@ class DominanceRankingTestCases(unittest.TestCase):
 
         solution1.objectives[0] = 1.0
         solution1.objectives[1] = 0.0
-        solution2.objectives[0] = 0.6
-        solution2.objectives[1] = 0.6
-        solution3.objectives[0] = 0.5
-        solution3.objectives[1] = 0.5
-        solution4.objectives[0] = 1.1
-        solution4.objectives[1] = 0.0
-        solution5.objectives[0] = 0.0
-        solution5.objectives[1] = 1.0
+        solution2.objectives[0] = 0.5
+        solution2.objectives[1] = 0.5
+        solution3.objectives[0] = 0.0
+        solution3.objectives[1] = 1.0
 
-        solution6.objectives[0] = 1.05
-        solution6.objectives[1] = 0.1
+        solution4.objectives[0] = 0.6
+        solution4.objectives[1] = 0.6
+        solution5.objectives[0] = 0.7
+        solution5.objectives[1] = 0.5
 
         solution_list = [solution1, solution2, solution3, solution4, solution5, solution6]
 
