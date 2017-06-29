@@ -18,13 +18,12 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    #binary_example()
     float_example()
-    #run_as_a_thread_example()
     #float_example_changing_the_stopping_condition()
 
+
 def float_example() -> None:
-    problem = Fonseca()
+    problem = Kursawe()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
         problem,
         population_size = 100,
