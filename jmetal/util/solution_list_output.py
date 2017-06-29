@@ -22,6 +22,5 @@ class SolutionListOutput(Generic[S]):
         with open(file_name, 'w') as of:
             for solution in solution_list:
                 for function_value in solution.objectives:
-                    print(function_value)
                     of.write(str(function_value) + " ")
                 of.write("\n")
