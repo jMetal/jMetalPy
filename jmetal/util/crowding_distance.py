@@ -17,7 +17,7 @@ class DensityEstimator(List[S]):
     """This is the interface of any density estimator algorithm.
     """
 
-    def compute_density_estimator(self, solution_list: List[S]):
+    def compute_density_estimator(self, solution_list: List[S]) -> float:
         pass
 
 

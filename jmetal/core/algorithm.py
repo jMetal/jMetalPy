@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 S = TypeVar('S')
 R = TypeVar('R')
 
+
 class Algorithm(Generic[S, R], threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)

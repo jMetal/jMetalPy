@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 S = TypeVar('S')
 R = TypeVar(List[S])
 
+
 def main():
     #float_example()
     float_example_changing_the_stopping_condition()
@@ -44,7 +45,7 @@ def float_example() -> None:
 
 
 def float_example_changing_the_stopping_condition() -> None:
-    problem = Schaffer()
+    problem = Fonseca()
 
     class NSGA2b(NSGAII[S, R]):
         def is_stopping_condition_reached(self):
