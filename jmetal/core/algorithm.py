@@ -16,10 +16,8 @@ class Algorithm(Generic[S, R], threading.Thread):
         threading.Thread.__init__(self)
         self.observable = None
         self.evaluations = 0
-        self.start_comuting_time = 0
+        self.start_computing_time = 0
         self.total_computing_time = 0
-        logger.info('Start algorithm ' + self.get_name())
-
 
     def run(self):
         self.start_computing_time = time.process_time()
@@ -31,7 +29,7 @@ class Algorithm(Generic[S, R], threading.Thread):
         return self.evaluations
 
     def get_current_computing_time(self):
-        return time.process_time() - self.start_comuting_time
+        return time.process_time() - self.start_computing_time
 
 
 class EvolutionaryAlgorithm(Algorithm[S, R]):

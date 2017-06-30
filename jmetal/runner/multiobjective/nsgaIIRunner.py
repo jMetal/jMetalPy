@@ -20,7 +20,7 @@ R = TypeVar(List[S])
 
 
 def main():
-    #float_example()
+    float_example()
     float_example_changing_the_stopping_condition()
 
 
