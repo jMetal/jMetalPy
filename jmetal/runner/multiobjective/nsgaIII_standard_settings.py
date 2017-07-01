@@ -33,7 +33,7 @@ def nsgaii_runner() -> None:
     algorithm.run()
     result = algorithm.get_result()
 
-    SolutionListOutput[FloatSolution].print_function_values_to_screen(result)
+    #SolutionListOutput[FloatSolution].print_function_values_to_screen(result)
     SolutionListOutput[FloatSolution].print_function_values_to_file("FUN."+problem.get_name(), result)
 
     logger.info("Algorithm (continuous problem): " + algorithm.get_name())

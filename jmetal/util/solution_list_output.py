@@ -1,5 +1,10 @@
 from typing import TypeVar, List, Generic
 
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 S = TypeVar('S')
 
 
@@ -18,7 +23,7 @@ class SolutionListOutput(Generic[S]):
 
     @staticmethod
     def print_function_values_to_file(file_name, solution_list:List[S]):
-        print(file_name)
+        logger.info("Output file (function values): " + file_name)
         with open(file_name, 'w') as of:
             for solution in solution_list:
                 for function_value in solution.objectives:
