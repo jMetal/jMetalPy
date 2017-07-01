@@ -1,6 +1,5 @@
-from typing import TypeVar, List, Generic
-
 import logging
+from typing import TypeVar, List, Generic
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

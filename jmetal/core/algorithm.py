@@ -1,9 +1,8 @@
+import logging
 import threading
 import time
 from typing import TypeVar, Generic, List
 
-
-import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 

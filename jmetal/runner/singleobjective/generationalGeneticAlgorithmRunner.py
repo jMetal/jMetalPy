@@ -1,3 +1,5 @@
+import logging
+
 from jmetal.algorithm.singleobjective.evolutionaryalgorithm import GenerationalGeneticAlgorithm
 from jmetal.core.solution import BinarySolution, FloatSolution
 from jmetal.operator.crossover import SinglePoint, SBX
@@ -5,7 +7,6 @@ from jmetal.operator.mutation import BitFlip, Polynomial
 from jmetal.operator.selection import BinaryTournament
 from jmetal.problem.singleobjectiveproblem import OneMax, Sphere
 
-import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 

@@ -1,6 +1,5 @@
 from copy import deepcopy
 from typing import TypeVar, List
-import time
 
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation, Crossover, Selection

@@ -1,15 +1,12 @@
-from typing import List, TypeVar
+import logging
+from typing import List
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.algorithm.singleobjective.evolutionaryalgorithm import GenerationalGeneticAlgorithm
-from jmetal.core.solution import BinarySolution, FloatSolution
-from jmetal.operator.crossover import SinglePoint, SBX
-from jmetal.operator.mutation import BitFlip, Polynomial
+from jmetal.core.solution import FloatSolution
+from jmetal.operator.crossover import SBX
+from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament
-from jmetal.problem.multiobjectiveproblem import Fonseca, Kursawe, Schaffer
-
-import logging
-
+from jmetal.problem.multiobjectiveproblem import Kursawe
 from jmetal.util.solution_list_output import SolutionListOutput
 
 logging.basicConfig(level=logging.INFO)
