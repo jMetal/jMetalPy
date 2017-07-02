@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def gGA_stopping_by_time() -> None:
+def main() -> None:
     variables = 10
     problem = Sphere(variables)
 
@@ -37,4 +37,4 @@ def gGA_stopping_by_time() -> None:
 
 
 if __name__ == '__main__':
-    gGA_stopping_by_time()
+    main()

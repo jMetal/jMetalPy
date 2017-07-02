@@ -16,7 +16,7 @@ S = TypeVar('S')
 R = TypeVar(List[S])
 
 
-def nsgaii_runner() -> None:
+def main() -> None:
     class NSGA2b(NSGAII[S, R]):
         def is_stopping_condition_reached(self):
             return self.get_current_computing_time() > 4
@@ -41,4 +41,4 @@ def nsgaii_runner() -> None:
     logger.info("Computing time: " + str(algorithm.total_computing_time))
 
 if __name__ == '__main__':
-    nsgaii_runner()
+    main()

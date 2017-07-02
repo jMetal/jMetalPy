@@ -10,7 +10,7 @@ from jmetal.problem.singleobjectiveproblem import OneMax, Sphere
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def gGA_binary() -> None:
+def main() -> None:
     bits = 512
     problem = OneMax(bits)
     algorithm = GenerationalGeneticAlgorithm[BinarySolution, BinarySolution](
@@ -31,4 +31,4 @@ def gGA_binary() -> None:
 
 
 if __name__ == '__main__':
-    gGA_binary()
+    main()
