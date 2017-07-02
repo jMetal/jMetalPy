@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def gGAFloat() -> None:
+def gGA_float() -> None:
     variables = 10
     problem = Sphere(variables)
     algorithm = GenerationalGeneticAlgorithm[FloatSolution, FloatSolution](
@@ -31,4 +31,4 @@ def gGAFloat() -> None:
     logger.info("Computing time: " + str(algorithm.total_computing_time))
 
 if __name__ == '__main__':
-    gGAFloat()
+    gGA_float()

@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def gGARunningAsAThread() -> None:
+def gGA_running_as_a_thread() -> None:
     variables = 10
     problem = Sphere(variables)
     algorithm = GenerationalGeneticAlgorithm[FloatSolution, FloatSolution](
@@ -34,4 +34,4 @@ def gGARunningAsAThread() -> None:
 
 
 if __name__ == '__main__':
-    gGARunningAsAThread()
+    gGA_running_as_a_thread()
