@@ -13,10 +13,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def main():
-    nsgaii_runner()
-
-
 def nsgaii_runner() -> None:
     problem = Kursawe()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
@@ -38,4 +34,4 @@ def nsgaii_runner() -> None:
     logger.info("Computing time: " + str(algorithm.total_computing_time))
 
 if __name__ == '__main__':
-    main()
+    nsgaii_runner()

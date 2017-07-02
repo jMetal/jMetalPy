@@ -16,17 +16,12 @@ S = TypeVar('S')
 R = TypeVar(List[S])
 
 
-def main():
-    nsgaii_runner()
-
-
 def nsgaii_runner() -> None:
-    problem = Fonseca()
-
     class NSGA2b(NSGAII[S, R]):
         def is_stopping_condition_reached(self):
             return self.get_current_computing_time() > 4
 
+    problem = Fonseca()
     algorithm = NSGA2b[FloatSolution, List[FloatSolution]](
         problem,
         population_size = 100,
@@ -46,4 +41,4 @@ def nsgaii_runner() -> None:
     logger.info("Computing time: " + str(algorithm.total_computing_time))
 
 if __name__ == '__main__':
-    main()
+    nsgaii_runner()
