@@ -15,7 +15,6 @@ class Ranking(List[S]):
     def get_number_of_subfronts(self) -> int:
         pass
 
-
 class DominanceRanking(Ranking[List[S]]):
     def __init__(self):
         self.ranked_sublists = []
@@ -73,4 +72,3 @@ class DominanceRanking(Ranking[List[S]]):
 
     def get_number_of_subfronts(self):
         return len(self.ranked_sublists)
-
