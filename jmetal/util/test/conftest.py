@@ -15,6 +15,3 @@ def pytest_generate_tests(metafunc):
     if 'self' in metafunc.fixturenames:
         for x in range(1, self):
             metafunc.parametrize("self", self)
-
-#@pytest.mark.parametrize("test_should_the_crowding_distance_of_an_empty_set_do_nothing", test_should_the_crowding_distance_of_an_empty_set_do_nothing())
-#def test_funcion_crowding(test_should_the_crowding_distance_of_an_empty_set_do_nothing)
