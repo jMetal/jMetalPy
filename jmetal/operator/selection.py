@@ -1,8 +1,10 @@
 import random
 from typing import List, TypeVar
 
+from jmetal.component.density_estimator import CrowdingDistance
 from jmetal.core.operator import Selection
 from jmetal.util.comparator import dominance_comparator
+from jmetal.util.ranking import DominanceRanking
 
 """ Class implementing a best solution selection operator """
 
@@ -93,3 +95,29 @@ class RandomSolution(Selection[List[S], S]):
             raise Exception("The solution is empty")
 
         return random.choice(solution_list)
+
+
+class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
+    def __init__(self, max_population_size: int):
+        super(RankingAndCrowdingDistanceSelection, self).__init__()
+        self.max_population_size = max_population_size
+
+    def execute(self, solution_list: List[S]) -> List[S]:
+        ranking = DominanceRanking()
+        crowding_distance = CrowdingDistance()
+        ranking.compute_ranking(solution_list)
+
+        ranking_index = 0
+        new_solution_list = []
+        while len(new_solution_list) < self.max_population_size:
+            if len(ranking.get_subfront(ranking_index)) < self.max_population_size - len(new_solution_list):
+                new_solution_list = new_solution_list + ranking.get_subfront(ranking_index)
+                ranking_index += 1
+            else:
+                subfront = ranking.get_subfront(ranking_index)
+                crowding_distance.compute_density_estimator(subfront)
+                sorted_subfront = sorted(subfront, key=lambda x: x.attributes["distance"], reverse=True)
+                for i in range((self.max_population_size - len(new_solution_list))):
+                    new_solution_list.append(sorted_subfront[i])
+
+        return new_solution_list

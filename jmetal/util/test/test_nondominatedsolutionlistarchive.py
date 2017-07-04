@@ -1,6 +1,6 @@
 import unittest
 
-from jmetal.component.nondominatedsolutionlistarchive import NonDominatedSolutionListArchive
+from jmetal.component.archive import NonDominatedSolutionListArchive
 from jmetal.core.solution import Solution
 
 

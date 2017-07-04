@@ -4,7 +4,22 @@ from jmetal.util.comparator import dominance_comparator, equal_solutions_compara
 
 S = TypeVar('S')
 
-class NonDominatedSolutionListArchive(Generic[S]):
+
+class Archive(Generic[S]):
+    def add(self, solution: S) -> bool:
+        pass
+
+    def get(self, index:int) -> S:
+        pass
+
+    def get_solution_list(self) -> List[S]:
+        pass
+
+    def size(self) -> int:
+        pass
+
+
+class NonDominatedSolutionListArchive(Archive[S]):
     def __init__(self):
         self.solution_list = []
 
