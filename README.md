@@ -9,11 +9,15 @@ Any ideas about how the structure the project, coding style, useful tools (I'm u
 
 ---
 
-
 # Last changes (July 4th 2017)
+* The algorithm [NSGA-II](https://github.com/jMetal/jMetalPy/blob/master/jmetal/algorithm/multiobjective/nsgaii.py) has been implemented
+* Examples of configuring and running all the included algorithms are located in the [jmetal.runner](https://github.com/jMetal/jMetalPy/tree/master/jmetal/runner) package.
+
+
+# Last changes (June 1st 2017)
 * The package organization has been simplified to make it more "Python-ish". The former oarganization was a clone of the original Java-based jMetal project.
-* The [`EvolutionaryAlgorithm`](https://github.com/jMetal/jMetalPy/blob/master/jmetal/core/algorithm.py) class interits from `threading.Thread`, the any evolutionary algorithm can run as a thread. This class also contains an `Observable` field, so observer entities can register and will notified with algorithm information. 
-* [Four examples](https://github.com/jMetal/jMetalPy/blob/master/jmetal/core/algorithm.py) of configuring and running three different single-objective algorithms are provided.
+* The [`EvolutionaryAlgorithm`](https://github.com/jMetal/jMetalPy/blob/master/jmetal/core/algorithm.py) class interits from `threading.Thread`, so any evolutionary algorithm can run as a thread. This class also contains an `Observable` field, allowing observer entities to register to be notified with algorithm information. 
+* [Four examples](https://github.com/jMetal/jMetalPy/tree/master/jmetal/runner) of configuring and running three different single-objective algorithms are provided.
 
 # Current status (July 4th 2017)
 The current implementation contains the following features: 
