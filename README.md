@@ -10,17 +10,20 @@ Any ideas about how the structure the project, coding style, useful tools (I'm u
 ---
 
 
-# Last changes (June 1st 2017)
+# Last changes (July 4th 2017)
 * The package organization has been simplified to make it more "Python-ish". The former oarganization was a clone of the original Java-based jMetal project.
 * The [`EvolutionaryAlgorithm`](https://github.com/jMetal/jMetalPy/blob/master/jmetal/core/algorithm.py) class interits from `threading.Thread`, the any evolutionary algorithm can run as a thread. This class also contains an `Observable` field, so observer entities can register and will notified with algorithm information. 
 * [Four examples](https://github.com/jMetal/jMetalPy/blob/master/jmetal/core/algorithm.py) of configuring and running three different single-objective algorithms are provided.
 
-# Current status (June 1st 2017)
+# Current status (July 4th 2017)
 The current implementation contains the following features: 
-* Algorithms (single-objective)
-  * (mu+lamba)Evolution Strategy
-  * (mu,lamba)Evolution Strategy
-  * Generational Genetic algorithm
+* Algorithms
+  * Multi-objective
+    * NSGA-II
+  * Single-objective
+    * (mu+lamba)Evolution Strategy
+    * (mu,lamba)Evolution Strategy
+    * Generational Genetic algorithm
 * Problems (multi-objective)
   * Kursawe
   * Fonseca
@@ -42,10 +45,13 @@ The current implementation contains the following features:
   * Uniform Mutation
   * Binary Tournament Selection
 
+# TODO list
+* The documentation of the code is not complete
+* Inclusion of integration tests for the algorithm implementations
+* Full coverage with unit tests
 
-# Developers
-
-All developers should follow these guidelines:
+# Contributing
+  Contributions to the jMetalPy project are welcome. Please, take into account the following guidelines if possible:
 
   - [Git WorkFlow](resources/pages/workflow_git.md)
   - [Follow style guide for python code: PEP8](resources/pages/code_style.md)
