@@ -4,7 +4,7 @@ from jmetal.core.solution import FloatSolution
 from jmetal.util.comparator import dominance_comparator
 
 
-class TestMethods(unittest.TestCase):
+class DominanceComparatorTestCases(unittest.TestCase):
 
     def setUp(self):
         pass
