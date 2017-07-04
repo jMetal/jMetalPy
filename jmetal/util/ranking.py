@@ -68,7 +68,7 @@ class DominanceRanking(Ranking[List[S]]):
 
     def get_subfront(self, rank: int):
         if(rank >= len(self.ranked_sublists)):
-            raise Exception("Invalid rank: " + rank + ". Max rank = " + (len(self.ranked_sublists) -1))
+            raise Exception("Invalid rank: " + str(rank) + ". Max rank = " + str(len(self.ranked_sublists) -1))
         return self.ranked_sublists[rank]
 
     def get_number_of_subfronts(self):

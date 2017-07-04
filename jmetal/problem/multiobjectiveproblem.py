@@ -21,11 +21,16 @@ class Kursawe(FloatProblem):
 
     def evaluate(self, solution: FloatSolution):
         fx = [0.0 for x in range(self.number_of_objectives)]
-        for i in range(self.number_of_variables):
+
+        fx[0] = 0.0
+        for i in range(self.number_of_variables - 1):
             xi = solution.variables[i] * solution.variables[i]
             xj = solution.variables[i + 1] * solution.variables[i + 1]
             aux = -0.2 * sqrt(xi + xj)
             fx[0] += -10 * exp(aux)
+
+        fx[1] = 0.0
+        for i in range(self.number_of_variables):
             fx[1] += pow(abs(solution.variables[i]), 0.8) + 5.0 * sin(pow(solution.variables[i], 3.0))
 
         solution.objectives[0] = fx[0]
@@ -33,6 +38,7 @@ class Kursawe(FloatProblem):
 
     def get_name(self):
         return "Kursawe"
+
 
 class Fonseca(FloatProblem):
     def __init__(self):

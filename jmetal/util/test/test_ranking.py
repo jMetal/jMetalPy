@@ -83,14 +83,15 @@ class DominanceRankingTestCases(unittest.TestCase):
 
         solution1.objectives[0] = 1.0
         solution1.objectives[1] = 0.0
-        solution2.objectives[0] = 0.6
-        solution2.objectives[1] = 0.6
-        solution3.objectives[0] = 0.5
-        solution3.objectives[1] = 0.5
-        solution4.objectives[0] = 1.1
-        solution4.objectives[1] = 0.0
-        solution5.objectives[0] = 0.0
-        solution5.objectives[1] = 1.0
+        solution2.objectives[0] = 0.5
+        solution2.objectives[1] = 0.5
+        solution3.objectives[0] = 0.0
+        solution3.objectives[1] = 1.0
+
+        solution4.objectives[0] = 0.6
+        solution4.objectives[1] = 0.6
+        solution5.objectives[0] = 0.7
+        solution5.objectives[1] = 0.5
 
         solution_list = [solution1, solution2, solution3, solution4, solution5]
 
@@ -100,11 +101,10 @@ class DominanceRankingTestCases(unittest.TestCase):
         self.assertEqual(3, len(self.ranking.get_subfront(0)))
         self.assertEqual(2, len(self.ranking.get_subfront(1)))
         self.assertEqual(solution1, ranking[0][0])
-        self.assertEqual(solution3, ranking[0][1])
-        self.assertEqual(solution5, ranking[0][2])
+        self.assertEqual(solution2, ranking[0][1])
+        self.assertEqual(solution3, ranking[0][2])
         self.assertEqual(solution4, ranking[1][0])
-        self.assertEqual(solution2, ranking[1][1])
-
+        self.assertEqual(solution5, ranking[1][1])
 
 if __name__ == "__main__":
     unittest.main()

@@ -29,6 +29,7 @@ class Mutation(Operator[Source, Source]):
     def execute(self, source: Source) -> Source:
         pass
 
+
 class Crossover(Operator[List[Source], List[Result]]):
     def __init__(self, probability: float):
         if probability > 1.0:

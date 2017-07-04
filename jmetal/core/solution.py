@@ -31,6 +31,7 @@ class BinarySolution(Solution[BitSet]):
 
         return total
 
+
 class FloatSolution(Solution[float]):
     """ Class representing float solutions """
 
@@ -39,6 +40,7 @@ class FloatSolution(Solution[float]):
         super(FloatSolution, self).__init__(number_of_variables, number_of_objectives, number_of_constraints)
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
+
 
 class IntegerSolution(Solution[int]):
     """ Class representing integer solutions """
