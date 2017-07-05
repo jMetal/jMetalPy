@@ -18,9 +18,6 @@ class Algorithm(Generic[S, R], threading.Thread):
         self.start_computing_time = 0
         self.total_computing_time = 0
 
-    def run(self):
-        self.start_computing_time = time.process_time()
-
     def get_name(self):
         pass
 
@@ -64,7 +61,8 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
         pass
 
     def run(self):
-        super(EvolutionaryAlgorithm, self).run()
+        self.start_computing_time = time.process_time()
+
         self.population = self.create_initial_population()
         self.population = self.evaluate_population(self.population)
         self.init_progress()
@@ -74,5 +72,7 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
             offspring_population = self.evaluate_population(offspring_population)
             self.population = self.replacement(self.population, offspring_population)
             self.update_progress()
+
+        self.total_computing_time = self.get_current_computing_time()
 
 

@@ -36,7 +36,6 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
         return "NSGA-II"
 
     def get_result(self) -> R:
-        self.total_computing_time = self.get_current_computing_time()
         return self.population
 
 
