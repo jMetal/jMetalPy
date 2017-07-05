@@ -10,9 +10,9 @@ class Solution(Generic[S]):
     """ Class representing solutions """
 
     def __init__(self, number_of_variables : int, number_of_objectives : int, number_of_constraints = 0):
-        self.number_of_objectives = number_of_objectives
-        self.number_of_variables = number_of_variables
-        self.number_of_constraints = number_of_constraints
+        self.number_of_objectives: int = number_of_objectives
+        self.number_of_variables:int = number_of_variables
+        self.number_of_constraints: int = number_of_constraints
         self.objectives = [0.0 for x in range(self.number_of_objectives)]
         self.variables = [[] for x in range(self.number_of_variables)]
         self.attributes = {}
