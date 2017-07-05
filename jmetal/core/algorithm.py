@@ -14,9 +14,9 @@ class Algorithm(Generic[S, R], threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
         self.observable = None
-        self.evaluations = 0
-        self.start_computing_time = 0
-        self.total_computing_time = 0
+        self.evaluations: int = 0
+        self.start_computing_time: int = 0
+        self.total_computing_time: int = 0
 
     def run(self):
         self.start_computing_time = time.process_time()
