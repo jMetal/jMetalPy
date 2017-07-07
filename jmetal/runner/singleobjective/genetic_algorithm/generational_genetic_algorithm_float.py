@@ -16,19 +16,19 @@ def main() -> None:
     problem = Sphere(variables)
     algorithm = GenerationalGeneticAlgorithm[FloatSolution, FloatSolution](
         problem,
-        population_size = 100,
-        max_evaluations = 25000,
-        mutation = Polynomial(1.0/variables, distribution_index=20),
-        crossover = SBX(1.0, distribution_index=20),
-        selection = BinaryTournament())
+        population_size=100,
+        max_evaluations=25000,
+        mutation=Polynomial(1.0/variables, distribution_index=20),
+        crossover=SBX(1.0, distribution_index=20),
+        selection=BinaryTournament())
 
     algorithm.run()
     result = algorithm.get_result()
+
     logger.info("Algorithm (continuous problem): " + algorithm.get_name())
     logger.info("Problem: " + problem.get_name())
     logger.info("Solution: " + str(result.variables))
     logger.info("Fitness:  " + str(result.objectives[0]))
-    logger.info("Computing time: " + str(algorithm.total_computing_time))
 
 if __name__ == '__main__':
     main()

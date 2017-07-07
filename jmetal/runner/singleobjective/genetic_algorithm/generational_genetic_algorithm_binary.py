@@ -10,6 +10,7 @@ from jmetal.problem.singleobjectiveproblem import OneMax, Sphere
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 def main() -> None:
     bits = 512
     problem = OneMax(bits)
@@ -23,12 +24,11 @@ def main() -> None:
 
     algorithm.run()
     result = algorithm.get_result()
+
     logger.info("Algorithm (binary problem): " + algorithm.get_name())
     logger.info("Problem: " + problem.get_name())
     logger.info("Solution: " + str(result.variables[0]))
     logger.info("Fitness:  " + str(result.objectives[0]))
-    logger.info("Computing time: " + str(algorithm.total_computing_time))
-
 
 if __name__ == '__main__':
     main()
