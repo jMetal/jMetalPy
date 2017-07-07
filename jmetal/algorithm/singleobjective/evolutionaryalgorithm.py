@@ -7,7 +7,6 @@ from jmetal.core.problem import Problem
 from jmetal.util.observable import Observable, DefaultObservable
 
 """ Class representing elitist evolution strategy algorithms """
-__author__ = "Antonio J. Nebro"
 
 S = TypeVar('S')
 R = TypeVar('R')
@@ -128,8 +127,7 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
     def update_progress(self):
         self.evaluations += self.population_size
         observable_data = {'evaluations': self.evaluations,
-                           'population': self.population,
-                           'computing time': self.get_current_computing_time()}
+                           'population': self.population}
         self.observable.notify_all(**observable_data)
 
     def is_stopping_condition_reached(self) -> bool:
@@ -189,7 +187,6 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         return offspring_population
 
     def get_result(self) -> R:
-        self.total_computing_time = self.get_current_computing_time()
         return self.population[0]
 
     def get_name(self):
