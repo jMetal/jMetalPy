@@ -19,26 +19,30 @@ R = TypeVar(List[S])
 def main() -> None:
     class NSGA2b(NSGAII[S, R]):
         def is_stopping_condition_reached(self):
-            return self.get_current_computing_time() > 4
+            # Re-define the stopping condition
+            reached = [False, True][self.get_current_computing_time() > 4]
+
+            if reached:
+                logger.info("Stopping condition reached!")
+
+            return reached
 
     problem = Fonseca()
     algorithm = NSGA2b[FloatSolution, List[FloatSolution]](
         problem,
-        population_size = 100,
-        max_evaluations = 25000,
-        mutation = Polynomial(1.0/problem.number_of_variables, distribution_index=20),
-        crossover = SBX(1.0, distribution_index=20),
-        selection = BinaryTournament())
+        population_size=100,
+        max_evaluations=25000,
+        mutation=Polynomial(1.0/problem.number_of_variables, distribution_index=20),
+        crossover=SBX(1.0, distribution_index=20),
+        selection=BinaryTournament())
 
     algorithm.run()
     result = algorithm.get_result()
 
-    #SolutionListOutput[FloatSolution].print_function_values_to_screen(result)
     SolutionListOutput[FloatSolution].print_function_values_to_file("FUN."+problem.get_name(), result)
 
     logger.info("Algorithm (continuous problem): " + algorithm.get_name())
     logger.info("Problem: " + problem.get_name())
-    logger.info("Computing time: " + str(algorithm.total_computing_time))
 
 if __name__ == '__main__':
     main()
