@@ -1,6 +1,6 @@
 import unittest
 
-from jmetal.problem.multiobjectiveproblem import Kursawe, Fonseca, Schaffer, Viennet2
+from jmetal.problem.multiobjective.unconstrained import Kursawe, Fonseca, Schaffer, Viennet2
 
 __author__ = "Antonio J. Nebro"
 
