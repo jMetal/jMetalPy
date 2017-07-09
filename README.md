@@ -12,12 +12,12 @@ Any ideas about how the structure the project, coding style, useful tools (I'm u
 ---
 
 # Table of Contents
-- [Usage](#)
-	- [Dependencies](#)
-- [History](#)
-	- [Last changes (July 9th 2017)](#)
-- [Contributing](#)
-- [License](#)
+- [Usage](#usage)
+	- [Dependencies](#dependencies)
+- [History](#history)
+	- [Last changes (July 9th 2017)](#last-changes-july-9th-2017)
+- [Contributing](#contributing)
+- [License](#license)
 
 
 # Usage
@@ -43,7 +43,7 @@ See [CHANGELOG](CHANGELOG.md) for full version history.
 * Added [CHANGELOG](CHANGELOG.md) file.
 
 # Contributing
-Please read [CONTRIBUTING](CONTRIBUTING.md) for details of how to contribute to the project.
+Please read [CONTRIBUTING](CONTRIBUTING.md) for details on how to contribute to the project.
 
 # License
 This project is licensed under the terms of the MIT - see the [LICENSE](LICENSE) file for details.
