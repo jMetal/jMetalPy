@@ -7,7 +7,7 @@ from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament
 from jmetal.problem.multiobjectiveproblem import Kursawe
-from jmetal.component.observer import WriteFrontToFileObserver
+from jmetal.component.observer import WriteFrontToFileObserver, AlgorithmObserver
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -23,9 +23,7 @@ def main() -> None:
         crossover=SBX(1.0, distribution_index=20),
         selection=BinaryTournament())
 
-    observer = WriteFrontToFileObserver("output_directory")
-
-    algorithm.observable.register(observer=observer)
+    algorithm.observable.register(observer=AlgorithmObserver())
 
     algorithm.start()
     algorithm.join()
