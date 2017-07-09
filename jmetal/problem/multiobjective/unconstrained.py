@@ -1,4 +1,4 @@
-from math import sqrt, exp, pow, sin, pi, cos
+from math import sqrt, exp, pow, sin
 
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution

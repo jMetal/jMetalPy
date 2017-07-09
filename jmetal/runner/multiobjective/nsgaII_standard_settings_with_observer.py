@@ -7,7 +7,7 @@ from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament
-from jmetal.problem.multiobjectiveproblem import Kursawe
+from jmetal.problem.multiobjective.unconstrained import Kursawe
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

@@ -1,6 +1,5 @@
 import unittest
 
-from jmetal.problem.multiobjective.unconstrained import Kursawe, Fonseca, Schaffer, Viennet2
 from jmetal.problem.multiobjective.zdt import ZDT1
 
 __author__ = "Antonio J. Nebro"

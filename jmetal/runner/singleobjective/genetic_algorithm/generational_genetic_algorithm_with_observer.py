@@ -7,9 +7,7 @@ from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament
-from jmetal.problem.singleobjectiveproblem import Sphere
-from jmetal.util.observable import Observer
-
+from jmetal.problem.singleobjective.unconstrained import Sphere
 
 """
 class ChartAlgorithmObserver(Observer):
