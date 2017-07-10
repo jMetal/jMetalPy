@@ -10,7 +10,7 @@ Any ideas about how the structure the project, coding style, useful tools (I'm u
 ---
 
 # Last changes (July 10th 2017)
-* The algorithm [ZDT](https://github.com/jMetal/jMetalPy/blob/master/jmetal/problem/multiobjective/zdt.py) problems have been implemented.
+* The [ZDT](https://github.com/jMetal/jMetalPy/blob/master/jmetal/problem/multiobjective/zdt.py) problems have been implemented.
 
 # Last changes (July 4th 2017)
 * The algorithm [NSGA-II](https://github.com/jMetal/jMetalPy/blob/master/jmetal/algorithm/multiobjective/nsgaii.py) has been implemented
