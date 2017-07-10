@@ -1,6 +1,6 @@
 # jMetalPy: Python version of the jMetal framework
 
-I have just started a new project called jMetalPy. The initial idea is not to write the whole jMetal proyect in Python, but to "have fun": I'm starting with Python, and to learn this programming language I think that using jMetal as a case study would be nice.
+I started a new project called jMetalPy in February 2017. The initial idea was not to write the whole jMetal proyect in Python but to use it as a practical study to learn that programming language, although due to the interest of some researchers the goal of an usable jMetal version in Python is an ongoing work.
 
 Any ideas about how the structure the project, coding style, useful tools (I'm using PyCharm), or links to related projects are welcome. The starting point is the jMetal architecture:
 
@@ -8,6 +8,9 @@ Any ideas about how the structure the project, coding style, useful tools (I'm u
 
 
 ---
+
+# Last changes (July 10th 2017)
+* The [ZDT](https://github.com/jMetal/jMetalPy/blob/master/jmetal/problem/multiobjective/zdt.py) problems have been implemented.
 
 # Last changes (July 4th 2017)
 * The algorithm [NSGA-II](https://github.com/jMetal/jMetalPy/blob/master/jmetal/algorithm/multiobjective/nsgaii.py) has been implemented
@@ -19,7 +22,7 @@ Any ideas about how the structure the project, coding style, useful tools (I'm u
 * The [`EvolutionaryAlgorithm`](https://github.com/jMetal/jMetalPy/blob/master/jmetal/core/algorithm.py) class interits from `threading.Thread`, so any evolutionary algorithm can run as a thread. This class also contains an `Observable` field, allowing observer entities to register to be notified with algorithm information. 
 * [Four examples](https://github.com/jMetal/jMetalPy/tree/master/jmetal/runner) of configuring and running three different single-objective algorithms are provided.
 
-# Current status (July 4th 2017)
+# Current status (July 10th 2017)
 The current implementation contains the following features: 
 * Algorithms
   * Multi-objective
@@ -33,6 +36,7 @@ The current implementation contains the following features:
   * Fonseca
   * Schaffer
   * Viennet2
+  * ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
 * Problems (single-objective)
   * Sphere
   * OneMax

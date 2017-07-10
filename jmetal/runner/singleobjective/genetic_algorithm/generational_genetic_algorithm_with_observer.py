@@ -2,7 +2,7 @@
 #from graphtiny.domain import DataStreamWindow, Chart
 
 from jmetal.algorithm.singleobjective.evolutionaryalgorithm import GenerationalGeneticAlgorithm
-from jmetal.component.consumer import BasicSingleObjectiveAlgorithmConsumer
+from jmetal.component.consumer import BasicAlgorithmConsumer
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
@@ -35,7 +35,7 @@ def main() -> None:
         crossover=SBX(1.0, distribution_index=20),
         selection=BinaryTournament())
 
-    observer = BasicSingleObjectiveAlgorithmConsumer()
+    observer = BasicAlgorithmConsumer(1000)
 
     algorithm.observable.register(observer=observer)
 

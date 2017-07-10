@@ -2,12 +2,12 @@ import logging
 from typing import List
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.component.consumer import WriteFrontToFileConsumer
+from jmetal.component.consumer import BasicAlgorithmConsumer
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament
-from jmetal.problem.multiobjective.unconstrained import Kursawe
+from jmetal.problem.multiobjective.zdt import ZDT1
 from jmetal.util.solution_list_output import SolutionListOutput
 
 logging.basicConfig(level=logging.INFO)
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 def main() -> None:
-    problem = Kursawe()
+    problem = ZDT1()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
         problem,
         population_size = 100,
@@ -24,7 +24,7 @@ def main() -> None:
         crossover = SBX(1.0, distribution_index=20),
         selection = BinaryTournament())
 
-    observer = WriteFrontToFileConsumer("output_directory")
+    observer = BasicAlgorithmConsumer(1000)
 
     algorithm.observable.register(observer=observer)
 
