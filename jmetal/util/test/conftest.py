@@ -1,8 +1,3 @@
-import pytest
-from jmetal.util.test.test_crowding_distance import CrowdingDistanceTestCases
-from jmetal.util.test.test_dominancecomparator import DominanceComparatorTestCases
-from jmetal.util.test.test_nondominatedsolutionlistarchive import NonDominatedTestCases
-from jmetal.util.test.test_observable import ObservableTestCases
 #from jmetal.util.test.test_ranking import DominanceRankingTestCases
 
 

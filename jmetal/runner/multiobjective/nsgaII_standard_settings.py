@@ -1,28 +1,21 @@
 import logging
-from typing import List, TypeVar
+from typing import List
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament
-from jmetal.problem.multiobjective.unconstrained import Fonseca
+from jmetal.problem.multiobjective.zdt import ZDT6
 from jmetal.util.solution_list_output import SolutionListOutput
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-S = TypeVar('S')
-R = TypeVar(List[S])
-
 
 def main() -> None:
-    class NSGA2b(NSGAII[S, R]):
-        def is_stopping_condition_reached(self):
-            return self.get_current_computing_time() > 4
-
-    problem = Fonseca()
-    algorithm = NSGA2b[FloatSolution, List[FloatSolution]](
+    problem = ZDT6()
+    algorithm = NSGAII[FloatSolution, List[FloatSolution]](
         problem,
         population_size = 100,
         max_evaluations = 25000,
@@ -33,7 +26,6 @@ def main() -> None:
     algorithm.run()
     result = algorithm.get_result()
 
-    #SolutionListOutput[FloatSolution].print_function_values_to_screen(result)
     SolutionListOutput[FloatSolution].print_function_values_to_file("FUN."+problem.get_name(), result)
 
     logger.info("Algorithm (continuous problem): " + algorithm.get_name())

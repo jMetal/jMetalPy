@@ -2,12 +2,12 @@ import logging
 from typing import List
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
+from jmetal.component.consumer import WriteFrontToFileConsumer
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament
-from jmetal.problem.multiobjectiveproblem import Kursawe
-from jmetal.util.solution_list_output import SolutionListOutput
+from jmetal.problem.multiobjective.unconstrained import Kursawe
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -23,10 +23,12 @@ def main() -> None:
         crossover = SBX(1.0, distribution_index=20),
         selection = BinaryTournament())
 
-    algorithm.run()
-    result = algorithm.get_result()
+    observer = WriteFrontToFileConsumer("output_directory")
 
-    SolutionListOutput[FloatSolution].print_function_values_to_file("FUN."+problem.get_name(), result)
+    algorithm.observable.register(observer=observer)
+
+    algorithm.start()
+    algorithm.join()
 
     logger.info("Algorithm (continuous problem): " + algorithm.get_name())
     logger.info("Problem: " + problem.get_name())

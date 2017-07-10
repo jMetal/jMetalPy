@@ -7,11 +7,10 @@ from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament
-from jmetal.problem.singleobjectiveproblem import Sphere
+from jmetal.problem.singleobjective.unconstrained import Sphere
 
-
-'''
-class AlgorithmObserver(Observer):
+"""
+class ChartAlgorithmObserver(Observer):
     def __init__(self) -> None:
         self.window = DataStreamWindow()
         self.chart = Chart()
@@ -21,12 +20,10 @@ class AlgorithmObserver(Observer):
         DataStreamWindowBS().launch_window(self.window)
 
     def update(self, *args, **kwargs):
-        print("Evaluations: " + str(kwargs["evaluations"]) +
-              ". Best fitness: " + str(kwargs["best"].objectives[0]) +
-              ". Computing time: " + str(kwargs["computing time"]))
-        ChartBS().set_data_stream(self.chart, kwargs["evaluations"], kwargs["best"].objectives[0])
-'''
+        ChartBS().set_data_stream(self.chart, kwargs["computing time"], kwargs["best"].objectives[0])
 
+        ChartBS().set_data_stream(self.chart, kwargs["evaluations"], kwargs["best"].objectives[0])
+"""
 def main() -> None:
     variables = 10
     problem = Sphere(variables)
