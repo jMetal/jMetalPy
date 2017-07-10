@@ -1,13 +1,51 @@
+"""
+    ============================================================
+    :mod:`zdt` -- ZDT problem family of multi-objective problems
+    ============================================================
+
+    This module provides the implementation of the ZDT problems defined in:
+
+    Zitzler, E., Deb, K., Thiele, L.
+    Comparison of multiobjective evolutionary algorithms: Empirical results.
+    Evolutionary Computation 8(2), pp: 173-195. 2000
+
+    DOI: https://doi.org/10.1162/106365600568202
+
+
+    These problems are scalable in the number of the decision variables, i.e. the Pareto front
+    is the same independently of the number of variables
+
+    .. module:: jmetal.problem.multiobjective.zdt
+
+    :platform: Unix, Windows
+    :synopsis: Module including the implementation of the ZDT problem family.
+
+    .. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+
+"""
+
+
 from math import sqrt, exp, pow, sin, pi, cos
 
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 
-__author__ = "Antonio J. Nebro"
-
 
 class ZDT1(FloatProblem):
+    """ Problem ZDT1
+
+    .. note:: Bi-objective unconstrained problem. The default number of variables is 30.
+
+    .. note:: Continuous problem having a convex Pareto front
+
+    """
     def __init__(self, number_of_variables: int = 30):
+        """Constructor
+
+        Arguments:
+
+        :param number_of_variables: number of decision variables of the problem
+        """
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -18,7 +56,11 @@ class ZDT1(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> None:
+        """Evaluate method
+
+        :param solution: Solution to be evaluated
+        """
         g = self.__eval_g(solution)
         h = self.__eval_h(solution.variables[0], g)
 
@@ -41,6 +83,13 @@ class ZDT1(FloatProblem):
 
 
 class ZDT2(FloatProblem):
+    """ Problem ZDT2
+
+    .. note:: Bi-objective unconstrained problem. The default number of variables is 30.
+
+    .. note:: Continuous problem having a non-convex Pareto front
+
+    """
     def __init__(self, number_of_variables: int = 30):
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
@@ -52,7 +101,11 @@ class ZDT2(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> None:
+        """Evaluate method
+
+        :param solution: Solution to be evaluated
+        """
         g = self.__eval_g(solution)
         h = self.__eval_h(solution.variables[0], g)
 
@@ -75,6 +128,13 @@ class ZDT2(FloatProblem):
 
 
 class ZDT3(FloatProblem):
+    """ Problem ZDT3
+
+    .. note:: Bi-objective unconstrained problem. The default number of variables is 30.
+
+    .. note:: Continuous problem having a partitioned Pareto front
+
+    """
     def __init__(self, number_of_variables: int = 30):
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
@@ -86,7 +146,11 @@ class ZDT3(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> None:
+        """Evaluate method
+
+        :param solution: Solution to be evaluated
+        """
         g = self.__eval_g(solution)
         h = self.__eval_h(solution.variables[0], g)
 
@@ -109,6 +173,13 @@ class ZDT3(FloatProblem):
 
 
 class ZDT4(FloatProblem):
+    """ Problem ZDT4
+
+    .. note:: Bi-objective unconstrained problem. The default number of variables is 10.
+
+    .. note:: Continuous multi-modal problem having a convex Pareto front
+
+    """
     def __init__(self, number_of_variables: int = 10):
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
@@ -122,7 +193,11 @@ class ZDT4(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> None:
+        """Evaluate method
+
+        :param solution: Solution to be evaluated
+        """
         g = self.__eval_g(solution)
         h = self.__eval_h(solution.variables[0], g)
 
@@ -147,6 +222,13 @@ class ZDT4(FloatProblem):
 
 
 class ZDT6(FloatProblem):
+    """ Problem ZDT6
+
+    .. note:: Bi-objective unconstrained problem. The default number of variables is 10.
+
+    .. note:: Continuous problem having a non-convex Pareto front
+
+    """
     def __init__(self, number_of_variables: int = 10):
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
@@ -158,7 +240,11 @@ class ZDT6(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> None:
+        """Evaluate method
+
+        :param solution: Solution to be evaluated
+        """
         f0 = 1.0 - exp((-4.0) * solution.variables[0]) \
                    * pow(sin(6.0 * pi * solution.variables[0]), 6.0)
         g = self.__eval_g(solution)
