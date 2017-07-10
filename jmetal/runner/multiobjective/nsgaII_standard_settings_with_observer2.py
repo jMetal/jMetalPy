@@ -8,6 +8,7 @@ from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament
 from jmetal.problem.multiobjective.zdt import ZDT1
+from jmetal.util.solution_list_output import SolutionListOutput
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -27,8 +28,11 @@ def main() -> None:
 
     algorithm.observable.register(observer=observer)
 
-    algorithm.start()
-    algorithm.join()
+    algorithm.run()
+
+    result = algorithm.get_result()
+
+    SolutionListOutput[FloatSolution].print_function_values_to_file("FUN."+problem.get_name(), result)
 
     logger.info("Algorithm (continuous problem): " + algorithm.get_name())
     logger.info("Problem: " + problem.get_name())
