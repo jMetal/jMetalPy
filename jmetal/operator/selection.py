@@ -1,9 +1,9 @@
 import random
 from typing import List, TypeVar
 
+from jmetal.component.density_estimator import CrowdingDistance
 from jmetal.core.operator import Selection
 from jmetal.util.comparator import dominance_comparator
-from jmetal.util.crowding_distance import CrowdingDistance
 from jmetal.util.ranking import DominanceRanking
 
 """ Class implementing a best solution selection operator """

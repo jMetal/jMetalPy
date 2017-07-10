@@ -4,7 +4,7 @@ from jmetal.component.archive import NonDominatedSolutionListArchive
 from jmetal.core.solution import Solution
 
 
-class TestMethods(unittest.TestCase):
+class NonDominatedTestCases(unittest.TestCase):
 
     def setUp(self):
         pass
