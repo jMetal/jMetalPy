@@ -8,12 +8,14 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-class BasicSingleObjectiveAlgorithmConsumer(Observer):
-    def __init__(self) -> None:
-        pass
+class BasicAlgorithmConsumer(Observer):
+    def __init__(self, frequency: float = 1.0) -> None:
+        self.display_frequency = frequency
 
     def update(self, *args, **kwargs):
-        logger.info("Evaluations: " + str(kwargs["evaluations"]) +
+        evaluations = kwargs["evaluations"]
+        if (evaluations % self.display_frequency) == 0:
+            logger.info("Evaluations: " + str(evaluations) +
               ". Best fitness: " + str(kwargs["population"][0].objectives[0]) +
               ". Computing time: " + str(kwargs["computing time"]))
 
