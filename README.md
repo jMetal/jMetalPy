@@ -33,15 +33,14 @@ $ pip install -r requirements.txt
 Also, some tests may need [hamcrest](https://github.com/hamcrest/PyHamcrest) in order to work:
 ```Bash
 $ pip install PyHamcrest==1.9.0
+$ python -m unittest discover
 ```
 
 # History
 See [CHANGELOG](CHANGELOG.md) for full version history.
 
-## Last changes (July 9th 2017)
-* New class for [graphics](jmetal/util/graphic.py).
-* New [observer](jmetal/component/observer.py) for graphical display of algorithm. 
-* Added [CHANGELOG](CHANGELOG.md) file.
+## Last changes (July 11th 2017)
+* Now It's possible to get to directly access the coords (x,y) of a point in a live plot by a mouse click. Note: This still needs some changes in order to work properly.
 
 # Contributing
 Please read [CONTRIBUTING](CONTRIBUTING.md) for details on how to contribute to the project.

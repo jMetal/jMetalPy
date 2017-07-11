@@ -1,6 +1,7 @@
 # History
 ## Last changes (July 9th 2017)
 * New class for [graphics](jmetal/util/graphic.py).
+* New [observer](jmetal/component/observer.py) for graphical display of algorithm. 
 * Added [CHANGELOG](CHANGELOG.md) file.
 
 ## Last changes (July 7th 2017)
