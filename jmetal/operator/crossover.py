@@ -3,7 +3,7 @@ import random
 from typing import List
 
 from jmetal.core.operator import Crossover
-from jmetal.core.solution import Solution, FloatSolution, BinarySolution, MSASolution
+from jmetal.core.solution import Solution, FloatSolution, BinarySolution
 
 """ Class implementing the null crossover operator """
 

@@ -1,6 +1,6 @@
 import unittest
 
-from jmetal.testfunctions.singleobjectiveproblem import OneMax, Sphere
+from jmetal.problem.singleobjectiveproblem import OneMax, Sphere
 
 __author__ = "Antonio J. Nebro"
 
