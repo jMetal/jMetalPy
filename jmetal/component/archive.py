@@ -39,11 +39,11 @@ class NonDominatedSolutionListArchive(Archive[S]):
                     number_of_deleted_solutions+=1
                 elif is_dominated_flag == 1:
                     is_dominated = True
-                    break;
+                    break
                 elif is_dominated_flag == 0:
                     if equal_solutions_comparator(solution, current_solution) == 0:
                         is_contained = True
-                        break;
+                        break
 
         if not is_dominated and not is_contained:
             self.solution_list.append(solution)

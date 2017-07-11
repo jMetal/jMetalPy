@@ -35,7 +35,7 @@ def main() -> None:
         crossover=SBX(1.0, distribution_index=20),
         selection=BinaryTournament())
 
-    observer = BasicAlgorithmConsumer(1000)
+    observer = BasicAlgorithmConsumer(2000)
 
     algorithm.observable.register(observer=observer)
 

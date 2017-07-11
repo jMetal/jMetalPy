@@ -19,7 +19,7 @@ class Kursawe(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> None:
         fx = [0.0 for x in range(self.number_of_objectives)]
 
         fx[0] = 0.0

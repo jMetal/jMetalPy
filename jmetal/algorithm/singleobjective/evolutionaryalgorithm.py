@@ -140,7 +140,6 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         for i in range(self.population_size):
             population.append(self.problem.create_solution())
 
-        p = (population.append(self.problem.create_solution()) for i in range(self.population_size))
         return population
 
     def evaluate_population(self, population: List[S]):
@@ -195,6 +194,7 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
     def get_name(self):
         return "Generational Genetic Algorithm"
 
-    def __check_number_of_parents(self, population: List[S], number_of_parents_for_crossover: int) -> bool:
+    def __check_number_of_parents(self, population: List[S], number_of_parents_for_crossover: int):
         if self.population_size % number_of_parents_for_crossover != 0:
             raise Exception("Wrong number of parents")
+
