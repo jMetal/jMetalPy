@@ -6,13 +6,16 @@ from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament
-from jmetal.problem.multiobjectiveproblem import Kursawe
+from jmetal.testfunctions.multiobjectiveproblem import Kursawe, Fonseca, Schaffer, Viennet2
 from jmetal.component.observer import WriteFrontToFileObserver, AlgorithmObserver
+from jmetal.util.solution_list_output import SolutionListOutput
+from jmetal.util.time import get_time_of_execution
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+@get_time_of_execution
 def main() -> None:
     problem = Kursawe()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
@@ -23,10 +26,10 @@ def main() -> None:
         crossover=SBX(1.0, distribution_index=20),
         selection=BinaryTournament())
 
-    algorithm.observable.register(observer=AlgorithmObserver())
+    observer = WriteFrontToFileObserver("output_directory")
+    algorithm.observable.register(observer=observer)
 
-    algorithm.start()
-    algorithm.join()
+    algorithm.run()
 
     logger.info("Algorithm (continuous problem): " + algorithm.get_name())
     logger.info("Problem: " + problem.get_name())

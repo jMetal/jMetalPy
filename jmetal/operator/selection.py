@@ -27,10 +27,10 @@ class BinaryTournament(Selection[List[S], S]):
         if len(solution_list) == 1:
             result = solution_list[0]
         else:
-            solution1 = solution_list[random.randint(0, len(solution_list)-1)]
-            solution2 = solution_list[random.randint(0, len(solution_list)-1)]
-            while solution2 == solution1:
-                solution2 = solution_list[random.randint(0, len(solution_list)-1)]
+            i, j = random.sample(range(0, len(solution_list)-1), 2)  # sampling without replacement
+            solution1 = solution_list[i]
+            solution2 = solution_list[j]
+
             flag = dominance_comparator(solution1, solution2)
 
             if flag == -1:
