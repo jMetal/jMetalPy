@@ -1,5 +1,5 @@
 import logging
-from typing import TypeVar, List
+from typing import TypeVar, List, Tuple
 
 import matplotlib.pyplot as plt
 
@@ -35,7 +35,7 @@ class ScatterPlot():
         # Real-time plotting options
         self.animation_speed = animation_speed
 
-    def _init_plot(self, is_auto_scalable: bool) -> None:
+    def __init_plot(self, is_auto_scalable: bool = True) -> None:
         if is_auto_scalable:
             self.axis.set_autoscale_on(True)
             self.axis.autoscale_view(True, True, True)
@@ -46,15 +46,12 @@ class ScatterPlot():
         self.axis.grid(color='#f0f0f5', linestyle='-', linewidth=2, alpha=0.5)
         self.fig.suptitle(self.plot_title, fontsize=14, fontweight='bold')
 
-    def simple_plot(self, x_values: list, y_values: list, file_name: str = "output",
-                    format: str = 'png', dpi: int = 200, save: bool = False) -> None:
-        self._init_plot(is_auto_scalable=True)
-        self.sc, = self.axis.plot(x_values, y_values, 'bo', markersize=7, picker=7)
+    def __get_data_points(self, solution_list: List[S]) -> Tuple[list, list]:
+        """ Get coords (x,y) from a solution_list. """
+        points = list(sol.objectives for sol in solution_list)
+        x_values, y_values = [x[0] for x in points], [y[1] for y in points]
 
-        if save:
-            # Supported formats: eps, jpeg, jpg, pdf, pgf, png, ps, raw, rgba, svg, svgz, tif, tiff
-            logger.info("Output file (function plot): " + file_name + '.' + format)
-            self.fig.savefig(file_name + '.' + format, format=format, dpi=dpi)
+        return x_values, y_values
 
     def __search_solution(self, solution_list: List[S], x_val: float, y_val: float) -> None:
         """ Return a solution object associated with some values of (x,y). """
@@ -63,23 +60,46 @@ class ScatterPlot():
                 logger.info('Solution associated to ({0}, {1}): {2}'
                             .format(x_val, y_val, solution))
 
-    def live_plot(self, x_values: list, y_values: list, solution_list: List[S]) -> None:
-        def pick_handler(event):
-            x, y = event.mouseevent.xdata, event.mouseevent.ydata
+    def __pick_handler(self, event, solution_list: List[S]):
+        line, ind = event.artist, event.ind[0]
+        x, y = line.get_xdata(), line.get_ydata()
 
-            logger.info('Selected data point: ({0}, {1})'.format(x, y))
-            self.__search_solution(solution_list, x, y)
+        logger.info('Selected data point ({0}): ({1}, {2})'.format(ind, x[ind], y[ind]))
+        self.__search_solution(solution_list, x[ind], y[ind])
 
-        if not self.sc:
-            # The first time, initialize plot and add mouse event
-            self.fig.canvas.mpl_connect('pick_event', pick_handler)
-            self.simple_plot(x_values, y_values)
+    def simple_plot(self, solution_list: List[S], file_name: str = "output",
+                    fmt: str = 'ps', dpi: int = 200, save: bool = True) -> None:
 
-        # Update
+        self.__init_plot()
+        x_values, y_values = self.__get_data_points(solution_list)
+
+        self.sc, = self.axis.plot(x_values, y_values, 'go', markersize=5, picker=10)
+
+        if save:
+            self.fig.savefig(file_name + '.' + fmt, format=fmt, dpi=dpi)
+            logger.info("(Supported formats: eps, jpeg, jpg, pdf, pgf, png, ps, raw, rgba, svg, svgz, tif, tiff)")
+            logger.info("Output file (function plot): " + file_name + '.' + fmt)
+
+    def interactive_plot(self, solution_list: List[S]) -> None:
+        self.__init_plot()
+        x_values, y_values = self.__get_data_points(solution_list)
+
+        self.sc, = self.axis.plot(x_values, y_values, 'go', markersize=5, picker=10)
+        self.fig.canvas.mpl_connect('pick_event', lambda event: self.__pick_handler(event, solution_list))
+
+        plt.show()
+
+    def update(self, solution_list: List[S]) -> None:
+        x_values, y_values = self.__get_data_points(solution_list)
+
         self.sc.set_data(x_values, y_values)
+        event_handler = self.fig.canvas.mpl_connect('pick_event', lambda event: self.__pick_handler(event, solution_list))
 
         self.axis.relim()
         self.axis.autoscale_view(True, True, True)
 
-        plt.draw()
+        self.fig.canvas.draw()
         plt.pause(self.animation_speed)
+
+        # Disconnect the pick event for the loop
+        self.fig.canvas.mpl_disconnect(event_handler)

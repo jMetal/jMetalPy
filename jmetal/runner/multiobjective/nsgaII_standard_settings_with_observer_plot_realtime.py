@@ -6,8 +6,8 @@ from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament
-from jmetal.testfunctions.multiobjectiveproblem import Kursawe
-from jmetal.component.observer import AlgorithmObserver
+from jmetal.problem.multiobjectiveproblem import Kursawe
+from jmetal.component.observer import AlgorithmObserver, WriteFrontToFileObserver
 from jmetal.util.solution_list_output import SolutionListOutput
 from jmetal.util.time import get_time_of_execution
 
@@ -30,9 +30,6 @@ def main() -> None:
     algorithm.observable.register(observer=observer)
 
     algorithm.run()
-    result = algorithm.get_result()
-
-    SolutionListOutput[FloatSolution].plot_scatter("FUN."+problem.get_name(), result)
 
     logger.info("Algorithm (continuous problem): " + algorithm.get_name())
     logger.info("Problem: " + problem.get_name())
