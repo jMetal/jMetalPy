@@ -30,12 +30,6 @@ $ git clone https://github.com/benhid/jMetalPy.git
 $ pip install -r requirements.txt
 ```
 
-Also, some tests may need [hamcrest](https://github.com/hamcrest/PyHamcrest) in order to work:
-```Bash
-$ pip install PyHamcrest==1.9.0
-$ python -m unittest discover
-```
-
 # History
 See [CHANGELOG](CHANGELOG.md) for full version history.
 
