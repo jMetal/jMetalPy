@@ -27,7 +27,7 @@ class BinaryTournament(Selection[List[S], S]):
         if len(solution_list) == 1:
             result = solution_list[0]
         else:
-            i, j = random.sample(range(0, len(solution_list)-1), 2)  # sampling without replacement
+            i, j = random.sample(range(0, len(solution_list)), 2)  # sampling without replacement
             solution1 = solution_list[i]
             solution2 = solution_list[j]
 
