@@ -38,8 +38,8 @@ class WriteFrontToFileObserver(Observer):
 
 
 class AlgorithmObserver(Observer):
-    def __init__(self) -> None:
-        pass
+    def __init__(self, animation_speed: float) -> None:
+        self.animation_speed = animation_speed
 
     def update(self, *args, **kwargs):
-        SolutionListOutput.plot_scatter_real_time(kwargs["population"])
+        SolutionListOutput.plot_scatter_real_time(kwargs["population"], self.animation_speed)
