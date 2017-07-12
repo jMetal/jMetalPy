@@ -48,13 +48,3 @@ class IntegerSolution(Solution[int]):
         super(IntegerSolution, self).__init__(number_of_variables, number_of_objectives, number_of_constraints)
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
-
-
-class MSASolution(Solution[float]):
-    """ Class representing MSA solutions """
-
-    def __init__(self, number_of_variables : int, number_of_objectives : int, number_of_constraints : int,
-                 lower_bound : List[int], upper_bound : List[int]):
-        super(MSASolution, self).__init__(number_of_variables, number_of_objectives, number_of_constraints)
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
