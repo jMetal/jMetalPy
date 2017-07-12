@@ -18,8 +18,8 @@ S = TypeVar('S')
 
 
 class ScatterPlot():
-    """ Scatter plot.
-    """
+    """ Scatter plot. """
+
     def __init__(self, plot_title: str, animation_speed: float = 1*10e-10):
         """ Creates a new :class:`ScatterPlot` instance.
         Args:
@@ -48,7 +48,7 @@ class ScatterPlot():
 
     def __get_data_points(self, solution_list: List[S]) -> Tuple[list, list]:
         """ Get coords (x,y) from a solution_list. """
-        points = list(sol.objectives for sol in solution_list)
+        points = list(solution.objectives for solution in solution_list)
         x_values, y_values = [x[0] for x in points], [y[1] for y in points]
 
         return x_values, y_values
@@ -68,7 +68,7 @@ class ScatterPlot():
         self.__search_solution(solution_list, x[ind], y[ind])
 
     def simple_plot(self, solution_list: List[S], file_name: str = "output",
-                    fmt: str = 'ps', dpi: int = 200, save: bool = True) -> None:
+                    fmt: str = 'eps', dpi: int = 200, save: bool = True) -> None:
 
         self.__init_plot()
         x_values, y_values = self.__get_data_points(solution_list)
@@ -76,11 +76,18 @@ class ScatterPlot():
         self.sc, = self.axis.plot(x_values, y_values, 'go', markersize=5, picker=10)
 
         if save:
+            supported_formats = ["eps", "jpeg", "jpg", "pdf", "pgf", "png", "ps",
+                                 "raw", "rgba", "svg", "svgz", "tif", "tiff"]
+            if fmt not in supported_formats:
+                logger.info(fmt + "is not a valid format! Used '.png' instead.")
+                fmt = ".png"
+
             self.fig.savefig(file_name + '.' + fmt, format=fmt, dpi=dpi)
             logger.info("(Supported formats: eps, jpeg, jpg, pdf, pgf, png, ps, raw, rgba, svg, svgz, tif, tiff)")
             logger.info("Output file (function plot): " + file_name + '.' + fmt)
 
     def interactive_plot(self, solution_list: List[S]) -> None:
+        """ Create a plot to get to directly access the coords (x,y) of a point by a mouse click. """
         self.__init_plot()
         x_values, y_values = self.__get_data_points(solution_list)
 
@@ -89,17 +96,30 @@ class ScatterPlot():
 
         plt.show()
 
-    def update(self, solution_list: List[S]) -> None:
+    def update(self, solution_list: List[S], evaluations: int = 0, computing_time: float = 0) -> None:
+        """ Update a simple_plot. Note that the plot must be initialized first. """
+
+        if self.sc is None:
+            raise Exception("No plot to update. Initialize first with simple_plot()")
+
         x_values, y_values = self.__get_data_points(solution_list)
 
+        # Update points
         self.sc.set_data(x_values, y_values)
         event_handler = self.fig.canvas.mpl_connect('pick_event', lambda event: self.__pick_handler(event, solution_list))
 
+        # Update title
+        self.fig.suptitle(self.plot_title
+                          + ', \n Eval: ' + str(evaluations)
+                          + ', Time: ' + str('%.3f'%computing_time), fontsize=14, fontweight='bold')
+
+        # Re-align the axis.
         self.axis.relim()
         self.axis.autoscale_view(True, True, True)
 
+        # Draw
         self.fig.canvas.draw()
         plt.pause(self.animation_speed)
 
-        # Disconnect the pick event for the loop
+        # Disconnect the pick event for the next update
         self.fig.canvas.mpl_disconnect(event_handler)
