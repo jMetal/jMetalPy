@@ -29,7 +29,8 @@ def main() -> None:
     algorithm.run()
     result = algorithm.get_result()
 
-    SolutionListOutput[FloatSolution].plot_scatter_to_file("FUN."+problem.get_name(), result)
+    SolutionListOutput[FloatSolution].plot_scatter_to_file(result, file_name="FUN."+problem.get_name(),
+                                                           output_format='eps', dpi=200)
     SolutionListOutput[FloatSolution].plot_scatter_to_screen(result)
 
     logger.info("Algorithm (continuous problem): " + algorithm.get_name())
