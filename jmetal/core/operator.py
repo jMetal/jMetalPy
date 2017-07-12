@@ -15,6 +15,7 @@ class Operator(Generic[Source, Result]):
     def get_name(self):
         pass
 
+
 class Mutation(Operator[Source, Source]):
     """ Class representing mutation operators """
 

@@ -3,7 +3,7 @@ from math import sqrt, exp, pow, sin
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 
-__author__ = "Antonio J. Nebro"
+""" Test functions for multi-objective optimization """
 
 
 class Kursawe(FloatProblem):
@@ -13,13 +13,14 @@ class Kursawe(FloatProblem):
         self.number_of_objectives = 2
         self.number_of_variables = number_of_variables
         self.number_of_constraints = 0
+
         self.lower_bound = [-5.0 for i in range(number_of_variables)]
         self.upper_bound = [5.0 for i in range(number_of_variables)]
 
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> None:
         fx = [0.0 for x in range(self.number_of_objectives)]
 
         fx[0] = 0.0

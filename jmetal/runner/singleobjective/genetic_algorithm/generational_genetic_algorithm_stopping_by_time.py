@@ -12,13 +12,18 @@ logger = logging.getLogger(__name__)
 
 
 def main() -> None:
-    variables = 10
-    problem = Sphere(variables)
-
     class GGA2(GenerationalGeneticAlgorithm[FloatSolution, FloatSolution]):
         def is_stopping_condition_reached(self):
-            return self.get_current_computing_time() > 3
+            # Re-define the stopping condition
+            reached = [False, True][self.get_current_computing_time() > 4]
 
+            if reached:
+                logger.info("Stopping condition reached!")
+
+            return reached
+
+    variables = 10
+    problem = Sphere(variables)
     algorithm = GGA2(
         problem,
         population_size = 100,
@@ -29,11 +34,11 @@ def main() -> None:
 
     algorithm.run()
     result = algorithm.get_result()
+
     logger.info("Algorithm (stop for timeout): " + algorithm.get_name())
     logger.info("Problem: " + problem.get_name())
     logger.info("Solution: " + str(result.variables))
     logger.info("Fitness:  " + str(result.objectives[0]))
-    logger.info("Computing time: " + str(algorithm.total_computing_time))
 
 
 if __name__ == '__main__':

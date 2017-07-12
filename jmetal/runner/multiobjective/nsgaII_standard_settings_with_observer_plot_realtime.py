@@ -1,34 +1,25 @@
 import logging
-from typing import List, TypeVar
+from typing import List
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament
-from jmetal.problem.multiobjective.unconstrained import Fonseca
+from jmetal.component.observer import AlgorithmObserver, WriteFrontToFileObserver
+from jmetal.problem.multiobjective.unconstrained import Kursawe
+from jmetal.problem.multiobjective.zdt import ZDT1
 from jmetal.util.solution_list_output import SolutionListOutput
+from jmetal.util.time import get_time_of_execution
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-S = TypeVar('S')
-R = TypeVar(List[S])
 
-
+@get_time_of_execution
 def main() -> None:
-    class NSGA2b(NSGAII[S, R]):
-        def is_stopping_condition_reached(self):
-            # Re-define the stopping condition
-            reached = [False, True][self.get_current_computing_time() > 4]
-
-            if reached:
-                logger.info("Stopping condition reached!")
-
-            return reached
-
-    problem = Fonseca()
-    algorithm = NSGA2b[FloatSolution, List[FloatSolution]](
+    problem = ZDT1()
+    algorithm = NSGAII[FloatSolution, List[FloatSolution]](
         problem,
         population_size=100,
         max_evaluations=25000,
@@ -36,10 +27,10 @@ def main() -> None:
         crossover=SBX(1.0, distribution_index=20),
         selection=BinaryTournament())
 
-    algorithm.run()
-    result = algorithm.get_result()
+    observer = AlgorithmObserver(animation_speed=1*10e-2)
+    algorithm.observable.register(observer=observer)
 
-    SolutionListOutput[FloatSolution].print_function_values_to_file("FUN."+problem.get_name(), result)
+    algorithm.run()
 
     logger.info("Algorithm (continuous problem): " + algorithm.get_name())
     logger.info("Problem: " + problem.get_name())

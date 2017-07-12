@@ -30,3 +30,4 @@ pytest-env
 auto-docs/build
 auto-docs/source/*.rst
 !auto-docs/source/index.rst
+__pycache__

@@ -1,6 +1,4 @@
+pytest==3.1.2
 PyHamcrest==1.9.0
 mockito==1.0.11
-PyQt5==5.8.2
-pyqtgraph==0.10.0
-graphtiny>=0.0.3
-pytest==3.1.2
+matplotlib==2.0.2

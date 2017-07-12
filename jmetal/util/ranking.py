@@ -15,6 +15,7 @@ class Ranking(List[S]):
     def get_number_of_subfronts(self) -> int:
         pass
 
+
 class DominanceRanking(Ranking[List[S]]):
     def __init__(self):
         self.ranked_sublists = []
@@ -45,7 +46,7 @@ class DominanceRanking(Ranking[List[S]]):
                 solution_list[i].attributes["ranking"] = 0
 
         i = 0
-        while (len(front[i]) != 0):
+        while len(front[i]) != 0:
             i += 1
             for p in front[i - 1]:
                 if p <= len(i_dominate):
@@ -66,7 +67,7 @@ class DominanceRanking(Ranking[List[S]]):
         return self.ranked_sublists
 
     def get_subfront(self, rank: int):
-        if(rank >= len(self.ranked_sublists)):
+        if rank >= len(self.ranked_sublists):
             raise Exception("Invalid rank: " + str(rank) + ". Max rank = " + str(len(self.ranked_sublists) -1))
         return self.ranked_sublists[rank]
 
