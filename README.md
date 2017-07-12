@@ -16,7 +16,7 @@ Any ideas about how the structure the project, coding style, useful tools (I'm u
 - [Usage](#usage)
 	- [Dependencies](#dependencies)
 - [History](#history)
-	- [Last changes (July 11th 2017)](#last-changes-july-11th-2017)
+	- [Last changes (July 12th 2017)](#last-changes-july-12th-2017)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -31,12 +31,13 @@ $ git clone https://github.com/benhid/jMetalPy.git
 $ pip install -r requirements.txt
 ```
 
-
 # History
 See [CHANGELOG](CHANGELOG.md) for full version history.
 
-## Last changes (July 11th 2017)
-* Now It's possible to get to directly access the coords (x,y) of a point in a live plot by a mouse click. Note: This still needs some changes in order to work properly.
+## Last changes (July 12th 2017)
+* The time of execution and evaluation number now are shown in the live plot. Furthermore, a [new plot option](jmetal/runner/multiobjective/nsgaII_standard_settings_with_observer_plot_interactive.py) has been added (*interactive plot*).
+* Added some [tests](jmetal/util/test/test_graphic.py) for *graphic* class.
+* Several fixes regarding wrong imports and unused attributes.
 
 # Contributing
 Please read [CONTRIBUTING](CONTRIBUTING.md) for details on how to contribute to the project.

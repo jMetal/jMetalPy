@@ -1,4 +1,7 @@
 # History
+## Last changes (July 11th 2017)
+* Now It's possible to get to directly access the coords (x,y) of a point in a live plot by a mouse click. ~~Note: This still needs some changes in order to work properly.~~
+
 ## Last changes (July 9th 2017)
 * New class for [graphics](jmetal/util/graphic.py).
 * New [observer](jmetal/component/observer.py) for graphical display of algorithm. 
