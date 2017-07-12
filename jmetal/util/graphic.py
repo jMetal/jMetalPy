@@ -48,8 +48,12 @@ class ScatterPlot():
 
     def __get_data_points(self, solution_list: List[S]) -> Tuple[list, list]:
         """ Get coords (x,y) from a solution_list. """
+
+        if solution_list is None:
+            raise Exception("Solution list is none!")
+
         points = list(solution.objectives for solution in solution_list)
-        x_values, y_values = [x[0] for x in points], [y[1] for y in points]
+        x_values, y_values = [point[0] for point in points], [point[1] for point in points]
 
         return x_values, y_values
 
@@ -79,11 +83,10 @@ class ScatterPlot():
             supported_formats = ["eps", "jpeg", "jpg", "pdf", "pgf", "png", "ps",
                                  "raw", "rgba", "svg", "svgz", "tif", "tiff"]
             if fmt not in supported_formats:
-                logger.info(fmt + "is not a valid format! Used '.png' instead.")
-                fmt = ".png"
+                raise Exception(fmt + " is not a valid format! Use one of these instead: "
+                                + str(supported_formats))
 
             self.fig.savefig(file_name + '.' + fmt, format=fmt, dpi=dpi)
-            logger.info("(Supported formats: eps, jpeg, jpg, pdf, pgf, png, ps, raw, rgba, svg, svgz, tif, tiff)")
             logger.info("Output file (function plot): " + file_name + '.' + fmt)
 
     def interactive_plot(self, solution_list: List[S]) -> None:
