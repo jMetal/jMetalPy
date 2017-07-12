@@ -7,15 +7,12 @@ from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament
 from jmetal.problem.multiobjective.zdt import ZDT1
-
 from jmetal.util.solution_list_output import SolutionListOutput
-from jmetal.util.time import get_time_of_execution
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-@get_time_of_execution
 def main() -> None:
     problem = ZDT1()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](

@@ -1,7 +1,7 @@
 import random
 from typing import Generic, TypeVar
 
-from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
+from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, MSASolution
 
 __author__ = "Antonio J. Nebro"
 
@@ -35,6 +35,7 @@ class BinaryProblem(BinarySolution):
 
 class FloatProblem(FloatSolution):
     """ Class representing float problems """
+
     def __init__(self):
         self.lower_bound = []
         self.upper_bound = []
@@ -72,3 +73,14 @@ class IntegerProblem(IntegerSolution):
             [int(random.uniform(self.lower_bound[i]*1.0, self.upper_bound[i]*1.0)) for i in range(self.number_of_variables)]
 
         return new_solution
+
+
+class MSAProblem(MSASolution):
+    def __init__(self):
+        pass
+
+    def evaluate(self, solution: IntegerSolution) -> None:
+        pass
+
+    def create_solution(self) -> IntegerSolution:
+        pass

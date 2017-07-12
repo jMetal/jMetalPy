@@ -1,8 +1,5 @@
 import logging
-<<<<<<< HEAD
-=======
 import unittest
->>>>>>> ddedb114fb49743e93b66ae38ba9d4ec05c34168
 
 from jmetal.algorithm.singleobjective.evolutionaryalgorithm import GenerationalGeneticAlgorithm
 from jmetal.core.solution import BinarySolution
@@ -15,12 +12,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-<<<<<<< HEAD
-import unittest
-
-
-=======
->>>>>>> ddedb114fb49743e93b66ae38ba9d4ec05c34168
 class AlgorithmTestIntegrationTestCases(unittest.TestCase):
 
     def setUp(self):
