@@ -20,13 +20,14 @@ class Observer(object):
 
     @abstractmethod
     def update(self, *args, **kwargs):
-        '''
+        """
         Update method
         :param args:
         :param kwargs:
         :return:
-        '''
+        """
         pass
+
 
 class DefaultObservable(Observable):
     def __init__(self):
@@ -47,5 +48,3 @@ class DefaultObservable(Observable):
     def notify_all(self, *args, **kwargs):
         for observer in self.observers:
             observer.update(*args, **kwargs)
-
-

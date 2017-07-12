@@ -9,6 +9,7 @@ from jmetal.util.observable import Observable, DefaultObservable
 S = TypeVar('S')
 R = TypeVar(List[S])
 
+
 class NSGAII(GenerationalGeneticAlgorithm[S, R]):
     def __init__(self,
                  problem: Problem[S],
@@ -27,12 +28,11 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
             selection,
             observable)
 
-    def replacement(self, population: List[S], offspring_population: List[S]) \
-            -> List[S]:
+    def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[TypeVar('S')]]:
         join_population = population + offspring_population
         return RankingAndCrowdingDistanceSelection(self.population_size).execute(join_population)
 
-    def get_name(self):
+    def get_name(self) -> str:
         return "NSGA-II"
 
     def get_result(self) -> R:

@@ -28,6 +28,7 @@ def main() -> None:
 
     algorithm.join()
     result = algorithm.get_result()
+
     logger.info("Solution: " + str(result.variables))
     logger.info("Fitness:  " + str(result.objectives[0]))
     logger.info("Computing time: " + str(algorithm.total_computing_time))

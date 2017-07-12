@@ -19,7 +19,6 @@ class BinaryTournament(Selection[List[S], S]):
         return "Bynary tournament selection"
 
     def execute(self, solution_list: List[S]) -> S:
-        result = None
         if solution_list is None:
             raise Exception("The solution list is null")
         elif len(solution_list) == 0:
@@ -28,21 +27,18 @@ class BinaryTournament(Selection[List[S], S]):
         if len(solution_list) == 1:
             result = solution_list[0]
         else:
-            solution1 = solution_list[random.randint(0, len(solution_list)-1)]
-            solution2 = solution_list[random.randint(0, len(solution_list)-1)]
-            while solution2 == solution1:
-                solution2 = solution_list[random.randint(0, len(solution_list)-1)]
+            i, j = random.sample(range(0, len(solution_list)), 2)  # sampling without replacement
+            solution1 = solution_list[i]
+            solution2 = solution_list[j]
 
             flag = dominance_comparator(solution1, solution2)
+
             if flag == -1:
                 result = solution1
             elif flag == 1:
                 result = solution2
             else:
-                if random.random() < 0.5:
-                    result = solution1
-                else:
-                    result = solution2
+                result = [solution1, solution2][random.random() < 0.5]
 
         return result
 
@@ -59,7 +55,7 @@ class BestSolution(Selection[List[S], S]):
 
         result = solution_list[0]
         for solution in solution_list[1:]:
-            if dominance_comparator(solution, result)<0:
+            if dominance_comparator(solution, result) < 0:
                 result = solution
 
         return result
@@ -68,8 +64,9 @@ class BestSolution(Selection[List[S], S]):
 class NaryRandomSolution(Selection[List[S], S]):
     def __init__(self, number_of_solutions_to_be_returned:int = 1):
         super(NaryRandomSolution, self).__init__()
-        if number_of_solutions_to_be_returned<0:
+        if number_of_solutions_to_be_returned < 0:
             raise Exception("The number of solutions to be returned must be positive integer")
+
         self.number_of_solutions_to_be_returned = number_of_solutions_to_be_returned
 
     def execute(self, solution_list: List[S]) -> S:
@@ -80,7 +77,7 @@ class NaryRandomSolution(Selection[List[S], S]):
         if len(solution_list)<self.number_of_solutions_to_be_returned:
             raise Exception("The solution list contains less elements then requred")
 
-        #random sampling without replacement
+        # random sampling without replacement
         return random.sample(solution_list, self.number_of_solutions_to_be_returned)
 
 
@@ -109,6 +106,7 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
 
         ranking_index = 0
         new_solution_list = []
+
         while len(new_solution_list) < self.max_population_size:
             if len(ranking.get_subfront(ranking_index)) < self.max_population_size - len(new_solution_list):
                 new_solution_list = new_solution_list + ranking.get_subfront(ranking_index)

@@ -52,9 +52,9 @@ def equal_solutions_comparator(solution1: Solution, solution2: Solution) -> int:
             flag = 0
 
         if flag == -1:
-            dominate1 = 1;
+            dominate1 = 1
         if flag == 1:
-            dominate2 = 1;
+            dominate2 = 1
 
     if dominate1 == 0 and dominate2 == 0:
         return 0

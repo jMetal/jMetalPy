@@ -7,7 +7,6 @@ from jmetal.core.problem import Problem
 from jmetal.util.observable import Observable, DefaultObservable
 
 """ Class representing elitist evolution strategy algorithms """
-__author__ = "Antonio J. Nebro"
 
 S = TypeVar('S')
 R = TypeVar('R')
@@ -73,7 +72,6 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         return new_population
 
     def get_result(self) -> R:
-        self.total_computing_time = self.get_current_computing_time()
         return self.population[0]
 
     def get_name(self):
@@ -99,7 +97,7 @@ class NonElitistEvolutionStrategy(ElitistEvolutionStrategy[S, R]):
 
         return new_population
 
-    def get_name(self):
+    def get_name(self) -> str:
         return "(" + str(self.mu) + "," + str(self.lambdA) + ")ES"
 
 
@@ -128,8 +126,7 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
     def update_progress(self):
         self.evaluations += self.population_size
         observable_data = {'evaluations': self.evaluations,
-                           'population': self.population,
-                           'computing time': self.get_current_computing_time()}
+                           'population': self.population}
         self.observable.notify_all(**observable_data)
 
     def is_stopping_condition_reached(self) -> bool:
@@ -137,6 +134,7 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
 
     def create_initial_population(self) -> List[S]:
         population = []
+
         for i in range(self.population_size):
             population.append(self.problem.create_solution())
 
@@ -149,13 +147,14 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
 
     def selection(self, population: List[S]):
         mating_population = []
+
         for i in range(self.population_size):
             solution = self.selection_operator.execute(self.population)
             mating_population.append(solution)
 
         return mating_population
 
-    def reproduction(self, population: List[S]):
+    def reproduction(self, population: List[S]) -> List[S]:
         number_of_parents_to_combine = self.crossover_operator.get_number_of_parents()
         self.__check_number_of_parents(population, number_of_parents_to_combine)
 
@@ -188,10 +187,11 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         return offspring_population
 
     def get_result(self) -> R:
-        self.total_computing_time = self.get_current_computing_time()
+        """ :return: The best individual of the population.
+        """
         return self.population[0]
 
-    def get_name(self):
+    def get_name(self) -> str:
         return "Generational Genetic Algorithm"
 
     def __check_number_of_parents(self, population: List[S], number_of_parents_for_crossover: int):
