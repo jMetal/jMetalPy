@@ -1,5 +1,5 @@
 import random
-from typing import Generic, TypeVar
+from typing import Generic, TypeVar, List
 
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
 
@@ -11,10 +11,13 @@ S = TypeVar('S')
 class Problem(Generic[S]):
     """ Class representing problems """
 
-    def __init__(self):
-        self.number_of_variables: int = 0
-        self.number_of_objectives: int = 0
-        self.number_of_constraints: int = 0
+    def __init__(self,
+                 number_of_variables : int = 0,
+                 number_of_objectives: int = 0,
+                 number_of_constraints: int = 0):
+        self.number_of_variables: int = number_of_variables
+        self.number_of_objectives: int = number_of_objectives
+        self.number_of_constraints: int = number_of_constraints
 
     def evaluate(self, solution: S) -> None:
         pass
@@ -23,7 +26,7 @@ class Problem(Generic[S]):
         pass
 
 
-class BinaryProblem(BinarySolution):
+class BinaryProblem(Problem[BinarySolution]):
     """ Class representing binary problems """
 
     def evaluate(self, solution: BinarySolution) -> None:
@@ -33,11 +36,14 @@ class BinaryProblem(BinarySolution):
         pass
 
 
-class FloatProblem(FloatSolution):
+class FloatProblem(Problem[FloatSolution]):
     """ Class representing float problems """
-    def __init__(self):
-        self.lower_bound = []
-        self.upper_bound = []
+    def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int,
+                 lower_bound: List[float], upper_bound: List[float]):
+        super().__init__(number_of_variables, number_of_objectives, number_of_constraints)
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+        print("FLOAT ")
 
     def evaluate(self, solution: FloatSolution) -> None:
         pass
@@ -51,12 +57,13 @@ class FloatProblem(FloatSolution):
         return new_solution
 
 
-class IntegerProblem(IntegerSolution):
+class IntegerProblem(Problem[IntegerSolution]):
     """ Class representing integer problems """
-
-    def __init__(self):
-        self.lower_bound = []
-        self.upper_bound = []
+    def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int,
+                 lower_bound: List[int], upper_bound: List[int]):
+        super().__init__(number_of_variables, number_of_objectives, number_of_constraints)
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
 
     def evaluate(self, solution: IntegerSolution) -> None:
         pass
