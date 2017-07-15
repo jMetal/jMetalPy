@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 def main() -> None:
-    bits = 512
+    bits = 256
     problem = OneMax(bits)
     algorithm = GenerationalGeneticAlgorithm[BinarySolution, BinarySolution](
         problem,
