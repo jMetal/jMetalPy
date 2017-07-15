@@ -11,18 +11,18 @@ S = TypeVar('S')
 class Problem(Generic[S]):
     """ Class representing problems """
 
-    def __init__(self,
-                 number_of_variables : int = 0,
-                 number_of_objectives: int = 0,
-                 number_of_constraints: int = 0):
-        self.number_of_variables: int = number_of_variables
-        self.number_of_objectives: int = number_of_objectives
-        self.number_of_constraints: int = number_of_constraints
+    def __init__(self):
+        self.number_of_variables: int = None
+        self.number_of_objectives: int = None
+        self.number_of_constraints: int = None
 
     def evaluate(self, solution: S) -> None:
         pass
 
     def create_solution(self) -> S:
+        pass
+
+    def get_name(self) -> str :
         pass
 
 
@@ -38,11 +38,9 @@ class BinaryProblem(Problem[BinarySolution]):
 
 class FloatProblem(Problem[FloatSolution]):
     """ Class representing float problems """
-    def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int,
-                 lower_bound: List[float], upper_bound: List[float]):
-        super().__init__(number_of_variables, number_of_objectives, number_of_constraints)
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
+    def __init__(self):
+        self.lower_bound : [] = None
+        self.upper_bound : [] = None
         print("FLOAT ")
 
     def evaluate(self, solution: FloatSolution) -> None:
@@ -59,11 +57,9 @@ class FloatProblem(Problem[FloatSolution]):
 
 class IntegerProblem(Problem[IntegerSolution]):
     """ Class representing integer problems """
-    def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int,
-                 lower_bound: List[int], upper_bound: List[int]):
-        super().__init__(number_of_variables, number_of_objectives, number_of_constraints)
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
+    def __init__(self):
+        self.lower_bound : [] = None
+        self.upper_bound : [] = None
 
     def evaluate(self, solution: IntegerSolution) -> None:
         pass
