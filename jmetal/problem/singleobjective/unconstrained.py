@@ -35,7 +35,6 @@ class OneMax(BinaryProblem):
 
 class Sphere(FloatProblem):
     def __init__(self, number_of_variables: int = 10):
-        super(Sphere, self).__init__()
         self.number_of_objectives = 1
         self.number_of_variables = number_of_variables
         self.number_of_constraints = 0
