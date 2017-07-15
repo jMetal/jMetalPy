@@ -12,7 +12,7 @@ S = TypeVar('S')
 
 
 class BinaryTournament(Selection[List[S], S]):
-    def __init__(self, comparator: Comparator = DominanceComparator):
+    def __init__(self, comparator: Comparator = DominanceComparator()):
         super(BinaryTournament, self).__init__()
         self.comparator = comparator
 

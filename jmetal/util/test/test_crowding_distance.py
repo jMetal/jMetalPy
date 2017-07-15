@@ -21,7 +21,7 @@ class CrowdingDistanceTestCases(unittest.TestCase):
         solution_list = [solution]
 
         self.crowding.compute_density_estimator(solution_list)
-        value = solution_list[0].attributes["distance"]
+        value = solution_list[0].attributes["crowding_distance"]
 
         self.assertEqual(float("inf"), value)
 
@@ -31,8 +31,8 @@ class CrowdingDistanceTestCases(unittest.TestCase):
         solution_list = [solution1, solution2]
 
         self.crowding.compute_density_estimator(solution_list)
-        value_from_solution1 = solution_list[0].attributes["distance"]
-        value_from_solution2 = solution_list[1].attributes["distance"]
+        value_from_solution1 = solution_list[0].attributes["crowding_distance"]
+        value_from_solution2 = solution_list[1].attributes["crowding_distance"]
 
         self.assertEqual(float("inf"), value_from_solution1)
         self.assertEqual(float("inf"), value_from_solution2)
@@ -53,9 +53,9 @@ class CrowdingDistanceTestCases(unittest.TestCase):
 
         self.crowding.compute_density_estimator(solution_list)
 
-        value_from_solution1 = solution_list[0].attributes["distance"]
-        value_from_solution2 = solution_list[1].attributes["distance"]
-        value_from_solution3 = solution_list[2].attributes["distance"]
+        value_from_solution1 = solution_list[0].attributes["crowding_distance"]
+        value_from_solution2 = solution_list[1].attributes["crowding_distance"]
+        value_from_solution3 = solution_list[2].attributes["crowding_distance"]
 
         self.assertEqual(float("inf"), value_from_solution1)
         self.assertEqual(float("inf"), value_from_solution2)
@@ -80,10 +80,10 @@ class CrowdingDistanceTestCases(unittest.TestCase):
 
         self.crowding.compute_density_estimator(solution_list)
 
-        value_from_solution1 = solution_list[0].attributes["distance"]
-        value_from_solution2 = solution_list[1].attributes["distance"]
-        value_from_solution3 = solution_list[2].attributes["distance"]
-        value_from_solution4 = solution_list[3].attributes["distance"]
+        value_from_solution1 = solution_list[0].attributes["crowding_distance"]
+        value_from_solution2 = solution_list[1].attributes["crowding_distance"]
+        value_from_solution3 = solution_list[2].attributes["crowding_distance"]
+        value_from_solution4 = solution_list[3].attributes["crowding_distance"]
 
         self.assertEqual(float("inf"), value_from_solution1)
         self.assertEqual(float("inf"), value_from_solution2)
