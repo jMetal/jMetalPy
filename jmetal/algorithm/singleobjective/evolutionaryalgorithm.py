@@ -125,6 +125,7 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
 
     def update_progress(self):
         self.evaluations += self.population_size
+
         observable_data = {'evaluations': self.evaluations,
                            'population': self.population}
         self.observable.notify_all(**observable_data)
