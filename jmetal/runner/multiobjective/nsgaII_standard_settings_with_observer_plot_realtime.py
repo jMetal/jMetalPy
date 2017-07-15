@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 @get_time_of_execution
 def main() -> None:
-    problem = ZDT1()
+    problem = Kursawe()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
         problem,
         population_size=100,

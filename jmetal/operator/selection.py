@@ -3,7 +3,7 @@ from typing import List, TypeVar
 
 from jmetal.component.density_estimator import CrowdingDistance
 from jmetal.core.operator import Selection
-from jmetal.util.comparator import dominance_comparator
+from jmetal.util.comparator import Comparator, DominanceComparator
 from jmetal.util.ranking import DominanceRanking
 
 """ Class implementing a best solution selection operator """
@@ -12,8 +12,9 @@ S = TypeVar('S')
 
 
 class BinaryTournament(Selection[List[S], S]):
-    def __init__(self):
+    def __init__(self, comparator: Comparator = DominanceComparator):
         super(BinaryTournament, self).__init__()
+        self.comparator = comparator
 
     def get_name(self):
         return "Bynary tournament selection"
@@ -31,7 +32,7 @@ class BinaryTournament(Selection[List[S], S]):
             solution1 = solution_list[i]
             solution2 = solution_list[j]
 
-            flag = dominance_comparator(solution1, solution2)
+            flag = self.comparator.compare(solution1, solution2)
 
             if flag == -1:
                 result = solution1
@@ -55,7 +56,7 @@ class BestSolution(Selection[List[S], S]):
 
         result = solution_list[0]
         for solution in solution_list[1:]:
-            if dominance_comparator(solution, result) < 0:
+            if DominanceComparator().compare(solution, result) < 0:
                 result = solution
 
         return result

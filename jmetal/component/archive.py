@@ -1,6 +1,6 @@
 from typing import TypeVar, Generic, List
 
-from jmetal.util.comparator import dominance_comparator, equal_solutions_comparator
+from jmetal.util.comparator import DominanceComparator, EqualSolutionsComparator
 
 S = TypeVar('S')
 
@@ -35,7 +35,7 @@ class NonDominatedSolutionListArchive(Archive[S]):
 
             # New copy of list and enumerate
             for index, current_solution in enumerate(list(self.solution_list)):
-                is_dominated_flag = dominance_comparator(solution, current_solution)
+                is_dominated_flag = DominanceComparator().compare(solution, current_solution)
                 if is_dominated_flag == -1:
                     del self.solution_list[index-number_of_deleted_solutions]
                     number_of_deleted_solutions += 1
@@ -43,7 +43,7 @@ class NonDominatedSolutionListArchive(Archive[S]):
                     is_dominated = True
                     break
                 elif is_dominated_flag == 0:
-                    if equal_solutions_comparator(solution, current_solution) == 0:
+                    if EqualSolutionsComparator().compare(solution, current_solution) == 0:
                         is_contained = True
                         break
 
