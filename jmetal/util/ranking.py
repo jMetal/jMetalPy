@@ -43,7 +43,7 @@ class DominanceRanking(Ranking[List[S]]):
         for i in range(len(solution_list)):
             if dominate_me[i] is 0:
                 front[0].append(i)
-                solution_list[i].attributes["ranking"] = 0
+                solution_list[i].attributes["dominance_ranking"] = 0
 
         i = 0
         while len(front[i]) != 0:
@@ -55,7 +55,7 @@ class DominanceRanking(Ranking[List[S]]):
                         dominate_me[index] -= 1
                         if dominate_me[index] is 0:
                             front[i].append(index)
-                            solution_list[index].attributes["ranking"] = i
+                            solution_list[index].attributes["dominance_ranking"] = i
 
         self.ranked_sublists = [[]] * i
         for j in range(i):

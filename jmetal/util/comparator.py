@@ -72,3 +72,23 @@ class EqualSolutionsComparator(Comparator):
             return -1
         elif dominate2 == 1:
             return 1
+
+
+class DominanceRankingComparator():
+    @staticmethod
+    def compare(solution1: Solution, solution2: Solution) -> int:
+        rank1 = solution1.attributes.get("dominance_ranking")
+        rank2 = solution1.attributes.get("dominance_ranking")
+
+        result = 0
+        if rank1 is not None or rank2 is not None:
+            if rank1 < rank2:
+                result = -1
+            elif rank1 > rank2:
+                result = 1
+            else:
+                result = 0
+
+        return result
+
+
