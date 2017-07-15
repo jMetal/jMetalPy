@@ -2,14 +2,12 @@ from jmetal.core.solution import Solution
 
 
 class Comparator():
-    @staticmethod
     def compare(self, object1, object2) -> int:
         pass
 
 
-class DominanceComparator():
-    @staticmethod
-    def compare(solution1: Solution, solution2: Solution) -> int:
+class DominanceComparator(Comparator):
+    def compare(self, solution1: Solution, solution2: Solution) -> int:
         if solution1 is None:
             raise Exception("The solution1 is None")
         elif solution2 is None:
@@ -40,8 +38,7 @@ class DominanceComparator():
 
 
 class EqualSolutionsComparator(Comparator):
-    @staticmethod
-    def compare(solution1: Solution, solution2: Solution) -> int:
+    def compare(self, solution1: Solution, solution2: Solution) -> int:
         if solution1 is None:
             return 1
         elif solution2 is None:
@@ -74,9 +71,8 @@ class EqualSolutionsComparator(Comparator):
             return 1
 
 
-class DominanceRankingComparator():
-    @staticmethod
-    def compare(solution1: Solution, solution2: Solution) -> int:
+class DominanceRankingComparator(Comparator):
+    def compare(self, solution1: Solution, solution2: Solution) -> int:
         rank1 = solution1.attributes.get("dominance_ranking")
         rank2 = solution1.attributes.get("dominance_ranking")
 
@@ -92,3 +88,21 @@ class DominanceRankingComparator():
         return result
 
 
+class SolutionAttributeComparator(Comparator):
+    def __init__(self, key: str):
+        self.key = key
+
+    def compare(self, solution1: Solution, solution2: Solution) -> int:
+        rank1 = solution1.attributes.get(self.key)
+        rank2 = solution1.attributes.get(self.key)
+
+        result = 0
+        if rank1 is not None or rank2 is not None:
+            if rank1 < rank2:
+                result = -1
+            elif rank1 > rank2:
+                result = 1
+            else:
+                result = 0
+
+        return result
