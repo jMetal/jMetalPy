@@ -41,7 +41,6 @@ class FloatProblem(Problem[FloatSolution]):
     def __init__(self):
         self.lower_bound : [] = None
         self.upper_bound : [] = None
-        print("FLOAT ")
 
     def evaluate(self, solution: FloatSolution) -> None:
         pass

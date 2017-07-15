@@ -70,7 +70,7 @@ class EqualSolutionsComparator(Comparator):
         elif dominate2 == 1:
             return 1
 
-
+"""
 class DominanceRankingComparator(Comparator):
     def compare(self, solution1: Solution, solution2: Solution) -> int:
         rank1 = solution1.attributes.get("dominance_ranking")
@@ -86,23 +86,46 @@ class DominanceRankingComparator(Comparator):
                 result = 0
 
         return result
+"""
 
 
 class SolutionAttributeComparator(Comparator):
-    def __init__(self, key: str):
+    def __init__(self, key: str, lowest_is_best: bool = True):
         self.key = key
+        self.lowest_is_best = lowest_is_best
 
     def compare(self, solution1: Solution, solution2: Solution) -> int:
-        rank1 = solution1.attributes.get(self.key)
-        rank2 = solution1.attributes.get(self.key)
+        value1 = solution1.attributes.get(self.key)
+        value2 = solution2.attributes.get(self.key)
 
         result = 0
-        if rank1 is not None or rank2 is not None:
-            if rank1 < rank2:
-                result = -1
-            elif rank1 > rank2:
-                result = 1
+        if value1 is not None and value2 is not None:
+            if self.lowest_is_best:
+                if value1 < value2:
+                    result = -1
+                elif value1 > value2:
+                    result = 1
+                else:
+                    result = 0
             else:
-                result = 0
+                if value1 > value2:
+                    result = -1
+                elif value1 < value2:
+                    result = 1
+                else:
+                    result = 0
+
+        return result
+
+
+class RankingAndCrowdingDistanceComparator(Comparator):
+
+    def compare(self, solution1: Solution, solution2: Solution) -> int:
+        result = \
+            SolutionAttributeComparator("dominance_ranking").compare(solution1, solution2)
+
+        if result is 0:
+            result = \
+                SolutionAttributeComparator("crowding_distance", lowest_is_best=False).compare(solution1, solution2)
 
         return result
