@@ -16,7 +16,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-@get_time_of_execution
 def main() -> None:
     problem = ZDT1()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
