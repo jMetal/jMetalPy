@@ -16,7 +16,7 @@ Any ideas about how the structure the project, coding style, useful tools (I'm u
 - [Usage](#usage)
 	- [Dependencies](#dependencies)
 - [History](#history)
-	- [Last changes (July 12th 2017)](#last-changes-july-12th-2017)
+	- [Last changes (July 17th 2017)](#last-changes-july-17th-2017)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -27,17 +27,15 @@ Examples of configuring and running all the included algorithms are located in t
 ## Dependencies
 With Python 3.6 installed, run:
 ```Bash
-$ git clone https://github.com/benhid/jMetalPy.git
+$ git clone https://github.com/jMetal/jMetalPy.git
 $ pip install -r requirements.txt
 ```
 
 # History
 See [CHANGELOG](CHANGELOG.md) for full version history.
 
-## Last changes (July 12th 2017)
-* The time of execution and evaluation number now are shown in the live plot. Furthermore, a [new plot option](jmetal/runner/multiobjective/nsgaII_standard_settings_with_observer_plot_interactive.py) has been added (*interactive plot*).
-* Added some [tests](jmetal/util/test/test_graphic.py) for *graphic* class.
-* Several fixes regarding wrong imports and unused attributes.
+## Last changes (July 17th 2017)
+* First version of a [multiple sequence alignment problem using jMetalPy](msa/) have been added to the repository.
 
 # Contributing
 Please read [CONTRIBUTING](CONTRIBUTING.md) for details on how to contribute to the project.

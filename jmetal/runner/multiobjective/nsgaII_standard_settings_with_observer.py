@@ -28,7 +28,6 @@ def main() -> None:
     algorithm.observable.register(observer=observer)
 
     algorithm.run()
-
     result = algorithm.get_result()
 
     SolutionListOutput[FloatSolution].print_function_values_to_file("FUN."+problem.get_name(), result)

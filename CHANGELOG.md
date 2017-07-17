@@ -1,4 +1,8 @@
 # History
+## Last changes (July 12th 2017)
+* The time of execution and evaluation number now are shown in the live plot. Furthermo::
+* Several fixes regarding wrong imports and unused attributes.
+
 ## Last changes (July 11th 2017)
 * Now It's possible to get to directly access the coords (x,y) of a point in a live plot by a mouse click. ~~Note: This still needs some changes in order to work properly.~~
 
