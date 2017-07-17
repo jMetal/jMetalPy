@@ -50,7 +50,7 @@ class AlgorithmObserver(Observer):
     def update(self, *args, **kwargs):
         evaluations = kwargs["evaluations"]
         population = kwargs["population"]
-        computing_time = kwargs["computing_time"]
+        computing_time = kwargs["computing time"]
 
         if (evaluations % self.display_frequency) == 0:
             SolutionListOutput.plot_scatter_real_time(population, evaluations, computing_time,
