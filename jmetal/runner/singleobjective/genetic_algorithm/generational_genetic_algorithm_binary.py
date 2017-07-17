@@ -17,7 +17,7 @@ def main() -> None:
     algorithm = GenerationalGeneticAlgorithm[BinarySolution, BinarySolution](
         problem,
         population_size = 100,
-        max_evaluations = 25000,
+        max_evaluations = 150000,
         mutation = BitFlip(1.0/bits),
         crossover = SinglePoint(0.9),
         selection = BinaryTournament())
