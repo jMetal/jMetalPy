@@ -33,7 +33,7 @@ class SBX(Crossover[FloatSolution, FloatSolution]):
         if len(parents) != 2:
             raise Exception("The number of parents is not two: " + str(len(parents)))
 
-        offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
+        offspring = [copy.copy(parents[0]), copy.copy(parents[1])]
         rand = random.random()
 
         if rand <= self.probability:
@@ -104,7 +104,7 @@ class SinglePoint(Crossover[BinarySolution, BinarySolution]):
         if len(parents) != 2:
             raise Exception("The number of parents is not two: " + str(len(parents)))
 
-        offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
+        offspring = [copy.copy(parents[0]), copy.copy(parents[1])]
         rand = random.random()
 
         if rand <= self.probability:
