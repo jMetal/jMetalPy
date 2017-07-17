@@ -24,6 +24,16 @@ class BinarySolution(Solution[BitSet]):
     def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints=0):
         super(BinarySolution, self).__init__(number_of_variables, number_of_objectives, number_of_constraints)
 
+    def __copy__(self):
+        new_solution = BinarySolution(
+            self.number_of_variables,
+            self.number_of_objectives,
+            self.number_of_constraints)
+        new_solution.objectives = self.objectives[:]
+        new_solution.variables = self.variables[:]
+
+        return new_solution
+
     def get_total_number_of_bits(self) -> int:
         total = 0
         for var in self.variables:
@@ -41,6 +51,18 @@ class FloatSolution(Solution[float]):
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
 
+    def __copy__(self):
+        new_solution = FloatSolution(
+            self.number_of_variables,
+            self.number_of_objectives,
+            self.number_of_constraints,
+            self.lower_bound,
+            self.upper_bound)
+        new_solution.objectives = self.objectives[:]
+        new_solution.variables = self.variables[:]
+
+        return new_solution
+
 
 class IntegerSolution(Solution[int]):
     """ Class representing integer solutions """
@@ -50,3 +72,15 @@ class IntegerSolution(Solution[int]):
         super(IntegerSolution, self).__init__(number_of_variables, number_of_objectives, number_of_constraints)
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
+
+    def __copy__(self):
+        new_solution = FloatSolution(
+            self.number_of_variables,
+            self.number_of_objectives,
+            self.number_of_constraints,
+            self.lower_bound,
+            self.upper_bound)
+        new_solution.objectives = self.objectives[:]
+        new_solution.variables = self.variables[:]
+
+        return new_solution
