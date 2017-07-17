@@ -1,5 +1,5 @@
 import random
-from typing import Generic, TypeVar, List
+from typing import Generic, TypeVar
 
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
 

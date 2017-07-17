@@ -5,12 +5,10 @@ from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
-from jmetal.operator.selection import BinaryTournament, BinaryTournament2
+from jmetal.operator.selection import BinaryTournament
 from jmetal.problem.multiobjective.zdt import ZDT1
-from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, SolutionAttributeComparator
-
+from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
 from jmetal.util.solution_list_output import SolutionListOutput
-from jmetal.util.time import get_time_of_execution
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

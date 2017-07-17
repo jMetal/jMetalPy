@@ -10,7 +10,6 @@ from jmetal.operator.selection import BinaryTournament
 from jmetal.problem.multiobjective.unconstrained import Kursawe
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
 from jmetal.util.solution_list_output import SolutionListOutput
-
 from jmetal.util.time import get_time_of_execution
 
 logging.basicConfig(level=logging.INFO)

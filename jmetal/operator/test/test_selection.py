@@ -5,8 +5,6 @@ from hamcrest import *
 from jmetal.core.solution import Solution
 from jmetal.operator.selection import BinaryTournament, BestSolution, RandomSolution, NaryRandomSolution, \
     RankingAndCrowdingDistanceSelection
-from jmetal.util.comparator import DominanceComparator, Comparator
-from jmetal.util.ranking import Ranking
 
 __author__ = "Antonio J. Nebro"
 

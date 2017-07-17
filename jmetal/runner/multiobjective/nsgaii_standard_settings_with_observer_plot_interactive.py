@@ -6,7 +6,6 @@ from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament
-from jmetal.component.observer import AlgorithmObserver, WriteFrontToFileObserver
 from jmetal.problem.multiobjective.unconstrained import Kursawe
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
 from jmetal.util.solution_list_output import SolutionListOutput
