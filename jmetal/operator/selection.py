@@ -15,9 +15,6 @@ class BinaryTournament(Selection[List[S], S]):
     def __init__(self):
         super(BinaryTournament, self).__init__()
 
-    def get_name(self):
-        return "Bynary tournament selection"
-
     def execute(self, solution_list: List[S]) -> S:
         if solution_list is None:
             raise Exception("The solution list is null")
@@ -42,6 +39,8 @@ class BinaryTournament(Selection[List[S], S]):
 
         return result
 
+    def get_name(self):
+        return "Binary tournament selection"
 
 class BestSolution(Selection[List[S], S]):
     def __init__(self):
