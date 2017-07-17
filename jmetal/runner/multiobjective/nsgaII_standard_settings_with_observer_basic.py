@@ -2,7 +2,7 @@ import logging
 from typing import List
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.component.consumer import BasicAlgorithmConsumer
+from jmetal.component.observer import BasicAlgorithmObserver
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
@@ -24,7 +24,7 @@ def main() -> None:
         crossover=SBX(1.0, distribution_index=20),
         selection=BinaryTournament())
 
-    observer = BasicAlgorithmConsumer(1000)
+    observer = BasicAlgorithmObserver(1000)
     algorithm.observable.register(observer=observer)
 
     algorithm.run()
