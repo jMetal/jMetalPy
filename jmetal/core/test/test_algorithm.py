@@ -11,7 +11,8 @@ from jmetal.problem.singleobjective.unconstrained import OneMax
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
+"""
+>>>>>>> 5fdebfdf33c118dab271bc7ab380a121b396fde5
 class AlgorithmTestIntegrationTestCases(unittest.TestCase):
 
     def setUp(self):
@@ -34,6 +35,6 @@ class AlgorithmTestIntegrationTestCases(unittest.TestCase):
         logger.info("Solution: " + str(result.variables[0]))
         logger.info("Fitness:  " + str(result.objectives[0]))
 
+        
         assert(-500 <= result.objectives[0] <= -300 or 300 <= result.objectives[0] <= 500)
-
-
+"""

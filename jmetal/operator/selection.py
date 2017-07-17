@@ -3,7 +3,7 @@ from typing import List, TypeVar
 
 from jmetal.component.density_estimator import CrowdingDistance
 from jmetal.core.operator import Selection
-from jmetal.util.comparator import dominance_comparator
+from jmetal.util.comparator import Comparator, DominanceComparator
 from jmetal.util.ranking import DominanceRanking
 
 """ Class implementing a best solution selection operator """
@@ -12,8 +12,9 @@ S = TypeVar('S')
 
 
 class BinaryTournament(Selection[List[S], S]):
-    def __init__(self):
+    def __init__(self, comparator: Comparator = DominanceComparator()):
         super(BinaryTournament, self).__init__()
+        self.comparator = comparator
 
     def execute(self, solution_list: List[S]) -> S:
         if solution_list is None:
@@ -28,7 +29,7 @@ class BinaryTournament(Selection[List[S], S]):
             solution1 = solution_list[i]
             solution2 = solution_list[j]
 
-            flag = dominance_comparator(solution1, solution2)
+            flag = self.comparator.compare(solution1, solution2)
 
             if flag == -1:
                 result = solution1
@@ -39,8 +40,9 @@ class BinaryTournament(Selection[List[S], S]):
 
         return result
 
-    def get_name(self):
+    def get_name(self) -> str:
         return "Binary tournament selection"
+
 
 class BestSolution(Selection[List[S], S]):
     def __init__(self):
@@ -54,7 +56,7 @@ class BestSolution(Selection[List[S], S]):
 
         result = solution_list[0]
         for solution in solution_list[1:]:
-            if dominance_comparator(solution, result) < 0:
+            if DominanceComparator().compare(solution, result) < 0:
                 result = solution
 
         return result
@@ -113,8 +115,54 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
             else:
                 subfront = ranking.get_subfront(ranking_index)
                 crowding_distance.compute_density_estimator(subfront)
-                sorted_subfront = sorted(subfront, key=lambda x: x.attributes["distance"], reverse=True)
+                sorted_subfront = sorted(subfront, key=lambda x: x.attributes["crowding_distance"], reverse=True)
                 for i in range((self.max_population_size - len(new_solution_list))):
                     new_solution_list.append(sorted_subfront[i])
 
         return new_solution_list
+
+"""
+class BinaryTournament2(Selection[List[S], S]):
+    def __init__(self, comparator_list: List[Comparator]):
+        super(BinaryTournament2, self).__init__()
+        self.comparator_list = comparator_list
+
+    def get_name(self):
+        return "Binary tournament selection (experimental)"
+
+    def execute(self, solution_list: List[S]) -> S:
+        if solution_list is None:
+            raise Exception("The solution list is null")
+        elif len(solution_list) == 0:
+            raise Exception("The solution is empty")
+        elif not self.comparator_list:
+            raise Exception("The list of comparators is empty")
+
+        winner = None
+
+        if len(solution_list) == 1:
+            winner = solution_list[0]
+        else:
+            for comparator in self.comparator_list:
+                winner = self.__winner(solution_list, comparator)
+                if winner is not None:
+                    break
+
+        return winner
+
+    def __winner(self, solution_list: List[S], comparator: Comparator) -> bool:
+        i, j = random.sample(range(0, len(solution_list)), 2)  # sampling without replacement
+        solution1 = solution_list[i]
+        solution2 = solution_list[j]
+
+        flag = comparator.compare(solution1, solution2)
+
+        if flag == -1:
+            result = solution1
+        elif flag == 1:
+            result = solution2
+        else:
+            result = None
+
+        return result
+"""

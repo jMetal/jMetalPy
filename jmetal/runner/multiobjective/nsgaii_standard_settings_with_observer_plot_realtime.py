@@ -2,35 +2,32 @@ import logging
 from typing import List
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.component.observer import WriteFrontToFileObserver
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament
-from jmetal.problem.multiobjective.unconstrained import Kursawe
-from jmetal.util.solution_list_output import SolutionListOutput
+from jmetal.component.observer import AlgorithmObserver
+from jmetal.problem.multiobjective.zdt import ZDT1
+from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 def main() -> None:
-    problem = Kursawe()
+    problem = ZDT1()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
         problem,
         population_size=100,
         max_evaluations=25000,
         mutation=Polynomial(1.0/problem.number_of_variables, distribution_index=20),
         crossover=SBX(1.0, distribution_index=20),
-        selection=BinaryTournament())
+        selection=BinaryTournament(RankingAndCrowdingDistanceComparator()))
 
-    observer = WriteFrontToFileObserver("output_directory")
+    observer = AlgorithmObserver(animation_speed=1*10e-2)
     algorithm.observable.register(observer=observer)
 
     algorithm.run()
-    result = algorithm.get_result()
-
-    SolutionListOutput[FloatSolution].print_function_values_to_file("FUN."+problem.get_name(), result)
 
     logger.info("Algorithm (continuous problem): " + algorithm.get_name())
     logger.info("Problem: " + problem.get_name())

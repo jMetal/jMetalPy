@@ -17,7 +17,8 @@ class Algorithm(Generic[S, R], threading.Thread):
         threading.Thread.__init__(self)
         self.observable = None
         self.evaluations: int = 0
-        self.start_computing_time: int = time.process_time()
+        self.start_computing_time: int = 0
+        self.total_computing_time: int = 0
 
     def get_name(self) -> str:
         pass
@@ -26,7 +27,7 @@ class Algorithm(Generic[S, R], threading.Thread):
         return self.evaluations
 
     def get_current_computing_time(self) -> float:
-        return time.process_time() - self.start_computing_time
+        return time.time() - self.start_computing_time
 
 
 class EvolutionaryAlgorithm(Algorithm[S, R]):
@@ -73,6 +74,8 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
             4. Replace least-fit population with new individuals.
         """
 
+        self.start_computing_time = time.time()
+
         self.population = self.create_initial_population() # Step One
         self.population = self.evaluate_population(self.population) # Step Two
         self.init_progress()
@@ -83,3 +86,5 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
             offspring_population = self.evaluate_population(offspring_population) # Step Three.3
             self.population = self.replacement(self.population, offspring_population) # Step Three.4
             self.update_progress()
+
+        self.total_computing_time = self.get_current_computing_time()

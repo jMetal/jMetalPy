@@ -1,5 +1,5 @@
 import random
-from typing import Generic, TypeVar
+from typing import Generic, TypeVar, List
 
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
 
@@ -12,9 +12,9 @@ class Problem(Generic[S]):
     """ Class representing problems """
 
     def __init__(self):
-        self.number_of_variables: int = 0
-        self.number_of_objectives: int = 0
-        self.number_of_constraints: int = 0
+        self.number_of_variables: int = None
+        self.number_of_objectives: int = None
+        self.number_of_constraints: int = None
 
     def evaluate(self, solution: S) -> None:
         pass
@@ -22,8 +22,11 @@ class Problem(Generic[S]):
     def create_solution(self) -> S:
         pass
 
+    def get_name(self) -> str :
+        pass
 
-class BinaryProblem(BinarySolution):
+
+class BinaryProblem(Problem[BinarySolution]):
     """ Class representing binary problems """
 
     def evaluate(self, solution: BinarySolution) -> None:
@@ -33,12 +36,12 @@ class BinaryProblem(BinarySolution):
         pass
 
 
-class FloatProblem(FloatSolution):
+class FloatProblem(Problem[FloatSolution]):
     """ Class representing float problems """
 
     def __init__(self):
-        self.lower_bound = []
-        self.upper_bound = []
+        self.lower_bound : [] = None
+        self.upper_bound : [] = None
 
     def evaluate(self, solution: FloatSolution) -> None:
         pass
@@ -52,12 +55,11 @@ class FloatProblem(FloatSolution):
         return new_solution
 
 
-class IntegerProblem(IntegerSolution):
+class IntegerProblem(Problem[IntegerSolution]):
     """ Class representing integer problems """
-
     def __init__(self):
-        self.lower_bound = []
-        self.upper_bound = []
+        self.lower_bound : [] = None
+        self.upper_bound : [] = None
 
     def evaluate(self, solution: IntegerSolution) -> None:
         pass

@@ -1,6 +1,6 @@
 from typing import TypeVar, List
 
-from jmetal.util.comparator import dominance_comparator
+from jmetal.util.comparator import DominanceComparator
 
 S = TypeVar('S')
 
@@ -32,7 +32,7 @@ class DominanceRanking(Ranking[List[S]]):
 
         for p in range(len(solution_list) - 1):
             for q in range(p + 1, len(solution_list)):
-                dominance_test_result = dominance_comparator(solution_list[p], solution_list[q])
+                dominance_test_result = DominanceComparator().compare(solution_list[p], solution_list[q])
                 if dominance_test_result is -1:
                     i_dominate[p].append(q)
                     dominate_me[q] += 1
@@ -43,7 +43,7 @@ class DominanceRanking(Ranking[List[S]]):
         for i in range(len(solution_list)):
             if dominate_me[i] is 0:
                 front[0].append(i)
-                solution_list[i].attributes["ranking"] = 0
+                solution_list[i].attributes["dominance_ranking"] = 0
 
         i = 0
         while len(front[i]) != 0:
@@ -55,7 +55,7 @@ class DominanceRanking(Ranking[List[S]]):
                         dominate_me[index] -= 1
                         if dominate_me[index] is 0:
                             front[i].append(index)
-                            solution_list[index].attributes["ranking"] = i
+                            solution_list[index].attributes["dominance_ranking"] = i
 
         self.ranked_sublists = [[]] * i
         for j in range(i):
