@@ -1,7 +1,8 @@
 import logging
+import matplotlib.pyplot as plt
 from typing import TypeVar, List, Tuple
 
-import matplotlib.pyplot as plt
+from jmetal.core.solution import Solution
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -36,6 +37,7 @@ class ScatterPlot():
         self.animation_speed = animation_speed
 
     def __init_plot(self, is_auto_scalable: bool = True) -> None:
+        """ Initialize the scatter plot the first time. """
         if is_auto_scalable:
             self.axis.set_autoscale_on(True)
             self.axis.autoscale_view(True, True, True)
@@ -57,14 +59,19 @@ class ScatterPlot():
 
         return x_values, y_values
 
+    def retrieve_info(self, solution: Solution) -> None:
+        """ Retrieve more information about a solution object. """
+        pass
+
     def __search_solution(self, solution_list: List[S], x_val: float, y_val: float) -> None:
         """ Return a solution object associated with some values of (x,y). """
         for solution in solution_list:
             if solution.objectives[0] == x_val and solution.objectives[1] == y_val:
-                logger.info('Solution associated to ({0}, {1}): {2}'
-                            .format(x_val, y_val, solution))
+                logger.info('Solution associated to ({0}, {1}):'.format(x_val, y_val))
+                self.retrieve_info(solution)
 
     def __pick_handler(self, event, solution_list: List[S]):
+        """ Handler for picking points from the plot. """
         line, ind = event.artist, event.ind[0]
         x, y = line.get_xdata(), line.get_ydata()
 
@@ -73,7 +80,7 @@ class ScatterPlot():
 
     def simple_plot(self, solution_list: List[S], file_name: str = "output",
                     fmt: str = 'eps', dpi: int = 200, save: bool = True) -> None:
-
+        """ Create a simple plot. """
         self.__init_plot()
         x_values, y_values = self.__get_data_points(solution_list)
 
@@ -91,6 +98,7 @@ class ScatterPlot():
 
     def interactive_plot(self, solution_list: List[S]) -> None:
         """ Create a plot to get to directly access the coords (x,y) of a point by a mouse click. """
+
         self.__init_plot()
         x_values, y_values = self.__get_data_points(solution_list)
 
@@ -100,10 +108,11 @@ class ScatterPlot():
         plt.show()
 
     def update(self, solution_list: List[S], evaluations: int = 0, computing_time: float = 0) -> None:
-        """ Update a simple_plot. Note that the plot must be initialized first. """
+        """ Update a simple_plot(). Note that the plot must be initialized first. """
 
         if self.sc is None:
-            raise Exception("No plot to update. Initialize first with simple_plot()")
+            raise Exception("Error while updating! Initialize plot first with "
+                            "simple_plot(solution_list: List[S])")
 
         x_values, y_values = self.__get_data_points(solution_list)
 
