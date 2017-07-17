@@ -18,8 +18,8 @@ class BasicAlgorithmObserver(Observer):
 
         if (evaluations % self.display_frequency) == 0:
             logger.info("Evaluations: " + str(evaluations) +
-                        ". Best fitness: " + str(population[0].objectives[0]) +
-                        ". Worst fitness: " + str(population[len(population)-1].objectives[0]))
+                        ". Best fitness: " + str(population[0].objectives) +
+                        ". Worst fitness: " + str(population[len(population)-1].objectives))
 
 
 class WriteFrontToFileObserver(Observer):
