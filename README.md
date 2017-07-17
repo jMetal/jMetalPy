@@ -27,7 +27,7 @@ Examples of configuring and running all the included algorithms are located in t
 ## Dependencies
 With Python 3.6 installed, run:
 ```Bash
-$ git clone https://github.com/benhid/jMetalPy.git
+$ git clone https://github.com/jMetal/jMetalPy.git
 $ pip install -r requirements.txt
 ```
 
