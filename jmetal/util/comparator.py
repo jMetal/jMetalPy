@@ -7,13 +7,14 @@ class Comparator():
 
 
 class DominanceComparator(Comparator):
+
     def compare(self, solution1: Solution, solution2: Solution) -> int:
         if solution1 is None:
             raise Exception("The solution1 is None")
         elif solution2 is None:
             raise Exception("The solution2 is None")
-        elif len(solution1.objectives) != len(solution2.objectives):
-            raise Exception("The solutions have different number of objectives")
+        #elif len(solution1.objectives) != len(solution2.objectives):
+        #    raise Exception("The solutions have different number of objectives")
 
         best_is_one = 0
         best_is_two = 0
@@ -24,7 +25,7 @@ class DominanceComparator(Comparator):
             if value1 != value2:
                 if value1 < value2:
                     best_is_one = 1
-                if value2 < value1:
+                else:
                     best_is_two = 1
 
         if best_is_one > best_is_two:

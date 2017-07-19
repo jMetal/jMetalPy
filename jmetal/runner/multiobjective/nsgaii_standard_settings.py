@@ -6,7 +6,7 @@ from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament, BinaryTournament2
-from jmetal.problem.multiobjective.zdt import ZDT1
+from jmetal.problem.multiobjective.unconstrained import Kursawe
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, SolutionAttributeComparator
 
 from jmetal.util.solution_list_output import SolutionListOutput
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 def main() -> None:
-    problem = ZDT1()
+    problem = Kursawe()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
         problem=problem,
         population_size=100,
