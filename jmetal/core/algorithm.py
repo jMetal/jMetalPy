@@ -5,6 +5,7 @@ from typing import TypeVar, Generic, List
 
 from jmetal.core.solution import FloatSolution
 
+from jmetal.component.evaluator import Evaluator, SequentialEvaluator
 from jmetal.util.time import get_time_of_execution
 
 logging.basicConfig(level=logging.INFO)
@@ -33,9 +34,10 @@ class Algorithm(Generic[S, R], threading.Thread):
 
 
 class EvolutionaryAlgorithm(Algorithm[S, R]):
-    def __init__(self):
+    def __init__(self, evaluator: Evaluator[S] = SequentialEvaluator[S]()):
         super(EvolutionaryAlgorithm,self).__init__()
         self.population = []
+        self.evaluator = evaluator
 
     def create_initial_population(self) -> List[S]:
         pass

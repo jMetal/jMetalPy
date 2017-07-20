@@ -1,6 +1,7 @@
 from copy import copy
 from typing import TypeVar, List
 
+from jmetal.component.evaluator import Evaluator, SequentialEvaluator
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
@@ -107,8 +108,9 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
                  mutation: Mutation[S],
                  crossover: Crossover[S, S],
                  selection: Selection[List[S], S],
-                 observable: Observable = DefaultObservable()):
-        super(GenerationalGeneticAlgorithm, self).__init__()
+                 observable: Observable = DefaultObservable(),
+                 evaluator: Evaluator[S] = SequentialEvaluator[S]()):
+        super(GenerationalGeneticAlgorithm, self).__init__(evaluator)
         self.problem = problem
         self.population_size = population_size
         self.max_evaluations = max_evaluations
@@ -141,9 +143,7 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         return population
 
     def evaluate_population(self, population: List[S]):
-        for solution in population:
-            self.problem.evaluate(solution)
-        return population
+        return self.evaluator.evaluate(population, self.problem)
 
     def selection(self, population: List[S]):
         mating_population = []
