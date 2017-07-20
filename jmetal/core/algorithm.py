@@ -88,3 +88,71 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
             self.update_progress()
 
         self.total_computing_time = self.get_current_computing_time()
+
+
+class ParticleSwarmOptimization(Algorithm[S, R]):
+    def __init__(self):
+        super(ParticleSwarmOptimization, self).__init__()
+        self.swarm = []
+
+    def init_progress(self) -> None :
+        pass
+
+    def update_progress(self) -> None :
+        pass
+
+    def is_stopping_condition_reached(self) -> bool:
+        pass
+
+    def evaluate_swarm(self, swarm: List[S]) -> List[S]:
+        pass
+
+    def initialize_global_best(self, swarm: List[S]) -> None:
+        pass
+
+    def initialize_particle_best(self, swarm: List[S]) -> None:
+        pass
+
+    def initialize_velocity(self, swarm: List[S]) -> None:
+        pass
+
+    def update_velocity(self, swarm: List[S]) -> None:
+        pass
+
+    def update_position(self, swarm: List[S]) -> None:
+        pass
+
+    def perturbation(self, swarm: List[S]) -> None:
+        pass
+
+    def update_global_best(self, swarm: List[S]) -> None:
+        pass
+
+    def update_particle_best(self, swarm: List[S]) -> None:
+        pass
+
+    def get_result(self) -> R:
+        pass
+
+    def run(self):
+        """
+        """
+        self.start_computing_time = time.time()
+
+        self.swarm = self.create_initial_swarm()
+        self.swarm = self.evaluate_swarm(self.population)
+        self.initialize_velocity(self.swarm)
+        self.initialize_particle_best(self.swarm)
+        self.initialize_global_best(self.swarm)
+        self.init_progress()
+
+        while not self.is_stopping_condition_reached():
+            self.update_velocity(self.swarm)
+            self.update_position(self.swarm)
+            self.perturbation(self.swarm)
+            self.swarm = self.evaluate_swarm(self.swarm)
+            self.update_global_best(self.swarm)
+            self.update_particle_best(self.swarm)
+            self.update_progress()
+
+        self.total_computing_time = self.get_current_computing_time()
