@@ -11,7 +11,6 @@ class Comparator():
 
 
 class DominanceComparator():
-
     def compare(self, solution1: Solution, solution2: Solution) -> int:
         if solution1 is None:
             raise Exception("The solution1 is None")
