@@ -3,6 +3,8 @@ import threading
 import time
 from typing import TypeVar, Generic, List
 
+from jmetal.core.solution import FloatSolution
+
 from jmetal.util.time import get_time_of_execution
 
 logging.basicConfig(level=logging.INFO)
@@ -90,7 +92,7 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
         self.total_computing_time = self.get_current_computing_time()
 
 
-class ParticleSwarmOptimization(Algorithm[S, R]):
+class ParticleSwarmOptimization(Algorithm[FloatSolution, R]):
     def __init__(self):
         super(ParticleSwarmOptimization, self).__init__()
         self.swarm = []

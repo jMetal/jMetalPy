@@ -1,12 +1,10 @@
-from copy import deepcopy
+from copy import copy
 from typing import TypeVar, List
 
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
 from jmetal.util.observable import Observable, DefaultObservable
-
-""" Class representing elitist evolution strategy algorithms """
 
 S = TypeVar('S')
 R = TypeVar('R')
@@ -53,7 +51,7 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         offspring_population = []
         for solution in population:
             for j in range((int)(self.lambdA / self.mu)):
-                new_solution = deepcopy(solution)
+                new_solution = copy(solution)
                 offspring_population.append(self.mutation.execute(new_solution))
 
         return offspring_population
