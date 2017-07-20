@@ -1,5 +1,6 @@
 from typing import TypeVar
 
+from jmetal.component.archive import BoundedArchive
 from jmetal.core.solution import FloatSolution
 
 from jmetal.core.algorithm import ParticleSwarmOptimization
@@ -24,6 +25,7 @@ class SMPSO(ParticleSwarmOptimization[FloatSolution, R]):
         self.max_evaluations = max_evaluations
         self.mutation_operator = mutation
         self.evaluations = 0
+        self.archive = archive
         self.observable = observable
 
         pass
