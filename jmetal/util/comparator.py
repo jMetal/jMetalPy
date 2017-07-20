@@ -5,12 +5,12 @@ from typing import TypeVar, Generic, List
 S = TypeVar('S')
 
 
-class Comparator(Generic[S]):
+class Comparator():
     def compare(self, object1: S, object2: S) -> int:
         pass
 
 
-class DominanceComparator(Comparator[Solution]):
+class DominanceComparator():
 
     def compare(self, solution1: Solution, solution2: Solution) -> int:
         if solution1 is None:
@@ -42,7 +42,7 @@ class DominanceComparator(Comparator[Solution]):
         return result
 
 
-class EqualSolutionsComparator(Comparator[Solution]):
+class EqualSolutionsComparator():
     def compare(self, solution1: Solution, solution2: Solution) -> int:
         if solution1 is None:
             return 1
@@ -94,7 +94,7 @@ class DominanceRankingComparator(Comparator):
 """
 
 
-class SolutionAttributeComparator(Comparator[S]):
+class SolutionAttributeComparator():
     def __init__(self, key: str, lowest_is_best: bool = True):
         self.key = key
         self.lowest_is_best = lowest_is_best
