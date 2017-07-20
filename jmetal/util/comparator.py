@@ -1,12 +1,16 @@
 from jmetal.core.solution import Solution
 
+from typing import TypeVar, Generic, List
 
-class Comparator():
-    def compare(self, object1, object2) -> int:
+S = TypeVar('S')
+
+
+class Comparator(Generic[S]):
+    def compare(self, object1: S, object2: S) -> int:
         pass
 
 
-class DominanceComparator(Comparator):
+class DominanceComparator(Comparator[Solution]):
 
     def compare(self, solution1: Solution, solution2: Solution) -> int:
         if solution1 is None:
@@ -38,7 +42,7 @@ class DominanceComparator(Comparator):
         return result
 
 
-class EqualSolutionsComparator(Comparator):
+class EqualSolutionsComparator(Comparator[Solution]):
     def compare(self, solution1: Solution, solution2: Solution) -> int:
         if solution1 is None:
             return 1
@@ -90,7 +94,7 @@ class DominanceRankingComparator(Comparator):
 """
 
 
-class SolutionAttributeComparator(Comparator):
+class SolutionAttributeComparator(Comparator[S]):
     def __init__(self, key: str, lowest_is_best: bool = True):
         self.key = key
         self.lowest_is_best = lowest_is_best
