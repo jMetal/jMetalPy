@@ -16,8 +16,8 @@ class BasicAlgorithmConsumer(Observer):
         evaluations = kwargs["evaluations"]
         if (evaluations % self.display_frequency) == 0:
             logger.info("Evaluations: " + str(evaluations) +
-              ". Best fitness: " + str(kwargs["population"][0].objectives[0]) +
-              ". Computing time: " + str(kwargs["computing time"]))
+                        ". Best fitness: " + str(kwargs["population"][0].objectives[0]) +
+                        ". Computing time: " + str(kwargs["computing time"]))
 
 
 class WriteFrontToFileObserver(Observer):

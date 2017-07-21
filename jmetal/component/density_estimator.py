@@ -36,15 +36,15 @@ class CrowdingDistance(DensityEstimator[List[S]]):
         if size is 0:
             return
         elif size is 1:
-            solution_list[0].attributes["distance"] = float("inf")
+            solution_list[0].attributes["crowding_distance"] = float("inf")
             return
         elif size is 2:
-            solution_list[0].attributes["distance"] = float("inf")
-            solution_list[1].attributes["distance"] = float("inf")
+            solution_list[0].attributes["crowding_distance"] = float("inf")
+            solution_list[1].attributes["crowding_distance"] = float("inf")
             return
 
         for i in range(len(solution_list)):
-            solution_list[i].attributes["distance"] = 0.0
+            solution_list[i].attributes["crowding_distance"] = 0.0
 
         number_of_objectives = solution_list[0].number_of_objectives
 
@@ -55,11 +55,11 @@ class CrowdingDistance(DensityEstimator[List[S]]):
             objective_maxn = solution_list[len(solution_list) - 1].objectives[i]
 
             # Set de crowding distance
-            solution_list[0].attributes["distance"] = float("inf")
-            solution_list[size - 1].attributes["distance"] = float("inf")
+            solution_list[0].attributes["crowding_distance"] = float("inf")
+            solution_list[size - 1].attributes["crowding_distance"] = float("inf")
 
             for j in range(1, size - 1):
                 distance = solution_list[j + 1].objectives[i] - solution_list[j - 1].objectives[i]
                 distance = distance / (objective_maxn - objective_minn)
-                distance += solution_list[j].attributes["distance"]
-                solution_list[j].attributes["distance"] = distance
+                distance += solution_list[j].attributes["crowding_distance"]
+                solution_list[j].attributes["crowding_distance"] = distance

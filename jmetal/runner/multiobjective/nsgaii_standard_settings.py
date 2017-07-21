@@ -5,26 +5,25 @@ from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
-from jmetal.operator.selection import BinaryTournament
-from jmetal.problem.multiobjective.zdt import ZDT1
+from jmetal.operator.selection import BinaryTournament, BinaryTournament2
+from jmetal.problem.multiobjective.unconstrained import Kursawe
+from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, SolutionAttributeComparator
 
 from jmetal.util.solution_list_output import SolutionListOutput
-from jmetal.util.time import get_time_of_execution
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-@get_time_of_execution
 def main() -> None:
-    problem = ZDT1()
+    problem = Kursawe()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
         problem=problem,
         population_size=100,
         max_evaluations=25000,
         mutation=Polynomial(1.0/problem.number_of_variables, distribution_index=20),
         crossover=SBX(1.0, distribution_index=20),
-        selection=BinaryTournament())
+        selection = BinaryTournament(RankingAndCrowdingDistanceComparator()))
 
     algorithm.run()
     result = algorithm.get_result()

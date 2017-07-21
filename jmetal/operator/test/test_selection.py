@@ -2,9 +2,11 @@ import unittest
 
 from hamcrest import *
 
+from jmetal.core import solution
 from jmetal.core.solution import Solution
 from jmetal.operator.selection import BinaryTournament, BestSolution, RandomSolution, NaryRandomSolution, \
-    RankingAndCrowdingDistanceSelection
+    RankingAndCrowdingDistanceSelection, BinaryTournament2
+from jmetal.util.comparator import Comparator, SolutionAttributeComparator
 
 __author__ = "Antonio J. Nebro"
 
@@ -278,6 +280,59 @@ class DominanceRankingTestCases(unittest.TestCase):
         self.assertEqual(solution5, list_of_crowding_and_rankings[2])
         self.assertEqual(solution4, list_of_crowding_and_rankings[3])
         self.assertEqual(solution2, list_of_crowding_and_rankings[4])
+
+
+class BinaryTournament2TestCases(unittest.TestCase):
+
+    def test_should_constructor_create_a_non_null_object(self):
+        selection = BinaryTournament2[Solution]([])
+
+        self.assertIsNotNone(selection)
+
+    def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_none(self):
+        solution_list = None
+        selection = BinaryTournament2[Solution]([])
+        with self.assertRaises(Exception):
+            selection.execute(solution_list)
+
+    def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_empty(self):
+        solution_list = []
+        selection = BinaryTournament2[Solution]([])
+        with self.assertRaises(Exception):
+            selection.execute(solution_list)
+
+    def test_should_operator_raise_an_exception_if_the_list_of_comparators_is_empty(self):
+        selection = BinaryTournament2[Solution]([])
+        solution1 = Solution(2, 2)
+        solution2 = Solution(2, 2)
+
+        solution_list = [solution1, solution2]
+
+        with self.assertRaises(Exception):
+            selection.execute(solution_list)
+
+    def test_should_execute_return_the_solution_in_a_list_with_one_solution(self):
+        solution = Solution(3,2)
+        solution_list = [solution]
+        selection = BinaryTournament2[Solution]([Comparator()])
+
+        self.assertEqual(solution, selection.execute(solution_list))
+
+
+    def test_should_execute_work_properly_case1(self):
+        solution1 = Solution(3,2)
+        solution1.objectives = [2, 3]
+        solution2 = Solution(3,2)
+        solution2.objectives = [1, 4]
+        solution1.attributes["dominance_ranking"] = 1
+        solution2.attributes["dominance_ranking"] = 1
+
+        solution_list = [solution1, solution2]
+        operator = BinaryTournament2[Solution]([SolutionAttributeComparator("key")])
+        selection1 = operator.execute(solution_list)
+        selection2 = operator.execute(solution_list)
+
+        self.assertTrue(1,  selection1.attributes["dominance_ranking"])
 
 if __name__ == '__main__':
     unittest.main()

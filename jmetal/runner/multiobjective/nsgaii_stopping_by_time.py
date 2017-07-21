@@ -7,6 +7,7 @@ from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament
 from jmetal.problem.multiobjective.unconstrained import Fonseca
+from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
 from jmetal.util.solution_list_output import SolutionListOutput
 
 logging.basicConfig(level=logging.INFO)
@@ -34,7 +35,7 @@ def main() -> None:
         max_evaluations=25000,
         mutation=Polynomial(1.0/problem.number_of_variables, distribution_index=20),
         crossover=SBX(1.0, distribution_index=20),
-        selection=BinaryTournament())
+        selection=BinaryTournament(RankingAndCrowdingDistanceComparator()))
 
     algorithm.run()
     result = algorithm.get_result()

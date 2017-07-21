@@ -1,26 +1,9 @@
 import logging
-<<<<<<< HEAD
-=======
-import unittest
->>>>>>> ddedb114fb49743e93b66ae38ba9d4ec05c34168
-
-from jmetal.algorithm.singleobjective.evolutionaryalgorithm import GenerationalGeneticAlgorithm
-from jmetal.core.solution import BinarySolution
-from jmetal.operator.crossover import SinglePoint
-from jmetal.operator.mutation import BitFlip
-from jmetal.operator.selection import BinaryTournament
-from jmetal.problem.singleobjective.unconstrained import OneMax
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
-<<<<<<< HEAD
-import unittest
-
-
-=======
->>>>>>> ddedb114fb49743e93b66ae38ba9d4ec05c34168
+"""
 class AlgorithmTestIntegrationTestCases(unittest.TestCase):
 
     def setUp(self):
@@ -43,6 +26,6 @@ class AlgorithmTestIntegrationTestCases(unittest.TestCase):
         logger.info("Solution: " + str(result.variables[0]))
         logger.info("Fitness:  " + str(result.objectives[0]))
 
+        
         assert(-500 <= result.objectives[0] <= -300 or 300 <= result.objectives[0] <= 500)
-
-
+"""
