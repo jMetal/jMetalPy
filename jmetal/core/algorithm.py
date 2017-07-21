@@ -3,6 +3,9 @@ import threading
 import time
 from typing import TypeVar, Generic, List
 
+from jmetal.core.solution import FloatSolution
+
+from jmetal.component.evaluator import Evaluator, SequentialEvaluator
 from jmetal.util.time import get_time_of_execution
 
 logging.basicConfig(level=logging.INFO)
@@ -31,9 +34,10 @@ class Algorithm(Generic[S, R], threading.Thread):
 
 
 class EvolutionaryAlgorithm(Algorithm[S, R]):
-    def __init__(self):
+    def __init__(self, evaluator: Evaluator[S] = SequentialEvaluator[S]()):
         super(EvolutionaryAlgorithm,self).__init__()
         self.population = []
+        self.evaluator = evaluator
 
     def create_initial_population(self) -> List[S]:
         pass
@@ -85,6 +89,74 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
             offspring_population = self.reproduction(mating_population) # Step Three.2
             offspring_population = self.evaluate_population(offspring_population) # Step Three.3
             self.population = self.replacement(self.population, offspring_population) # Step Three.4
+            self.update_progress()
+
+        self.total_computing_time = self.get_current_computing_time()
+
+
+class ParticleSwarmOptimization(Algorithm[FloatSolution, R]):
+    def __init__(self):
+        super(ParticleSwarmOptimization, self).__init__()
+        self.swarm = []
+
+    def init_progress(self) -> None :
+        pass
+
+    def update_progress(self) -> None :
+        pass
+
+    def is_stopping_condition_reached(self) -> bool:
+        pass
+
+    def evaluate_swarm(self, swarm: List[S]) -> List[S]:
+        pass
+
+    def initialize_global_best(self, swarm: List[S]) -> None:
+        pass
+
+    def initialize_particle_best(self, swarm: List[S]) -> None:
+        pass
+
+    def initialize_velocity(self, swarm: List[S]) -> None:
+        pass
+
+    def update_velocity(self, swarm: List[S]) -> None:
+        pass
+
+    def update_position(self, swarm: List[S]) -> None:
+        pass
+
+    def perturbation(self, swarm: List[S]) -> None:
+        pass
+
+    def update_global_best(self, swarm: List[S]) -> None:
+        pass
+
+    def update_particle_best(self, swarm: List[S]) -> None:
+        pass
+
+    def get_result(self) -> R:
+        pass
+
+    def run(self):
+        """
+        """
+        self.start_computing_time = time.time()
+
+        self.swarm = self.create_initial_swarm()
+        self.swarm = self.evaluate_swarm(self.population)
+        self.initialize_velocity(self.swarm)
+        self.initialize_particle_best(self.swarm)
+        self.initialize_global_best(self.swarm)
+        self.init_progress()
+
+        while not self.is_stopping_condition_reached():
+            self.update_velocity(self.swarm)
+            self.update_position(self.swarm)
+            self.perturbation(self.swarm)
+            self.swarm = self.evaluate_swarm(self.swarm)
+            self.update_global_best(self.swarm)
+            self.update_particle_best(self.swarm)
             self.update_progress()
 
         self.total_computing_time = self.get_current_computing_time()

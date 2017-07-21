@@ -2,11 +2,11 @@ import unittest
 
 from hamcrest import *
 
+from jmetal.core import solution
 from jmetal.core.solution import Solution
 from jmetal.operator.selection import BinaryTournament, BestSolution, RandomSolution, NaryRandomSolution, \
-    RankingAndCrowdingDistanceSelection
-from jmetal.util.comparator import DominanceComparator, Comparator
-from jmetal.util.ranking import Ranking
+    RankingAndCrowdingDistanceSelection, BinaryTournament2
+from jmetal.util.comparator import Comparator, SolutionAttributeComparator
 
 __author__ = "Antonio J. Nebro"
 
@@ -282,7 +282,6 @@ class DominanceRankingTestCases(unittest.TestCase):
         self.assertEqual(solution2, list_of_crowding_and_rankings[4])
 
 
-"""
 class BinaryTournament2TestCases(unittest.TestCase):
 
     def test_should_constructor_create_a_non_null_object(self):
@@ -319,17 +318,21 @@ class BinaryTournament2TestCases(unittest.TestCase):
 
         self.assertEqual(solution, selection.execute(solution_list))
 
+
     def test_should_execute_work_properly_case1(self):
         solution1 = Solution(3,2)
         solution1.objectives = [2, 3]
         solution2 = Solution(3,2)
         solution2.objectives = [1, 4]
+        solution1.attributes["dominance_ranking"] = 1
+        solution2.attributes["dominance_ranking"] = 1
 
         solution_list = [solution1, solution2]
-        selection = BinaryTournament2[Solution]([Comparator()])
+        operator = BinaryTournament2[Solution]([SolutionAttributeComparator("key")])
+        selection1 = operator.execute(solution_list)
+        selection2 = operator.execute(solution_list)
 
-        self.assertEqual(solution, selection.execute(solution_list))
-"""
+        self.assertTrue(1,  selection1.attributes["dominance_ranking"])
 
 if __name__ == '__main__':
     unittest.main()

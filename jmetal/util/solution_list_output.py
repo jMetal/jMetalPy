@@ -1,8 +1,9 @@
 import logging
-from typing import TypeVar, List, Generic, Tuple
+from typing import TypeVar, List, Generic
+
+import matplotlib.pyplot as plt
 
 from jmetal.util.graphic import ScatterPlot
-import matplotlib.pyplot as plt
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

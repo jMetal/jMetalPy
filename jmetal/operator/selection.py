@@ -121,7 +121,7 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
 
         return new_solution_list
 
-"""
+
 class BinaryTournament2(Selection[List[S], S]):
     def __init__(self, comparator_list: List[Comparator]):
         super(BinaryTournament2, self).__init__()
@@ -148,9 +148,13 @@ class BinaryTournament2(Selection[List[S], S]):
                 if winner is not None:
                     break
 
+        if not winner:
+            i = random.randrange(0, len(solution_list))
+            winner = solution_list[i]
+
         return winner
 
-    def __winner(self, solution_list: List[S], comparator: Comparator) -> bool:
+    def __winner(self, solution_list: List[S], comparator: Comparator):
         i, j = random.sample(range(0, len(solution_list)), 2)  # sampling without replacement
         solution1 = solution_list[i]
         solution2 = solution_list[j]
@@ -165,4 +169,3 @@ class BinaryTournament2(Selection[List[S], S]):
             result = None
 
         return result
-"""

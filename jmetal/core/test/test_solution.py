@@ -1,6 +1,5 @@
-import unittest
-
 import copy
+import unittest
 
 from jmetal.core.solution import BinarySolution, FloatSolution, Solution, IntegerSolution
 

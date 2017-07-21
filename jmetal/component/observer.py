@@ -14,12 +14,11 @@ class BasicAlgorithmObserver(Observer):
 
     def update(self, *args, **kwargs):
         evaluations = kwargs["evaluations"]
-        population = kwargs["population"]
 
         if (evaluations % self.display_frequency) == 0:
             logger.info("Evaluations: " + str(evaluations) +
-                        ". Best fitness: " + str(population[0].objectives) +
-                        ". Worst fitness: " + str(population[len(population)-1].objectives))
+                        ". Best fitness: " + str(kwargs["population"][0].objectives[0]) +
+                        ". Computing time: " + str(kwargs["computing time"]))
 
 
 class WriteFrontToFileObserver(Observer):

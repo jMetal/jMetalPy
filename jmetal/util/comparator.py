@@ -1,19 +1,23 @@
 from jmetal.core.solution import Solution
 
+from typing import TypeVar, Generic, List
+
+S = TypeVar('S')
+
 
 class Comparator():
-    def compare(self, object1, object2) -> int:
+    def compare(self, object1: S, object2: S) -> int:
         pass
 
 
-class DominanceComparator(Comparator):
+class DominanceComparator():
     def compare(self, solution1: Solution, solution2: Solution) -> int:
         if solution1 is None:
             raise Exception("The solution1 is None")
         elif solution2 is None:
             raise Exception("The solution2 is None")
-        elif len(solution1.objectives) != len(solution2.objectives):
-            raise Exception("The solutions have different number of objectives")
+        #elif len(solution1.objectives) != len(solution2.objectives):
+        #    raise Exception("The solutions have different number of objectives")
 
         best_is_one = 0
         best_is_two = 0
@@ -24,7 +28,7 @@ class DominanceComparator(Comparator):
             if value1 != value2:
                 if value1 < value2:
                     best_is_one = 1
-                if value2 < value1:
+                else:
                     best_is_two = 1
 
         if best_is_one > best_is_two:
@@ -37,7 +41,7 @@ class DominanceComparator(Comparator):
         return result
 
 
-class EqualSolutionsComparator(Comparator):
+class EqualSolutionsComparator():
     def compare(self, solution1: Solution, solution2: Solution) -> int:
         if solution1 is None:
             return 1
@@ -89,7 +93,7 @@ class DominanceRankingComparator(Comparator):
 """
 
 
-class SolutionAttributeComparator(Comparator):
+class SolutionAttributeComparator():
     def __init__(self, key: str, lowest_is_best: bool = True):
         self.key = key
         self.lowest_is_best = lowest_is_best

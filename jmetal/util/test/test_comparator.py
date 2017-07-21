@@ -21,13 +21,13 @@ class DominanceComparatorTestCases(unittest.TestCase):
         solution2 = None
         with self.assertRaises(Exception):
             self.comparator.compare(solution, solution2)
-
+    """
     def test_should_dominance_comparator_raise_an_exception_if_the_solutions_have_not_the_same_number_of_objectives(self):
         solution = FloatSolution(3, 2, 0, [], [])
         solution2 = FloatSolution(3, 5, 0, [], [])
         with self.assertRaises(Exception):
             self.comparator.compare(solution, solution2)
-
+    """
     def test_should_dominance_comparator_return_zero_if_the_two_solutions_have_one_objective_with_the_same_value(self):
         solution = FloatSolution(3, 1, 0, [], [])
         solution2 = FloatSolution(3, 1, 0, [], [])
