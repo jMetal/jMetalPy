@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='jmetalpy',
-      version='1.0.0',
+      version='0.1',
       description='JMetalPy. Python version of the jMetal framework',
       author='Antonio J. Nebro',
       author_email='ajnebro@uma.es',
