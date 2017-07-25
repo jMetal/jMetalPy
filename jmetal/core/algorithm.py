@@ -4,7 +4,6 @@ import time
 from typing import TypeVar, Generic, List
 
 from jmetal.core.solution import FloatSolution
-
 from jmetal.component.evaluator import Evaluator, SequentialEvaluator
 from jmetal.util.time import get_time_of_execution
 
@@ -108,6 +107,9 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, R]):
     def is_stopping_condition_reached(self) -> bool:
         pass
 
+    def create_initial_swarm(self):
+        pass
+
     def evaluate_swarm(self, swarm: List[S]) -> List[S]:
         pass
 
@@ -144,7 +146,7 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, R]):
         self.start_computing_time = time.time()
 
         self.swarm = self.create_initial_swarm()
-        self.swarm = self.evaluate_swarm(self.population)
+        self.swarm = self.evaluate_swarm(self.swarm)
         self.initialize_velocity(self.swarm)
         self.initialize_particle_best(self.swarm)
         self.initialize_global_best(self.swarm)
