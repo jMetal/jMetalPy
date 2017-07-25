@@ -32,7 +32,7 @@ class SMPSOTestCases(unittest.TestCase):
         self.assertEqual(-1.0, algorithm.change_velocity1)
         self.assertEqual(-1.0, algorithm.change_velocity2)
         self.assertEqual(200, algorithm.max_evaluations)
-        self.assertEqual(100, len(algorithm.speed))
+        self.assertEqual((100, 2), algorithm.speed.shape)
 
         numpy.testing.assert_array_almost_equal(numpy.array([2.0, 2.0]), algorithm.delta_max)
         numpy.testing.assert_array_almost_equal(algorithm.delta_max * -1.0, algorithm.delta_min)

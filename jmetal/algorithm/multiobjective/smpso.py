@@ -49,7 +49,7 @@ class SMPSO(ParticleSwarmOptimization[R]):
 
         self.dominance_comparator = DominanceComparator()
 
-        self.speed = None
+        self.speed = numpy.zeros((self.swarm_size, self.problem.number_of_variables), dtype=float)
         self.delta_max = numpy.empty(problem.number_of_variables)
         self.delta_min = numpy.empty(problem.number_of_variables)
         for i in range(problem.number_of_variables):
@@ -93,7 +93,7 @@ class SMPSO(ParticleSwarmOptimization[R]):
             particle.attributes["localBest"] = particle.copy()
 
     def initialize_velocity(self, swarm: List[FloatSolution]) -> None:
-        self.speed = numpy.zeros((self.swarm_size, self.problem.number_of_variables), dtype=float)
+        pass # Velocity initialized in the constructor
 
     def update_velocity(self, swarm: List[FloatSolution]) -> None:
         for i in range(self.swarm_size):
