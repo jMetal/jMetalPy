@@ -34,8 +34,10 @@ $ pip install -r requirements.txt
 # History
 See [CHANGELOG](CHANGELOG.md) for full version history.
 
-## Last changes (July 17th 2017)
-* First version of a [multiple sequence alignment problem using jMetalPy](msa/) have been added to the repository.
+## Last changes (July 21th 2017)
+* Added guide for using [cProfile](resources/pages/profiling.md).
+* Starting to implement [SMPSO](jmetal/algorithm/multiobjective/smpso.py).
+* Added [comparators](jmetal/util/comparator.py).
 
 # Contributing
 Please read [CONTRIBUTING](CONTRIBUTING.md) for details on how to contribute to the project.
