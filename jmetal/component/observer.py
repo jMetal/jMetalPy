@@ -17,7 +17,7 @@ class BasicAlgorithmObserver(Observer):
 
         if (evaluations % self.display_frequency) == 0:
             logger.info("Evaluations: " + str(evaluations) +
-                        ". Best fitness: " + str(kwargs["population"][0].objectives[0]) +
+                        ". Best fitness: " + str(kwargs["population"][0].objectives) +
                         ". Computing time: " + str(kwargs["computing time"]))
 
 
@@ -42,7 +42,7 @@ class WriteFrontToFileObserver(Observer):
 
 
 class AlgorithmObserver(Observer):
-    def __init__(self, animation_speed: float = 1*10e-12, frequency: float = 1.0) -> None:
+    def __init__(self, animation_speed: float, frequency: float = 1.0) -> None:
         self.animation_speed = animation_speed
         self.display_frequency = frequency
 
