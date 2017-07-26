@@ -5,7 +5,7 @@ from jmetal.core.solution import Solution
 __author__ = "Antonio J. Nebro"
 
 
-class Objective():
+class Objective:
     def compute(self, solution: Solution, problem: Problem) -> float:
         pass
 

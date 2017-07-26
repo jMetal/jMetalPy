@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 def main() -> None:
-    problem = Viennet2()
+    problem = ZDT2()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
         problem,
         population_size=100,
