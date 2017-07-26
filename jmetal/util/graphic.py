@@ -19,7 +19,6 @@ S = TypeVar('S')
 
 
 class ScatterPlot():
-    """ Scatter plot. """
 
     def __init__(self, plot_title: str, animation_speed: float = 1*10e-10):
         """ Creates a new :class:`ScatterPlot` instance.
@@ -65,10 +64,15 @@ class ScatterPlot():
 
     def __search_solution(self, solution_list: List[S], x_val: float, y_val: float) -> None:
         """ Return a solution object associated with some values of (x,y). """
-        for solution in solution_list:
-            if solution.objectives[0] == x_val and solution.objectives[1] == y_val:
-                logger.info('Solution associated to ({0}, {1}):'.format(x_val, y_val))
-                self.retrieve_info(solution)
+
+        sol = next((solution for solution in solution_list
+                    if solution.objectives[0] == x_val and solution.objectives[1]), None)
+
+        if sol is not None:
+            logger.info('Solution associated to ({0}, {1}): {2}'.format(x_val, y_val, sol))
+            self.retrieve_info(sol)
+        else:
+            raise Exception("Solution is none.")
 
     def __pick_handler(self, event, solution_list: List[S]):
         """ Handler for picking points from the plot. """
