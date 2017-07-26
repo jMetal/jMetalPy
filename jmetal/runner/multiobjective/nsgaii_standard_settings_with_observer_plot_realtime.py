@@ -1,13 +1,14 @@
 import logging
 from typing import List
 
+from jmetal.problem.multiobjective.unconstrained import Schaffer, Fonseca, Viennet2
+
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.component.observer import AlgorithmObserver
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament, BinaryTournament2
-from jmetal.problem.multiobjective.unconstrained import Kursawe
 from jmetal.problem.multiobjective.zdt import ZDT1, ZDT2, ZDT3, ZDT6
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, SolutionAttributeComparator
 
@@ -16,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 def main() -> None:
-    problem = ZDT1()
+    problem = Viennet2()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
         problem,
         population_size=100,

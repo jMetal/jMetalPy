@@ -50,7 +50,6 @@ class KursaweTestCases(unittest.TestCase):
 
 
 class FonsecaTestCases(unittest.TestCase):
-
     def setUp(self):
         pass
 
