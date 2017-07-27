@@ -11,6 +11,10 @@ class Comparator():
 
 
 class DominanceComparator():
+    def __init__(self):
+        self.constraint_comparator = \
+            SolutionAttributeComparator("overall_constraint_violation", lowest_is_best=False)
+
     def compare(self, solution1: Solution, solution2: Solution) -> int:
         if solution1 is None:
             raise Exception("The solution1 is None")
@@ -19,6 +23,13 @@ class DominanceComparator():
         #elif len(solution1.objectives) != len(solution2.objectives):
         #    raise Exception("The solutions have different number of objectives")
 
+        result = self.constraint_comparator.compare(solution1, solution2)
+        if result == 0:
+            result = self.__dominance_test(solution1, solution2)
+
+        return result
+
+    def __dominance_test(self, solution1, solution2) ->float:
         best_is_one = 0
         best_is_two = 0
 

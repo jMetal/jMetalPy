@@ -102,7 +102,7 @@ class DominanceComparatorTestCases(unittest.TestCase):
         solution2.objectives = [-1.0, 5.0, 8.0]
 
         self.assertEqual(1, self.comparator.compare(solution, solution2))
-
+    """ 
     def test_should_dominance_comparator_work_properly_case_3(self):
         '''
         Case d: solution1 has objectives [-1.0, 5.0, 9.0] and solution2 has [-2.0, 5.0, 10.0]
@@ -114,6 +114,36 @@ class DominanceComparatorTestCases(unittest.TestCase):
         solution2.objectives = [-2.0, 5.0, 10.0]
 
         self.assertEqual(0, self.comparator.compare(solution, solution2))
+        
+    """
+    def test_should_dominance_comparator_work_properly_with_constrains_case_1(self):
+        '''
+        Case 1: solution1 has a higher degree of constraint violation than solution 2
+        '''
+        solution1 = FloatSolution(3, 3, 0, [], [])
+        solution2 = FloatSolution(3, 3, 0, [], [])
+        solution1.attributes["overall_constraint_violation"] = 0.2
+        solution2.attributes["overall_constraint_violation"] = 0.3
+
+        solution1.objectives = [-1.0, 5.0, 9.0]
+        solution2.objectives = [-2.0, 5.0, 10.0]
+
+        self.assertEqual(-1, self.comparator.compare(solution1, solution2))
+
+    def test_should_dominance_comparator_work_properly_with_constrains_case_2(self):
+        '''
+        Case 2: solution1 has a lower degree of constraint violation than solution 2
+        '''
+        solution1 = FloatSolution(3, 3, 0, [], [])
+        solution2 = FloatSolution(3, 3, 0, [], [])
+        solution1.attributes["overall_constraint_violation"] = 0.2
+        solution2.attributes["overall_constraint_violation"] = 0.1
+
+        solution1.objectives = [-1.0, 5.0, 9.0]
+        solution2.objectives = [-2.0, 5.0, 10.0]
+
+        self.assertEqual(1, self.comparator.compare(solution1, solution2))
+
 
 
 class SolutionAttributeComparatorTestCases(unittest.TestCase):
