@@ -6,7 +6,7 @@ from jmetal.core.operator import Selection
 from jmetal.util.comparator import Comparator, DominanceComparator
 from jmetal.util.ranking import DominanceRanking
 
-""" Class implementing a best solution selection operator """
+""" Class implementing a best solution selection operators """
 
 S = TypeVar('S')
 
