@@ -76,7 +76,7 @@ class Tanaka(FloatProblem):
         FloatSolution.upper_bound = self.upper_bound
 
     def get_name(self):
-        return "Srinivas"
+        return "Tanaka"
 
     class Objective1(Objective):
         def compute(self, solution: FloatSolution, problem: FloatProblem):
