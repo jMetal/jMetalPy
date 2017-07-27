@@ -6,6 +6,8 @@ from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament, BinaryTournament2
+from jmetal.problem.multiobjective.constrained import Srinivas
+from jmetal.problem.multiobjective.dtlz import DTLZ1
 from jmetal.problem.multiobjective.unconstrained import Kursawe, Schaffer, Fonseca, Viennet2
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, SolutionAttributeComparator
 
@@ -16,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 def main() -> None:
-    problem = Viennet2()
+    problem = Srinivas()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
         problem=problem,
         population_size=100,

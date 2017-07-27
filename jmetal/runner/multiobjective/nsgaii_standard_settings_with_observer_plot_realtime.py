@@ -1,6 +1,7 @@
 import logging
 from typing import List
 
+from jmetal.problem.multiobjective.constrained import Srinivas, Tanaka
 from jmetal.problem.multiobjective.unconstrained import Schaffer, Fonseca, Viennet2
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
@@ -17,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 def main() -> None:
-    problem = ZDT6()
+    problem = Tanaka()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
         problem,
         population_size=100,
