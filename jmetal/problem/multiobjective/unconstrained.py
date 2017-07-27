@@ -4,7 +4,7 @@ from jmetal.core.objective import Objective
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 
-""" Test functions for multi-objective optimization """
+""" Unconstrained Test problems for multi-objective optimization """
 
 class Kursawe(FloatProblem):
     """ Class representing problem Kursawe """

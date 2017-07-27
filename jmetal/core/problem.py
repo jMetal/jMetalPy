@@ -25,6 +25,9 @@ class Problem(Generic[S]):
             else:
                 solution.objectives[i] = -1.0 * self.objectives[i].compute(solution, self)
 
+    def evaluate_constraints(self, solution: S):
+        pass
+
     def create_solution(self) -> S:
         pass
 
