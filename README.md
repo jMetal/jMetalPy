@@ -35,10 +35,8 @@ $ pip install -r requirements.txt
 # History
 See [CHANGELOG](CHANGELOG.md) for full version history.
 
-## Last changes (July 21th 2017)
-* Added guide for using [cProfile](resources/pages/profiling.md).
-* Starting to implement [SMPSO](jmetal/algorithm/multiobjective/smpso.py).
-* Added [comparators](jmetal/util/comparator.py).
+## Last changes (July 27th 2017)
+* (Fix) Search solution in `ScatterPlot()` now return only one solution object (as intended).
 
 # Contributing
 Please read [CONTRIBUTING](CONTRIBUTING.md) for details on how to contribute to the project.
