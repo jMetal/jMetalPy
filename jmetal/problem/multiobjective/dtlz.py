@@ -46,7 +46,7 @@ class DTLZ1(FloatProblem):
 
         :param number_of_variables: number of decision variables of the problem
         """
-        self.objectives = [number_of_objectives * self.Dtlz1Objective()]
+        self.objectives = [self.Dtlz1Objective() for i in range(number_of_objectives)]
 
         self.number_of_variables = number_of_variables
         self.number_of_objectives = number_of_objectives
@@ -65,7 +65,7 @@ class DTLZ1(FloatProblem):
     def evaluate(self, solution: FloatSolution):
         g = 0.0
         k = self.number_of_variables - self.number_of_objectives + 1
-        for i in range (self.numberOfVariables - k, self.numberOfVariables):
+        for i in range (self.number_of_variables - k, self.number_of_variables):
             g += (solution.variables[i] - 0.5) * (solution.variables[i] - 0.5) - \
                  cos(20.0 * pi * (solution.variables[i] - 0.5))
 
