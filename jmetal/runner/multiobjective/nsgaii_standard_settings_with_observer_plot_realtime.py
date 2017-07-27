@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 def main() -> None:
-    problem = Tanaka()
+    problem = Srinivas()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
         problem,
         population_size=100,
