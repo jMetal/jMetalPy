@@ -1,5 +1,7 @@
 # jMetalPy: Python version of the jMetal framework
 [![Build Status](https://travis-ci.org/jMetal/jMetalPy.svg?branch=master)](https://travis-ci.org/jMetal/jMetalPy)
+[![PyPI](https://img.shields.io/pypi/l/jMetalPy.svg)]()
+[![PyPI](https://img.shields.io/pypi/v/jMetalPy.svg)]()
 
 > jMetalPy is currently under heavy development!  
 
@@ -10,7 +12,6 @@ Any ideas about how the structure the project, coding style, useful tools (I'm u
 ![jMetal architecture](resources/jMetal5UML.png)
 
 ---
-
 
 # Table of Contents
 - [Usage](#usage)
