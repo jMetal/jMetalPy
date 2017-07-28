@@ -94,7 +94,7 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
         self.total_computing_time = self.get_current_computing_time()
 
 
-class ParticleSwarmOptimization(Algorithm[FloatSolution, R]):
+class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]]):
     def __init__(self):
         super(ParticleSwarmOptimization, self).__init__()
         self.swarm = []
@@ -147,7 +147,7 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, R]):
         self.start_computing_time = time.time()
 
         self.swarm = self.create_initial_swarm()
-        self.swarm = self.evaluate_swarm(self.population)
+        self.swarm = self.evaluate_swarm(self.swarm)
         self.initialize_velocity(self.swarm)
         self.initialize_particle_best(self.swarm)
         self.initialize_global_best(self.swarm)
