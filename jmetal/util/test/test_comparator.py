@@ -122,8 +122,8 @@ class DominanceComparatorTestCases(unittest.TestCase):
         '''
         solution1 = FloatSolution(3, 3, 0, [], [])
         solution2 = FloatSolution(3, 3, 0, [], [])
-        solution1.attributes["overall_constraint_violation"] = 0.2
-        solution2.attributes["overall_constraint_violation"] = 0.3
+        solution1.attributes["overall_constraint_violation"] = -0.1
+        solution2.attributes["overall_constraint_violation"] = -0.3
 
         solution1.objectives = [-1.0, 5.0, 9.0]
         solution2.objectives = [-2.0, 5.0, 10.0]
@@ -136,8 +136,8 @@ class DominanceComparatorTestCases(unittest.TestCase):
         '''
         solution1 = FloatSolution(3, 3, 0, [], [])
         solution2 = FloatSolution(3, 3, 0, [], [])
-        solution1.attributes["overall_constraint_violation"] = 0.2
-        solution2.attributes["overall_constraint_violation"] = 0.1
+        solution1.attributes["overall_constraint_violation"] = -0.3
+        solution2.attributes["overall_constraint_violation"] = -0.1
 
         solution1.objectives = [-1.0, 5.0, 9.0]
         solution2.objectives = [-2.0, 5.0, 10.0]
