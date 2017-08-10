@@ -25,9 +25,8 @@ def main() -> None:
         max_evaluations=25000,
         mutation=Polynomial(1.0/problem.number_of_variables, distribution_index=20),
         crossover=SBX(1.0, distribution_index=20),
-        #selection=BinaryTournament(RankingAndCrowdingDistanceComparator()))
-        selection = BinaryTournament2([SolutionAttributeComparator("dominance_ranking"),
-                                       SolutionAttributeComparator("crowding_distance", lowest_is_best=False)]))
+        selection=BinaryTournament2([SolutionAttributeComparator("dominance_ranking"),
+                                     SolutionAttributeComparator("crowding_distance", lowest_is_best=False)]))
 
     observer = AlgorithmObserver(animation_speed=1*10e-8)
     algorithm.observable.register(observer=observer)

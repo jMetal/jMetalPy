@@ -10,13 +10,11 @@ from jmetal.operator.selection import BinaryTournament
 from jmetal.problem.multiobjective.unconstrained import Kursawe
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
 from jmetal.util.solution_list_output import SolutionListOutput
-from jmetal.util.time import get_time_of_execution
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-@get_time_of_execution
 def main() -> None:
     problem = Kursawe()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
@@ -31,7 +29,6 @@ def main() -> None:
     algorithm.observable.register(observer=observer)
 
     algorithm.run()
-
     result = algorithm.get_result()
 
     SolutionListOutput[FloatSolution].print_function_values_to_file("FUN."+problem.get_name(), result)

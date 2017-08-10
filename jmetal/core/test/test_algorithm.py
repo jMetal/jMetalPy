@@ -1,9 +1,11 @@
 import logging
+import unittest
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 """
+>>>>>>> 5fdebfdf33c118dab271bc7ab380a121b396fde5
 class AlgorithmTestIntegrationTestCases(unittest.TestCase):
 
     def setUp(self):

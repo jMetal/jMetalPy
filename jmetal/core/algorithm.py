@@ -4,9 +4,7 @@ import time
 from typing import TypeVar, Generic, List
 
 from jmetal.core.solution import FloatSolution
-
 from jmetal.component.evaluator import Evaluator, SequentialEvaluator
-from jmetal.util.time import get_time_of_execution
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -24,7 +22,7 @@ class Algorithm(Generic[S, R], threading.Thread):
         self.total_computing_time: int = 0
 
     def get_name(self) -> str:
-        pass
+        return type(self).__name__
 
     def get_evaluations(self) -> int:
         return self.evaluations
@@ -66,7 +64,6 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
     def get_result(self) -> R:
         pass
 
-    @get_time_of_execution
     def run(self):
         """
         Step One: Generate the initial population of individuals randomly. (First generation)

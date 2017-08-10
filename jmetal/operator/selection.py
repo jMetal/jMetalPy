@@ -6,7 +6,7 @@ from jmetal.core.operator import Selection
 from jmetal.util.comparator import Comparator, DominanceComparator
 from jmetal.util.ranking import DominanceRanking
 
-""" Class implementing a best solution selection operator """
+""" Class implementing a best solution selection operators """
 
 S = TypeVar('S')
 
@@ -15,9 +15,6 @@ class BinaryTournament(Selection[List[S], S]):
     def __init__(self, comparator: Comparator = DominanceComparator()):
         super(BinaryTournament, self).__init__()
         self.comparator = comparator
-
-    def get_name(self):
-        return "Binary tournament selection"
 
     def execute(self, solution_list: List[S]) -> S:
         if solution_list is None:
@@ -42,6 +39,9 @@ class BinaryTournament(Selection[List[S], S]):
                 result = [solution1, solution2][random.random() < 0.5]
 
         return result
+
+    def get_name(self) -> str:
+        return "Binary tournament selection"
 
 
 class BestSolution(Selection[List[S], S]):
@@ -169,6 +169,3 @@ class BinaryTournament2(Selection[List[S], S]):
             result = None
 
         return result
-
-
-

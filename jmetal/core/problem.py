@@ -47,6 +47,7 @@ class BinaryProblem(Problem[BinarySolution]):
 
 class FloatProblem(Problem[FloatSolution]):
     """ Class representing float problems """
+
     def __init__(self):
         self.lower_bound : [] = None
         self.upper_bound : [] = None
