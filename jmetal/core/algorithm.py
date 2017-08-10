@@ -91,7 +91,7 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
         self.total_computing_time = self.get_current_computing_time()
 
 
-class ParticleSwarmOptimization(Algorithm[FloatSolution, R]):
+class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]]):
     def __init__(self):
         super(ParticleSwarmOptimization, self).__init__()
         self.swarm = []
@@ -105,34 +105,34 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, R]):
     def is_stopping_condition_reached(self) -> bool:
         pass
 
-    def create_initial_swarm(self):
+    def create_initial_swarm(self) -> List[FloatSolution]:
         pass
 
-    def evaluate_swarm(self, swarm: List[S]) -> List[S]:
+    def evaluate_swarm(self, swarm: List[FloatSolution]) -> List[FloatSolution]:
         pass
 
-    def initialize_global_best(self, swarm: List[S]) -> None:
+    def initialize_global_best(self, swarm: List[FloatSolution]) -> None:
         pass
 
-    def initialize_particle_best(self, swarm: List[S]) -> None:
+    def initialize_particle_best(self, swarm: List[FloatSolution]) -> None:
         pass
 
-    def initialize_velocity(self, swarm: List[S]) -> None:
+    def initialize_velocity(self, swarm: List[FloatSolution]) -> None:
         pass
 
-    def update_velocity(self, swarm: List[S]) -> None:
+    def update_velocity(self, swarm: List[FloatSolution]) -> None:
         pass
 
-    def update_position(self, swarm: List[S]) -> None:
+    def update_position(self, swarm: List[FloatSolution]) -> None:
         pass
 
-    def perturbation(self, swarm: List[S]) -> None:
+    def perturbation(self, swarm: List[FloatSolution]) -> None:
         pass
 
-    def update_global_best(self, swarm: List[S]) -> None:
+    def update_global_best(self, swarm: List[FloatSolution]) -> None:
         pass
 
-    def update_particle_best(self, swarm: List[S]) -> None:
+    def update_particle_best(self, swarm: List[FloatSolution]) -> None:
         pass
 
     def get_result(self) -> R:
