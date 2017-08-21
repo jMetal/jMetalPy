@@ -8,15 +8,16 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-class BasicAlgorithmConsumer(Observer):
+class BasicAlgorithmObserver(Observer):
     def __init__(self, frequency: float = 1.0) -> None:
         self.display_frequency = frequency
 
     def update(self, *args, **kwargs):
         evaluations = kwargs["evaluations"]
+
         if (evaluations % self.display_frequency) == 0:
             logger.info("Evaluations: " + str(evaluations) +
-                        ". Best fitness: " + str(kwargs["population"][0].objectives[0]) +
+                        ". Best fitness: " + str(kwargs["population"][0].objectives) +
                         ". Computing time: " + str(kwargs["computing time"]))
 
 
@@ -41,8 +42,15 @@ class WriteFrontToFileObserver(Observer):
 
 
 class AlgorithmObserver(Observer):
-    def __init__(self, animation_speed: float) -> None:
+    def __init__(self, animation_speed: float, frequency: float = 1.0) -> None:
         self.animation_speed = animation_speed
+        self.display_frequency = frequency
 
     def update(self, *args, **kwargs):
-        SolutionListOutput.plot_scatter_real_time(kwargs["population"], self.animation_speed)
+        evaluations = kwargs["evaluations"]
+        population = kwargs["population"]
+        computing_time = kwargs["computing time"]
+
+        if (evaluations % self.display_frequency) == 0:
+            SolutionListOutput.plot_scatter_real_time(population, evaluations, computing_time,
+                                                      self.animation_speed)

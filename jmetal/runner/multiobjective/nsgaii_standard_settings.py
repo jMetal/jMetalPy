@@ -11,7 +11,6 @@ from jmetal.problem.multiobjective.dtlz import DTLZ1
 from jmetal.problem.multiobjective.unconstrained import Kursawe, Schaffer, Fonseca, Viennet2
 from jmetal.problem.multiobjective.zdt import ZDT1
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, SolutionAttributeComparator
-
 from jmetal.util.solution_list_output import SolutionListOutput
 
 logging.basicConfig(level=logging.INFO)
@@ -26,7 +25,7 @@ def main() -> None:
         max_evaluations=25000,
         mutation=Polynomial(1.0/problem.number_of_variables, distribution_index=20),
         crossover=SBX(1.0, distribution_index=20),
-        selection = BinaryTournament(RankingAndCrowdingDistanceComparator()))
+        selection=BinaryTournament(RankingAndCrowdingDistanceComparator()))
 
     algorithm.run()
     result = algorithm.get_result()

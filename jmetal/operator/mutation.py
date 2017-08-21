@@ -3,7 +3,7 @@ import random
 from jmetal.core.operator import Mutation
 from jmetal.core.solution import BinarySolution, Solution, FloatSolution, IntegerSolution
 
-""" Class implementing the binary BitFlip mutation operator """
+""" Class implementing the binary BitFlip mutation operators """
 __author__ = "Antonio J. Nebro"
 
 
@@ -43,10 +43,11 @@ class Polynomial(Mutation[FloatSolution]):
     def execute(self, solution: FloatSolution) -> FloatSolution:
         for i in range(solution.number_of_variables):
             rand = random.random()
+
             if rand <= self.probability:
                 y = solution.variables[i]
-                yl = solution.lower_bound[i]
-                yu = solution.upper_bound[i]
+                yl, yu = solution.lower_bound[i], solution.upper_bound[i]
+
                 if yl == yu:
                     y = yl
                 else:
@@ -86,8 +87,8 @@ class IntegerPolynomial(Mutation[IntegerSolution]):
         for i in range(solution.number_of_variables):
             if random.random() <= self.probability:
                 y = solution.variables[i]
-                yl = solution.lower_bound[i]
-                yu = solution.upper_bound[i]
+                yl, yu = solution.lower_bound[i], solution.upper_bound[i]
+
                 if yl == yu:
                     y = yl
                 else:
@@ -95,14 +96,14 @@ class IntegerPolynomial(Mutation[IntegerSolution]):
                     delta2 = (yu - y) / (yu - yl)
                     mutPow = 1.0 / (self.distribution_index + 1.0)
                     rnd = random.random()
-                    if rnd<=0.5:
+                    if rnd <= 0.5:
                         xy = 1.0 - delta1
                         val = 2.0 * rnd + (1.0 - 2.0 * rnd) * (xy ** (self.distribution_index + 1.0))
-                        deltaq = val**mutPow - 1.0
+                        deltaq = val ** mutPow - 1.0
                     else:
                         xy = 1.0 - delta2
-                        val = 2.0 * (1.0 - rnd) + 2.0 * (rnd - 0.5) * (xy**(self.distribution_index + 1.0))
-                        deltaq = 1.0 - val**mutPow
+                        val = 2.0 * (1.0 - rnd) + 2.0 * (rnd - 0.5) * (xy ** (self.distribution_index + 1.0))
+                        deltaq = 1.0 - val ** mutPow
 
                     y += deltaq * (yu - yl)
                     if y < solution.lower_bound[i]:
@@ -125,7 +126,8 @@ class SimpleRandom(Mutation[FloatSolution]):
         for i in range(solution.number_of_variables):
             rand = random.random()
             if rand <= self.probability:
-                solution.variables[i] = solution.lower_bound[i] + (solution.upper_bound[i] - solution.lower_bound[i]) * random.random()
+                solution.variables[i] = solution.lower_bound[i] + \
+                                        (solution.upper_bound[i] - solution.lower_bound[i]) * random.random()
         return solution
 
 
@@ -140,9 +142,10 @@ class Uniform(Mutation[FloatSolution]):
     def execute(self, solution: FloatSolution) -> FloatSolution:
         for i in range(solution.number_of_variables):
             rand = random.random()
+
             if rand <= self.probability:
-                tmp = (random.random() - 0.5) * self.perturbation;
-                tmp+= solution.variables[i]
+                tmp = (random.random() - 0.5) * self.perturbation
+                tmp += solution.variables[i]
 
                 if tmp < solution.lower_bound[i]:
                     tmp = solution.lower_bound[i]
