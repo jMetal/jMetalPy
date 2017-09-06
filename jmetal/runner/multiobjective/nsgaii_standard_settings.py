@@ -34,6 +34,7 @@ def main() -> None:
 
     logger.info("Algorithm (continuous problem): " + algorithm.get_name())
     logger.info("Problem: " + problem.get_name())
+    logger.info("Computing time: " + str(algorithm.total_computing_time))
 
 if __name__ == '__main__':
     main()
