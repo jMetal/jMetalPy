@@ -25,6 +25,7 @@ coverage.xml
 .cache
 pytest-env
 *.zip
+.ipynb_checkpoints
 
 # Avoid documentation
 auto-docs/build

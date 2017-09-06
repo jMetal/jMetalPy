@@ -41,8 +41,8 @@ class KursaweTestCases(unittest.TestCase):
         self.assertEqual(0, problem.number_of_constraints)
         self.assertEqual([-5.0, -5.0, -5.0], problem.lower_bound)
         self.assertEqual([5.0, 5.0, 5.0], problem.upper_bound)
-        self.assertTrue(solution.variables[0] >= -5.0)
-        self.assertTrue(solution.variables[0] <= 5.0)
+        self.assertTrue(all(variable >= -5.0 for variable in solution.variables))
+        self.assertTrue(all(variable <= 5.0 for variable in solution.variables))
 
     def test_should_get_name_return_the_right_name(self):
         problem = Kursawe()
@@ -50,7 +50,6 @@ class KursaweTestCases(unittest.TestCase):
 
 
 class FonsecaTestCases(unittest.TestCase):
-
     def setUp(self):
         pass
 

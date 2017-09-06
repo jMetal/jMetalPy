@@ -33,11 +33,11 @@ class DefaultObservable(Observable):
     def __init__(self):
         self.observers = []
 
-    def register(self, observer):
+    def register(self, observer: Observer):
         if observer not in self.observers:
             self.observers.append(observer)
 
-    def deregister(self, observer):
+    def deregister(self, observer: Observer):
         if observer in self.observers:
             self.observers.remove(observer)
 

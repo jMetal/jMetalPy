@@ -1,5 +1,6 @@
 from random import Random
 from typing import TypeVar, List
+from copy import copy
 
 from jmetal.component.archive import BoundedArchive
 from jmetal.component.evaluator import Evaluator, SequentialEvaluator
@@ -7,7 +8,7 @@ from jmetal.core.solution import FloatSolution
 
 from jmetal.core.algorithm import ParticleSwarmOptimization
 from jmetal.core.operator import Mutation
-from jmetal.core.problem import Problem
+from jmetal.core.problem import Problem, FloatProblem
 from jmetal.util.comparator import DominanceComparator
 from jmetal.util.observable import Observable, DefaultObservable
 
@@ -16,9 +17,9 @@ import numpy
 R = TypeVar('R')
 
 
-class SMPSO(ParticleSwarmOptimization[R]):
+class SMPSO(ParticleSwarmOptimization):
     def __init__(self,
-                 problem: Problem[FloatSolution],
+                 problem: FloatProblem,
                  swarm_size: int,
                  max_evaluations: int,
                  mutation: Mutation[FloatSolution],
@@ -90,19 +91,15 @@ class SMPSO(ParticleSwarmOptimization[R]):
 
     def initialize_particle_best(self, swarm: List[FloatSolution]) -> None:
         for particle in self.swarm:
-            particle.attributes["localBest"] = particle.copy()
+            particle.attributes["local_best"] = copy(particle)
 
     def initialize_velocity(self, swarm: List[FloatSolution]) -> None:
         pass # Velocity initialized in the constructor
 
     def update_velocity(self, swarm: List[FloatSolution]) -> None:
         for i in range(self.swarm_size):
-            pass
-
-    def update_position(self, swarm: List[FloatSolution]) -> None:
-        for i in range(self.swarm_size):
-            particle = self.swarm[i].copy()
-            best_particle = self.swarm[i].attributes["localBest"].copy()
+            particle = copy(self.swarm[i])
+            best_particle = copy(self.swarm[i].attributes["local_best"])
             best_global = self.__select_global_best()
 
             r1 = Random.random()
@@ -111,33 +108,61 @@ class SMPSO(ParticleSwarmOptimization[R]):
             c1 = Random.uniform(self.c1_min, self.c1_max)
             c2 = Random.uniform(self.c2_min, self.c2_max)
 
-            for j in range(self.problem.number_of_variables):
-                pass
+            wmin = self.min_weight
+            wmax = self.max_weight
 
+            for var in range(self.problem.number_of_variables):
+                self.speed[i][var] = \
+                    self.__velocity_constriction(self.__constriction_coefficient(c1, c2) * \
+                                                 (wmax * self.speed[i][var] +
+                                                  c1 * r1 * (best_particle.variables[var] - particle.variables[var]) +
+                                                  c2 * r2 * (best_global.variables[var] - particle.variables[var])),
+                                                 var)
 
+    def update_position(self, swarm: List[FloatSolution]) -> None:
+        for i in range(self.swarm_size):
+            particle = self.swarm[i]
 
+            for j in particle.variables:
+                particle.variables[j] += self.speed[i][j]
+
+                if particle.variables[j] < self.problem.lower_bound[j]:
+                    particle.variables[j] = self.problem.lower_bound[j]
+                    self.speed[i][j] *= self.change_velocity1
+
+                if particle.variables[j] > self.problem.upper_bound[j]:
+                    particle.variables[j] = self.problem.upper_bound[j]
+                    self.speed[i][j] *= self.change_velocity2
 
     def perturbation(self, swarm: List[FloatSolution]) -> None:
-        pass
+        for particle in self.swarm:
+            self.mutation.execute(particle)
 
     def update_global_best(self, swarm: List[FloatSolution]) -> None:
-        pass
+        for particle in self.swarm:
+            self.leaders.add(copy(particle))
 
     def update_particle_best(self, swarm: List[FloatSolution]) -> None:
-        pass
+        for i in range(self.swarm_size):
+            flag = self.dominance_comparator.compare(
+                self.swarm[i],
+                self.swarm[i].attribute["local_best"])
 
-    def get_result(self) -> R:
-        pass
+            if flag is not 1:
+                swarm[i].attributes["local_best"] = copy(self.swarm[i])
+
+    def get_result(self) -> List[FloatSolution]:
+        self.leaders.solution_list
 
     def __select_global_best(self) -> FloatSolution:
         #pos1 = Random.randint(0, len(self.leaders.solution_list) - 1)
         #pos2 = Random.randint(0, len(self.leaders.solution_list) - 1)
         best_global = None
         particles = Random.sample(self.leaders.solution_list, 2)
-        if (self.leaders.get_comparator().compare(particles[0], particles[1]) < 1):
-            best_global = particles[0].copy()
+        if self.leaders.get_comparator().compare(particles[0], particles[1]) < 1:
+            best_global = copy(particles[0])
         else:
-            best_global = particles[1].copy()
+            best_global = copy(particles[1])
 
         return best_global
 
@@ -152,7 +177,7 @@ class SMPSO(ParticleSwarmOptimization[R]):
         return result
 
     def __constriction_coefficient(self, c1: float, c2: float) -> float:
-        result = None
+        result = 0.0
         rho = c1 + c2
         if rho <= 4:
             result = 1.0
