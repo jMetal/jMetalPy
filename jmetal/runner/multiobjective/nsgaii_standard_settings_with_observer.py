@@ -6,7 +6,7 @@ from jmetal.component.observer import WriteFrontToFileObserver
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
-from jmetal.operator.selection import BinaryTournament
+from jmetal.operator.selection import BinaryTournamentSelection
 from jmetal.problem.multiobjective.unconstrained import Kursawe
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
 from jmetal.util.solution_list_output import SolutionListOutput
@@ -23,7 +23,7 @@ def main() -> None:
         max_evaluations=25000,
         mutation=Polynomial(1.0/problem.number_of_variables, distribution_index=20),
         crossover=SBX(1.0, distribution_index=20),
-        selection=BinaryTournament(RankingAndCrowdingDistanceComparator()))
+        selection=BinaryTournamentSelection(RankingAndCrowdingDistanceComparator()))
 
     observer = WriteFrontToFileObserver("output_directory")
     algorithm.observable.register(observer=observer)

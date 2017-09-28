@@ -6,19 +6,29 @@ S = TypeVar('S')
 
 
 class Ranking(List[S]):
+    def __init__(self):
+        self.number_of_comparions = 0
+        self.ranked_sublists = []
+
     def compute_ranking(self, solution_list: List[S]):
         pass
 
-    def get_subfront(self, rank: int) -> List[S]:
-        pass
+    def get_subfront(self, rank: int):
+        if rank >= len(self.ranked_sublists):
+            raise Exception("Invalid rank: " + str(rank) + ". Max rank = " + str(len(self.ranked_sublists) -1))
+        return self.ranked_sublists[rank]
 
-    def get_number_of_subfronts(self) -> int:
-        pass
+    def get_number_of_subfronts(self):
+        return len(self.ranked_sublists)
+
+    def get_number_of_comparions(self) -> int:
+        return self.number_of_comparisons
 
 
-class DominanceRanking(Ranking[List[S]]):
+class FastNonDominatedRanking(Ranking[List[S]]):
+    """ Class implementing the non-dominated ranking of NSGA-II"""
     def __init__(self):
-        self.ranked_sublists = []
+        super(FastNonDominatedRanking, self).__init__()
 
     def compute_ranking(self, solution_list: List[S]):
         # number of solutions dominating solution ith
@@ -33,6 +43,7 @@ class DominanceRanking(Ranking[List[S]]):
         for p in range(len(solution_list) - 1):
             for q in range(p + 1, len(solution_list)):
                 dominance_test_result = DominanceComparator().compare(solution_list[p], solution_list[q])
+                self.number_of_comparions += 1
                 if dominance_test_result is -1:
                     i_dominate[p].append(q)
                     dominate_me[q] += 1
@@ -66,10 +77,13 @@ class DominanceRanking(Ranking[List[S]]):
 
         return self.ranked_sublists
 
-    def get_subfront(self, rank: int):
-        if rank >= len(self.ranked_sublists):
-            raise Exception("Invalid rank: " + str(rank) + ". Max rank = " + str(len(self.ranked_sublists) -1))
-        return self.ranked_sublists[rank]
 
-    def get_number_of_subfronts(self):
-        return len(self.ranked_sublists)
+class EfficientNonDominatedRanking(Ranking[List[S]]):
+    """ Class implementing the EDS (efficient non-dominated sorting) algorithm """
+    def __init__(self):
+        super(EfficientNonDominatedRanking, self).__init__()
+
+    def compute_ranking(self, solution_list: List[S]):
+        #todo       
+
+        return self.ranked_sublists

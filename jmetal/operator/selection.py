@@ -4,16 +4,16 @@ from typing import List, TypeVar
 from jmetal.component.density_estimator import CrowdingDistance
 from jmetal.core.operator import Selection
 from jmetal.util.comparator import Comparator, DominanceComparator
-from jmetal.util.ranking import DominanceRanking
+from jmetal.util.ranking import FastNonDominatedRanking
 
 """ Class implementing a best solution selection operators """
 
 S = TypeVar('S')
 
 
-class BinaryTournament(Selection[List[S], S]):
+class BinaryTournamentSelection(Selection[List[S], S]):
     def __init__(self, comparator: Comparator = DominanceComparator()):
-        super(BinaryTournament, self).__init__()
+        super(BinaryTournamentSelection, self).__init__()
         self.comparator = comparator
 
     def execute(self, solution_list: List[S]) -> S:
@@ -44,9 +44,9 @@ class BinaryTournament(Selection[List[S], S]):
         return "Binary tournament selection"
 
 
-class BestSolution(Selection[List[S], S]):
+class BestSolutionSelection(Selection[List[S], S]):
     def __init__(self):
-        super(BestSolution, self).__init__()
+        super(BestSolutionSelection, self).__init__()
 
     def execute(self, solution_list: List[S]) -> S:
         if solution_list is None:
@@ -62,9 +62,9 @@ class BestSolution(Selection[List[S], S]):
         return result
 
 
-class NaryRandomSolution(Selection[List[S], S]):
+class NaryRandomSolutionSelection(Selection[List[S], S]):
     def __init__(self, number_of_solutions_to_be_returned:int = 1):
-        super(NaryRandomSolution, self).__init__()
+        super(NaryRandomSolutionSelection, self).__init__()
         if number_of_solutions_to_be_returned < 0:
             raise Exception("The number of solutions to be returned must be positive integer")
 
@@ -82,9 +82,9 @@ class NaryRandomSolution(Selection[List[S], S]):
         return random.sample(solution_list, self.number_of_solutions_to_be_returned)
 
 
-class RandomSolution(Selection[List[S], S]):
+class RandomSolutionSelection(Selection[List[S], S]):
     def __init__(self):
-        super(RandomSolution, self).__init__()
+        super(RandomSolutionSelection, self).__init__()
 
     def execute(self, solution_list: List[S]) -> S:
         if solution_list is None:
@@ -101,7 +101,7 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
         self.max_population_size = max_population_size
 
     def execute(self, solution_list: List[S]) -> List[S]:
-        ranking = DominanceRanking()
+        ranking = FastNonDominatedRanking()
         crowding_distance = CrowdingDistance()
         ranking.compute_ranking(solution_list)
 
@@ -122,9 +122,9 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
         return new_solution_list
 
 
-class BinaryTournament2(Selection[List[S], S]):
+class BinaryTournament2Selection(Selection[List[S], S]):
     def __init__(self, comparator_list: List[Comparator]):
-        super(BinaryTournament2, self).__init__()
+        super(BinaryTournament2Selection, self).__init__()
         self.comparator_list = comparator_list
 
     def get_name(self):

@@ -5,7 +5,7 @@ from jmetal.component.observer import BasicAlgorithmConsumer
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
-from jmetal.operator.selection import BinaryTournament
+from jmetal.operator.selection import BinaryTournamentSelection
 from jmetal.problem.singleobjective.unconstrained import Sphere
 
 logging.basicConfig(level=logging.INFO)
@@ -21,7 +21,7 @@ def main() -> None:
         max_evaluations=25000,
         mutation=Polynomial(1.0 / variables, distribution_index=20),
         crossover=SBX(1.0, distribution_index=20),
-        selection=BinaryTournament())
+        selection=BinaryTournamentSelection())
 
     observer = BasicAlgorithmConsumer(2000)
 
