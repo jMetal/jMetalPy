@@ -26,8 +26,8 @@ class SequentialEvaluator(Evaluator[S]):
 
 
 class ParallelEvaluator(Evaluator[S]):
-    def __init__(self):
-        self.pool = ThreadPool()
+    def __init__(self, processes=None):
+        self.pool = ThreadPool(processes)
 
     def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
         self.pool.map(lambda solution: Evaluator[S].evaluate_solution(solution, problem), solution_list)
