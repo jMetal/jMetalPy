@@ -17,7 +17,7 @@ Any ideas about how the structure the project, coding style, useful tools (I'm u
 - [Usage](#usage)
 	- [Dependencies](#dependencies)
 - [History](#history)
-	- [Last changes (July 17th 2017)](#last-changes-july-17th-2017)
+	- [Last changes (December 18th 2017)](#last-changes-december-18th-2017)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -35,8 +35,9 @@ $ pip install -r requirements.txt
 # History
 See [CHANGELOG](CHANGELOG.md) for full version history.
 
-## Last changes (July 27th 2017)
+## Last changes (December 18th 2017)
 * (Fix) Search solution in `ScatterPlot()` now return only one solution object (as intended).
+* Added class `ParallelEvaluator` (Contribution of Michael Cipold)
 
 # Contributing
 Please read [CONTRIBUTING](CONTRIBUTING.md) for details on how to contribute to the project.
