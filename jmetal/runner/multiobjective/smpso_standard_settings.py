@@ -1,18 +1,10 @@
 import logging
-from typing import List
 
-from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.algorithm.multiobjective.smpso import SMPSO
-from jmetal.component.archive import BoundedArchive, CrowdingDistanceArchive
+from jmetal.component.archive import CrowdingDistanceArchive
 from jmetal.core.solution import FloatSolution
-from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
-from jmetal.operator.selection import BinaryTournamentSelection, BinaryTournament2Selection
-from jmetal.problem.multiobjective.constrained import Srinivas
-from jmetal.problem.multiobjective.dtlz import DTLZ1
-from jmetal.problem.multiobjective.unconstrained import Kursawe, Schaffer, Fonseca, Viennet2
-from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, SolutionAttributeComparator
-
+from jmetal.problem.multiobjective.unconstrained import Kursawe
 from jmetal.util.solution_list_output import SolutionListOutput
 
 logging.basicConfig(level=logging.INFO)

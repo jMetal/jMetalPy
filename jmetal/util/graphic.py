@@ -1,6 +1,7 @@
 import logging
-import matplotlib.pyplot as plt
 from typing import TypeVar, List, Tuple
+
+import matplotlib.pyplot as plt
 
 from jmetal.core.solution import Solution
 

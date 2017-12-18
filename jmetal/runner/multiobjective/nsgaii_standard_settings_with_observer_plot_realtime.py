@@ -1,17 +1,14 @@
 import logging
 from typing import List
 
-from jmetal.problem.multiobjective.constrained import Srinivas, Tanaka
-from jmetal.problem.multiobjective.unconstrained import Schaffer, Fonseca, Viennet2
-
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.component.observer import AlgorithmObserver
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
-from jmetal.operator.selection import BinaryTournamentSelection, BinaryTournament2Selection
-from jmetal.problem.multiobjective.zdt import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
-from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, SolutionAttributeComparator
+from jmetal.operator.selection import BinaryTournament2Selection
+from jmetal.problem.multiobjective.zdt import ZDT4
+from jmetal.util.comparator import SolutionAttributeComparator
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

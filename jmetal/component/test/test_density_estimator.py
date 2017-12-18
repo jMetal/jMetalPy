@@ -1,6 +1,5 @@
 import unittest
 
-import pytest
 from jmetal.component.density_estimator import CrowdingDistance
 from jmetal.core.solution import Solution
 

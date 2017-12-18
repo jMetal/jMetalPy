@@ -1,5 +1,5 @@
-import unittest
 import os
+import unittest
 
 from jmetal.core.solution import FloatSolution
 from jmetal.util.graphic import ScatterPlot

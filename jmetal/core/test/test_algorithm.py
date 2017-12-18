@@ -1,5 +1,4 @@
 import logging
-import unittest
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

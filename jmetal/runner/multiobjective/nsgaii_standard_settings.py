@@ -5,12 +5,9 @@ from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
-from jmetal.operator.selection import BinaryTournamentSelection, BinaryTournament2Selection
-from jmetal.problem.multiobjective.constrained import Srinivas
-from jmetal.problem.multiobjective.dtlz import DTLZ1
-from jmetal.problem.multiobjective.unconstrained import Kursawe, Schaffer, Fonseca, Viennet2
+from jmetal.operator.selection import BinaryTournament2Selection
 from jmetal.problem.multiobjective.zdt import ZDT1
-from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, SolutionAttributeComparator
+from jmetal.util.comparator import SolutionAttributeComparator
 from jmetal.util.solution_list_output import SolutionListOutput
 
 logging.basicConfig(level=logging.INFO)
@@ -26,7 +23,7 @@ def main() -> None:
         mutation=Polynomial(1.0/problem.number_of_variables, distribution_index=20),
         crossover=SBX(1.0, distribution_index=20),
         #selection=BinaryTournamentSelection(RankingAndCrowdingDistanceComparator()))
-        selection = BinaryTournament2([SolutionAttributeComparator("dominance_ranking"),
+        selection = BinaryTournament2Selection([SolutionAttributeComparator("dominance_ranking"),
                                    SolutionAttributeComparator("crowding_distance", lowest_is_best=False)]))
 
     algorithm.run()

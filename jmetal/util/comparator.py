@@ -1,6 +1,6 @@
-from jmetal.core.solution import Solution
+from typing import TypeVar
 
-from typing import TypeVar, Generic, List
+from jmetal.core.solution import Solution
 
 S = TypeVar('S')
 

@@ -1,4 +1,5 @@
 import unittest
+
 import numpy
 
 from jmetal.algorithm.multiobjective.smpso import SMPSO

@@ -2,9 +2,9 @@ import unittest
 
 from hamcrest import *
 
-from jmetal.core import solution
 from jmetal.core.solution import Solution
-from jmetal.operator.selection import BinaryTournamentSelection, BestSolutionSelection, RandomSolutionSelection, NaryRandomSolutionSelection, \
+from jmetal.operator.selection import BinaryTournamentSelection, BestSolutionSelection, RandomSolutionSelection, \
+    NaryRandomSolutionSelection, \
     RankingAndCrowdingDistanceSelection, BinaryTournament2Selection
 from jmetal.util.comparator import Comparator, SolutionAttributeComparator
 

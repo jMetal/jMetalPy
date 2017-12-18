@@ -3,8 +3,8 @@ import threading
 import time
 from typing import TypeVar, Generic, List
 
-from jmetal.core.solution import FloatSolution
 from jmetal.component.evaluator import Evaluator, SequentialEvaluator
+from jmetal.core.solution import FloatSolution
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

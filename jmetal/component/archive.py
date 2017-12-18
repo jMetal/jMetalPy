@@ -1,8 +1,7 @@
 from typing import TypeVar, Generic, List
 
 from jmetal.component.density_estimator import CrowdingDistance
-from jmetal.util.comparator import DominanceComparator, EqualSolutionsComparator, Comparator, \
-    SolutionAttributeComparator
+from jmetal.util.comparator import DominanceComparator, EqualSolutionsComparator, SolutionAttributeComparator
 
 S = TypeVar('S')
 

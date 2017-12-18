@@ -1,18 +1,17 @@
+from copy import copy
 from random import Random
 from typing import TypeVar, List
-from copy import copy
+
+import numpy
 
 from jmetal.component.archive import BoundedArchive
 from jmetal.component.evaluator import Evaluator, SequentialEvaluator
-from jmetal.core.solution import FloatSolution
-
 from jmetal.core.algorithm import ParticleSwarmOptimization
 from jmetal.core.operator import Mutation
-from jmetal.core.problem import Problem, FloatProblem
+from jmetal.core.problem import FloatProblem
+from jmetal.core.solution import FloatSolution
 from jmetal.util.comparator import DominanceComparator
 from jmetal.util.observable import Observable, DefaultObservable
-
-import numpy
 
 R = TypeVar('R')
 
