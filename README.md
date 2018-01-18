@@ -35,9 +35,10 @@ $ pip install -r requirements.txt
 # History
 See [CHANGELOG](CHANGELOG.md) for full version history.
 
-## Last changes (December 18th 2017)
+## Last changes (January 18th 2018)
 * (Fix) Search solution in `ScatterPlot()` now return only one solution object (as intended).
 * Added class `ParallelEvaluator` (Contribution of Michael Cipold)
+* Fixed a bug in class `DominanceComparator`
 
 # Contributing
 Please read [CONTRIBUTING](CONTRIBUTING.md) for details on how to contribute to the project.
