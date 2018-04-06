@@ -1,5 +1,7 @@
 # jMetalPy: Python version of the jMetal framework
 [![Build Status](https://travis-ci.org/jMetal/jMetalPy.svg?branch=master)](https://travis-ci.org/jMetal/jMetalPy)
+[![PyPI](https://img.shields.io/pypi/l/jMetalPy.svg)]()
+[![PyPI](https://img.shields.io/pypi/v/jMetalPy.svg)]()
 
 > jMetalPy is currently under heavy development!  
 
@@ -11,12 +13,11 @@ Any ideas about how the structure the project, coding style, useful tools (I'm u
 
 ---
 
-
 # Table of Contents
 - [Usage](#usage)
 	- [Dependencies](#dependencies)
 - [History](#history)
-	- [Last changes (July 11th 2017)](#last-changes-july-11th-2017)
+	- [Last changes (December 18th 2017)](#last-changes-december-18th-2017)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -31,12 +32,13 @@ $ git clone https://github.com/jMetal/jMetalPy.git
 $ pip install -r requirements.txt
 ```
 
-
 # History
 See [CHANGELOG](CHANGELOG.md) for full version history.
 
-## Last changes (July 11th 2017)
-* Now It's possible to get to directly access the coords (x,y) of a point in a live plot by a mouse click. Note: This still needs some changes in order to work properly.
+## Last changes (January 18th 2018)
+* (Fix) Search solution in `ScatterPlot()` now return only one solution object (as intended).
+* Added class `ParallelEvaluator` (Contribution of Michael Cipold)
+* Fixed a bug in class `DominanceComparator`
 
 # Contributing
 Please read [CONTRIBUTING](CONTRIBUTING.md) for details on how to contribute to the project.

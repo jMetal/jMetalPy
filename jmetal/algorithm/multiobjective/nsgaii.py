@@ -1,7 +1,7 @@
 from typing import TypeVar, List
 
 from jmetal.algorithm.singleobjective.evolutionaryalgorithm import GenerationalGeneticAlgorithm
-from jmetal.component.evaluator import SequentialEvaluator
+from jmetal.component.evaluator import SequentialEvaluator, Evaluator
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
 from jmetal.operator.selection import RankingAndCrowdingDistanceSelection
@@ -19,7 +19,8 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
                  mutation: Mutation[S],
                  crossover: Crossover[S, S],
                  selection: Selection[List[S], S],
-                 observable: Observable = DefaultObservable()):
+                 observable: Observable = DefaultObservable(),
+                 evaluator: Evaluator[S] = SequentialEvaluator[S]()):
         super(NSGAII, self).__init__(
             problem,
             population_size,
@@ -27,7 +28,8 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
             mutation,
             crossover,
             selection,
-            observable)
+            observable,
+            evaluator)
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[TypeVar('S')]]:
         join_population = population + offspring_population

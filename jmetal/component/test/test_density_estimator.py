@@ -1,17 +1,13 @@
 import unittest
 
-import pytest
-
 from jmetal.component.density_estimator import CrowdingDistance
 from jmetal.core.solution import Solution
 
 
 class CrowdingDistanceTestCases(unittest.TestCase):
-
     def setUp(self):
         self.crowding = CrowdingDistance()
 
-    @pytest.fixture
     def test_should_the_crowding_distance_of_an_empty_set_do_nothing(self):
         solution_list = []
         self.crowding.compute_density_estimator(solution_list)

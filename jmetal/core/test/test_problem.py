@@ -26,8 +26,8 @@ class FloatProblemTestCases(unittest.TestCase):
         self.assertEqual(1, problem.number_of_variables)
         self.assertEqual(2, problem.number_of_objectives)
         self.assertEqual(0, problem.number_of_constraints)
-        self.assertEquals([-1], problem.lower_bound)
-        self.assertEquals([1], problem.upper_bound)
+        self.assertEqual([-1], problem.lower_bound)
+        self.assertEqual([1], problem.upper_bound)
 
     def test_should_create_solution_create_a_valid_solution(self) -> None:
         problem = FloatProblem()
@@ -56,8 +56,8 @@ class IntegerProblemTestCases(unittest.TestCase):
         self.assertEqual(1, problem.number_of_variables)
         self.assertEqual(2, problem.number_of_objectives)
         self.assertEqual(0, problem.number_of_constraints)
-        self.assertEquals([-1], problem.lower_bound)
-        self.assertEquals([1], problem.upper_bound)
+        self.assertEqual([-1], problem.lower_bound)
+        self.assertEqual([1], problem.upper_bound)
 
     def test_should_create_solution_create_a_valid_solution(self) -> None:
         problem = FloatProblem()

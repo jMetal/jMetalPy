@@ -3,10 +3,8 @@ import threading
 import time
 from typing import TypeVar, Generic, List
 
-from jmetal.core.solution import FloatSolution
-
 from jmetal.component.evaluator import Evaluator, SequentialEvaluator
-from jmetal.util.time import get_time_of_execution
+from jmetal.core.solution import FloatSolution
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -24,7 +22,7 @@ class Algorithm(Generic[S, R], threading.Thread):
         self.total_computing_time: int = 0
 
     def get_name(self) -> str:
-        pass
+        return type(self).__name__
 
     def get_evaluations(self) -> int:
         return self.evaluations
@@ -66,7 +64,6 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
     def get_result(self) -> R:
         pass
 
-    @get_time_of_execution
     def run(self):
         """
         Step One: Generate the initial population of individuals randomly. (First generation)
@@ -94,7 +91,7 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
         self.total_computing_time = self.get_current_computing_time()
 
 
-class ParticleSwarmOptimization(Algorithm[FloatSolution, R]):
+class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]]):
     def __init__(self):
         super(ParticleSwarmOptimization, self).__init__()
         self.swarm = []
@@ -108,31 +105,34 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, R]):
     def is_stopping_condition_reached(self) -> bool:
         pass
 
-    def evaluate_swarm(self, swarm: List[S]) -> List[S]:
+    def create_initial_swarm(self) -> List[FloatSolution]:
         pass
 
-    def initialize_global_best(self, swarm: List[S]) -> None:
+    def evaluate_swarm(self, swarm: List[FloatSolution]) -> List[FloatSolution]:
         pass
 
-    def initialize_particle_best(self, swarm: List[S]) -> None:
+    def initialize_global_best(self, swarm: List[FloatSolution]) -> None:
         pass
 
-    def initialize_velocity(self, swarm: List[S]) -> None:
+    def initialize_particle_best(self, swarm: List[FloatSolution]) -> None:
         pass
 
-    def update_velocity(self, swarm: List[S]) -> None:
+    def initialize_velocity(self, swarm: List[FloatSolution]) -> None:
         pass
 
-    def update_position(self, swarm: List[S]) -> None:
+    def update_velocity(self, swarm: List[FloatSolution]) -> None:
         pass
 
-    def perturbation(self, swarm: List[S]) -> None:
+    def update_position(self, swarm: List[FloatSolution]) -> None:
         pass
 
-    def update_global_best(self, swarm: List[S]) -> None:
+    def perturbation(self, swarm: List[FloatSolution]) -> None:
         pass
 
-    def update_particle_best(self, swarm: List[S]) -> None:
+    def update_global_best(self, swarm: List[FloatSolution]) -> None:
+        pass
+
+    def update_particle_best(self, swarm: List[FloatSolution]) -> None:
         pass
 
     def get_result(self) -> R:
@@ -144,7 +144,7 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, R]):
         self.start_computing_time = time.time()
 
         self.swarm = self.create_initial_swarm()
-        self.swarm = self.evaluate_swarm(self.population)
+        self.swarm = self.evaluate_swarm(self.swarm)
         self.initialize_velocity(self.swarm)
         self.initialize_particle_best(self.swarm)
         self.initialize_global_best(self.swarm)

@@ -1,12 +1,12 @@
 import unittest
 
 from jmetal.core.solution import Solution
-from jmetal.util.ranking import DominanceRanking
+from jmetal.util.ranking import FastNonDominatedRanking
 
 
-class DominanceRankingTestCases(unittest.TestCase):
+class FastNonDominatedRankingTestCases(unittest.TestCase):
     def setUp(self):
-        self.ranking = DominanceRanking()
+        self.ranking = FastNonDominatedRanking()
 
     def test_should_constructor_create_a_valid_object(self):
         self.assertIsNotNone(self.ranking)
@@ -105,6 +105,7 @@ class DominanceRankingTestCases(unittest.TestCase):
         self.assertEqual(solution3, ranking[0][2])
         self.assertEqual(solution4, ranking[1][0])
         self.assertEqual(solution5, ranking[1][1])
+
 
 if __name__ == "__main__":
     unittest.main()

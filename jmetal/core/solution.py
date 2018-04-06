@@ -1,7 +1,5 @@
 from typing import List, Generic, TypeVar
 
-__author__ = "Antonio J. Nebro"
-
 BitSet = List[bool]
 S = TypeVar('S')
 
@@ -11,7 +9,7 @@ class Solution(Generic[S]):
 
     def __init__(self, number_of_variables : int, number_of_objectives : int, number_of_constraints = 0):
         self.number_of_objectives: int = number_of_objectives
-        self.number_of_variables:int = number_of_variables
+        self.number_of_variables: int = number_of_variables
         self.number_of_constraints: int = number_of_constraints
         self.objectives = [0.0 for x in range(self.number_of_objectives)]
         self.variables = [[] for x in range(self.number_of_variables)]

@@ -29,7 +29,7 @@ class OneMax(BinaryProblem):
             [True if random.randint(0, 1) == 0 else False for i in range(self.number_of_bits)]
         return new_solution
 
-    def get_name(self):
+    def get_name(self) -> str:
         return "OneMax"
 
 
@@ -52,5 +52,5 @@ class Sphere(FloatProblem):
 
         solution.objectives[0] = total
 
-    def get_name(self):
+    def get_name(self) -> str:
         return "Sphere"

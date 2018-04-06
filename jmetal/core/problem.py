@@ -1,6 +1,7 @@
 import random
 from typing import Generic, TypeVar
 
+import jmetal
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
 
 __author__ = "Antonio J. Nebro"
@@ -12,11 +13,19 @@ class Problem(Generic[S]):
     """ Class representing problems """
 
     def __init__(self):
+        self.objectives = [jmetal.core.objective.Objective]
         self.number_of_variables: int = None
         self.number_of_objectives: int = None
         self.number_of_constraints: int = None
 
     def evaluate(self, solution: S) -> None:
+        for i in range(self.number_of_objectives):
+            if self.objectives[i].is_a_minimization_objective():
+                solution.objectives[i] = self.objectives[i].compute(solution, self)
+            else:
+                solution.objectives[i] = -1.0 * self.objectives[i].compute(solution, self)
+
+    def evaluate_constraints(self, solution: S):
         pass
 
     def create_solution(self) -> S:
@@ -38,12 +47,10 @@ class BinaryProblem(Problem[BinarySolution]):
 
 class FloatProblem(Problem[FloatSolution]):
     """ Class representing float problems """
+
     def __init__(self):
         self.lower_bound : [] = None
         self.upper_bound : [] = None
-
-    def evaluate(self, solution: FloatSolution) -> None:
-        pass
 
     def create_solution(self) -> FloatSolution:
         new_solution = FloatSolution(self.number_of_variables, self.number_of_objectives, self.number_of_constraints,
@@ -59,9 +66,6 @@ class IntegerProblem(Problem[IntegerSolution]):
     def __init__(self):
         self.lower_bound : [] = None
         self.upper_bound : [] = None
-
-    def evaluate(self, solution: IntegerSolution) -> None:
-        pass
 
     def create_solution(self) -> IntegerSolution:
         new_solution = IntegerSolution(

@@ -2,10 +2,10 @@ import unittest
 
 from hamcrest import *
 
-from jmetal.core import solution
 from jmetal.core.solution import Solution
-from jmetal.operator.selection import BinaryTournament, BestSolution, RandomSolution, NaryRandomSolution, \
-    RankingAndCrowdingDistanceSelection, BinaryTournament2
+from jmetal.operator.selection import BinaryTournamentSelection, BestSolutionSelection, RandomSolutionSelection, \
+    NaryRandomSolutionSelection, \
+    RankingAndCrowdingDistanceSelection, BinaryTournament2Selection
 from jmetal.util.comparator import Comparator, SolutionAttributeComparator
 
 __author__ = "Antonio J. Nebro"
@@ -13,7 +13,7 @@ __author__ = "Antonio J. Nebro"
 
 class BinaryTournamentTestCases(unittest.TestCase):
     def setUp(self):
-        self.selection = BinaryTournament[Solution]()
+        self.selection = BinaryTournamentSelection[Solution]()
 
     def test_should_constructor_create_a_non_null_object(self):
         self.assertIsNotNone(self.selection)
@@ -57,7 +57,7 @@ class BinaryTournamentTestCases(unittest.TestCase):
 
 class BestSolutionSelectionTestCases(unittest.TestCase):
     def setUp(self):
-        self.selection = BestSolution[Solution]()
+        self.selection = BestSolutionSelection[Solution]()
 
     def test_should_constructor_create_a_non_null_object(self):
         self.assertIsNotNone(self.selection)
@@ -119,7 +119,7 @@ class BestSolutionSelectionTestCases(unittest.TestCase):
 class RandomSolutionSelectionTestCases(unittest.TestCase):
 
     def setUp(self):
-        self.selection = RandomSolution[Solution]()
+        self.selection = RandomSolutionSelection[Solution]()
 
     def test_should_constructor_create_a_non_null_object(self):
         self.assertIsNotNone(self.selection)
@@ -182,40 +182,40 @@ class NaryRandomSolutionSelectionTestCases(unittest.TestCase):
         pass
 
     def test_should_constructor_create_a_non_null_object(self):
-        selection = NaryRandomSolution[Solution]()
+        selection = NaryRandomSolutionSelection[Solution]()
         self.assertIsNotNone(selection)
 
     def test_should_constructor_create_a_non_null_object_and_check_number_of_elements(self):
-        selection = NaryRandomSolution[Solution](3)
+        selection = NaryRandomSolutionSelection[Solution](3)
         self.assertEqual(selection.number_of_solutions_to_be_returned, 3)
 
     def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_none(self):
-        selection = NaryRandomSolution[Solution]()
+        selection = NaryRandomSolutionSelection[Solution]()
         solution_list = None
         with self.assertRaises(Exception):
             selection.execute(solution_list)
 
     def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_empty(self):
-        selection = NaryRandomSolution[Solution]()
+        selection = NaryRandomSolutionSelection[Solution]()
         solution_list = []
         with self.assertRaises(Exception):
            selection.execute(solution_list)
 
     def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_smaller_than_required(self):
-        selection = NaryRandomSolution[Solution](4)
+        selection = NaryRandomSolutionSelection[Solution](4)
         solution_list = [Solution(1,1), Solution(1,1)]
         with self.assertRaises(Exception):
            selection.execute(solution_list)
 
     def test_should_execute_return_the_solution_in_a_list_with_one_solution(self):
-        selection = NaryRandomSolution[Solution](1)
+        selection = NaryRandomSolutionSelection[Solution](1)
         solution = Solution(3,2)
         solution_list = [solution]
 
         self.assertEqual([solution], selection.execute(solution_list))
 
     def test_should_execute_work_if_the_solution_list_contains_two_non_dominated_solutions(self):
-        selection = NaryRandomSolution[Solution](2)
+        selection = NaryRandomSolutionSelection[Solution](2)
         solution1 = Solution(2,2)
         solution1.objectives = [1.0, 2.0]
         solution2 = Solution(2,2)
@@ -228,7 +228,7 @@ class NaryRandomSolutionSelectionTestCases(unittest.TestCase):
         self.assertTrue(selection_result[1] in solution_list)
 
     def test_should_execute_work_if_the_solution_list_contains_five_solutions_and_one_them_is_dominated(self):
-        selection = NaryRandomSolution[Solution](1)
+        selection = NaryRandomSolutionSelection[Solution](1)
         solution1 = Solution(2,2)
         solution1.objectives = [1.0, 4.0]
         solution2 = Solution(2,2)
@@ -285,24 +285,24 @@ class DominanceRankingTestCases(unittest.TestCase):
 class BinaryTournament2TestCases(unittest.TestCase):
 
     def test_should_constructor_create_a_non_null_object(self):
-        selection = BinaryTournament2[Solution]([])
+        selection = BinaryTournament2Selection[Solution]([])
 
         self.assertIsNotNone(selection)
 
     def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_none(self):
         solution_list = None
-        selection = BinaryTournament2[Solution]([])
+        selection = BinaryTournament2Selection[Solution]([])
         with self.assertRaises(Exception):
             selection.execute(solution_list)
 
     def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_empty(self):
         solution_list = []
-        selection = BinaryTournament2[Solution]([])
+        selection = BinaryTournament2Selection[Solution]([])
         with self.assertRaises(Exception):
             selection.execute(solution_list)
 
     def test_should_operator_raise_an_exception_if_the_list_of_comparators_is_empty(self):
-        selection = BinaryTournament2[Solution]([])
+        selection = BinaryTournament2Selection[Solution]([])
         solution1 = Solution(2, 2)
         solution2 = Solution(2, 2)
 
@@ -314,7 +314,7 @@ class BinaryTournament2TestCases(unittest.TestCase):
     def test_should_execute_return_the_solution_in_a_list_with_one_solution(self):
         solution = Solution(3,2)
         solution_list = [solution]
-        selection = BinaryTournament2[Solution]([Comparator()])
+        selection = BinaryTournament2Selection[Solution]([Comparator()])
 
         self.assertEqual(solution, selection.execute(solution_list))
 
@@ -328,7 +328,7 @@ class BinaryTournament2TestCases(unittest.TestCase):
         solution2.attributes["dominance_ranking"] = 1
 
         solution_list = [solution1, solution2]
-        operator = BinaryTournament2[Solution]([SolutionAttributeComparator("key")])
+        operator = BinaryTournament2Selection[Solution]([SolutionAttributeComparator("key")])
         selection1 = operator.execute(solution_list)
         selection2 = operator.execute(solution_list)
 

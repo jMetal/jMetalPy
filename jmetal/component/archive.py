@@ -1,8 +1,7 @@
 from typing import TypeVar, Generic, List
 
 from jmetal.component.density_estimator import CrowdingDistance
-from jmetal.util.comparator import DominanceComparator, EqualSolutionsComparator, Comparator, \
-    SolutionAttributeComparator
+from jmetal.util.comparator import DominanceComparator, EqualSolutionsComparator, SolutionAttributeComparator
 
 S = TypeVar('S')
 
@@ -23,6 +22,9 @@ class Archive(Generic[S]):
     def size(self) -> int:
         return len(self.solution_list)
 
+    def get_comparator(self):
+        pass
+
 
 class BoundedArchive(Archive[S]):
     def __init__(self, maximum_size: int):
@@ -42,6 +44,7 @@ class BoundedArchive(Archive[S]):
 class NonDominatedSolutionListArchive(Archive[S]):
     def __init__(self):
         super(NonDominatedSolutionListArchive, self).__init__()
+        self.comparator = DominanceComparator()
 
     def add(self, solution:S) -> bool:
         is_dominated = False
@@ -55,7 +58,7 @@ class NonDominatedSolutionListArchive(Archive[S]):
 
             # New copy of list and enumerate
             for index, current_solution in enumerate(list(self.solution_list)):
-                is_dominated_flag = DominanceComparator().compare(solution, current_solution)
+                is_dominated_flag = self.comparator.compare(solution, current_solution)
                 if is_dominated_flag == -1:
                     del self.solution_list[index-number_of_deleted_solutions]
                     number_of_deleted_solutions += 1
@@ -72,6 +75,9 @@ class NonDominatedSolutionListArchive(Archive[S]):
             return True
 
         return False
+
+    def get_comparator(self):
+        return self.comparator
 
 
 class CrowdingDistanceArchive(BoundedArchive[S]):
@@ -109,4 +115,5 @@ class CrowdingDistanceArchive(BoundedArchive[S]):
 
         return worst_solution
 
-
+    def get_comparator(self):
+        return self.__comparator
