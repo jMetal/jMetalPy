@@ -2,5 +2,16 @@ language: python
 python: '3.6'
 install: pip install -r requirements.txt
 script: python -m unittest discover
-dd:
-  secure: pJhh2ZwuDaMELZO7kmNGWa7sRaUi6s4By4GdBxf1hPjIBkB0GkOGHKxuivnWitAYLbmzpSoMcp2rHETcRiSqYTPlyovLA8A7YpY1HXIcNBrrmqnOpzc9bN3Ka90HMu0ySw2uYZgaQ2neFMm5CvD6W47IG0UUaFPYl68aZ8lEe8t7Tea7kFLU4UgXZxp3BXLTHF7xx7V29Ba5aKv2/RXU4vGCFstMNhgIZ+2xyIb82KspV2ZiEmYEqAvwJIuxEdsvBMeEqrgt239Nua5Elp5WqyfFflTChHZIovjckqw+Vxl+ReB+LxwhhjffM1kFKwZaGxctu+ubsKwGs7JPkfV2YRQTpwdpI8nuG5zVYWN23OBy/MqaCH0DjSJDVIO45VliO5aRhVka3iRxU3mtZwuXoO/GOHg1mBSRyW0VoY2MrvgX2yl8zPG+O/Cv2fHFQBWaG/TO9200eGuZcJIZYG/0M1KOn6h+X1Ga6eSfsuF/QWO4/888prokwCYVpa4Zzo0WdR/obE3uuisTQLh+FU3sOmgdX8t3ijXkPp1WxONc0HQAIBrL1kvSp5wTeuOLNgIuvSSxj21MBN3Pq7nxmK3pAdBQyZBbk4ttSiVH5o/D4wZGlGUYg0WLsGfFsYidN3DfXkDSH0UyI3qwDf9SkoxEt/RIZBIun9GFSQ0FmXJ7GAM=
+branches:
+  only:
+  - master
+  - /.*/
+deploy:
+ provider: pypi
+ skip_cleanup: true
+ user: ajnebro
+ distributions: sdist bdist_wheel
+ password:
+   secure: "pJhh2ZwuDaMELZO7kmNGWa7sRaUi6s4By4GdBxf1hPjIBkB0GkOGHKxuivnWitAYLbmzpSoMcp2rHETcRiSqYTPlyovLA8A7YpY1HXIcNBrrmqnOpzc9bN3Ka90HMu0ySw2uYZgaQ2neFMm5CvD6W47IG0UUaFPYl68aZ8lEe8t7Tea7kFLU4UgXZxp3BXLTHF7xx7V29Ba5aKv2"
+ on:
+   branch: master
