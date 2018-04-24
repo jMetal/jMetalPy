@@ -24,7 +24,7 @@ class Kursawe(FloatProblem):
 
     def evaluate(self, solution: FloatSolution):
         fx = [0.0 for _ in range(self.number_of_objectives)]
-        for i in range(self.number_of_variables):
+        for i in range(self.number_of_variables - 1):
             xi = solution.variables[i] * solution.variables[i]
             xj = solution.variables[i + 1] * solution.variables[i + 1]
             aux = -0.2 * sqrt(xi + xj)
