@@ -1,7 +1,6 @@
 from math import pi, cos, atan
 
 """ Unconstrained Test problems for multi-objective optimization """
-from jmetal.core.objective import Objective
 from jmetal.core.solution import FloatSolution
 
 from jmetal.core.problem import FloatProblem
@@ -10,37 +9,28 @@ from jmetal.core.problem import FloatProblem
 class Srinivas(FloatProblem):
     """ Class representing problem Srinivas """
     def __init__(self):
-        self.objectives = [self.Objective1(), self.Objective2()]
-
-        self.number_of_objectives = len(self.objectives)
+        self.number_of_objectives = 2
         self.number_of_variables = 2
         self.number_of_constraints = 2
 
-        self.lower_bound = [-20.0 for i in range(self.number_of_variables)]
-        self.upper_bound = [20.0 for i in range(self.number_of_variables)]
+        self.lower_bound = [-20.0 for _ in range(self.number_of_variables)]
+        self.upper_bound = [20.0 for _ in range(self.number_of_variables)]
 
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
+    def evaluate(self, solution: FloatSolution):
+        x1 = solution.variables[0]
+        x2 = solution.variables[1]
+
+        solution.objectives[0] = 2.0 + (x1 - 2.0) * (x1 - 2.0) + (x2 - 1.0) * (x2 - 1.0)
+        solution.objectives[1] = 9.0 * x1 - (x2 - 1.0) * (x2 - 1.0)
+
     def get_name(self):
         return "Srinivas"
 
-    class Objective1(Objective):
-        def compute(self, solution: FloatSolution, problem: FloatProblem):
-            x1 = solution.variables[0]
-            x2 = solution.variables[1]
-
-            return 2.0 + (x1 - 2.0) * (x1 - 2.0) + (x2 - 1.0) * (x2 - 1.0)
-
-    class Objective2(Objective):
-        def compute(self, solution: FloatSolution, problem: FloatProblem):
-            x1 = solution.variables[0]
-            x2 = solution.variables[1]
-
-            return 9.0 * x1 - (x2 - 1.0) * (x2 - 1.0)
-
     def evaluate_constraints(self, solution: FloatSolution) -> None:
-        constraints : [float] = [0.0 for x in range(self.number_of_constraints)]
+        constraints : [float] = [0.0 for _ in range(self.number_of_constraints)]
 
         x1 = solution.variables[0]
         x2 = solution.variables[1]
@@ -63,28 +53,19 @@ class Srinivas(FloatProblem):
 class Tanaka(FloatProblem):
     """ Class representing problem Tanaka """
     def __init__(self):
-        self.objectives = [self.Objective1(), self.Objective2()]
-
-        self.number_of_objectives = len(self.objectives)
+        self.number_of_objectives = 2
         self.number_of_variables = 2
         self.number_of_constraints = 2
 
-        self.lower_bound = [10e-5 for i in range(self.number_of_variables)]
-        self.upper_bound = [pi for i in range(self.number_of_variables)]
+        self.lower_bound = [10e-5 for _ in range(self.number_of_variables)]
+        self.upper_bound = [pi for _ in range(self.number_of_variables)]
 
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def get_name(self):
-        return "Tanaka"
-
-    class Objective1(Objective):
-        def compute(self, solution: FloatSolution, problem: FloatProblem):
-            return solution.variables[0]
-
-    class Objective2(Objective):
-        def compute(self, solution: FloatSolution, problem: FloatProblem):
-            return solution.variables[1]
+    def evaluate(self, solution: FloatSolution):
+        solution.objectives[0] = solution.variables[0]
+        solution.objectives[1] = solution.variables[1]
 
     def evaluate_constraints(self, solution: FloatSolution) -> None:
         constraints : [float] = [0.0 for x in range(self.number_of_constraints)]
@@ -105,4 +86,7 @@ class Tanaka(FloatProblem):
 
         solution.attributes["overall_constraint_violation"] = overall_constraint_violation
         solution.attributes["number_of_violated_constraints"] = number_of_violated_constraints
+
+    def get_name(self):
+        return "Tanaka"
 

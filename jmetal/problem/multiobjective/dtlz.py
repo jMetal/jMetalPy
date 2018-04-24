@@ -25,7 +25,6 @@
 
 from math import pi, cos
 
-from jmetal.core.objective import Objective
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 
@@ -46,8 +45,6 @@ class DTLZ1(FloatProblem):
 
         :param number_of_variables: number of decision variables of the problem
         """
-        self.objectives = [self.Dtlz1Objective() for i in range(number_of_objectives)]
-
         self.number_of_variables = number_of_variables
         self.number_of_objectives = number_of_objectives
         self.number_of_constraints = 0
@@ -57,10 +54,6 @@ class DTLZ1(FloatProblem):
 
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
-
-    class Dtlz1Objective(Objective):
-        def is_a_minimization_objective(self):
-            return True
 
     def evaluate(self, solution: FloatSolution):
         g = 0.0
@@ -83,5 +76,3 @@ class DTLZ1(FloatProblem):
 
     def get_name(self):
         return "DTLZ1"
-
-

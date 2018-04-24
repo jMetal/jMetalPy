@@ -232,5 +232,6 @@ class ZDT6TestCases(unittest.TestCase):
         problem = ZDT6()
         self.assertEqual("ZDT6", problem.get_name())
 
+
 if __name__ == '__main__':
     unittest.main()
