@@ -1,14 +1,16 @@
 from math import pi, cos, atan
 
-""" Unconstrained Test problems for multi-objective optimization """
 from jmetal.core.solution import FloatSolution
-
 from jmetal.core.problem import FloatProblem
+
+""" Unconstrained Test problems for multi-objective optimization """
 
 
 class Srinivas(FloatProblem):
     """ Class representing problem Srinivas """
+
     def __init__(self):
+        super().__init__()
         self.number_of_objectives = 2
         self.number_of_variables = 2
         self.number_of_constraints = 2
@@ -52,7 +54,9 @@ class Srinivas(FloatProblem):
 
 class Tanaka(FloatProblem):
     """ Class representing problem Tanaka """
+
     def __init__(self):
+        super().__init__()
         self.number_of_objectives = 2
         self.number_of_variables = 2
         self.number_of_constraints = 2
@@ -68,7 +72,7 @@ class Tanaka(FloatProblem):
         solution.objectives[1] = solution.variables[1]
 
     def evaluate_constraints(self, solution: FloatSolution) -> None:
-        constraints : [float] = [0.0 for x in range(self.number_of_constraints)]
+        constraints : [float] = [0.0 for _ in range(self.number_of_constraints)]
 
         x1 = solution.variables[0]
         x2 = solution.variables[1]
@@ -89,4 +93,3 @@ class Tanaka(FloatProblem):
 
     def get_name(self):
         return "Tanaka"
-

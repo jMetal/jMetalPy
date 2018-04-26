@@ -139,8 +139,6 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]]):
         pass
 
     def run(self):
-        """
-        """
         self.start_computing_time = time.time()
 
         self.swarm = self.create_initial_swarm()

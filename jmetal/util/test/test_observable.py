@@ -52,13 +52,14 @@ class ObservableTestCases(unittest.TestCase):
 
         self.assertEqual(0, len(self.observable.observers))
 
-"""
+    """
     def test_should_notify_all_update_an_observer(self):
         observer = mock(Observer)
         self.observable.register(observer)
 
         self.observable.notify_all("color", "blue")
-"""
+    """
+
 
 if __name__ == "__main__":
     unittest.main()

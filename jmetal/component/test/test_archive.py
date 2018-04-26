@@ -27,7 +27,6 @@ class BoundedArchiveTestCases(unittest.TestCase):
 
 
 class NonDominatedSolutionListArchiveTestCases(unittest.TestCase):
-
     def setUp(self):
         self.archive = NonDominatedSolutionListArchive[Solution]()
 

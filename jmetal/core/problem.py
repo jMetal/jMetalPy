@@ -1,7 +1,6 @@
 import random
 from typing import Generic, TypeVar
 
-import jmetal
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
 
 __author__ = "Antonio J. Nebro"
@@ -13,7 +12,6 @@ class Problem(Generic[S]):
     """ Class representing problems """
 
     def __init__(self):
-        self.objectives = [jmetal.core.objective.Objective]
         self.number_of_variables: int = None
         self.number_of_objectives: int = None
         self.number_of_constraints: int = None
@@ -45,6 +43,7 @@ class FloatProblem(Problem[FloatSolution]):
     """ Class representing float problems """
 
     def __init__(self):
+        super().__init__()
         self.lower_bound : [] = None
         self.upper_bound : [] = None
 
@@ -59,7 +58,9 @@ class FloatProblem(Problem[FloatSolution]):
 
 class IntegerProblem(Problem[IntegerSolution]):
     """ Class representing integer problems """
+
     def __init__(self):
+        super().__init__()
         self.lower_bound : [] = None
         self.upper_bound : [] = None
 

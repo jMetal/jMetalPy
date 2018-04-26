@@ -19,7 +19,8 @@ def main() -> None:
         swarm_size=100,
         max_evaluations=25000,
         mutation=Polynomial(probability=1.0/problem.number_of_variables, distribution_index=20),
-        leaders=CrowdingDistanceArchive(100))
+        leaders=CrowdingDistanceArchive(100)
+    )
 
     observer = AlgorithmObserver(animation_speed=1*10e-8)
     algorithm.observable.register(observer=observer)
