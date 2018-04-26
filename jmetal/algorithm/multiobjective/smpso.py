@@ -30,7 +30,7 @@ class SMPSO(ParticleSwarmOptimization):
         self.problem = problem
         self.swarm_size = swarm_size
         self.max_evaluations = max_evaluations
-        self.mutation: Mutation[FloatSolution] = mutation
+        self.mutation = mutation
         self.leaders = leaders
         self.observable = observable
         self.evaluator = evaluator
