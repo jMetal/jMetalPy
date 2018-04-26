@@ -1,42 +1,46 @@
+<p align="center">
+  <br/>
+  <img src=resources/jmetalpy.png alt="jMetalPy">
+  <br/>
+</p>
+
 # jMetalPy: Python version of the jMetal framework
-[![Build Status](https://travis-ci.org/jMetal/jMetalPy.svg?branch=master)](https://travis-ci.org/jMetal/jMetalPy)
-[![PyPI](https://img.shields.io/pypi/l/jMetalPy.svg)]()
-[![PyPI](https://img.shields.io/pypi/v/jMetalPy.svg)]()
+[![Build Status](https://img.shields.io/travis/jMetal/jMetalPy.svg?style=flat-square)](https://travis-ci.org/jMetal/jMetalPy)
+[![PyPI Version](https://img.shields.io/pypi/v/jMetalPy.svg?style=flat-square)]()
+[![PyPI License](https://img.shields.io/pypi/l/jMetalPy.svg?style=flat-square)]()
+[![PyPI Python version](https://img.shields.io/pypi/pyversions/jMetalPy.svg?style=flat-square)]()
 
 > jMetalPy is currently under heavy development!  
-
-I started a new project called jMetalPy in February 2017. The initial idea was not to write the whole jMetal proyect in Python but to use it as a practical study to learn that programming language, although due to the interest of some researchers the goal of an usable jMetal version in Python is an ongoing work.
-
-Any ideas about how the structure the project, coding style, useful tools (I'm using PyCharm), or links to related projects are welcome (see [CONTRIBUTING](https://github.com/jMetal/jMetalPy/blob/master/CONTRIBUTING.md)). The starting point is the jMetal architecture:
-
-![jMetal architecture](resources/jMetal5UML.png)
-
----
+> Any ideas about how the structure the project, coding style, useful tools or links to related projects are welcome (see [CONTRIBUTING](https://github.com/jMetal/jMetalPy/blob/master/CONTRIBUTING.md)). The starting point is the jMetal architecture:
+> ![jMetal architecture](resources/jMetal5UML.png)
 
 # Table of Contents
-- [Usage](#usage)
+- [Installation](#installation)
 	- [Dependencies](#dependencies)
-- [History](#history)
-	- [Last changes (July 17th 2017)](#last-changes-july-17th-2017)
+- [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
 
+# Installation
+To download jMetalPy just clone the Git repository hosted in GitHub:
+```bash
+$ git clone https://github.com/jMetal/jMetalPy.git
+$ python setup.py install
+```
 
-# Usage
-Examples of configuring and running all the included algorithms are located in the [jmetal.runner](https://github.com/jMetal/jMetalPy/tree/master/jmetal/runner) folder.
+Alternatively, you can install with `pip`:
+```bash
+$ pip install jmetalpy
+```
 
 ## Dependencies
 With Python 3.6 installed, run:
-```Bash
-$ git clone https://github.com/jMetal/jMetalPy.git
+```bash
 $ pip install -r requirements.txt
 ```
 
-# History
-See [CHANGELOG](CHANGELOG.md) for full version history.
-
-## Last changes (July 27th 2017)
-* (Fix) Search solution in `ScatterPlot()` now return only one solution object (as intended).
+# Usage
+Examples of configuring and running all the included algorithms are located in the [jmetalpy.runner](jmetal/runner) folder.
 
 # Contributing
 Please read [CONTRIBUTING](CONTRIBUTING.md) for details on how to contribute to the project.

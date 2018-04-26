@@ -1,4 +1,7 @@
 # History
+## Last changes (April 26th 2018)
+* Added [SMPSO](jmetal/algorithm/multiobjective/smpso.py).
+
 ## Last changes (July 21th 2017)
 * Added guide for using [cProfile](resources/pages/profiling.md).
 * Starting to implement [SMPSO](jmetal/algorithm/multiobjective/smpso.py).
