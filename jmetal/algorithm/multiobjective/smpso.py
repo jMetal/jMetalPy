@@ -16,6 +16,14 @@ from jmetal.util.observable import Observable, DefaultObservable
 
 R = TypeVar('R')
 
+"""
+.. module:: SMPSO
+   :platform: Unix, Windows
+   :synopsis: Implementation of SMPSO.
+
+.. moduleauthor:: Antonio Benítez-Hidalgo <antonio.b@uma.es>
+"""
+
 
 class SMPSO(ParticleSwarmOptimization):
     def __init__(self,
@@ -26,6 +34,22 @@ class SMPSO(ParticleSwarmOptimization):
                  leaders: BoundedArchive[FloatSolution],
                  observable: Observable = DefaultObservable(),
                  evaluator: Evaluator[FloatSolution] = SequentialEvaluator[FloatSolution]()):
+        """ This class implements the SMPSO algorithm described in
+
+        * SMPSO: A new PSO-based metaheuristic for multi-objective optimization
+        * MCDM 2009. DOI: `<http://dx.doi.org/10.1109/MCDM.2009.4938830/>`_.
+
+        The implementation of SMPSO provided in jMetalPy follows the
+        algorithm template described in the algorithm templates section (:mod:`algorithm`) of the documentation.
+
+        :param problem: The problem to solve.
+        :param swarm_size:
+        :param max_evaluations:
+        :param mutation:
+        :param leaders:
+        :param observable:
+        :param evaluator: An evaluator object to evaluate the solutions in the population.
+        """
         super(SMPSO, self).__init__()
         self.problem = problem
         self.swarm_size = swarm_size

@@ -10,6 +10,14 @@ from jmetal.util.observable import Observable, DefaultObservable
 S = TypeVar('S')
 R = TypeVar('R')
 
+"""
+.. module:: evolutionaryalgorithm
+   :platform: Unix, Windows
+   :synopsis: Implementation of Evolutionary Algorithms.
+
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+"""
+
 
 class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
     def __init__(self,
