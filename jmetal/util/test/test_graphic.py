@@ -40,13 +40,13 @@ class GraphicTestCases(unittest.TestCase):
 
         with self.assertRaises(Exception):
             plot.simple_plot(solution_list=solution_list, file_name="file", fmt="null", save=True)
-    """
 
     def test_should_raise_an_exception_when_updating_a_plot_that_doesnt_exist(self):
         plot = ScatterPlot(plot_title="title", animation_speed=1*10e-10)
 
         with self.assertRaises(Exception):
             plot.update(solution_list=None)
+    """
 
 
 if __name__ == "__main__":

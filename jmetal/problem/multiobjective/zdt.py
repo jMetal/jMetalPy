@@ -17,6 +17,7 @@ class ZDT1(FloatProblem):
     .. note:: Bi-objective unconstrained problem. The default number of variables is 30.
     .. note:: Continuous problem having a convex Pareto front
     """
+
     def __init__(self, number_of_variables: int = 30):
         """Constructor
         :param number_of_variables: number of decision variables of the problem
