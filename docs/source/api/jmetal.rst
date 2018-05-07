@@ -1,11 +1,8 @@
 jMetalPy API
 ==============
 
-Main packages
------------
-
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
     jmetal.algorithm
     jmetal.component
