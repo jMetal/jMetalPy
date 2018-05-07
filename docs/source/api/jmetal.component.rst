@@ -1,9 +1,6 @@
 jmetal.component package
 ========================
 
-Submodules
-----------
-
 jmetal.component.archive module
 -------------------------------
 

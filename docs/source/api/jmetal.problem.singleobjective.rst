@@ -1,9 +1,6 @@
 jmetal.problem.singleobjective package
 ======================================
 
-Submodules
-----------
-
 jmetal.problem.singleobjective.unconstrained module
 ---------------------------------------------------
 

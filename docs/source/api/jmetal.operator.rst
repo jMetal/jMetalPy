@@ -1,9 +1,6 @@
 jmetal.operator package
 =======================
 
-Submodules
-----------
-
 jmetal.operator.crossover module
 --------------------------------
 

@@ -1,49 +1,24 @@
-"""
-    ============================================================
-    :mod:`zdt` -- ZDT problem family of multi-objective problems
-    ============================================================
-
-    This module provides the implementation of the ZDT problems defined in:
-
-    Zitzler, E., Deb, K., Thiele, L.
-    Comparison of multiobjective evolutionary algorithms: Empirical results.
-    Evolutionary Computation 8(2), pp: 173-195. 2000
-
-    DOI: https://doi.org/10.1162/106365600568202
-
-
-    These problems are scalable in the number of the decision variables, i.e. the Pareto front
-    is the same independently of the number of variables
-
-    .. module:: jmetal.problem.multiobjective.zdt
-
-    :platform: Unix, Windows
-    :synopsis: Module including the implementation of the ZDT problem family.
-
-    .. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
-
-"""
-
-
-from math import sqrt, exp, pow, sin, pi, cos
+from math import sqrt, pow, sin, pi, cos
 
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 
+"""
+.. module:: `zdt`
+   :platform: Unix, Windows
+   :synopsis: ZDT problem family of multi-objective problems.
+
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+"""
+
 
 class ZDT1(FloatProblem):
     """ Problem ZDT1
-
     .. note:: Bi-objective unconstrained problem. The default number of variables is 30.
-
     .. note:: Continuous problem having a convex Pareto front
-
     """
     def __init__(self, number_of_variables: int = 30):
         """Constructor
-
-        Arguments:
-
         :param number_of_variables: number of decision variables of the problem
         """
         self.number_of_variables = number_of_variables

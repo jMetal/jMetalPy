@@ -1,9 +1,6 @@
 jmetal.problem.multiobjective package
 =====================================
 
-Submodules
-----------
-
 jmetal.problem.multiobjective.constrained module
 ------------------------------------------------
 

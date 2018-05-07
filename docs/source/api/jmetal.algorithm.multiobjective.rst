@@ -1,9 +1,6 @@
 jmetal.algorithm.multiobjective package
 =======================================
 
-Submodules
-----------
-
 jmetal.algorithm.multiobjective.nsgaii module
 ---------------------------------------------
 

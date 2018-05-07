@@ -1,9 +1,6 @@
 jmetal.algorithm.singleobjective package
 ========================================
 
-Submodules
-----------
-
 jmetal.algorithm.singleobjective.evolutionaryalgorithm module
 -------------------------------------------------------------
 

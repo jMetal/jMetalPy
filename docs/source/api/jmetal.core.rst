@@ -1,9 +1,6 @@
 jmetal.core package
 ===================
 
-Submodules
-----------
-
 jmetal.core.algorithm module
 ----------------------------
 
