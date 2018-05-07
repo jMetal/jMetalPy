@@ -10,11 +10,44 @@ Welcome to jMetalPy's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   changelog
 
+Installation
+------------
+
+Via pip:
+
+.. code-block:: console
+
+    $ pip install jmetalpy
+
+Via Github:
+
+.. code-block:: console
+
+    $ git clone https://github.com/jMetal/jMetalPy.git
+    $ pip install -r requirements.txt
+
+
+Basic Usage
+-----------
+
+.. code-block:: python
+
+    problem = ZDT1()
+    algorithm = NSGAII[FloatSolution, List[FloatSolution]](
+        problem=problem,
+        population_size=100,
+        max_evaluations=25000,
+        mutation=Polynomial(1.0/problem.number_of_variables, distribution_index=20),
+        crossover=SBX(1.0, distribution_index=20),
+        selection=BinaryTournamentSelection(RankingAndCrowdingDistanceComparator()))
+
+    algorithm.run()
+    result = algorithm.get_result()
 
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`
