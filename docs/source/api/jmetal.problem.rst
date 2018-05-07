@@ -1,9 +1,6 @@
 Problems
 ======================
 
-Problems available
------------
-
 .. toctree::
 
     jmetal.problem.multiobjective

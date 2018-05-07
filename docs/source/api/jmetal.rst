@@ -1,7 +1,7 @@
 User documentation
 ==============
 
-Content
+Components
 -----------
 
 .. toctree::
