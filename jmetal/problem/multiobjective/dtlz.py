@@ -1,32 +1,15 @@
-"""
-    ============================================================
-    :mod:`dtlz` -- DTLZ problem family of multi-objective problems
-    ============================================================
-
-    This module provides the implementation of the DTLZ problems defined in:
-
-    ...
-
-    DOI: ...
-
-
-    These problems are scalable in the number of the decision variables and the number of
-    objective functions
-
-    .. module:: jmetal.problem.multiobjective.dtlz
-
-    :platform: Unix, Windows
-    :synopsis: Module including the implementation of the DTLZ problem family.
-
-    .. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
-
-"""
-
-
 from math import pi, cos
 
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
+
+"""
+.. module:: `dtlz`
+   :platform: Unix, Windows
+   :synopsis: DTLZ problem family of multi-objective problems.
+
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+"""
 
 
 class DTLZ1(FloatProblem):

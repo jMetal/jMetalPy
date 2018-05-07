@@ -3,8 +3,12 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-jMetalPy
+jMetalPy Documentation
 ====================================
+
+.. warning::
+
+  Documentation is in process!! Some information may be missing.
 
 .. toctree::
    :maxdepth: 2
@@ -54,8 +58,3 @@ API documentation
 
    api/jmetal
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
