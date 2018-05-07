@@ -15,6 +15,7 @@ jMetalPy: Python version of the jMetal framework
    changelog
    runner
    about
+   jmetal.algorithm
 
 Installation
 ------------
