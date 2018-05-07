@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to jMetalPy's documentation!
+jMetalPy
 ====================================
 
 .. toctree::
@@ -11,6 +11,8 @@ Welcome to jMetalPy's documentation!
    :caption: Contents:
 
    changelog
+   runner
+   about
 
 Installation
 ------------
@@ -28,7 +30,6 @@ Via Github:
     $ git clone https://github.com/jMetal/jMetalPy.git
     $ pip install -r requirements.txt
 
-
 Basic Usage
 -----------
 
@@ -45,6 +46,13 @@ Basic Usage
 
     algorithm.run()
     result = algorithm.get_result()
+
+API documentation
+-----------------
+
+.. toctree::
+
+   api/jmetal
 
 Indices and tables
 ==================
