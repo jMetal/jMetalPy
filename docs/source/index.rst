@@ -8,6 +8,14 @@ jMetalPy: Python version of the jMetal framework
 
 .. warning:: Documentation is in process!! Some information may be missing.
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   changelog
+   runner
+   about
+
 Installation
 ------------
 
