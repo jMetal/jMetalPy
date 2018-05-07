@@ -3,18 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-jMetalPy Documentation
+jMetalPy: Python version of the jMetal framework
 ====================================
 
 .. warning:: Documentation is in process!! Some information may be missing.
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-   changelog
-   runner
-   about
 
 Installation
 ------------
@@ -48,11 +40,4 @@ Basic Usage
 
     algorithm.run()
     result = algorithm.get_result()
-
-API documentation
------------------
-
-.. toctree::
-
-   api/jmetal
 

@@ -22,10 +22,9 @@ S = TypeVar('S')
 class ScatterPlot():
     def __init__(self, plot_title: str, animation_speed: float = 1*10e-10):
         """ Creates a new :class:`ScatterPlot` instance.
-        Args:
-           plot_title (str): Title of the scatter diagram.
-           animation_speed (float): Delay (for live plot only). Allow time for the gui event loops to trigger
-           and update the display.
+
+        :param plot_title: Title of the scatter diagram.
+        :param animation_speed: TDelay (for live plot only). Allow time for the gui event loops to trigger and update the display.
         """
         self.plot_title = plot_title
         self.fig = plt.figure()
@@ -63,7 +62,7 @@ class ScatterPlot():
         pass
 
     def __search_solution(self, solution_list: List[S], x_val: float, y_val: float) -> None:
-        """ Return a solution object associated with some values of (x,y). """
+        """ :return: A solution object associated with some values of (x,y). """
 
         sol = next((solution for solution in solution_list
                     if solution.objectives[0] == x_val and solution.objectives[1]), None)

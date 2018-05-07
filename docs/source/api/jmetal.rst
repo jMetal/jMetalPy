@@ -1,9 +1,6 @@
 User documentation
 ==============
 
-Components
------------
-
 .. toctree::
 
     jmetal.algorithm

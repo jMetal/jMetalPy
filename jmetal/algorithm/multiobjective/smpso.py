@@ -40,7 +40,7 @@ class SMPSO(ParticleSwarmOptimization):
         * MCDM 2009. DOI: `<http://dx.doi.org/10.1109/MCDM.2009.4938830/>`_.
 
         The implementation of SMPSO provided in jMetalPy follows the
-        algorithm template described in the algorithm templates section (:mod:`algorithm`) of the documentation.
+        algorithm template described in the algorithm templates section of the documentation.
 
         :param problem: The problem to solve.
         :param swarm_size:

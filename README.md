@@ -6,7 +6,7 @@
 
 # jMetalPy: Python version of the jMetal framework
 [![Build Status](https://img.shields.io/travis/jMetal/jMetalPy.svg?style=flat-square)](https://travis-ci.org/jMetal/jMetalPy)
-[![PyPI Version](https://img.shields.io/pypi/v/jMetalPy.svg?style=flat-square)]()
+[![Read the Docs](https://img.shields.io/readthedocs/jmetalpy.svg?style=flat-square)]()
 [![PyPI License](https://img.shields.io/pypi/l/jMetalPy.svg?style=flat-square)]()
 [![PyPI Python version](https://img.shields.io/pypi/pyversions/jMetalPy.svg?style=flat-square)]()
 
