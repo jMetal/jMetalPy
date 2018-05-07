@@ -1,7 +1,7 @@
-jmetal.problem package
+Problems
 ======================
 
-Subpackages
+Problems
 -----------
 
 .. toctree::

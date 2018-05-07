@@ -1,7 +1,7 @@
-jmetal.operator package
+Operator
 =======================
 
-jmetal.operator.crossover module
+Crossover
 --------------------------------
 
 .. automodule:: jmetal.operator.crossover
@@ -9,7 +9,7 @@ jmetal.operator.crossover module
     :undoc-members:
     :show-inheritance:
 
-jmetal.operator.mutation module
+Mutation
 -------------------------------
 
 .. automodule:: jmetal.operator.mutation
@@ -17,7 +17,7 @@ jmetal.operator.mutation module
     :undoc-members:
     :show-inheritance:
 
-jmetal.operator.selection module
+Selection
 --------------------------------
 
 .. automodule:: jmetal.operator.selection

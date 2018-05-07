@@ -1,7 +1,9 @@
-jmetal.core package
+Core
 ===================
 
-jmetal.core.algorithm module
+This subpackage store templates used in jMetalPy.
+
+Algorithm
 ----------------------------
 
 .. automodule:: jmetal.core.algorithm
@@ -9,7 +11,7 @@ jmetal.core.algorithm module
     :undoc-members:
     :show-inheritance:
 
-jmetal.core.operator module
+Operator
 ---------------------------
 
 .. automodule:: jmetal.core.operator
@@ -17,7 +19,7 @@ jmetal.core.operator module
     :undoc-members:
     :show-inheritance:
 
-jmetal.core.problem module
+Problem
 --------------------------
 
 .. automodule:: jmetal.core.problem
@@ -25,7 +27,7 @@ jmetal.core.problem module
     :undoc-members:
     :show-inheritance:
 
-jmetal.core.solution module
+Solution
 ---------------------------
 
 .. automodule:: jmetal.core.solution

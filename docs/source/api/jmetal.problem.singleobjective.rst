@@ -1,7 +1,7 @@
-jmetal.problem.singleobjective package
+Singleobjective problems
 ======================================
 
-jmetal.problem.singleobjective.unconstrained module
+Unconstrained
 ---------------------------------------------------
 
 .. automodule:: jmetal.problem.singleobjective.unconstrained

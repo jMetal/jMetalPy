@@ -1,7 +1,7 @@
-jmetal.algorithm.multiobjective package
+Multiobjective algorithms
 =======================================
 
-jmetal.algorithm.multiobjective.nsgaii module
+NSGA-II
 ---------------------------------------------
 
 .. automodule:: jmetal.algorithm.multiobjective.nsgaii
@@ -9,7 +9,15 @@ jmetal.algorithm.multiobjective.nsgaii module
     :undoc-members:
     :show-inheritance:
 
-jmetal.algorithm.multiobjective.randomSearch module
+SMPSO
+--------------------------------------------
+
+.. automodule:: jmetal.algorithm.multiobjective.smpso
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Random Search
 ---------------------------------------------------
 
 .. automodule:: jmetal.algorithm.multiobjective.randomSearch
@@ -17,10 +25,3 @@ jmetal.algorithm.multiobjective.randomSearch module
     :undoc-members:
     :show-inheritance:
 
-jmetal.algorithm.multiobjective.smpso module
---------------------------------------------
-
-.. automodule:: jmetal.algorithm.multiobjective.smpso
-    :members:
-    :undoc-members:
-    :show-inheritance:

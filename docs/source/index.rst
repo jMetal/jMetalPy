@@ -6,9 +6,7 @@
 jMetalPy Documentation
 ====================================
 
-.. warning::
-
-  Documentation is in process!! Some information may be missing.
+.. warning:: Documentation is in process!! Some information may be missing.
 
 .. toctree::
    :maxdepth: 2

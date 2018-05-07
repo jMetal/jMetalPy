@@ -1,10 +1,7 @@
-jmetal.util package
+Utils
 ===================
 
-Submodules
-----------
-
-jmetal.util.comparator module
+Comparator
 -----------------------------
 
 .. automodule:: jmetal.util.comparator
@@ -12,7 +9,7 @@ jmetal.util.comparator module
     :undoc-members:
     :show-inheritance:
 
-jmetal.util.graphic module
+Graphic
 --------------------------
 
 .. automodule:: jmetal.util.graphic
@@ -20,7 +17,7 @@ jmetal.util.graphic module
     :undoc-members:
     :show-inheritance:
 
-jmetal.util.observable module
+Observable
 -----------------------------
 
 .. automodule:: jmetal.util.observable
@@ -28,7 +25,7 @@ jmetal.util.observable module
     :undoc-members:
     :show-inheritance:
 
-jmetal.util.ranking module
+Ranking
 --------------------------
 
 .. automodule:: jmetal.util.ranking
@@ -36,7 +33,7 @@ jmetal.util.ranking module
     :undoc-members:
     :show-inheritance:
 
-jmetal.util.solution\_list\_output module
+Solution list output
 -----------------------------------------
 
 .. automodule:: jmetal.util.solution_list_output
@@ -44,7 +41,7 @@ jmetal.util.solution\_list\_output module
     :undoc-members:
     :show-inheritance:
 
-jmetal.util.time module
+Time
 -----------------------
 
 .. automodule:: jmetal.util.time

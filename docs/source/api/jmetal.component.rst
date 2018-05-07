@@ -1,7 +1,7 @@
-jmetal.component package
+Components
 ========================
 
-jmetal.component.archive module
+Archive
 -------------------------------
 
 .. automodule:: jmetal.component.archive
@@ -9,7 +9,7 @@ jmetal.component.archive module
     :undoc-members:
     :show-inheritance:
 
-jmetal.component.density\_estimator module
+Density Estimator
 ------------------------------------------
 
 .. automodule:: jmetal.component.density_estimator
@@ -17,7 +17,7 @@ jmetal.component.density\_estimator module
     :undoc-members:
     :show-inheritance:
 
-jmetal.component.evaluator module
+Evaluator
 ---------------------------------
 
 .. automodule:: jmetal.component.evaluator
@@ -25,7 +25,7 @@ jmetal.component.evaluator module
     :undoc-members:
     :show-inheritance:
 
-jmetal.component.observer module
+Observer
 --------------------------------
 
 .. automodule:: jmetal.component.observer

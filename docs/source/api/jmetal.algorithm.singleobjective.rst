@@ -1,7 +1,7 @@
-jmetal.algorithm.singleobjective package
+Singleobjectives algorithms
 ========================================
 
-jmetal.algorithm.singleobjective.evolutionaryalgorithm module
+Evolutionary Algorithm
 -------------------------------------------------------------
 
 .. automodule:: jmetal.algorithm.singleobjective.evolutionaryalgorithm

@@ -1,7 +1,7 @@
-jmetal.algorithm package
+Algorithms
 ========================
 
-Subpackages
+Algorithms
 -----------
 
 .. toctree::

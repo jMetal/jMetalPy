@@ -1,7 +1,7 @@
-jmetal.problem.multiobjective package
+Multiobjective problems
 =====================================
 
-jmetal.problem.multiobjective.constrained module
+Constrained
 ------------------------------------------------
 
 .. automodule:: jmetal.problem.multiobjective.constrained
@@ -9,15 +9,7 @@ jmetal.problem.multiobjective.constrained module
     :undoc-members:
     :show-inheritance:
 
-jmetal.problem.multiobjective.dtlz module
------------------------------------------
-
-.. automodule:: jmetal.problem.multiobjective.dtlz
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-jmetal.problem.multiobjective.unconstrained module
+Unconstrained
 --------------------------------------------------
 
 .. automodule:: jmetal.problem.multiobjective.unconstrained
@@ -25,7 +17,15 @@ jmetal.problem.multiobjective.unconstrained module
     :undoc-members:
     :show-inheritance:
 
-jmetal.problem.multiobjective.zdt module
+DTLZ
+-----------------------------------------
+
+.. automodule:: jmetal.problem.multiobjective.dtlz
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ZDT
 ----------------------------------------
 
 .. automodule:: jmetal.problem.multiobjective.zdt
