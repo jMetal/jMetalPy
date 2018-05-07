@@ -1,7 +1,7 @@
 Problems
 ======================
 
-Problems
+Problems available
 -----------
 
 .. toctree::
