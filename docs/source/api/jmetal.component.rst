@@ -1,13 +1,6 @@
 jmetal.component package
 ========================
 
-Subpackages
------------
-
-.. toctree::
-
-    jmetal.component.test
-
 Submodules
 ----------
 
@@ -39,15 +32,6 @@ jmetal.component.observer module
 --------------------------------
 
 .. automodule:: jmetal.component.observer
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: jmetal.component
     :members:
     :undoc-members:
     :show-inheritance:

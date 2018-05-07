@@ -1,4 +1,4 @@
-jmetal package
+jMetalPy API
 ==============
 
 Subpackages
@@ -13,11 +13,3 @@ Subpackages
     jmetal.problem
     jmetal.runner
     jmetal.util
-
-Module contents
----------------
-
-.. automodule:: jmetal
-    :members:
-    :undoc-members:
-    :show-inheritance:

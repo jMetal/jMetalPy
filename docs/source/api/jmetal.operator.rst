@@ -1,13 +1,6 @@
 jmetal.operator package
 =======================
 
-Subpackages
------------
-
-.. toctree::
-
-    jmetal.operator.test
-
 Submodules
 ----------
 
@@ -31,15 +24,6 @@ jmetal.operator.selection module
 --------------------------------
 
 .. automodule:: jmetal.operator.selection
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: jmetal.operator
     :members:
     :undoc-members:
     :show-inheritance:

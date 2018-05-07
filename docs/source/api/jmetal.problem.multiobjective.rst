@@ -1,13 +1,6 @@
 jmetal.problem.multiobjective package
 =====================================
 
-Subpackages
------------
-
-.. toctree::
-
-    jmetal.problem.multiobjective.test
-
 Submodules
 ----------
 
@@ -39,15 +32,6 @@ jmetal.problem.multiobjective.zdt module
 ----------------------------------------
 
 .. automodule:: jmetal.problem.multiobjective.zdt
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: jmetal.problem.multiobjective
     :members:
     :undoc-members:
     :show-inheritance:

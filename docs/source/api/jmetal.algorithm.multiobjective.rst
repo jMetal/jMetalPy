@@ -1,13 +1,6 @@
 jmetal.algorithm.multiobjective package
 =======================================
 
-Subpackages
------------
-
-.. toctree::
-
-    jmetal.algorithm.multiobjective.test
-
 Submodules
 ----------
 
@@ -31,15 +24,6 @@ jmetal.algorithm.multiobjective.smpso module
 --------------------------------------------
 
 .. automodule:: jmetal.algorithm.multiobjective.smpso
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: jmetal.algorithm.multiobjective
     :members:
     :undoc-members:
     :show-inheritance:

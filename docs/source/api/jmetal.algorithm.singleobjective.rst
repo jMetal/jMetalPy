@@ -11,12 +11,3 @@ jmetal.algorithm.singleobjective.evolutionaryalgorithm module
     :members:
     :undoc-members:
     :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: jmetal.algorithm.singleobjective
-    :members:
-    :undoc-members:
-    :show-inheritance:

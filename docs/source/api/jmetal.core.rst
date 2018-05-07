@@ -1,13 +1,6 @@
 jmetal.core package
 ===================
 
-Subpackages
------------
-
-.. toctree::
-
-    jmetal.core.test
-
 Submodules
 ----------
 
@@ -39,15 +32,6 @@ jmetal.core.solution module
 ---------------------------
 
 .. automodule:: jmetal.core.solution
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: jmetal.core
     :members:
     :undoc-members:
     :show-inheritance:

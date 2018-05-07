@@ -1,13 +1,6 @@
 jmetal.util package
 ===================
 
-Subpackages
------------
-
-.. toctree::
-
-    jmetal.util.test
-
 Submodules
 ----------
 
@@ -55,15 +48,6 @@ jmetal.util.time module
 -----------------------
 
 .. automodule:: jmetal.util.time
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: jmetal.util
     :members:
     :undoc-members:
     :show-inheritance:
