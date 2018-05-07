@@ -5,6 +5,14 @@ from jmetal.util.comparator import DominanceComparator, EqualSolutionsComparator
 
 S = TypeVar('S')
 
+"""
+.. module:: archive
+   :platform: Unix, Windows
+   :synopsis: Archive implementation.
+
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+"""
+
 
 class Archive(Generic[S]):
     def __init__(self):
