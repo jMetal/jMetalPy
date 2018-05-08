@@ -76,6 +76,7 @@ NSGA-II stopping by time
 ------------
 
 .. code-block:: python
+
    from typing import List, TypeVar
 
    S = TypeVar('S')

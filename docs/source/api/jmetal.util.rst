@@ -1,6 +1,14 @@
 Utils
 ===================
 
+Quality indicator
+-----------------------------
+
+.. automodule:: jmetal.util.quality_indicator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Comparator
 -----------------------------
 
