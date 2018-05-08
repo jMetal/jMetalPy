@@ -11,8 +11,9 @@ class Solution(Generic[S]):
         self.number_of_objectives: int = number_of_objectives
         self.number_of_variables: int = number_of_variables
         self.number_of_constraints: int = number_of_constraints
-        self.objectives = [0.0 for x in range(self.number_of_objectives)]
-        self.variables = [[] for x in range(self.number_of_variables)]
+        self.objectives = [0.0 for _ in range(self.number_of_objectives)]
+        self.normalized_objectives = [0.0 for _ in range(self.number_of_objectives)]
+        self.variables = [[] for _ in range(self.number_of_variables)]
         self.attributes = {}
 
 

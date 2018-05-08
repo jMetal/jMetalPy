@@ -71,3 +71,7 @@ class IntegerProblemTestCases(unittest.TestCase):
         self.assertNotEqual(None, solution)
         self.assertTrue(-1 <= solution.variables[0] <= 1)
         self.assertTrue(-2 <= solution.variables[1] <= 2)
+
+
+if __name__ == '__main__':
+    unittest.main()
