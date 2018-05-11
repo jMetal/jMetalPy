@@ -12,7 +12,7 @@ jMetalPy: Python version of the jMetal framework
    :maxdepth: 1
    :caption: Contents:
 
-   runner
+   examples
    about
    api/jmetal
 

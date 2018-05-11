@@ -31,7 +31,7 @@ class SMPSO(ParticleSwarmOptimization):
                  swarm_size: int,
                  max_evaluations: int,
                  mutation: Mutation[FloatSolution],
-                 leaders: BoundedArchive[FloatSolution],
+                 leaders: BoundedArchive[FloatSolution] or None,
                  observable: Observable = DefaultObservable(),
                  evaluator: Evaluator[FloatSolution] = SequentialEvaluator[FloatSolution]()):
         """ This class implements the SMPSO algorithm described in
@@ -50,7 +50,7 @@ class SMPSO(ParticleSwarmOptimization):
         :param observable:
         :param evaluator: An evaluator object to evaluate the solutions in the population.
         """
-        super(SMPSO, self).__init__()
+        super().__init__()
         self.problem = problem
         self.swarm_size = swarm_size
         self.max_evaluations = max_evaluations
@@ -125,7 +125,7 @@ class SMPSO(ParticleSwarmOptimization):
     def update_velocity(self, swarm: List[FloatSolution]) -> None:
         for i in range(self.swarm_size):
             best_particle = copy(swarm[i].attributes["local_best"])
-            best_global = self.__select_global_best()
+            best_global = self.select_global_best()
 
             r1 = round(random.uniform(self.r1_min, self.r1_max), 1)
             r2 = round(random.uniform(self.r2_min, self.r2_max), 1)
@@ -180,12 +180,18 @@ class SMPSO(ParticleSwarmOptimization):
     def get_result(self) -> List[FloatSolution]:
         return self.leaders.solution_list
 
-    def __select_global_best(self) -> FloatSolution:
-        particles = random.sample(self.leaders.solution_list, 2)
-        if self.leaders.get_comparator().compare(particles[0], particles[1]) < 1:
-            best_global = copy(particles[0])
+    def select_global_best(self) -> FloatSolution:
+        leaders = self.leaders.solution_list
+
+        if len(leaders) > 2:
+            particles = random.sample(leaders, 2)
+
+            if self.leaders.get_comparator().compare(particles[0], particles[1]) < 1:
+                best_global = copy(particles[0])
+            else:
+                best_global = copy(particles[1])
         else:
-            best_global = copy(particles[1])
+            best_global = copy(self.leaders.solution_list[0])
 
         return best_global
 
@@ -209,3 +215,100 @@ class SMPSO(ParticleSwarmOptimization):
             result = 2.0 / (2.0 - rho - sqrt(pow(rho, 2.0) - 4.0 * rho))
 
         return result
+
+
+class SMPSORP(SMPSO):
+    def __init__(self, problem: FloatProblem,
+                 swarm_size: int,
+                 max_evaluations: int,
+                 mutation: Mutation[FloatSolution],
+                 reference_points: List[List],
+                 leaders: List[BoundedArchive[FloatSolution]],
+                 observable: Observable = DefaultObservable(),
+                 evaluator: Evaluator[FloatSolution] = SequentialEvaluator[FloatSolution]()):
+        """ This class implements the SMPSORP algorithm.
+
+        :param problem: The problem to solve.
+        :param swarm_size:
+        :param max_evaluations:
+        :param mutation:
+        :param leaders: List of bounded archives.
+        :param observable:
+        :param evaluator: An evaluator object to evaluate the solutions in the population.
+        """
+        super().__init__(
+            problem,
+            swarm_size,
+            max_evaluations,
+            mutation,
+            None,
+            observable,
+            evaluator)
+        self.reference_points = reference_points
+        self.leaders = leaders
+
+    def update_leaders_density_estimator(self):
+        for leader in self.leaders:
+            leader.compute_density_estimator()
+
+    def init_progress(self) -> None:
+        self.evaluations = self.swarm_size
+        self.update_leaders_density_estimator()
+
+    def update_progress(self) -> None:
+        self.evaluations += self.swarm_size
+        self.update_leaders_density_estimator()
+
+        reference_points = []
+        for i, _ in enumerate(self.reference_points):
+            point = self.problem.create_solution()
+            point.objectives = self.reference_points[i]
+            reference_points.append(point)
+
+        observable_data = {'evaluations': self.evaluations,
+                           'population': self.get_result() + reference_points,
+                           'computing time': self.get_current_computing_time()}
+
+        self.observable.notify_all(**observable_data)
+
+    def initialize_global_best(self, swarm: List[FloatSolution]) -> None:
+        for particle in swarm:
+            for leader in self.leaders:
+                leader.add(copy(particle))
+
+    def update_global_best(self, swarm: List[FloatSolution]) -> None:
+        for particle in swarm:
+            for leader in self.leaders:
+                leader.add(copy(particle))
+
+    def get_result(self) -> List[FloatSolution]:
+        result = []
+
+        for leader in self.leaders:
+            for solution in leader.get_solution_list():
+                result.append(solution)
+
+        return result
+
+    def select_global_best(self) -> FloatSolution:
+        selected = False
+        selected_swarm_index = 0
+
+        while not selected:
+            selected_swarm_index = random.randint(0, len(self.leaders) - 1)
+            if len(self.leaders[selected_swarm_index].solution_list) != 0:
+                selected = True
+
+        leaders = self.leaders[selected_swarm_index].solution_list
+
+        if len(leaders) > 2:
+            particles = random.sample(leaders, 2)
+
+            if self.leaders[selected_swarm_index].get_comparator().compare(particles[0], particles[1]) < 1:
+                best_global = copy(particles[0])
+            else:
+                best_global = copy(particles[1])
+        else:
+            best_global = copy(self.leaders[selected_swarm_index].solution_list[0])
+
+        return best_global
