@@ -25,9 +25,9 @@
 
 
 class HyperVolume:
-    """
-    Hypervolume computation based on variant 3 of the algorithm in the paper:
-    C. M. Fonseca, L. Paquete, and M. Lopez-Ibanez. An improved dimension-sweep
+    """ Hypervolume computation based on variant 3 of the algorithm in the paper:
+
+    * C. M. Fonseca, L. Paquete, and M. Lopez-Ibanez. An improved dimension-sweep
     algorithm for the hypervolume indicator. In IEEE Congress on Evolutionary
     Computation, pages 1157-1163, Vancouver, Canada, July 2006.
 
@@ -40,10 +40,10 @@ class HyperVolume:
         self.list: MultiList = []
 
     def compute(self, front):
-        """Returns the hypervolume that is dominated by a non-dominated front.
-
-        Before the HV computation, front and reference point are translated, so
+        """Before the HV computation, front and reference point are translated, so
         that the reference point is [0, ..., 0].
+
+        :return: The hypervolume that is dominated by a non-dominated front.
         """
 
         def weaklyDominates(point, other):
@@ -190,10 +190,7 @@ class MultiList:
             return str(self.cargo)
 
     def __init__(self, numberLists):
-        """Constructor.
-
-        Builds 'numberLists' doubly linked lists.
-
+        """ Builds 'numberLists' doubly linked lists.
         """
         self.numberLists = numberLists
         self.sentinel = MultiList.Node(numberLists)
@@ -229,7 +226,7 @@ class MultiList:
         return length
 
     def append(self, node, index):
-        """Appends a node to the end of the list at the given index."""
+        """ Appends a node to the end of the list at the given index."""
         lastButOne = self.sentinel.prev[index]
         node.next[index] = self.sentinel
         node.prev[index] = lastButOne
@@ -238,7 +235,7 @@ class MultiList:
         lastButOne.next[index] = node
 
     def extend(self, nodes, index):
-        """Extends the list at the given index with the nodes."""
+        """ Extends the list at the given index with the nodes."""
         sentinel = self.sentinel
         for node in nodes:
             lastButOne = sentinel.prev[index]
@@ -249,7 +246,7 @@ class MultiList:
             lastButOne.next[index] = node
 
     def remove(self, node, index, bounds):
-        """Removes and returns 'node' from all lists in [0, 'index'[."""
+        """ Removes and returns 'node' from all lists in [0, 'index'[."""
         for i in range(index):
             predecessor = node.prev[i]
             successor = node.next[i]
@@ -260,8 +257,7 @@ class MultiList:
         return node
 
     def reinsert(self, node, index, bounds):
-        """
-        Inserts 'node' at the position it had in all lists in [0, 'index'[
+        """ Inserts 'node' at the position it had in all lists in [0, 'index'[
         before it was removed. This method assumes that the next and previous
         nodes of the node that is reinserted are in the list.
         """
