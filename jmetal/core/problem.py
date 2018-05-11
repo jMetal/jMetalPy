@@ -1,9 +1,11 @@
-import random
+from os.path import dirname, join
 from typing import Generic, TypeVar
+import random
 
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
+from jmetal.util.front_utils import walk_up_folder, read_front_from_file_as_solutions
 
-__author__ = "Antonio J. Nebro"
+FILE_PATH = dirname(join(dirname(__file__)))
 
 S = TypeVar('S')
 
@@ -15,6 +17,7 @@ class Problem(Generic[S]):
         self.number_of_variables: int = None
         self.number_of_objectives: int = None
         self.number_of_constraints: int = None
+        self.reference_front_path: str = False
 
     def evaluate(self, solution: S) -> None:
         pass
@@ -25,7 +28,16 @@ class Problem(Generic[S]):
     def create_solution(self) -> S:
         pass
 
-    def get_name(self) -> str :
+    def get_reference_front(self) -> list:
+        front = []
+
+        if self.reference_front_path:
+            computed_path = join(walk_up_folder(FILE_PATH, 2), self.reference_front_path)
+            front = read_front_from_file_as_solutions(computed_path)
+
+        return front
+
+    def get_name(self) -> str:
         pass
 
 
@@ -44,8 +56,8 @@ class FloatProblem(Problem[FloatSolution]):
 
     def __init__(self):
         super().__init__()
-        self.lower_bound : [] = None
-        self.upper_bound : [] = None
+        self.lower_bound: [] = None
+        self.upper_bound: [] = None
 
     def create_solution(self) -> FloatSolution:
         new_solution = FloatSolution(self.number_of_variables, self.number_of_objectives, self.number_of_constraints,

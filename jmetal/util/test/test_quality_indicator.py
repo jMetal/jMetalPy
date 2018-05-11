@@ -1,19 +1,10 @@
-from os.path import dirname, realpath, join
+from os.path import dirname, join
 import unittest
 
-from jmetal.util.front_utils import read_front_from_file
+from jmetal.util.front_utils import read_front_from_file, walk_up_folder
 from jmetal.util.quality_indicator import HyperVolume
 
-BASE_PATH = dirname(realpath('__file__'))
 FILE_PATH = dirname(join(dirname(__file__)))
-
-
-def walk_up_folder(path, depth: int =1):
-    _cur_depth = 1
-    while _cur_depth < depth:
-        path = dirname(path)
-        _cur_depth += 1
-    return path
 
 
 class HyperVolumeTestCases(unittest.TestCase):

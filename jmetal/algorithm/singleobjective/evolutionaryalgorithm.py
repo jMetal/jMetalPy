@@ -134,10 +134,12 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
     def update_progress(self):
         self.evaluations += self.population_size
 
-        observable_data = {'evaluations': self.evaluations,
-                           'population': self.population,
-                           'computing time': self.get_current_computing_time()}
-        
+        observable_data = {'evaluations': self.evaluations, 'computing time': self.get_current_computing_time()}
+        if self.problem.reference_front_path:
+            observable_data['population'] = self.population+self.problem.get_reference_front()
+        else:
+            observable_data['population'] = self.population
+
         self.observable.notify_all(**observable_data)
 
     def is_stopping_condition_reached(self) -> bool:
