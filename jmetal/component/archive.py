@@ -38,7 +38,7 @@ class Archive(Generic[S]):
 
 
 class BoundedArchive(Archive[S]):
-    def __init__(self, maximum_size: int, comparator: Comparator[S], density_estimator: DensityEstimator):
+    def __init__(self, maximum_size: int, comparator: Comparator[S]=None, density_estimator: DensityEstimator=None):
         super(BoundedArchive, self).__init__()
         self.maximum_size = maximum_size
         self.comparator = comparator
@@ -132,7 +132,7 @@ class ArchiveWithReferencePoint(BoundedArchive[S]):
         self.__reference_point = reference_point
         self.__comparator = comparator
         self.__density_estimator = density_estimator
-        self.__reference_point_solution: S = None
+        self.__reference_point_solution = None
 
     def add(self, solution: S) -> bool:
         if self.__reference_point_solution is None:
