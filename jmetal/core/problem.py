@@ -19,8 +19,14 @@ class Problem(Generic[S]):
         self.number_of_constraints: int = None
         self.reference_front_path: str = False
 
-    def evaluate(self, solution: S) -> None:
-        pass
+    def evaluate(self, solution: S) -> S:
+        for i in range(self.number_of_objectives):
+            if self.objectives[i].is_a_minimization_objective():
+                solution.objectives[i] = self.objectives[i].compute(solution, self)
+            else:
+                solution.objectives[i] = -1.0 * self.objectives[i].compute(solution, self)
+
+        return solution
 
     def evaluate_constraints(self, solution: S):
         pass
