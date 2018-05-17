@@ -12,6 +12,14 @@ logger = logging.getLogger(__name__)
 S = TypeVar('S')
 R = TypeVar('R')
 
+"""
+.. module:: algorithm
+   :platform: Unix, Windows
+   :synopsis: Templates for algorithms.
+
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+"""
+
 
 class Algorithm(Generic[S, R], threading.Thread):
     def __init__(self):
@@ -65,27 +73,29 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
         pass
 
     def run(self):
-        """
-        Step One: Generate the initial population of individuals randomly. (First generation)
-        Step Two: Evaluate the fitness of each individual in that population (time limit, sufficient fitness achieved, etc.)
-        Step Three: Repeat the following regenerational steps until termination:
+        """* Step One: Generate the initial population of individuals randomly. (First generation)
+        * Step Two: Evaluate the fitness of each individual in that population (time limit, sufficient fitness achieved, etc.)
+        * Step Three: Repeat the following regenerational steps until termination:
             1. Select the best-fit individuals for reproduction. (Parents)
             2. Breed new individuals through crossover and mutation operations to give birth to offspring.
             3. Evaluate the individual fitness of new individuals.
             4. Replace least-fit population with new individuals.
+
+        .. note::
+            To develop an EA, all the abstract the methods used in the run() method must be implemented.
         """
 
         self.start_computing_time = time.time()
 
-        self.population = self.create_initial_population() # Step One
-        self.population = self.evaluate_population(self.population) # Step Two
+        self.population = self.create_initial_population()
+        self.population = self.evaluate_population(self.population)
         self.init_progress()
 
-        while not self.is_stopping_condition_reached(): # Step Three
-            mating_population = self.selection(self.population) # Step Three.1
-            offspring_population = self.reproduction(mating_population) # Step Three.2
-            offspring_population = self.evaluate_population(offspring_population) # Step Three.3
-            self.population = self.replacement(self.population, offspring_population) # Step Three.4
+        while not self.is_stopping_condition_reached():
+            mating_population = self.selection(self.population)
+            offspring_population = self.reproduction(mating_population)
+            offspring_population = self.evaluate_population(offspring_population)
+            self.population = self.replacement(self.population, offspring_population)
             self.update_progress()
 
         self.total_computing_time = self.get_current_computing_time()
@@ -139,8 +149,6 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]]):
         pass
 
     def run(self):
-        """
-        """
         self.start_computing_time = time.time()
 
         self.swarm = self.create_initial_swarm()

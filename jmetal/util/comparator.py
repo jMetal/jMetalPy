@@ -1,16 +1,16 @@
-from typing import TypeVar
+from typing import TypeVar, Generic
 
 from jmetal.core.solution import Solution
 
 S = TypeVar('S')
 
 
-class Comparator():
+class Comparator(Generic[S]):
     def compare(self, object1: S, object2: S) -> int:
         pass
 
 
-class EqualSolutionsComparator():
+class EqualSolutionsComparator(Comparator):
     def compare(self, solution1: Solution, solution2: Solution) -> int:
         if solution1 is None:
             return 1
@@ -24,7 +24,7 @@ class EqualSolutionsComparator():
             value1 = solution1.objectives[i]
             value2 = solution2.objectives[i]
 
-            if value1<value2:
+            if value1 < value2:
                 flag = -1
             elif value1 > value2:
                 flag = 1
@@ -43,26 +43,8 @@ class EqualSolutionsComparator():
         elif dominate2 == 1:
             return 1
 
-"""
-class DominanceRankingComparator(Comparator):
-    def compare(self, solution1: Solution, solution2: Solution) -> int:
-        rank1 = solution1.attributes.get("dominance_ranking")
-        rank2 = solution1.attributes.get("dominance_ranking")
 
-        result = 0
-        if rank1 is not None or rank2 is not None:
-            if rank1 < rank2:
-                result = -1
-            elif rank1 > rank2:
-                result = 1
-            else:
-                result = 0
-
-        return result
-"""
-
-
-class SolutionAttributeComparator():
+class SolutionAttributeComparator(Comparator):
     def __init__(self, key: str, lowest_is_best: bool = True):
         self.key = key
         self.lowest_is_best = lowest_is_best
@@ -104,7 +86,7 @@ class RankingAndCrowdingDistanceComparator(Comparator):
         return result
 
 
-class DominanceComparator():
+class DominanceComparator(Comparator):
     def __init__(self, constraint_comparator = SolutionAttributeComparator("overall_constraint_violation", lowest_is_best=False)):
         self.constraint_comparator = constraint_comparator
 

@@ -26,7 +26,8 @@ class Ranking(List[S]):
 
 
 class FastNonDominatedRanking(Ranking[List[S]]):
-    """ Class implementing the non-dominated ranking of NSGA-II"""
+    """ Class implementing the non-dominated ranking of NSGA-II """
+
     def __init__(self):
         super(FastNonDominatedRanking, self).__init__()
 
@@ -80,10 +81,10 @@ class FastNonDominatedRanking(Ranking[List[S]]):
 
 class EfficientNonDominatedRanking(Ranking[List[S]]):
     """ Class implementing the EDS (efficient non-dominated sorting) algorithm """
+
     def __init__(self):
         super(EfficientNonDominatedRanking, self).__init__()
 
     def compute_ranking(self, solution_list: List[S]):
-        #todo       
-
+        #todo
         return self.ranked_sublists

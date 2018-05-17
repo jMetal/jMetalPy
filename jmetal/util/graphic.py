@@ -19,14 +19,12 @@ S = TypeVar('S')
 """
 
 
-class ScatterPlot():
-
-    def __init__(self, plot_title: str, animation_speed: float = 1*10e-10):
+class ScatterPlot:
+    def __init__(self, plot_title: str, animation_speed: float = 1 * 10e-10):
         """ Creates a new :class:`ScatterPlot` instance.
-        Args:
-           plot_title (str): Title of the scatter diagram.
-           animation_speed (float): Delay (for live plot only). Allow time for the gui event loops to trigger
-           and update the display.
+
+        :param plot_title: Title of the scatter diagram.
+        :param animation_speed: TDelay (for live plot only). Allow time for the gui event loops to trigger and update the display.
         """
         self.plot_title = plot_title
         self.fig = plt.figure()
@@ -50,7 +48,6 @@ class ScatterPlot():
 
     def __get_data_points(self, solution_list: List[S]) -> Tuple[list, list]:
         """ Get coords (x,y) from a solution_list. """
-
         if solution_list is None:
             raise Exception("Solution list is none!")
 
@@ -64,8 +61,7 @@ class ScatterPlot():
         pass
 
     def __search_solution(self, solution_list: List[S], x_val: float, y_val: float) -> None:
-        """ Return a solution object associated with some values of (x,y). """
-
+        """ :return: A solution object associated with some values of (x,y). """
         sol = next((solution for solution in solution_list
                     if solution.objectives[0] == x_val and solution.objectives[1]), None)
 
@@ -89,7 +85,7 @@ class ScatterPlot():
         self.__init_plot()
         x_values, y_values = self.__get_data_points(solution_list)
 
-        self.sc, = self.axis.plot(x_values, y_values, 'go', markersize=5, picker=10)
+        self.sc, = self.axis.plot(x_values, y_values, 'go', markersize=3, picker=10)
 
         if save:
             supported_formats = ["eps", "jpeg", "jpg", "pdf", "pgf", "png", "ps",
@@ -123,12 +119,13 @@ class ScatterPlot():
 
         # Update points
         self.sc.set_data(x_values, y_values)
-        event_handler = self.fig.canvas.mpl_connect('pick_event', lambda event: self.__pick_handler(event, solution_list))
+        event_handler = self.fig.canvas.mpl_connect('pick_event',
+                                                    lambda event: self.__pick_handler(event, solution_list))
 
         # Update title
         self.fig.suptitle(self.plot_title
                           + ', \n Eval: ' + str(evaluations)
-                          + ', Time: ' + str('%.3f'%computing_time), fontsize=14, fontweight='bold')
+                          + ', Time: ' + str('%.3f' % computing_time), fontsize=14, fontweight='bold')
 
         # Re-align the axis.
         self.axis.relim()

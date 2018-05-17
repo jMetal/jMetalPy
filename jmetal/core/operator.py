@@ -48,8 +48,5 @@ class Crossover(Operator[List[Source], List[Result]]):
 
 
 class Selection(Operator[Source, Result]):
-    def __init__(self):
-        super(Selection, self).__init__()
-
     def execute(self, source: Source) -> Result:
         pass

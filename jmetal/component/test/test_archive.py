@@ -6,7 +6,7 @@ from jmetal.core.solution import Solution
 
 class ArchiveTestCases(unittest.TestCase):
     def setUp(self):
-        self.archive = Archive[Solution]()
+        self.archive = Archive()
 
     def test_should_constructor_create_a_non_null_object(self):
         self.assertIsNotNone(self.archive)
@@ -17,7 +17,7 @@ class ArchiveTestCases(unittest.TestCase):
 
 class BoundedArchiveTestCases(unittest.TestCase):
     def setUp(self):
-        self.archive = BoundedArchive[Solution](5)
+        self.archive = BoundedArchive(5)
 
     def test_should_constructor_create_a_non_null_object(self):
         self.assertIsNotNone(self.archive)
@@ -27,9 +27,8 @@ class BoundedArchiveTestCases(unittest.TestCase):
 
 
 class NonDominatedSolutionListArchiveTestCases(unittest.TestCase):
-
     def setUp(self):
-        self.archive = NonDominatedSolutionListArchive[Solution]()
+        self.archive = NonDominatedSolutionListArchive()
 
     def test_should_constructor_create_a_non_null_object(self):
         self.assertIsNotNone(self.archive)
@@ -110,70 +109,59 @@ class NonDominatedSolutionListArchiveTestCases(unittest.TestCase):
 
 class CrowdingDistanceArchiveTestCases(unittest.TestCase):
     def setUp(self):
-        pass
+        self.archive = CrowdingDistanceArchive[Solution](5)
 
     def test_should_constructor_create_a_non_null_object(self):
-        archive = CrowdingDistanceArchive[Solution](5)
-        self.assertIsNotNone(archive)
+        self.assertIsNotNone(self.archive)
 
     def test_should_constructor_set_the_max_size(self):
-        archive = CrowdingDistanceArchive[Solution](5)
-        self.assertEqual(5, archive.get_max_size())
+        self.assertEqual(5, self.archive.get_max_size())
 
     def test_should_constructor_create_an_empty_archive(self):
-        archive = CrowdingDistanceArchive[Solution](5)
-        self.assertEqual(0, archive.size())
+        self.assertEqual(0, self.archive.size())
 
     def test_should_add_a_solution_when_the_archive_is_empty_work_properly(self):
-        archive = CrowdingDistanceArchive[Solution](5)
-
         solution = Solution(2, 3)
-        archive.add(solution)
+        self.archive.add(solution)
 
-        self.assertEqual(1, archive.size())
-        self.assertEqual(solution, archive.get(0))
+        self.assertEqual(1, self.archive.size())
+        self.assertEqual(solution, self.archive.get(0))
 
     def test_should_add_work_properly_case1(self) :
         """
         Case 1: add a dominated solution when the archive size is 1 must not include the solution
         """
-        archive = CrowdingDistanceArchive[Solution](5)
-
         solution1 = Solution(2, 2)
         solution1.objectives = [1, 2]
         solution2 = Solution(2, 2)
         solution2.objectives = [3, 4]
 
-        archive.add(solution1)
-        archive.add(solution2)
+        self.archive.add(solution1)
+        self.archive.add(solution2)
 
-        self.assertEqual(1, archive.size())
-        self.assertEqual(solution1, archive.get(0))
+        self.assertEqual(1, self.archive.size())
+        self.assertEqual(solution1, self.archive.get(0))
 
     def test_should_add_work_properly_case2(self) :
         """
         Case 2: add a non-dominated solution when the archive size is 1 must include the solution
         """
-        archive = CrowdingDistanceArchive[Solution](5)
-
         solution1 = Solution(2, 2)
         solution1.objectives = [1, 2]
         solution2 = Solution(2, 2)
         solution2.objectives = [0, 4]
 
-        archive.add(solution1)
-        archive.add(solution2)
+        self.archive.add(solution1)
+        self.archive.add(solution2)
 
-        self.assertEqual(2, archive.size())
-        self.assertTrue(solution1 in archive.get_solution_list())
-        self.assertTrue(solution2 in archive.get_solution_list())
+        self.assertEqual(2, self.archive.size())
+        self.assertTrue(solution1 in self.archive.get_solution_list())
+        self.assertTrue(solution2 in self.archive.get_solution_list())
 
     def test_should_add_work_properly_case3(self) :
         """
         Case 3: add a non-dominated solution when the archive size is 3 must include the solution
         """
-        archive = CrowdingDistanceArchive[Solution](5)
-
         solution1 = Solution(2, 2)
         solution1.objectives = [1.0, 2.0]
         solution2 = Solution(2, 2)
@@ -183,23 +171,21 @@ class CrowdingDistanceArchiveTestCases(unittest.TestCase):
         solution4 = Solution(2, 2)
         solution4.objectives = [1.6, 1.2]
 
-        archive.add(solution1)
-        archive.add(solution2)
-        archive.add(solution3)
-        archive.add(solution4)
+        self.archive.add(solution1)
+        self.archive.add(solution2)
+        self.archive.add(solution3)
+        self.archive.add(solution4)
 
-        self.assertEqual(4, archive.size())
-        self.assertTrue(solution1 in archive.get_solution_list())
-        self.assertTrue(solution2 in archive.get_solution_list())
-        self.assertTrue(solution3 in archive.get_solution_list())
-        self.assertTrue(solution4 in archive.get_solution_list())
+        self.assertEqual(4, self.archive.size())
+        self.assertTrue(solution1 in self.archive.get_solution_list())
+        self.assertTrue(solution2 in self.archive.get_solution_list())
+        self.assertTrue(solution3 in self.archive.get_solution_list())
+        self.assertTrue(solution4 in self.archive.get_solution_list())
 
     def test_should_add_work_properly_case4(self) :
         """
         Case 4: add a dominated solution when the archive size is 3 must not include the solution
         """
-        archive = CrowdingDistanceArchive[Solution](5)
-
         solution1 = Solution(2, 2)
         solution1.objectives = [1.0, 2.0]
         solution2 = Solution(2, 2)
@@ -209,22 +195,20 @@ class CrowdingDistanceArchiveTestCases(unittest.TestCase):
         solution4 = Solution(2, 2)
         solution4.objectives = [5.0, 6.0]
 
-        archive.add(solution1)
-        archive.add(solution2)
-        archive.add(solution3)
-        archive.add(solution4)
+        self.archive.add(solution1)
+        self.archive.add(solution2)
+        self.archive.add(solution3)
+        self.archive.add(solution4)
 
-        self.assertEqual(3, archive.size())
-        self.assertTrue(solution1 in archive.get_solution_list())
-        self.assertTrue(solution2 in archive.get_solution_list())
-        self.assertTrue(solution3 in archive.get_solution_list())
+        self.assertEqual(3, self.archive.size())
+        self.assertTrue(solution1 in self.archive.get_solution_list())
+        self.assertTrue(solution2 in self.archive.get_solution_list())
+        self.assertTrue(solution3 in self.archive.get_solution_list())
 
     def test_should_add_work_properly_case5(self) :
         """
         Case 5: add a dominated solution when the archive is full should not include the solution
         """
-        archive = CrowdingDistanceArchive[Solution](3)
-
         solution1 = Solution(2, 2)
         solution1.objectives = [1.0, 2.0]
         solution2 = Solution(2, 2)
@@ -234,22 +218,22 @@ class CrowdingDistanceArchiveTestCases(unittest.TestCase):
         solution4 = Solution(2, 2)
         solution4.objectives = [5.0, 6.0]
 
-        archive.add(solution1)
-        archive.add(solution2)
-        archive.add(solution3)
-        archive.add(solution4)
+        self.archive.add(solution1)
+        self.archive.add(solution2)
+        self.archive.add(solution3)
+        self.archive.add(solution4)
 
-        self.assertEqual(3, archive.size())
-        self.assertTrue(solution1 in archive.get_solution_list())
-        self.assertTrue(solution2 in archive.get_solution_list())
-        self.assertTrue(solution3 in archive.get_solution_list())
+        self.assertEqual(3, self.archive.size())
+        self.assertTrue(solution1 in self.archive.get_solution_list())
+        self.assertTrue(solution2 in self.archive.get_solution_list())
+        self.assertTrue(solution3 in self.archive.get_solution_list())
 
     def test_should_add_work_properly_case6(self) :
         """
         Case 6: add a non-dominated solution when the archive is full should not include
                 the solution if it has the highest distance crowding value
         """
-        archive = CrowdingDistanceArchive[Solution](4)
+        archive = CrowdingDistanceArchive(4)
 
         solution1 = Solution(2, 2)
         solution1.objectives = [0.0, 3.0]
@@ -277,7 +261,7 @@ class CrowdingDistanceArchiveTestCases(unittest.TestCase):
         Case 7: add a non-dominated solution when the archive is full should remove all the
                 dominated solutions
         """
-        archive = CrowdingDistanceArchive[Solution](4)
+        archive = CrowdingDistanceArchive(4)
 
         solution1 = Solution(2, 2)
         solution1.objectives = [0.0, 3.0]
@@ -304,7 +288,7 @@ class CrowdingDistanceArchiveTestCases(unittest.TestCase):
         """
         Case 1: The archive contains one solution
         """
-        archive = CrowdingDistanceArchive[Solution](4)
+        archive = CrowdingDistanceArchive(4)
 
         solution1 = Solution(2, 2)
         solution1.objectives = [0.0, 3.0]
@@ -319,7 +303,7 @@ class CrowdingDistanceArchiveTestCases(unittest.TestCase):
         """
         Case 2: The archive contains two solutions
         """
-        archive = CrowdingDistanceArchive[Solution](4)
+        archive = CrowdingDistanceArchive(4)
 
         solution1 = Solution(2, 2)
         solution1.objectives = [0.0, 3.0]
@@ -339,7 +323,7 @@ class CrowdingDistanceArchiveTestCases(unittest.TestCase):
         """
         Case 3: The archive contains two solutions
         """
-        archive = CrowdingDistanceArchive[Solution](4)
+        archive = CrowdingDistanceArchive(4)
 
         solution1 = Solution(2, 2)
         solution1.objectives = [0.0, 3.0]
