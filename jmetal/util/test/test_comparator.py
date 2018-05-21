@@ -20,6 +20,7 @@ class DominanceComparatorTestCases(unittest.TestCase):
         solution2 = None
         with self.assertRaises(Exception):
             self.comparator.compare(solution, solution2)
+
     """
     def test_should_dominance_comparator_raise_an_exception_if_the_solutions_have_not_the_same_number_of_objectives(self):
         solution = FloatSolution(3, 2, 0, [], [])
@@ -102,6 +103,18 @@ class DominanceComparatorTestCases(unittest.TestCase):
         solution2.objectives = [-1.0, 5.0, 8.0]
 
         self.assertEqual(1, self.comparator.compare(solution, solution2))
+
+    def test_should_dominance_comparator_work_properly_case_3(self):
+        """
+        Case d: solution1 has objectives [-1.0, 5.0, 9.0] and solution2 has [-2.0, 5.0, 10.0]
+        """
+        solution = FloatSolution(3, 3, 0, [], [])
+        solution2 = FloatSolution(3, 3, 0, [], [])
+
+        solution.objectives = [-1.0, 5.0, 9.0]
+        solution2.objectives = [-2.0, 5.0, 10.0]
+
+        self.assertEqual(0, self.comparator.compare(solution, solution2))
 
     def test_should_dominance_comparator_work_properly_with_constrains_case_1(self):
         """

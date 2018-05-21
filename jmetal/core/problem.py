@@ -19,14 +19,14 @@ class Problem(Generic[S]):
         self.number_of_constraints: int = None
         self.reference_front_path: str = None
 
-    def evaluate(self, solution: S) -> None:
-        pass
+    def evaluate(self, solution: S) -> S:
+        raise NotImplemented
 
     def evaluate_constraints(self, solution: S):
-        pass
+        raise NotImplemented
 
     def create_solution(self) -> S:
-        pass
+        raise NotImplemented
 
     def get_reference_front(self) -> list:
         front = []
@@ -38,7 +38,7 @@ class Problem(Generic[S]):
         return front
 
     def get_name(self) -> str:
-        pass
+        raise NotImplemented
 
 
 class BinaryProblem(Problem[BinarySolution]):

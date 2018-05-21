@@ -1,6 +1,8 @@
 import logging
 from typing import List
 
+from jmetal.component.evaluator import SequentialEvaluator, DaskMultithreadedEvaluator, ParallelEvaluator
+
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.component.observer import VisualizerObserver
 from jmetal.core.solution import FloatSolution
@@ -22,7 +24,8 @@ def main() -> None:
         problem=problem,
         population_size=100,
         max_evaluations=25000,
-        mutation=Polynomial(1.0 / problem.number_of_variables, distribution_index=20),
+        #evaluator=DaskMultithreadedEvaluator(),
+        mutation=Polynomial(1.0/problem.number_of_variables, distribution_index=20),
         crossover=SBX(1.0, distribution_index=20),
         # selection=BinaryTournamentSelection(RankingAndCrowdingDistanceComparator()))
         selection=BinaryTournament2Selection([SolutionAttributeComparator("dominance_ranking"),

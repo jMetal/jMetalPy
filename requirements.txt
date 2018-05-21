@@ -3,3 +3,4 @@ PyHamcrest==1.9.0
 mockito==1.0.11
 matplotlib==2.0.2
 numpy==1.13.1
+dask==0.17.4

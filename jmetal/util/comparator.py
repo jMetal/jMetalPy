@@ -114,7 +114,7 @@ class DominanceComparator(Comparator):
             if value1 != value2:
                 if value1 < value2:
                     best_is_one = 1
-                else:
+                if value1 > value2:
                     best_is_two = 1
 
         if best_is_one > best_is_two:
