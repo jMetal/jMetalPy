@@ -93,11 +93,11 @@ class SMPSO(ParticleSwarmOptimization):
         self.evaluations += self.swarm_size
         self.leaders.compute_density_estimator()
 
-        observable_data = {'evaluations': self.evaluations, 'computing time': self.get_current_computing_time()}
+        observable_data = {'evaluations': self.evaluations, 'computing time': self.get_current_computing_time(),
+                           'population': self.leaders.solution_list}
+
         if self.problem.reference_front_path:
-            observable_data['population'] = self.leaders.solution_list+self.problem.get_reference_front()
-        else:
-            observable_data['population'] = self.leaders.solution_list
+            observable_data['reference'] = self.problem.get_reference_front()
 
         self.observable.notify_all(**observable_data)
 
@@ -267,9 +267,11 @@ class SMPSORP(SMPSO):
             point.objectives = self.reference_points[i]
             reference_points.append(point)
 
-        observable_data = {'evaluations': self.evaluations,
-                           'population': self.get_result() + reference_points,
-                           'computing time': self.get_current_computing_time()}
+        observable_data = {'evaluations': self.evaluations, 'computing time': self.get_current_computing_time(),
+                           'population': self.get_result() + reference_points}
+
+        if self.problem.reference_front_path:
+            observable_data['reference'] = self.problem.get_reference_front()
 
         self.observable.notify_all(**observable_data)
 

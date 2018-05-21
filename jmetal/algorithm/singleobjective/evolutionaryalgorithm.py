@@ -134,11 +134,11 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
     def update_progress(self):
         self.evaluations += self.population_size
 
-        observable_data = {'evaluations': self.evaluations, 'computing time': self.get_current_computing_time()}
+        observable_data = {'evaluations': self.evaluations, 'computing time': self.get_current_computing_time(),
+                           'population': self.population}
+
         if self.problem.reference_front_path:
-            observable_data['population'] = self.population+self.problem.get_reference_front()
-        else:
-            observable_data['population'] = self.population
+            observable_data['reference'] = self.problem.get_reference_front()
 
         self.observable.notify_all(**observable_data)
 

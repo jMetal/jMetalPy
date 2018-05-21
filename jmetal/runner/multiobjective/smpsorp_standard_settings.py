@@ -2,7 +2,7 @@ import logging
 
 from jmetal.algorithm.multiobjective.smpso import SMPSORP
 from jmetal.component.archive import CrowdingDistanceArchiveWithReferencePoint
-from jmetal.component.observer import AlgorithmObserver
+from jmetal.component.observer import VisualizerObserver
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.mutation import Polynomial
 from jmetal.problem.multiobjective.zdt import ZDT1
@@ -33,13 +33,11 @@ def main() -> None:
         leaders=archives_with_reference_points
     )
 
-    observer = AlgorithmObserver(animation_speed=1*10e-8)
+    observer = VisualizerObserver(animation_speed=1 * 10e-8)
     algorithm.observable.register(observer=observer)
 
     algorithm.run()
     result = algorithm.get_result()
-
-    SolutionListOutput[FloatSolution].plot_scatter_to_screen(result)
 
     logger.info("Algorithm (continuous problem): " + algorithm.get_name())
     logger.info("Problem: " + problem.get_name())

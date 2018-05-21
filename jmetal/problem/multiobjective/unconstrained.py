@@ -9,6 +9,7 @@ from jmetal.core.solution import FloatSolution
 class Kursawe(FloatProblem):
     """ Class representing problem Kursawe """
     def __init__(self, number_of_variables: int = 3):
+        super().__init__()
         self.number_of_objectives = 2
         self.number_of_variables = number_of_variables
         self.number_of_constraints = 0

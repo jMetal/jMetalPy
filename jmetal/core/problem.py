@@ -17,7 +17,7 @@ class Problem(Generic[S]):
         self.number_of_variables: int = None
         self.number_of_objectives: int = None
         self.number_of_constraints: int = None
-        self.reference_front_path: str = False
+        self.reference_front_path: str = None
 
     def evaluate(self, solution: S) -> None:
         pass

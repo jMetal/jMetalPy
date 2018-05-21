@@ -2,12 +2,12 @@ import logging
 from typing import List
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.component.observer import AlgorithmObserver
+from jmetal.component.observer import VisualizerObserver
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament2Selection
-from jmetal.problem.multiobjective.zdt import ZDT4
+from jmetal.problem.multiobjective.zdt import ZDT1, ZDT4
 from jmetal.util.comparator import SolutionAttributeComparator
 
 logging.basicConfig(level=logging.INFO)
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 def main() -> None:
-    problem = ZDT4()
+    problem = ZDT1()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
         problem,
         population_size=100,
@@ -25,7 +25,7 @@ def main() -> None:
         selection=BinaryTournament2Selection([SolutionAttributeComparator("dominance_ranking"),
                                               SolutionAttributeComparator("crowding_distance", lowest_is_best=False)]))
 
-    observer = AlgorithmObserver(animation_speed=1*10e-8)
+    observer = VisualizerObserver(animation_speed=1 * 10e-8)
     algorithm.observable.register(observer=observer)
 
     algorithm.run()

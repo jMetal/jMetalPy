@@ -12,35 +12,32 @@ S = TypeVar('S')
 
 
 class SolutionListOutput(Generic[S]):
-    @staticmethod
-    def plot_scatter_to_file(solution_list: List[S], file_name, output_format: str, dpi: int,
-                             plot_title="Pareto frontier"):
-        """ Plot non-dominated solutions. For problems with TWO variables.
-        """
-        sc = ScatterPlot(plot_title=plot_title)
-        sc.simple_plot(solution_list=solution_list, file_name=file_name, fmt=output_format, dpi=dpi)
 
     @staticmethod
-    def plot_scatter_to_screen(solution_list: List[S],
-                               plot_title="Pareto frontier (interactive)"):
-        """ Plot non-dominated solutions. For problems with TWO variables.
-        """
-        sc = ScatterPlot(plot_title=plot_title)
-        sc.interactive_plot(solution_list=solution_list)
+    def plot_frontier_to_file(solution_list: List[S], reference_solution_list: List[S],
+                              file_name="output", output_format: str='eps', dpi: int=200):
+        """ Plot non-dominated solutions. For problems with TWO variables """
+        sc = ScatterPlot("Pareto frontier")
+        sc.plot(solution_list, reference_solution_list, True, output_format, dpi, file_name)
 
     @staticmethod
-    def plot_scatter_real_time(solution_list: List[S], evaluations: int, computing_time: float, animation_speed: float,
-                               plot_title="Pareto frontier (real-time)"):
-        """ Plot non-dominated solutions in real-time. For problems with TWO variables.
-        """
+    def plot_frontier_to_screen(solution_list: List[S]):
+        """ Plot non-dominated solutions. For problems with TWO variables """
+        sc = ScatterPlot("Pareto frontier")
+        sc.plot_interactive(solution_list)
+
+    @staticmethod
+    def plot_frontier_interactive(solution_list: List[S], reference_solution_list: List[S], evaluations: int,
+                                  computing_time: float, animation_speed: float=1 * 10e-10):
+        """ Plot non-dominated solutions in real-time. For problems with TWO variables """
         global sc
 
         if not plt.get_fignums():
             # The first time, set up plot
-            sc = ScatterPlot(plot_title=plot_title, animation_speed=animation_speed)
-            sc.simple_plot(solution_list=solution_list, save=False)
+            sc = ScatterPlot("Pareto frontier", animation_speed)
+            sc.plot(solution_list, reference_solution_list, save=False)
         else:
-            sc.update(solution_list=solution_list, evaluations=evaluations, computing_time=computing_time)
+            sc.update(solution_list, evaluations, computing_time)
 
     @staticmethod
     def print_variables_to_screen(solution_list: List[S]):

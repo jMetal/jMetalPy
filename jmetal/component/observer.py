@@ -41,16 +41,17 @@ class WriteFrontToFileObserver(Observer):
         self.counter += 1
 
 
-class AlgorithmObserver(Observer):
+class VisualizerObserver(Observer):
     def __init__(self, animation_speed: float, frequency: float = 1.0) -> None:
         self.animation_speed = animation_speed
         self.display_frequency = frequency
 
     def update(self, *args, **kwargs):
         evaluations = kwargs["evaluations"]
-        population = kwargs["population"]
         computing_time = kwargs["computing time"]
+        solution_list = kwargs["population"]
+        reference_solution_list = kwargs.get("reference", None)
 
         if (evaluations % self.display_frequency) == 0:
-            SolutionListOutput.plot_scatter_real_time(population, evaluations, computing_time,
-                                                      self.animation_speed)
+            SolutionListOutput.plot_frontier_interactive(solution_list, reference_solution_list, evaluations,
+                                                         computing_time, self.animation_speed)
