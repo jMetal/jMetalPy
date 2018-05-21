@@ -76,9 +76,16 @@ class ScatterPlot:
 
         plt.show()
 
-    def retrieve_info(self, solution: Solution) -> None:
+    def retrieve_info(self, x_val: float, y_val: float, solution: Solution) -> None:
         """ Retrieve more information about a solution object. """
-        pass
+        logger.info("Output file: " + '{0}-{1}'.format(x_val, y_val))
+        with open('{0}-{1}'.format(x_val, y_val), 'w') as of:
+            for function_value in solution.objectives:
+                of.write(str(function_value) + " ")
+            of.write("\n \n")
+            for function_variable in solution.variables:
+                of.write(str(function_variable) + "\n")
+            of.write("\n")
 
     def update(self, solution_list: List[S], evaluations: int=0, computing_time: float=0) -> None:
         """ Update a plot(). Note that the plot must be initialized first. """
@@ -124,7 +131,7 @@ class ScatterPlot:
                     if solution.objectives[0] == x_val and solution.objectives[1]), None)
 
         if sol is not None:
-            self.retrieve_info(sol)
+            self.retrieve_info(x_val, y_val, sol)
         else:
             raise Exception("Solution is none.")
 
