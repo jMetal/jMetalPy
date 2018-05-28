@@ -18,10 +18,11 @@ class DTLZ1(FloatProblem):
     .. note:: Continuous problem having a convex Pareto front
     """
 
-    def __init__(self, number_of_variables: int = 30, number_of_objectives = 3):
+    def __init__(self, number_of_variables: int = 30, number_of_objectives=3):
         """Constructor
         :param number_of_variables: number of decision variables of the problem
         """
+        super().__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = number_of_objectives
         self.number_of_constraints = 0
