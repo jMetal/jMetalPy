@@ -27,15 +27,17 @@ SUPPORTED_FORMATS = ["eps", "jpeg", "jpg", "pdf", "pgf", "png", "ps", "raw", "rg
 class ScatterPlot:
 
     def __init__(self, plot_title: str, number_of_objectives: int=2):
-        """ Creates a new :class:`Plot` instance.
+        """ Creates a new :class:`ScatterPlot` instance. Suitable for problems with 2 or 3 objectives.
 
         :param plot_title: Title of the scatter diagram.
+        :param number_of_objectives: Number of objectives to be used (2D/3D).
         """
         self.plot_title = plot_title
         self.number_of_objectives = number_of_objectives
 
         # Initialize a plot
         self.fig = plt.figure()
+        self.fig.canvas.set_window_title('jMetalPy')
         self.sc = None
 
         if number_of_objectives == 2:
@@ -46,13 +48,12 @@ class ScatterPlot:
 
         self.__initialize()
 
-    def __initialize(self, is_auto_scalable: bool = True) -> None:
+    def __initialize(self) -> None:
         """ Initialize the scatter plot the first time. """
-        if is_auto_scalable:
-            self.axis.set_autoscale_on(True)
-            self.axis.autoscale_view(True, True, True)
-
         logger.info("Generating plot...")
+
+        self.axis.set_autoscale_on(True)
+        self.axis.autoscale_view(True, True, True)
 
         # Style options
         self.axis.grid(color='#f0f0f5', linestyle='-', linewidth=2, alpha=0.5)
@@ -73,8 +74,13 @@ class ScatterPlot:
         x_values, y_values, z_values = self.__get_objectives(solution_list)
         self.__plot(x_values, y_values, z_values, solution_list)
 
+        if show:
+            plt.show()
+
     def update(self, solution_list: List[S], evaluations: int=0, computing_time: float=0) -> None:
-        """ Update a plot(). Note that the plot must be initialized first. """
+        """ Update a plot with new values.
+
+        .. note:: The plot must be initialized first. """
         if self.sc is None:
             raise Exception("Error while updating: Initialize plot first!")
 
@@ -105,12 +111,15 @@ class ScatterPlot:
         self.fig.canvas.mpl_disconnect(event_handler)
 
     def save(self, file_name: str, fmt: str='eps', dpi: int=200):
+        """ Save the plot in a file. """
+        logger.info("Saving to file...")
+
         if fmt not in SUPPORTED_FORMATS:
             raise Exception("{0} is not a valid format! Use one of these instead: {0}".format(fmt, SUPPORTED_FORMATS))
         self.fig.savefig(file_name + '.' + fmt, format=fmt, dpi=dpi)
 
     def retrieve_info(self, x_val: float, y_val: float, solution: Solution) -> None:
-        """ Retrieve more information about a solution object. """
+        """ Retrieve some information about a solution object. """
         logger.info("Output file: " + '{0}-{1}'.format(x_val, y_val))
         with open('{0}-{1}'.format(x_val, y_val), 'w') as of:
             for function_value in solution.objectives:
@@ -121,7 +130,9 @@ class ScatterPlot:
             of.write("\n")
 
     def __get_objectives(self, solution_list: List[S]) -> Tuple[list, list, list]:
-        """ Get coords (x,y) from a solution_list. """
+        """ Get coords (x,y,z) from a solution_list.
+
+        :return: A tuple with (x,y,z) values. The third might be empty if working with a problem with 2 objectives."""
         if solution_list is None:
             raise Exception("Solution list is none!")
 

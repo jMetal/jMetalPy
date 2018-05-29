@@ -20,8 +20,8 @@ class Observer(object):
 
     @abstractmethod
     def update(self, *args, **kwargs):
-        """
-        Update method
+        """ Update method
+
         :param args:
         :param kwargs:
         :return:
