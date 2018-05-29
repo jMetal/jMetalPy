@@ -11,7 +11,7 @@ Common imports:
    from jmetal.component.archive import CrowdingDistanceArchive
 
 SMPSO with standard settings
-------------
+------------------------------------
 
 .. code-block:: python
 
@@ -29,7 +29,7 @@ SMPSO with standard settings
    result = algorithm.get_result()
 
 SMPSO/RP with standard settings
-------------
+------------------------------------
 
 .. code-block:: python
 

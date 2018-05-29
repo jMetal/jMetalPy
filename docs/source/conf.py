@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 # http://blog.rtwilson.com/how-to-make-your-sphinx-documentation-compile-with-readthedocs-when-youre-using-numpy-and-scipy/
 import mock
 
-MOCK_MODULES = ['numpy', 'matplotlib', 'matplotlib.pyplot']
+MOCK_MODULES = ['numpy', 'dask', 'dask[distributed]', 'matplotlib', 'matplotlib.pyplot', 'matplotlib.axes']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 
@@ -30,7 +30,7 @@ copyright = '2018, Antonio J. Nebro'
 author = 'Antonio J. Nebro'
 
 # The short X.Y version
-version = ''
+version = '1.0.0'
 # The full version, including alpha/beta/rc tags
 release = ''
 

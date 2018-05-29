@@ -14,7 +14,7 @@ Common imports:
    from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
 
 NSGA-II with standard settings
-------------
+------------------------------------
 
 .. code-block:: python
 
@@ -31,7 +31,7 @@ NSGA-II with standard settings
    result = algorithm.get_result()
 
 NSGA-II with observer
-------------
+------------------------------------
 
 .. code-block:: python
 
@@ -53,7 +53,7 @@ NSGA-II with observer
    result = algorithm.get_result()
 
 NSGA-II with plot in real-time
-------------
+------------------------------------
 
 .. code-block:: python
 
@@ -75,7 +75,7 @@ NSGA-II with plot in real-time
    result = algorithm.get_result()
 
 NSGA-II stopping by time
-------------
+------------------------------------
 
 .. code-block:: python
 

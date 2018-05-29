@@ -1,3 +1,1 @@
 sphinx==1.6.3
-matplotlib==2.0.2
-dask[distributed]==0.17.4
