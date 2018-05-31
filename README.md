@@ -40,7 +40,7 @@ $ pip install -r requirements.txt
 ```
 
 # Usage
-Examples of configuring and running all the included algorithms are located in the [jmetalpy.runner](jmetal/runner) folder.
+Examples of configuring and running all the included algorithms are located [in the docs](http://jmetalpy.readthedocs.io/en/develop/examples.html).
 
 # Contributing
 Please read [CONTRIBUTING](CONTRIBUTING.md) for details on how to contribute to the project.

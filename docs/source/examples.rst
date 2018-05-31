@@ -8,3 +8,4 @@ Examples
 
    runner/nsgaii
    runner/smpso
+   runner/observer

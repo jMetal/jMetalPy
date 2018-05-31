@@ -1,7 +1,7 @@
 NSGA-II
 ========================
 
-Common imports:
+Common imports for these examples:
 
 .. code-block:: python
 
@@ -26,50 +26,6 @@ NSGA-II with standard settings
       crossover=SBX(1.0, distribution_index=20),
       selection=BinaryTournamentSelection(RankingAndCrowdingDistanceComparator())
    )
-
-   algorithm.run()
-   result = algorithm.get_result()
-
-NSGA-II with observer
-------------------------------------
-
-.. code-block:: python
-
-   from jmetal.component.observer import WriteFrontToFileObserver
-
-   algorithm = NSGAII[FloatSolution, List[FloatSolution]](
-      problem,
-      population_size=100,
-      max_evaluations=25000,
-      mutation=Polynomial(1.0/problem.number_of_variables, distribution_index=20),
-      crossover=SBX(1.0, distribution_index=20),
-      selection=BinaryTournamentSelection(RankingAndCrowdingDistanceComparator())
-   )
-
-   observer = WriteFrontToFileObserver("output_directory")
-   algorithm.observable.register(observer=observer)
-
-   algorithm.run()
-   result = algorithm.get_result()
-
-NSGA-II with plot in real-time
-------------------------------------
-
-.. code-block:: python
-
-   from jmetal.component.observer import AlgorithmObserver
-
-   algorithm = NSGAII[FloatSolution, List[FloatSolution]](
-      problem,
-      population_size=100,
-      max_evaluations=25000,
-      mutation=Polynomial(1.0/problem.number_of_variables, distribution_index=20),
-      crossover=SBX(1.0, distribution_index=20),
-      selection=BinaryTournamentSelection(RankingAndCrowdingDistanceComparator())
-   )
-
-   observer = AlgorithmObserver(animation_speed=1*10e-8)
-   algorithm.observable.register(observer=observer)
 
    algorithm.run()
    result = algorithm.get_result()
