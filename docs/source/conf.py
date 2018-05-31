@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 # http://blog.rtwilson.com/how-to-make-your-sphinx-documentation-compile-with-readthedocs-when-youre-using-numpy-and-scipy/
 import mock
 
-MOCK_MODULES = ['numpy', 'dask', 'dask.distributed', 'mpl_toolkits', 'matplotlib', 'matplotlib.pyplot', 'matplotlib.axes']
+MOCK_MODULES = ['numpy', 'dask', 'dask.distributed', 'mpl_toolkits', 'mpl_toolkits.mplot3d', 'matplotlib', 'matplotlib.pyplot', 'matplotlib.axes']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 
@@ -82,6 +82,7 @@ pygments_style = 'sphinx'
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
+html_logo = 'jmetalpy.png'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
