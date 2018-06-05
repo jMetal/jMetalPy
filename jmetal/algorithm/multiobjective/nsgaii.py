@@ -10,6 +10,14 @@ from jmetal.util.observable import Observable, DefaultObservable
 S = TypeVar('S')
 R = TypeVar(List[S])
 
+"""
+.. module:: NSGA-II
+   :platform: Unix, Windows
+   :synopsis: Implementation of NSGA-II.
+
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+"""
+
 
 class NSGAII(GenerationalGeneticAlgorithm[S, R]):
     def __init__(self,
@@ -21,6 +29,19 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
                  selection: Selection[List[S], S],
                  observable: Observable = DefaultObservable(),
                  evaluator: Evaluator[S] = SequentialEvaluator[S]()):
+        """ NSGA-II is a genetic algorithm (GA), i.e. it belongs to the evolutionary algorithms (EAs)
+        family. The implementation of NSGA-II provided in jMetalPy follows the evolutionary
+        algorithm template described in the algorithm templates section (:mod:`algorithm`) of the documentation.
+
+        :param problem: The problem to solve.
+        :param population_size:
+        :param max_evaluations:
+        :param mutation:
+        :param crossover:
+        :param selection:
+        :param observable:
+        :param evaluator: An evaluator object to evaluate the solutions in the population.
+        """
         super(NSGAII, self).__init__(
             problem,
             population_size,
@@ -32,6 +53,13 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
             evaluator)
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[TypeVar('S')]]:
+        """ This method joins the current and offspring populations to produce the population of the next generation
+        by applying the ranking and crowding distance selection.
+
+        :param population:
+        :param offspring_population:
+        :return: New population.
+        """
         join_population = population + offspring_population
         return RankingAndCrowdingDistanceSelection(self.population_size).execute(join_population)
 
@@ -39,6 +67,8 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
         return "NSGA-II"
 
     def get_result(self) -> R:
+        """:return: Population.
+        """
         return self.population
 
 

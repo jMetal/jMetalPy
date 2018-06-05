@@ -1,10 +1,11 @@
-import random
+from os.path import dirname, join
 from typing import Generic, TypeVar
+import random
 
-import jmetal
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
+from jmetal.util.front_utils import walk_up_folder, read_front_from_file_as_solutions
 
-__author__ = "Antonio J. Nebro"
+FILE_PATH = dirname(join(dirname(__file__)))
 
 S = TypeVar('S')
 
@@ -13,26 +14,31 @@ class Problem(Generic[S]):
     """ Class representing problems """
 
     def __init__(self):
-        self.objectives = [jmetal.core.objective.Objective]
         self.number_of_variables: int = None
         self.number_of_objectives: int = None
         self.number_of_constraints: int = None
+        self.reference_front_path: str = None
 
-    def evaluate(self, solution: S) -> None:
-        for i in range(self.number_of_objectives):
-            if self.objectives[i].is_a_minimization_objective():
-                solution.objectives[i] = self.objectives[i].compute(solution, self)
-            else:
-                solution.objectives[i] = -1.0 * self.objectives[i].compute(solution, self)
+    def evaluate(self, solution: S) -> S:
+        raise NotImplemented
 
     def evaluate_constraints(self, solution: S):
-        pass
+        raise NotImplemented
 
     def create_solution(self) -> S:
-        pass
+        raise NotImplemented
 
-    def get_name(self) -> str :
-        pass
+    def get_reference_front(self) -> list:
+        front = []
+
+        if self.reference_front_path:
+            computed_path = join(walk_up_folder(FILE_PATH, 2), self.reference_front_path)
+            front = read_front_from_file_as_solutions(computed_path)
+
+        return front
+
+    def get_name(self) -> str:
+        raise NotImplemented
 
 
 class BinaryProblem(Problem[BinarySolution]):
@@ -49,8 +55,9 @@ class FloatProblem(Problem[FloatSolution]):
     """ Class representing float problems """
 
     def __init__(self):
-        self.lower_bound : [] = None
-        self.upper_bound : [] = None
+        super().__init__()
+        self.lower_bound: [] = None
+        self.upper_bound: [] = None
 
     def create_solution(self) -> FloatSolution:
         new_solution = FloatSolution(self.number_of_variables, self.number_of_objectives, self.number_of_constraints,
@@ -63,7 +70,9 @@ class FloatProblem(Problem[FloatSolution]):
 
 class IntegerProblem(Problem[IntegerSolution]):
     """ Class representing integer problems """
+
     def __init__(self):
+        super().__init__()
         self.lower_bound : [] = None
         self.upper_bound : [] = None
 

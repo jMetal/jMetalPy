@@ -1,5 +1,5 @@
-from typing import TypeVar, List
 import logging
+from typing import TypeVar, List
 
 S = TypeVar('S')
 

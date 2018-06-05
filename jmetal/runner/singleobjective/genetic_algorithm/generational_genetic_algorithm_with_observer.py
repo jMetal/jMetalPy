@@ -1,7 +1,7 @@
 import logging
 
 from jmetal.algorithm.singleobjective.evolutionaryalgorithm import GenerationalGeneticAlgorithm
-from jmetal.component.observer import BasicAlgorithmConsumer
+from jmetal.component.observer import BasicAlgorithmObserver
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
@@ -23,7 +23,7 @@ def main() -> None:
         crossover=SBX(1.0, distribution_index=20),
         selection=BinaryTournamentSelection())
 
-    observer = BasicAlgorithmConsumer(2000)
+    observer = BasicAlgorithmObserver(2000)
 
     algorithm.observable.register(observer=observer)
 

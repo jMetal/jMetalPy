@@ -3,10 +3,15 @@ from typing import TypeVar, List, Generic
 from jmetal.component.archive import NonDominatedSolutionListArchive
 from jmetal.core.problem import Problem
 
-""" Class representing simple random search algorithms """
-
-
 S = TypeVar('S')
+
+"""
+.. module:: RamdomSearch
+   :platform: Unix, Windows
+   :synopsis: Simple random search algorithms.
+
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+"""
 
 
 class RandomSearch(Generic[S]):

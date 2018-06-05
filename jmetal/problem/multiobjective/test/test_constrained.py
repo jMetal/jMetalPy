@@ -71,5 +71,6 @@ class TanakaTestCases(unittest.TestCase):
         problem = Tanaka()
         self.assertEqual("Tanaka", problem.get_name())
 
+
 if __name__ == '__main__':
     unittest.main()

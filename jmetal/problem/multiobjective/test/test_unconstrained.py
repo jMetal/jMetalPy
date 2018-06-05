@@ -198,13 +198,14 @@ class Viennet2TestCases(unittest.TestCase):
 
         problem.evaluate(solution2)
 
-        self.assertAlmostEqual(solution2.objectives[0],  14.0607692307);
-        self.assertAlmostEqual(solution2.objectives[1], -11.8818055555);
-        self.assertAlmostEqual(solution2.objectives[2], -11.1532369747);
+        self.assertAlmostEqual(solution2.objectives[0],  14.0607692307)
+        self.assertAlmostEqual(solution2.objectives[1], -11.8818055555)
+        self.assertAlmostEqual(solution2.objectives[2], -11.1532369747)
 
     def test_should_get_name_return_the_right_name(self):
         problem = Viennet2()
         self.assertEqual("Viennet2", problem.get_name())
+
 
 if __name__ == '__main__':
     unittest.main()

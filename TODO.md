@@ -1,6 +1,6 @@
-# TODO list
+# ToDo list
 
-- [ ] The documentation of the code is not complete.
-- [ ] Inclusion of integration tests for the algorithm implementations.
-- [ ] Full coverage with unit tests.
-- [ ] Add MSA problem.
+- [ ] Add _experiment_ class with options to export results in LaTeX.
+- [ ] Support parallelism (see: [Dask](https://dask.pydata.org/en/latest/)).
+- [ ] Auto-generate documentation (also: the documentation of the code is not complete!)
+- [ ] Add _state-of-the-art_ visualization methods.

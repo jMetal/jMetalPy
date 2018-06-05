@@ -12,35 +12,33 @@ S = TypeVar('S')
 
 
 class SolutionListOutput(Generic[S]):
-    @staticmethod
-    def plot_scatter_to_file(solution_list: List[S], file_name, output_format: str, dpi: int,
-                             plot_title="Pareto frontier"):
-        """ Plot non-dominated solutions. For problems with TWO variables.
-        """
-        sc = ScatterPlot(plot_title=plot_title)
-        sc.simple_plot(solution_list=solution_list, file_name=file_name, fmt=output_format, dpi=dpi)
 
     @staticmethod
-    def plot_scatter_to_screen(solution_list: List[S],
-                               plot_title="Pareto frontier (interactive)"):
-        """ Plot non-dominated solutions. For problems with TWO variables.
-        """
-        sc = ScatterPlot(plot_title=plot_title)
-        sc.interactive_plot(solution_list=solution_list)
+    def plot_frontier_to_file(solution_list: List[S], reference_solution_list: List[S], title: str,
+                              file_name: str, output_format: str='eps'):
+        """ Plot non-dominated solutions. For problems with TWO variables """
+        sc = ScatterPlot(title, solution_list[0].number_of_objectives)
+        sc.plot(solution_list, reference_solution_list)
+        sc.save(file_name, output_format)
 
     @staticmethod
-    def plot_scatter_real_time(solution_list: List[S], evaluations: int, computing_time: float, animation_speed: float,
-                               plot_title="Pareto frontier (real-time)"):
-        """ Plot non-dominated solutions in real-time. For problems with TWO variables.
-        """
+    def plot_frontier_to_screen(solution_list: List[S], reference_solution_list: List[S], title: str):
+        """ Plot non-dominated solutions. For problems with TWO variables """
+        sc = ScatterPlot(title, solution_list[0].number_of_objectives)
+        sc.plot(solution_list, reference_solution_list, True)
+
+    @staticmethod
+    def plot_frontier_live(solution_list: List[S], reference_solution_list: List[S], title: str,
+                           evaluations: int, computing_time: float):
+        """ Plot non-dominated solutions in real-time. For problems with TWO variables """
         global sc
 
         if not plt.get_fignums():
             # The first time, set up plot
-            sc = ScatterPlot(plot_title=plot_title, animation_speed=animation_speed)
-            sc.simple_plot(solution_list=solution_list, save=False)
+            sc = ScatterPlot(title, solution_list[0].number_of_objectives)
+            sc.plot(solution_list, reference_solution_list)
         else:
-            sc.update(solution_list=solution_list, evaluations=evaluations, computing_time=computing_time)
+            sc.update(solution_list, evaluations, computing_time)
 
     @staticmethod
     def print_variables_to_screen(solution_list: List[S]):
@@ -55,7 +53,7 @@ class SolutionListOutput(Generic[S]):
             print()
 
     @staticmethod
-    def print_function_values_to_file(file_name, solution_list: List[S]):
+    def print_function_values_to_file(solution_list: List[S], file_name):
         logger.info("Output file (function values): " + file_name)
         with open(file_name, 'w') as of:
             for solution in solution_list:

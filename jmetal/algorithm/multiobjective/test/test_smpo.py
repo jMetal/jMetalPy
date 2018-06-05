@@ -1,4 +1,5 @@
 import unittest
+
 import numpy
 
 from jmetal.algorithm.multiobjective.smpso import SMPSO
@@ -9,7 +10,6 @@ from jmetal.operator.mutation import Polynomial
 
 
 class SMPSOTestCases(unittest.TestCase):
-
     def setUp(self):
         pass
 
@@ -39,6 +39,7 @@ class SMPSOTestCases(unittest.TestCase):
 
     class __DummyFloatProblem(Problem[FloatSolution]):
         def __init__(self):
+            super().__init__()
             self.number_of_variables = 2
             self.number_of_objectives = 2
             self.number_of_constraints = 0
