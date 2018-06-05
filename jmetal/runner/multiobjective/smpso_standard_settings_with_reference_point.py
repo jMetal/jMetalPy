@@ -22,7 +22,7 @@ def main() -> None:
         leaders=CrowdingDistanceArchiveWithReferencePoint(100, reference_point=[1.0, 1.0])
     )
 
-    observer = VisualizerObserver(animation_speed=1 * 10e-8)
+    observer = VisualizerObserver()
     algorithm.observable.register(observer=observer)
 
     algorithm.run()

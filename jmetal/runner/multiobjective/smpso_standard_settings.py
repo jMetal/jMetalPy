@@ -22,7 +22,7 @@ def main() -> None:
         leaders=CrowdingDistanceArchive(100)
     )
 
-    observer = VisualizerObserver(animation_speed=1 * 10e-8)
+    observer = VisualizerObserver()
     algorithm.observable.register(observer=observer)
 
     algorithm.run()
