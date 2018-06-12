@@ -11,7 +11,7 @@ def main() -> None:
     problem = ZDT1()
     swarm_size = 100
 
-    reference_points = [[0.8, 0.2], [0.4, 0.6]]
+    reference_points = [[0.0, 0.0]]
     archives_with_reference_points = []
 
     for point in reference_points:

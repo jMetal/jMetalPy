@@ -46,7 +46,6 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
 
     def create_initial_population(self) -> List[S]:
         pass
-
     def evaluate_population(self, population: List[S]) -> List[S]:
         pass
 
