@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 
 from jmetal.util.graphic import ScatterPlot
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 S = TypeVar('S')

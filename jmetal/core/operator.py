@@ -2,21 +2,21 @@ from typing import TypeVar, Generic, List
 
 __author__ = "Antonio J. Nebro"
 
-Source = TypeVar('S')
-Result = TypeVar('R')
+S = TypeVar('S')
+R = TypeVar('R')
 
 
-class Operator(Generic[Source, Result]):
+class Operator(Generic[S, R]):
     """ Class representing operators """
 
-    def execute(self, source: Source) -> Result:
+    def execute(self, source: S) -> R:
         pass
 
     def get_name(self):
         pass
 
 
-class Mutation(Operator[Source, Source]):
+class Mutation(Operator[S, S]):
     """ Class representing mutation operators """
 
     def __init__(self, probability: float):
@@ -27,11 +27,11 @@ class Mutation(Operator[Source, Source]):
 
         self.probability = probability
 
-    def execute(self, source: Source) -> Source:
+    def execute(self, source: S) -> S:
         pass
 
 
-class Crossover(Operator[List[Source], List[Result]]):
+class Crossover(Operator[List[S], List[R]]):
     def __init__(self, probability: float):
         if probability > 1.0:
             raise Exception("The probability is greater than one: " + str(probability))
@@ -40,13 +40,16 @@ class Crossover(Operator[List[Source], List[Result]]):
 
         self.probability = probability
 
-    def execute(self, source: Source) -> Result:
+    def execute(self, source: S) -> R:
         pass
 
     def get_number_of_parents(self) -> int:
         pass
 
 
-class Selection(Operator[Source, Result]):
-    def execute(self, source: Source) -> Result:
+class Selection(Operator[S, R]):
+    def __init__(self):
+        pass
+
+    def execute(self, source: S) -> R:
         pass

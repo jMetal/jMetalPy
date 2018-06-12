@@ -1,7 +1,7 @@
 About
 ==============
 
-jMetalPy is being developed by `Antonio J. Nebro <http://www.lcc.uma.es/%7Eantonio/>`_, associate professor at the University of Málaga, and Antonio Benítez-Hidalgo.
+jMetalPy is being developed by `Antonio J. Nebro <http://www.lcc.uma.es/%7Eantonio/>`_, associate professor at the University of Málaga, and `Antonio Benítez-Hidalgo <https://benhid.github.io/about//>`_.
 
 References
 --------------------------------

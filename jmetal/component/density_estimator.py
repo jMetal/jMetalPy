@@ -1,6 +1,8 @@
 import logging
 from typing import TypeVar, List
 
+logger = logging.getLogger(__name__)
+
 S = TypeVar('S')
 
 """
@@ -10,9 +12,6 @@ S = TypeVar('S')
 
 .. moduleauthor:: Álvaro Gómez Jáuregui <alvarogj@lcc.uma.es>
 """
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 
 class DensityEstimator(List[S]):
@@ -67,7 +66,7 @@ class CrowdingDistance(DensityEstimator[List[S]]):
 
                 # Check if minimum and maximum are the same (in which case do nothing)
                 if objective_maxn - objective_minn == 0:
-                    logger.info("Minimum and maximum are the same!")
+                    logger.warning("Minimum and maximum are the same!")
                 else:
                     distance = distance / (objective_maxn - objective_minn)
 

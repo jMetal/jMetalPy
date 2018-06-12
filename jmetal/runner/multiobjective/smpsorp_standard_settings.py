@@ -3,13 +3,8 @@ import logging
 from jmetal.algorithm.multiobjective.smpso import SMPSORP
 from jmetal.component.archive import CrowdingDistanceArchiveWithReferencePoint
 from jmetal.component.observer import VisualizerObserver
-from jmetal.core.solution import FloatSolution
 from jmetal.operator.mutation import Polynomial
 from jmetal.problem.multiobjective.zdt import ZDT1
-from jmetal.util.solution_list_output import SolutionListOutput
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 
 def main() -> None:
@@ -33,15 +28,24 @@ def main() -> None:
         leaders=archives_with_reference_points
     )
 
-    observer = VisualizerObserver(animation_speed=1 * 10e-8)
+    observer = VisualizerObserver()
     algorithm.observable.register(observer=observer)
 
     algorithm.run()
     result = algorithm.get_result()
 
-    logger.info("Algorithm (continuous problem): " + algorithm.get_name())
-    logger.info("Problem: " + problem.get_name())
+    print("Algorithm (continuous problem): " + algorithm.get_name())
+    print("Problem: " + problem.get_name())
 
 
 if __name__ == '__main__':
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s",
+        handlers=[
+            logging.FileHandler('jmetalpy.log'),
+            logging.StreamHandler()
+        ]
+    )
+
     main()

@@ -3,9 +3,7 @@ from typing import Generic, TypeVar
 import random
 
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
-from jmetal.util.front_utils import walk_up_folder, read_front_from_file_as_solutions
-
-FILE_PATH = dirname(join(dirname(__file__)))
+from jmetal.util.front_file import walk_up_folder, read_front_from_file_as_solutions
 
 S = TypeVar('S')
 
@@ -30,6 +28,7 @@ class Problem(Generic[S]):
 
     def get_reference_front(self) -> list:
         front = []
+        FILE_PATH = dirname(join(dirname(__file__)))
 
         if self.reference_front_path:
             computed_path = join(walk_up_folder(FILE_PATH, 2), self.reference_front_path)

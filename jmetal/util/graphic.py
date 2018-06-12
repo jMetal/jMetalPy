@@ -9,7 +9,6 @@ from jmetal.core.solution import Solution
 
 warnings.filterwarnings("ignore",".*GUI is implemented.*")
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 S = TypeVar('S')

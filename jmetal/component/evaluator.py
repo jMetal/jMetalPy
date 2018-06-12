@@ -1,5 +1,6 @@
 from multiprocessing.pool import ThreadPool
 from typing import TypeVar, List, Generic
+
 from dask.distributed import Client, as_completed
 
 from jmetal.core.problem import Problem

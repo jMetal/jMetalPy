@@ -1,24 +1,25 @@
 from setuptools import setup, find_packages
 
-setup(name='jmetalpy',
-      version='1.0.0',
-      description='JMetalPy. Python version of the jMetal framework',
-      author='Antonio J. Nebro',
-      author_email='ajnebro@uma.es',
-      maintainer='Antonio Nebro',
-      maintainer_email='ajnebro@uma.es',
-      license='MIT',
-      url='https://github.com/jMetal/jMetalPy',
-      classifiers=[
-          'Development Status :: 3 - Alpha',
+setup(
+    name='jmetalpy',
+    version='1.0.0',
+    description='JMetalPy. Python version of the jMetal framework',
+    author='Antonio J. Nebro',
+    author_email='ajnebro@uma.es',
+    maintainer='Antonio Nebro',
+    maintainer_email='ajnebro@uma.es',
+    license='MIT',
+    url='https://github.com/jMetal/jMetalPy',
+    classifiers=[
+      'Development Status :: 3 - Alpha',
 
-          'Intended Audience :: Science/Research',
+      'Intended Audience :: Science/Research',
 
-          'License :: OSI Approved :: MIT License',
+      'License :: OSI Approved :: MIT License',
 
-          'Topic :: Scientific/Engineering :: Artificial Intelligence',
+      'Topic :: Scientific/Engineering :: Artificial Intelligence',
 
-          'Programming Language :: Python :: 3.6'],
+      'Programming Language :: Python :: 3.6'],
 
-      packages=find_packages(exclude=['test_']),
-      )
+    packages=find_packages(exclude=['test_']),
+)
