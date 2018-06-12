@@ -1,7 +1,7 @@
 from os.path import dirname, join
 import unittest
 
-from jmetal.util.front_utils import read_front_from_file, walk_up_folder
+from jmetal.util.front_file import read_front_from_file, walk_up_folder
 from jmetal.util.quality_indicator import HyperVolume
 
 FILE_PATH = dirname(join(dirname(__file__)))
