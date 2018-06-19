@@ -41,8 +41,9 @@ class WriteFrontToFileObserver(Observer):
 
 
 class VisualizerObserver(Observer):
-    def __init__(self, frequency: float = 1.0) -> None:
+    def __init__(self, frequency: float = 1.0, replace: bool=True) -> None:
         self.display_frequency = frequency
+        self.replace = replace
 
     def update(self, *args, **kwargs):
         evaluations = kwargs["evaluations"]
@@ -52,4 +53,4 @@ class VisualizerObserver(Observer):
 
         if (evaluations % self.display_frequency) == 0:
             SolutionListOutput.plot_frontier_live(
-                solution_list, reference_solution_list, "Pareto frontier", evaluations, computing_time)
+                solution_list, reference_solution_list, "Pareto frontier", evaluations, computing_time, self.replace)

@@ -12,9 +12,17 @@ class Solution(Generic[S]):
         self.number_of_variables: int = number_of_variables
         self.number_of_constraints: int = number_of_constraints
         self.objectives = [0.0 for _ in range(self.number_of_objectives)]
-        self.normalized_objectives = [0.0 for _ in range(self.number_of_objectives)]
         self.variables = [[] for _ in range(self.number_of_variables)]
         self.attributes = {}
+
+    def __str__(self) -> str:
+        solution = "number_of_objectives: {0} \nnumber_of_variables: {1} \nnumber_of_constraints: {2} \n".format(
+            self.number_of_objectives, self.number_of_variables, self.number_of_constraints
+        )
+        solution += "objectives: \n {0} \n".format(self.objectives)
+        solution += "variables: \n {0}".format(self.variables)
+
+        return solution
 
 
 class BinarySolution(Solution[BitSet]):

@@ -7,13 +7,13 @@ from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament2Selection
-from jmetal.problem.multiobjective.dtlz import DTLZ1
+from jmetal.problem.multiobjective.zdt import ZDT1
 from jmetal.util.comparator import SolutionAttributeComparator
 from jmetal.util.solution_list_output import SolutionListOutput
 
 
 def main():
-    problem = DTLZ1()
+    problem = ZDT1()
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
         problem=problem,
         population_size=100,
@@ -23,7 +23,7 @@ def main():
         selection=BinaryTournament2Selection([SolutionAttributeComparator("dominance_ranking"),
                                               SolutionAttributeComparator("crowding_distance", lowest_is_best=False)]))
 
-    observer = VisualizerObserver()
+    observer = VisualizerObserver(replace=True)
     algorithm.observable.register(observer=observer)
 
     algorithm.run()
