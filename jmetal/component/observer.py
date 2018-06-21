@@ -1,13 +1,16 @@
 import logging
 import os
 
+from jmetal.core.problem import Problem
+from jmetal.util.graphic import ScatterBokeh, ScatterMatplotlib
 from jmetal.util.observable import Observer
-from jmetal.util.solution_list_output import PrintSolutionList, GraphicSolutionList
+from jmetal.util.solution_list_output import SolutionList
 
 logger = logging.getLogger(__name__)
 
 
 class BasicAlgorithmObserver(Observer):
+
     def __init__(self, frequency: float = 1.0) -> None:
         self.display_frequency = frequency
 
@@ -21,6 +24,7 @@ class BasicAlgorithmObserver(Observer):
 
 
 class WriteFrontToFileObserver(Observer):
+
     def __init__(self, output_directory) -> None:
         self.counter = 0
         self.directory = output_directory
@@ -34,17 +38,19 @@ class WriteFrontToFileObserver(Observer):
             os.mkdir(self.directory)
 
     def update(self, *args, **kwargs):
-        PrintSolutionList.print_function_values_to_file(
+        SolutionList.print_function_values_to_file(
             kwargs["population"], self.directory + "/FUN." + str(self.counter))
 
         self.counter += 1
 
 
 class VisualizerObserver(Observer):
-    def __init__(self, ref: list=None, replace: bool=True) -> None:
+
+    def __init__(self, problem: Problem, replace: bool=True) -> None:
         self.display_frequency = 1.0
         self.replace = replace
-        self.solution_list_output = GraphicSolutionList(title='JMETALPY', reference=ref)
+        self.reference = problem.get_reference_front()
+        self.plot = ScatterMatplotlib(plot_title='VisualizerObserver', number_of_objectives=problem.number_of_objectives)
 
     def update(self, *args, **kwargs):
         evaluations = kwargs["evaluations"]
@@ -54,4 +60,4 @@ class VisualizerObserver(Observer):
         title = '{0}, Eval: {1}, Time: {2}'.format("VisualizerObserver", evaluations, computing_time)
 
         if (evaluations % self.display_frequency) == 0:
-            self.solution_list_output.plot_frontier_live(solution_list, title, self.replace)
+            self.plot.update(solution_list=solution_list, reference=self.reference, new_title=title, persistence=self.replace)

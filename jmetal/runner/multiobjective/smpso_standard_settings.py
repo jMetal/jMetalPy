@@ -7,7 +7,6 @@ from jmetal.core.solution import FloatSolution
 from jmetal.operator.mutation import Polynomial
 from jmetal.problem.multiobjective.dtlz import DTLZ1
 from jmetal.problem.multiobjective.zdt import ZDT1
-from jmetal.util.solution_list_output import SolutionListOutput
 
 
 def main() -> None:
@@ -20,14 +19,10 @@ def main() -> None:
         leaders=CrowdingDistanceArchive(100)
     )
 
-    observer = VisualizerObserver(replace=True)
+    observer = VisualizerObserver(problem)
     algorithm.observable.register(observer=observer)
 
     algorithm.run()
-    result = algorithm.get_result()
-
-    SolutionListOutput[FloatSolution].plot_frontier_to_screen(result, None, title=problem.get_name())
-    SolutionListOutput[FloatSolution].print_function_values_to_file(result, "SMPSO." + problem.get_name())
 
     print("Algorithm (continuous problem): " + algorithm.get_name())
     print("Problem: " + problem.get_name())
