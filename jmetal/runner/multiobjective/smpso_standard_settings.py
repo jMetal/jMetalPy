@@ -11,7 +11,7 @@ from jmetal.util.solution_list_output import SolutionListOutput
 
 
 def main() -> None:
-    problem = DTLZ1()
+    problem = ZDT1()
     algorithm = SMPSO(
         problem=problem,
         swarm_size=100,
@@ -20,7 +20,7 @@ def main() -> None:
         leaders=CrowdingDistanceArchive(100)
     )
 
-    observer = VisualizerObserver()
+    observer = VisualizerObserver(replace=True)
     algorithm.observable.register(observer=observer)
 
     algorithm.run()

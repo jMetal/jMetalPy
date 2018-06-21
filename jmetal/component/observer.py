@@ -2,7 +2,7 @@ import logging
 import os
 
 from jmetal.util.observable import Observer
-from jmetal.util.solution_list_output import SolutionListOutput
+from jmetal.util.solution_list_output import PrintSolutionList, GraphicSolutionList
 
 logger = logging.getLogger(__name__)
 
@@ -34,23 +34,24 @@ class WriteFrontToFileObserver(Observer):
             os.mkdir(self.directory)
 
     def update(self, *args, **kwargs):
-        SolutionListOutput.print_function_values_to_file(
+        PrintSolutionList.print_function_values_to_file(
             kwargs["population"], self.directory + "/FUN." + str(self.counter))
 
         self.counter += 1
 
 
 class VisualizerObserver(Observer):
-    def __init__(self, frequency: float = 1.0, replace: bool=True) -> None:
-        self.display_frequency = frequency
+    def __init__(self, ref: list=None, replace: bool=True) -> None:
+        self.display_frequency = 1.0
         self.replace = replace
+        self.solution_list_output = GraphicSolutionList(title='JMETALPY', reference=ref)
 
     def update(self, *args, **kwargs):
         evaluations = kwargs["evaluations"]
         computing_time = kwargs["computing time"]
         solution_list = kwargs["population"]
-        reference_solution_list = kwargs.get("reference", None)
+
+        title = '{0}, Eval: {1}, Time: {2}'.format("VisualizerObserver", evaluations, computing_time)
 
         if (evaluations % self.display_frequency) == 0:
-            SolutionListOutput.plot_frontier_live(
-                solution_list, reference_solution_list, "Pareto frontier", evaluations, computing_time, self.replace)
+            self.solution_list_output.plot_frontier_live(solution_list, title, self.replace)

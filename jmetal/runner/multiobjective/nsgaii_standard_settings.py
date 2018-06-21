@@ -9,7 +9,7 @@ from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament2Selection
 from jmetal.problem.multiobjective.zdt import ZDT1
 from jmetal.util.comparator import SolutionAttributeComparator
-from jmetal.util.solution_list_output import SolutionListOutput
+from jmetal.util.solution_list_output import PrintSolutionList, GraphicSolutionList
 
 
 def main():
@@ -23,18 +23,17 @@ def main():
         selection=BinaryTournament2Selection([SolutionAttributeComparator("dominance_ranking"),
                                               SolutionAttributeComparator("crowding_distance", lowest_is_best=False)]))
 
-    observer = VisualizerObserver(replace=True)
+    observer = VisualizerObserver(problem.get_reference_front())
+    dobserver = VisualizerObserver()
     algorithm.observable.register(observer=observer)
 
     algorithm.run()
     result = algorithm.get_result()
 
-    SolutionListOutput[FloatSolution].plot_frontier_to_file(result, None,
-                                                            title=problem.get_name(),
-                                                            file_name="NSGAII." + problem.get_name(),
-                                                            output_format='png')
-    SolutionListOutput[FloatSolution].plot_frontier_to_screen(result, None, title=problem.get_name())
-    SolutionListOutput[FloatSolution].print_function_values_to_file(result, "NSGAII." + problem.get_name())
+    GraphicSolutionList(title="NSGAII").plot_frontier_to_file(result, 'output')
+    GraphicSolutionList(title="NSGAII", reference=problem.get_reference_front()).plot_frontier_to_screen(result)
+
+    #SolutionList[FloatSolution].print_function_values_to_file(result, "NSGAII." + problem.get_name())
 
     print("Algorithm (continuous problem): " + algorithm.get_name())
     print("Problem: " + problem.get_name())

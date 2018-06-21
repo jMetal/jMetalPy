@@ -1,59 +1,47 @@
 import logging
-from typing import TypeVar, List, Generic
+from typing import TypeVar, Generic
 
-import matplotlib.pyplot as plt
-
-from jmetal.util.graphic import ScatterPlot
-
-logger = logging.getLogger(__name__)
+from jmetal.util.graphic import ScatterBokeh
 
 S = TypeVar('S')
+logger = logging.getLogger(__name__)
 
 
-class SolutionListOutput(Generic[S]):
+class GraphicSolutionList(Generic[S]):
 
-    @staticmethod
-    def plot_frontier_to_file(solution_list: List[S], reference_solution_list: List[S], title: str,
-                              file_name: str, output_format: str='eps'):
+    def __init__(self, title: str, reference: list=None, number_of_objectives: int=2):
+        self.bokeh = ScatterBokeh(title, reference, number_of_objectives)
+
+    def plot_frontier_to_file(self, solution_list: list, file_name: str):
         """ Save plot of non-dominated solutions to file. For problems with TWO or THREE variables """
-        sc = ScatterPlot(title, solution_list[0].number_of_objectives, reference_solution_list)
-        sc.plot(solution_list, False)
-        sc.save(file_name, output_format)
+        self.bokeh.plot(solution_list)
+        self.bokeh.save(file_name)
 
-    @staticmethod
-    def plot_frontier_to_screen(solution_list: List[S], reference_solution_list: List[S], title: str):
+    def plot_frontier_to_screen(self, solution_list: list):
         """ Plot non-dominated solutions interactively. For problems with TWO or THREE variables """
-        sc = ScatterPlot(title, solution_list[0].number_of_objectives, reference_solution_list)
-        sc.plot(solution_list, True)
+        self.bokeh.plot(solution_list, show=True)
 
-    @staticmethod
-    def plot_frontier_live(solution_list: List[S], reference_solution_list: List[S], title: str,
-                           evaluations: int, computing_time: float, replace: bool):
+    def plot_frontier_live(self, solution_list: list, new_title: str, replace: bool):
         """ Plot non-dominated solutions in real-time. For problems with TWO or THREE variables """
-        global sc
+        self.bokeh.update(solution_list, new_title, replace)
 
-        if not plt.get_fignums():
-            # The first time, set up plot
-            sc = ScatterPlot(title, solution_list[0].number_of_objectives, reference_solution_list)
-            sc.plot(solution_list)
-        else:
-            subtitle = '{0}, Eval: {1}, Time: {2}'.format(title, evaluations, computing_time)
-            sc.update(solution_list, subtitle, replace)
+
+class PrintSolutionList(Generic[S]):
 
     @staticmethod
-    def print_variables_to_screen(solution_list: List[S]):
+    def print_variables_to_screen(solution_list: list):
         for solution in solution_list:
             print(solution.variables[0])
 
     @staticmethod
-    def print_function_values_to_screen(solution_list: List[S]):
+    def print_function_values_to_screen(solution_list: list):
         for solution in solution_list:
             print(str(solution_list.index(solution)) + ": ", sep='  ', end='', flush=True)
             print(solution.objectives, sep='  ', end='', flush=True)
             print()
 
     @staticmethod
-    def print_function_values_to_file(solution_list: List[S], file_name):
+    def print_function_values_to_file(solution_list: list, file_name):
         logger.info("Output file (function values): " + file_name)
         with open(file_name, 'w') as of:
             for solution in solution_list:
