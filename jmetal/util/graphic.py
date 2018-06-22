@@ -7,7 +7,7 @@ from bokeh.resources import CDN
 from bokeh.client import ClientSession
 from bokeh.io import curdoc, reset_output
 from bokeh.layouts import column, row
-from bokeh.models import HoverTool, ColumnDataSource, TapTool, CustomJS, WheelZoomTool, Title
+from bokeh.models import HoverTool, ColumnDataSource, TapTool, CustomJS, WheelZoomTool
 from bokeh.plotting import Figure
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
@@ -30,9 +30,14 @@ S = TypeVar('S')
 
 class Plot:
 
-    def __init__(self, plot_title: str, number_of_objectives: int):
+    def __init__(self, plot_title: str, number_of_objectives: int,
+                 xaxis_label: str='', yaxis_label: str='', zaxis_label: str=''):
         self.plot_title = plot_title
         self.number_of_objectives = number_of_objectives
+
+        self.xaxis_label = xaxis_label
+        self.yaxis_label = yaxis_label
+        self.zaxis_label = zaxis_label
 
     def get_objectives(self, solution_list: List[S]) -> Tuple[list, list, list]:
         if solution_list is None:
@@ -195,6 +200,7 @@ class ScatterBokeh(Plot):
 
         self.client = ClientSession(websocket_url="ws://{0}/ws".format(ws_url))
         self.doc = curdoc()
+        self.doc.title = plot_title
         self.figure_xy = None
         self.figure_xz = None
         self.figure_yz = None
@@ -213,13 +219,15 @@ class ScatterBokeh(Plot):
         self.plot_tools = [TapTool(callback=callback), WheelZoomTool(), 'save', 'pan',
                            HoverTool(tooltips=[("index", "$index"), ("(x,y)", "($x, $y)")])]
 
-    def plot(self, solution_list: List[S], reference: List[S], output: str='', show: bool=True) -> None:
+    def plot(self, solution_list: List[S], reference: List[S]=None, output: str='', show: bool=True) -> None:
         # This is important to purge data (if any) between calls
         reset_output()
 
         # Set up figure
         self.figure_xy = Figure(output_backend='webgl', sizing_mode='scale_width', title=self.plot_title, tools=self.plot_tools)
         self.figure_xy.scatter(x='x', y='y', legend='solution', fill_alpha=0.7, source=self.source)
+        self.figure_xy.xaxis.axis_label = self.xaxis_label
+        self.figure_xy.yaxis.axis_label = self.yaxis_label
 
         x_values, y_values, z_values = self.get_objectives(solution_list)
 
@@ -236,9 +244,13 @@ class ScatterBokeh(Plot):
             # Add new figures for each axis
             self.figure_xz = Figure(title='xz', output_backend='webgl', sizing_mode='scale_width', tools=self.plot_tools)
             self.figure_xz.scatter(x='x', y='z', legend='solution', fill_alpha=0.7, source=self.source)
+            self.figure_xz.xaxis.axis_label = self.xaxis_label
+            self.figure_xz.yaxis.axis_label = self.zaxis_label
 
             self.figure_yz = Figure(title='yz', output_backend='webgl', sizing_mode='scale_width', tools=self.plot_tools)
             self.figure_yz.scatter(x='y', y='z', legend='solution', fill_alpha=0.7, source=self.source)
+            self.figure_yz.xaxis.axis_label = self.yaxis_label
+            self.figure_yz.yaxis.axis_label = self.zaxis_label
 
             # Plot reference solution list (if any)
             if reference:
@@ -279,6 +291,9 @@ class ScatterBokeh(Plot):
                                rollover=rollover)
 
     def __save(self, file_name: str):
+        # env = Environment(loader=FileSystemLoader(BASE_PATH + '/util/'))
+        # env.filters['json'] = lambda obj: Markup(json.dumps(obj))
+
         html = file_html(models=self.doc, resources=CDN)
         with open(file_name + '.html', 'w') as of:
             of.write(html)
