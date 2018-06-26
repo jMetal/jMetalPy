@@ -1,7 +1,7 @@
 from multiprocessing.pool import ThreadPool
 from typing import TypeVar, List, Generic
 
-from dask.distributed import Client, as_completed
+from dask.distributed import LocalCluster, Client, as_completed
 
 from jmetal.core.problem import Problem
 
@@ -42,8 +42,12 @@ class ParallelEvaluator(Evaluator[S]):
 
 class DaskMultithreadedEvaluator(Evaluator[S]):
 
-    def __init__(self):
-        self.client = Client()
+    def __init__(self, n_workers: int, processes: bool=True):
+        """ :param n_workers: Number of workers to start.
+        :param processes: Whether to use processes (True) or threads (False).
+        """
+        cluster = LocalCluster(n_workers=n_workers, processes=processes)
+        self.client = Client(cluster)
 
     def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
         futures = []
