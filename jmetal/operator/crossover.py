@@ -5,7 +5,7 @@ from typing import List
 from jmetal.core.operator import Crossover
 from jmetal.core.solution import Solution, FloatSolution, BinarySolution
 
-""" Class implementing the null crossover operators """
+""" Class implementing the null crossover operator """
 
 
 class Null(Crossover[Solution, Solution]):

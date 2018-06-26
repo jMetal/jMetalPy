@@ -3,7 +3,13 @@ from math import pi, cos, atan
 from jmetal.core.solution import FloatSolution
 from jmetal.core.problem import FloatProblem
 
-""" Unconstrained Test problems for multi-objective optimization """
+"""
+.. module:: constrained
+   :platform: Unix, Windows
+   :synopsis: Constrained test problems for multi-objective optimization
+
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+"""
 
 
 class Srinivas(FloatProblem):

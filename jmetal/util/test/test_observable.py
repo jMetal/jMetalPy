@@ -4,6 +4,7 @@ from jmetal.util.observable import DefaultObservable, Observer
 
 
 class ObservableTestCases(unittest.TestCase):
+
     def setUp(self):
         self.observable = DefaultObservable()
 
@@ -51,14 +52,6 @@ class ObservableTestCases(unittest.TestCase):
         self.observable.deregister_all()
 
         self.assertEqual(0, len(self.observable.observers))
-
-    """
-    def test_should_notify_all_update_an_observer(self):
-        observer = mock(Observer)
-        self.observable.register(observer)
-
-        self.observable.notify_all("color", "blue")
-    """
 
 
 if __name__ == "__main__":

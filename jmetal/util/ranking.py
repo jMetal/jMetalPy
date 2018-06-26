@@ -6,8 +6,10 @@ S = TypeVar('S')
 
 
 class Ranking(List[S]):
+
     def __init__(self):
-        self.number_of_comparions = 0
+        super().__init__()
+        self.number_of_comparisons = 0
         self.ranked_sublists = []
 
     def compute_ranking(self, solution_list: List[S]):
@@ -21,12 +23,12 @@ class Ranking(List[S]):
     def get_number_of_subfronts(self):
         return len(self.ranked_sublists)
 
-    def get_number_of_comparions(self) -> int:
+    def number_of_comparisons(self) -> int:
         return self.number_of_comparisons
 
 
 class FastNonDominatedRanking(Ranking[List[S]]):
-    """ Class implementing the non-dominated ranking of NSGA-II """
+    """ Class implementing the non-dominated ranking of NSGA-II. """
 
     def __init__(self):
         super(FastNonDominatedRanking, self).__init__()
@@ -44,7 +46,7 @@ class FastNonDominatedRanking(Ranking[List[S]]):
         for p in range(len(solution_list) - 1):
             for q in range(p + 1, len(solution_list)):
                 dominance_test_result = DominanceComparator().compare(solution_list[p], solution_list[q])
-                self.number_of_comparions += 1
+                self.number_of_comparisons += 1
                 if dominance_test_result is -1:
                     i_dominate[p].append(q)
                     dominate_me[q] += 1
@@ -80,7 +82,7 @@ class FastNonDominatedRanking(Ranking[List[S]]):
 
 
 class EfficientNonDominatedRanking(Ranking[List[S]]):
-    """ Class implementing the EDS (efficient non-dominated sorting) algorithm """
+    """ Class implementing the EDS (efficient non-dominated sorting) algorithm. """
 
     def __init__(self):
         super(EfficientNonDominatedRanking, self).__init__()

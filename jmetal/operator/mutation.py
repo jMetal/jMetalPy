@@ -3,7 +3,7 @@ import random
 from jmetal.core.operator import Mutation
 from jmetal.core.solution import BinarySolution, Solution, FloatSolution, IntegerSolution
 
-""" Class implementing the binary BitFlip mutation operators """
+""" Class implementing the binary BitFlip mutation operator """
 __author__ = "Antonio J. Nebro"
 
 

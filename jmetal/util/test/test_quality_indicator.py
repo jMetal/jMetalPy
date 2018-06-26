@@ -4,13 +4,11 @@ import unittest
 from jmetal.util.front_file import read_front_from_file, walk_up_folder
 from jmetal.util.quality_indicator import HyperVolume
 
-FILE_PATH = dirname(join(dirname(__file__)))
-
 
 class HyperVolumeTestCases(unittest.TestCase):
 
     def setUp(self):
-        pass
+        self.file_path = dirname(join(dirname(__file__)))
 
     def test_should_hypervolume_return_5_0(self):
         reference_point = [2, 2, 2]
@@ -23,7 +21,7 @@ class HyperVolumeTestCases(unittest.TestCase):
 
     def test_should_hypervolume_return_the_correct_value_when_applied_to_the_ZDT1_reference_front(self):
         reference_point = [1, 1]
-        front = read_front_from_file(join(walk_up_folder(FILE_PATH, 3), 'resources/data/ZDT1.pf'))
+        front = read_front_from_file(join(walk_up_folder(self.file_path, 3), 'resources/resources/ZDT1.pf'))
         hv = HyperVolume(reference_point)
         value = hv.compute(front)
 

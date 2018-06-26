@@ -6,6 +6,7 @@ from jmetal.util.comparator import DominanceComparator, SolutionAttributeCompara
 
 
 class DominanceComparatorTestCases(unittest.TestCase):
+
     def setUp(self):
         self.comparator = DominanceComparator()
 
@@ -57,8 +58,7 @@ class DominanceComparatorTestCases(unittest.TestCase):
         self.assertEqual(-1, self.comparator.compare(solution, solution2))
 
     def test_should_dominance_comparator_work_properly_case_a(self):
-        """
-        Case A: solution1 has objectives [-1.0, 5.0, 9.0] and solution2 has [2.0, 6.0, 15.0]
+        """ Case A: solution1 has objectives [-1.0, 5.0, 9.0] and solution2 has [2.0, 6.0, 15.0]
         """
         solution = FloatSolution(3, 3, 0, [], [])
         solution2 = FloatSolution(3, 3, 0, [], [])
@@ -69,8 +69,7 @@ class DominanceComparatorTestCases(unittest.TestCase):
         self.assertEqual(-1, self.comparator.compare(solution, solution2))
 
     def test_should_dominance_comparator_work_properly_case_b(self):
-        """
-        Case b: solution1 has objectives [-1.0, 5.0, 9.0] and solution2 has [-1.0, 5.0, 10.0]
+        """ Case b: solution1 has objectives [-1.0, 5.0, 9.0] and solution2 has [-1.0, 5.0, 10.0]
         """
         solution = FloatSolution(3, 3, 0, [], [])
         solution2 = FloatSolution(3, 3, 0, [], [])
@@ -81,8 +80,7 @@ class DominanceComparatorTestCases(unittest.TestCase):
         self.assertEqual(-1, self.comparator.compare(solution, solution2))
 
     def test_should_dominance_comparator_work_properly_case_c(self):
-        """
-        Case c: solution1 has objectives [-1.0, 5.0, 9.0] and solution2 has [-2.0, 5.0, 9.0]
+        """ Case c: solution1 has objectives [-1.0, 5.0, 9.0] and solution2 has [-2.0, 5.0, 9.0]
         """
         solution = FloatSolution(3, 3, 0, [], [])
         solution2 = FloatSolution(3, 3, 0, [], [])
@@ -93,8 +91,7 @@ class DominanceComparatorTestCases(unittest.TestCase):
         self.assertEqual(1, self.comparator.compare(solution, solution2))
 
     def test_should_dominance_comparator_work_properly_case_d(self):
-        """
-        Case d: solution1 has objectives [-1.0, 5.0, 9.0] and solution2 has [-1.0, 5.0, 8.0]
+        """ Case d: solution1 has objectives [-1.0, 5.0, 9.0] and solution2 has [-1.0, 5.0, 8.0]
         """
         solution = FloatSolution(3, 3, 0, [], [])
         solution2 = FloatSolution(3, 3, 0 , [], [])
@@ -105,8 +102,7 @@ class DominanceComparatorTestCases(unittest.TestCase):
         self.assertEqual(1, self.comparator.compare(solution, solution2))
 
     def test_should_dominance_comparator_work_properly_case_3(self):
-        """
-        Case d: solution1 has objectives [-1.0, 5.0, 9.0] and solution2 has [-2.0, 5.0, 10.0]
+        """ Case d: solution1 has objectives [-1.0, 5.0, 9.0] and solution2 has [-2.0, 5.0, 10.0]
         """
         solution = FloatSolution(3, 3, 0, [], [])
         solution2 = FloatSolution(3, 3, 0, [], [])
@@ -117,8 +113,7 @@ class DominanceComparatorTestCases(unittest.TestCase):
         self.assertEqual(0, self.comparator.compare(solution, solution2))
 
     def test_should_dominance_comparator_work_properly_with_constrains_case_1(self):
-        """
-        Case 1: solution1 has a higher degree of constraint violation than solution 2
+        """ Case 1: solution1 has a higher degree of constraint violation than solution 2
         """
         solution1 = FloatSolution(3, 3, 0, [], [])
         solution2 = FloatSolution(3, 3, 0, [], [])
@@ -131,8 +126,7 @@ class DominanceComparatorTestCases(unittest.TestCase):
         self.assertEqual(-1, self.comparator.compare(solution1, solution2))
 
     def test_should_dominance_comparator_work_properly_with_constrains_case_2(self):
-        """
-        Case 2: solution1 has a lower degree of constraint violation than solution 2
+        """ Case 2: solution1 has a lower degree of constraint violation than solution 2
         """
         solution1 = FloatSolution(3, 3, 0, [], [])
         solution2 = FloatSolution(3, 3, 0, [], [])
@@ -146,6 +140,7 @@ class DominanceComparatorTestCases(unittest.TestCase):
 
 
 class SolutionAttributeComparatorTestCases(unittest.TestCase):
+
     def setUp(self):
         self.comparator = SolutionAttributeComparator("attribute")
 
@@ -178,8 +173,7 @@ class SolutionAttributeComparatorTestCases(unittest.TestCase):
         self.assertEqual(0, self.comparator.compare(solution1, solution2))
 
     def test_should_compare_works_properly_case1(self):
-        """
-        Case 1: solution1.attribute < solution2.attribute (lowest is best)
+        """ Case 1: solution1.attribute < solution2.attribute (lowest is best)
         """
         solution1 = Solution(1, 1)
         solution2 = Solution(1, 1)
@@ -189,8 +183,7 @@ class SolutionAttributeComparatorTestCases(unittest.TestCase):
         self.assertEqual(-1, self.comparator.compare(solution1, solution2))
 
     def test_should_compare_works_properly_case2(self):
-        """
-        Case 2: solution1.attribute > solution2.attribute (lowest is best)
+        """ Case 2: solution1.attribute > solution2.attribute (lowest is best)
         """
         solution1 = Solution(1, 1)
         solution2 = Solution(1, 1)
@@ -200,8 +193,7 @@ class SolutionAttributeComparatorTestCases(unittest.TestCase):
         self.assertEqual(1, self.comparator.compare(solution1, solution2))
 
     def test_should_compare_works_properly_case3(self):
-        """
-        Case 3: solution1.attribute < solution2.attribute (highest is best)
+        """ Case 3: solution1.attribute < solution2.attribute (highest is best)
         """
         comparator = SolutionAttributeComparator("attribute", False)
         solution1 = Solution(1, 1)
@@ -212,8 +204,7 @@ class SolutionAttributeComparatorTestCases(unittest.TestCase):
         self.assertEqual(1, comparator.compare(solution1, solution2))
 
     def test_should_compare_works_properly_case4(self):
-        """
-        Case 4: solution1.attribute > solution2.attribute (highest is best)
+        """ Case 4: solution1.attribute > solution2.attribute (highest is best)
         """
         solution1 = Solution(1, 1)
         solution2 = Solution(1, 1)
@@ -225,12 +216,12 @@ class SolutionAttributeComparatorTestCases(unittest.TestCase):
 
 
 class RankingAndCrowdingComparatorTestCases(unittest.TestCase):
+
     def setUp(self):
         self.comparator = RankingAndCrowdingDistanceComparator()
 
     def test_should_compare_work_properly_case_1(self):
-        """
-        Case 1: solution1.ranking < solution2.ranking
+        """ Case 1: solution1.ranking < solution2.ranking
         """
         solution1 = Solution(1, 1)
         solution2 = Solution(1, 1)
@@ -240,8 +231,7 @@ class RankingAndCrowdingComparatorTestCases(unittest.TestCase):
         self.assertEqual(-1, self.comparator.compare(solution1, solution2))
 
     def test_should_compare_work_properly_case_2(self):
-        """
-        Case 2: solution1.ranking > solution2.ranking
+        """ Case 2: solution1.ranking > solution2.ranking
         """
         solution1 = Solution(1, 1)
         solution2 = Solution(1, 1)
@@ -251,9 +241,8 @@ class RankingAndCrowdingComparatorTestCases(unittest.TestCase):
         self.assertEqual(1, self.comparator.compare(solution1, solution2))
 
     def test_should_compare_work_properly_case_3(self):
-        """
-        Case 3: solution1.ranking == solution2.ranking
-                solution1.crowding < solution2.crowding
+        """ Case 3: solution1.ranking == solution2.ranking
+                    solution1.crowding < solution2.crowding
         """
         solution1 = Solution(1, 1)
         solution2 = Solution(1, 1)
@@ -265,9 +254,8 @@ class RankingAndCrowdingComparatorTestCases(unittest.TestCase):
         self.assertEqual(1, self.comparator.compare(solution1, solution2))
 
     def test_should_compare_work_properly_case_4(self):
-        """
-        Case 4: solution1.ranking == solution2.ranking
-                solution1.crowding > solution2.crowding
+        """ Case 4: solution1.ranking == solution2.ranking
+                    solution1.crowding > solution2.crowding
         """
         solution1 = Solution(1, 1)
         solution2 = Solution(1, 1)
@@ -279,9 +267,8 @@ class RankingAndCrowdingComparatorTestCases(unittest.TestCase):
         self.assertEqual(-1, self.comparator.compare(solution1, solution2))
 
     def test_should_compare_work_properly_case_5(self):
-        """
-        Case 5: solution1.ranking == solution2.ranking
-                solution1.crowding == solution2.crowding
+        """ Case 5: solution1.ranking == solution2.ranking
+                    solution1.crowding == solution2.crowding
         """
         solution1 = Solution(1, 1)
         solution2 = Solution(1, 1)

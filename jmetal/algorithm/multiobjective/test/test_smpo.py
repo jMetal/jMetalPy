@@ -10,8 +10,6 @@ from jmetal.operator.mutation import Polynomial
 
 
 class SMPSOTestCases(unittest.TestCase):
-    def setUp(self):
-        pass
 
     def test_should_constructor_create_a_valid_object(self):
         problem = self.__DummyFloatProblem()
@@ -44,8 +42,8 @@ class SMPSOTestCases(unittest.TestCase):
             self.number_of_objectives = 2
             self.number_of_constraints = 0
 
-            self.lower_bound = [-2.0 for i in range(self.number_of_variables)]
-            self.upper_bound = [2.0 for i in range(self.number_of_variables)]
+            self.lower_bound = [-2.0 for _ in range(self.number_of_variables)]
+            self.upper_bound = [2.0 for _ in range(self.number_of_variables)]
 
             FloatSolution.lower_bound = self.lower_bound
             FloatSolution.upper_bound = self.upper_bound

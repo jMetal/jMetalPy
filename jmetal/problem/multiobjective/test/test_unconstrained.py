@@ -2,13 +2,9 @@ import unittest
 
 from jmetal.problem.multiobjective.unconstrained import Kursawe, Fonseca, Schaffer, Viennet2
 
-__author__ = "Antonio J. Nebro"
 
 
 class KursaweTestCases(unittest.TestCase):
-
-    def setUp(self):
-        pass
 
     def test_should_constructor_create_a_non_null_object(self) -> None:
         problem = Kursawe(3)
@@ -50,8 +46,6 @@ class KursaweTestCases(unittest.TestCase):
 
 
 class FonsecaTestCases(unittest.TestCase):
-    def setUp(self):
-        pass
 
     def test_should_constructor_create_a_non_null_object(self):
         problem = Fonseca()
@@ -92,8 +86,8 @@ class FonsecaTestCases(unittest.TestCase):
 
         problem.evaluate(solution1)
 
-        self.assertAlmostEqual(solution1.objectives[0], 0.991563628, 4);
-        self.assertAlmostEqual(solution1.objectives[1], 0.999663388, 4);
+        self.assertAlmostEqual(solution1.objectives[0], 0.991563628, 4)
+        self.assertAlmostEqual(solution1.objectives[1], 0.999663388, 4)
 
     def test_should_get_name_return_the_right_name(self):
         problem = Fonseca()
@@ -101,9 +95,6 @@ class FonsecaTestCases(unittest.TestCase):
 
 
 class SchafferTestCases(unittest.TestCase):
-
-    def setUp(self):
-        pass
 
     def test_should_constructor_create_a_non_null_object(self):
         problem = Schaffer()
@@ -145,11 +136,11 @@ class SchafferTestCases(unittest.TestCase):
         problem.evaluate(solution1)
         problem.evaluate(solution2)
 
-        self.assertAlmostEqual(solution1.objectives[0], 9);
-        self.assertAlmostEqual(solution1.objectives[1], 1);
+        self.assertAlmostEqual(solution1.objectives[0], 9)
+        self.assertAlmostEqual(solution1.objectives[1], 1)
 
-        self.assertAlmostEqual(solution2.objectives[0], 6.76);
-        self.assertAlmostEqual(solution2.objectives[1], 21.16);
+        self.assertAlmostEqual(solution2.objectives[0], 6.76)
+        self.assertAlmostEqual(solution2.objectives[1], 21.16)
 
     def test_should_get_name_return_the_right_name(self):
         problem = Schaffer()
@@ -157,9 +148,6 @@ class SchafferTestCases(unittest.TestCase):
 
 
 class Viennet2TestCases(unittest.TestCase):
-
-    def setUp(self):
-        pass
 
     def test_should_constructor_create_a_non_null_object(self):
         problem = Viennet2()

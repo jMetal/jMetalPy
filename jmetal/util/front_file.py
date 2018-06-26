@@ -2,9 +2,17 @@ from os.path import dirname
 
 from jmetal.core.solution import FloatSolution
 
+"""
+.. module:: front_file
+   :platform: Unix, Windows
+   :synopsis: Utils to read reference frontiers from files.
+
+.. moduleauthor:: Antonio J. Nebro <ajnebro@uma.es>
+"""
+
 
 def read_front_from_file(file_name: str):
-    """ Reads a front from a file and returns a list
+    """ Reads a front from a file and returns a list.
     """
     front = []
     with open(file_name) as file:
@@ -15,7 +23,9 @@ def read_front_from_file(file_name: str):
 
 
 def read_front_from_file_as_solutions(file_name: str):
-    """ Reads a front from a file and returns a list of solution objects
+    """ Reads a front from a file and returns a list of solution objects.
+
+    :return: List of solution objects.
     """
     front = []
     with open(file_name) as file:

@@ -5,6 +5,7 @@ from jmetal.util.ranking import FastNonDominatedRanking
 
 
 class FastNonDominatedRankingTestCases(unittest.TestCase):
+
     def setUp(self):
         self.ranking = FastNonDominatedRanking()
 
@@ -40,7 +41,8 @@ class FastNonDominatedRankingTestCases(unittest.TestCase):
         self.assertEqual(solution2, ranking[0][1])
 
     def test_should_compute_ranking_work_properly_case1(self):
-        """ The list contains two solutions and one of them is dominated by the other one """
+        """ The list contains two solutions and one of them is dominated by the other one.
+        """
         solution = Solution(2, 2)
         solution.objectives = [2, 3]
         solution2 = Solution(2, 2)

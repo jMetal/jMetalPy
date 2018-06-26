@@ -29,8 +29,9 @@ class CrowdingDistance(DensityEstimator[List[S]]):
 
     def compute_density_estimator(self, solution_list: List[S]):
         """This function performs the computation of the crowding density estimation over the solution list.
-            .. note::
-               This method assign the distance in the inner elements of the solution list.
+
+        .. note::
+           This method assign the distance in the inner elements of the solution list.
 
         :param solution_list: The list of solutions.
         """

@@ -1,7 +1,16 @@
 from abc import ABCMeta, abstractmethod
 
+"""
+.. module:: observable
+   :platform: Unix, Windows
+   :synopsis: Implementation of the observer-observable pattern.
+
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+"""
+
 
 class Observable(object):
+
     def register(self, observer):
         pass
 
@@ -30,6 +39,7 @@ class Observer(object):
 
 
 class DefaultObservable(Observable):
+
     def __init__(self):
         self.observers = []
 

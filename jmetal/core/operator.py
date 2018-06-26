@@ -7,7 +7,7 @@ R = TypeVar('R')
 
 
 class Operator(Generic[S, R]):
-    """ Class representing operators """
+    """ Class representing operator """
 
     def execute(self, source: S) -> R:
         pass
@@ -17,7 +17,7 @@ class Operator(Generic[S, R]):
 
 
 class Mutation(Operator[S, S]):
-    """ Class representing mutation operators """
+    """ Class representing mutation operator """
 
     def __init__(self, probability: float):
         if probability > 1.0:

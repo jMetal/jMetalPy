@@ -26,6 +26,7 @@ R = TypeVar('R')
 
 
 class SMPSO(ParticleSwarmOptimization):
+
     def __init__(self,
                  problem: FloatProblem,
                  swarm_size: int,
@@ -217,6 +218,7 @@ class SMPSO(ParticleSwarmOptimization):
 
 
 class SMPSORP(SMPSO):
+
     def __init__(self, problem: FloatProblem,
                  swarm_size: int,
                  max_evaluations: int,

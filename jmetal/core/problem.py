@@ -1,4 +1,6 @@
+import os
 from os.path import dirname, join
+from pathlib import Path
 from typing import Generic, TypeVar
 import random
 
@@ -9,13 +11,13 @@ S = TypeVar('S')
 
 
 class Problem(Generic[S]):
-    """ Class representing problems """
+    """ Class representing problems. """
 
     def __init__(self):
         self.number_of_variables: int = None
         self.number_of_objectives: int = None
         self.number_of_constraints: int = None
-        self.reference_front_path: str = None
+        self.reference_front_path: str = 'problem/resources/{0}.pf'.format(self.get_name())
 
     def evaluate(self, solution: S) -> S:
         raise NotImplemented
@@ -28,20 +30,20 @@ class Problem(Generic[S]):
 
     def get_reference_front(self) -> list:
         front = []
-        FILE_PATH = dirname(join(dirname(__file__)))
+        file_path = dirname(join(dirname(__file__)))
+        computed_path = join(file_path, self.reference_front_path)
 
-        if self.reference_front_path:
-            computed_path = join(walk_up_folder(FILE_PATH, 2), self.reference_front_path)
+        if Path(computed_path).is_file():
             front = read_front_from_file_as_solutions(computed_path)
 
         return front
 
     def get_name(self) -> str:
-        raise NotImplemented
+        return self.__class__.__name__
 
 
 class BinaryProblem(Problem[BinarySolution]):
-    """ Class representing binary problems """
+    """ Class representing binary problems. """
 
     def evaluate(self, solution: BinarySolution) -> None:
         pass
@@ -51,7 +53,7 @@ class BinaryProblem(Problem[BinarySolution]):
 
 
 class FloatProblem(Problem[FloatSolution]):
-    """ Class representing float problems """
+    """ Class representing float problems. """
 
     def __init__(self):
         super().__init__()
@@ -68,7 +70,7 @@ class FloatProblem(Problem[FloatSolution]):
 
 
 class IntegerProblem(Problem[IntegerSolution]):
-    """ Class representing integer problems """
+    """ Class representing integer problems. """
 
     def __init__(self):
         super().__init__()

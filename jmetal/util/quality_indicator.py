@@ -150,7 +150,7 @@ class HyperVolume:
             return hvol
 
     def preProcess(self, front):
-        """Sets up the list data structure needed for calculation."""
+        """Sets up the list resources structure needed for calculation."""
         dimensions = len(self.referencePoint)
         nodeList = MultiList(dimensions)
         nodes = [MultiList.Node(dimensions, point) for point in front]
@@ -170,7 +170,7 @@ class HyperVolume:
 
 
 class MultiList:
-    """A special data structure needed by FonsecaHyperVolume.
+    """A special resources structure needed by FonsecaHyperVolume.
 
     It consists of several doubly linked lists that share common nodes. So,
     every node has multiple predecessors and successors, one in every list.

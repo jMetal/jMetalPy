@@ -19,8 +19,7 @@ class DTLZ1(FloatProblem):
     """
 
     def __init__(self, number_of_variables: int = 7, number_of_objectives=3):
-        """Constructor
-        :param number_of_variables: number of decision variables of the problem
+        """ :param number_of_variables: number of decision variables of the problem
         """
         super().__init__()
         self.number_of_variables = number_of_variables
@@ -61,8 +60,7 @@ class DTLZ2(FloatProblem):
     """
 
     def __init__(self, number_of_variables: int = 12, number_of_objectives=3):
-        """Constructor
-        :param number_of_variables: number of decision variables of the problem
+        """:param number_of_variables: number of decision variables of the problem
         """
         super().__init__()
         self.number_of_variables = number_of_variables

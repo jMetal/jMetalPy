@@ -13,7 +13,7 @@ from jmetal.core.solution import FloatSolution
 
 
 class ZDT1(FloatProblem):
-    """ Problem ZDT1
+    """ Problem ZDT1.
 
     .. note:: Bi-objective unconstrained problem. The default number of variables is 30.
     .. note:: Continuous problem having a convex Pareto front
@@ -21,6 +21,7 @@ class ZDT1(FloatProblem):
 
     def __init__(self, number_of_variables: int = 30):
         """Constructor
+
         :param number_of_variables: number of decision variables of the problem
         """
         super().__init__()
@@ -33,8 +34,6 @@ class ZDT1(FloatProblem):
 
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
-
-        self.reference_front_path = 'resources/data/ZDT1.pf'
 
     def evaluate(self, solution: FloatSolution):
         g = self.__eval_g(solution)
@@ -64,6 +63,7 @@ class ZDT2(FloatProblem):
     .. note:: Bi-objective unconstrained problem. The default number of variables is 30.
     .. note:: Continuous problem having a non-convex Pareto front
     """
+
     def __init__(self, number_of_variables: int = 30):
         super().__init__()
         self.number_of_variables = number_of_variables
@@ -104,6 +104,7 @@ class ZDT3(FloatProblem):
     .. note:: Bi-objective unconstrained problem. The default number of variables is 30.
     .. note:: Continuous problem having a partitioned Pareto front
     """
+
     def __init__(self, number_of_variables: int = 30):
         super().__init__()
         self.number_of_variables = number_of_variables
@@ -144,6 +145,7 @@ class ZDT4(FloatProblem):
     .. note:: Bi-objective unconstrained problem. The default number of variables is 10.
     .. note:: Continuous multi-modal problem having a convex Pareto front
     """
+
     def __init__(self, number_of_variables: int = 10):
         super().__init__()
         self.number_of_variables = number_of_variables
@@ -188,6 +190,7 @@ class ZDT6(FloatProblem):
     .. note:: Bi-objective unconstrained problem. The default number of variables is 10.
     .. note:: Continuous problem having a non-convex Pareto front
     """
+
     def __init__(self, number_of_variables: int = 10):
         super().__init__()
         self.number_of_variables = number_of_variables

@@ -18,7 +18,7 @@ def main():
     algorithm = NSGAII[FloatSolution, List[FloatSolution]](
         problem=problem,
         population_size=100,
-        max_evaluations=1000,
+        max_evaluations=25000,
         mutation=Polynomial(1.0 / problem.number_of_variables, distribution_index=20),
         crossover=SBX(1.0, distribution_index=20),
         selection=BinaryTournament2Selection([SolutionAttributeComparator("dominance_ranking"),
@@ -31,10 +31,10 @@ def main():
     result = algorithm.get_result()
 
     # Plot frontier
-    pareto_front = ScatterBokeh(plot_title='NSGAII', number_of_objectives=problem.number_of_objectives)
+    pareto_front = ScatterBokeh(plot_title='NSGAII for DTLZ1', number_of_objectives=problem.number_of_objectives)
     pareto_front.plot(result, reference=problem.get_reference_front(), output='output')
 
-    pareto_front = ScatterMatplotlib(plot_title='NSGAII', number_of_objectives=problem.number_of_objectives)
+    pareto_front = ScatterMatplotlib(plot_title='NSGAII for DTLZ1', number_of_objectives=problem.number_of_objectives)
     pareto_front.plot(result, reference=problem.get_reference_front(), output='output2')
 
     # Save variables to file

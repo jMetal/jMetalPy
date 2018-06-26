@@ -50,7 +50,7 @@ class VisualizerObserver(Observer):
         self.display_frequency = 1.0
         self.replace = replace
         self.reference = problem.get_reference_front()
-        self.plot = ScatterMatplotlib(plot_title='VisualizerObserver', number_of_objectives=problem.number_of_objectives)
+        self.plot = ScatterMatplotlib('VisualizerObserver', problem.number_of_objectives)
 
     def update(self, *args, **kwargs):
         evaluations = kwargs["evaluations"]
@@ -60,4 +60,4 @@ class VisualizerObserver(Observer):
         title = '{0}, Eval: {1}, Time: {2}'.format("VisualizerObserver", evaluations, computing_time)
 
         if (evaluations % self.display_frequency) == 0:
-            self.plot.update(solution_list=solution_list, reference=self.reference, new_title=title, persistence=self.replace)
+            self.plot.update(solution_list, self.reference, new_title=title, persistence=self.replace)

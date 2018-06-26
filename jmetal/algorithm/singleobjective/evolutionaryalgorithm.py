@@ -20,6 +20,7 @@ R = TypeVar('R')
 
 
 class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
+
     def __init__(self,
                  problem: Problem[S],
                  mu: int,
@@ -86,6 +87,7 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
 
 
 class NonElitistEvolutionStrategy(ElitistEvolutionStrategy[S, R]):
+
     def __init__(self,
                  problem: Problem[S],
                  mu: int, lambdA: int,
@@ -109,6 +111,7 @@ class NonElitistEvolutionStrategy(ElitistEvolutionStrategy[S, R]):
 
 
 class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
+
     def __init__(self,
                  problem: Problem[S],
                  population_size: int,

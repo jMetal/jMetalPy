@@ -98,6 +98,8 @@ class ScatterMatplotlib(Plot):
         self.axis.grid(color='#f0f0f5', linestyle='-', linewidth=1, alpha=0.5)
         self.fig.suptitle(self.plot_title, fontsize=13)
 
+        logger.info("Plot initialized")
+
     def __plot(self, x_values, y_values, z_values, color: str = '#98FB98', marker: str = 'o', msize: int = 3):
         if self.number_of_objectives == 2:
             self.sc, = self.axis.plot(x_values, y_values,
@@ -108,6 +110,7 @@ class ScatterMatplotlib(Plot):
 
     def plot(self, solution_list: List[S], reference: List[S], output: str='', show: bool=True) -> None:
         if reference:
+            logger.info("Reference front found")
             ref_x_values, ref_y_values, ref_z_values = self.get_objectives(reference)
             self.__plot(ref_x_values, ref_y_values, ref_z_values, color='#323232', marker='*')
 
@@ -122,6 +125,7 @@ class ScatterMatplotlib(Plot):
 
     def update(self, solution_list: List[S], reference: List[S], new_title: str='', persistence: bool=True) -> None:
         if self.sc is None:
+            logger.warning("Plot is none! Generating first plot...")
             self.plot(solution_list, reference, show=False)
 
         x_values, y_values, z_values = self.get_objectives(solution_list)
@@ -174,7 +178,7 @@ class ScatterMatplotlib(Plot):
         line, ind = event.artist, event.ind[0]
         x, y = line.get_xdata(), line.get_ydata()
 
-        logger.debug('Selected data point ({0}): ({1}, {2})'.format(ind, x[ind], y[ind]))
+        logger.debug('Selected resources point ({0}): ({1}, {2})'.format(ind, x[ind], y[ind]))
 
         sol = next((solution for solution in solution_list
                     if solution.objectives[0] == x[ind] and solution.objectives[1] == y[ind]), None)
@@ -211,7 +215,7 @@ class ScatterBokeh(Plot):
         """ Set-up tools for plot. """
         code = '''
             selected = source.selected['1d']['indices'][0]
-            var str = source.data.str[selected]
+            var str = source.resources.str[selected]
             alert(str)
         '''
 
@@ -220,7 +224,7 @@ class ScatterBokeh(Plot):
                            HoverTool(tooltips=[("index", "$index"), ("(x,y)", "($x, $y)")])]
 
     def plot(self, solution_list: List[S], reference: List[S]=None, output: str='', show: bool=True) -> None:
-        # This is important to purge data (if any) between calls
+        # This is important to purge resources (if any) between calls
         reset_output()
 
         # Set up figure
@@ -237,7 +241,7 @@ class ScatterBokeh(Plot):
                 ref_x_values, ref_y_values, _ = self.get_objectives(reference)
                 self.figure_xy.line(x=ref_x_values, y=ref_y_values, legend='reference', color='green')
 
-            # Push data to server
+            # Push resources to server
             self.source.stream({'x': x_values, 'y': y_values, 'str': [s.__str__() for s in solution_list]})
             self.doc.add_root(column(self.figure_xy))
         else:
@@ -259,7 +263,7 @@ class ScatterBokeh(Plot):
                 self.figure_xz.line(x=ref_x_values, y=ref_z_values, legend='reference', color='green')
                 self.figure_yz.line(x=ref_y_values, y=ref_z_values, legend='reference', color='green')
 
-            # Push data to server
+            # Push resources to server
             self.source.stream({'x': x_values, 'y': y_values, 'z': z_values, 'str': [s.__str__() for s in solution_list]})
             self.doc.add_root(row(self.figure_xy, self.figure_xz, self.figure_yz))
 

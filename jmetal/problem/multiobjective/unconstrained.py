@@ -3,11 +3,18 @@ from math import sqrt, exp, pow, sin
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 
-""" Unconstrained Test problems for multi-objective optimization """
+"""
+.. module:: constrained
+   :platform: Unix, Windows
+   :synopsis: Unconstrained test problems for multi-objective optimization
+
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+"""
 
 
 class Kursawe(FloatProblem):
-    """ Class representing problem Kursawe """
+    """ Class representing problem Kursawe. """
+
     def __init__(self, number_of_variables: int = 3):
         super().__init__()
         self.number_of_objectives = 2
@@ -37,7 +44,9 @@ class Kursawe(FloatProblem):
 
 
 class Fonseca(FloatProblem):
+
     def __init__(self):
+        super().__init__()
         self.number_of_variables = 3
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -58,7 +67,9 @@ class Fonseca(FloatProblem):
 
 
 class Schaffer(FloatProblem):
+
     def __init__(self):
+        super().__init__()
         self.number_of_variables = 1
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -80,7 +91,9 @@ class Schaffer(FloatProblem):
 
 
 class Viennet2(FloatProblem):
+
     def __init__(self):
+        super().__init__()
         self.number_of_variables = 2
         self.number_of_objectives = 3
         self.number_of_constraints = 0

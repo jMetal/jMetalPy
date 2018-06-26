@@ -9,6 +9,7 @@ S = TypeVar('S')
 
 
 class Evaluator(Generic[S]):
+
     def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
         pass
 
@@ -20,6 +21,7 @@ class Evaluator(Generic[S]):
 
 
 class SequentialEvaluator(Evaluator[S]):
+
     def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
         for solution in solution_list:
             Evaluator.evaluate_solution(solution, problem)
@@ -28,6 +30,7 @@ class SequentialEvaluator(Evaluator[S]):
 
 
 class ParallelEvaluator(Evaluator[S]):
+
     def __init__(self, processes=None):
         self.pool = ThreadPool(processes)
 
@@ -38,6 +41,7 @@ class ParallelEvaluator(Evaluator[S]):
 
 
 class DaskMultithreadedEvaluator(Evaluator[S]):
+
     def __init__(self):
         self.client = Client()
 
