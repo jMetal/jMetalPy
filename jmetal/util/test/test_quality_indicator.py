@@ -21,7 +21,7 @@ class HyperVolumeTestCases(unittest.TestCase):
 
     def test_should_hypervolume_return_the_correct_value_when_applied_to_the_ZDT1_reference_front(self):
         reference_point = [1, 1]
-        front = read_front_from_file(join(walk_up_folder(self.file_path, 3), 'resources/resources/ZDT1.pf'))
+        front = read_front_from_file(join(walk_up_folder(self.file_path, 2), 'problem/resources/ZDT1.pf'))
         hv = HyperVolume(reference_point)
         value = hv.compute(front)
 
