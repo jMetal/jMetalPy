@@ -2,7 +2,7 @@ import logging
 
 from jmetal.algorithm.multiobjective.smpso import SMPSORP
 from jmetal.component.archive import CrowdingDistanceArchiveWithReferencePoint
-from jmetal.component.observer import VisualizerObserver
+from jmetal.component.observer import ProgressBarObserver
 from jmetal.operator.mutation import Polynomial
 from jmetal.problem.multiobjective.zdt import ZDT1
 
@@ -28,8 +28,8 @@ def main() -> None:
         leaders=archives_with_reference_points
     )
 
-    observer = VisualizerObserver(problem)
-    algorithm.observable.register(observer=observer)
+    progress_bar = ProgressBarObserver(step=100, max=25000)
+    algorithm.observable.register(progress_bar)
 
     algorithm.run()
 

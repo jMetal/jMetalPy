@@ -1,5 +1,6 @@
 import logging
 
+from jmetal.component.observer import ProgressBarObserver
 from jmetal.problem.multiobjective.zdt import ZDT1
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.component.archive import CrowdingDistanceArchive
@@ -16,6 +17,9 @@ def main() -> None:
         mutation=Polynomial(probability=1.0/problem.number_of_variables, distribution_index=20),
         leaders=CrowdingDistanceArchive(100)
     )
+
+    progress_bar = ProgressBarObserver(step=100, max=25000)
+    algorithm.observable.register(progress_bar)
 
     algorithm.run()
 

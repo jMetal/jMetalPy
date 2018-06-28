@@ -79,7 +79,7 @@ class SMPSO(ParticleSwarmOptimization):
         self.dominance_comparator = DominanceComparator()
 
         self.speed = numpy.zeros((self.swarm_size, self.problem.number_of_variables), dtype=float)
-        self.delta_max, self.delta_min = numpy.empty(problem.number_of_variables),\
+        self.delta_max, self.delta_min = numpy.empty(problem.number_of_variables), \
                                          numpy.empty(problem.number_of_variables)
         for i in range(problem.number_of_variables):
             self.delta_max[i] = (self.problem.upper_bound[i] - self.problem.lower_bound[i]) / 2.0
@@ -94,7 +94,8 @@ class SMPSO(ParticleSwarmOptimization):
         self.evaluations += self.swarm_size
         self.leaders.compute_density_estimator()
 
-        observable_data = {'evaluations': self.evaluations, 'computing time': self.get_current_computing_time(),
+        observable_data = {'evaluations': self.evaluations,
+                           'computing time': self.get_current_computing_time(),
                            'population': self.leaders.solution_list}
 
         self.observable.notify_all(**observable_data)
@@ -139,7 +140,7 @@ class SMPSO(ParticleSwarmOptimization):
                     self.__velocity_constriction(
                         self.__constriction_coefficient(c1, c2) *
                         ((self.__inertia_weight(self.evaluations, self.max_evaluations, wmax, wmin)
-                         * self.speed[i][var])
+                          * self.speed[i][var])
                          + (c1 * r1 * (best_particle.variables[var] - swarm[i].variables[var]))
                          + (c2 * r2 * (best_global.variables[var] - swarm[i].variables[var]))
                          ),
@@ -266,11 +267,9 @@ class SMPSORP(SMPSO):
             point.objectives = self.reference_points[i]
             reference_points.append(point)
 
-        observable_data = {'evaluations': self.evaluations, 'computing time': self.get_current_computing_time(),
+        observable_data = {'evaluations': self.evaluations,
+                           'computing time': self.get_current_computing_time(),
                            'population': self.get_result() + reference_points}
-
-        if self.problem.reference_front_path:
-            observable_data['reference'] = self.problem.get_reference_front()
 
         self.observable.notify_all(**observable_data)
 

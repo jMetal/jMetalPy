@@ -3,6 +3,8 @@ import threading
 import time
 from typing import TypeVar, Generic, List
 
+from tqdm import tqdm
+
 from jmetal.component.evaluator import Evaluator, SequentialEvaluator
 from jmetal.core.solution import FloatSolution
 
@@ -26,6 +28,7 @@ class Algorithm(Generic[S, R], threading.Thread):
         threading.Thread.__init__(self)
         self.observable = None
         self.evaluations: int = 0
+        self.max_evaluations: int = 100
         self.start_computing_time: int = 0
         self.total_computing_time: int = 0
 
@@ -42,7 +45,7 @@ class Algorithm(Generic[S, R], threading.Thread):
 class EvolutionaryAlgorithm(Algorithm[S, R]):
 
     def __init__(self, evaluator: Evaluator[S] = SequentialEvaluator[S]()):
-        super(EvolutionaryAlgorithm,self).__init__()
+        super(EvolutionaryAlgorithm, self).__init__()
         self.population = []
         self.evaluator = evaluator
 

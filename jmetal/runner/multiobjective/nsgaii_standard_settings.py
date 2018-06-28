@@ -1,6 +1,7 @@
 import logging
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
+from jmetal.component.observer import ProgressBarObserver
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament2Selection
@@ -19,6 +20,9 @@ def main() -> None:
         crossover=SBX(1.0, distribution_index=20),
         selection=BinaryTournament2Selection([SolutionAttributeComparator('dominance_ranking'),
                                               SolutionAttributeComparator('crowding_distance', lowest_is_best=False)]))
+
+    progress_bar = ProgressBarObserver(step=100, max=25000)
+    algorithm.observable.register(progress_bar)
 
     algorithm.run()
 

@@ -1,12 +1,30 @@
 import logging
 import os
 
+from tqdm import tqdm
+
 from jmetal.core.problem import Problem
 from jmetal.util.graphic import ScatterBokeh, ScatterMatplotlib
 from jmetal.util.observable import Observer
 from jmetal.util.solution_list_output import SolutionList
 
 logger = logging.getLogger(__name__)
+
+
+class ProgressBarObserver(Observer):
+
+    def __init__(self, step: int, max: int, desc: str='Progress') -> None:
+        self.progress_bar = tqdm(total=max, initial=step, ascii=True, desc=desc)
+        self.progress = step
+        self.step = step
+        self.maxx = max
+
+    def update(self, *args, **kwargs):
+        self.progress_bar.update(self.step)
+        self.progress += self.step
+
+        if self.progress >= self.maxx:
+            self.progress_bar.close()
 
 
 class BasicAlgorithmObserver(Observer):

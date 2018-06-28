@@ -20,6 +20,7 @@ R = TypeVar(List[S])
 
 
 class NSGAII(GenerationalGeneticAlgorithm[S, R]):
+
     def __init__(self,
                  problem: Problem[S],
                  population_size: int,

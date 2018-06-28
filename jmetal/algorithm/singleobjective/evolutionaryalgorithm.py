@@ -1,6 +1,8 @@
 from copy import copy
 from typing import TypeVar, List
 
+from tqdm import tqdm
+
 from jmetal.component.evaluator import Evaluator, SequentialEvaluator
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
@@ -24,13 +26,13 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
     def __init__(self,
                  problem: Problem[S],
                  mu: int,
-                 lambdA: int,
+                 lambd_a: int,
                  max_evaluations: int,
                  mutation: Mutation[S]):
         super(ElitistEvolutionStrategy, self).__init__()
         self.problem = problem
         self.mu = mu
-        self.lambdA = lambdA
+        self.lambd_a = lambd_a
         self.max_evaluations = max_evaluations
         self.mutation = mutation
 
@@ -38,7 +40,7 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         self.evaluations = self.mu
 
     def update_progress(self):
-        self.evaluations += self.lambdA
+        self.evaluations += self.lambd_a
 
     def is_stopping_condition_reached(self) -> bool:
         return self.evaluations >= self.max_evaluations
@@ -60,14 +62,13 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
     def reproduction(self, population: List[S]):
         offspring_population = []
         for solution in population:
-            for j in range((int)(self.lambdA / self.mu)):
+            for j in range((int)(self.lambd_a / self.mu)):
                 new_solution = copy(solution)
                 offspring_population.append(self.mutation.execute(new_solution))
 
         return offspring_population
 
-    def replacement(self, population: List[S], offspring_population: List[S]) \
-            -> List[S]:
+    def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
         for solution in offspring_population:
             self.population.append(solution)
 
@@ -83,7 +84,7 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         return self.population[0]
 
     def get_name(self):
-        return "(" + str(self.mu) + "+" + str(self.lambdA) + ")ES"
+        return "(" + str(self.mu) + "+" + str(self.lambd_a) + ")ES"
 
 
 class NonElitistEvolutionStrategy(ElitistEvolutionStrategy[S, R]):
@@ -107,7 +108,7 @@ class NonElitistEvolutionStrategy(ElitistEvolutionStrategy[S, R]):
         return new_population
 
     def get_name(self) -> str:
-        return "(" + str(self.mu) + "," + str(self.lambdA) + ")ES"
+        return "(" + str(self.mu) + "," + str(self.lambd_a) + ")ES"
 
 
 class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
@@ -137,7 +138,8 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
     def update_progress(self):
         self.evaluations += self.population_size
 
-        observable_data = {'evaluations': self.evaluations, 'computing time': self.get_current_computing_time(),
+        observable_data = {'evaluations': self.evaluations,
+                           'computing time': self.get_current_computing_time(),
                            'population': self.population}
 
         self.observable.notify_all(**observable_data)
