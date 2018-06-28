@@ -1,17 +1,14 @@
 import logging
 
-from jmetal.util.graphic import ScatterBokeh
-
+from jmetal.problem.multiobjective.zdt import ZDT1
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.component.archive import CrowdingDistanceArchive
-from jmetal.component.observer import VisualizerObserver
 from jmetal.operator.mutation import Polynomial
-from jmetal.problem.multiobjective.zdt import ZDT1
-from jmetal.problem.multiobjective.dtlz import DTLZ1
 
 
 def main() -> None:
-    problem = DTLZ1()
+    problem = ZDT1()
+
     algorithm = SMPSO(
         problem=problem,
         swarm_size=100,
@@ -20,18 +17,11 @@ def main() -> None:
         leaders=CrowdingDistanceArchive(100)
     )
 
-    observer = VisualizerObserver(problem)
-    algorithm.observable.register(observer=observer)
-
     algorithm.run()
-    result = algorithm.get_result()
-
-    # Plot frontier
-    pareto_front = ScatterBokeh(plot_title='SMPSO for DTLZ1', number_of_objectives=problem.number_of_objectives)
-    pareto_front.plot(result, reference=problem.get_reference_front(), output='output')
 
     print("Algorithm (continuous problem): " + algorithm.get_name())
     print("Problem: " + problem.get_name())
+    print("Computing time: " + str(algorithm.total_computing_time))
 
 
 if __name__ == '__main__':

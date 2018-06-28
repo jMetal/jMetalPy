@@ -105,3 +105,6 @@ ENV/
 
 # pypi
 .pypirc
+
+# Dask
+dask-worker-space

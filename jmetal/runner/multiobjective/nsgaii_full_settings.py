@@ -1,11 +1,15 @@
 import logging
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
+from jmetal.component.observer import VisualizerObserver
+from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial
 from jmetal.operator.selection import BinaryTournament2Selection
 from jmetal.problem.multiobjective.dtlz import DTLZ1
 from jmetal.util.comparator import SolutionAttributeComparator
+from jmetal.util.graphic import ScatterMatplotlib
+from jmetal.util.solution_list_output import SolutionList
 
 
 def main() -> None:
@@ -20,7 +24,18 @@ def main() -> None:
         selection=BinaryTournament2Selection([SolutionAttributeComparator('dominance_ranking'),
                                               SolutionAttributeComparator('crowding_distance', lowest_is_best=False)]))
 
+    observer = VisualizerObserver(problem)
+    algorithm.observable.register(observer=observer)
+
     algorithm.run()
+    result = algorithm.get_result()
+
+    # Plot frontier
+    pareto_front = ScatterMatplotlib(plot_title='NSGAII for DTLZ1', number_of_objectives=problem.number_of_objectives)
+    pareto_front.plot(result, reference=problem.get_reference_front(), output='output2')
+
+    # Save variables to file
+    SolutionList[FloatSolution].print_function_values_to_file(result, 'NSGAII.' + problem.get_name())
 
     print("Algorithm (continuous problem): " + algorithm.get_name())
     print("Problem: " + problem.get_name())

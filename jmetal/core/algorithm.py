@@ -21,6 +21,7 @@ R = TypeVar('R')
 
 
 class Algorithm(Generic[S, R], threading.Thread):
+
     def __init__(self):
         threading.Thread.__init__(self)
         self.observable = None
@@ -39,6 +40,7 @@ class Algorithm(Generic[S, R], threading.Thread):
 
 
 class EvolutionaryAlgorithm(Algorithm[S, R]):
+
     def __init__(self, evaluator: Evaluator[S] = SequentialEvaluator[S]()):
         super(EvolutionaryAlgorithm,self).__init__()
         self.population = []
@@ -46,6 +48,7 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
 
     def create_initial_population(self) -> List[S]:
         pass
+
     def evaluate_population(self, population: List[S]) -> List[S]:
         pass
 
@@ -100,6 +103,7 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
 
 
 class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]]):
+
     def __init__(self):
         super(ParticleSwarmOptimization, self).__init__()
         self.swarm = []

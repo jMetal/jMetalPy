@@ -1,7 +1,6 @@
 import random
-from typing import TypeVar, Generic, List
-
 import copy
+from typing import TypeVar, Generic, List
 
 from jmetal.component.density_estimator import CrowdingDistance, DensityEstimator
 from jmetal.util.comparator import Comparator, DominanceComparator, EqualSolutionsComparator, SolutionAttributeComparator
@@ -18,6 +17,7 @@ S = TypeVar('S')
 
 
 class Archive(Generic[S]):
+
     def __init__(self):
         self.solution_list: List[S] = []
 
@@ -38,6 +38,7 @@ class Archive(Generic[S]):
 
 
 class BoundedArchive(Archive[S]):
+
     def __init__(self, maximum_size: int, comparator: Comparator[S]=None, density_estimator: DensityEstimator=None):
         super(BoundedArchive, self).__init__()
         self.maximum_size = maximum_size
@@ -80,6 +81,7 @@ class BoundedArchive(Archive[S]):
 
 
 class NonDominatedSolutionListArchive(Archive[S]):
+
     def __init__(self):
         super(NonDominatedSolutionListArchive, self).__init__()
         self.comparator = DominanceComparator()
@@ -119,6 +121,7 @@ class NonDominatedSolutionListArchive(Archive[S]):
 
 
 class CrowdingDistanceArchive(BoundedArchive[S]):
+
     def __init__(self, maximum_size: int):
         super(CrowdingDistanceArchive, self).__init__(
             maximum_size=maximum_size,
@@ -127,6 +130,7 @@ class CrowdingDistanceArchive(BoundedArchive[S]):
 
 
 class ArchiveWithReferencePoint(BoundedArchive[S]):
+
     def __init__(self, maximum_size: int, reference_point: List[float], comparator: Comparator[S], density_estimator: DensityEstimator):
         super(ArchiveWithReferencePoint, self).__init__(maximum_size, comparator, density_estimator)
         self.__reference_point = reference_point
@@ -190,6 +194,7 @@ class ArchiveWithReferencePoint(BoundedArchive[S]):
 
 
 class CrowdingDistanceArchiveWithReferencePoint(ArchiveWithReferencePoint[S]):
+
     def __init__(self, maximum_size: int, reference_point:List[float]):
         super(CrowdingDistanceArchiveWithReferencePoint, self).__init__(
             maximum_size=maximum_size,

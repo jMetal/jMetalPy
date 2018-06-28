@@ -119,8 +119,8 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
                  mutation: Mutation[S],
                  crossover: Crossover[S, S],
                  selection: Selection[List[S], S],
-                 observable: Observable = DefaultObservable(),
-                 evaluator: Evaluator[S] = SequentialEvaluator[S]()):
+                 evaluator: Evaluator[S] = SequentialEvaluator[S](),
+                 observable: Observable = DefaultObservable()):
         super(GenerationalGeneticAlgorithm, self).__init__(evaluator)
         self.problem = problem
         self.population_size = population_size
@@ -183,8 +183,7 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
 
         return offspring_population
 
-    def replacement(self, population: List[S], offspring_population: List[S]) \
-            -> List[S]:
+    def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
         population.sort(key=lambda s: s.objectives[0])
 
         offspring_population.append(population[0])
@@ -203,9 +202,8 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         return self.population[0]
 
     def get_name(self) -> str:
-        return "Generational Genetic Algorithm"
+        return 'Generational Genetic Algorithm'
 
     def __check_number_of_parents(self, population: List[S], number_of_parents_for_crossover: int):
         if self.population_size % number_of_parents_for_crossover != 0:
-            raise Exception("Wrong number of parents")
-
+            raise Exception('Wrong number of parents')

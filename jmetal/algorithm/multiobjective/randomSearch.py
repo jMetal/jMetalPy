@@ -26,8 +26,8 @@ class RandomSearch(Generic[S]):
             self.problem.evaluate(new_solution)
             self.archive.add(new_solution)
 
-    def get_name(self) -> str:
-        return "Random Search Algorithm"
-
     def get_result(self) -> List[S]:
         return self.archive.get_solution_list()
+
+    def get_name(self) -> str:
+        return 'Random Search Algorithm'

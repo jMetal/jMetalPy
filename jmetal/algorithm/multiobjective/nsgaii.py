@@ -27,8 +27,8 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
                  mutation: Mutation[S],
                  crossover: Crossover[S, S],
                  selection: Selection[List[S], S],
-                 observable: Observable = DefaultObservable(),
-                 evaluator: Evaluator[S] = SequentialEvaluator[S]()):
+                 evaluator: Evaluator[S] = SequentialEvaluator[S](),
+                 observable: Observable = DefaultObservable()):
         """ NSGA-II is a genetic algorithm (GA), i.e. it belongs to the evolutionary algorithms (EAs)
         family. The implementation of NSGA-II provided in jMetalPy follows the evolutionary
         algorithm template described in the algorithm templates section (:mod:`algorithm`) of the documentation.
@@ -49,8 +49,8 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
             mutation,
             crossover,
             selection,
-            observable,
-            evaluator)
+            evaluator,
+            observable)
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[TypeVar('S')]]:
         """ This method joins the current and offspring populations to produce the population of the next generation
@@ -63,12 +63,10 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
         join_population = population + offspring_population
         return RankingAndCrowdingDistanceSelection(self.population_size).execute(join_population)
 
-    def get_name(self) -> str:
-        return "NSGA-II"
-
     def get_result(self) -> R:
         """:return: Population.
         """
         return self.population
 
-
+    def get_name(self) -> str:
+        return 'NSGA-II'

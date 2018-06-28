@@ -28,14 +28,14 @@ def main() -> None:
         leaders=archives_with_reference_points
     )
 
-    observer = VisualizerObserver()
+    observer = VisualizerObserver(problem)
     algorithm.observable.register(observer=observer)
 
     algorithm.run()
-    result = algorithm.get_result()
 
     print("Algorithm (continuous problem): " + algorithm.get_name())
     print("Problem: " + problem.get_name())
+    print("Computing time: " + str(algorithm.total_computing_time))
 
 
 if __name__ == '__main__':
