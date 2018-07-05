@@ -31,19 +31,19 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
         """  NSGA-II implementation as described in
 
         * K. Deb, A. Pratap, S. Agarwal and T. Meyarivan, "A fast and elitist
-        multiobjective genetic algorithm: NSGA-II," in IEEE Transactions on Evolutionary Computation,
-        vol. 6, no. 2, pp. 182-197, Apr 2002. doi: 10.1109/4235.996017
+          multiobjective genetic algorithm: NSGA-II," in IEEE Transactions on Evolutionary Computation,
+          vol. 6, no. 2, pp. 182-197, Apr 2002. doi: 10.1109/4235.996017
 
         NSGA-II is a genetic algorithm (GA), i.e. it belongs to the evolutionary algorithms (EAs)
         family. The implementation of NSGA-II provided in jMetalPy follows the evolutionary
-        algorithm template described in the algorithm module (:mod:`algorithm`).
+        algorithm template described in the algorithm module (:py:mod:`algorithm`).
 
         :param problem: The problem to solve.
         :param population_size: Size of the population.
         :param max_evaluations: Maximum number of evaluations/iterations.
-        :param mutation: Mutation operator (see :mod:`mutation`).
-        :param crossover: Crossover operator (see :mod:`crosover`).
-        :param selection: Selection operator (see :mod:`selection`).
+        :param mutation: Mutation operator (see :py:mod:`mutation`).
+        :param crossover: Crossover operator (see :py:mod:`crosover`).
+        :param selection: Selection operator (see :py:mod:`selection`).
         :param evaluator: An evaluator object to evaluate the individuals of the population.
         """
         super(NSGAII, self).__init__(

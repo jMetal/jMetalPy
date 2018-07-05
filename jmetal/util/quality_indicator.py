@@ -28,8 +28,8 @@ class HyperVolume:
     """ Hypervolume computation based on variant 3 of the algorithm in the paper:
 
     * C. M. Fonseca, L. Paquete, and M. Lopez-Ibanez. An improved dimension-sweep
-    algorithm for the hypervolume indicator. In IEEE Congress on Evolutionary
-    Computation, pages 1157-1163, Vancouver, Canada, July 2006.
+      algorithm for the hypervolume indicator. In IEEE Congress on Evolutionary
+      Computation, pages 1157-1163, Vancouver, Canada, July 2006.
 
     Minimization is implicitly assumed here!
     """
