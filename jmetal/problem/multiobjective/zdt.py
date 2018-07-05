@@ -4,7 +4,7 @@ from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 
 """
-.. module:: `zdt`
+.. module:: ZDT
    :platform: Unix, Windows
    :synopsis: ZDT problem family of multi-objective problems.
 
@@ -20,9 +20,7 @@ class ZDT1(FloatProblem):
     """
 
     def __init__(self, number_of_variables: int = 30):
-        """Constructor
-
-        :param number_of_variables: number of decision variables of the problem
+        """ :param number_of_variables: Number of decision variables of the problem.
         """
         super().__init__()
         self.number_of_variables = number_of_variables

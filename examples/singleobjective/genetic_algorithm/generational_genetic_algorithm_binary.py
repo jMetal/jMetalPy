@@ -2,7 +2,7 @@ import logging
 
 from jmetal.algorithm.singleobjective.evolutionaryalgorithm import GenerationalGeneticAlgorithm
 from jmetal.core.solution import BinarySolution
-from jmetal.operator.crossover import SinglePoint
+from jmetal.operator.crossover import SP
 from jmetal.operator.mutation import BitFlip
 from jmetal.operator.selection import BinaryTournamentSelection
 from jmetal.problem.singleobjective.unconstrained import OneMax
@@ -19,7 +19,7 @@ def main() -> None:
         population_size = 100,
         max_evaluations = 150000,
         mutation = BitFlip(1.0/bits),
-        crossover = SinglePoint(0.9),
+        crossover = SP(0.9),
         selection = BinaryTournamentSelection())
 
     algorithm.run()

@@ -3,7 +3,6 @@ import unittest
 from jmetal.problem.multiobjective.unconstrained import Kursawe, Fonseca, Schaffer, Viennet2
 
 
-
 class KursaweTestCases(unittest.TestCase):
 
     def test_should_constructor_create_a_non_null_object(self) -> None:

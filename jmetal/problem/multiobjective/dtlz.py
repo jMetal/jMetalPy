@@ -4,7 +4,7 @@ from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 
 """
-.. module:: `dtlz`
+.. module:: DTLZ
    :platform: Unix, Windows
    :synopsis: DTLZ problem family of multi-objective problems.
 
@@ -19,7 +19,7 @@ class DTLZ1(FloatProblem):
     """
 
     def __init__(self, number_of_variables: int = 7, number_of_objectives=3):
-        """ :param number_of_variables: number of decision variables of the problem
+        """ :param number_of_variables: number of decision variables of the problem.
         """
         super().__init__()
         self.number_of_variables = number_of_variables

@@ -1,7 +1,7 @@
-from copy import copy
-import random
-from math import sqrt
 from typing import TypeVar, List
+from copy import copy
+from math import sqrt
+import random
 
 import numpy
 
@@ -11,8 +11,7 @@ from jmetal.core.algorithm import ParticleSwarmOptimization
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
-from jmetal.util.comparator import DominanceComparator
-from jmetal.util.observable import Observable, DefaultObservable
+from jmetal.component.comparator import DominanceComparator
 
 R = TypeVar('R')
 
@@ -32,23 +31,21 @@ class SMPSO(ParticleSwarmOptimization):
                  swarm_size: int,
                  max_evaluations: int,
                  mutation: Mutation[FloatSolution],
-                 leaders: BoundedArchive[FloatSolution] or None,
-                 observable: Observable = DefaultObservable(),
+                 leaders: BoundedArchive[FloatSolution],
                  evaluator: Evaluator[FloatSolution] = SequentialEvaluator[FloatSolution]()):
-        """ This class implements the SMPSO algorithm described in
+        """ This class implements the SMPSO algorithm as described in
 
         * SMPSO: A new PSO-based metaheuristic for multi-objective optimization
         * MCDM 2009. DOI: `<http://dx.doi.org/10.1109/MCDM.2009.4938830/>`_.
 
-        The implementation of SMPSO provided in jMetalPy follows the
-        algorithm template described in the algorithm templates section of the documentation.
+        The implementation of SMPSO provided in jMetalPy follows the algorithm template described in the algorithm
+        templates section of the documentation.
 
         :param problem: The problem to solve.
-        :param swarm_size:
-        :param max_evaluations:
-        :param mutation:
-        :param leaders:
-        :param observable:
+        :param swarm_size: Swarm size.
+        :param max_evaluations: Maximum number of evaluations.
+        :param mutation: Mutation operator.
+        :param leaders: Archive for leaders.
         :param evaluator: An evaluator object to evaluate the solutions in the population.
         """
         super().__init__()
@@ -57,7 +54,6 @@ class SMPSO(ParticleSwarmOptimization):
         self.max_evaluations = max_evaluations
         self.mutation = mutation
         self.leaders = leaders
-        self.observable = observable
         self.evaluator = evaluator
 
         self.evaluations = 0
@@ -220,13 +216,13 @@ class SMPSO(ParticleSwarmOptimization):
 
 class SMPSORP(SMPSO):
 
-    def __init__(self, problem: FloatProblem,
+    def __init__(self,
+                 problem: FloatProblem,
                  swarm_size: int,
                  max_evaluations: int,
                  mutation: Mutation[FloatSolution],
                  reference_points: List[List],
                  leaders: List[BoundedArchive[FloatSolution]],
-                 observable: Observable = DefaultObservable(),
                  evaluator: Evaluator[FloatSolution] = SequentialEvaluator[FloatSolution]()):
         """ This class implements the SMPSORP algorithm.
 
@@ -235,7 +231,6 @@ class SMPSORP(SMPSO):
         :param max_evaluations:
         :param mutation:
         :param leaders: List of bounded archives.
-        :param observable:
         :param evaluator: An evaluator object to evaluate the solutions in the population.
         """
         super().__init__(
@@ -244,7 +239,6 @@ class SMPSORP(SMPSO):
             max_evaluations,
             mutation,
             None,
-            observable,
             evaluator)
         self.reference_points = reference_points
         self.leaders = leaders

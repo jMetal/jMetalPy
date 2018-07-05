@@ -1,19 +1,16 @@
 from copy import copy
 from typing import TypeVar, List
 
-from tqdm import tqdm
-
-from jmetal.component.evaluator import Evaluator, SequentialEvaluator
+from jmetal.component.evaluator import Evaluator
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
-from jmetal.util.observable import Observable, DefaultObservable
 
 S = TypeVar('S')
 R = TypeVar('R')
 
 """
-.. module:: evolutionaryalgorithm
+.. module:: Evolutionary Algorithm (EA)
    :platform: Unix, Windows
    :synopsis: Implementation of Evolutionary Algorithms.
 
@@ -51,15 +48,15 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
             population.append(self.problem.create_solution())
         return population
 
-    def evaluate_population(self, population: List[S]):
+    def evaluate_population(self, population: List[S]) -> List[S]:
         for solution in population:
             self.problem.evaluate(solution)
         return population
 
-    def selection(self, population: List[S]):
+    def selection(self, population: List[S]) -> List[S]:
         return population
 
-    def reproduction(self, population: List[S]):
+    def reproduction(self, population: List[S]) -> List[S]:
         offspring_population = []
         for solution in population:
             for j in range((int)(self.lambd_a / self.mu)):
@@ -83,7 +80,7 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
     def get_result(self) -> R:
         return self.population[0]
 
-    def get_name(self):
+    def get_name(self) -> str:
         return "(" + str(self.mu) + "+" + str(self.lambd_a) + ")ES"
 
 
@@ -91,14 +88,13 @@ class NonElitistEvolutionStrategy(ElitistEvolutionStrategy[S, R]):
 
     def __init__(self,
                  problem: Problem[S],
-                 mu: int, lambdA: int,
+                 mu: int,
+                 lambd_a: int,
                  max_evaluations: int,
                  mutation: Mutation[S]):
-        super(NonElitistEvolutionStrategy, self).__init__(problem, mu, lambdA,
-                                                          max_evaluations, mutation)
+        super(NonElitistEvolutionStrategy, self).__init__(problem, mu, lambd_a, max_evaluations, mutation)
 
-    def replacement(self, population: List[S], offspring_population: List[S]) \
-            -> List[S]:
+    def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
         offspring_population.sort(key=lambda s: s.objectives[0])
 
         new_population = []
@@ -120,17 +116,15 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
                  mutation: Mutation[S],
                  crossover: Crossover[S, S],
                  selection: Selection[List[S], S],
-                 evaluator: Evaluator[S] = SequentialEvaluator[S](),
-                 observable: Observable = DefaultObservable()):
-        super(GenerationalGeneticAlgorithm, self).__init__(evaluator)
+                 evaluator: Evaluator[S]):
+        super(GenerationalGeneticAlgorithm, self).__init__()
         self.problem = problem
         self.population_size = population_size
         self.max_evaluations = max_evaluations
         self.mutation_operator = mutation
         self.crossover_operator = crossover
         self.selection_operator = selection
-        self.evaluations = 0
-        self.observable = observable
+        self.evaluator = evaluator
 
     def init_progress(self):
         self.evaluations = self.population_size

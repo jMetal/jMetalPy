@@ -1,6 +1,6 @@
 from typing import TypeVar, List
 
-from jmetal.util.comparator import DominanceComparator
+from jmetal.component.comparator import DominanceComparator
 
 S = TypeVar('S')
 

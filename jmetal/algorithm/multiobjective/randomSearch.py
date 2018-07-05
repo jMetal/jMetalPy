@@ -15,7 +15,10 @@ S = TypeVar('S')
 
 
 class RandomSearch(Generic[S]):
-    def __init__(self, problem: Problem[S], max_evaluations: int):
+
+    def __init__(self,
+                 problem: Problem[S],
+                 max_evaluations: int = 25000):
         self.problem = problem
         self.max_evaluations = max_evaluations
         self.archive = NonDominatedSolutionListArchive()

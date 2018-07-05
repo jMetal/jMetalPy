@@ -1,9 +1,15 @@
 from typing import TypeVar, Generic, List
 
-__author__ = "Antonio J. Nebro"
-
 S = TypeVar('S')
 R = TypeVar('R')
+
+"""
+.. module:: Operator
+   :platform: Unix, Windows
+   :synopsis: Templates for operators.
+
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+"""
 
 
 class Operator(Generic[S, R]):
@@ -17,7 +23,7 @@ class Operator(Generic[S, R]):
 
 
 class Mutation(Operator[S, S]):
-    """ Class representing mutation operator """
+    """ Class representing mutation operator. """
 
     def __init__(self, probability: float):
         if probability > 1.0:
@@ -32,6 +38,8 @@ class Mutation(Operator[S, S]):
 
 
 class Crossover(Operator[List[S], List[R]]):
+    """ Class representing crossover operator. """
+
     def __init__(self, probability: float):
         if probability > 1.0:
             raise Exception("The probability is greater than one: " + str(probability))
@@ -48,6 +56,8 @@ class Crossover(Operator[List[S], List[R]]):
 
 
 class Selection(Operator[S, R]):
+    """ Class representing selection operator. """
+
     def __init__(self):
         pass
 

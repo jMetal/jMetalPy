@@ -28,7 +28,7 @@ def main() -> None:
         leaders=archives_with_reference_points
     )
 
-    progress_bar = ProgressBarObserver(step=100, max=25000)
+    progress_bar = ProgressBarObserver(step=swarm_size, max=25000)
     algorithm.observable.register(progress_bar)
 
     algorithm.run()

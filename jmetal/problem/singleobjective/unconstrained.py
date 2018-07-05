@@ -3,13 +3,20 @@ import random
 from jmetal.core.problem import BinaryProblem, FloatProblem
 from jmetal.core.solution import BinarySolution, FloatSolution
 
-__author__ = "Antonio J. Nebro"
+"""
+.. module:: unconstrained
+   :platform: Unix, Windows
+   :synopsis: Unconstrained test problems for single-objective optimization
+
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+"""
 
 
 class OneMax(BinaryProblem):
-    """ Class representing problem Kursawe """
+    """ Class representing problem Kursawe. """
 
     def __init__(self, number_of_bits: int = 256):
+        super().__init__()
         self.number_of_bits = number_of_bits
         self.number_of_objectives = 1
         self.number_of_variables = 1
@@ -26,7 +33,7 @@ class OneMax(BinaryProblem):
     def create_solution(self) -> BinarySolution:
         new_solution = BinarySolution(number_of_variables=1, number_of_objectives=1)
         new_solution.variables[0] = \
-            [True if random.randint(0, 1) == 0 else False for i in range(self.number_of_bits)]
+            [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
         return new_solution
 
     def get_name(self) -> str:
@@ -35,12 +42,13 @@ class OneMax(BinaryProblem):
 
 class Sphere(FloatProblem):
     def __init__(self, number_of_variables: int = 10):
+        super().__init__()
         self.number_of_objectives = 1
         self.number_of_variables = number_of_variables
         self.number_of_constraints = 0
 
-        self.lower_bound = [-5.12 for i in range(number_of_variables)]
-        self.upper_bound = [5.12 for i in range(number_of_variables)]
+        self.lower_bound = [-5.12 for _ in range(number_of_variables)]
+        self.upper_bound = [5.12 for _ in range(number_of_variables)]
 
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound

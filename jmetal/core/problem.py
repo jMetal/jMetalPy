@@ -5,7 +5,7 @@ from typing import Generic, TypeVar
 import random
 
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
-from jmetal.util.front_file import walk_up_folder, read_front_from_file_as_solutions
+from jmetal.util.front_file import read_front_from_file_as_solutions
 
 S = TypeVar('S')
 

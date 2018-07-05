@@ -1,7 +1,7 @@
 import unittest
 
 from jmetal.core.solution import FloatSolution, Solution
-from jmetal.util.comparator import DominanceComparator, SolutionAttributeComparator, \
+from jmetal.component.comparator import DominanceComparator, SolutionAttributeComparator, \
     RankingAndCrowdingDistanceComparator
 
 

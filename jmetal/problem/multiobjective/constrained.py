@@ -13,7 +13,7 @@ from jmetal.core.problem import FloatProblem
 
 
 class Srinivas(FloatProblem):
-    """ Class representing problem Srinivas """
+    """ Class representing problem Srinivas. """
 
     def __init__(self):
         super().__init__()
@@ -34,11 +34,8 @@ class Srinivas(FloatProblem):
         solution.objectives[0] = 2.0 + (x1 - 2.0) * (x1 - 2.0) + (x2 - 1.0) * (x2 - 1.0)
         solution.objectives[1] = 9.0 * x1 - (x2 - 1.0) * (x2 - 1.0)
 
-    def get_name(self):
-        return "Srinivas"
-
     def evaluate_constraints(self, solution: FloatSolution) -> None:
-        constraints : [float] = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints)]
 
         x1 = solution.variables[0]
         x2 = solution.variables[1]
@@ -56,6 +53,9 @@ class Srinivas(FloatProblem):
 
         solution.attributes["overall_constraint_violation"] = overall_constraint_violation
         solution.attributes["number_of_violated_constraints"] = number_of_violated_constraints
+
+    def get_name(self):
+        return "Srinivas"
 
 
 class Tanaka(FloatProblem):
@@ -78,7 +78,7 @@ class Tanaka(FloatProblem):
         solution.objectives[1] = solution.variables[1]
 
     def evaluate_constraints(self, solution: FloatSolution) -> None:
-        constraints : [float] = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints)]
 
         x1 = solution.variables[0]
         x2 = solution.variables[1]

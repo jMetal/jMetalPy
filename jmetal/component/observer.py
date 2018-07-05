@@ -4,8 +4,8 @@ import os
 from tqdm import tqdm
 
 from jmetal.core.problem import Problem
-from jmetal.util.graphic import ScatterBokeh, ScatterMatplotlib
-from jmetal.util.observable import Observer
+from jmetal.util.graphic import ScatterMatplotlib
+from jmetal.core.observable import Observer
 from jmetal.util.solution_list_output import SolutionList
 
 logger = logging.getLogger(__name__)

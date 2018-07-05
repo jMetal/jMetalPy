@@ -1,8 +1,17 @@
 import logging
 from typing import TypeVar, Generic
 
-S = TypeVar('S')
 logger = logging.getLogger(__name__)
+
+S = TypeVar('S')
+
+"""
+.. module:: Solution list
+   :platform: Unix, Windows
+   :synopsis: Utils to print solutions.
+
+.. moduleauthor:: Antonio J. Nebro <ajnebro@uma.es>
+"""
 
 
 class SolutionList(Generic[S]):

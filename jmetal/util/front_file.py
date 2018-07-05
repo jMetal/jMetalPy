@@ -3,7 +3,7 @@ from os.path import dirname
 from jmetal.core.solution import FloatSolution
 
 """
-.. module:: front_file
+.. module:: Front file
    :platform: Unix, Windows
    :synopsis: Utils to read reference frontiers from files.
 

@@ -27,9 +27,6 @@ class Kursawe(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def get_name(self):
-        return "Kursawe"
-
     def evaluate(self, solution: FloatSolution):
         fx = [0.0 for _ in range(self.number_of_objectives)]
         for i in range(self.number_of_variables - 1):
@@ -41,6 +38,9 @@ class Kursawe(FloatProblem):
 
         solution.objectives[0] = fx[0]
         solution.objectives[1] = fx[1]
+
+    def get_name(self):
+        return "Kursawe"
 
 
 class Fonseca(FloatProblem):
@@ -57,13 +57,13 @@ class Fonseca(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def get_name(self):
-        return "Fonseca"
-
     def evaluate(self, solution: FloatSolution):
         n = self.number_of_variables
         solution.objectives[0] = 1 - exp(-sum([(x - 1.0 / n ** 0.5) ** 2 for x in solution.variables]))
         solution.objectives[1] = 1 - exp(-sum([(x + 1.0 / n ** 0.5) ** 2 for x in solution.variables]))
+
+    def get_name(self):
+        return "Fonseca"
 
 
 class Schaffer(FloatProblem):
@@ -80,14 +80,14 @@ class Schaffer(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def get_name(self):
-        return "Schaffer"
-
     def evaluate(self, solution: FloatSolution):
         value = solution.variables[0]
 
         solution.objectives[0] = value ** 2
         solution.objectives[1] = (value - 2) ** 2
+
+    def get_name(self):
+        return "Schaffer"
 
 
 class Viennet2(FloatProblem):
@@ -104,9 +104,6 @@ class Viennet2(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def get_name(self):
-        return "Viennet2"
-
     def evaluate(self, solution: FloatSolution):
         x0 = solution.variables[0]
         x1 = solution.variables[1]
@@ -118,3 +115,6 @@ class Viennet2(FloatProblem):
         solution.objectives[0] = f1
         solution.objectives[1] = f2
         solution.objectives[2] = f3
+
+    def get_name(self):
+        return "Viennet2"

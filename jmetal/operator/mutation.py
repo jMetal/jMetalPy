@@ -3,8 +3,24 @@ import random
 from jmetal.core.operator import Mutation
 from jmetal.core.solution import BinarySolution, Solution, FloatSolution, IntegerSolution
 
-""" Class implementing the binary BitFlip mutation operator """
-__author__ = "Antonio J. Nebro"
+"""
+.. module:: Mutation operators
+   :platform: Unix, Windows
+   :synopsis: Module implementing mutation operators.
+
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+"""
+
+
+class NullMutation(Mutation[Solution]):
+    def __init__(self):
+        super(NullMutation, self).__init__(probability=0)
+
+    def execute(self, solution: Solution) -> Solution:
+        return solution
+
+    def get_name(self):
+        return "Null mutation"
 
 
 class BitFlip(Mutation[BinarySolution]):
@@ -20,25 +36,14 @@ class BitFlip(Mutation[BinarySolution]):
 
         return solution
 
-
-class Null(Mutation[Solution]):
-    def __init__(self):
-        super(Null, self).__init__(probability=0)
-
     def get_name(self):
-        return "Null mutation"
-
-    def execute(self, solution: Solution) -> Solution:
-        return solution
+        return "BitFlip mutation"
 
 
 class Polynomial(Mutation[FloatSolution]):
     def __init__(self, probability: float, distribution_index: float = 0.20):
         super(Polynomial, self).__init__(probability=probability)
         self.distribution_index = distribution_index
-
-    def get_name(self):
-        return "Polynomial mutation"
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
         for i in range(solution.number_of_variables):
@@ -74,14 +79,14 @@ class Polynomial(Mutation[FloatSolution]):
 
         return solution
 
+    def get_name(self):
+        return "Polynomial mutation"
+
 
 class IntegerPolynomial(Mutation[IntegerSolution]):
     def __init__(self, probability: float, distribution_index: float = 0.20):
         super(IntegerPolynomial, self).__init__(probability=probability)
         self.distribution_index = distribution_index
-
-    def get_name(self):
-        return "Polynomial mutation (Integer)"
 
     def execute(self, solution: IntegerSolution) -> IntegerSolution:
         for i in range(solution.number_of_variables):
@@ -114,13 +119,13 @@ class IntegerPolynomial(Mutation[IntegerSolution]):
                 solution.variables[i] = int(round(y))
         return solution
 
+    def get_name(self):
+        return "Polynomial mutation (Integer)"
+
 
 class SimpleRandom(Mutation[FloatSolution]):
     def __init__(self, probability: float):
         super(SimpleRandom, self).__init__(probability=probability)
-
-    def get_name(self):
-        return "Simple random mutation"
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
         for i in range(solution.number_of_variables):
@@ -130,14 +135,14 @@ class SimpleRandom(Mutation[FloatSolution]):
                                         (solution.upper_bound[i] - solution.lower_bound[i]) * random.random()
         return solution
 
+    def get_name(self):
+        return "Simple random mutation"
+
 
 class Uniform(Mutation[FloatSolution]):
     def __init__(self, probability: float, perturbation: float = 0.5):
         super(Uniform, self).__init__(probability=probability)
         self.perturbation = perturbation
-
-    def get_name(self):
-        return "Uniform mutation"
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
         for i in range(solution.number_of_variables):
@@ -155,3 +160,6 @@ class Uniform(Mutation[FloatSolution]):
                 solution.variables[i] = tmp
 
         return solution
+
+    def get_name(self):
+        return "Uniform mutation"

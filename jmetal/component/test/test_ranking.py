@@ -1,7 +1,7 @@
 import unittest
 
 from jmetal.core.solution import Solution
-from jmetal.util.ranking import FastNonDominatedRanking
+from jmetal.component.ranking import FastNonDominatedRanking
 
 
 class FastNonDominatedRankingTestCases(unittest.TestCase):

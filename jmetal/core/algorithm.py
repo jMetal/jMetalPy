@@ -3,10 +3,8 @@ import threading
 import time
 from typing import TypeVar, Generic, List
 
-from tqdm import tqdm
-
-from jmetal.component.evaluator import Evaluator, SequentialEvaluator
 from jmetal.core.solution import FloatSolution
+from jmetal.core.observable import Observable, DefaultObservable
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +12,7 @@ S = TypeVar('S')
 R = TypeVar('R')
 
 """
-.. module:: algorithm
+.. module:: Algorithm
    :platform: Unix, Windows
    :synopsis: Templates for algorithms.
 
@@ -26,28 +24,30 @@ class Algorithm(Generic[S, R], threading.Thread):
 
     def __init__(self):
         threading.Thread.__init__(self)
-        self.observable = None
         self.evaluations: int = 0
         self.max_evaluations: int = 100
         self.start_computing_time: int = 0
         self.total_computing_time: int = 0
-
-    def get_name(self) -> str:
-        return type(self).__name__
+        self.observable: Observable = DefaultObservable()
 
     def get_evaluations(self) -> int:
         return self.evaluations
 
+    def get_result(self) -> R:
+        pass
+
     def get_current_computing_time(self) -> float:
         return time.time() - self.start_computing_time
+
+    def get_name(self) -> str:
+        return type(self).__name__
 
 
 class EvolutionaryAlgorithm(Algorithm[S, R]):
 
-    def __init__(self, evaluator: Evaluator[S] = SequentialEvaluator[S]()):
+    def __init__(self):
         super(EvolutionaryAlgorithm, self).__init__()
         self.population = []
-        self.evaluator = evaluator
 
     def create_initial_population(self) -> List[S]:
         pass
@@ -71,9 +71,6 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
         pass
 
     def update_progress(self):
-        pass
-
-    def get_result(self) -> R:
         pass
 
     def run(self):
@@ -148,9 +145,6 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]]):
         pass
 
     def update_particle_best(self, swarm: List[FloatSolution]) -> None:
-        pass
-
-    def get_result(self) -> R:
         pass
 
     def run(self):

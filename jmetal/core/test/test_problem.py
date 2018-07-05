@@ -2,8 +2,6 @@ import unittest
 
 from jmetal.core.problem import Problem, FloatProblem, IntegerProblem
 
-__author__ = "Antonio J. Nebro"
-
 
 class ProblemTestCases(unittest.TestCase):
 

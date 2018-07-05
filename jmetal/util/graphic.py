@@ -20,9 +20,9 @@ logger = logging.getLogger(__name__)
 S = TypeVar('S')
 
 """
-.. module:: graphics
+.. module:: Visualization
    :platform: Unix, Windows
-   :synopsis: Class for plotting solutions.
+   :synopsis: Classes for plotting solutions.
 
 .. moduleauthor:: Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """

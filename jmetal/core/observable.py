@@ -1,12 +1,27 @@
 from abc import ABCMeta, abstractmethod
 
 """
-.. module:: observable
+.. module:: Observable
    :platform: Unix, Windows
    :synopsis: Implementation of the observer-observable pattern.
 
 .. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
 """
+
+
+class Observer(object):
+
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def update(self, *args, **kwargs):
+        """ Update method
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        pass
 
 
 class Observable(object):
@@ -21,20 +36,6 @@ class Observable(object):
         pass
 
     def notify_all(self, *args, **kwargs):
-        pass
-
-
-class Observer(object):
-    __metaclass__ = ABCMeta
-
-    @abstractmethod
-    def update(self, *args, **kwargs):
-        """ Update method
-
-        :param args:
-        :param kwargs:
-        :return:
-        """
         pass
 
 

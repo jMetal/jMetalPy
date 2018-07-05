@@ -4,14 +4,12 @@ from hamcrest import assert_that, any_of
 
 from jmetal.core.solution import Solution
 from jmetal.operator.selection import BinaryTournamentSelection, BestSolutionSelection, RandomSolutionSelection, \
-    NaryRandomSolutionSelection, \
-    RankingAndCrowdingDistanceSelection, BinaryTournament2Selection
-from jmetal.util.comparator import Comparator, SolutionAttributeComparator
-
-__author__ = "Antonio J. Nebro"
+    NaryRandomSolutionSelection, RankingAndCrowdingDistanceSelection, BinaryTournament2Selection
+from jmetal.component.comparator import Comparator, SolutionAttributeComparator
 
 
 class BinaryTournamentTestCases(unittest.TestCase):
+
     def setUp(self):
         self.selection = BinaryTournamentSelection[Solution]()
 
@@ -56,6 +54,7 @@ class BinaryTournamentTestCases(unittest.TestCase):
 
 
 class BestSolutionSelectionTestCases(unittest.TestCase):
+
     def setUp(self):
         self.selection = BestSolutionSelection[Solution]()
 
@@ -178,9 +177,6 @@ class RandomSolutionSelectionTestCases(unittest.TestCase):
 
 class NaryRandomSolutionSelectionTestCases(unittest.TestCase):
 
-    def setUp(self):
-        pass
-
     def test_should_constructor_create_a_non_null_object(self):
         selection = NaryRandomSolutionSelection[Solution]()
         self.assertIsNotNone(selection)
@@ -246,6 +242,7 @@ class NaryRandomSolutionSelectionTestCases(unittest.TestCase):
 
 
 class DominanceRankingTestCases(unittest.TestCase):
+
     def setUp(self):
         self.ranking_and_crowding_selection = RankingAndCrowdingDistanceSelection(5)
 

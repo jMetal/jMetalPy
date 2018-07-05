@@ -5,7 +5,6 @@ from jmetal.component.evaluator import SequentialEvaluator, Evaluator
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
 from jmetal.operator.selection import RankingAndCrowdingDistanceSelection
-from jmetal.util.observable import Observable, DefaultObservable
 
 S = TypeVar('S')
 R = TypeVar(List[S])
@@ -28,8 +27,7 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
                  mutation: Mutation[S],
                  crossover: Crossover[S, S],
                  selection: Selection[List[S], S],
-                 evaluator: Evaluator[S] = SequentialEvaluator[S](),
-                 observable: Observable = DefaultObservable()):
+                 evaluator: Evaluator[S] = SequentialEvaluator[S]()):
         """ NSGA-II is a genetic algorithm (GA), i.e. it belongs to the evolutionary algorithms (EAs)
         family. The implementation of NSGA-II provided in jMetalPy follows the evolutionary
         algorithm template described in the algorithm templates section (:mod:`algorithm`) of the documentation.
@@ -40,7 +38,6 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
         :param mutation:
         :param crossover:
         :param selection:
-        :param observable:
         :param evaluator: An evaluator object to evaluate the solutions in the population.
         """
         super(NSGAII, self).__init__(
@@ -50,8 +47,7 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
             mutation,
             crossover,
             selection,
-            evaluator,
-            observable)
+            evaluator)
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[TypeVar('S')]]:
         """ This method joins the current and offspring populations to produce the population of the next generation

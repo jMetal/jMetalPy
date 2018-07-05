@@ -5,18 +5,24 @@ from typing import List
 from jmetal.core.operator import Crossover
 from jmetal.core.solution import Solution, FloatSolution, BinarySolution
 
-""" Class implementing the null crossover operator """
+"""
+.. module:: Crossover operators
+   :platform: Unix, Windows
+   :synopsis: Module implementing crossover operators.
+
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+"""
 
 
-class Null(Crossover[Solution, Solution]):
+class NullCrossover(Crossover[Solution, Solution]):
     def __init__(self):
-        super(Null, self).__init__(probability=0)
+        super(NullCrossover, self).__init__(probability=0)
 
     def execute(self, parents: List[Solution]) -> List[Solution]:
         if len(parents) != 2:
             raise Exception("The number of parents is not two: " + str(len(parents)))
 
-        return [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
+        return parents
 
     def get_number_of_parents(self):
         return 2
@@ -96,9 +102,9 @@ class SBX(Crossover[FloatSolution, FloatSolution]):
         return 2
 
 
-class SinglePoint(Crossover[BinarySolution, BinarySolution]):
+class SP(Crossover[BinarySolution, BinarySolution]):
     def __init__(self, probability: float):
-        super(SinglePoint, self).__init__(probability=probability)
+        super(SP, self).__init__(probability=probability)
 
     def execute(self, parents: List[BinarySolution]) -> List[BinarySolution]:
         if len(parents) != 2:
