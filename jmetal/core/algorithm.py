@@ -76,7 +76,8 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
     def run(self):
         """* Step One: Generate the initial population of individuals randomly. (First generation)
         * Step Two: Evaluate the fitness of each individual in that population (time limit, sufficient fitness achieved, etc.)
-        * Step Three: Repeat the following regenerational steps until termination:
+        * Step Three: Repeat the following regenerational steps until termination
+
             1. Select the best-fit individuals for reproduction. (Parents)
             2. Breed new individuals through crossover and mutation operations to give birth to offspring.
             3. Evaluate the individual fitness of new individuals.

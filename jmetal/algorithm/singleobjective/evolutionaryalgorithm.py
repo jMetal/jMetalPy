@@ -10,7 +10,7 @@ S = TypeVar('S')
 R = TypeVar('R')
 
 """
-.. module:: Evolutionary Algorithm (EA)
+.. module:: evolutionary_algorithm
    :platform: Unix, Windows
    :synopsis: Implementation of Evolutionary Algorithms.
 

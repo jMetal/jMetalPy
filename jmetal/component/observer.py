@@ -10,6 +10,14 @@ from jmetal.util.solution_list_output import SolutionList
 
 logger = logging.getLogger(__name__)
 
+"""
+.. module:: observer
+   :platform: Unix, Windows
+   :synopsis: Implementation of algorithm's observers.
+
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+"""
+
 
 class ProgressBarObserver(Observer):
 

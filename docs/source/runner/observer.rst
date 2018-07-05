@@ -11,4 +11,4 @@ For example, a basic algorithm observer will print the number of evaluations, th
    algorithm.observable.register(observer=basic)
 
 
-A full list of all available observers can be found :doc:`here </../api/jmetal.core.component>`.
+A full list of all available observer can be found at :py:mod:`observer`.

@@ -9,7 +9,7 @@ from jmetal.component.ranking import FastNonDominatedRanking
 S = TypeVar('S')
 
 """
-.. module:: Selection operators
+.. module:: selection
    :platform: Unix, Windows
    :synopsis: Module implementing selection operators.
 

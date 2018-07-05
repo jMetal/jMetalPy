@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 S = TypeVar('S')
 
 """
-.. module:: Solution list
+.. module:: solution_list
    :platform: Unix, Windows
    :synopsis: Utils to print solutions.
 
