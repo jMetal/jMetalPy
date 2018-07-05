@@ -34,3 +34,11 @@ Solution
     :members:
     :undoc-members:
     :show-inheritance:
+
+Observable
+-----------------------------
+
+.. automodule:: jmetal.core.observable
+    :members:
+    :undoc-members:
+    :show-inheritance:

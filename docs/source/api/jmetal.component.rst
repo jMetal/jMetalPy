@@ -25,6 +25,22 @@ Evaluator
     :undoc-members:
     :show-inheritance:
 
+Comparator
+-----------------------------
+
+.. automodule:: jmetal.component.comparator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Ranking
+--------------------------
+
+.. automodule:: jmetal.component.ranking
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Observer
 --------------------------------
 

@@ -2,12 +2,12 @@ from setuptools import setup, find_packages
 
 setup(
     name='jmetalpy',
-    version='1.0.0',
+    version='0.5.0',
     description='JMetalPy. Python version of the jMetal framework',
     author='Antonio J. Nebro',
-    author_email='ajnebro@uma.es',
-    maintainer='Antonio Nebro',
-    maintainer_email='ajnebro@uma.es',
+    author_email='antonio@lcc.uma.es',
+    maintainer='Antonio J. Nebro',
+    maintainer_email='antonio@lcc.uma.es',
     license='MIT',
     url='https://github.com/jMetal/jMetalPy',
     classifiers=[

@@ -22,9 +22,9 @@ NSGA-II with standard settings
       problem=problem,
       population_size=100,
       max_evaluations=25000,
-      mutation=Polynomial(1.0/problem.number_of_variables, distribution_index=20),
-      crossover=SBX(1.0, distribution_index=20),
-      selection=BinaryTournamentSelection(RankingAndCrowdingDistanceComparator())
+      mutation=Polynomial(probability=1.0/problem.number_of_variables, distribution_index=20),
+      crossover=SBX(probability=1.0, distribution_index=20),
+      selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
    )
 
    algorithm.run()
