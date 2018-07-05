@@ -4,7 +4,7 @@ from jmetal.core.operator import Mutation
 from jmetal.core.solution import BinarySolution, Solution, FloatSolution, IntegerSolution
 
 """
-.. module:: Mutation operators
+.. module:: mutation
    :platform: Unix, Windows
    :synopsis: Module implementing mutation operators.
 

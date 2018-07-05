@@ -12,7 +12,7 @@ S = TypeVar('S')
 R = TypeVar('R')
 
 """
-.. module:: Algorithm
+.. module:: algorithm
    :platform: Unix, Windows
    :synopsis: Templates for algorithms.
 

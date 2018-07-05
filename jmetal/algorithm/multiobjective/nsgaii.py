@@ -12,7 +12,7 @@ R = TypeVar(List[S])
 """
 .. module:: NSGA-II
    :platform: Unix, Windows
-   :synopsis: Implementation of NSGA-II.
+   :synopsis: NSGA-II (Non-dominance Sorting Genetic Algorithm II) implementation.
 
 .. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
 """
@@ -28,17 +28,23 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
                  crossover: Crossover[S, S],
                  selection: Selection[List[S], S],
                  evaluator: Evaluator[S] = SequentialEvaluator[S]()):
-        """ NSGA-II is a genetic algorithm (GA), i.e. it belongs to the evolutionary algorithms (EAs)
+        """  NSGA-II implementation as described in
+
+        * K. Deb, A. Pratap, S. Agarwal and T. Meyarivan, "A fast and elitist
+        multiobjective genetic algorithm: NSGA-II," in IEEE Transactions on Evolutionary Computation,
+        vol. 6, no. 2, pp. 182-197, Apr 2002. doi: 10.1109/4235.996017
+
+        NSGA-II is a genetic algorithm (GA), i.e. it belongs to the evolutionary algorithms (EAs)
         family. The implementation of NSGA-II provided in jMetalPy follows the evolutionary
-        algorithm template described in the algorithm templates section (:mod:`algorithm`) of the documentation.
+        algorithm template described in the algorithm module (:mod:`algorithm`).
 
         :param problem: The problem to solve.
-        :param population_size:
-        :param max_evaluations:
-        :param mutation:
-        :param crossover:
-        :param selection:
-        :param evaluator: An evaluator object to evaluate the solutions in the population.
+        :param population_size: Size of the population.
+        :param max_evaluations: Maximum number of evaluations/iterations.
+        :param mutation: Mutation operator (see :mod:`mutation`).
+        :param crossover: Crossover operator (see :mod:`crosover`).
+        :param selection: Selection operator (see :mod:`selection`).
+        :param evaluator: An evaluator object to evaluate the individuals of the population.
         """
         super(NSGAII, self).__init__(
             problem,
@@ -53,17 +59,19 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
         """ This method joins the current and offspring populations to produce the population of the next generation
         by applying the ranking and crowding distance selection.
 
-        :param population:
-        :param offspring_population:
-        :return: New population.
+        :param population: Parent population.
+        :param offspring_population: Offspring population.
+        :return: New population after ranking and crowding distance selection is applied.
         """
         join_population = population + offspring_population
         return RankingAndCrowdingDistanceSelection(self.population_size).execute(join_population)
 
     def get_result(self) -> R:
-        """:return: Population.
+        """ :return: Final population.
         """
         return self.population
 
     def get_name(self) -> str:
+        """ :return: Name of the algorithm.
+        """
         return 'NSGA-II'
