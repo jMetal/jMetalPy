@@ -7,8 +7,14 @@ from jmetal.problem.singleobjective.unconstrained import Sphere
 def main() -> None:
     variables = 10
     problem = Sphere(variables)
-    algorithm = NonElitistEvolutionStrategy[FloatSolution, FloatSolution]\
-        (problem, mu=10, lambdA=10, max_evaluations= 50000, mutation=Polynomial(1.0/variables))
+
+    algorithm = NonElitistEvolutionStrategy[FloatSolution, FloatSolution](
+        problem=problem,
+        mu=10,
+        lambd_a=10,
+        max_evaluations=50000,
+        mutation=Polynomial(probability=1.0/variables)
+    )
 
     algorithm.start()
     print("Algorithm (running as a thread): " + algorithm.get_name())

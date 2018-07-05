@@ -1,10 +1,10 @@
 import logging
 
-from jmetal.algorithm.multiobjective.smpso import SMPSORP
+from jmetal.algorithm import SMPSORP
 from jmetal.component.archive import CrowdingDistanceArchiveWithReferencePoint
 from jmetal.component.observer import ProgressBarObserver
-from jmetal.operator.mutation import Polynomial
-from jmetal.problem.multiobjective.zdt import ZDT1
+from jmetal.problem import ZDT1
+from jmetal.operator import Polynomial
 
 
 def main() -> None:

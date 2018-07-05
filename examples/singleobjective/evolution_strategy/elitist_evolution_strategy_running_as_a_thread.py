@@ -7,12 +7,14 @@ from jmetal.problem.singleobjective.unconstrained import Sphere
 def main() -> None:
     variables = 10
     problem = Sphere(variables)
-    algorithm = ElitistEvolutionStrategy[FloatSolution, FloatSolution]\
-        (problem,
-         mu=10,
-         lambdA=10,
-         max_evaluations=50000,
-         mutation=Polynomial(1.0/variables))
+
+    algorithm = ElitistEvolutionStrategy[FloatSolution, FloatSolution](
+        problem=problem,
+        mu=10,
+        lambd_a=10,
+        max_evaluations=50000,
+        mutation=Polynomial(probability=1.0/variables)
+    )
 
     algorithm.start()
     print("Algorithm (running as a thread): " + algorithm.get_name())
@@ -20,6 +22,7 @@ def main() -> None:
     algorithm.join()
 
     result = algorithm.get_result()
+
     print("Solution: " + str(result.variables))
     print("Fitness:  " + str(result.objectives[0]))
     print("Computing time: " + str(algorithm.total_computing_time))
