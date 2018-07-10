@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 # http://blog.rtwilson.com/how-to-make-your-sphinx-documentation-compile-with-readthedocs-when-youre-using-numpy-and-scipy/
 import mock
 
-MOCK_MODULES = ['numpy', 'dask', 'dask.distributed', 'tqdm', 'bokeh', 'bokeh.embed', 'bokeh.resources', 'bokeh.client',
+MOCK_MODULES = ['numpy', 'dask', 'dask.distributed', 'tqdm', 'bokeh', 'bokeh.embed', 'bokeh.front', 'bokeh.client',
                 'bokeh.io', 'bokeh.layouts','bokeh.models','bokeh.plotting',
                 'mpl_toolkits', 'mpl_toolkits.mplot3d', 'matplotlib', 'matplotlib.pyplot', 'matplotlib.axes']
 for mod_name in MOCK_MODULES:
