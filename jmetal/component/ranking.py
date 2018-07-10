@@ -17,7 +17,7 @@ class Ranking(List[S]):
 
     def get_subfront(self, rank: int):
         if rank >= len(self.ranked_sublists):
-            raise Exception("Invalid rank: " + str(rank) + ". Max rank = " + str(len(self.ranked_sublists) -1))
+            raise Exception('Invalid rank: {0}. Max rank: {1}'.format(rank, len(self.ranked_sublists) - 1))
         return self.ranked_sublists[rank]
 
     def get_number_of_subfronts(self):
@@ -35,13 +35,13 @@ class FastNonDominatedRanking(Ranking[List[S]]):
 
     def compute_ranking(self, solution_list: List[S]):
         # number of solutions dominating solution ith
-        dominate_me = [0 for i in range(len(solution_list))]
+        dominate_me = [0 for _ in range(len(solution_list))]
 
         # list of solutions dominated by solution ith
-        i_dominate = [[] for i in range(len(solution_list))]
+        i_dominate = [[] for _ in range(len(solution_list))]
 
         # front[i] contains the list of solutions belonging to front i
-        front = [[] for i in range(len(solution_list) + 1)]
+        front = [[] for _ in range(len(solution_list) + 1)]
 
         for p in range(len(solution_list) - 1):
             for q in range(p + 1, len(solution_list)):
@@ -57,7 +57,7 @@ class FastNonDominatedRanking(Ranking[List[S]]):
         for i in range(len(solution_list)):
             if dominate_me[i] is 0:
                 front[0].append(i)
-                solution_list[i].attributes["dominance_ranking"] = 0
+                solution_list[i].attributes['dominance_ranking'] = 0
 
         i = 0
         while len(front[i]) != 0:
@@ -69,7 +69,7 @@ class FastNonDominatedRanking(Ranking[List[S]]):
                         dominate_me[index] -= 1
                         if dominate_me[index] is 0:
                             front[i].append(index)
-                            solution_list[index].attributes["dominance_ranking"] = i
+                            solution_list[index].attributes['dominance_ranking'] = i
 
         self.ranked_sublists = [[]] * i
         for j in range(i):
@@ -88,5 +88,5 @@ class EfficientNonDominatedRanking(Ranking[List[S]]):
         super(EfficientNonDominatedRanking, self).__init__()
 
     def compute_ranking(self, solution_list: List[S]):
-        #todo
+        # todo
         return self.ranked_sublists

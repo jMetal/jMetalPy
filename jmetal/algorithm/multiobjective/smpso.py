@@ -114,14 +114,14 @@ class SMPSO(ParticleSwarmOptimization):
 
     def initialize_particle_best(self, swarm: List[FloatSolution]) -> None:
         for particle in swarm:
-            particle.attributes["local_best"] = copy(particle)
+            particle.attributes['local_best'] = copy(particle)
 
     def initialize_velocity(self, swarm: List[FloatSolution]) -> None:
         pass  # Velocity initialized in the constructor
 
     def update_velocity(self, swarm: List[FloatSolution]) -> None:
         for i in range(self.swarm_size):
-            best_particle = copy(swarm[i].attributes["local_best"])
+            best_particle = copy(swarm[i].attributes['local_best'])
             best_global = self.select_global_best()
 
             r1 = round(random.uniform(self.r1_min, self.r1_max), 1)
@@ -170,9 +170,9 @@ class SMPSO(ParticleSwarmOptimization):
         for i in range(self.swarm_size):
             flag = self.dominance_comparator.compare(
                 swarm[i],
-                swarm[i].attributes["local_best"])
+                swarm[i].attributes['local_best'])
             if flag != 1:
-                swarm[i].attributes["local_best"] = copy(swarm[i])
+                swarm[i].attributes['local_best'] = copy(swarm[i])
 
     def get_result(self) -> List[FloatSolution]:
         return self.leaders.solution_list

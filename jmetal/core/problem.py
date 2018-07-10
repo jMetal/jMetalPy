@@ -1,4 +1,3 @@
-import os
 from os.path import dirname, join
 from pathlib import Path
 from typing import Generic, TypeVar
@@ -13,11 +12,14 @@ S = TypeVar('S')
 class Problem(Generic[S]):
     """ Class representing problems. """
 
+    MINIMIZE = -1
+    MAXIMIZE = 1
+
     def __init__(self):
         self.number_of_variables: int = None
         self.number_of_objectives: int = None
         self.number_of_constraints: int = None
-        self.reference_front_path: str = 'problem/resources/{0}.pf'.format(self.get_name())
+        self.obj_directions: list = []
 
     def evaluate(self, solution: S) -> S:
         raise NotImplemented
@@ -29,9 +31,11 @@ class Problem(Generic[S]):
         raise NotImplemented
 
     def get_reference_front(self) -> list:
+        reference_front_path = 'problem/front/{0}.pf'.format(self.get_name())
+
         front = []
         file_path = dirname(join(dirname(__file__)))
-        computed_path = join(file_path, self.reference_front_path)
+        computed_path = join(file_path, reference_front_path)
 
         if Path(computed_path).is_file():
             front = read_front_from_file_as_solutions(computed_path)
@@ -74,8 +78,8 @@ class IntegerProblem(Problem[IntegerSolution]):
 
     def __init__(self):
         super().__init__()
-        self.lower_bound : [] = None
-        self.upper_bound : [] = None
+        self.lower_bound: [] = None
+        self.upper_bound: [] = None
 
     def create_solution(self) -> IntegerSolution:
         new_solution = IntegerSolution(

@@ -29,7 +29,7 @@ class SequentialEvaluator(Evaluator[S]):
         return solution_list
 
 
-class ParallelEvaluator(Evaluator[S]):
+class MapEvaluator(Evaluator[S]):
 
     def __init__(self, processes=None):
         self.pool = ThreadPool(processes)
@@ -40,10 +40,11 @@ class ParallelEvaluator(Evaluator[S]):
         return solution_list
 
 
-class DaskMultithreadedEvaluator(Evaluator[S]):
+class MultithreadedEvaluator(Evaluator[S]):
 
     def __init__(self, n_workers: int, processes: bool=True):
-        """ :param n_workers: Number of workers to start.
+        """
+        :param n_workers: Number of workers to start.
         :param processes: Whether to use processes (True) or threads (False).
         """
         cluster = LocalCluster(n_workers=n_workers, processes=processes)

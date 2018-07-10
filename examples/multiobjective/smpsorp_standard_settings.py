@@ -1,5 +1,3 @@
-import logging
-
 from jmetal.algorithm import SMPSORP
 from jmetal.component.archive import CrowdingDistanceArchiveWithReferencePoint
 from jmetal.component.observer import ProgressBarObserver
@@ -7,7 +5,7 @@ from jmetal.problem import ZDT1
 from jmetal.operator import Polynomial
 
 
-def main() -> None:
+if __name__ == '__main__':
     problem = ZDT1()
     swarm_size = 100
 
@@ -33,19 +31,6 @@ def main() -> None:
 
     algorithm.run()
 
-    print("Algorithm (continuous problem): " + algorithm.get_name())
-    print("Problem: " + problem.get_name())
-    print("Computing time: " + str(algorithm.total_computing_time))
-
-
-if __name__ == '__main__':
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s",
-        handlers=[
-            logging.FileHandler('jmetalpy.log'),
-            logging.StreamHandler()
-        ]
-    )
-
-    main()
+    print('Algorithm (continuous problem): ' + algorithm.get_name())
+    print('Problem: ' + problem.get_name())
+    print('Computing time: ' + str(algorithm.total_computing_time))

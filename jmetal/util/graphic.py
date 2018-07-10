@@ -16,7 +16,7 @@ from jmetal.core.solution import Solution
 
 warnings.filterwarnings("ignore", ".*GUI is implemented.*")
 
-logger = logging.getLogger(__name__)
+jMetalPyLogger = logging.getLogger('jMetalPy')
 S = TypeVar('S')
 
 """
@@ -39,11 +39,11 @@ class Plot:
         self.yaxis_label = yaxis_label
         self.zaxis_label = zaxis_label
 
-    def get_objectives(self, solution_list: List[S]) -> Tuple[list, list, list]:
-        if solution_list is None:
-            raise Exception("Solution list is none!")
+    def get_objectives(self, front: List[S]) -> Tuple[list, list, list]:
+        if front is None:
+            raise Exception('Front is none!')
 
-        points = list(solution.objectives for solution in solution_list)
+        points = list(solution.objectives for solution in front)
 
         x_values, y_values = [point[0] for point in points], [point[1] for point in points]
 
@@ -74,7 +74,7 @@ class ScatterMatplotlib(Plot):
 
     def __initialize(self) -> None:
         """ Initialize the scatter plot for the first time. """
-        logger.info("Generating plot...")
+        jMetalPyLogger.info("Generating plot...")
 
         # Initialize a plot
         self.fig.canvas.set_window_title('jMetalPy')
@@ -98,7 +98,7 @@ class ScatterMatplotlib(Plot):
         self.axis.grid(color='#f0f0f5', linestyle='-', linewidth=1, alpha=0.5)
         self.fig.suptitle(self.plot_title, fontsize=13)
 
-        logger.info("Plot initialized")
+        jMetalPyLogger.info("Plot initialized")
 
     def __plot(self, x_values, y_values, z_values, color: str = '#98FB98', marker: str = 'o', msize: int = 3):
         if self.number_of_objectives == 2:
@@ -108,27 +108,27 @@ class ScatterMatplotlib(Plot):
             self.sc, = self.axis.plot(x_values, y_values, z_values,
                                       color=color, marker=marker, markersize=msize, ls='None', picker=10)
 
-    def plot(self, solution_list: List[S], reference: List[S], output: str='', show: bool=True) -> None:
+    def plot(self, front: List[S], reference: List[S], output: str= '', show: bool=True) -> None:
         if reference:
-            logger.info("Reference front found")
+            jMetalPyLogger.info('Reference front found')
             ref_x_values, ref_y_values, ref_z_values = self.get_objectives(reference)
             self.__plot(ref_x_values, ref_y_values, ref_z_values, color='#323232', marker='*')
 
-        x_values, y_values, z_values = self.get_objectives(solution_list)
+        x_values, y_values, z_values = self.get_objectives(front)
         self.__plot(x_values, y_values, z_values)
 
         if output:
             self.__save(output)
         if show:
-            self.fig.canvas.mpl_connect('pick_event', lambda event: self.__pick_handler(event, solution_list))
+            self.fig.canvas.mpl_connect('pick_event', lambda event: self.__pick_handler(event, front))
             plt.show()
 
-    def update(self, solution_list: List[S], reference: List[S], new_title: str='', persistence: bool=True) -> None:
+    def update(self, front: List[S], reference: List[S], new_title: str= '', persistence: bool=True) -> None:
         if self.sc is None:
-            logger.warning("Plot is none! Generating first plot...")
-            self.plot(solution_list, reference, show=False)
+            jMetalPyLogger.warning("Plot is none! Generating first plot...")
+            self.plot(front, reference, show=False)
 
-        x_values, y_values, z_values = self.get_objectives(solution_list)
+        x_values, y_values, z_values = self.get_objectives(front)
 
         if persistence:
             # Replace with new points
@@ -142,7 +142,7 @@ class ScatterMatplotlib(Plot):
 
         # Also, add event handler
         event_handler = \
-            self.fig.canvas.mpl_connect('pick_event', lambda event: self.__pick_handler(event, solution_list))
+            self.fig.canvas.mpl_connect('pick_event', lambda event: self.__pick_handler(event, front))
 
         # Update title with new times and evaluations
         self.fig.suptitle(new_title, fontsize=13)
@@ -163,30 +163,30 @@ class ScatterMatplotlib(Plot):
                              "raw", "rgba", "svg", "svgz", "tif", "tiff"]
 
         if fmt not in supported_formats:
-            raise Exception("{0} is not a valid format! Use one of these instead: {0}".format(fmt, supported_formats))
+            raise Exception('{0} is not a valid format! Use one of these instead: {0}'.format(fmt, supported_formats))
 
         self.fig.savefig(file_name + '.' + fmt, format=fmt, dpi=dpi)
 
     def __retrieve_info(self, x_val: float, y_val: float, solution: Solution) -> None:
-        logger.info("Output file: " + '{0}-{1}'.format(x_val, y_val))
+        jMetalPyLogger.info("Output file: " + '{0}-{1}'.format(x_val, y_val))
 
         with open('{0}-{1}'.format(x_val, y_val), 'w') as of:
             of.write(solution.__str__())
 
-    def __pick_handler(self, event, solution_list: List[S]):
+    def __pick_handler(self, event, front: List[S]):
         """ Handler for picking points from the plot. """
         line, ind = event.artist, event.ind[0]
         x, y = line.get_xdata(), line.get_ydata()
 
-        logger.debug('Selected resources point ({0}): ({1}, {2})'.format(ind, x[ind], y[ind]))
+        jMetalPyLogger.debug('Selected front point ({0}): ({1}, {2})'.format(ind, x[ind], y[ind]))
 
-        sol = next((solution for solution in solution_list
+        sol = next((solution for solution in front
                     if solution.objectives[0] == x[ind] and solution.objectives[1] == y[ind]), None)
 
         if sol is not None:
             self.__retrieve_info(x[ind], y[ind], sol)
         else:
-            logger.warning("Solution is none.")
+            jMetalPyLogger.warning('Solution is none')
             return True
 
 
@@ -202,7 +202,7 @@ class ScatterBokeh(Plot):
         else:
             raise Exception('Wrong number of objectives: {0}'.format(number_of_objectives))
 
-        self.client = ClientSession(websocket_url="ws://{0}/ws".format(ws_url))
+        self.client = ClientSession(websocket_url='ws://{0}/ws'.format(ws_url))
         self.doc = curdoc()
         self.doc.title = plot_title
         self.figure_xy = None
@@ -215,16 +215,16 @@ class ScatterBokeh(Plot):
         """ Set-up tools for plot. """
         code = '''
             selected = source.selected['1d']['indices'][0]
-            var str = source.resources.str[selected]
+            var str = source.front.str[selected]
             alert(str)
         '''
 
         callback = CustomJS(args=dict(source=self.source), code=code)
         self.plot_tools = [TapTool(callback=callback), WheelZoomTool(), 'save', 'pan',
-                           HoverTool(tooltips=[("index", "$index"), ("(x,y)", "($x, $y)")])]
+                           HoverTool(tooltips=[('index', '$index'), ('(x,y)', '($x, $y)')])]
 
-    def plot(self, solution_list: List[S], reference: List[S]=None, output: str='', show: bool=True) -> None:
-        # This is important to purge resources (if any) between calls
+    def plot(self, front: List[S], reference: List[S]=None, output: str= '', show: bool=True) -> None:
+        # This is important to purge front (if any) between calls
         reset_output()
 
         # Set up figure
@@ -233,7 +233,7 @@ class ScatterBokeh(Plot):
         self.figure_xy.xaxis.axis_label = self.xaxis_label
         self.figure_xy.yaxis.axis_label = self.yaxis_label
 
-        x_values, y_values, z_values = self.get_objectives(solution_list)
+        x_values, y_values, z_values = self.get_objectives(front)
 
         if self.number_of_objectives == 2:
             # Plot reference solution list (if any)
@@ -241,8 +241,8 @@ class ScatterBokeh(Plot):
                 ref_x_values, ref_y_values, _ = self.get_objectives(reference)
                 self.figure_xy.line(x=ref_x_values, y=ref_y_values, legend='reference', color='green')
 
-            # Push resources to server
-            self.source.stream({'x': x_values, 'y': y_values, 'str': [s.__str__() for s in solution_list]})
+            # Push front to server
+            self.source.stream({'x': x_values, 'y': y_values, 'str': [s.__str__() for s in front]})
             self.doc.add_root(column(self.figure_xy))
         else:
             # Add new figures for each axis
@@ -263,8 +263,8 @@ class ScatterBokeh(Plot):
                 self.figure_xz.line(x=ref_x_values, y=ref_z_values, legend='reference', color='green')
                 self.figure_yz.line(x=ref_y_values, y=ref_z_values, legend='reference', color='green')
 
-            # Push resources to server
-            self.source.stream({'x': x_values, 'y': y_values, 'z': z_values, 'str': [s.__str__() for s in solution_list]})
+            # Push front to server
+            self.source.stream({'x': x_values, 'y': y_values, 'z': z_values, 'str': [s.__str__() for s in front]})
             self.doc.add_root(row(self.figure_xy, self.figure_xz, self.figure_yz))
 
         self.client.push(self.doc)
@@ -274,24 +274,24 @@ class ScatterBokeh(Plot):
         if show:
             self.client.show()
 
-    def update(self, solution_list: List[S], reference: List[S], new_title: str='', persistence: bool=False) -> None:
+    def update(self, front: List[S], reference: List[S], new_title: str= '', persistence: bool=False) -> None:
         # Check if plot has not been initialized first
         if self.figure_xy is None:
-            self.plot(solution_list, reference)
+            self.plot(front, reference)
 
         if not persistence:
-            rollover = len(solution_list)
+            rollover = len(front)
         else:
             rollover = None
 
         self.figure_xy.title.text = new_title
-        x_values, y_values, z_values = self.get_objectives(solution_list)
+        x_values, y_values, z_values = self.get_objectives(front)
 
         if self.number_of_objectives == 2:
-            self.source.stream({'x': x_values, 'y': y_values, 'str': [s.__str__() for s in solution_list]},
+            self.source.stream({'x': x_values, 'y': y_values, 'str': [s.__str__() for s in front]},
                                rollover=rollover)
         else:
-            self.source.stream({'x': x_values, 'y': y_values, 'z': z_values, 'str': [s.__str__() for s in solution_list]},
+            self.source.stream({'x': x_values, 'y': y_values, 'z': z_values, 'str': [s.__str__() for s in front]},
                                rollover=rollover)
 
     def __save(self, file_name: str):

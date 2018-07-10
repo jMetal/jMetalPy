@@ -13,6 +13,7 @@ from jmetal.core.solution import BinarySolution, Solution, FloatSolution, Intege
 
 
 class NullMutation(Mutation[Solution]):
+
     def __init__(self):
         super(NullMutation, self).__init__(probability=0)
 
@@ -24,6 +25,7 @@ class NullMutation(Mutation[Solution]):
 
 
 class BitFlip(Mutation[BinarySolution]):
+
     def __init__(self, probability: float):
         super(BitFlip, self).__init__(probability=probability)
 
@@ -32,15 +34,16 @@ class BitFlip(Mutation[BinarySolution]):
             for j in range(len(solution.variables[i])):
                 rand = random.random()
                 if rand <= self.probability:
-                    solution.variables[i][j] = True if solution.variables[i][j] == False else False
+                    solution.variables[i][j] = True if solution.variables[i][j] is False else False
 
         return solution
 
     def get_name(self):
-        return "BitFlip mutation"
+        return 'BitFlip mutation'
 
 
 class Polynomial(Mutation[FloatSolution]):
+
     def __init__(self, probability: float, distribution_index: float = 0.20):
         super(Polynomial, self).__init__(probability=probability)
         self.distribution_index = distribution_index
@@ -80,10 +83,11 @@ class Polynomial(Mutation[FloatSolution]):
         return solution
 
     def get_name(self):
-        return "Polynomial mutation"
+        return 'Polynomial mutation'
 
 
 class IntegerPolynomial(Mutation[IntegerSolution]):
+
     def __init__(self, probability: float, distribution_index: float = 0.20):
         super(IntegerPolynomial, self).__init__(probability=probability)
         self.distribution_index = distribution_index
@@ -99,16 +103,16 @@ class IntegerPolynomial(Mutation[IntegerSolution]):
                 else:
                     delta1 = (y - yl) / (yu - yl)
                     delta2 = (yu - y) / (yu - yl)
-                    mutPow = 1.0 / (self.distribution_index + 1.0)
+                    mut_pow = 1.0 / (self.distribution_index + 1.0)
                     rnd = random.random()
                     if rnd <= 0.5:
                         xy = 1.0 - delta1
                         val = 2.0 * rnd + (1.0 - 2.0 * rnd) * (xy ** (self.distribution_index + 1.0))
-                        deltaq = val ** mutPow - 1.0
+                        deltaq = val ** mut_pow - 1.0
                     else:
                         xy = 1.0 - delta2
                         val = 2.0 * (1.0 - rnd) + 2.0 * (rnd - 0.5) * (xy ** (self.distribution_index + 1.0))
-                        deltaq = 1.0 - val ** mutPow
+                        deltaq = 1.0 - val ** mut_pow
 
                     y += deltaq * (yu - yl)
                     if y < solution.lower_bound[i]:
@@ -120,10 +124,11 @@ class IntegerPolynomial(Mutation[IntegerSolution]):
         return solution
 
     def get_name(self):
-        return "Polynomial mutation (Integer)"
+        return 'Polynomial mutation (Integer)'
 
 
 class SimpleRandom(Mutation[FloatSolution]):
+
     def __init__(self, probability: float):
         super(SimpleRandom, self).__init__(probability=probability)
 
@@ -136,10 +141,11 @@ class SimpleRandom(Mutation[FloatSolution]):
         return solution
 
     def get_name(self):
-        return "Simple random mutation"
+        return 'Simple random mutation'
 
 
 class Uniform(Mutation[FloatSolution]):
+
     def __init__(self, probability: float, perturbation: float = 0.5):
         super(Uniform, self).__init__(probability=probability)
         self.perturbation = perturbation
@@ -162,4 +168,4 @@ class Uniform(Mutation[FloatSolution]):
         return solution
 
     def get_name(self):
-        return "Uniform mutation"
+        return 'Uniform mutation'

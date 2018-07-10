@@ -43,11 +43,11 @@ class NonDominatedSolutionListArchiveTestCases(unittest.TestCase):
         self.assertEqual(solution, self.archive.get_solution_list()[0])
 
     def test_should_adding_two_solutions_work_properly_if_one_is_dominated(self):
-        dominated_solution = Solution(1,2)
-        dominated_solution.objectives = [2.0,2.0]
+        dominated_solution = Solution(1 ,2)
+        dominated_solution.objectives = [2.0, 2.0]
 
-        dominant_solution = Solution(1,2)
-        dominant_solution.objectives = [1.0,1.0]
+        dominant_solution = Solution(1, 2)
+        dominant_solution.objectives = [1.0 ,1.0]
 
         self.archive.add(dominated_solution)
         self.archive.add(dominant_solution)

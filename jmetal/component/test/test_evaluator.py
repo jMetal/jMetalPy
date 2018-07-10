@@ -1,6 +1,6 @@
 import unittest
 
-from jmetal.component.evaluator import SequentialEvaluator, ParallelEvaluator
+from jmetal.component.evaluator import SequentialEvaluator, MapEvaluator
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 
@@ -56,7 +56,7 @@ class SequentialEvaluatorTestCases(unittest.TestCase):
 class ParallelEvaluatorTestCases(unittest.TestCase):
 
     def setUp(self):
-        self.evaluator = ParallelEvaluator()
+        self.evaluator = MapEvaluator()
         self.problem = MockedProblem()
 
     def test_should_constructor_create_a_non_null_object(self):

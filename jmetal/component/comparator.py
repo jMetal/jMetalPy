@@ -6,11 +6,13 @@ S = TypeVar('S')
 
 
 class Comparator(Generic[S]):
+
     def compare(self, object1: S, object2: S) -> int:
         pass
 
 
 class EqualSolutionsComparator(Comparator):
+
     def compare(self, solution1: Solution, solution2: Solution) -> int:
         if solution1 is None:
             return 1
@@ -45,6 +47,7 @@ class EqualSolutionsComparator(Comparator):
 
 
 class SolutionAttributeComparator(Comparator):
+
     def __init__(self, key: str, lowest_is_best: bool = True):
         self.key = key
         self.lowest_is_best = lowest_is_best
@@ -87,6 +90,7 @@ class RankingAndCrowdingDistanceComparator(Comparator):
 
 
 class DominanceComparator(Comparator):
+
     def __init__(self, constraint_comparator = SolutionAttributeComparator("overall_constraint_violation", lowest_is_best=False)):
         self.constraint_comparator = constraint_comparator
 

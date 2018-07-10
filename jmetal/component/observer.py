@@ -8,7 +8,7 @@ from jmetal.util.graphic import ScatterMatplotlib
 from jmetal.core.observable import Observer
 from jmetal.util.solution_list_output import SolutionList
 
-logger = logging.getLogger(__name__)
+jMetalPyLogger = logging.getLogger('jMetalPy')
 
 """
 .. module:: observer
@@ -41,12 +41,16 @@ class BasicAlgorithmObserver(Observer):
         self.display_frequency = frequency
 
     def update(self, *args, **kwargs):
-        evaluations = kwargs["evaluations"]
+        computing_time = kwargs['computing time']
+        evaluations = kwargs['evaluations']
+        front = kwargs['population']
 
         if (evaluations % self.display_frequency) == 0:
-            logger.debug("Evaluations: " + str(evaluations) +
-                         ". Best fitness: " + str(kwargs["population"][0].objectives) +
-                         ". Computing time: " + str(kwargs["computing time"]))
+            jMetalPyLogger.debug(
+                'Evaluations: {0} \n Best fitness: {1} \n Computing time: {2}'.format(
+                    evaluations, front[0].objectives, computing_time
+                )
+            )
 
 
 class WriteFrontToFileObserver(Observer):
@@ -56,17 +60,17 @@ class WriteFrontToFileObserver(Observer):
         self.directory = output_directory
 
         if os.path.isdir(self.directory):
-            logger.warning("Directory " + self.directory + " exists. Removing contents.")
+            jMetalPyLogger.warning('Directory {0} exists. Removing contents.'.format(self.directory))
             for file in os.listdir(self.directory):
-                os.remove(self.directory + "/" + file)
+                os.remove('{0}/{1}'.format(self.directory, file))
         else:
-            logger.warning("Directory " + self.directory + " does not exist. Creating it.")
+            jMetalPyLogger.warning('Directory {0} does not exist. Creating it.'.format(self.directory))
             os.mkdir(self.directory)
 
     def update(self, *args, **kwargs):
-        SolutionList.print_function_values_to_file(
-            kwargs["population"], self.directory + "/FUN." + str(self.counter))
+        front = kwargs['population']
 
+        SolutionList.print_function_values_to_file(front, '{0}/FUN.{1}'.format(self.directory, self.counter))
         self.counter += 1
 
 
@@ -76,14 +80,14 @@ class VisualizerObserver(Observer):
         self.display_frequency = 1.0
         self.replace = replace
         self.reference = problem.get_reference_front()
-        self.plot = ScatterMatplotlib('VisualizerObserver', problem.number_of_objectives)
+        self.plot = ScatterMatplotlib('jMetalPy', problem.number_of_objectives)
 
     def update(self, *args, **kwargs):
-        evaluations = kwargs["evaluations"]
-        computing_time = kwargs["computing time"]
-        solution_list = kwargs["population"]
+        computing_time = kwargs['computing time']
+        evaluations = kwargs['evaluations']
+        front = kwargs['population']
 
-        title = '{0}, Eval: {1}, Time: {2}'.format("VisualizerObserver", evaluations, computing_time)
+        title = '{0}, Eval: {1}, Time: {2}'.format('VisualizerObserver', evaluations, computing_time)
 
         if (evaluations % self.display_frequency) == 0:
-            self.plot.update(solution_list, self.reference, new_title=title, persistence=self.replace)
+            self.plot.update(front, self.reference, new_title=title, persistence=self.replace)

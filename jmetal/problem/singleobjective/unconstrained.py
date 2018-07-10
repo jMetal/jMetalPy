@@ -37,7 +37,7 @@ class OneMax(BinaryProblem):
         return new_solution
 
     def get_name(self) -> str:
-        return "OneMax"
+        return 'OneMax'
 
 
 class Sphere(FloatProblem):
@@ -61,4 +61,4 @@ class Sphere(FloatProblem):
         solution.objectives[0] = total
 
     def get_name(self) -> str:
-        return "Sphere"
+        return 'Sphere'

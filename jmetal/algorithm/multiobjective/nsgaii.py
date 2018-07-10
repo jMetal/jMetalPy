@@ -67,11 +67,7 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
         return RankingAndCrowdingDistanceSelection(self.population_size).execute(join_population)
 
     def get_result(self) -> R:
-        """ :return: Final population.
-        """
         return self.population
 
     def get_name(self) -> str:
-        """ :return: Name of the algorithm.
-        """
         return 'NSGA-II'

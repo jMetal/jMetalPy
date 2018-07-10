@@ -26,6 +26,8 @@ class DTLZ1(FloatProblem):
         self.number_of_objectives = number_of_objectives
         self.number_of_constraints = 0
 
+        self.obj_directions = [self.MINIMIZE] * number_of_objectives
+
         self.lower_bound = self.number_of_variables * [0.0]
         self.upper_bound = self.number_of_variables * [1.0]
 
@@ -50,7 +52,7 @@ class DTLZ1(FloatProblem):
                 solution.objectives[i] *= 1 - solution.variables[self.number_of_objectives - (i + 1)]
 
     def get_name(self):
-        return "DTLZ1"
+        return 'DTLZ1'
 
 
 class DTLZ2(FloatProblem):
@@ -66,6 +68,8 @@ class DTLZ2(FloatProblem):
         self.number_of_variables = number_of_variables
         self.number_of_objectives = number_of_objectives
         self.number_of_constraints = 0
+
+        self.obj_directions = [self.MINIMIZE] * number_of_objectives
 
         self.lower_bound = self.number_of_variables * [0.0]
         self.upper_bound = self.number_of_variables * [1.0]
@@ -88,4 +92,4 @@ class DTLZ2(FloatProblem):
                 solution.objectives[i] *= sin(0.5 * pi * solution.variables[self.number_of_objectives - (i + 1)])
 
     def get_name(self):
-        return "DTLZ2"
+        return 'DTLZ2'

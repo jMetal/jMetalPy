@@ -21,6 +21,8 @@ class Kursawe(FloatProblem):
         self.number_of_variables = number_of_variables
         self.number_of_constraints = 0
 
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+
         self.lower_bound = [-5.0 for _ in range(number_of_variables)]
         self.upper_bound = [5.0 for _ in range(number_of_variables)]
 
@@ -40,7 +42,7 @@ class Kursawe(FloatProblem):
         solution.objectives[1] = fx[1]
 
     def get_name(self):
-        return "Kursawe"
+        return 'Kursawe'
 
 
 class Fonseca(FloatProblem):
@@ -50,6 +52,8 @@ class Fonseca(FloatProblem):
         self.number_of_variables = 3
         self.number_of_objectives = 2
         self.number_of_constraints = 0
+
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
 
         self.lower_bound = self.number_of_variables * [-4]
         self.upper_bound = self.number_of_variables * [ 4]
@@ -63,7 +67,7 @@ class Fonseca(FloatProblem):
         solution.objectives[1] = 1 - exp(-sum([(x + 1.0 / n ** 0.5) ** 2 for x in solution.variables]))
 
     def get_name(self):
-        return "Fonseca"
+        return 'Fonseca'
 
 
 class Schaffer(FloatProblem):
@@ -73,6 +77,8 @@ class Schaffer(FloatProblem):
         self.number_of_variables = 1
         self.number_of_objectives = 2
         self.number_of_constraints = 0
+
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
 
         self.lower_bound = [-100000]
         self.upper_bound = [100000]
@@ -87,7 +93,7 @@ class Schaffer(FloatProblem):
         solution.objectives[1] = (value - 2) ** 2
 
     def get_name(self):
-        return "Schaffer"
+        return 'Schaffer'
 
 
 class Viennet2(FloatProblem):
@@ -97,6 +103,8 @@ class Viennet2(FloatProblem):
         self.number_of_variables = 2
         self.number_of_objectives = 3
         self.number_of_constraints = 0
+
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE, self.MINIMIZE]
 
         self.lower_bound = self.number_of_variables * [-4]
         self.upper_bound = self.number_of_variables * [4]
@@ -117,4 +125,4 @@ class Viennet2(FloatProblem):
         solution.objectives[2] = f3
 
     def get_name(self):
-        return "Viennet2"
+        return 'Viennet2'

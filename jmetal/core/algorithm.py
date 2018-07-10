@@ -1,12 +1,9 @@
-import logging
 import threading
 import time
 from typing import TypeVar, Generic, List
 
 from jmetal.core.solution import FloatSolution
 from jmetal.core.observable import Observable, DefaultObservable
-
-logger = logging.getLogger(__name__)
 
 S = TypeVar('S')
 R = TypeVar('R')
@@ -34,12 +31,16 @@ class Algorithm(Generic[S, R], threading.Thread):
         return self.evaluations
 
     def get_result(self) -> R:
+        """ :return: Final population.
+        """
         pass
 
     def get_current_computing_time(self) -> float:
         return time.time() - self.start_computing_time
 
     def get_name(self) -> str:
+        """ :return: Name of the algorithm.
+        """
         return type(self).__name__
 
 

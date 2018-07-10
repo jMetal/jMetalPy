@@ -16,11 +16,11 @@ class Solution(Generic[S]):
         self.attributes = {}
 
     def __str__(self) -> str:
-        solution = "number_of_objectives: {0} \nnumber_of_variables: {1} \nnumber_of_constraints: {2} \n".format(
+        solution = 'number_of_objectives: {0} \nnumber_of_variables: {1} \nnumber_of_constraints: {2} \n'.format(
             self.number_of_objectives, self.number_of_variables, self.number_of_constraints
         )
-        solution += "objectives: \n {0} \n".format(self.objectives)
-        solution += "variables: \n {0}".format(self.variables)
+        solution += 'objectives: \n {0} \n'.format(self.objectives)
+        solution += 'variables: \n {0}'.format(self.variables)
 
         return solution
 

@@ -27,9 +27,9 @@ class Mutation(Operator[S, S]):
 
     def __init__(self, probability: float):
         if probability > 1.0:
-            raise Exception("The probability is greater than one: " + str(probability))
+            raise Exception('The probability is greater than one: {}'.format(probability))
         elif probability < 0.0:
-            raise Exception("The probability is lower than zero: " + str(probability))
+            raise Exception('The probability is lower than zero: {}'.format(probability))
 
         self.probability = probability
 
@@ -42,9 +42,9 @@ class Crossover(Operator[List[S], List[R]]):
 
     def __init__(self, probability: float):
         if probability > 1.0:
-            raise Exception("The probability is greater than one: " + str(probability))
+            raise Exception('The probability is greater than one: {}'.format(probability))
         elif probability < 0.0:
-            raise Exception("The probability is lower than zero: " + str(probability))
+            raise Exception('The probability is lower than zero: {}'.format(probability))
 
         self.probability = probability
 
