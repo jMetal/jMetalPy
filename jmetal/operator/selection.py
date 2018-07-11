@@ -70,10 +70,13 @@ class BestSolutionSelection(Selection[List[S], S]):
 
         return result
 
+    def get_name(self) -> str:
+        return 'Best solution selection'
+
 
 class NaryRandomSolutionSelection(Selection[List[S], S]):
 
-    def __init__(self, number_of_solutions_to_be_returned:int = 1):
+    def __init__(self, number_of_solutions_to_be_returned: int = 1):
         super(NaryRandomSolutionSelection, self).__init__()
         if number_of_solutions_to_be_returned < 0:
             raise Exception('The number of solutions to be returned must be positive integer')
@@ -91,6 +94,9 @@ class NaryRandomSolutionSelection(Selection[List[S], S]):
         # random sampling without replacement
         return random.sample(front, self.number_of_solutions_to_be_returned)
 
+    def get_name(self) -> str:
+        return 'Nary random solution selection'
+
 
 class RandomSolutionSelection(Selection[List[S], S]):
 
@@ -104,6 +110,9 @@ class RandomSolutionSelection(Selection[List[S], S]):
             raise Exception('The front is empty')
 
         return random.choice(front)
+
+    def get_name(self) -> str:
+        return 'Random solution selection'
 
 
 class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
@@ -132,6 +141,9 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
                     new_solution_list.append(sorted_subfront[i])
 
         return new_solution_list
+
+    def get_name(self) -> str:
+        return 'Ranking and crowding distance selection'
 
 
 class BinaryTournament2Selection(Selection[List[S], S]):
@@ -182,5 +194,5 @@ class BinaryTournament2Selection(Selection[List[S], S]):
 
         return result
 
-    def get_name(self):
+    def get_name(self) -> str:
         return 'Binary tournament selection (experimental)'

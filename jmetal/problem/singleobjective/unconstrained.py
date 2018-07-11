@@ -13,22 +13,23 @@ from jmetal.core.solution import BinarySolution, FloatSolution
 
 
 class OneMax(BinaryProblem):
-    """ Class representing problem Kursawe. """
 
     def __init__(self, number_of_bits: int = 256):
-        super().__init__()
+        super(OneMax, self).__init__()
         self.number_of_bits = number_of_bits
         self.number_of_objectives = 1
         self.number_of_variables = 1
         self.number_of_constraints = 0
 
-    def evaluate(self, solution: BinarySolution) -> None:
+    def evaluate(self, solution: BinarySolution) -> BinarySolution:
         counter_of_ones = 0
         for bits in solution.variables[0]:
             if bits:
                 counter_of_ones += 1
 
         solution.objectives[0] = -1.0 * counter_of_ones
+
+        return solution
 
     def create_solution(self) -> BinarySolution:
         new_solution = BinarySolution(number_of_variables=1, number_of_objectives=1)
@@ -41,8 +42,9 @@ class OneMax(BinaryProblem):
 
 
 class Sphere(FloatProblem):
+
     def __init__(self, number_of_variables: int = 10):
-        super().__init__()
+        super(Sphere, self).__init__()
         self.number_of_objectives = 1
         self.number_of_variables = number_of_variables
         self.number_of_constraints = 0
@@ -53,12 +55,14 @@ class Sphere(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
         total = 0.0
         for x in solution.variables:
             total += x * x
 
         solution.objectives[0] = total
+
+        return solution
 
     def get_name(self) -> str:
         return 'Sphere'

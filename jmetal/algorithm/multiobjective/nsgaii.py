@@ -55,7 +55,7 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
             selection,
             evaluator)
 
-    def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[TypeVar('S')]]:
+    def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
         """ This method joins the current and offspring populations to produce the population of the next generation
         by applying the ranking and crowding distance selection.
 
@@ -70,4 +70,4 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
         return self.population
 
     def get_name(self) -> str:
-        return 'NSGA-II'
+        return 'Non-dominated Sorting Genetic Algorithm II'

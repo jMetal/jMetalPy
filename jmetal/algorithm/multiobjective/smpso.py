@@ -48,7 +48,7 @@ class SMPSO(ParticleSwarmOptimization):
         :param leaders: Archive for leaders.
         :param evaluator: An evaluator object to evaluate the solutions in the population.
         """
-        super().__init__()
+        super(SMPSO, self).__init__()
         self.problem = problem
         self.swarm_size = swarm_size
         self.max_evaluations = max_evaluations
@@ -75,7 +75,7 @@ class SMPSO(ParticleSwarmOptimization):
         self.dominance_comparator = DominanceComparator()
 
         self.speed = numpy.zeros((self.swarm_size, self.problem.number_of_variables), dtype=float)
-        self.delta_max, self.delta_min = numpy.empty(problem.number_of_variables), \
+        self.delta_max, self.delta_min = numpy.empty(problem.number_of_variables),\
                                          numpy.empty(problem.number_of_variables)
         for i in range(problem.number_of_variables):
             self.delta_max[i] = (self.problem.upper_bound[i] - self.problem.lower_bound[i]) / 2.0
@@ -183,7 +183,7 @@ class SMPSO(ParticleSwarmOptimization):
         if len(leaders) > 2:
             particles = random.sample(leaders, 2)
 
-            if self.leaders.get_comparator().compare(particles[0], particles[1]) < 1:
+            if self.leaders.comparator.compare(particles[0], particles[1]) < 1:
                 best_global = copy(particles[0])
             else:
                 best_global = copy(particles[1])
@@ -221,7 +221,7 @@ class SMPSORP(SMPSO):
                  swarm_size: int,
                  max_evaluations: int,
                  mutation: Mutation[FloatSolution],
-                 reference_points: List[List],
+                 reference_points: List[List[float]],
                  leaders: List[BoundedArchive[FloatSolution]],
                  evaluator: Evaluator[FloatSolution] = SequentialEvaluator[FloatSolution]()):
         """ This class implements the SMPSORP algorithm.
@@ -233,13 +233,13 @@ class SMPSORP(SMPSO):
         :param leaders: List of bounded archives.
         :param evaluator: An evaluator object to evaluate the solutions in the population.
         """
-        super().__init__(
-            problem,
-            swarm_size,
-            max_evaluations,
-            mutation,
-            None,
-            evaluator)
+        super(SMPSORP, self).__init__(
+            problem=problem,
+            swarm_size=swarm_size,
+            max_evaluations=max_evaluations,
+            mutation=mutation,
+            leaders=None,
+            evaluator=evaluator)
         self.reference_points = reference_points
         self.leaders = leaders
 
@@ -281,7 +281,7 @@ class SMPSORP(SMPSO):
         result = []
 
         for leader in self.leaders:
-            for solution in leader.get_solution_list():
+            for solution in leader.solution_list:
                 result.append(solution)
 
         return result
@@ -300,7 +300,7 @@ class SMPSORP(SMPSO):
         if len(leaders) > 2:
             particles = random.sample(leaders, 2)
 
-            if self.leaders[selected_swarm_index].get_comparator().compare(particles[0], particles[1]) < 1:
+            if self.leaders[selected_swarm_index].comparator.compare(particles[0], particles[1]) < 1:
                 best_global = copy(particles[0])
             else:
                 best_global = copy(particles[1])

@@ -21,7 +21,7 @@ class DTLZ1(FloatProblem):
     def __init__(self, number_of_variables: int = 7, number_of_objectives=3):
         """ :param number_of_variables: number of decision variables of the problem.
         """
-        super().__init__()
+        super(DTLZ1, self).__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = number_of_objectives
         self.number_of_constraints = 0
@@ -34,7 +34,7 @@ class DTLZ1(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
         k = self.number_of_variables - self.number_of_objectives + 1
 
         g = sum([(x - 0.5) * (x - 0.5) - cos(20.0 * pi * (x - 0.5))
@@ -51,6 +51,8 @@ class DTLZ1(FloatProblem):
             if i != 0:
                 solution.objectives[i] *= 1 - solution.variables[self.number_of_objectives - (i + 1)]
 
+        return solution
+
     def get_name(self):
         return 'DTLZ1'
 
@@ -64,7 +66,7 @@ class DTLZ2(FloatProblem):
     def __init__(self, number_of_variables: int = 12, number_of_objectives=3):
         """:param number_of_variables: number of decision variables of the problem
         """
-        super().__init__()
+        super(DTLZ2, self).__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = number_of_objectives
         self.number_of_constraints = 0
@@ -77,7 +79,7 @@ class DTLZ2(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
         k = self.number_of_variables - self.number_of_objectives + 1
 
         g = sum([(x - 0.5) * (x - 0.5) for x in solution.variables[self.number_of_variables - k:]])
@@ -90,6 +92,8 @@ class DTLZ2(FloatProblem):
 
             if i != 0:
                 solution.objectives[i] *= sin(0.5 * pi * solution.variables[self.number_of_objectives - (i + 1)])
+
+        return solution
 
     def get_name(self):
         return 'DTLZ2'

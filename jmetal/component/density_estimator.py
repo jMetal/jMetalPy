@@ -1,4 +1,5 @@
 import logging
+from abc import ABCMeta, abstractmethod
 from typing import TypeVar, List
 
 logger = logging.getLogger(__name__)
@@ -18,6 +19,9 @@ class DensityEstimator(List[S]):
     """This is the interface of any density estimator algorithm.
     """
 
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
     def compute_density_estimator(self, solution_list: List[S]) -> float:
         pass
 

@@ -16,7 +16,7 @@ class Kursawe(FloatProblem):
     """ Class representing problem Kursawe. """
 
     def __init__(self, number_of_variables: int = 3):
-        super().__init__()
+        super(Kursawe, self).__init__()
         self.number_of_objectives = 2
         self.number_of_variables = number_of_variables
         self.number_of_constraints = 0
@@ -29,7 +29,7 @@ class Kursawe(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
         fx = [0.0 for _ in range(self.number_of_objectives)]
         for i in range(self.number_of_variables - 1):
             xi = solution.variables[i] * solution.variables[i]
@@ -41,6 +41,8 @@ class Kursawe(FloatProblem):
         solution.objectives[0] = fx[0]
         solution.objectives[1] = fx[1]
 
+        return solution
+
     def get_name(self):
         return 'Kursawe'
 
@@ -48,7 +50,7 @@ class Kursawe(FloatProblem):
 class Fonseca(FloatProblem):
 
     def __init__(self):
-        super().__init__()
+        super(Fonseca, self).__init__()
         self.number_of_variables = 3
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -56,15 +58,17 @@ class Fonseca(FloatProblem):
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
 
         self.lower_bound = self.number_of_variables * [-4]
-        self.upper_bound = self.number_of_variables * [ 4]
+        self.upper_bound = self.number_of_variables * [4]
 
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
         n = self.number_of_variables
         solution.objectives[0] = 1 - exp(-sum([(x - 1.0 / n ** 0.5) ** 2 for x in solution.variables]))
         solution.objectives[1] = 1 - exp(-sum([(x + 1.0 / n ** 0.5) ** 2 for x in solution.variables]))
+
+        return solution
 
     def get_name(self):
         return 'Fonseca'
@@ -73,7 +77,7 @@ class Fonseca(FloatProblem):
 class Schaffer(FloatProblem):
 
     def __init__(self):
-        super().__init__()
+        super(Schaffer, self).__init__()
         self.number_of_variables = 1
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -86,11 +90,13 @@ class Schaffer(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
         value = solution.variables[0]
 
         solution.objectives[0] = value ** 2
         solution.objectives[1] = (value - 2) ** 2
+
+        return solution
 
     def get_name(self):
         return 'Schaffer'
@@ -99,7 +105,7 @@ class Schaffer(FloatProblem):
 class Viennet2(FloatProblem):
 
     def __init__(self):
-        super().__init__()
+        super(Viennet2, self).__init__()
         self.number_of_variables = 2
         self.number_of_objectives = 3
         self.number_of_constraints = 0
@@ -112,7 +118,7 @@ class Viennet2(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x0 = solution.variables[0]
         x1 = solution.variables[1]
 
@@ -123,6 +129,8 @@ class Viennet2(FloatProblem):
         solution.objectives[0] = f1
         solution.objectives[1] = f2
         solution.objectives[2] = f3
+
+        return solution
 
     def get_name(self):
         return 'Viennet2'

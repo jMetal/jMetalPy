@@ -1,5 +1,6 @@
 import logging
 import warnings
+from abc import ABCMeta
 from typing import TypeVar, List, Tuple
 
 from bokeh.embed import file_html
@@ -29,6 +30,8 @@ S = TypeVar('S')
 
 
 class Plot:
+
+    __metaclass__ = ABCMeta
 
     def __init__(self, plot_title: str, number_of_objectives: int,
                  xaxis_label: str='', yaxis_label: str='', zaxis_label: str=''):
@@ -63,7 +66,7 @@ class ScatterMatplotlib(Plot):
         :param plot_title: Title of the scatter diagram.
         :param number_of_objectives: Number of objectives to be used (2D/3D).
         """
-        super().__init__(plot_title, number_of_objectives)
+        super(ScatterMatplotlib, self).__init__(plot_title, number_of_objectives)
 
         # Initialize a plot
         self.fig = plt.figure()
@@ -152,7 +155,11 @@ class ScatterMatplotlib(Plot):
         self.axis.autoscale_view(True, True, True)
 
         # Draw
-        self.fig.canvas.draw()
+        try:
+            self.fig.canvas.draw()
+        except KeyboardInterrupt:
+            pass
+
         plt.pause(0.01)
 
         # Disconnect the pick event for the next update
@@ -193,7 +200,7 @@ class ScatterMatplotlib(Plot):
 class ScatterBokeh(Plot):
 
     def __init__(self, plot_title: str, number_of_objectives: int, ws_url: str='localhost:5006'):
-        super().__init__(plot_title, number_of_objectives)
+        super(ScatterBokeh, self).__init__(plot_title, number_of_objectives)
 
         if self.number_of_objectives == 2:
             self.source = ColumnDataSource(data=dict(x=[], y=[], str=[]))
@@ -228,7 +235,10 @@ class ScatterBokeh(Plot):
         reset_output()
 
         # Set up figure
-        self.figure_xy = Figure(output_backend='webgl', sizing_mode='scale_width', title=self.plot_title, tools=self.plot_tools)
+        self.figure_xy = Figure(output_backend='webgl',
+                                sizing_mode='scale_width',
+                                title=self.plot_title,
+                                tools=self.plot_tools)
         self.figure_xy.scatter(x='x', y='y', legend='solution', fill_alpha=0.7, source=self.source)
         self.figure_xy.xaxis.axis_label = self.xaxis_label
         self.figure_xy.yaxis.axis_label = self.yaxis_label

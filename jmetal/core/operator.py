@@ -1,3 +1,4 @@
+from abc import ABCMeta, abstractmethod
 from typing import TypeVar, Generic, List
 
 S = TypeVar('S')
@@ -15,16 +16,22 @@ R = TypeVar('R')
 class Operator(Generic[S, R]):
     """ Class representing operator """
 
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
     def execute(self, source: S) -> R:
         pass
 
-    def get_name(self):
+    @abstractmethod
+    def get_name(self) -> str:
         pass
 
 
 class Mutation(Operator[S, S]):
     """ Class representing mutation operator. """
 
+    __metaclass__ = ABCMeta
+
     def __init__(self, probability: float):
         if probability > 1.0:
             raise Exception('The probability is greater than one: {}'.format(probability))
@@ -33,13 +40,20 @@ class Mutation(Operator[S, S]):
 
         self.probability = probability
 
-    def execute(self, source: S) -> S:
+    @abstractmethod
+    def execute(self, source: S) -> R:
+        pass
+
+    @abstractmethod
+    def get_name(self) -> str:
         pass
 
 
 class Crossover(Operator[List[S], List[R]]):
     """ Class representing crossover operator. """
 
+    __metaclass__ = ABCMeta
+
     def __init__(self, probability: float):
         if probability > 1.0:
             raise Exception('The probability is greater than one: {}'.format(probability))
@@ -48,18 +62,31 @@ class Crossover(Operator[List[S], List[R]]):
 
         self.probability = probability
 
+    @abstractmethod
+    def get_number_of_parents(self):
+        pass
+
+    @abstractmethod
     def execute(self, source: S) -> R:
         pass
 
-    def get_number_of_parents(self) -> int:
+    @abstractmethod
+    def get_name(self) -> str:
         pass
 
 
 class Selection(Operator[S, R]):
     """ Class representing selection operator. """
 
+    __metaclass__ = ABCMeta
+
     def __init__(self):
         pass
 
+    @abstractmethod
     def execute(self, source: S) -> R:
+        pass
+
+    @abstractmethod
+    def get_name(self) -> str:
         pass

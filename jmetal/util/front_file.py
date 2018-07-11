@@ -22,13 +22,13 @@ def read_front_from_file(file_name: str):
     return front
 
 
-def read_front_from_file_as_solutions(file_name: str):
+def read_front_from_file_as_solutions(file_path: str):
     """ Reads a front from a file and returns a list of solution objects.
 
     :return: List of solution objects.
     """
     front = []
-    with open(file_name) as file:
+    with open(file_path) as file:
         for line in file:
             vector = [float(x) for x in line.split()]
             solution = FloatSolution(2, 2, 0, [], [])

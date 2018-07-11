@@ -23,7 +23,7 @@ class ZDT1(FloatProblem):
         """
         :param number_of_variables: Number of decision variables of the problem.
         """
-        super().__init__()
+        super(ZDT1, self).__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -36,12 +36,14 @@ class ZDT1(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
         g = self.__eval_g(solution)
         h = self.__eval_h(solution.variables[0], g)
 
         solution.objectives[0] = solution.variables[0]
         solution.objectives[1] = h * g
+
+        return solution
 
     def __eval_g(self, solution: FloatSolution):
         g = sum(solution.variables) - solution.variables[0]
@@ -49,6 +51,7 @@ class ZDT1(FloatProblem):
         constant = 9.0 / (solution.number_of_variables - 1)
         g = constant * g
         g = g + 1.0
+
         return g
 
     def __eval_h(self, f: float, g: float) -> float:
@@ -66,7 +69,7 @@ class ZDT2(FloatProblem):
     """
 
     def __init__(self, number_of_variables: int = 30):
-        super().__init__()
+        super(ZDT2, self).__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -79,12 +82,14 @@ class ZDT2(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
         g = self.__eval_g(solution)
         h = self.__eval_h(solution.variables[0], g)
 
         solution.objectives[0] = solution.variables[0]
         solution.objectives[1] = h * g
+
+        return solution
 
     def __eval_g(self, solution: FloatSolution):
         g = sum(solution.variables) - solution.variables[0]
@@ -92,6 +97,7 @@ class ZDT2(FloatProblem):
         constant = 9.0 / (solution.number_of_variables - 1)
         g = constant * g
         g = g + 1.0
+
         return g
 
     def __eval_h(self, f: float, g: float) -> float:
@@ -109,7 +115,7 @@ class ZDT3(FloatProblem):
     """
 
     def __init__(self, number_of_variables: int = 30):
-        super().__init__()
+        super(ZDT3, self).__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -122,12 +128,14 @@ class ZDT3(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
         g = self.__eval_g(solution)
         h = self.__eval_h(solution.variables[0], g)
 
         solution.objectives[0] = solution.variables[0]
         solution.objectives[1] = h * g
+
+        return solution
 
     def __eval_g(self, solution: FloatSolution):
         g = sum(solution.variables) - solution.variables[0]
@@ -152,7 +160,7 @@ class ZDT4(FloatProblem):
     """
 
     def __init__(self, number_of_variables: int = 10):
-        super().__init__()
+        super(ZDT4, self).__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -167,12 +175,14 @@ class ZDT4(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
         g = self.__eval_g(solution)
         h = self.__eval_h(solution.variables[0], g)
 
         solution.objectives[0] = solution.variables[0]
         solution.objectives[1] = h * g
+
+        return solution
 
     def __eval_g(self, solution: FloatSolution):
         g = 0.0
@@ -199,7 +209,7 @@ class ZDT6(FloatProblem):
     """
 
     def __init__(self, number_of_variables: int = 10):
-        super().__init__()
+        super(ZDT6, self).__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -212,12 +222,14 @@ class ZDT6(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
         g = self.__eval_g(solution)
         h = self.__eval_h(solution.variables[0], g)
 
         solution.objectives[0] = solution.variables[0]
         solution.objectives[1] = h * g
+
+        return solution
 
     def __eval_g(self, solution: FloatSolution):
         g = sum(solution.variables) - solution.variables[0]

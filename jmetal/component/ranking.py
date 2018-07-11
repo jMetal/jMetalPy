@@ -1,3 +1,4 @@
+from abc import ABCMeta, abstractmethod
 from typing import TypeVar, List
 
 from jmetal.component.comparator import DominanceComparator
@@ -7,11 +8,14 @@ S = TypeVar('S')
 
 class Ranking(List[S]):
 
+    __metaclass__ = ABCMeta
+
     def __init__(self):
-        super().__init__()
+        super(Ranking, self).__init__()
         self.number_of_comparisons = 0
         self.ranked_sublists = []
 
+    @abstractmethod
     def compute_ranking(self, solution_list: List[S]):
         pass
 
@@ -23,9 +27,6 @@ class Ranking(List[S]):
     def get_number_of_subfronts(self):
         return len(self.ranked_sublists)
 
-    def number_of_comparisons(self) -> int:
-        return self.number_of_comparisons
-
 
 class FastNonDominatedRanking(Ranking[List[S]]):
     """ Class implementing the non-dominated ranking of NSGA-II. """
@@ -35,10 +36,10 @@ class FastNonDominatedRanking(Ranking[List[S]]):
 
     def compute_ranking(self, solution_list: List[S]):
         # number of solutions dominating solution ith
-        dominate_me = [0 for _ in range(len(solution_list))]
+        dominating_ith = [0 for _ in range(len(solution_list))]
 
         # list of solutions dominated by solution ith
-        i_dominate = [[] for _ in range(len(solution_list))]
+        ith_dominated = [[] for _ in range(len(solution_list))]
 
         # front[i] contains the list of solutions belonging to front i
         front = [[] for _ in range(len(solution_list) + 1)]
@@ -47,15 +48,16 @@ class FastNonDominatedRanking(Ranking[List[S]]):
             for q in range(p + 1, len(solution_list)):
                 dominance_test_result = DominanceComparator().compare(solution_list[p], solution_list[q])
                 self.number_of_comparisons += 1
-                if dominance_test_result is -1:
-                    i_dominate[p].append(q)
-                    dominate_me[q] += 1
+
+                if dominance_test_result == -1:
+                    ith_dominated[p].append(q)
+                    dominating_ith[q] += 1
                 elif dominance_test_result is 1:
-                    i_dominate[q].append(p)
-                    dominate_me[p] += 1
+                    ith_dominated[q].append(p)
+                    dominating_ith[p] += 1
 
         for i in range(len(solution_list)):
-            if dominate_me[i] is 0:
+            if dominating_ith[i] is 0:
                 front[0].append(i)
                 solution_list[i].attributes['dominance_ranking'] = 0
 
@@ -63,13 +65,12 @@ class FastNonDominatedRanking(Ranking[List[S]]):
         while len(front[i]) != 0:
             i += 1
             for p in front[i - 1]:
-                if p <= len(i_dominate):
-                    for q in i_dominate[p]:
-                        index = q
-                        dominate_me[index] -= 1
-                        if dominate_me[index] is 0:
-                            front[i].append(index)
-                            solution_list[index].attributes['dominance_ranking'] = i
+                if p <= len(ith_dominated):
+                    for q in ith_dominated[p]:
+                        dominating_ith[q] -= 1
+                        if dominating_ith[q] is 0:
+                            front[i].append(q)
+                            solution_list[q].attributes['dominance_ranking'] = i
 
         self.ranked_sublists = [[]] * i
         for j in range(i):

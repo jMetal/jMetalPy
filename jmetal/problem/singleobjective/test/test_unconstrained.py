@@ -31,7 +31,7 @@ class OneMaxTestCases(unittest.TestCase):
     def test_should_evaluate_work_properly_if_the_bitset_only_contains_zeroes(self) -> None:
         problem = OneMax(512)
         solution = problem.create_solution()
-        solution.variables[0] = [False for i in range(problem.number_of_bits)]
+        solution.variables[0] = [False for _ in range(problem.number_of_bits)]
         problem.evaluate(solution)
         self.assertEqual(0.0, solution.objectives[0])
 

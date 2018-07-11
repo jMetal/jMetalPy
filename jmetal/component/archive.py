@@ -1,9 +1,11 @@
 import random
 import copy
+from abc import ABCMeta, abstractmethod
 from typing import TypeVar, Generic, List
 
 from jmetal.component.density_estimator import CrowdingDistance, DensityEstimator
-from jmetal.component.comparator import Comparator, DominanceComparator, EqualSolutionsComparator, SolutionAttributeComparator
+from jmetal.component.comparator import Comparator, DominanceComparator, EqualSolutionsComparator, \
+    SolutionAttributeComparator
 
 S = TypeVar('S')
 
@@ -18,23 +20,23 @@ S = TypeVar('S')
 
 class Archive(Generic[S]):
 
+    __metaclass__ = ABCMeta
+
     def __init__(self):
         self.solution_list: List[S] = []
 
+    @abstractmethod
     def add(self, solution: S) -> bool:
         pass
 
     def get(self, index: int) -> S:
         return self.solution_list[index]
 
-    def get_solution_list(self) -> List[S]:
-        return self.solution_list
-
     def size(self) -> int:
         return len(self.solution_list)
 
-    def get_comparator(self):
-        pass
+    def get_name(self) -> str:
+        return self.__class__.__name__
 
 
 class BoundedArchive(Archive[S]):
@@ -48,21 +50,18 @@ class BoundedArchive(Archive[S]):
         self.comparator = comparator
         self.density_estimator = density_estimator
         self.non_dominated_solution_archive = NonDominatedSolutionListArchive()
-        self.solution_list = self.non_dominated_solution_archive.get_solution_list()
-
-    def get_max_size(self) -> int:
-        return self.maximum_size
+        self.solution_list = self.non_dominated_solution_archive.solution_list
 
     def compute_density_estimator(self):
-        self.density_estimator.compute_density_estimator(self.get_solution_list())
+        self.density_estimator.compute_density_estimator(self.solution_list)
 
     def add(self, solution: S) -> bool:
-        success: bool = self.non_dominated_solution_archive.add(solution)
+        success = self.non_dominated_solution_archive.add(solution)
         if success:
-            if self.size() > self.get_max_size():
+            if self.size() > self.maximum_size:
                 self.compute_density_estimator()
-                worst_solution = self.__find_worst_solution(self.get_solution_list())
-                self.get_solution_list().remove(worst_solution)
+                worst_solution = self.__find_worst_solution(self.solution_list)
+                self.solution_list.remove(worst_solution)
 
         return success
 
@@ -78,9 +77,6 @@ class BoundedArchive(Archive[S]):
                 worst_solution = solution
 
         return worst_solution
-
-    def get_comparator(self):
-        return self.comparator
 
 
 class NonDominatedSolutionListArchive(Archive[S]):
@@ -119,9 +115,6 @@ class NonDominatedSolutionListArchive(Archive[S]):
 
         return False
 
-    def get_comparator(self):
-        return self.comparator
-
 
 class CrowdingDistanceArchive(BoundedArchive[S]):
 
@@ -155,7 +148,7 @@ class ArchiveWithReferencePoint(BoundedArchive[S]):
         dominated_solution = None
 
         if self.__dominance_test(solution, self.__reference_point_solution) == 0:
-            if len(self.get_solution_list()) == 0:
+            if len(self.solution_list) == 0:
                 result = True
             else:
                 if random.uniform(0.0, 1.0) < 0.05:
@@ -169,10 +162,10 @@ class ArchiveWithReferencePoint(BoundedArchive[S]):
         if result:
             result = super(ArchiveWithReferencePoint, self).add(solution)
 
-        if result and dominated_solution is not None and len(self.get_solution_list()) > 1:
-            self.get_solution_list().remove(dominated_solution)
+        if result and dominated_solution is not None and len(self.solution_list) > 1:
+            self.solution_list.remove(dominated_solution)
 
-        if result and len(self.get_solution_list()) > self.maximum_size:
+        if result and len(self.solution_list) > self.maximum_size:
             self.compute_density_estimator()
 
         return result
@@ -180,7 +173,7 @@ class ArchiveWithReferencePoint(BoundedArchive[S]):
     def get_reference_point(self)->List[float]:
         return self.__reference_point
 
-    def __dominance_test(self, solution1:S, solution2:S)->int:
+    def __dominance_test(self, solution1: S, solution2: S) -> int:
         best_is_one = 0
         best_is_two = 0
 

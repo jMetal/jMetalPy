@@ -208,7 +208,7 @@ class IntegerPolynomialMutationTestCases(unittest.TestCase):
 
         mutated_solution = operator.execute(solution)
         self.assertNotEqual([1, 2, 3], mutated_solution.variables)
-        self.assertEqual([True, True, True], [isinstance(x, int) for x in  mutated_solution.variables])
+        self.assertEqual([True, True, True], [isinstance(x, int) for x in mutated_solution.variables])
 
 
 if __name__ == '__main__':

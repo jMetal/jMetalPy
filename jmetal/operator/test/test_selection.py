@@ -5,7 +5,7 @@ from hamcrest import assert_that, any_of
 from jmetal.core.solution import Solution
 from jmetal.operator.selection import BinaryTournamentSelection, BestSolutionSelection, RandomSolutionSelection, \
     NaryRandomSolutionSelection, RankingAndCrowdingDistanceSelection, BinaryTournament2Selection
-from jmetal.component.comparator import Comparator, SolutionAttributeComparator
+from jmetal.component.comparator import SolutionAttributeComparator, EqualSolutionsComparator
 
 
 class BinaryTournamentTestCases(unittest.TestCase):
@@ -311,7 +311,7 @@ class BinaryTournament2TestCases(unittest.TestCase):
     def test_should_execute_return_the_solution_in_a_list_with_one_solution(self):
         solution = Solution(3, 2)
         solution_list = [solution]
-        selection = BinaryTournament2Selection[Solution]([Comparator()])
+        selection = BinaryTournament2Selection[Solution]([EqualSolutionsComparator()])
 
         self.assertEqual(solution, selection.execute(solution_list))
 

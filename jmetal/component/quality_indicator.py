@@ -1,3 +1,4 @@
+from abc import ABCMeta, abstractmethod
 from typing import List, TypeVar
 
 from jmetal.core.solution import Solution
@@ -15,6 +16,9 @@ S = TypeVar('S')
 
 class Metric:
 
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
     def get_name(self) -> str:
         return self.__class__.__name__
 
@@ -40,14 +44,14 @@ class HyperVolume(Metric):
 
         :return: The hypervolume that is dominated by a non-dominated front.
         """
-        def get_variables(front: List[Solution]) -> list:
+        def get_variables() -> list:
             result = []
             for solution in front:
                 result.append(solution.objectives)
 
             return result
 
-        front = get_variables(front)
+        front = get_variables()
 
         def weakly_dominates(point, other):
             for i in range(len(point)):
@@ -107,7 +111,7 @@ class HyperVolume(Metric):
             hv_recursive = self._hv_recursive
             p = sentinel
             q = p.prev[dim_index]
-            while q.cargo != None:
+            while q.cargo is not None:
                 if q.ignore < dim_index:
                     q.ignore = 0
                 q = q.prev[dim_index]
@@ -170,6 +174,9 @@ class HyperVolume(Metric):
         decorated.sort()
         # write back to original list
         nodes[:] = [node for (_, node) in decorated]
+
+    def get_name(self) -> str:
+        return 'Hypervolume'
 
 
 class MultiList:

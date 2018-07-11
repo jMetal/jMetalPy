@@ -16,7 +16,7 @@ class Srinivas(FloatProblem):
     """ Class representing problem Srinivas. """
 
     def __init__(self):
-        super().__init__()
+        super(Srinivas, self).__init__()
         self.number_of_objectives = 2
         self.number_of_variables = 2
         self.number_of_constraints = 2
@@ -27,12 +27,14 @@ class Srinivas(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x1 = solution.variables[0]
         x2 = solution.variables[1]
 
         solution.objectives[0] = 2.0 + (x1 - 2.0) * (x1 - 2.0) + (x2 - 1.0) * (x2 - 1.0)
         solution.objectives[1] = 9.0 * x1 - (x2 - 1.0) * (x2 - 1.0)
+
+        return solution
 
     def evaluate_constraints(self, solution: FloatSolution) -> None:
         constraints = [0.0 for _ in range(self.number_of_constraints)]
@@ -51,18 +53,18 @@ class Srinivas(FloatProblem):
                 overall_constraint_violation += constrain
                 number_of_violated_constraints += 1
 
-        solution.attributes["overall_constraint_violation"] = overall_constraint_violation
-        solution.attributes["number_of_violated_constraints"] = number_of_violated_constraints
+        solution.attributes['overall_constraint_violation'] = overall_constraint_violation
+        solution.attributes['number_of_violated_constraints'] = number_of_violated_constraints
 
     def get_name(self):
-        return "Srinivas"
+        return 'Srinivas'
 
 
 class Tanaka(FloatProblem):
     """ Class representing problem Tanaka """
 
     def __init__(self):
-        super().__init__()
+        super(Tanaka, self).__init__()
         self.number_of_objectives = 2
         self.number_of_variables = 2
         self.number_of_constraints = 2
@@ -73,9 +75,11 @@ class Tanaka(FloatProblem):
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
         solution.objectives[0] = solution.variables[0]
         solution.objectives[1] = solution.variables[1]
+
+        return solution
 
     def evaluate_constraints(self, solution: FloatSolution) -> None:
         constraints = [0.0 for _ in range(self.number_of_constraints)]
@@ -94,8 +98,8 @@ class Tanaka(FloatProblem):
                 overall_constraint_violation += constrain
                 number_of_violated_constraints += 1
 
-        solution.attributes["overall_constraint_violation"] = overall_constraint_violation
-        solution.attributes["number_of_violated_constraints"] = number_of_violated_constraints
+        solution.attributes['overall_constraint_violation'] = overall_constraint_violation
+        solution.attributes['number_of_violated_constraints'] = number_of_violated_constraints
 
     def get_name(self):
-        return "Tanaka"
+        return 'Tanaka'

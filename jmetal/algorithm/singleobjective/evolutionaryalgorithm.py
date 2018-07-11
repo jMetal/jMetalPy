@@ -59,7 +59,7 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
     def reproduction(self, population: List[S]) -> List[S]:
         offspring_population = []
         for solution in population:
-            for j in range((int)(self.lambd_a / self.mu)):
+            for j in range(int(self.lambd_a / self.mu)):
                 new_solution = copy(solution)
                 offspring_population.append(self.mutation.execute(new_solution))
 
@@ -81,7 +81,7 @@ class ElitistEvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         return self.population[0]
 
     def get_name(self) -> str:
-        return "(" + str(self.mu) + "+" + str(self.lambd_a) + ")ES"
+        return 'Elitist evolution Strategy'
 
 
 class NonElitistEvolutionStrategy(ElitistEvolutionStrategy[S, R]):
@@ -104,7 +104,7 @@ class NonElitistEvolutionStrategy(ElitistEvolutionStrategy[S, R]):
         return new_population
 
     def get_name(self) -> str:
-        return "(" + str(self.mu) + "," + str(self.lambd_a) + ")ES"
+        return 'Non-Elitist evolution Strategy'
 
 
 class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):

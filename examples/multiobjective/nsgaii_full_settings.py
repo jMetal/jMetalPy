@@ -20,7 +20,7 @@ if __name__ == '__main__':
     )
 
     visualizer = VisualizerObserver(problem)
-    progress_bar = ProgressBarObserver(step=100, max=25000)
+    progress_bar = ProgressBarObserver(step=100, maximum=25000)
     algorithm.observable.register(observer=visualizer)
     algorithm.observable.register(observer=progress_bar)
 

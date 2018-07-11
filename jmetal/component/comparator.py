@@ -1,3 +1,4 @@
+from abc import ABCMeta, abstractmethod
 from typing import TypeVar, Generic
 
 from jmetal.core.solution import Solution
@@ -7,8 +8,14 @@ S = TypeVar('S')
 
 class Comparator(Generic[S]):
 
-    def compare(self, object1: S, object2: S) -> int:
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def compare(self, solution1: S, solution2: S) -> int:
         pass
+
+    def get_name(self) -> str:
+        return self.__class__.__name__
 
 
 class EqualSolutionsComparator(Comparator):
@@ -91,7 +98,7 @@ class RankingAndCrowdingDistanceComparator(Comparator):
 
 class DominanceComparator(Comparator):
 
-    def __init__(self, constraint_comparator = SolutionAttributeComparator("overall_constraint_violation", lowest_is_best=False)):
+    def __init__(self, constraint_comparator=SolutionAttributeComparator("overall_constraint_violation", False)):
         self.constraint_comparator = constraint_comparator
 
     def compare(self, solution1: Solution, solution2: Solution) -> int:
@@ -108,7 +115,7 @@ class DominanceComparator(Comparator):
 
         return result
 
-    def __dominance_test(self, solution1, solution2) -> float:
+    def __dominance_test(self, solution1: Solution, solution2: Solution) -> float:
         best_is_one = 0
         best_is_two = 0
 

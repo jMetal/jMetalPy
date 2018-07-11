@@ -9,7 +9,7 @@ from abc import ABCMeta, abstractmethod
 """
 
 
-class Observer(object):
+class Observer:
 
     __metaclass__ = ABCMeta
 
@@ -24,17 +24,23 @@ class Observer(object):
         pass
 
 
-class Observable(object):
+class Observable:
 
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
     def register(self, observer):
         pass
 
+    @abstractmethod
     def deregister(self, observer):
         pass
 
+    @abstractmethod
     def deregister_all(self):
         pass
 
+    @abstractmethod
     def notify_all(self, *args, **kwargs):
         pass
 

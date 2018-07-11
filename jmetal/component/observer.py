@@ -21,11 +21,11 @@ jMetalPyLogger = logging.getLogger('jMetalPy')
 
 class ProgressBarObserver(Observer):
 
-    def __init__(self, step: int, max: int, desc: str='Progress') -> None:
-        self.progress_bar = tqdm(total=max, initial=step, ascii=True, desc=desc)
+    def __init__(self, step: int, maximum: int, desc: str= 'Progress') -> None:
+        self.progress_bar = tqdm(total=maximum, initial=step, ascii=True, desc=desc)
         self.progress = step
         self.step = step
-        self.maxx = max
+        self.maxx = maximum
 
     def update(self, *args, **kwargs):
         self.progress_bar.update(self.step)

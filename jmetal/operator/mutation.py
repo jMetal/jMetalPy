@@ -21,7 +21,7 @@ class NullMutation(Mutation[Solution]):
         return solution
 
     def get_name(self):
-        return "Null mutation"
+        return 'Null mutation'
 
 
 class BitFlip(Mutation[BinarySolution]):
@@ -69,7 +69,7 @@ class Polynomial(Mutation[FloatSolution]):
                         deltaq = pow(val, mut_pow) - 1.0
                     else:
                         xy = 1.0 - delta2
-                        val = 2.0 * (1.0 - rnd) + 2.0 * (rnd - 0.5) * (pow(xy, self.distribution_index + 1.0));
+                        val = 2.0 * (1.0 - rnd) + 2.0 * (rnd - 0.5) * (pow(xy, self.distribution_index + 1.0))
                         deltaq = 1.0 - pow(val, mut_pow)
 
                     y += deltaq * (yu - yl)
