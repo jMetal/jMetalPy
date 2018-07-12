@@ -163,7 +163,7 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
 
     def reproduction(self, population: List[S]) -> List[S]:
         number_of_parents_to_combine = self.crossover_operator.get_number_of_parents()
-        self.__check_number_of_parents(population, number_of_parents_to_combine)
+        self.__check_number_of_parents(number_of_parents_to_combine)
 
         offspring_population = []
         for i in range(0, self.population_size, number_of_parents_to_combine):
@@ -197,9 +197,9 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         """
         return self.population[0]
 
-    def get_name(self) -> str:
-        return 'Generational Genetic Algorithm'
-
-    def __check_number_of_parents(self, population: List[S], number_of_parents_for_crossover: int):
+    def __check_number_of_parents(self, number_of_parents_for_crossover: int):
         if self.population_size % number_of_parents_for_crossover != 0:
             raise Exception('Wrong number of parents')
+
+    def get_name(self) -> str:
+        return 'Generational Genetic Algorithm'

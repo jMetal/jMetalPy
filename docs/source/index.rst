@@ -13,11 +13,12 @@ jMetalPy: Python version of the jMetal framework
    :caption: Contents:
 
    examples
+   contributing
    about
    api/jmetal
 
-Installation
-------------
+Installation steps
+------------------------
 
 Via pip:
 
@@ -33,20 +34,26 @@ Via Github:
     $ pip install -r requirements.txt
     $ python setup.py install
 
-Basic Usage
+Basic usage
 -----------
 
 .. code-block:: python
 
     problem = ZDT1()
-    algorithm = NSGAII[FloatSolution, List[FloatSolution]](
+
+    algorithm = NSGAII(
         problem=problem,
         population_size=100,
         max_evaluations=25000,
         mutation=Polynomial(probability=1.0/problem.number_of_variables, distribution_index=20),
         crossover=SBX(probability=1.0, distribution_index=20),
-        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()))
+        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
+    )
 
     algorithm.run()
-    result = algorithm.get_result()
+    front = algorithm.get_result()
 
+    pareto_front = ScatterMatplotlib(plot_title='NSGAII for ZDT1', number_of_objectives=problem.number_of_objectives)
+    pareto_front.plot(front, reference=problem.get_reference_front(), output='NSGAII-ZDT1', show=False)
+
+.. image:: NSGAII-ZDT1.png

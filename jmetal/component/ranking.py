@@ -74,10 +74,10 @@ class FastNonDominatedRanking(Ranking[List[S]]):
 
         self.ranked_sublists = [[]] * i
         for j in range(i):
-            Q = [0] * len(front[j])
+            q = [0] * len(front[j])
             for k in range(len(front[j])):
-                Q[k] = solution_list[front[j][k]]
-            self.ranked_sublists[j] = Q
+                q[k] = solution_list[front[j][k]]
+            self.ranked_sublists[j] = q
 
         return self.ranked_sublists
 

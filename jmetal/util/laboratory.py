@@ -6,7 +6,7 @@ jMetalPyLogger = logging.getLogger('jMetalPy')
 """
 .. module:: laboratory
    :platform: Unix, Windows
-   :synopsis: Run experiments.
+   :synopsis: Run experiments. WIP!
 
 .. moduleauthor:: Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
@@ -30,6 +30,8 @@ def experiment(algorithm_list: list, metric_list: list, problem_list: list, g_pa
                 problem = problem(**problem_params)
 
             for a_index, (algorithm, algorithm_params) in enumerate(algorithm_list):
+                if g_params:
+                    algorithm_params.update(g_params)
                 if isinstance(algorithm, type):
                     jMetalPyLogger.debug('Algorithm {} is not instantiated by default'.format(algorithm))
                     algorithm_list[a_index] = (algorithm(problem=problem, **algorithm_params), {})

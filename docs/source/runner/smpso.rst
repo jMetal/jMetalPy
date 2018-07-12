@@ -5,20 +5,20 @@ Common imports:
 
 .. code-block:: python
 
-   from jmetal.core.solution import FloatSolution
+   from jmetal.operator import Polynomial
 
-   from jmetal.operator.mutation import Polynomial
-   from jmetal.component.archive import CrowdingDistanceArchive
+   from jmetal.problem import ZDT1
 
 SMPSO with standard settings
 ------------------------------------
 
 .. code-block:: python
 
-   from jmetal.algorithm.multiobjective.smpso import SMPSO
+   from jmetal.algorithm import SMPSO
+   from jmetal.component import CrowdingDistanceArchive
 
    algorithm = SMPSO(
-       problem=problem,
+       problem=ZDT1(),
        swarm_size=100,
        max_evaluations=25000,
        mutation=Polynomial(probability=1.0/problem.number_of_variables, distribution_index=20),
@@ -26,15 +26,15 @@ SMPSO with standard settings
    )
 
    algorithm.run()
-   result = algorithm.get_result()
+   front = algorithm.get_result()
 
 SMPSO/RP with standard settings
 ------------------------------------
 
 .. code-block:: python
 
-   from jmetal.algorithm.multiobjective.smpso import SMPSORP
-   from jmetal.component.archive import CrowdingDistanceArchiveWithReferencePoint
+   from jmetal.algorithm import SMPSORP
+   from jmetal.component import CrowdingDistanceArchiveWithReferencePoint
 
    swarm_size = 100
 
@@ -47,7 +47,7 @@ SMPSO/RP with standard settings
        )
 
    algorithm = SMPSORP(
-       problem=problem,
+       problem=ZDT1(),
        swarm_size=swarm_size,
        max_evaluations=25000,
        mutation=Polynomial(probability=1.0/problem.number_of_variables, distribution_index=20),
@@ -56,4 +56,4 @@ SMPSO/RP with standard settings
    )
 
    algorithm.run()
-   result = algorithm.get_result()
+   front = algorithm.get_result()

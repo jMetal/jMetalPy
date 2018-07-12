@@ -97,10 +97,10 @@ class HyperVolume(Metric):
             h = q.cargo[0]
             p = q.next[1]
             while p is not sentinel:
-                pCargo = p.cargo
-                hvol += h * (q.cargo[1] - pCargo[1])
-                if pCargo[0] < h:
-                    h = pCargo[0]
+                p_cargo = p.cargo
+                hvol += h * (q.cargo[1] - p_cargo[1])
+                if p_cargo[0] < h:
+                    h = p_cargo[0]
                 q = p
                 p = q.next[1]
             hvol += h * q.cargo[1]
@@ -139,9 +139,9 @@ class HyperVolume(Metric):
                 if q_area[dim_index] <= q_prev_dim_index.area[dim_index]:
                     q.ignore = dim_index
             while p is not sentinel:
-                pCargoDimIndex = p.cargo[dim_index]
-                hvol += q.area[dim_index] * (pCargoDimIndex - q.cargo[dim_index])
-                bounds[dim_index] = pCargoDimIndex
+                p_cargo_dim_index = p.cargo[dim_index]
+                hvol += q.area[dim_index] * (p_cargo_dim_index - q.cargo[dim_index])
+                bounds[dim_index] = p_cargo_dim_index
                 reinsert(p, dim_index, bounds)
                 length += 1
                 q = p

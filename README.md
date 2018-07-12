@@ -1,6 +1,6 @@
 <p align="center">
   <br/>
-  <img src=resources/jmetalpy.png alt="jMetalPy">
+  <img src=docs/source/jmetalpy.png alt="jMetalPy">
   <br/>
 </p>
 

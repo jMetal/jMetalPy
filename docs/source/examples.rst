@@ -1,7 +1,6 @@
 Examples
 ==============
 
-
 .. toctree::
    :maxdepth: 2
    :caption: Algorithms:
@@ -14,4 +13,3 @@ Examples
    :caption: Further configuration:
 
    runner/observer
-   runner/logger

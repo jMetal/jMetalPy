@@ -202,6 +202,7 @@ class SMPSO(ParticleSwarmOptimization):
         return result
 
     def __inertia_weight(self, evaluations: int, max_evaluations: int, wmax: float, wmin: float):
+        # todo ?
         return wmax
 
     def __constriction_coefficient(self, c1: float, c2: float) -> float:

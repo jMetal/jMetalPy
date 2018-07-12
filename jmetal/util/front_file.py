@@ -1,5 +1,3 @@
-from os.path import dirname
-
 from jmetal.core.solution import FloatSolution
 
 """
@@ -37,11 +35,3 @@ def read_front_from_file_as_solutions(file_path: str):
             front.append(solution)
 
     return front
-
-
-def walk_up_folder(path, depth: int =1):
-    _cur_depth = 1
-    while _cur_depth < depth:
-        path = dirname(path)
-        _cur_depth += 1
-    return path

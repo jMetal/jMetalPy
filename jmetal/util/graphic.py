@@ -256,12 +256,14 @@ class ScatterBokeh(Plot):
             self.doc.add_root(column(self.figure_xy))
         else:
             # Add new figures for each axis
-            self.figure_xz = Figure(title='xz', output_backend='webgl', sizing_mode='scale_width', tools=self.plot_tools)
+            self.figure_xz = Figure(title='xz', output_backend='webgl',
+                                    sizing_mode='scale_width', tools=self.plot_tools)
             self.figure_xz.scatter(x='x', y='z', legend='solution', fill_alpha=0.7, source=self.source)
             self.figure_xz.xaxis.axis_label = self.xaxis_label
             self.figure_xz.yaxis.axis_label = self.zaxis_label
 
-            self.figure_yz = Figure(title='yz', output_backend='webgl', sizing_mode='scale_width', tools=self.plot_tools)
+            self.figure_yz = Figure(title='yz', output_backend='webgl',
+                                    sizing_mode='scale_width', tools=self.plot_tools)
             self.figure_yz.scatter(x='y', y='z', legend='solution', fill_alpha=0.7, source=self.source)
             self.figure_yz.xaxis.axis_label = self.yaxis_label
             self.figure_yz.yaxis.axis_label = self.zaxis_label
