@@ -17,14 +17,21 @@ if __name__ == '__main__':
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
     )
 
+    observer = VisualizerObserver(problem)
+    progress_bar = ProgressBarObserver(step=100, maximum=25000)
+    algorithm.observable.register(observer=observer)
+    algorithm.observable.register(observer=progress_bar)
+
     algorithm.run()
     front = algorithm.get_result()
 
     # Plot frontier to file
     pareto_front = ScatterMatplotlib(plot_title='NSGAII for ZDT1', number_of_objectives=problem.number_of_objectives)
-    pareto_front.plot(front, reference=problem.get_reference_front(), output='NSGAII-DTLZ1', show=False)
+    pareto_front.plot(front, reference=problem.get_reference_front(), output='NSGAII-ZDT1', show=False)
 
     # Save variables to file
+    SolutionList.print_function_values_to_file(front, 'FUN.NSGAII.' + problem.get_name())
+    SolutionList.print_variables_to_file(front, 'VAR.NSGAII.' + problem.get_name())
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())
