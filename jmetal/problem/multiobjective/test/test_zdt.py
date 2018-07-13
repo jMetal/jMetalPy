@@ -2,13 +2,8 @@ import unittest
 
 from jmetal.problem.multiobjective.zdt import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
 
-__author__ = "Antonio J. Nebro"
-
 
 class ZDT1TestCases(unittest.TestCase):
-
-    def setUp(self):
-        pass
 
     def test_should_constructor_create_a_non_null_object(self) -> None:
         problem = ZDT1()
@@ -51,9 +46,6 @@ class ZDT1TestCases(unittest.TestCase):
 
 class ZDT2TestCases(unittest.TestCase):
 
-    def setUp(self):
-        pass
-
     def test_should_constructor_create_a_non_null_object(self) -> None:
         problem = ZDT2()
         self.assertIsNotNone(problem)
@@ -95,9 +87,6 @@ class ZDT2TestCases(unittest.TestCase):
 
 class ZDT3TestCases(unittest.TestCase):
 
-    def setUp(self):
-        pass
-
     def test_should_constructor_create_a_non_null_object(self) -> None:
         problem = ZDT3()
         self.assertIsNotNone(problem)
@@ -138,9 +127,6 @@ class ZDT3TestCases(unittest.TestCase):
 
 
 class ZDT4TestCases(unittest.TestCase):
-
-    def setUp(self):
-        pass
 
     def test_should_constructor_create_a_non_null_object(self) -> None:
         problem = ZDT4()
@@ -191,9 +177,6 @@ class ZDT4TestCases(unittest.TestCase):
 
 class ZDT6TestCases(unittest.TestCase):
 
-    def setUp(self):
-        pass
-
     def test_should_constructor_create_a_non_null_object(self) -> None:
         problem = ZDT6()
         self.assertIsNotNone(problem)
@@ -231,6 +214,7 @@ class ZDT6TestCases(unittest.TestCase):
     def test_should_get_name_return_the_right_name(self):
         problem = ZDT6()
         self.assertEqual("ZDT6", problem.get_name())
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -3,13 +3,8 @@ from math import pi
 
 from jmetal.problem.multiobjective.constrained import Srinivas, Tanaka
 
-__author__ = "Antonio J. Nebro"
-
 
 class SrinivasTestCases(unittest.TestCase):
-
-    def setUp(self):
-        pass
 
     def test_should_constructor_create_a_non_null_object(self) -> None:
         problem = Srinivas()
@@ -41,9 +36,6 @@ class SrinivasTestCases(unittest.TestCase):
 
 class TanakaTestCases(unittest.TestCase):
 
-    def setUp(self):
-        pass
-
     def test_should_constructor_create_a_non_null_object(self) -> None:
         problem = Tanaka()
         self.assertIsNotNone(problem)
@@ -70,6 +62,7 @@ class TanakaTestCases(unittest.TestCase):
     def test_should_get_name_return_the_right_name(self):
         problem = Tanaka()
         self.assertEqual("Tanaka", problem.get_name())
+
 
 if __name__ == '__main__':
     unittest.main()

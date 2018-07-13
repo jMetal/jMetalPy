@@ -1,47 +1,50 @@
+<p align="center">
+  <br/>
+  <img src=docs/source/jmetalpy.png alt="jMetalPy">
+  <br/>
+</p>
+
 # jMetalPy: Python version of the jMetal framework
-[![Build Status](https://travis-ci.org/jMetal/jMetalPy.svg?branch=master)](https://travis-ci.org/jMetal/jMetalPy)
-[![PyPI](https://img.shields.io/pypi/l/jMetalPy.svg)]()
-[![PyPI](https://img.shields.io/pypi/v/jMetalPy.svg)]()
+[![Build Status](https://img.shields.io/travis/jMetal/jMetalPy.svg?style=flat-square)](https://travis-ci.org/jMetal/jMetalPy)
+[![Read the Docs](https://img.shields.io/readthedocs/jmetalpy.svg?style=flat-square)](https://readthedocs.org/projects/jmetalpy/)
+[![PyPI License](https://img.shields.io/pypi/l/jMetalPy.svg?style=flat-square)]()
+[![PyPI Python version](https://img.shields.io/pypi/pyversions/jMetalPy.svg?style=flat-square)]()
 
-> jMetalPy is currently under heavy development!  
-
-I started a new project called jMetalPy in February 2017. The initial idea was not to write the whole jMetal proyect in Python but to use it as a practical study to learn that programming language, although due to the interest of some researchers the goal of an usable jMetal version in Python is an ongoing work.
-
-Any ideas about how the structure the project, coding style, useful tools (I'm using PyCharm), or links to related projects are welcome (see [CONTRIBUTING](https://github.com/jMetal/jMetalPy/blob/master/CONTRIBUTING.md)). The starting point is the jMetal architecture:
-
-![jMetal architecture](resources/jMetal5UML.png)
-
----
-
-# Table of Contents
+## Table of Contents
+- [Installation](#installation)
 - [Usage](#usage)
-	- [Dependencies](#dependencies)
-- [History](#history)
-	- [Last changes (December 18th 2017)](#last-changes-december-18th-2017)
+- [Features](#features)
 - [Contributing](#contributing)
 - [License](#license)
 
-
-# Usage
-Examples of configuring and running all the included algorithms are located in the [jmetal.runner](https://github.com/jMetal/jMetalPy/tree/master/jmetal/runner) folder.
-
-## Dependencies
-With Python 3.6 installed, run:
-```Bash
+## Installation
+To download jMetalPy just clone the Git repository hosted in GitHub:
+```bash
 $ git clone https://github.com/jMetal/jMetalPy.git
-$ pip install -r requirements.txt
+$ python setup.py install
 ```
 
-# History
-See [CHANGELOG](CHANGELOG.md) for full version history.
+Alternatively, you can install it with `pip`:
+```bash
+$ pip install jmetalpy
+```
 
-## Last changes (January 18th 2018)
-* (Fix) Search solution in `ScatterPlot()` now return only one solution object (as intended).
-* Added class `ParallelEvaluator` (Contribution of Michael Cipold)
-* Fixed a bug in class `DominanceComparator`
+## Usage
+Examples of configuring and running all the included algorithms are located [in the docs](https://jmetalpy.readthedocs.io/en/latest/examples.html).
 
-# Contributing
+## Features
+The current release of jMetalPy (v0.5.0) contains the following components:
+
+* Algorithms: random search, NSGA-II, SMPSO, SMPSO/RP
+* Problems: ZDT1-6, DTLZ1-2, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2), constrained (Srinivas, Tanaka).
+* Encodings: real, binary
+* Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random)
+* Quality indicators: hypervolume
+* Density estimator: crowding distance
+* Graphics: 2D/3D plotting in real-time
+
+## Contributing
 Please read [CONTRIBUTING](CONTRIBUTING.md) for details on how to contribute to the project.
 
-# License
+## License
 This project is licensed under the terms of the MIT - see the [LICENSE](LICENSE) file for details.

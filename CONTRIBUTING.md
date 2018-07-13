@@ -9,3 +9,19 @@ Contributions to the jMetalPy project are welcome. Please, take into account the
 - [Respect the initial structure](resources/pages/project_structure.md)
 - [How to create auto documentation using compatible code](resources/pages/auto_doc.md)
 - [Performance analysis of Python](resources/pages/profiling.md)
+
+# Documentation
+
+To generate the documentation, install [Sphinx](http://www.sphinx-doc.org/en/master/) by running:
+
+```bash
+$ pip install sphinx
+$ pip install sphinx_rtd_theme
+```
+
+And then `cd` to `/docs` and run:
+
+```bash
+$ sphinx-apidoc -f -o source/ ../jmetal/
+$ make html
+```

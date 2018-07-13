@@ -1,3 +1,4 @@
+from abc import ABCMeta, abstractmethod
 from multiprocessing.pool import ThreadPool
 from typing import TypeVar, List, Generic
 
@@ -7,6 +8,10 @@ S = TypeVar('S')
 
 
 class Evaluator(Generic[S]):
+
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
     def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
         pass
 
@@ -16,8 +21,12 @@ class Evaluator(Generic[S]):
         if problem.number_of_constraints > 0:
             problem.evaluate_constraints(solution)
 
+    def get_name(self) -> str:
+        return self.__class__.__name__
+
 
 class SequentialEvaluator(Evaluator[S]):
+
     def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
         for solution in solution_list:
             Evaluator.evaluate_solution(solution, problem)
@@ -25,7 +34,8 @@ class SequentialEvaluator(Evaluator[S]):
         return solution_list
 
 
-class ParallelEvaluator(Evaluator[S]):
+class MapEvaluator(Evaluator[S]):
+
     def __init__(self, processes=None):
         self.pool = ThreadPool(processes)
 

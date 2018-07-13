@@ -2,13 +2,8 @@ import unittest
 
 from jmetal.problem.singleobjective.unconstrained import OneMax, Sphere
 
-__author__ = "Antonio J. Nebro"
-
 
 class OneMaxTestCases(unittest.TestCase):
-
-    def setUp(self):
-        pass
 
     def test_should_constructor_create_a_non_null_object(self) -> None:
         problem = OneMax()
@@ -33,17 +28,10 @@ class OneMaxTestCases(unittest.TestCase):
         solution = problem.create_solution()
         self.assertEqual(256, len(solution.variables[0]))
 
-    # def test_should_evaluate_work_properly_if_the_bitset_only_contains_ones(self) -> None:
-    #     problem = OneMax(512)
-    #     solution = problem.create_solution()
-    #     solution.variables[0] = [True for i in range(problem.number_of_bits)]
-    #     problem.evaluate(solution)
-    #     self.assertEqual(512.0, solution.objectives[0])
-
     def test_should_evaluate_work_properly_if_the_bitset_only_contains_zeroes(self) -> None:
         problem = OneMax(512)
         solution = problem.create_solution()
-        solution.variables[0] = [False for i in range(problem.number_of_bits)]
+        solution.variables[0] = [False for _ in range(problem.number_of_bits)]
         problem.evaluate(solution)
         self.assertEqual(0.0, solution.objectives[0])
 
@@ -53,9 +41,6 @@ class OneMaxTestCases(unittest.TestCase):
 
 
 class SphereTestCases(unittest.TestCase):
-
-    def setUp(self):
-        pass
 
     def test_should_constructor_create_a_non_null_object(self):
         problem = Sphere(3)
@@ -67,8 +52,8 @@ class SphereTestCases(unittest.TestCase):
         self.assertEqual(1, problem.number_of_objectives)
         self.assertEqual(0, problem.number_of_constraints)
 
-        self.assertEqual([-5.12 for i in range(10)], problem.lower_bound)
-        self.assertEqual([5.12 for i in range(10)], problem.upper_bound)
+        self.assertEqual([-5.12 for _ in range(10)], problem.lower_bound)
+        self.assertEqual([5.12 for _ in range(10)], problem.upper_bound)
 
     def test_should_constructor_create_a_valid_problem_with_5_variables(self):
         problem = Sphere(5)

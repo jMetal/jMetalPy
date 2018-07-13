@@ -5,6 +5,7 @@ from jmetal.core.solution import Solution
 
 
 class CrowdingDistanceTestCases(unittest.TestCase):
+
     def setUp(self):
         self.crowding = CrowdingDistance()
 

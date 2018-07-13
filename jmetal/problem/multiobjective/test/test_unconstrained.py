@@ -2,13 +2,8 @@ import unittest
 
 from jmetal.problem.multiobjective.unconstrained import Kursawe, Fonseca, Schaffer, Viennet2
 
-__author__ = "Antonio J. Nebro"
-
 
 class KursaweTestCases(unittest.TestCase):
-
-    def setUp(self):
-        pass
 
     def test_should_constructor_create_a_non_null_object(self) -> None:
         problem = Kursawe(3)
@@ -50,8 +45,6 @@ class KursaweTestCases(unittest.TestCase):
 
 
 class FonsecaTestCases(unittest.TestCase):
-    def setUp(self):
-        pass
 
     def test_should_constructor_create_a_non_null_object(self):
         problem = Fonseca()
@@ -63,8 +56,8 @@ class FonsecaTestCases(unittest.TestCase):
         self.assertEqual(2, problem.number_of_objectives)
         self.assertEqual(0, problem.number_of_constraints)
 
-        self.assertEqual( 3 * [-4], problem.lower_bound)
-        self.assertEqual( 3 * [ 4], problem.upper_bound)
+        self.assertEqual(3 * [-4], problem.lower_bound)
+        self.assertEqual(3 * [4], problem.upper_bound)
 
     def test_should_create_solution_create_a_valid_float_solution(self):
         problem = Fonseca()
@@ -77,7 +70,7 @@ class FonsecaTestCases(unittest.TestCase):
         self.assertEqual(0, problem.number_of_constraints)
 
         self.assertEqual(3 * [-4], problem.lower_bound)
-        self.assertEqual(3 * [ 4], problem.upper_bound)
+        self.assertEqual(3 * [4], problem.upper_bound)
 
         self.assertTrue(solution.variables[0] >= -4)
         self.assertTrue(solution.variables[0] <= 4)
@@ -92,8 +85,8 @@ class FonsecaTestCases(unittest.TestCase):
 
         problem.evaluate(solution1)
 
-        self.assertAlmostEqual(solution1.objectives[0], 0.991563628, 4);
-        self.assertAlmostEqual(solution1.objectives[1], 0.999663388, 4);
+        self.assertAlmostEqual(solution1.objectives[0], 0.991563628, 4)
+        self.assertAlmostEqual(solution1.objectives[1], 0.999663388, 4)
 
     def test_should_get_name_return_the_right_name(self):
         problem = Fonseca()
@@ -101,9 +94,6 @@ class FonsecaTestCases(unittest.TestCase):
 
 
 class SchafferTestCases(unittest.TestCase):
-
-    def setUp(self):
-        pass
 
     def test_should_constructor_create_a_non_null_object(self):
         problem = Schaffer()
@@ -145,11 +135,11 @@ class SchafferTestCases(unittest.TestCase):
         problem.evaluate(solution1)
         problem.evaluate(solution2)
 
-        self.assertAlmostEqual(solution1.objectives[0], 9);
-        self.assertAlmostEqual(solution1.objectives[1], 1);
+        self.assertAlmostEqual(solution1.objectives[0], 9)
+        self.assertAlmostEqual(solution1.objectives[1], 1)
 
-        self.assertAlmostEqual(solution2.objectives[0], 6.76);
-        self.assertAlmostEqual(solution2.objectives[1], 21.16);
+        self.assertAlmostEqual(solution2.objectives[0], 6.76)
+        self.assertAlmostEqual(solution2.objectives[1], 21.16)
 
     def test_should_get_name_return_the_right_name(self):
         problem = Schaffer()
@@ -157,9 +147,6 @@ class SchafferTestCases(unittest.TestCase):
 
 
 class Viennet2TestCases(unittest.TestCase):
-
-    def setUp(self):
-        pass
 
     def test_should_constructor_create_a_non_null_object(self):
         problem = Viennet2()
@@ -198,13 +185,14 @@ class Viennet2TestCases(unittest.TestCase):
 
         problem.evaluate(solution2)
 
-        self.assertAlmostEqual(solution2.objectives[0],  14.0607692307);
-        self.assertAlmostEqual(solution2.objectives[1], -11.8818055555);
-        self.assertAlmostEqual(solution2.objectives[2], -11.1532369747);
+        self.assertAlmostEqual(solution2.objectives[0], 14.0607692307)
+        self.assertAlmostEqual(solution2.objectives[1], -11.8818055555)
+        self.assertAlmostEqual(solution2.objectives[2], -11.1532369747)
 
     def test_should_get_name_return_the_right_name(self):
         problem = Viennet2()
         self.assertEqual("Viennet2", problem.get_name())
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -3,13 +3,8 @@ import unittest
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
 from jmetal.operator.mutation import BitFlip, Uniform, SimpleRandom, Polynomial, IntegerPolynomial
 
-__author__ = "Antonio J. Nebro"
-
 
 class PolynomialMutationTestMethods(unittest.TestCase):
-
-    def setUp(self):
-        pass
 
     def test_should_constructor_create_a_non_null_object(self):
         mutation = Polynomial(1.0)
@@ -50,9 +45,6 @@ class PolynomialMutationTestMethods(unittest.TestCase):
 
 class BitFlipTestCases(unittest.TestCase):
 
-    def setUp(self):
-        pass
-
     def test_should_constructor_create_a_non_null_object(self):
         solution = BitFlip(1.0)
         self.assertIsNotNone(solution)
@@ -89,9 +81,6 @@ class BitFlipTestCases(unittest.TestCase):
 
 
 class UniformMutationTestCases(unittest.TestCase):
-
-    def setUp(self):
-        pass
 
     def test_should_constructor_create_a_non_null_object(self):
         operator = Uniform(0.3)
@@ -141,9 +130,6 @@ class UniformMutationTestCases(unittest.TestCase):
 
 class RandomMutationTestCases(unittest.TestCase):
 
-    def setUp(self):
-        pass
-
     def test_should_constructor_create_a_non_null_object(self):
         operator = SimpleRandom(1.0)
         self.assertIsNotNone(operator)
@@ -188,8 +174,6 @@ class RandomMutationTestCases(unittest.TestCase):
 
 
 class IntegerPolynomialMutationTestCases(unittest.TestCase):
-    def setUp(self):
-        pass
 
     def test_should_constructor_create_a_non_null_object(self):
         operator = IntegerPolynomial(1.0)
@@ -224,7 +208,8 @@ class IntegerPolynomialMutationTestCases(unittest.TestCase):
 
         mutated_solution = operator.execute(solution)
         self.assertNotEqual([1, 2, 3], mutated_solution.variables)
-        self.assertEqual([True, True, True], [isinstance(x, int) for x in  mutated_solution.variables])
+        self.assertEqual([True, True, True], [isinstance(x, int) for x in mutated_solution.variables])
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -3,13 +3,8 @@ import unittest
 
 from jmetal.core.solution import BinarySolution, FloatSolution, Solution, IntegerSolution
 
-__author__ = "Antonio J. Nebro"
-
 
 class SolutionTestCase(unittest.TestCase):
-
-    def setUp(self) -> None:
-        pass
 
     def test_should_constructor_create_a_non_null_object(self) -> None:
         solution = Solution[int](3, 2)
@@ -33,9 +28,6 @@ class SolutionTestCase(unittest.TestCase):
 
 
 class BinarySolutionTestCase(unittest.TestCase):
-
-    def setUp(self) -> None:
-        pass
 
     def test_should_default_constructor_create_a_valid_solution(self) -> None:
         solution = BinarySolution(2, 3, 1)
@@ -66,9 +58,6 @@ class BinarySolutionTestCase(unittest.TestCase):
 
 
 class FloatSolutionTestCase(unittest.TestCase):
-
-    def setUp(self) -> None:
-        pass
 
     def test_should_constructor_create_a_non_null_object(self) -> None:
         solution = FloatSolution(3, 2, 0, [], [])
@@ -105,9 +94,6 @@ class FloatSolutionTestCase(unittest.TestCase):
 
 
 class IntegerSolutionTestCase(unittest.TestCase):
-
-    def setUp(self) -> None:
-        pass
 
     def test_should_constructor_create_a_non_null_object(self) -> None:
         solution = IntegerSolution(3, 2, 0, [], [])
