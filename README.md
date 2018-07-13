@@ -10,8 +10,6 @@
 [![PyPI License](https://img.shields.io/pypi/l/jMetalPy.svg?style=flat-square)]()
 [![PyPI Python version](https://img.shields.io/pypi/pyversions/jMetalPy.svg?style=flat-square)]()
 
-> jMetalPy is currently under heavy development!. The current version is 0.5.0
-
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
@@ -26,21 +24,21 @@ $ git clone https://github.com/jMetal/jMetalPy.git
 $ python setup.py install
 ```
 
-Alternatively, you can install with `pip`:
+Alternatively, you can install it with `pip`:
 ```bash
 $ pip install jmetalpy
 ```
 
 ## Usage
-Examples of configuring and running all the included algorithms are located [in the docs](http://jmetalpy.readthedocs.io/en/develop/examples.html).
+Examples of configuring and running all the included algorithms are located [in the docs](https://jmetalpy.readthedocs.io/en/latest/examples.html).
 
 ## Features
-The current release of jMetalPy contains the following components:
+The current release of jMetalPy (v0.5.0) contains the following components:
 
-* Algorithms: Random search, NSGA-II, SMPSO, SMPSO/RP
-* Problems: ZDT1-6, DTLZ1-2
+* Algorithms: random search, NSGA-II, SMPSO, SMPSO/RP
+* Problems: ZDT1-6, DTLZ1-2, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2), constrained (Srinivas, Tanaka).
 * Encodings: real, binary
-* Operators: binary tournament, single-point crossover, SBX crossover, bit-blip mutation, polynomial mutation, uniform mutation
+* Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crosover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random)
 * Quality indicators: hypervolume
 * Density estimator: crowding distance
 * Graphics: 2D/3D plotting in real-time
