@@ -6,7 +6,7 @@ Common imports for these examples:
 .. code-block:: python
 
    from jmetal.algorithm import NSGAII
-   from jmetal.operator Polynomial, SBX, BinaryTournamentSelection
+   from jmetal.operator import Polynomial, SBX, BinaryTournamentSelection
    from jmetal.component import RankingAndCrowdingDistanceComparator
 
    from jmetal.problem import ZDT1
