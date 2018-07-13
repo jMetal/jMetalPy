@@ -27,6 +27,7 @@ class DTLZ1(FloatProblem):
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE] * number_of_objectives
+        self.obj_labels = ['f'] * number_of_objectives
 
         self.lower_bound = self.number_of_variables * [0.0]
         self.upper_bound = self.number_of_variables * [1.0]
@@ -72,6 +73,7 @@ class DTLZ2(FloatProblem):
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE] * number_of_objectives
+        self.obj_labels = ['f'] * number_of_objectives
 
         self.lower_bound = self.number_of_variables * [0.0]
         self.upper_bound = self.number_of_variables * [1.0]

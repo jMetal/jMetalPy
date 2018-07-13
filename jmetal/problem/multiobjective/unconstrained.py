@@ -22,6 +22,7 @@ class Kursawe(FloatProblem):
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+        self.obj_labels = ['f(x)', 'f(y)']
 
         self.lower_bound = [-5.0 for _ in range(number_of_variables)]
         self.upper_bound = [5.0 for _ in range(number_of_variables)]
@@ -56,6 +57,7 @@ class Fonseca(FloatProblem):
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+        self.obj_labels = ['f(x)', 'f(y)']
 
         self.lower_bound = self.number_of_variables * [-4]
         self.upper_bound = self.number_of_variables * [4]
@@ -83,6 +85,7 @@ class Schaffer(FloatProblem):
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+        self.obj_labels = ['f(x)', 'f(y)']
 
         self.lower_bound = [-100000]
         self.upper_bound = [100000]
@@ -111,6 +114,7 @@ class Viennet2(FloatProblem):
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE, self.MINIMIZE]
+        self.obj_labels = ['f(x)', 'f(y)', 'f(z)']
 
         self.lower_bound = self.number_of_variables * [-4]
         self.upper_bound = self.number_of_variables * [4]

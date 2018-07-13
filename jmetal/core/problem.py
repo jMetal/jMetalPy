@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
+from typing import Generic, TypeVar
 from os.path import dirname, join
 from pathlib import Path
-from typing import Generic, TypeVar
 import random
 
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
@@ -19,17 +19,13 @@ class Problem(Generic[S]):
     MAXIMIZE = 1
 
     def __init__(self):
-        self.number_of_variables = None
-        self.number_of_objectives = None
-        self.number_of_constraints = None
-        self.obj_directions = []
+        self.number_of_variables: int = None
+        self.number_of_objectives: int = None
+        self.number_of_constraints: int = None
 
-    @abstractmethod
-    def evaluate(self, solution: S) -> S:
-        """ Evaluate a solution.
-
-        :return: Evaluated solution. """
-        pass
+        self.obj_functions: list = []
+        self.obj_directions: list = None
+        self.obj_labels: list = None
 
     @abstractmethod
     def create_solution(self) -> S:
@@ -37,6 +33,18 @@ class Problem(Generic[S]):
 
         :return: Solution. """
         pass
+
+    def evaluate(self, solution: S) -> S:
+        """ Evaluate a solution.
+
+        :return: Evaluated solution. """
+        for ith, fnc in enumerate(self.obj_functions):
+            if self.obj_directions[ith] == self.MINIMIZE:
+                solution.objectives[ith] = fnc(solution)
+            else:
+                solution.objectives[ith] = -1.0 * fnc(solution)
+
+        return solution
 
     def evaluate_constraints(self, solution: S):
         pass
@@ -68,10 +76,6 @@ class BinaryProblem(Problem[BinarySolution]):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def evaluate(self, solution: BinarySolution) -> BinarySolution:
-        pass
-
-    @abstractmethod
     def create_solution(self) -> BinarySolution:
         pass
 
@@ -85,10 +89,6 @@ class FloatProblem(Problem[FloatSolution]):
         super(FloatProblem, self).__init__()
         self.lower_bound = None
         self.upper_bound = None
-
-    @abstractmethod
-    def evaluate(self, solution: FloatSolution) -> FloatSolution:
-        pass
 
     def create_solution(self) -> FloatSolution:
         new_solution = FloatSolution(self.number_of_variables, self.number_of_objectives, self.number_of_constraints,
@@ -108,10 +108,6 @@ class IntegerProblem(Problem[IntegerSolution]):
         super(IntegerProblem, self).__init__()
         self.lower_bound = None
         self.upper_bound = None
-
-    @abstractmethod
-    def evaluate(self, solution: IntegerSolution) -> IntegerSolution:
-        pass
 
     def create_solution(self) -> IntegerSolution:
         new_solution = IntegerSolution(

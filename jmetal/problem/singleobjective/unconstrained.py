@@ -21,6 +21,9 @@ class OneMax(BinaryProblem):
         self.number_of_variables = 1
         self.number_of_constraints = 0
 
+        self.obj_directions = [self.MINIMIZE]
+        self.obj_labels = ['f(x)']
+
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
         counter_of_ones = 0
         for bits in solution.variables[0]:
@@ -48,6 +51,9 @@ class Sphere(FloatProblem):
         self.number_of_objectives = 1
         self.number_of_variables = number_of_variables
         self.number_of_constraints = 0
+
+        self.obj_directions = [self.MINIMIZE]
+        self.obj_labels = ['f(x)']
 
         self.lower_bound = [-5.12 for _ in range(number_of_variables)]
         self.upper_bound = [5.12 for _ in range(number_of_variables)]

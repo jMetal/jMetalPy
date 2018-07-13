@@ -21,6 +21,9 @@ class Srinivas(FloatProblem):
         self.number_of_variables = 2
         self.number_of_constraints = 2
 
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+        self.obj_labels = ['f(x)', 'f(y)']
+
         self.lower_bound = [-20.0 for _ in range(self.number_of_variables)]
         self.upper_bound = [20.0 for _ in range(self.number_of_variables)]
 
@@ -68,6 +71,9 @@ class Tanaka(FloatProblem):
         self.number_of_objectives = 2
         self.number_of_variables = 2
         self.number_of_constraints = 2
+
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+        self.obj_labels = ['f(x)', 'f(y)']
 
         self.lower_bound = [10e-5 for _ in range(self.number_of_variables)]
         self.upper_bound = [pi for _ in range(self.number_of_variables)]
