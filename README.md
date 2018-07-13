@@ -1,6 +1,6 @@
 <p align="center">
   <br/>
-  <img src=resources/jmetalpy.png alt="jMetalPy">
+  <img src=docs/source/jmetalpy.png alt="jMetalPy">
   <br/>
 </p>
 
@@ -38,7 +38,7 @@ The current release of jMetalPy (v0.5.0) contains the following components:
 * Algorithms: random search, NSGA-II, SMPSO, SMPSO/RP
 * Problems: ZDT1-6, DTLZ1-2, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2), constrained (Srinivas, Tanaka).
 * Encodings: real, binary
-* Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crosover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random)
+* Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random)
 * Quality indicators: hypervolume
 * Density estimator: crowding distance
 * Graphics: 2D/3D plotting in real-time
