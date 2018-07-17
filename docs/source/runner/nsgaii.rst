@@ -17,7 +17,7 @@ NSGA-II with standard settings
 .. code-block:: python
 
    algorithm = NSGAII(
-      problem=ZDT1(),
+      problem=ZDT1(rf_path='resources/reference_front/ZDT1.pf'),
       population_size=100,
       max_evaluations=25000,
       mutation=Polynomial(probability=1.0/problem.number_of_variables, distribution_index=20),
@@ -39,7 +39,7 @@ NSGA-II stopping by time
          return [False, True][self.get_current_computing_time() > 4]
 
    algorithm = NSGA2b(
-      problem=ZDT1(),
+      problem=ZDT1(rf_path='resources/reference_front/ZDT1.pf'),
       population_size=100,
       max_evaluations=25000,
       mutation=Polynomial(probability=1.0/problem.number_of_variables, distribution_index=20),

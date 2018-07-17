@@ -18,7 +18,7 @@ SMPSO with standard settings
    from jmetal.component import CrowdingDistanceArchive
 
    algorithm = SMPSO(
-       problem=ZDT1(),
+       problem=ZDT1(rf_path='resources/reference_front/ZDT1.pf'),
        swarm_size=100,
        max_evaluations=25000,
        mutation=Polynomial(probability=1.0/problem.number_of_variables, distribution_index=20),
@@ -47,7 +47,7 @@ SMPSO/RP with standard settings
        )
 
    algorithm = SMPSORP(
-       problem=ZDT1(),
+       problem=ZDT1(rf_path='resources/reference_front/ZDT1.pf'),
        swarm_size=swarm_size,
        max_evaluations=25000,
        mutation=Polynomial(probability=1.0/problem.number_of_variables, distribution_index=20),
