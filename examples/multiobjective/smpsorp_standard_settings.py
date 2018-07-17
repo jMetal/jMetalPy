@@ -47,7 +47,7 @@ if __name__ == '__main__':
     front = algorithm.get_result()
 
     # Plot frontier to file
-    pareto_front = ScatterPlot(plot_title='NSGAII plot', axis_labels=problem.obj_labels)
+    pareto_front = ScatterPlot(plot_title='SMPSORP-ZDT1', axis_labels=problem.obj_labels)
     pareto_front.plot(front, reference_front=problem.reference_front, show=False)
     pareto_front.add_data(points_to_solutions(reference_points), legend='reference points')
     pareto_front.show()
