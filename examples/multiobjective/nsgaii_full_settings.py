@@ -1,12 +1,12 @@
 from jmetal.algorithm import NSGAII
-from jmetal.component import VisualizerObserver, ProgressBarObserver, RankingAndCrowdingDistanceComparator
 from jmetal.problem import ZDT1
 from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
-from jmetal.util import ScatterMatplotlib, SolutionList
+from jmetal.component import VisualizerObserver, ProgressBarObserver, RankingAndCrowdingDistanceComparator
+from jmetal.util import ScatterPlot, SolutionList
 
 
 if __name__ == '__main__':
-    problem = ZDT1()
+    problem = ZDT1(rf_path='../../resources/reference_front/ZDT1.pf')
 
     algorithm = NSGAII(
         problem=problem,
@@ -17,17 +17,18 @@ if __name__ == '__main__':
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
     )
 
-    observer = VisualizerObserver(problem)
-    progress_bar = ProgressBarObserver(step=100, maximum=25000)
+    observer = VisualizerObserver()
     algorithm.observable.register(observer=observer)
+
+    progress_bar = ProgressBarObserver(step=100, maximum=25000)
     algorithm.observable.register(observer=progress_bar)
 
     algorithm.run()
     front = algorithm.get_result()
 
     # Plot frontier to file
-    pareto_front = ScatterMatplotlib(plot_title='NSGAII for ZDT1', number_of_objectives=problem.number_of_objectives)
-    pareto_front.plot(front, reference=problem.get_reference_front(), output='NSGAII-ZDT1', show=False)
+    pareto_front = ScatterPlot(plot_title='NSGAII-ZDT1', axis_labels=problem.obj_labels)
+    pareto_front.plot(front, reference_front=problem.reference_front)
 
     # Save variables to file
     SolutionList.print_function_values_to_file(front, 'FUN.NSGAII.' + problem.get_name())

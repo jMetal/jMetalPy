@@ -1,11 +1,9 @@
 from abc import ABCMeta, abstractmethod
-from typing import Generic, TypeVar
-from os.path import dirname, join
+from typing import Generic, TypeVar, List
 from pathlib import Path
 import random
 
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
-from jmetal.util.front_file import read_front_from_file_as_solutions
 
 S = TypeVar('S')
 
@@ -18,14 +16,53 @@ class Problem(Generic[S]):
     MINIMIZE = -1
     MAXIMIZE = 1
 
-    def __init__(self):
+    def __init__(self, reference_front_path: str):
         self.number_of_variables: int = None
         self.number_of_objectives: int = None
         self.number_of_constraints: int = None
 
-        self.obj_functions: list = []
-        self.obj_directions: list = None
-        self.obj_labels: list = None
+        self.obj_directions: List[int] = []
+        self.obj_functions: List = []
+        self.obj_labels: List[str] = []
+
+        self.reference_front: List[S] = None
+        if reference_front_path:
+            self.reference_front = self.read_front_from_file_as_solutions(reference_front_path)
+
+    @staticmethod
+    def read_front_from_file(file_path: str) -> List[List[float]]:
+        """ Reads a front from a file and returns a list.
+
+        :return: List of solution points. """
+        front = []
+        if Path(file_path).is_file():
+            with open(file_path) as file:
+                for line in file:
+                    vector = [float(x) for x in line.split()]
+                    front.append(vector)
+        else:
+            raise Exception('Reference front file was not found at {}'.format(file_path))
+
+        return front
+
+    @staticmethod
+    def read_front_from_file_as_solutions(file_path: str) -> List[S]:
+        """ Reads a front from a file and returns a list of solution objects.
+
+        :return: List of solution objects. """
+        front = []
+        if Path(file_path).is_file():
+            with open(file_path) as file:
+                for line in file:
+                    vector = [float(x) for x in line.split()]
+                    solution = FloatSolution(2, 2, 0, [], [])
+                    solution.objectives = vector
+
+                    front.append(solution)
+        else:
+            raise Exception('Reference front file was not found at {}'.format(file_path))
+
+        return front
 
     @abstractmethod
     def create_solution(self) -> S:
@@ -35,36 +72,32 @@ class Problem(Generic[S]):
         pass
 
     def evaluate(self, solution: S) -> S:
-        """ Evaluate a solution.
+        """ Evaluate a solution. For any new problem inheriting from :class:`Problem`, this method should be replaced.
+        Otherwise, the attributes `obj_functions`, `obj_functions` and `obj_labels` must be declared:
+
+        .. code-block:: python
+
+           problem = FloatProblem()
+
+           problem.obj_functions.append(lambda s: 1)
+           problem.obj_directions.append(Problem.MINIMIZE)
+           problem.obj_labels.append('Min')
+
+           problem.obj_functions.append(lambda s: 2)
+           problem.obj_directions.append(Problem.MAXIMIZE)
+           problem.obj_labels.append('Max')
 
         :return: Evaluated solution. """
         for ith, fnc in enumerate(self.obj_functions):
-            if self.obj_directions[ith] == self.MINIMIZE:
-                solution.objectives[ith] = fnc(solution)
-            else:
+            if self.obj_directions[ith] == self.MAXIMIZE:
                 solution.objectives[ith] = -1.0 * fnc(solution)
+            else:
+                solution.objectives[ith] = fnc(solution)
 
         return solution
 
     def evaluate_constraints(self, solution: S):
         pass
-
-    def get_reference_front(self) -> list:
-        """ Get the reference front to the problem (if any).
-        This method read front files (.pf) located in `jmetal/problem/reference_front/`, which must have the same
-        name as the problem.
-
-        :return: Front."""
-        reference_front_path = 'problem/reference_front/{0}.pf'.format(self.get_name())
-
-        front = []
-        file_path = dirname(join(dirname(__file__)))
-        computed_path = join(file_path, reference_front_path)
-
-        if Path(computed_path).is_file():
-            front = read_front_from_file_as_solutions(computed_path)
-
-        return front
 
     def get_name(self) -> str:
         return self.__class__.__name__
@@ -73,9 +106,9 @@ class Problem(Generic[S]):
 class BinaryProblem(Problem[BinarySolution]):
     """ Class representing binary problems. """
 
-    __metaclass__ = ABCMeta
+    def __init__(self, rf_path: str = None):
+        super(BinaryProblem, self).__init__(reference_front_path=rf_path)
 
-    @abstractmethod
     def create_solution(self) -> BinarySolution:
         pass
 
@@ -83,10 +116,8 @@ class BinaryProblem(Problem[BinarySolution]):
 class FloatProblem(Problem[FloatSolution]):
     """ Class representing float problems. """
 
-    __metaclass__ = ABCMeta
-
-    def __init__(self):
-        super(FloatProblem, self).__init__()
+    def __init__(self, rf_path: str = None):
+        super(FloatProblem, self).__init__(reference_front_path=rf_path)
         self.lower_bound = None
         self.upper_bound = None
 
@@ -102,10 +133,8 @@ class FloatProblem(Problem[FloatSolution]):
 class IntegerProblem(Problem[IntegerSolution]):
     """ Class representing integer problems. """
 
-    __metaclass__ = ABCMeta
-
-    def __init__(self):
-        super(IntegerProblem, self).__init__()
+    def __init__(self, rf_path: str = None):
+        super(IntegerProblem, self).__init__(reference_front_path=rf_path)
         self.lower_bound = None
         self.upper_bound = None
 

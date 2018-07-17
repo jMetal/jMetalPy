@@ -1,15 +1,26 @@
 from jmetal.algorithm import SMPSORP
-from jmetal.component.archive import CrowdingDistanceArchiveWithReferencePoint
-from jmetal.component.observer import ProgressBarObserver
+from jmetal.component import ProgressBarObserver, VisualizerObserver, CrowdingDistanceArchiveWithReferencePoint
 from jmetal.problem import ZDT1
 from jmetal.operator import Polynomial
+from jmetal.util import ScatterPlot
+
+
+def points_to_solutions(points):
+    solutions = []
+    for i, _ in enumerate(points):
+        point = problem.create_solution()
+        point.objectives = points[i]
+        solutions.append(point)
+
+    return solutions
 
 
 if __name__ == '__main__':
-    problem = ZDT1()
+    problem = ZDT1(rf_path='../../resources/reference_front/ZDT1.pf')
+
     swarm_size = 100
 
-    reference_points = [[0.0, 0.0]]
+    reference_points = [[0.5, 0.5], [0.2, 0.8]]
     archives_with_reference_points = []
 
     for point in reference_points:
@@ -26,10 +37,20 @@ if __name__ == '__main__':
         leaders=archives_with_reference_points
     )
 
+    observer = VisualizerObserver()
+    algorithm.observable.register(observer=observer)
+
     progress_bar = ProgressBarObserver(step=swarm_size, maximum=25000)
-    algorithm.observable.register(progress_bar)
+    algorithm.observable.register(observer=progress_bar)
 
     algorithm.run()
+    front = algorithm.get_result()
+
+    # Plot frontier to file
+    pareto_front = ScatterPlot(plot_title='NSGAII plot', axis_labels=problem.obj_labels)
+    pareto_front.plot(front, reference_front=problem.reference_front, show=False)
+    pareto_front.add_data(points_to_solutions(reference_points), legend='reference points')
+    pareto_front.show()
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())

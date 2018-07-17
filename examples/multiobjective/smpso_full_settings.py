@@ -1,14 +1,12 @@
 from jmetal.algorithm import SMPSO
-from jmetal.component.observer import ProgressBarObserver, VisualizerObserver
-from jmetal.component.archive import CrowdingDistanceArchive
-from jmetal.problem import ZDT1
+from jmetal.problem import DTLZ1
 from jmetal.operator import Polynomial
-from jmetal.util.graphic import ScatterMatplotlib
-from jmetal.util.solution_list_output import SolutionList
+from jmetal.component import VisualizerObserver, ProgressBarObserver, CrowdingDistanceArchive
+from jmetal.util import ScatterPlot, SolutionList
 
 
 if __name__ == '__main__':
-    problem = ZDT1()
+    problem = DTLZ1(rf_path='../../resources/reference_front/DTLZ1.pf')
 
     algorithm = SMPSO(
         problem=problem,
@@ -18,17 +16,18 @@ if __name__ == '__main__':
         leaders=CrowdingDistanceArchive(100)
     )
 
-    observer = VisualizerObserver(problem)
-    progress_bar = ProgressBarObserver(step=100, maximum=25000)
+    observer = VisualizerObserver()
     algorithm.observable.register(observer=observer)
+
+    progress_bar = ProgressBarObserver(step=100, maximum=25000)
     algorithm.observable.register(observer=progress_bar)
 
     algorithm.run()
     front = algorithm.get_result()
 
     # Plot frontier to file
-    pareto_front = ScatterMatplotlib(plot_title='SMPSO for ' + problem.get_name(), number_of_objectives=problem.number_of_objectives)
-    pareto_front.plot(front, reference=problem.get_reference_front(), output='SMPSO-' + problem.get_name(), show=False)
+    pareto_front = ScatterPlot(plot_title='SMPSO-DTLZ1', axis_labels=problem.obj_labels)
+    pareto_front.plot(front, reference_front=problem.reference_front)
 
     # Save variables to file
     SolutionList.print_function_values_to_file(front, 'FUN.SMPSO.' + problem.get_name())

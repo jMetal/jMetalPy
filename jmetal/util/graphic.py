@@ -1,21 +1,12 @@
 import logging
-import warnings
 from abc import ABCMeta
-from typing import TypeVar, List, Tuple
+from typing import TypeVar, List
 
-from bokeh.embed import file_html
-from bokeh.resources import CDN
-from bokeh.client import ClientSession
-from bokeh.io import curdoc, reset_output
-from bokeh.layouts import column, row
-from bokeh.models import HoverTool, ColumnDataSource, TapTool, CustomJS, WheelZoomTool
-from bokeh.plotting import Figure
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
-
-from jmetal.core.solution import Solution
-
-warnings.filterwarnings("ignore", ".*GUI is implemented.*")
+from mpl_toolkits.mplot3d import Axes3D
+from plotly import graph_objs as go
+from plotly.offline import plot
+from pandas import DataFrame
 
 jMetalPyLogger = logging.getLogger('jMetalPy')
 S = TypeVar('S')
@@ -23,61 +14,134 @@ S = TypeVar('S')
 """
 .. module:: Visualization
    :platform: Unix, Windows
-   :synopsis: Classes for plotting solutions.
+   :synopsis: Classes for plotting fronts.
 
 .. moduleauthor:: Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
 
 class Plot:
-
     __metaclass__ = ABCMeta
 
-    def __init__(self, plot_title: str, number_of_objectives: int,
-                 xaxis_label: str='', yaxis_label: str='', zaxis_label: str=''):
+    def __init__(self, plot_title: str, axis_labels: list):
         self.plot_title = plot_title
-        self.number_of_objectives = number_of_objectives
+        self.axis_labels = axis_labels
 
-        self.xaxis_label = xaxis_label
-        self.yaxis_label = yaxis_label
-        self.zaxis_label = zaxis_label
+        self.number_of_objectives: int = None
 
-    def get_objectives(self, front: List[S]) -> Tuple[list, list, list]:
+    @staticmethod
+    def get_objectives(front: List[S]) -> DataFrame:
         if front is None:
             raise Exception('Front is none!')
 
-        points = list(solution.objectives for solution in front)
-
-        x_values, y_values = [point[0] for point in points], [point[1] for point in points]
-
-        try:
-            z_values = [point[2] for point in points]
-        except IndexError:
-            z_values = [0]*len(points)
-
-        return x_values, y_values, z_values
+        return DataFrame(list(solution.objectives for solution in front))
 
 
-class ScatterMatplotlib(Plot):
+class ScatterStreaming(Plot):
 
-    def __init__(self, plot_title: str, number_of_objectives: int):
-        """ Creates a new :class:`ScatterPlot` instance. Suitable for problems with 2 or 3 objectives.
+    def __init__(self, plot_title: str, axis_labels: list = None):
+        """ Creates a new :class:`ScatterStreaming` instance. Suitable for problems with 2 or 3 objectives in streaming.
 
-        :param plot_title: Title of the scatter diagram.
-        :param number_of_objectives: Number of objectives to be used (2D/3D).
-        """
-        super(ScatterMatplotlib, self).__init__(plot_title, number_of_objectives)
+        :param plot_title: Title of the diagram.
+        :param axis_labels: List of axis labels. """
+        super(ScatterStreaming, self).__init__(plot_title, axis_labels)
 
-        # Initialize a plot
+        import warnings
+        warnings.filterwarnings("ignore", ".*GUI is implemented.*")
+
         self.fig = plt.figure()
         self.sc = None
         self.axis = None
 
+    def plot(self, front: List[S], reference_front: List[S], filename: str = '', show: bool = True) -> None:
+        """ Plot a front of solutions (2D or 3D).
+
+        :param front: List of solutions.
+        :param reference_front: Reference solution list (if any).
+        :param filename: If specified, save the plot into a file.
+        :param show: If True, show the final diagram (default to True). """
+        objectives = self.get_objectives(front)
+
+        # Initialize plot
+        self.number_of_objectives = objectives.shape[1]
         self.__initialize()
+
+        if reference_front:
+            jMetalPyLogger.info('Reference front found')
+            ref_objectives = self.get_objectives(reference_front)
+
+            if self.number_of_objectives == 2:
+                self.__plot(ref_objectives[0], ref_objectives[1], None,
+                            color='#323232', marker='*', markersize=3)
+            else:
+                self.__plot(ref_objectives[0], ref_objectives[1], ref_objectives[2],
+                            color='#323232', marker='*', markersize=3)
+
+        if self.number_of_objectives == 2:
+            self.__plot(objectives[0], objectives[1], None, color='#98FB98', marker='o', markersize=3)
+        else:
+            self.__plot(objectives[0], objectives[1], objectives[2], color='#98FB98', marker='o', markersize=3)
+
+        if filename:
+            self.fig.savefig(filename, format='png', dpi=200)
+        if show:
+            self.fig.canvas.mpl_connect('pick_event', lambda event: self.__pick_handler(front, event))
+            plt.show()
+
+    def update(self, front: List[S], reference_front: List[S], rename_title: str = '',
+               persistence: bool = True) -> None:
+        """ Update an already created plot.
+
+        :param front: List of solutions.
+        :param reference_front: Reference solution list (if any).
+        :param rename_title: New title of the plot.
+        :param persistence: If True, keep old points; else, replace them with new values.
+        """
+        if self.sc is None:
+            jMetalPyLogger.warning('Plot must be initialized first.')
+            self.plot(front, reference_front, show=False)
+            return
+
+        objectives = self.get_objectives(front)
+
+        if persistence:
+            # Replace with new points
+            self.sc.set_data(objectives[0], objectives[1])
+
+            if self.number_of_objectives == 3:
+                self.sc.set_3d_properties(objectives[2])
+        else:
+            # Add new points
+            if self.number_of_objectives == 2:
+                self.__plot(objectives[0], objectives[1], None, color='#98FB98', marker='o', markersize=3)
+            else:
+                self.__plot(objectives[0], objectives[1], objectives[2], color='#98FB98', marker='o', markersize=3)
+
+        # Also, add event handler
+        event_handler = \
+            self.fig.canvas.mpl_connect('pick_event', lambda event: self.__pick_handler(front, event))
+
+        # Update title with new times and evaluations
+        self.fig.suptitle(rename_title, fontsize=13)
+
+        # Re-align the axis
+        self.axis.relim()
+        self.axis.autoscale_view(True, True, True)
+
+        try:
+            # Draw
+            self.fig.canvas.draw()
+        except KeyboardInterrupt:
+            pass
+
+        plt.pause(0.01)
+
+        # Disconnect the pick event for the next update
+        self.fig.canvas.mpl_disconnect(event_handler)
 
     def __initialize(self) -> None:
         """ Initialize the scatter plot for the first time. """
-        jMetalPyLogger.info("Generating plot...")
+        jMetalPyLogger.info('Generating plot')
 
         # Initialize a plot
         self.fig.canvas.set_window_title('jMetalPy')
@@ -90,9 +154,11 @@ class ScatterMatplotlib(Plot):
             self.axis.spines['right'].set_visible(False)
             self.axis.get_xaxis().tick_bottom()
             self.axis.get_yaxis().tick_left()
-        else:
+        elif self.number_of_objectives == 3:
             self.axis = Axes3D(self.fig)
             self.axis.autoscale(enable=True, axis='both')
+        else:
+            raise Exception('Number of objectives must be either 2 or 3')
 
         self.axis.set_autoscale_on(True)
         self.axis.autoscale_view(True, True, True)
@@ -101,86 +167,15 @@ class ScatterMatplotlib(Plot):
         self.axis.grid(color='#f0f0f5', linestyle='-', linewidth=1, alpha=0.5)
         self.fig.suptitle(self.plot_title, fontsize=13)
 
-        jMetalPyLogger.info("Plot initialized")
+        jMetalPyLogger.info('Plot initialized')
 
-    def __plot(self, x_values, y_values, z_values, color: str = '#98FB98', marker: str = 'o', msize: int = 3):
+    def __plot(self, x_values, y_values, z_values, **kwargs) -> None:
         if self.number_of_objectives == 2:
-            self.sc, = self.axis.plot(x_values, y_values,
-                                      color=color, marker=marker, markersize=msize, ls='None', picker=10)
+            self.sc, = self.axis.plot(x_values, y_values, ls='None', picker=10, **kwargs)
         else:
-            self.sc, = self.axis.plot(x_values, y_values, z_values,
-                                      color=color, marker=marker, markersize=msize, ls='None', picker=10)
+            self.sc, = self.axis.plot(x_values, y_values, z_values, ls='None', picker=10, **kwargs)
 
-    def plot(self, front: List[S], reference: List[S], output: str= '', show: bool=True) -> None:
-        if reference:
-            jMetalPyLogger.info('Reference front found')
-            ref_x_values, ref_y_values, ref_z_values = self.get_objectives(reference)
-            self.__plot(ref_x_values, ref_y_values, ref_z_values, color='#323232', marker='*')
-
-        x_values, y_values, z_values = self.get_objectives(front)
-        self.__plot(x_values, y_values, z_values)
-
-        if output:
-            self.__save(output)
-        if show:
-            self.fig.canvas.mpl_connect('pick_event', lambda event: self.__pick_handler(event, front))
-            plt.show()
-
-    def update(self, front: List[S], reference: List[S], new_title: str= '', persistence: bool=True) -> None:
-        if self.sc is None:
-            jMetalPyLogger.warning("Plot is none! Generating first plot...")
-            self.plot(front, reference, show=False)
-
-        x_values, y_values, z_values = self.get_objectives(front)
-
-        if persistence:
-            # Replace with new points
-            self.sc.set_data(x_values, y_values)
-
-            if self.number_of_objectives == 3:
-                self.sc.set_3d_properties(z_values)
-        else:
-            # Add new points
-            self.__plot(x_values, y_values, z_values)
-
-        # Also, add event handler
-        event_handler = \
-            self.fig.canvas.mpl_connect('pick_event', lambda event: self.__pick_handler(event, front))
-
-        # Update title with new times and evaluations
-        self.fig.suptitle(new_title, fontsize=13)
-
-        # Re-align the axis
-        self.axis.relim()
-        self.axis.autoscale_view(True, True, True)
-
-        # Draw
-        try:
-            self.fig.canvas.draw()
-        except KeyboardInterrupt:
-            pass
-
-        plt.pause(0.01)
-
-        # Disconnect the pick event for the next update
-        self.fig.canvas.mpl_disconnect(event_handler)
-
-    def __save(self, file_name: str, fmt: str = 'png', dpi: int = 200):
-        supported_formats = ["eps", "jpeg", "jpg", "pdf", "pgf", "png", "ps",
-                             "raw", "rgba", "svg", "svgz", "tif", "tiff"]
-
-        if fmt not in supported_formats:
-            raise Exception('{0} is not a valid format! Use one of these instead: {0}'.format(fmt, supported_formats))
-
-        self.fig.savefig(file_name + '.' + fmt, format=fmt, dpi=dpi)
-
-    def __retrieve_info(self, x_val: float, y_val: float, solution: Solution) -> None:
-        jMetalPyLogger.info("Output file: " + '{0}-{1}'.format(x_val, y_val))
-
-        with open('{0}-{1}'.format(x_val, y_val), 'w') as of:
-            of.write(solution.__str__())
-
-    def __pick_handler(self, event, front: List[S]):
+    def __pick_handler(self, front: List[S], event):
         """ Handler for picking points from the plot. """
         line, ind = event.artist, event.ind[0]
         x, y = line.get_xdata(), line.get_ydata()
@@ -191,132 +186,135 @@ class ScatterMatplotlib(Plot):
                     if solution.objectives[0] == x[ind] and solution.objectives[1] == y[ind]), None)
 
         if sol is not None:
-            self.__retrieve_info(x[ind], y[ind], sol)
+            with open('{0}-{1}'.format(x[ind], y[ind]), 'w') as of:
+                of.write(sol.__str__())
         else:
             jMetalPyLogger.warning('Solution is none')
             return True
 
 
-class ScatterBokeh(Plot):
+class ScatterPlot(Plot):
 
-    def __init__(self, plot_title: str, number_of_objectives: int, ws_url: str='localhost:5006'):
-        super(ScatterBokeh, self).__init__(plot_title, number_of_objectives)
+    def __init__(self, plot_title: str, axis_labels: list = None):
+        """ Creates a new :class:`ScatterPlot` instance. Suitable for problems with 2 or more objectives.
 
-        if self.number_of_objectives == 2:
-            self.source = ColumnDataSource(data=dict(x=[], y=[], str=[]))
-        elif self.number_of_objectives == 3:
-            self.source = ColumnDataSource(data=dict(x=[], y=[], z=[], str=[]))
-        else:
-            raise Exception('Wrong number of objectives: {0}'.format(number_of_objectives))
+        :param plot_title: Title of the diagram.
+        :param axis_labels: List of axis labels. """
+        super(ScatterPlot, self).__init__(plot_title, axis_labels)
 
-        self.client = ClientSession(websocket_url='ws://{0}/ws'.format(ws_url))
-        self.doc = curdoc()
-        self.doc.title = plot_title
-        self.figure_xy = None
-        self.figure_xz = None
-        self.figure_yz = None
+        self.figure: go.Figure = None
+        self.layout = None
+        self.data = None
 
+    def plot(self, front: List[S], reference_front: List[S] = None, show: bool = True) -> None:
+        """ Plot a front of solutions (2D, 3D or parallel coordinates).
+
+        :param front: List of solutions.
+        :param reference_front: Reference solution list (if any).
+        :param show: If True, show and save (file `front.html`) the final diagram (default to True). """
         self.__initialize()
 
-    def __initialize(self) -> None:
-        """ Set-up tools for plot. """
-        code = '''
-            selected = source.selected['1d']['indices'][0]
-            var str = source.front.str[selected]
-            alert(str)
-        '''
+        objectives = self.get_objectives(front)
+        self.data = [self.__generate_trace(objectives, legend='front')]
 
-        callback = CustomJS(args=dict(source=self.source), code=code)
-        self.plot_tools = [TapTool(callback=callback), WheelZoomTool(), 'save', 'pan',
-                           HoverTool(tooltips=[('index', '$index'), ('(x,y)', '($x, $y)')])]
+        if reference_front:
+            objectives = self.get_objectives(reference_front)
+            self.data.append(
+                self.__generate_trace(
+                    objectives, legend='reference',
+                    symbol='diamond-open', size=3, opacity=0.4, color='rgb(2, 130, 242)'))
 
-    def plot(self, front: List[S], reference: List[S]=None, output: str= '', show: bool=True) -> None:
-        # This is important to purge front (if any) between calls
-        reset_output()
+        self.figure = go.Figure(data=self.data, layout=self.layout)
 
-        # Set up figure
-        self.figure_xy = Figure(output_backend='webgl',
-                                sizing_mode='scale_width',
-                                title=self.plot_title,
-                                tools=self.plot_tools)
-        self.figure_xy.scatter(x='x', y='y', legend='solution', fill_alpha=0.7, source=self.source)
-        self.figure_xy.xaxis.axis_label = self.xaxis_label
-        self.figure_xy.yaxis.axis_label = self.yaxis_label
-
-        x_values, y_values, z_values = self.get_objectives(front)
-
-        if self.number_of_objectives == 2:
-            # Plot reference solution list (if any)
-            if reference:
-                ref_x_values, ref_y_values, _ = self.get_objectives(reference)
-                self.figure_xy.line(x=ref_x_values, y=ref_y_values, legend='reference', color='green')
-
-            # Push front to server
-            self.source.stream({'x': x_values, 'y': y_values, 'str': [s.__str__() for s in front]})
-            self.doc.add_root(column(self.figure_xy))
-        else:
-            # Add new figures for each axis
-            self.figure_xz = Figure(title='xz', output_backend='webgl',
-                                    sizing_mode='scale_width', tools=self.plot_tools)
-            self.figure_xz.scatter(x='x', y='z', legend='solution', fill_alpha=0.7, source=self.source)
-            self.figure_xz.xaxis.axis_label = self.xaxis_label
-            self.figure_xz.yaxis.axis_label = self.zaxis_label
-
-            self.figure_yz = Figure(title='yz', output_backend='webgl',
-                                    sizing_mode='scale_width', tools=self.plot_tools)
-            self.figure_yz.scatter(x='y', y='z', legend='solution', fill_alpha=0.7, source=self.source)
-            self.figure_yz.xaxis.axis_label = self.yaxis_label
-            self.figure_yz.yaxis.axis_label = self.zaxis_label
-
-            # Plot reference solution list (if any)
-            if reference:
-                ref_x_values, ref_y_values, ref_z_values = self.get_objectives(reference)
-                self.figure_xy.line(x=ref_x_values, y=ref_y_values, legend='reference', color='green')
-                self.figure_xz.line(x=ref_x_values, y=ref_z_values, legend='reference', color='green')
-                self.figure_yz.line(x=ref_y_values, y=ref_z_values, legend='reference', color='green')
-
-            # Push front to server
-            self.source.stream({'x': x_values, 'y': y_values, 'z': z_values, 'str': [s.__str__() for s in front]})
-            self.doc.add_root(row(self.figure_xy, self.figure_xz, self.figure_yz))
-
-        self.client.push(self.doc)
-
-        if output:
-            self.__save(output)
         if show:
-            self.client.show()
+            plot(self.figure, filename='front.html')
 
-    def update(self, front: List[S], reference: List[S], new_title: str= '', persistence: bool=False) -> None:
-        # Check if plot has not been initialized first
-        if self.figure_xy is None:
-            self.plot(front, reference)
+    def add_data(self, data: List[S], **kwargs) -> None:
+        """ Update an already created plot with new data.
 
-        if not persistence:
-            rollover = len(front)
+        :param data: List of solutions to be included.
+        :param kwargs: Optional values for `styling markers <https://plot.ly/python/marker-style/>`_. """
+        if self.figure is None:
+            jMetalPyLogger.warning('Plot must be initialized first.')
+            self.plot(data, None, show=False)
+            return
+
+        objectives = self.get_objectives(data)
+        new_data = self.__generate_trace(objectives=objectives, size=5, color='rgb(255, 170, 0)', **kwargs)
+
+        self.data.append(new_data)
+        self.figure = go.Figure(data=self.data, layout=self.layout)
+
+    def show(self) -> None:
+        plot(self.figure, filename='front')
+
+    def __initialize(self):
+        """ Initialize the plot for the first time. """
+        jMetalPyLogger.info('Generating plot')
+
+        self.layout = go.Layout(
+            margin=dict(l=100, r=100, b=100, t=100),
+            title=self.plot_title,
+            scene=dict(
+                xaxis=dict(title=self.axis_labels[0:1][0] if self.axis_labels[0:1] else None),
+                yaxis=dict(title=self.axis_labels[1:2][0] if self.axis_labels[1:2] else None),
+                zaxis=dict(title=self.axis_labels[2:3][0] if self.axis_labels[2:3] else None)
+            ),
+            images=[dict(
+                source='https://raw.githubusercontent.com/jMetal/jMetalPy/master/docs/source/jmetalpy.png',
+                xref='paper', yref='paper',
+                x=0, y=1.05,
+                sizex=0.1, sizey=0.1,
+                xanchor="left", yanchor="bottom"
+            )]
+        )
+
+    @staticmethod
+    def __generate_trace(objectives: DataFrame, legend: str = '', **kwargs):
+        number_of_objectives = objectives.shape[1]
+
+        marker = dict(
+            color='rgb(127, 127, 127)',
+            size=3,
+            symbol='circle',
+            line=dict(
+                color='rgb(204, 204, 204)',
+                width=1
+            ),
+            opacity=1.0
+        )
+        marker.update(**kwargs)
+
+        if number_of_objectives == 2:
+            trace = go.Scattergl(
+                x=objectives[0],
+                y=objectives[1],
+                mode='markers',
+                marker=marker,
+                name=legend
+            )
+        elif number_of_objectives == 3:
+            trace = go.Scatter3d(
+                x=objectives[0],
+                y=objectives[1],
+                z=objectives[2],
+                mode='markers',
+                marker=marker,
+                name=legend
+            )
         else:
-            rollover = None
+            dimensions = list()
+            for column in objectives:
+                dimensions.append(
+                    dict(range=[0, 1],
+                         label='O',
+                         values=objectives[column])
+                )
 
-        self.figure_xy.title.text = new_title
-        x_values, y_values, z_values = self.get_objectives(front)
+            trace = go.Parcoords(
+                line=dict(color='blue'),
+                dimensions=dimensions,
+                name=legend
+            )
 
-        if self.number_of_objectives == 2:
-            self.source.stream({'x': x_values, 'y': y_values, 'str': [s.__str__() for s in front]},
-                               rollover=rollover)
-        else:
-            self.source.stream({'x': x_values, 'y': y_values, 'z': z_values, 'str': [s.__str__() for s in front]},
-                               rollover=rollover)
-
-    def __save(self, file_name: str):
-        # env = Environment(loader=FileSystemLoader(BASE_PATH + '/util/'))
-        # env.filters['json'] = lambda obj: Markup(json.dumps(obj))
-
-        html = file_html(models=self.doc, resources=CDN)
-        with open(file_name + '.html', 'w') as of:
-            of.write(html)
-
-    def disconnect(self):
-        if self.is_connected():
-            self.client.close()
-
-    def is_connected(self) -> bool:
-        return self.client.connected
+        return trace

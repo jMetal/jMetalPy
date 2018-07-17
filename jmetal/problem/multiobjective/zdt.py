@@ -19,11 +19,11 @@ class ZDT1(FloatProblem):
     .. note:: Continuous problem having a convex Pareto front
     """
 
-    def __init__(self, number_of_variables: int = 30):
+    def __init__(self, number_of_variables: int=30, rf_path: str=None):
+        """ :param number_of_variables: Number of decision variables of the problem.
+        :param rf_path: Path to the reference front file (if any). Default to None.
         """
-        :param number_of_variables: Number of decision variables of the problem.
-        """
-        super(ZDT1, self).__init__()
+        super(ZDT1, self).__init__(rf_path=rf_path)
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -33,9 +33,6 @@ class ZDT1(FloatProblem):
 
         self.lower_bound = self.number_of_variables * [0.0]
         self.upper_bound = self.number_of_variables * [1.0]
-
-        FloatSolution.lower_bound = self.lower_bound
-        FloatSolution.upper_bound = self.upper_bound
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         g = self.__eval_g(solution)
@@ -63,14 +60,17 @@ class ZDT1(FloatProblem):
 
 
 class ZDT2(FloatProblem):
-    """ Problem ZDT2
+    """ Problem ZDT2.
 
     .. note:: Bi-objective unconstrained problem. The default number of variables is 30.
     .. note:: Continuous problem having a non-convex Pareto front
     """
 
-    def __init__(self, number_of_variables: int = 30):
-        super(ZDT2, self).__init__()
+    def __init__(self, number_of_variables: int = 30, rf_path: str=None):
+        """ :param number_of_variables: Number of decision variables of the problem.
+        :param rf_path: Path to the reference front file (if any). Default to None.
+        """
+        super(ZDT2, self).__init__(rf_path=rf_path)
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -80,9 +80,6 @@ class ZDT2(FloatProblem):
 
         self.lower_bound = self.number_of_variables * [0.0]
         self.upper_bound = self.number_of_variables * [1.0]
-
-        FloatSolution.lower_bound = self.lower_bound
-        FloatSolution.upper_bound = self.upper_bound
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         g = self.__eval_g(solution)
@@ -110,14 +107,17 @@ class ZDT2(FloatProblem):
 
 
 class ZDT3(FloatProblem):
-    """ Problem ZDT3
+    """ Problem ZDT3.
 
     .. note:: Bi-objective unconstrained problem. The default number of variables is 30.
     .. note:: Continuous problem having a partitioned Pareto front
     """
 
-    def __init__(self, number_of_variables: int = 30):
-        super(ZDT3, self).__init__()
+    def __init__(self, number_of_variables: int = 30, rf_path: str=None):
+        """ :param number_of_variables: Number of decision variables of the problem.
+        :param rf_path: Path to the reference front file (if any). Default to None.
+        """
+        super(ZDT3, self).__init__(rf_path=rf_path)
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -127,9 +127,6 @@ class ZDT3(FloatProblem):
 
         self.lower_bound = self.number_of_variables * [0.0]
         self.upper_bound = self.number_of_variables * [1.0]
-
-        FloatSolution.lower_bound = self.lower_bound
-        FloatSolution.upper_bound = self.upper_bound
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         g = self.__eval_g(solution)
@@ -156,14 +153,17 @@ class ZDT3(FloatProblem):
 
 
 class ZDT4(FloatProblem):
-    """ Problem ZDT4
+    """ Problem ZDT4.
 
     .. note:: Bi-objective unconstrained problem. The default number of variables is 10.
     .. note:: Continuous multi-modal problem having a convex Pareto front
     """
 
-    def __init__(self, number_of_variables: int = 10):
-        super(ZDT4, self).__init__()
+    def __init__(self, number_of_variables: int = 10, rf_path: str=None):
+        """ :param number_of_variables: Number of decision variables of the problem.
+        :param rf_path: Path to the reference front file (if any). Default to None.
+        """
+        super(ZDT4, self).__init__(rf_path=rf_path)
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -175,9 +175,6 @@ class ZDT4(FloatProblem):
         self.upper_bound = self.number_of_variables * [5.0]
         self.lower_bound[0] = 0.0
         self.upper_bound[0] = 1.0
-
-        FloatSolution.lower_bound = self.lower_bound
-        FloatSolution.upper_bound = self.upper_bound
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         g = self.__eval_g(solution)
@@ -206,14 +203,17 @@ class ZDT4(FloatProblem):
 
 
 class ZDT6(FloatProblem):
-    """ Problem ZDT6
+    """ Problem ZDT6.
 
     .. note:: Bi-objective unconstrained problem. The default number of variables is 10.
     .. note:: Continuous problem having a non-convex Pareto front
     """
 
-    def __init__(self, number_of_variables: int = 10):
-        super(ZDT6, self).__init__()
+    def __init__(self, number_of_variables: int = 10, rf_path: str=None):
+        """ :param number_of_variables: Number of decision variables of the problem.
+        :param rf_path: Path to the reference front file (if any). Default to None.
+        """
+        super(ZDT6, self).__init__(rf_path=rf_path)
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -223,9 +223,6 @@ class ZDT6(FloatProblem):
 
         self.lower_bound = self.number_of_variables * [0.0]
         self.upper_bound = self.number_of_variables * [1.0]
-
-        FloatSolution.lower_bound = self.lower_bound
-        FloatSolution.upper_bound = self.upper_bound
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         g = self.__eval_g(solution)

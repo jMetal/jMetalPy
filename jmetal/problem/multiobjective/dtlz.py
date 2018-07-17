@@ -18,10 +18,11 @@ class DTLZ1(FloatProblem):
     .. note:: Unconstrained problem. The default number of variables and objectives are, respectively, 7 and 3.
     """
 
-    def __init__(self, number_of_variables: int = 7, number_of_objectives=3):
+    def __init__(self, number_of_variables: int = 7, number_of_objectives=3, rf_path: str=None):
         """ :param number_of_variables: number of decision variables of the problem.
+        :param rf_path: Path to the reference front file (if any). Default to None.
         """
-        super(DTLZ1, self).__init__()
+        super(DTLZ1, self).__init__(rf_path=rf_path)
         self.number_of_variables = number_of_variables
         self.number_of_objectives = number_of_objectives
         self.number_of_constraints = 0
@@ -31,9 +32,6 @@ class DTLZ1(FloatProblem):
 
         self.lower_bound = self.number_of_variables * [0.0]
         self.upper_bound = self.number_of_variables * [1.0]
-
-        FloatSolution.lower_bound = self.lower_bound
-        FloatSolution.upper_bound = self.upper_bound
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         k = self.number_of_variables - self.number_of_objectives + 1
@@ -64,10 +62,11 @@ class DTLZ2(FloatProblem):
     .. note:: Unconstrained problem. The default number of variables and objectives are, respectively, 12 and 3.
     """
 
-    def __init__(self, number_of_variables: int = 12, number_of_objectives=3):
+    def __init__(self, number_of_variables: int = 12, number_of_objectives=3, rf_path: str=None):
         """:param number_of_variables: number of decision variables of the problem
+        :param rf_path: Path to the reference front file (if any). Default to None.
         """
-        super(DTLZ2, self).__init__()
+        super(DTLZ2, self).__init__(rf_path=rf_path)
         self.number_of_variables = number_of_variables
         self.number_of_objectives = number_of_objectives
         self.number_of_constraints = 0
@@ -77,9 +76,6 @@ class DTLZ2(FloatProblem):
 
         self.lower_bound = self.number_of_variables * [0.0]
         self.upper_bound = self.number_of_variables * [1.0]
-
-        FloatSolution.lower_bound = self.lower_bound
-        FloatSolution.upper_bound = self.upper_bound
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         k = self.number_of_variables - self.number_of_objectives + 1

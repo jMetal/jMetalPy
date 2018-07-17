@@ -15,8 +15,8 @@ from jmetal.core.solution import FloatSolution
 class Kursawe(FloatProblem):
     """ Class representing problem Kursawe. """
 
-    def __init__(self, number_of_variables: int = 3):
-        super(Kursawe, self).__init__()
+    def __init__(self, number_of_variables: int=3, rf_path: str=None):
+        super(Kursawe, self).__init__(rf_path=rf_path)
         self.number_of_objectives = 2
         self.number_of_variables = number_of_variables
         self.number_of_constraints = 0
@@ -50,8 +50,8 @@ class Kursawe(FloatProblem):
 
 class Fonseca(FloatProblem):
 
-    def __init__(self):
-        super(Fonseca, self).__init__()
+    def __init__(self, rf_path: str=None):
+        super(Fonseca, self).__init__(rf_path=rf_path)
         self.number_of_variables = 3
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -78,8 +78,8 @@ class Fonseca(FloatProblem):
 
 class Schaffer(FloatProblem):
 
-    def __init__(self):
-        super(Schaffer, self).__init__()
+    def __init__(self, rf_path: str=None):
+        super(Schaffer, self).__init__(rf_path=rf_path)
         self.number_of_variables = 1
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -107,8 +107,8 @@ class Schaffer(FloatProblem):
 
 class Viennet2(FloatProblem):
 
-    def __init__(self):
-        super(Viennet2, self).__init__()
+    def __init__(self, rf_path: str=None):
+        super(Viennet2, self).__init__(rf_path=rf_path)
         self.number_of_variables = 2
         self.number_of_objectives = 3
         self.number_of_constraints = 0

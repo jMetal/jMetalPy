@@ -4,7 +4,7 @@ import os
 from tqdm import tqdm
 
 from jmetal.core.problem import Problem
-from jmetal.util.graphic import ScatterMatplotlib
+from jmetal.util.graphic import ScatterStreaming
 from jmetal.core.observable import Observer
 from jmetal.util.solution_list_output import SolutionList
 
@@ -76,18 +76,19 @@ class WriteFrontToFileObserver(Observer):
 
 class VisualizerObserver(Observer):
 
-    def __init__(self, problem: Problem, replace: bool=True) -> None:
+    def __init__(self, replace: bool=True) -> None:
         self.display_frequency = 1.0
         self.replace = replace
-        self.reference = problem.get_reference_front()
-        self.plot = ScatterMatplotlib('jMetalPy', problem.number_of_objectives)
+        self.plot = ScatterStreaming(plot_title='jMetalPy')
 
     def update(self, *args, **kwargs):
         computing_time = kwargs['computing time']
         evaluations = kwargs['evaluations']
+
         front = kwargs['population']
+        reference_front = kwargs['reference_front']
 
         title = '{0}, Eval: {1}, Time: {2}'.format('VisualizerObserver', evaluations, computing_time)
 
         if (evaluations % self.display_frequency) == 0:
-            self.plot.update(front, self.reference, new_title=title, persistence=self.replace)
+            self.plot.update(front, reference_front, rename_title=title, persistence=self.replace)
