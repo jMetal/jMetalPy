@@ -5,7 +5,7 @@ from typing import TypeVar, List
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from plotly import graph_objs as go
-from plotly.offline import plot
+from plotly.offline import plot, offline
 from pandas import DataFrame
 
 jMetalPyLogger = logging.getLogger('jMetalPy')
@@ -198,62 +198,67 @@ class ScatterPlot(Plot):
     def __init__(self, plot_title: str, axis_labels: list = None):
         """ Creates a new :class:`ScatterPlot` instance. Suitable for problems with 2 or more objectives.
 
-        :param plot_title: Title of the diagram.
+        :param plot_title: Title of the graph.
         :param axis_labels: List of axis labels. """
         super(ScatterPlot, self).__init__(plot_title, axis_labels)
 
         self.figure: go.Figure = None
         self.layout = None
-        self.data = None
+        self.data = []
 
-    def plot(self, front: List[S], reference_front: List[S] = None, show: bool = True) -> None:
+    def plot(self, front: List[S], reference_front: List[S] = None, normalize: bool = False) -> None:
         """ Plot a front of solutions (2D, 3D or parallel coordinates).
 
         :param front: List of solutions.
         :param reference_front: Reference solution list (if any).
-        :param show: If True, show and save (file `front.html`) the final diagram (default to True). """
+        :param normalize: Normalize the input front between 0 and 1 (for problems with more than 3 objectives). """
         self.__initialize()
-
-        objectives = self.get_objectives(front)
-        self.data = [self.__generate_trace(objectives, legend='front')]
 
         if reference_front:
             objectives = self.get_objectives(reference_front)
-            self.data.append(
-                self.__generate_trace(
-                    objectives, legend='reference',
-                    symbol='diamond-open', size=3, opacity=0.4, color='rgb(2, 130, 242)'))
+            trace = self.__generate_trace(objectives=objectives, legend='reference front', normalize=normalize,
+                                          color='rgb(2, 130, 242)')
+            self.data.append(trace)
+
+        objectives = self.get_objectives(front)
+        trace = self.__generate_trace(objectives=objectives, legend='front', normalize=normalize,
+                                      symbol='diamond-open')
+        self.data.append(trace)
 
         self.figure = go.Figure(data=self.data, layout=self.layout)
 
-        if show:
-            plot(self.figure, filename='front.html')
-
-    def add_data(self, data: List[S], **kwargs) -> None:
-        """ Update an already created plot with new data.
+    def update(self, data: List[S], normalize: bool = False, legend: str = '') -> None:
+        """ Update an already created graph with new data.
 
         :param data: List of solutions to be included.
-        :param kwargs: Optional values for `styling markers <https://plot.ly/python/marker-style/>`_. """
+        :param legend: Legend to be included.
+        :param normalize: Normalize the input front between 0 and 1 (for problems with more than 3 objectives). """
         if self.figure is None:
             jMetalPyLogger.warning('Plot must be initialized first.')
-            self.plot(data, None, show=False)
+            self.plot(data, reference_front=None, normalize=normalize)
             return
 
         objectives = self.get_objectives(data)
-        new_data = self.__generate_trace(objectives=objectives, size=5, color='rgb(255, 170, 0)', **kwargs)
-
+        new_data = self.__generate_trace(objectives=objectives, legend=legend, normalize=normalize,
+                                         color='rgb(255, 170, 0)')
         self.data.append(new_data)
+
         self.figure = go.Figure(data=self.data, layout=self.layout)
 
-    def show(self) -> None:
-        plot(self.figure, filename='front')
+    def save(self, filename: str = 'front', show: bool = False) -> None:
+        """ Save the graph. """
+        plot(self.figure, filename=filename + '.html', auto_open=show, show_link=False)
+
+    def export(self, include_plotlyjs: bool = False) -> str:
+        """ Export as a `div` for embedding the graph in an HTML file. """
+        return plot(self.figure, output_type='div', include_plotlyjs=include_plotlyjs)
 
     def __initialize(self):
-        """ Initialize the plot for the first time. """
-        jMetalPyLogger.info('Generating plot')
+        """ Initialize the graph for the first time. """
+        jMetalPyLogger.info('Generating graph')
 
         self.layout = go.Layout(
-            margin=dict(l=100, r=100, b=100, t=100),
+            margin=dict(l=150, r=150, b=150, t=150),
             title=self.plot_title,
             scene=dict(
                 xaxis=dict(title=self.axis_labels[0:1][0] if self.axis_labels[0:1] else None),
@@ -269,19 +274,21 @@ class ScatterPlot(Plot):
             )]
         )
 
-    @staticmethod
-    def __generate_trace(objectives: DataFrame, legend: str = '', **kwargs):
+    def __generate_trace(self, objectives: DataFrame, legend: str = '', normalize: bool=False, **kwargs):
         number_of_objectives = objectives.shape[1]
+
+        if normalize:
+            objectives = (objectives - objectives.min()) / (objectives.max() - objectives.min())
 
         marker = dict(
             color='rgb(127, 127, 127)',
             size=3,
-            symbol='circle',
+            symbol='circle-dot',
             line=dict(
                 color='rgb(204, 204, 204)',
                 width=1
             ),
-            opacity=1.0
+            opacity=0.8
         )
         marker.update(**kwargs)
 
@@ -307,7 +314,7 @@ class ScatterPlot(Plot):
             for column in objectives:
                 dimensions.append(
                     dict(range=[0, 1],
-                         label='O',
+                         label=self.axis_labels[column:column+1][0] if self.axis_labels[column:column+1] else None,
                          values=objectives[column])
                 )
 

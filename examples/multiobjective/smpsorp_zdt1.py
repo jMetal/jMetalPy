@@ -37,9 +37,6 @@ if __name__ == '__main__':
         leaders=archives_with_reference_points
     )
 
-    observer = VisualizerObserver()
-    algorithm.observable.register(observer=observer)
-
     progress_bar = ProgressBarObserver(step=swarm_size, maximum=25000)
     algorithm.observable.register(observer=progress_bar)
 
@@ -48,9 +45,9 @@ if __name__ == '__main__':
 
     # Plot frontier to file
     pareto_front = ScatterPlot(plot_title='SMPSORP-ZDT1', axis_labels=problem.obj_labels)
-    pareto_front.plot(front, reference_front=problem.reference_front, show=False)
-    pareto_front.add_data(points_to_solutions(reference_points), legend='reference points')
-    pareto_front.show()
+    pareto_front.plot(front, reference_front=problem.reference_front)
+    pareto_front.update(points_to_solutions(reference_points), legend='reference points')
+    pareto_front.save(filename='SMPSORP-ZDT1')
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())
