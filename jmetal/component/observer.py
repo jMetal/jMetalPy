@@ -3,7 +3,6 @@ import os
 
 from tqdm import tqdm
 
-from jmetal.core.problem import Problem
 from jmetal.util.graphic import ScatterStreaming
 from jmetal.core.observable import Observer
 from jmetal.util.solution_list_output import SolutionList
@@ -22,6 +21,11 @@ jMetalPyLogger = logging.getLogger('jMetalPy')
 class ProgressBarObserver(Observer):
 
     def __init__(self, step: int, maximum: int, desc: str= 'Progress') -> None:
+        """ Show a smart progress meter with the number of evaluations and computing time.
+
+        :param step: Initial counter value.
+        :param maximum: Number of expected iterations.
+        :param desc: Prefix for the progressbar. """
         self.progress_bar = tqdm(total=maximum, initial=step, ascii=True, desc=desc)
         self.progress = step
         self.step = step
@@ -38,6 +42,9 @@ class ProgressBarObserver(Observer):
 class BasicAlgorithmObserver(Observer):
 
     def __init__(self, frequency: float = 1.0) -> None:
+        """ Show the number of evaluations, best fitness and computing time.
+
+        :param frequency: Display frequency. """
         self.display_frequency = frequency
 
     def update(self, *args, **kwargs):
@@ -56,15 +63,18 @@ class BasicAlgorithmObserver(Observer):
 class WriteFrontToFileObserver(Observer):
 
     def __init__(self, output_directory) -> None:
+        """ Write function values of the front into files.
+
+        :param output_directory: Output directory. Each front will be saved on a file `FUN.x`. """
         self.counter = 0
         self.directory = output_directory
 
         if os.path.isdir(self.directory):
-            jMetalPyLogger.warning('Directory {0} exists. Removing contents.'.format(self.directory))
+            jMetalPyLogger.warning('Directory {} exists. Removing contents.'.format(self.directory))
             for file in os.listdir(self.directory):
                 os.remove('{0}/{1}'.format(self.directory, file))
         else:
-            jMetalPyLogger.warning('Directory {0} does not exist. Creating it.'.format(self.directory))
+            jMetalPyLogger.warning('Directory {} does not exist. Creating it.'.format(self.directory))
             os.mkdir(self.directory)
 
     def update(self, *args, **kwargs):
