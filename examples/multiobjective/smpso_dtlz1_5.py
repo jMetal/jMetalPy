@@ -2,7 +2,7 @@ from jmetal.algorithm import SMPSO
 from jmetal.problem import DTLZ1
 from jmetal.operator import Polynomial
 from jmetal.component import ProgressBarObserver, CrowdingDistanceArchive
-from jmetal.util import ScatterPlot, SolutionList
+from jmetal.util import FrontPlot, SolutionList
 
 
 if __name__ == '__main__':
@@ -23,13 +23,13 @@ if __name__ == '__main__':
     front = algorithm.get_result()
 
     # Plot frontier to file
-    pareto_front = ScatterPlot(plot_title='SMPSO-DTLZ1-5', axis_labels=problem.obj_labels)
+    pareto_front = FrontPlot(plot_title='SMPSO-DTLZ1-5', axis_labels=problem.obj_labels)
     pareto_front.plot(front, reference_front=problem.reference_front)
-    pareto_front.save(filename='SMPSO-DTLZ1-5')
+    pareto_front.to_html(filename='SMPSO-DTLZ1-5')
 
-    pareto_front = ScatterPlot(plot_title='SMPSO-DTLZ1-5-norm', axis_labels=problem.obj_labels)
+    pareto_front = FrontPlot(plot_title='SMPSO-DTLZ1-5-norm', axis_labels=problem.obj_labels)
     pareto_front.plot(front, reference_front=problem.reference_front, normalize=True)
-    pareto_front.save(filename='SMPSO-DTLZ1-5-norm')
+    pareto_front.to_html(filename='SMPSO-DTLZ1-5-norm')
 
     # Save variables to file
     SolutionList.print_function_values_to_file(front, 'FUN.SMPSO.DTLZ1-5')

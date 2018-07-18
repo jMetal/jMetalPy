@@ -1,12 +1,13 @@
 import logging
 from abc import ABCMeta
+from string import Template
 from typing import TypeVar, List
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from plotly import graph_objs as go
-from plotly.offline import plot, offline
-from pandas import DataFrame
+from plotly.offline import plot
+from pandas import DataFrame, merge
 
 jMetalPyLogger = logging.getLogger('jMetalPy')
 S = TypeVar('S')
@@ -193,14 +194,14 @@ class ScatterStreaming(Plot):
             return True
 
 
-class ScatterPlot(Plot):
+class FrontPlot(Plot):
 
     def __init__(self, plot_title: str, axis_labels: list = None):
         """ Creates a new :class:`ScatterPlot` instance. Suitable for problems with 2 or more objectives.
 
         :param plot_title: Title of the graph.
         :param axis_labels: List of axis labels. """
-        super(ScatterPlot, self).__init__(plot_title, axis_labels)
+        super(FrontPlot, self).__init__(plot_title, axis_labels)
 
         self.figure: go.Figure = None
         self.layout = None
@@ -221,7 +222,8 @@ class ScatterPlot(Plot):
             self.data.append(trace)
 
         objectives = self.get_objectives(front)
-        trace = self.__generate_trace(objectives=objectives, legend='front', normalize=normalize,
+        metadata = list(solution.__str__() for solution in front)
+        trace = self.__generate_trace(objectives=objectives, metadata=metadata, legend='front', normalize=normalize,
                                       symbol='diamond-open')
         self.data.append(trace)
 
@@ -245,13 +247,44 @@ class ScatterPlot(Plot):
 
         self.figure = go.Figure(data=self.data, layout=self.layout)
 
-    def save(self, filename: str = 'front', show: bool = False) -> None:
-        """ Save the graph. """
-        plot(self.figure, filename=filename + '.html', auto_open=show, show_link=False)
+    def to_html(self, filename: str='front') -> None:
+        """ Export the graph to an interactive HTML (solutions can be selected to show some metadata).
 
-    def export(self, include_plotlyjs: bool = False) -> str:
-        """ Export as a `div` for embedding the graph in an HTML file. """
-        return plot(self.figure, output_type='div', include_plotlyjs=include_plotlyjs)
+        :param filename: Output file name. """
+        html_string = '''
+        <html>
+            <head>
+                <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+                <script src="https://unpkg.com/sweetalert2@7.7.0/dist/sweetalert2.all.js"></script>
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+            </head>
+            <body>
+                ''' + self.__export(include_plotlyjs=False) + '''
+                <script>                
+                    var myPlot = document.querySelectorAll('div')[0];
+                    myPlot.on('plotly_click', function(data){
+                        var pts = '';
+                        
+                        for(var i=0; i < data.points.length; i++){
+                            pts = '(x, y) = ('+data.points[i].x +', '+ data.points[i].y.toPrecision(4)+')';
+                            
+                            cs = data.points[i].customdata
+                            if(cs == undefined) cs = "";
+                        }
+                                                
+                        swal({
+                          title: 'Closest solution clicked:',
+                          text: pts + cs,
+                          type: 'info',
+                          position: 'bottom-end'
+                        })
+                    });
+                </script>
+            </body>
+        </html>'''
+
+        with open(filename + '.html', 'w') as outf:
+            outf.write(html_string)
 
     def __initialize(self):
         """ Initialize the graph for the first time. """
@@ -271,10 +304,12 @@ class ScatterPlot(Plot):
                 x=0, y=1.05,
                 sizex=0.1, sizey=0.1,
                 xanchor="left", yanchor="bottom"
-            )]
+            )],
+            hovermode='closest'
         )
 
-    def __generate_trace(self, objectives: DataFrame, legend: str = '', normalize: bool=False, **kwargs):
+    def __generate_trace(self, objectives: DataFrame, metadata: list = None, legend: str = '', normalize: bool = False,
+                         **kwargs):
         number_of_objectives = objectives.shape[1]
 
         if normalize:
@@ -298,7 +333,8 @@ class ScatterPlot(Plot):
                 y=objectives[1],
                 mode='markers',
                 marker=marker,
-                name=legend
+                name=legend,
+                customdata=metadata
             )
         elif number_of_objectives == 3:
             trace = go.Scatter3d(
@@ -307,7 +343,8 @@ class ScatterPlot(Plot):
                 z=objectives[2],
                 mode='markers',
                 marker=marker,
-                name=legend
+                name=legend,
+                customdata=metadata
             )
         else:
             dimensions = list()
@@ -321,7 +358,15 @@ class ScatterPlot(Plot):
             trace = go.Parcoords(
                 line=dict(color='blue'),
                 dimensions=dimensions,
-                name=legend
+                name=legend,
             )
 
         return trace
+
+    def __export(self, include_plotlyjs: bool = False) -> str:
+        """ Export as a `div` for embedding the graph in an HTML file. """
+        return plot(self.figure, output_type='div', include_plotlyjs=include_plotlyjs, show_link=False)
+
+    def __save(self, filename: str = 'front', show: bool = False) -> None:
+        """ Save the graph. """
+        plot(self.figure, filename=filename + '.html', auto_open=show, show_link=False)

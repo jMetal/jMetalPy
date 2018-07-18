@@ -1,9 +1,9 @@
-from .graphic import ScatterPlot, ScatterStreaming
+from .graphic import FrontPlot, ScatterStreaming
 from .laboratory import experiment, display
 from .solution_list_output import SolutionList
 
 __all__ = [
-    'ScatterPlot', 'ScatterStreaming',
+    'FrontPlot', 'ScatterStreaming',
     'experiment', 'display',
     'SolutionList'
 ]

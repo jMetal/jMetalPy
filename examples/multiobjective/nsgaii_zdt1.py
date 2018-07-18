@@ -2,7 +2,7 @@ from jmetal.algorithm import NSGAII
 from jmetal.problem import ZDT1
 from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
 from jmetal.component import ProgressBarObserver, RankingAndCrowdingDistanceComparator
-from jmetal.util import ScatterPlot, SolutionList
+from jmetal.util import FrontPlot, SolutionList
 
 
 if __name__ == '__main__':
@@ -24,9 +24,9 @@ if __name__ == '__main__':
     front = algorithm.get_result()
 
     # Plot frontier to file
-    pareto_front = ScatterPlot(plot_title='NSGAII-ZDT1', axis_labels=problem.obj_labels)
+    pareto_front = FrontPlot(plot_title='NSGAII-ZDT1', axis_labels=problem.obj_labels)
     pareto_front.plot(front, reference_front=problem.reference_front)
-    pareto_front.save(filename='NSGAII-ZDT1')
+    pareto_front.to_html(filename='NSGAII-ZDT1')
 
     # Save variables to file
     SolutionList.print_function_values_to_file(front, 'FUN.NSGAII.ZDT1')
