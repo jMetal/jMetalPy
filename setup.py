@@ -25,14 +25,14 @@ setup(
         'Programming Language :: Python :: 3.6'
     ],
     install_requires=[
+        'tqdm',
         'numpy',
+        'pandas',
+        'plotly',
         'matplotlib==2.0.2',
-        'bokeh==0.12.16',
-        'tqdm'
     ],
     tests_require=[
         'mockito'
         'PyHamcrest',
-        'pytest'
     ]
 )
