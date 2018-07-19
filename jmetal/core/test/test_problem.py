@@ -10,9 +10,6 @@ class FloatProblemTestCases(unittest.TestCase):
         def evaluate(self, solution: FloatSolution) -> FloatSolution:
             pass
 
-    class DummyLambdaFloatProblem(FloatProblem):
-        pass
-
     def test_should_default_constructor_create_a_valid_problem(self) -> None:
         problem = self.DummyFloatProblem()
         problem.number_of_variables = 1
@@ -25,22 +22,6 @@ class FloatProblemTestCases(unittest.TestCase):
         self.assertEqual(0, problem.number_of_constraints)
         self.assertEqual([-1], problem.lower_bound)
         self.assertEqual([1], problem.upper_bound)
-
-    def test_should_default_constructor_create_a_valid_problem_with_lambda(self) -> None:
-        problem = self.DummyLambdaFloatProblem()
-        problem.number_of_variables = 1
-        problem.number_of_objectives = 2
-        problem.number_of_constraints = 0
-        problem.lower_bound = [-1.0]
-        problem.upper_bound = [1.0]
-        problem.obj_directions = [problem.MINIMIZE, problem.MAXIMIZE]
-        problem.obj_functions.append(lambda s: s.number_of_variables * 2)
-        problem.obj_functions.append(lambda s: s.number_of_variables * 3)
-
-        solution = FloatSolution(2, 2, 0, [], [])
-        problem.evaluate(solution)
-
-        self.assertEqual([4, -6], solution.objectives)
 
     def test_should_create_solution_create_a_valid_solution(self) -> None:
         problem = self.DummyFloatProblem()

@@ -259,7 +259,7 @@ class FrontPlot(Plot):
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
             </head>
             <body>
-                ''' + self.__export(include_plotlyjs=False) + '''
+                ''' + self.export(include_plotlyjs=False) + '''
                 <script>                
                     var myPlot = document.querySelectorAll('div')[0];
                     myPlot.on('plotly_click', function(data){
@@ -267,14 +267,13 @@ class FrontPlot(Plot):
                         
                         for(var i=0; i < data.points.length; i++){
                             pts = '(x, y) = ('+data.points[i].x +', '+ data.points[i].y.toPrecision(4)+')';
-                            
                             cs = data.points[i].customdata
                             if(cs == undefined) cs = "";
                         }
                                                 
                         swal({
                           title: 'Closest solution clicked:',
-                          text: pts + cs,
+                          text: cs,
                           type: 'info',
                           position: 'bottom-end'
                         })
@@ -286,12 +285,16 @@ class FrontPlot(Plot):
         with open(filename + '.html', 'w') as outf:
             outf.write(html_string)
 
+    def export(self, include_plotlyjs: bool = False) -> str:
+        """ Export as a `div` for embedding the graph in an HTML file. """
+        return plot(self.figure, output_type='div', include_plotlyjs=include_plotlyjs, show_link=False)
+
     def __initialize(self):
         """ Initialize the graph for the first time. """
         jMetalPyLogger.info('Generating graph')
 
         self.layout = go.Layout(
-            margin=dict(l=150, r=150, b=150, t=150),
+            margin=dict(l=80, r=80, b=80, t=150),
             title=self.plot_title,
             scene=dict(
                 xaxis=dict(title=self.axis_labels[0:1][0] if self.axis_labels[0:1] else None),
@@ -318,7 +321,7 @@ class FrontPlot(Plot):
         marker = dict(
             color='rgb(127, 127, 127)',
             size=3,
-            symbol='circle-dot',
+            symbol='x',
             line=dict(
                 color='rgb(204, 204, 204)',
                 width=1
@@ -362,10 +365,6 @@ class FrontPlot(Plot):
             )
 
         return trace
-
-    def __export(self, include_plotlyjs: bool = False) -> str:
-        """ Export as a `div` for embedding the graph in an HTML file. """
-        return plot(self.figure, output_type='div', include_plotlyjs=include_plotlyjs, show_link=False)
 
     def __save(self, filename: str = 'front', show: bool = False) -> None:
         """ Save the graph. """

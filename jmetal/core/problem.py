@@ -22,7 +22,6 @@ class Problem(Generic[S]):
         self.number_of_constraints: int = None
 
         self.obj_directions: List[int] = []
-        self.obj_functions: List = []
         self.obj_labels: List[str] = []
 
         self.reference_front: List[S] = None
@@ -71,30 +70,12 @@ class Problem(Generic[S]):
         :return: Solution. """
         pass
 
+    @abstractmethod
     def evaluate(self, solution: S) -> S:
         """ Evaluate a solution. For any new problem inheriting from :class:`Problem`, this method should be replaced.
-        Otherwise, the attributes `obj_functions`, `obj_functions` and `obj_labels` must be declared:
-
-        .. code-block:: python
-
-           problem = FloatProblem()
-
-           problem.obj_functions.append(lambda s: 1)
-           problem.obj_directions.append(Problem.MINIMIZE)
-           problem.obj_labels.append('Min')
-
-           problem.obj_functions.append(lambda s: 2)
-           problem.obj_directions.append(Problem.MAXIMIZE)
-           problem.obj_labels.append('Max')
 
         :return: Evaluated solution. """
-        for ith, fnc in enumerate(self.obj_functions):
-            if self.obj_directions[ith] == self.MAXIMIZE:
-                solution.objectives[ith] = -1.0 * fnc(solution)
-            else:
-                solution.objectives[ith] = fnc(solution)
-
-        return solution
+        pass
 
     def evaluate_constraints(self, solution: S):
         pass
@@ -106,15 +87,23 @@ class Problem(Generic[S]):
 class BinaryProblem(Problem[BinarySolution]):
     """ Class representing binary problems. """
 
+    __metaclass__ = ABCMeta
+
     def __init__(self, rf_path: str = None):
         super(BinaryProblem, self).__init__(reference_front_path=rf_path)
 
     def create_solution(self) -> BinarySolution:
         pass
 
+    @abstractmethod
+    def evaluate(self, solution: BinarySolution) -> BinarySolution:
+        pass
+
 
 class FloatProblem(Problem[FloatSolution]):
     """ Class representing float problems. """
+
+    __metaclass__ = ABCMeta
 
     def __init__(self, rf_path: str = None):
         super(FloatProblem, self).__init__(reference_front_path=rf_path)
@@ -129,9 +118,15 @@ class FloatProblem(Problem[FloatSolution]):
 
         return new_solution
 
+    @abstractmethod
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
+        pass
+
 
 class IntegerProblem(Problem[IntegerSolution]):
     """ Class representing integer problems. """
+
+    __metaclass__ = ABCMeta
 
     def __init__(self, rf_path: str = None):
         super(IntegerProblem, self).__init__(reference_front_path=rf_path)
@@ -150,3 +145,7 @@ class IntegerProblem(Problem[IntegerSolution]):
              for i in range(self.number_of_variables)]
 
         return new_solution
+
+    @abstractmethod
+    def evaluate(self, solution: IntegerSolution) -> IntegerSolution:
+        pass
