@@ -1,17 +1,15 @@
 language: python
-python: '3.6'
+python: "3.6"
 install: pip install -r requirements.txt
+# command to run tests
 script: python -m unittest discover
-branches:
-  only:
-  - master
-  - /.*/
+# deploy to pypi
 deploy:
-  provider: pypi
-  skip_cleanup: true
-  user: ajnebro
-  distributions: sdist bdist_wheel
-  password:
-    secure: "pJhh2ZwuDaMELZO7kmNGWa7sRaUi6s4By4GdBxf1hPjIBkB0GkOGHKxuivnWitAYLbmzpSoMcp2rHETcRiSqYTPlyovLA8A7YpY1HXIcNBrrmqnOpzc9bN3Ka90HMu0ySw2uYZgaQ2neFMm5CvD6W47IG0UUaFPYl68aZ8lEe8t7Tea7kFLU4UgXZxp3BXLTHF7xx7V29Ba5aKv2"
-  on:
-    branch: master
+ provider: pypi
+ skip_cleanup: true
+ user: ajnebro
+ distributions: sdist bdist_wheel
+ password:
+   secure: "pJhh2ZwuDaMELZO7kmNGWa7sRaUi6s4By4GdBxf1hPjIBkB0GkOGHKxuivnWitAYLbmzpSoMcp2rHETcRiSqYTPlyovLA8A7YpY1HXIcNBrrmqnOpzc9bN3Ka90HMu0ySw2uYZgaQ2neFMm5CvD6W47IG0UUaFPYl68aZ8lEe8t7Tea7kFLU4UgXZxp3BXLTHF7xx7V29Ba5aKv2"
+ on:
+   branch: master
