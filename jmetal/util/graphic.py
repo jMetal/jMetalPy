@@ -247,7 +247,7 @@ class FrontPlot(Plot):
 
         self.figure = go.Figure(data=self.data, layout=self.layout)
 
-    def to_html(self, filename: str='front') -> None:
+    def to_html(self, filename: str='front') -> str:
         """ Export the graph to an interactive HTML (solutions can be selected to show some metadata).
 
         :param filename: Output file name. """
@@ -285,8 +285,12 @@ class FrontPlot(Plot):
         with open(filename + '.html', 'w') as outf:
             outf.write(html_string)
 
+        return html_string
+
     def export(self, include_plotlyjs: bool = False) -> str:
-        """ Export as a `div` for embedding the graph in an HTML file. """
+        """ Export as a `div` for embedding the graph in an HTML file.
+
+        :param include_plotlyjs: If True, include plot.ly JS script (default to False). """
         return plot(self.figure, output_type='div', include_plotlyjs=include_plotlyjs, show_link=False)
 
     def __initialize(self):
