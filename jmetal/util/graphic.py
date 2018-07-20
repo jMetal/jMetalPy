@@ -33,6 +33,10 @@ class Plot:
 
     @staticmethod
     def get_objectives(front: List[S]) -> DataFrame:
+        """ Get objectives for each solution of the front.
+
+        :param front: List of solutions.
+        :return: Pandas dataframe with one column for each objective and one row for each solution. """
         if front is None:
             raise Exception('Front is none!')
 
@@ -251,7 +255,8 @@ class FrontPlot(Plot):
     def to_html(self, filename: str='front') -> str:
         """ Export the graph to an interactive HTML (solutions can be selected to show some metadata).
 
-        :param filename: Output file name. """
+        :param filename: Output file name.
+        :return: Script as string. """
         html_string = '''
         <html>
             <head>
@@ -292,7 +297,8 @@ class FrontPlot(Plot):
         """ Export as a `div` for embedding the graph in an HTML file.
 
         :param filename: Output file name (if desired, default to None).
-        :param include_plotlyjs: If True, include plot.ly JS script (default to False). """
+        :param include_plotlyjs: If True, include plot.ly JS script (default to False).
+        :return: Script as string. """
         script = plot(self.figure, output_type='div', include_plotlyjs=include_plotlyjs, show_link=False)
 
         if filename:

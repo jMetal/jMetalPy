@@ -12,14 +12,35 @@ jMetalPyLogger = logging.getLogger('jMetalPy')
 """
 
 
-def experiment(algorithm_list: list, metric_list: list, problem_list: list, g_params: dict=None, m_workers: int=3):
-    """ :param algorithm_list: List of algorithms as Tuple(Algorithm, dic() with parameters).
-    :param metric_list: List of metrics.
+def experiment(algorithm_list: list, metric_list: list, problem_list: list, g_params: dict = None, m_workers: int = 3):
+    """ Run an experiment. For example:
+
+    .. code-block:: python
+
+        algorithm = [
+        (NSGAII, {'population_size': 100, 'max_evaluations': 25000, 'mutation': NullMutation(), 'crossover': SBX(1.0, 20),
+                  'selection': BinaryTournamentSelection(RankingAndCrowdingDistanceComparator())}),
+        (NSGAII(population_size=100, max_evaluations=25000, mutation=NullMutation(), crossover=SBX(1.0, 20),
+                selection=BinaryTournamentSelection(RankingAndCrowdingDistanceComparator()), problem=ZDT1()), {}),
+        (SMPSO, {'swarm_size': 100, 'max_evaluations': 25000, 'mutation': NullMutation(),
+                 'leaders': CrowdingDistanceArchive(100)})
+        ]
+        metric = [HyperVolume(reference_point=[1, 1])]
+        problem = [(ZDT1, {}), (ZDT2, {})]
+
+        results = experiment(algorithm, metric, problem)
+
+    :param algorithm_list: List of algorithms as Tuple(Algorithm, dic() with parameters).
+    :param metric_list: List of metrics. Each metric should inherit from :py:class:`Metric` or, at least, contain a
+    method `compute`.
     :param problem_list:  List of problems as Tuple(Problem, dic() with parameters).
     :param g_params: Global parameters (will override those from algorithm_list).
     :param m_workers: Maximum number of workers for ProcessPoolExecutor.
     :return: Stats.
     """
+
+    if g_params is None:
+        g_params = {}
 
     with ProcessPoolExecutor(max_workers=m_workers) as pool:
         result = dict()
@@ -30,8 +51,8 @@ def experiment(algorithm_list: list, metric_list: list, problem_list: list, g_pa
                 problem = problem(**problem_params)
 
             for a_index, (algorithm, algorithm_params) in enumerate(algorithm_list):
-                if g_params:
-                    algorithm_params.update(g_params)
+                algorithm_params.update(g_params)
+
                 if isinstance(algorithm, type):
                     jMetalPyLogger.debug('Algorithm {} is not instantiated by default'.format(algorithm))
                     algorithm_list[a_index] = (algorithm(problem=problem, **algorithm_params), {})
