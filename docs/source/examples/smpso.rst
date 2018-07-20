@@ -44,7 +44,7 @@ SMPSO with standard settings
 
    pareto_front = ScatterPlot(plot_title='SMPSO-DTLZ1-5-norm', axis_labels=problem.obj_labels)
    pareto_front.plot(front, reference_front=problem.reference_front, normalize=True)
-   pareto_front.save(filename='SMPSO-DTLZ1-5-norm')
+   pareto_front.to_html(filename='SMPSO-DTLZ1-5-norm')
 
 .. raw:: html
 

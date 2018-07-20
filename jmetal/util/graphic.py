@@ -13,7 +13,7 @@ jMetalPyLogger = logging.getLogger('jMetalPy')
 S = TypeVar('S')
 
 """
-.. module:: Visualization
+.. module:: visualization
    :platform: Unix, Windows
    :synopsis: Classes for plotting fronts.
 
@@ -22,6 +22,7 @@ S = TypeVar('S')
 
 
 class Plot:
+
     __metaclass__ = ABCMeta
 
     def __init__(self, plot_title: str, axis_labels: list):
@@ -197,7 +198,7 @@ class ScatterStreaming(Plot):
 class FrontPlot(Plot):
 
     def __init__(self, plot_title: str, axis_labels: list = None):
-        """ Creates a new :class:`ScatterPlot` instance. Suitable for problems with 2 or more objectives.
+        """ Creates a new :class:`FrontPlot` instance. Suitable for problems with 2 or more objectives.
 
         :param plot_title: Title of the graph.
         :param axis_labels: List of axis labels. """
@@ -287,11 +288,18 @@ class FrontPlot(Plot):
 
         return html_string
 
-    def export(self, include_plotlyjs: bool = False) -> str:
+    def export(self, filename: str = '', include_plotlyjs: bool = False) -> str:
         """ Export as a `div` for embedding the graph in an HTML file.
 
+        :param filename: Output file name (if desired, default to None).
         :param include_plotlyjs: If True, include plot.ly JS script (default to False). """
-        return plot(self.figure, output_type='div', include_plotlyjs=include_plotlyjs, show_link=False)
+        script = plot(self.figure, output_type='div', include_plotlyjs=include_plotlyjs, show_link=False)
+
+        if filename:
+            with open(filename + '.html', 'w') as outf:
+                outf.write(script)
+
+        return script
 
     def __initialize(self):
         """ Initialize the graph for the first time. """
