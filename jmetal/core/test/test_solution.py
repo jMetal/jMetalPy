@@ -1,30 +1,7 @@
 import copy
 import unittest
 
-from jmetal.core.solution import BinarySolution, FloatSolution, Solution, IntegerSolution
-
-
-class SolutionTestCase(unittest.TestCase):
-
-    def test_should_constructor_create_a_non_null_object(self) -> None:
-        solution = Solution[int](3, 2)
-        self.assertIsNotNone(solution)
-
-    def test_should_constructor_create_a_valid_solution_of_ints(self) -> None:
-        solution = Solution[int](3, 2)
-        self.assertEqual(3, solution.number_of_variables)
-        self.assertEqual(2, solution.number_of_objectives)
-        self.assertEqual(0, solution.number_of_constraints)
-
-    def test_should_constructor_create_a_valid_solution_of_floats(self) -> None:
-        solution = Solution[float](3, 2, 5)
-        self.assertEqual(3, solution.number_of_variables)
-        self.assertEqual(2, solution.number_of_objectives)
-        self.assertEqual(5, solution.number_of_constraints)
-
-    def test_should_constructor_create_a_non_null_objective_list(self) -> None:
-        solution = Solution[float](3, 2)
-        self.assertIsNotNone(solution.objectives)
+from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
 
 
 class BinarySolutionTestCase(unittest.TestCase):
@@ -100,17 +77,17 @@ class IntegerSolutionTestCase(unittest.TestCase):
         self.assertIsNotNone(solution)
 
     def test_should_default_constructor_create_a_valid_solution(self) -> None:
-        solution = IntegerSolution(2, 3, 2, [0.0, 0.5], [1.0, 2.0])
+        solution = IntegerSolution(2, 3, 2, [0, 5], [1, 2])
         self.assertEqual(2, solution.number_of_variables)
         self.assertEqual(3, solution.number_of_objectives)
         self.assertEqual(2, solution.number_of_constraints)
         self.assertEqual(2, len(solution.variables))
         self.assertEqual(3, len(solution.objectives))
-        self.assertEqual([0.0, 0.5], solution.lower_bound)
-        self.assertEqual([1.0, 2.0], solution.upper_bound)
+        self.assertEqual([0, 5], solution.lower_bound)
+        self.assertEqual([1, 2], solution.upper_bound)
 
     def test_should_copy_work_properly(self) -> None:
-        solution = IntegerSolution(2, 3, 2, [0.0, 0.5], [1.0, 2.0])
+        solution = IntegerSolution(2, 3, 2, [0, 5], [1, 2])
         solution.variables = [1, 2]
         solution.objectives = [0.16, -2.34, 9.25]
         solution.attributes["attr"] = "value"

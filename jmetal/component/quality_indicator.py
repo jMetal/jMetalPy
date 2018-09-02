@@ -22,6 +22,9 @@ class Metric:
     def get_name(self) -> str:
         return self.__class__.__name__
 
+    @abstractmethod
+    def compute(self, front: List[Solution]):
+        pass
 
 class HyperVolume(Metric):
     """ Hypervolume computation based on variant 3 of the algorithm in the paper:

@@ -14,12 +14,15 @@ from jmetal.core.solution import BinarySolution, FloatSolution
 
 class OneMax(BinaryProblem):
 
-    def __init__(self, number_of_bits: int = 256):
-        super(OneMax, self).__init__()
+    def __init__(self, number_of_bits: int=256, rf_path: str=None):
+        super(OneMax, self).__init__(rf_path=rf_path)
         self.number_of_bits = number_of_bits
         self.number_of_objectives = 1
         self.number_of_variables = 1
         self.number_of_constraints = 0
+
+        self.obj_directions = [self.MINIMIZE]
+        self.obj_labels = ['f(x)']
 
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
         counter_of_ones = 0
@@ -43,11 +46,14 @@ class OneMax(BinaryProblem):
 
 class Sphere(FloatProblem):
 
-    def __init__(self, number_of_variables: int = 10):
-        super(Sphere, self).__init__()
+    def __init__(self, number_of_variables: int=10, rf_path: str=None):
+        super(Sphere, self).__init__(rf_path=rf_path)
         self.number_of_objectives = 1
         self.number_of_variables = number_of_variables
         self.number_of_constraints = 0
+
+        self.obj_directions = [self.MINIMIZE]
+        self.obj_labels = ['f(x)']
 
         self.lower_bound = [-5.12 for _ in range(number_of_variables)]
         self.upper_bound = [5.12 for _ in range(number_of_variables)]

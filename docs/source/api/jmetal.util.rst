@@ -1,14 +1,6 @@
 Utils
 ===================
 
-Front file
------------------------------
-
-.. automodule:: jmetal.util.front_file
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 Graphic
 --------------------------
 

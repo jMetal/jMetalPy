@@ -1,3 +1,4 @@
+from abc import ABCMeta
 from typing import List, Generic, TypeVar
 
 BitSet = List[bool]
@@ -7,10 +8,13 @@ S = TypeVar('S')
 class Solution(Generic[S]):
     """ Class representing solutions """
 
+    __metaclass__ = ABCMeta
+
     def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int = 0):
         self.number_of_objectives = number_of_objectives
         self.number_of_variables = number_of_variables
         self.number_of_constraints = number_of_constraints
+
         self.objectives = [0.0 for _ in range(self.number_of_objectives)]
         self.variables = [[] for _ in range(self.number_of_variables)]
         self.attributes = {}
@@ -28,7 +32,7 @@ class Solution(Generic[S]):
 class BinarySolution(Solution[BitSet]):
     """ Class representing float solutions """
 
-    def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints=0):
+    def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int=0):
         super(BinarySolution, self).__init__(number_of_variables, number_of_objectives, number_of_constraints)
 
     def __copy__(self):

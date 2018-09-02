@@ -12,7 +12,7 @@ logger.setLevel(logging.DEBUG)
 
 # create a file handler
 file_handler = logging.FileHandler('jmetalpy.log', delay=True)
-file_handler.setLevel(logging.INFO)
+file_handler.setLevel(logging.DEBUG)
 stream_handler = logging.StreamHandler()
 
 # create a logging format

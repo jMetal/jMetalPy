@@ -5,8 +5,8 @@ from jmetal.core.solution import FloatSolution, IntegerSolution
 
 
 class FloatProblemTestCases(unittest.TestCase):
-    class DummyFloatProblem(FloatProblem):
 
+    class DummyFloatProblem(FloatProblem):
         def evaluate(self, solution: FloatSolution) -> FloatSolution:
             pass
 
@@ -38,8 +38,8 @@ class FloatProblemTestCases(unittest.TestCase):
 
 
 class IntegerProblemTestCases(unittest.TestCase):
-    class DummyIntegerProblem(IntegerProblem):
 
+    class DummyIntegerProblem(IntegerProblem):
         def evaluate(self, solution: IntegerSolution) -> IntegerSolution:
             pass
 
