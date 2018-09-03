@@ -1,12 +1,24 @@
-Observers
+Experiments
 ========================
 
-It is possible to attach any number of observers to a jMetalPy's algorithm to retrieve information from each iteration.
-For example, a basic algorithm observer will print the number of evaluations, the objectives from the best individual in the population and the computing time:
+This is an example of an experimental study based on solving two problems of the ZDT family with two versions of the same algorithm (NSGAII).
+The hypervolume indicator is used for performance assessment.
 
 .. code-block:: python
 
-   basic = BasicAlgorithmObserver(frequency=1.0)
-   algorithm.observable.register(observer=basic)
+   # Configure the experiment
+   algorithm = [
+       (NSGAII, {'population_size': 100, 'max_evaluations': 25000, 'mutation': NullMutation(), 'crossover': SBX(1.0, 20),
+                 'selection': BinaryTournamentSelection(RankingAndCrowdingDistanceComparator())}),
+       (NSGAII, {'population_size': 100, 'max_evaluations': 25000, 'mutation': NullMutation(), 'crossover': SBX(0.3, 20),
+                 'selection': BinaryTournamentSelection(RankingAndCrowdingDistanceComparator())})
+   ]
+   problem = [(ZDT1, {}), (ZDT2, {})]
 
-A full list of all available observer can be found at :py:mod:`jmetal.component.observer` module.
+   study = Experiment(algorithm, problem, n_runs=3)
+   study.run()
+
+   # Compute metrics
+   metric = [HyperVolume(reference_point=[1, 1])]
+
+   study.compute_metrics(metric)

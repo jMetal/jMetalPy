@@ -258,8 +258,10 @@ class FrontPlot(Plot):
         :param filename: Output file name.
         :return: Script as string. """
         html_string = '''
+        <!DOCTYPE html>
         <html>
             <head>
+                <meta charset="utf-8"/>
                 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
                 <script src="https://unpkg.com/sweetalert2@7.7.0/dist/sweetalert2.all.js"></script>
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -274,15 +276,16 @@ class FrontPlot(Plot):
                         for(var i=0; i < data.points.length; i++){
                             pts = '(x, y) = ('+data.points[i].x +', '+ data.points[i].y.toPrecision(4)+')';
                             cs = data.points[i].customdata
-                            if(cs == undefined) cs = "";
                         }
-                                                
-                        swal({
-                          title: 'Closest solution clicked:',
-                          text: cs,
-                          type: 'info',
-                          position: 'bottom-end'
-                        })
+                        
+                        if(typeof cs !== "undefined"){
+                            swal({
+                              title: 'Closest solution clicked:',
+                              text: cs,
+                              type: 'info',
+                              position: 'bottom-end'
+                            })
+                        }
                     });
                 </script>
             </body>

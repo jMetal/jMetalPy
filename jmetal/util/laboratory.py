@@ -12,72 +12,75 @@ jMetalPyLogger = logging.getLogger('jMetalPy')
 """
 
 
-def experiment(algorithm_list: list, metric_list: list, problem_list: list, g_params: dict = None, m_workers: int = 3):
-    """ Run an experiment. For example:
+class Experiment:
 
-    .. code-block:: python
+    def __init__(self, algorithm_list: list, problem_list: list, n_runs: int = 1, m_workers: int = 1):
+        """ :param algorithm_list: List of algorithms as Tuple(Algorithm, dic() with parameters).
+        :param problem_list:  List of problems as Tuple(Problem, dic() with parameters).
+        :param m_workers: Maximum number of workers for ProcessPoolExecutor. """
+        self.algorithm_list = algorithm_list
+        self.problem_list = problem_list
 
-        algorithm = [
-        (NSGAII, {'population_size': 100, 'max_evaluations': 25000, 'mutation': NullMutation(), 'crossover': SBX(1.0, 20),
-                  'selection': BinaryTournamentSelection(RankingAndCrowdingDistanceComparator())}),
-        (NSGAII(population_size=100, max_evaluations=25000, mutation=NullMutation(), crossover=SBX(1.0, 20),
-                selection=BinaryTournamentSelection(RankingAndCrowdingDistanceComparator()), problem=ZDT1()), {}),
-        (SMPSO, {'swarm_size': 100, 'max_evaluations': 25000, 'mutation': NullMutation(),
-                 'leaders': CrowdingDistanceArchive(100)})
-        ]
-        metric = [HyperVolume(reference_point=[1, 1])]
-        problem = [(ZDT1, {}), (ZDT2, {})]
+        self.n_runs = n_runs
+        self.m_workers = m_workers
+        self.experiments_list = list()
 
-        results = experiment(algorithm, metric, problem)
+    def run(self) -> None:
+        """ Run the experiment. """
+        self.__configure_algorithm_list()
 
-    :param algorithm_list: List of algorithms as Tuple(Algorithm, dic() with parameters).
-    :param metric_list: List of metrics. Each metric should inherit from :py:class:`Metric` or, at least, contain a
-    method `compute`.
-    :param problem_list:  List of problems as Tuple(Problem, dic() with parameters).
-    :param g_params: Global parameters (will override those from algorithm_list).
-    :param m_workers: Maximum number of workers for ProcessPoolExecutor.
-    :return: Stats.
-    """
+        with ProcessPoolExecutor(max_workers=self.m_workers) as pool:
+            for algorithm, problem, run in self.experiments_list:
+                jMetalPyLogger.info('Running experiment: algorithm {0}, problem {1} (run {2})'.format(
+                    algorithm.get_name(), problem.get_name(), run)
+                )
 
-    if g_params is None:
-        g_params = {}
+                pool.submit(algorithm.run())
 
-    with ProcessPoolExecutor(max_workers=m_workers) as pool:
-        result = dict()
-
-        for p_index, (problem, problem_params) in enumerate(problem_list):
-            if isinstance(problem, type):
-                jMetalPyLogger.debug('Problem is not instantiated by default')
-                problem = problem(**problem_params)
-
-            for a_index, (algorithm, algorithm_params) in enumerate(algorithm_list):
-                algorithm_params.update(g_params)
-
-                if isinstance(algorithm, type):
-                    jMetalPyLogger.debug('Algorithm {} is not instantiated by default'.format(algorithm))
-                    algorithm_list[a_index] = (algorithm(problem=problem, **algorithm_params), {})
-
-                jMetalPyLogger.info('Running experiment: problem {0}, algorithm {1}'.format(problem, algorithm))
-
-                pool.submit(algorithm_list[a_index][0].run())
-
+            # Wait until all computation is done for this problem
             jMetalPyLogger.debug('Waiting')
+            pool.shutdown(wait=True)
 
-        # Wait until all computation is done for this problem
-        pool.shutdown(wait=True)
+    def compute_metrics(self, metric_list: list) -> None:
+        """ :param metric_list: List of metrics. Each metric should inherit from :py:class:`Metric` or, at least,
+        contain a method `compute`. """
+        results = dict()
 
-    for algorithm, _ in algorithm_list:
-        front = algorithm.get_result()
-        result[algorithm.get_name()] = {'front': front,
-                                        'problem': algorithm.problem.get_name(),
-                                        'time': algorithm.total_computing_time}
+        for algorithm, problem, run in self.experiments_list:
+            name = '{0}.{1}.{2}'.format(algorithm.__class__.__name__, problem.__class__.__name__, run)
 
-        for metric in metric_list:
-            result[algorithm.get_name()].setdefault('metric', dict()).update({metric.get_name(): metric.compute(front)})
+            counter = 0
+            while name in results:
+                counter += 1
+                name = '{0}.{1}.{2}({3})'.format(algorithm.__class__.__name__, problem.__class__.__name__, run, counter)
 
-    return result
+            results[name] = {}
 
+            for metric in metric_list:
+                results[name].setdefault('metric', dict()).update(
+                    {metric.get_name(): metric.compute(algorithm.get_result())}
+                )
 
-def display(table: dict):
-    for k, v in table.items():
-        print('{0}: {1}'.format(k, v['metric']))
+        print(results)
+
+    def export_to_file(self, base_directory: str = 'experiment', function_values_filename: str = 'FUN',
+                       variables_filename: str = 'VAR'):
+        for algorithm, problem, run in self.experiments_list:
+            # todo Save VAR and FUN to files
+            pass
+
+    def __configure_algorithm_list(self):
+        """ Configure the algorithm list, by making a triple of (algorithm, problem, run). """
+        for n_run in range(self.n_runs):
+
+            for p_index, (problem, problem_params) in enumerate(self.problem_list):
+                if isinstance(problem, type):
+                    jMetalPyLogger.debug('Problem {} is not instantiated by default'.format(problem))
+                    problem = problem(**problem_params)
+
+                for a_index, (algorithm, algorithm_params) in enumerate(self.algorithm_list):
+                    if isinstance(algorithm, type):
+                        jMetalPyLogger.debug('Algorithm {} is not instantiated by default'.format(algorithm))
+                        algorithm = algorithm(problem=problem, **algorithm_params)
+
+                    self.experiments_list.append((algorithm, problem, n_run))
