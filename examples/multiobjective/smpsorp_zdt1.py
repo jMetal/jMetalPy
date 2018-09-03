@@ -37,8 +37,10 @@ if __name__ == '__main__':
         leaders=archives_with_reference_points
     )
 
-    progress_bar = ProgressBarObserver(step=swarm_size, maximum=25000)
+    progress_bar = ProgressBarObserver(step=100, maximum=25000)
+    visualizer = VisualizerObserver()
     algorithm.observable.register(observer=progress_bar)
+    algorithm.observable.register(observer=visualizer)
 
     algorithm.run()
     front = algorithm.get_result()
