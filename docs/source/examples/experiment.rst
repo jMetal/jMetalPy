@@ -6,19 +6,38 @@ The hypervolume indicator is used for performance assessment.
 
 .. code-block:: python
 
-   # Configure the experiment
-   algorithm = [
-       (NSGAII, {'population_size': 100, 'max_evaluations': 25000, 'mutation': NullMutation(), 'crossover': SBX(1.0, 20),
-                 'selection': BinaryTournamentSelection(RankingAndCrowdingDistanceComparator())}),
-       (NSGAII, {'population_size': 100, 'max_evaluations': 25000, 'mutation': NullMutation(), 'crossover': SBX(0.3, 20),
-                 'selection': BinaryTournamentSelection(RankingAndCrowdingDistanceComparator())})
-   ]
-   problem = [(ZDT1, {}), (ZDT2, {})]
+   # Configure experiment
+   problem_list = [ZDT1(), ZDT2()]
+   algorithm_list = []
 
-   study = Experiment(algorithm, problem, n_runs=3)
+   for problem in problem_list:
+      algorithm_list.append(
+         ('NSGAII_A',
+          NSGAII(
+             problem=problem,
+             population_size=100,
+             max_evaluations=25000,
+             mutation=NullMutation(),
+             crossover=SBX(probability=1.0, distribution_index=20),
+             selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
+          ))
+      )
+      algorithm_list.append(
+         ('NSGAII_B',
+          NSGAII(
+             problem=problem,
+             population_size=100,
+             max_evaluations=25000,
+             mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
+             crossover=SBX(probability=1.0, distribution_index=20),
+             selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
+          ))
+      )
+
+   study = Experiment(algorithm_list, n_runs=2)
    study.run()
 
-   # Compute metrics
-   metric = [HyperVolume(reference_point=[1, 1])]
+   # Compute quality indicators
+   metric_list = [HyperVolume(reference_point=[1, 1])]
 
-   study.compute_metrics(metric)
+   print(study.compute_metrics(metric_list))
