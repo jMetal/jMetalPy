@@ -174,7 +174,7 @@ class HyperVolume(Metric):
         # build a list of tuples of (point[i], node)
         decorated = [(node.cargo[i], node) for node in nodes]
         # sort by this value
-        decorated.sort()
+        decorated.sort(key=lambda n: n[0])
         # write back to original list
         nodes[:] = [node for (_, node) in decorated]
 
