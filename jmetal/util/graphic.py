@@ -265,8 +265,18 @@ class FrontPlot(Plot):
                 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
                 <script src="https://unpkg.com/sweetalert2@7.7.0/dist/sweetalert2.all.js"></script>
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+                <style>
+                    .float{
+                      position:fixed;
+                      right:40px;
+                      bottom:40px;
+                    }
+                </style>
             </head>
             <body>
+                <a class="float" href="https://jmetalpy.readthedocs.io/en/latest/">
+                  <img src="https://raw.githubusercontent.com/jMetal/jMetalPy/master/docs/source/jmetalpy.png" height="20px"/>
+                </a>
                 ''' + self.export(include_plotlyjs=False) + '''
                 <script>                
                     var myPlot = document.querySelectorAll('div')[0];
@@ -287,6 +297,10 @@ class FrontPlot(Plot):
                             })
                         }
                     });
+                    
+                    window.onresize = function() {
+                       Plotly.Plots.resize(myPlot);
+                    };
                 </script>
             </body>
         </html>'''
@@ -316,19 +330,13 @@ class FrontPlot(Plot):
 
         self.layout = go.Layout(
             margin=dict(l=80, r=80, b=80, t=150),
+            height=800,
             title=self.plot_title,
             scene=dict(
                 xaxis=dict(title=self.axis_labels[0:1][0] if self.axis_labels[0:1] else None),
                 yaxis=dict(title=self.axis_labels[1:2][0] if self.axis_labels[1:2] else None),
                 zaxis=dict(title=self.axis_labels[2:3][0] if self.axis_labels[2:3] else None)
             ),
-            images=[dict(
-                source='https://raw.githubusercontent.com/jMetal/jMetalPy/master/docs/source/jmetalpy.png',
-                xref='paper', yref='paper',
-                x=0, y=1.05,
-                sizex=0.1, sizey=0.1,
-                xanchor="left", yanchor="bottom"
-            )],
             hovermode='closest'
         )
 
