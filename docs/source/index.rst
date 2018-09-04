@@ -34,26 +34,16 @@ Via Github:
     $ pip install -r requirements.txt
     $ python setup.py install
 
-Basic usage
------------
+Features
+------------------------
+The current release of jMetalPy (v0.5.1) contains the following components:
 
-.. code-block:: python
+* Algorithms: random search, NSGA-II, SMPSO, SMPSO/RP
+* Benchmark problems: ZDT1-6, DTLZ1-2, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2), constrained (Srinivas, Tanaka).
+* Encodings: real, binary
+* Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random)
+* Quality indicators: hypervolume
+* Density estimator: crowding distance
+* Graphics: Pareto front plotting (2 or more objectives)
+* Laboratory: Experiment class for performing studies.
 
-    problem = ZDT1()
-
-    algorithm = NSGAII(
-        problem=problem,
-        population_size=100,
-        max_evaluations=25000,
-        mutation=Polynomial(probability=1.0/problem.number_of_variables, distribution_index=20),
-        crossover=SBX(probability=1.0, distribution_index=20),
-        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
-    )
-
-    algorithm.run()
-    front = algorithm.get_result()
-
-    pareto_front = ScatterMatplotlib(plot_title='NSGAII for ZDT1', number_of_objectives=problem.number_of_objectives)
-    pareto_front.plot(front, reference=problem.get_reference_front(), output='NSGAII-ZDT1', show=False)
-
-.. image:: NSGAII-ZDT1.png

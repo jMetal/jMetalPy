@@ -7,12 +7,12 @@ except ImportError:
 
 setup(
     name='jmetalpy',
-    version='0.5.0',
+    version='0.5.1',
     description='JMetalPy. Python version of the jMetal framework',
     author='Antonio J. Nebro',
     author_email='antonio@lcc.uma.es',
-    maintainer='Antonio J. Nebro',
-    maintainer_email='antonio@lcc.uma.es',
+    maintainer='Antonio J. Nebro, Antonio Benítez-Hidalgo',
+    maintainer_email='antonio@lcc.uma.es, antonio.b@uma.es',
     license='MIT',
     url='https://github.com/jMetal/jMetalPy',
     long_description=open('README.md').read(),
@@ -25,14 +25,14 @@ setup(
         'Programming Language :: Python :: 3.6'
     ],
     install_requires=[
+        'tqdm',
         'numpy',
+        'pandas',
+        'plotly',
         'matplotlib==2.0.2',
-        'bokeh==0.12.16',
-        'tqdm'
     ],
     tests_require=[
         'mockito'
         'PyHamcrest',
-        'pytest'
     ]
 )

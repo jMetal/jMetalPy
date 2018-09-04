@@ -92,7 +92,8 @@ class SMPSO(ParticleSwarmOptimization):
 
         observable_data = {'evaluations': self.evaluations,
                            'computing time': self.get_current_computing_time(),
-                           'population': self.leaders.solution_list}
+                           'population': self.leaders.solution_list,
+                           'reference_front': self.problem.reference_front}
 
         self.observable.notify_all(**observable_data)
 
@@ -264,7 +265,8 @@ class SMPSORP(SMPSO):
 
         observable_data = {'evaluations': self.evaluations,
                            'computing time': self.get_current_computing_time(),
-                           'population': self.get_result() + reference_points}
+                           'population': self.get_result() + reference_points,
+                           'reference_front': self.problem.reference_front}
 
         self.observable.notify_all(**observable_data)
 

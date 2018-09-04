@@ -1,15 +1,16 @@
-Examples
-==============
+Getting started
+==================
 
 .. toctree::
    :maxdepth: 2
    :caption: Algorithms:
 
-   runner/nsgaii
-   runner/smpso
+   examples/nsgaii
+   examples/smpso
 
 .. toctree::
    :maxdepth: 2
    :caption: Further configuration:
 
-   runner/observer
+   examples/observer
+   examples/experiment

@@ -6,7 +6,7 @@ from jmetal.core.operator import Crossover
 from jmetal.core.solution import Solution, FloatSolution, BinarySolution
 
 """
-.. module:: crosover
+.. module:: crossover
    :platform: Unix, Windows
    :synopsis: Module implementing crossover operators.
 

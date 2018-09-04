@@ -134,7 +134,8 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
 
         observable_data = {'evaluations': self.evaluations,
                            'computing time': self.get_current_computing_time(),
-                           'population': self.population}
+                           'population': self.population,
+                           'reference_front': self.problem.reference_front}
 
         self.observable.notify_all(**observable_data)
 

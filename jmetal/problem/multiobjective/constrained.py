@@ -15,11 +15,14 @@ from jmetal.core.problem import FloatProblem
 class Srinivas(FloatProblem):
     """ Class representing problem Srinivas. """
 
-    def __init__(self):
-        super(Srinivas, self).__init__()
+    def __init__(self, rf_path: str=None):
+        super(Srinivas, self).__init__(rf_path=rf_path)
         self.number_of_objectives = 2
         self.number_of_variables = 2
         self.number_of_constraints = 2
+
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+        self.obj_labels = ['f(x)', 'f(y)']
 
         self.lower_bound = [-20.0 for _ in range(self.number_of_variables)]
         self.upper_bound = [20.0 for _ in range(self.number_of_variables)]
@@ -63,11 +66,14 @@ class Srinivas(FloatProblem):
 class Tanaka(FloatProblem):
     """ Class representing problem Tanaka """
 
-    def __init__(self):
-        super(Tanaka, self).__init__()
+    def __init__(self, rf_path: str=None):
+        super(Tanaka, self).__init__(rf_path=rf_path)
         self.number_of_objectives = 2
         self.number_of_variables = 2
         self.number_of_constraints = 2
+
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+        self.obj_labels = ['f(x)', 'f(y)']
 
         self.lower_bound = [10e-5 for _ in range(self.number_of_variables)]
         self.upper_bound = [pi for _ in range(self.number_of_variables)]

@@ -28,11 +28,11 @@ class HyperVolumeTestCases(unittest.TestCase):
         self.assertEqual(5.0, value)
 
     def test_should_hypervolume_return_the_correct_value_when_applied_to_the_ZDT1_reference_front(self):
-        problem = ZDT1()
+        problem = ZDT1(rf_path='resources/reference_front/ZDT1.pf')
         reference_point = [1, 1]
 
         hv = HyperVolume(reference_point)
-        value = hv.compute(problem.get_reference_front())
+        value = hv.compute(problem.reference_front)
 
         self.assertAlmostEqual(0.666, value, delta=0.001)
 

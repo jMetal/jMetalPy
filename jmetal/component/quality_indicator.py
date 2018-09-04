@@ -22,6 +22,9 @@ class Metric:
     def get_name(self) -> str:
         return self.__class__.__name__
 
+    @abstractmethod
+    def compute(self, front: List[Solution]):
+        pass
 
 class HyperVolume(Metric):
     """ Hypervolume computation based on variant 3 of the algorithm in the paper:
@@ -171,7 +174,7 @@ class HyperVolume(Metric):
         # build a list of tuples of (point[i], node)
         decorated = [(node.cargo[i], node) for node in nodes]
         # sort by this value
-        decorated.sort()
+        decorated.sort(key=lambda n: n[0])
         # write back to original list
         nodes[:] = [node for (_, node) in decorated]
 
