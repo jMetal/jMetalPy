@@ -43,5 +43,11 @@ The current release of jMetalPy (v0.5.1) contains the following components:
 * Graphics: Pareto front plotting (2 or more objectives).
 * Laboratory: Experiment class for performing studies.
 
+<p align="center">
+  <br/>
+  <img src=docs/source/visualization.png alt="Visualization">
+  <br/>
+</p>
+
 ## License
 This project is licensed under the terms of the MIT - see the [LICENSE](LICENSE) file for details.
