@@ -38,11 +38,11 @@ Features
 ------------------------
 The current release of jMetalPy (v0.5.1) contains the following components:
 
-* Algorithms: random search, NSGA-II, SMPSO, SMPSO/RP
+* Algorithms: random search, NSGA-II, SMPSO, SMPSO/RP.
 * Benchmark problems: ZDT1-6, DTLZ1-2, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2), constrained (Srinivas, Tanaka).
-* Encodings: real, binary
-* Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random)
-* Quality indicators: hypervolume
-* Density estimator: crowding distance
+* Encodings: real, binary.
+* Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random).
+* Quality indicators: hypervolume.
+* Density estimator: crowding distance.
 * Laboratory: Experiment class for performing studies.
 * Graphics: Pareto front plotting for problems with two or more objectives (as scatter plot/parallel coordinates).
