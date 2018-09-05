@@ -40,8 +40,8 @@ class Experiment:
             pool.shutdown(wait=True)
 
     def compute_metrics(self, metric_list: list) -> dict:
-        """ :param metric_list: List of metrics. Each metric should inherit from :py:class:`Metric` or, at least,
-        contain a method `compute`. """
+        """ :param metric_list: List
+        of metrics. Each metric should inherit from :py:class:`Metric` or, at least, contain a method `compute`. """
         results = dict()
 
         for name, algorithm, n_run in self.experiment_list:

@@ -13,5 +13,5 @@ Getting started
    :caption: Further configuration:
 
    examples/observer
-   examples/visualization
    examples/experiment
+   examples/visualization
