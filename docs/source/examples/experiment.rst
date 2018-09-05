@@ -34,7 +34,7 @@ The hypervolume indicator is used for performance assessment.
           ))
       )
 
-   study = Experiment(algorithm_list, n_runs=2)
+   study = Experiment(algorithm_list, n_runs=30)
    study.run()
 
    # Compute quality indicators

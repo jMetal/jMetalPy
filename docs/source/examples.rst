@@ -5,8 +5,8 @@ Getting started
    :maxdepth: 2
    :caption: Algorithms:
 
-   examples/nsgaii
-   examples/smpso
+   examples/ea
+   examples/pso
 
 .. toctree::
    :maxdepth: 2
@@ -14,3 +14,4 @@ Getting started
 
    examples/observer
    examples/experiment
+   examples/visualization

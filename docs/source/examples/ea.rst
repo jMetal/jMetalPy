@@ -1,4 +1,4 @@
-NSGA-II
+EA
 ========================
 
 Common imports for these examples:
