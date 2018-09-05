@@ -30,10 +30,10 @@ for mod_name in MOCK_MODULES:
 
 project = 'jMetalPy'
 copyright = '2018, Antonio J. Nebro'
-author = 'Antonio J. Nebro'
+author = 'Antonio J. Nebro, Antonio Benítez-Hidalgo'
 
 # The short X.Y version
-version = '0.5.0'
+version = '0.5.1'
 # The full version, including alpha/beta/rc tags
 release = ''
 

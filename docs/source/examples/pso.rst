@@ -1,4 +1,4 @@
-SMPSO
+PSO
 ========================
 
 Common imports for these examples:
@@ -42,7 +42,7 @@ SMPSO with standard settings
 
 .. code-block:: python
 
-   pareto_front = ScatterPlot(plot_title='SMPSO-DTLZ1-5-norm', axis_labels=problem.obj_labels)
+   pareto_front = FrontPlot(plot_title='SMPSO-DTLZ1-5-norm', axis_labels=problem.obj_labels)
    pareto_front.plot(front, reference_front=problem.reference_front, normalize=True)
    pareto_front.to_html(filename='SMPSO-DTLZ1-5-norm')
 
