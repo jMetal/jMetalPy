@@ -46,3 +46,7 @@ The current release of jMetalPy (v0.5.1) contains the following components:
 * Density estimator: crowding distance.
 * Laboratory: Experiment class for performing studies.
 * Graphics: Pareto front plotting for problems with two or more objectives (as scatter plot/parallel coordinates).
+
+.. figure:: visualization.png
+   :scale: 50 %
+   :alt: Visualization
