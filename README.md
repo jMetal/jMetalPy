@@ -46,7 +46,6 @@ The current release of jMetalPy (v0.5.1) contains the following components:
 <p align="center">
   <br/>
   <img src=docs/source/2D.gif width=450 alt="Scatter plot 2D">
-  <br/>
   <img src=docs/source/3D.gif width=450 alt="Scatter plot 3D">
   <br/>
   <img src=docs/source/p-c.gif width=450 alt="Parallel coordinates">
