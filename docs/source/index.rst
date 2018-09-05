@@ -44,6 +44,5 @@ The current release of jMetalPy (v0.5.1) contains the following components:
 * Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random)
 * Quality indicators: hypervolume
 * Density estimator: crowding distance
-* Graphics: Pareto front plotting (2 or more objectives)
 * Laboratory: Experiment class for performing studies.
-
+* Graphics: Pareto front plotting for problems with two or more objectives (as scatter plot/parallel coordinates).

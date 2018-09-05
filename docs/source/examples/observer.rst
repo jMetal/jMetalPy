@@ -27,7 +27,7 @@ A progress bar observer will print a `smart progress meter <https://github.com/t
 
    algorithm.run()
 
-.. code-block:: none
+.. code-block:: console
 
    $ Progress:  50%|#####     | 12500/25000 [13:59<14:12, 14.66it/s]
 

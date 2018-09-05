@@ -1,7 +1,7 @@
 Visualization
 ========================
 
-The :py:mod:`jmetal.util` module contains two classes useful for plotting solutions:
+The :py:mod:`jmetal.util.graphic` module contains two classes useful for plotting solutions:
 
 - :code:`FrontPlot` works for problems with any number of objectives:
 
@@ -20,13 +20,12 @@ The :py:mod:`jmetal.util` module contains two classes useful for plotting soluti
   The plot can also be exported as an standalone *div* container for embedding the graph in an HTML file:
 
   .. code-block:: python
-
      pareto_front.export(filename='output', include_plotlyjs=False)
 
 - :code:`ScatterStreaming` is intended to be used as an observer. The visualizer observer displays the front in real-time (although **it only works for problems with two and three objectives**; otherwise, an exception is raised):
 
   .. code-block:: python
-      from jmetal.component import VisualizerObserver
+     from jmetal.component import VisualizerObserver
 
-      visualizer = VisualizerObserver()
-      algorithm.observable.register(observer=visualizer)
+     visualizer = VisualizerObserver()
+     algorithm.observable.register(observer=visualizer)
