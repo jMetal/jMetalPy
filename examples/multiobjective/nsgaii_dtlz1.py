@@ -6,7 +6,7 @@ from jmetal.util import FrontPlot, SolutionList
 
 
 if __name__ == '__main__':
-    problem = DTLZ1(rf_path='../../resources/reference_front/DTLZ1.pf')
+    problem = DTLZ2(rf_path='../../resources/reference_front/DTLZ2.pf')
 
     algorithm = NSGAII(
         problem=problem,
