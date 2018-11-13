@@ -1,6 +1,8 @@
 from os.path import dirname, join
 import unittest
 
+from jmetal.core.problem import Problem
+
 from jmetal.core.solution import Solution
 from jmetal.problem import ZDT1
 from jmetal.component.quality_indicator import HyperVolume
@@ -28,7 +30,8 @@ class HyperVolumeTestCases(unittest.TestCase):
         self.assertEqual(5.0, value)
 
     def test_should_hypervolume_return_the_correct_value_when_applied_to_the_ZDT1_reference_front(self):
-        problem = ZDT1(rf_path='resources/reference_front/ZDT1.pf')
+        reference_front = Problem.read_front_from_file_as_solutions('resources/reference_front/ZDT1.pf')
+        problem = ZDT1(reference_front=reference_front)
         reference_point = [1, 1]
 
         hv = HyperVolume(reference_point)
