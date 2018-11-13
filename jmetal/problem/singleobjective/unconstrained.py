@@ -8,14 +8,14 @@ from jmetal.core.solution import BinarySolution, FloatSolution
    :platform: Unix, Windows
    :synopsis: Unconstrained test problems for single-objective optimization
 
-.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
 
 class OneMax(BinaryProblem):
 
-    def __init__(self, number_of_bits: int=256, rf_path: str=None):
-        super(OneMax, self).__init__(rf_path=rf_path)
+    def __init__(self, number_of_bits: int=256, reference_front=None):
+        super(OneMax, self).__init__(reference_front=reference_front)
         self.number_of_bits = number_of_bits
         self.number_of_objectives = 1
         self.number_of_variables = 1
@@ -46,8 +46,8 @@ class OneMax(BinaryProblem):
 
 class Sphere(FloatProblem):
 
-    def __init__(self, number_of_variables: int=10, rf_path: str=None):
-        super(Sphere, self).__init__(rf_path=rf_path)
+    def __init__(self, number_of_variables: int=10, reference_front=None):
+        super(Sphere, self).__init__(reference_front=reference_front)
         self.number_of_objectives = 1
         self.number_of_variables = number_of_variables
         self.number_of_constraints = 0
@@ -72,3 +72,46 @@ class Sphere(FloatProblem):
 
     def get_name(self) -> str:
         return 'Sphere'
+
+
+class SubsetSum(BinaryProblem):
+
+    def __init__(self, C: int, W: list):
+        """ The goal is to find a subset S of W whose elements sum is closest to (without exceeding) C.
+
+        :param C: Large integer.
+        :param W: Set of intergers."""
+        super(SubsetSum, self).__init__(reference_front=None)
+        self.C = -C
+        self.W = W
+
+        self.number_of_bits = len(self.W)
+        self.number_of_objectives = 1
+        self.number_of_variables = 1
+        self.number_of_constraints = 0
+
+        self.obj_directions = [self.MAXIMIZE]
+        self.obj_labels = ['f(x)']
+
+    def evaluate(self, solution: BinarySolution) -> BinarySolution:
+        for index, bits in enumerate(solution.variables[0]):
+            if bits:
+                solution.objectives[0] += -self.W[index]
+
+        if solution.objectives[0] < self.C:
+            solution.objectives[0] = self.C - solution.objectives[0] * 0.1
+
+            if solution.objectives[0] > 0.0:
+                solution.objectives[0] = 0.0
+
+        return solution
+
+    def create_solution(self) -> BinarySolution:
+        new_solution = BinarySolution(number_of_variables=1, number_of_objectives=1)
+        new_solution.variables[0] = \
+            [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
+
+        return new_solution
+
+    def get_name(self) -> str:
+        return 'Subset Sum'

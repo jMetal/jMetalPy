@@ -12,7 +12,7 @@ if __name__ == '__main__':
         problem=problem,
         swarm_size=100,
         max_evaluations=25000,
-        mutation=Polynomial(probability=1.0/problem.number_of_variables, distribution_index=20),
+        mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
         leaders=CrowdingDistanceArchive(100)
     )
 

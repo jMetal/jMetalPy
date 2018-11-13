@@ -1,7 +1,7 @@
 from copy import copy
 from typing import TypeVar, List
 
-from jmetal.component.evaluator import Evaluator
+from jmetal.component.evaluator import Evaluator, SequentialEvaluator
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
@@ -112,14 +112,18 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
     def __init__(self,
                  problem: Problem[S],
                  population_size: int,
+                 mating_pool_size: int,
+                 offspring_population_size: int,
                  max_evaluations: int,
                  mutation: Mutation[S],
                  crossover: Crossover[S, S],
                  selection: Selection[List[S], S],
-                 evaluator: Evaluator[S]):
+                 evaluator: Evaluator[S] = SequentialEvaluator[S]()):
         super(GenerationalGeneticAlgorithm, self).__init__()
         self.problem = problem
         self.population_size = population_size
+        self.mating_pool_size = mating_pool_size
+        self.offspring_population_size = offspring_population_size
         self.max_evaluations = max_evaluations
         self.mutation_operator = mutation
         self.crossover_operator = crossover
@@ -130,7 +134,7 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         self.evaluations = self.population_size
 
     def update_progress(self):
-        self.evaluations += self.population_size
+        self.evaluations += self.offspring_population_size
 
         observable_data = {'evaluations': self.evaluations,
                            'computing time': self.get_current_computing_time(),
@@ -156,7 +160,7 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
     def selection(self, population: List[S]):
         mating_population = []
 
-        for i in range(self.population_size):
+        for i in range(self.mating_pool_size):
             solution = self.selection_operator.execute(self.population)
             mating_population.append(solution)
 
@@ -167,7 +171,7 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         self.__check_number_of_parents(number_of_parents_to_combine)
 
         offspring_population = []
-        for i in range(0, self.population_size, number_of_parents_to_combine):
+        for i in range(0, self.offspring_population_size, number_of_parents_to_combine):
             parents = []
             for j in range(number_of_parents_to_combine):
                 parents.append(population[i + j])
@@ -204,3 +208,27 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
 
     def get_name(self) -> str:
         return 'Generational Genetic Algorithm'
+
+
+class SteadyStateGeneticAlgorithm(GenerationalGeneticAlgorithm[S, R]):
+
+    def __init__(self,
+                 problem: Problem[S],
+                 population_size: int,
+                 max_evaluations: int,
+                 mutation: Mutation[S],
+                 crossover: Crossover[S, S],
+                 selection: Selection[List[S], S],
+                 evaluator: Evaluator[S] = SequentialEvaluator[S]()):
+        super(SteadyStateGeneticAlgorithm, self).__init__(problem=problem,
+                                                          population_size=population_size,
+                                                          mating_pool_size=2,
+                                                          offspring_population_size=1,
+                                                          max_evaluations=max_evaluations,
+                                                          mutation=mutation,
+                                                          crossover=crossover,
+                                                          selection=selection,
+                                                          evaluator=evaluator)
+
+    def get_name(self) -> str:
+        return 'Steady State Genetic Algorithm'

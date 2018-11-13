@@ -20,15 +20,15 @@ def main() -> None:
     )
 
     algorithm.start()
-    print("Algorithm (running as a thread): " + algorithm.get_name())
-    print("Problem: " + problem.get_name())
+    print('Algorithm (running as a thread): ' + algorithm.get_name())
+    print('Problem: ' + problem.get_name())
     algorithm.join()
 
     result = algorithm.get_result()
 
-    print("Solution: " + str(result.variables))
-    print("Fitness:  " + str(result.objectives[0]))
-    print("Computing time: " + str(algorithm.total_computing_time))
+    print('Solution: ' + str(result.variables))
+    print('Fitness:  ' + str(result.objectives[0]))
+    print('Computing time: ' + str(algorithm.total_computing_time))
 
 
 if __name__ == '__main__':

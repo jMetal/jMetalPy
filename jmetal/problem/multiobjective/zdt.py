@@ -19,11 +19,11 @@ class ZDT1(FloatProblem):
     .. note:: Continuous problem having a convex Pareto front
     """
 
-    def __init__(self, number_of_variables: int=30, rf_path: str=None):
+    def __init__(self, number_of_variables: int=30, reference_front=None):
         """ :param number_of_variables: Number of decision variables of the problem.
-        :param rf_path: Path to the reference front file (if any). Default to None.
+        :param reference_front: List of solutions with the reference front. Default to None.
         """
-        super(ZDT1, self).__init__(rf_path=rf_path)
+        super(ZDT1, self).__init__(reference_front=reference_front)
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -59,45 +59,12 @@ class ZDT1(FloatProblem):
         return 'ZDT1'
 
 
-class ZDT2(FloatProblem):
+class ZDT2(ZDT1):
     """ Problem ZDT2.
 
     .. note:: Bi-objective unconstrained problem. The default number of variables is 30.
     .. note:: Continuous problem having a non-convex Pareto front
     """
-
-    def __init__(self, number_of_variables: int = 30, rf_path: str=None):
-        """ :param number_of_variables: Number of decision variables of the problem.
-        :param rf_path: Path to the reference front file (if any). Default to None.
-        """
-        super(ZDT2, self).__init__(rf_path=rf_path)
-        self.number_of_variables = number_of_variables
-        self.number_of_objectives = 2
-        self.number_of_constraints = 0
-
-        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f(x)', 'f(y)']
-
-        self.lower_bound = self.number_of_variables * [0.0]
-        self.upper_bound = self.number_of_variables * [1.0]
-
-    def evaluate(self, solution: FloatSolution) -> FloatSolution:
-        g = self.__eval_g(solution)
-        h = self.__eval_h(solution.variables[0], g)
-
-        solution.objectives[0] = solution.variables[0]
-        solution.objectives[1] = h * g
-
-        return solution
-
-    def __eval_g(self, solution: FloatSolution):
-        g = sum(solution.variables) - solution.variables[0]
-
-        constant = 9.0 / (solution.number_of_variables - 1)
-        g = constant * g
-        g = g + 1.0
-
-        return g
 
     def __eval_h(self, f: float, g: float) -> float:
         return 1.0 - pow(f / g, 2.0)
@@ -106,45 +73,12 @@ class ZDT2(FloatProblem):
         return 'ZDT2'
 
 
-class ZDT3(FloatProblem):
+class ZDT3(ZDT1):
     """ Problem ZDT3.
 
     .. note:: Bi-objective unconstrained problem. The default number of variables is 30.
     .. note:: Continuous problem having a partitioned Pareto front
     """
-
-    def __init__(self, number_of_variables: int = 30, rf_path: str=None):
-        """ :param number_of_variables: Number of decision variables of the problem.
-        :param rf_path: Path to the reference front file (if any). Default to None.
-        """
-        super(ZDT3, self).__init__(rf_path=rf_path)
-        self.number_of_variables = number_of_variables
-        self.number_of_objectives = 2
-        self.number_of_constraints = 0
-
-        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f(x)', 'f(y)']
-
-        self.lower_bound = self.number_of_variables * [0.0]
-        self.upper_bound = self.number_of_variables * [1.0]
-
-    def evaluate(self, solution: FloatSolution) -> FloatSolution:
-        g = self.__eval_g(solution)
-        h = self.__eval_h(solution.variables[0], g)
-
-        solution.objectives[0] = solution.variables[0]
-        solution.objectives[1] = h * g
-
-        return solution
-
-    def __eval_g(self, solution: FloatSolution):
-        g = sum(solution.variables) - solution.variables[0]
-
-        constant = 9.0 / (solution.number_of_variables - 1)
-        g = constant * g
-        g = g + 1.0
-        return g
-
     def __eval_h(self, f: float, g: float) -> float:
         return 1.0 - sqrt(f / g) - (f / g) * sin(10.0 * f * pi)
 
@@ -152,38 +86,22 @@ class ZDT3(FloatProblem):
         return 'ZDT3'
 
 
-class ZDT4(FloatProblem):
+class ZDT4(ZDT1):
     """ Problem ZDT4.
 
     .. note:: Bi-objective unconstrained problem. The default number of variables is 10.
     .. note:: Continuous multi-modal problem having a convex Pareto front
     """
 
-    def __init__(self, number_of_variables: int = 10, rf_path: str=None):
+    def __init__(self, number_of_variables: int=10, reference_front=None):
         """ :param number_of_variables: Number of decision variables of the problem.
-        :param rf_path: Path to the reference front file (if any). Default to None.
+        :param reference_front: List of solutions with the reference front. Default to None.
         """
-        super(ZDT4, self).__init__(rf_path=rf_path)
-        self.number_of_variables = number_of_variables
-        self.number_of_objectives = 2
-        self.number_of_constraints = 0
-
-        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f(x)', 'f(y)']
-
+        super(ZDT4, self).__init__(number_of_variables=number_of_variables, reference_front=reference_front)
         self.lower_bound = self.number_of_variables * [-5.0]
         self.upper_bound = self.number_of_variables * [5.0]
         self.lower_bound[0] = 0.0
         self.upper_bound[0] = 1.0
-
-    def evaluate(self, solution: FloatSolution) -> FloatSolution:
-        g = self.__eval_g(solution)
-        h = self.__eval_h(solution.variables[0], g)
-
-        solution.objectives[0] = solution.variables[0]
-        solution.objectives[1] = h * g
-
-        return solution
 
     def __eval_g(self, solution: FloatSolution):
         g = 0.0
@@ -202,36 +120,18 @@ class ZDT4(FloatProblem):
         return 'ZDT4'
 
 
-class ZDT6(FloatProblem):
+class ZDT6(ZDT1):
     """ Problem ZDT6.
 
     .. note:: Bi-objective unconstrained problem. The default number of variables is 10.
     .. note:: Continuous problem having a non-convex Pareto front
     """
 
-    def __init__(self, number_of_variables: int = 10, rf_path: str=None):
+    def __init__(self, number_of_variables: int=10, reference_front=None):
         """ :param number_of_variables: Number of decision variables of the problem.
-        :param rf_path: Path to the reference front file (if any). Default to None.
+        :param reference_front: List of solutions with the reference front. Default to None.
         """
-        super(ZDT6, self).__init__(rf_path=rf_path)
-        self.number_of_variables = number_of_variables
-        self.number_of_objectives = 2
-        self.number_of_constraints = 0
-
-        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f(x)', 'f(y)']
-
-        self.lower_bound = self.number_of_variables * [0.0]
-        self.upper_bound = self.number_of_variables * [1.0]
-
-    def evaluate(self, solution: FloatSolution) -> FloatSolution:
-        g = self.__eval_g(solution)
-        h = self.__eval_h(solution.variables[0], g)
-
-        solution.objectives[0] = solution.variables[0]
-        solution.objectives[1] = h * g
-
-        return solution
+        super(ZDT6, self).__init__(number_of_variables=number_of_variables, reference_front=reference_front)
 
     def __eval_g(self, solution: FloatSolution):
         g = sum(solution.variables) - solution.variables[0]

@@ -1,16 +1,15 @@
 import pandas as pd
 
 from jmetal.algorithm import NSGAII, SMPSO
-from jmetal.component.quality_indicator import HyperVolume2
 from jmetal.operator import NullMutation, SBX, BinaryTournamentSelection, Polynomial
-from jmetal.problem import ZDT1, ZDT6
+from jmetal.problem import ZDT1, ZDT2
 from jmetal.component import CrowdingDistanceArchive, RankingAndCrowdingDistanceComparator, HyperVolume
 from jmetal.util.laboratory import Experiment
 
 
 # Configure experiment
-problem_list = [ZDT1(), ZDT6()]
-metric_list = [HyperVolume(reference_point=[1, 1]), HyperVolume2(reference_point=[1, 1])]
+problem_list = [ZDT1(), ZDT2()]
+metric_list = [HyperVolume(reference_point=[1, 1])]
 algorithm_list = []
 
 for problem in problem_list:
@@ -59,8 +58,8 @@ median_results = results.groupby(['problem', 'metric']).median()
 
 print(mean_results)
 print(median_results)
-# print(results.groupby(['problem', 'metric']).min())
-# print(results.groupby(['problem', 'metric']).max())
+print(results.groupby(['problem', 'metric']).min())
+print(results.groupby(['problem', 'metric']).max())
 print(mean_results.xs('Hypervolume', level='metric'))
 
 print(study.convert_to_latex(mean_results.xs('Hypervolume', level='metric')))

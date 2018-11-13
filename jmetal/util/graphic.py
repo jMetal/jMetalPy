@@ -1,13 +1,12 @@
 import logging
 from abc import ABCMeta
-from string import Template
 from typing import TypeVar, List
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from plotly import graph_objs as go
 from plotly.offline import plot
-from pandas import DataFrame, merge
+from pandas import DataFrame
 
 jMetalPyLogger = logging.getLogger('jMetalPy')
 S = TypeVar('S')
@@ -22,7 +21,6 @@ S = TypeVar('S')
 
 
 class Plot:
-
     __metaclass__ = ABCMeta
 
     def __init__(self, plot_title: str, axis_labels: list):
@@ -252,7 +250,7 @@ class FrontPlot(Plot):
 
         self.figure = go.Figure(data=self.data, layout=self.layout)
 
-    def to_html(self, filename: str='front') -> str:
+    def to_html(self, filename: str = 'front') -> str:
         """ Export the graph to an interactive HTML (solutions can be selected to show some metadata).
 
         :param filename: Output file name.
@@ -383,7 +381,7 @@ class FrontPlot(Plot):
             for column in objectives:
                 dimensions.append(
                     dict(range=[0, 1],
-                         label=self.axis_labels[column:column+1][0] if self.axis_labels[column:column+1] else None,
+                         label=self.axis_labels[column:column + 1][0] if self.axis_labels[column:column + 1] else None,
                          values=objectives[column])
                 )
 

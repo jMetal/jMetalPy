@@ -109,10 +109,10 @@ class SBX(Crossover[FloatSolution, FloatSolution]):
         return 'SBX crossover'
 
 
-class SP(Crossover[BinarySolution, BinarySolution]):
+class SPX(Crossover[BinarySolution, BinarySolution]):
 
     def __init__(self, probability: float):
-        super(SP, self).__init__(probability=probability)
+        super(SPX, self).__init__(probability=probability)
 
     def execute(self, parents: List[BinarySolution]) -> List[BinarySolution]:
         if len(parents) != 2:

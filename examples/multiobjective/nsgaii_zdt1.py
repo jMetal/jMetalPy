@@ -1,3 +1,5 @@
+from jmetal.core.problem import Problem
+
 from jmetal.algorithm import NSGAII
 from jmetal.problem import ZDT1
 from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
@@ -6,7 +8,8 @@ from jmetal.util import FrontPlot, SolutionList
 
 
 if __name__ == '__main__':
-    problem = ZDT1(rf_path='../../resources/reference_front/ZDT1.pf')
+    reference_front = Problem.read_front_from_file_as_solutions('../../resources/reference_front/ZDT1.pf')
+    problem = ZDT1(reference_front=reference_front)
 
     algorithm = NSGAII(
         problem=problem,

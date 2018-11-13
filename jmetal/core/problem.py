@@ -16,7 +16,7 @@ class Problem(Generic[S]):
     MINIMIZE = -1
     MAXIMIZE = 1
 
-    def __init__(self, reference_front_path: str):
+    def __init__(self, reference_front: List[S]):
         self.number_of_variables: int = None
         self.number_of_objectives: int = None
         self.number_of_constraints: int = None
@@ -24,9 +24,7 @@ class Problem(Generic[S]):
         self.obj_directions: List[int] = []
         self.obj_labels: List[str] = []
 
-        self.reference_front: List[S] = None
-        if reference_front_path:
-            self.reference_front = self.read_front_from_file_as_solutions(reference_front_path)
+        self.reference_front: List[S] = reference_front
 
     @staticmethod
     def read_front_from_file(file_path: str) -> List[List[float]]:
@@ -72,7 +70,8 @@ class Problem(Generic[S]):
 
     @abstractmethod
     def evaluate(self, solution: S) -> S:
-        """ Evaluate a solution. For any new problem inheriting from :class:`Problem`, this method should be replaced.
+        """ Evaluate a solution. For any new problem inheriting from :class:`Problem`, this method should be
+        replaced. Note that this framework ASSUME minimization, thus solutions should be evaluated in consequence.
 
         :return: Evaluated solution. """
         pass
@@ -89,8 +88,8 @@ class BinaryProblem(Problem[BinarySolution]):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, rf_path: str = None):
-        super(BinaryProblem, self).__init__(reference_front_path=rf_path)
+    def __init__(self, reference_front: List[S]):
+        super(BinaryProblem, self).__init__(reference_front=reference_front)
 
     def create_solution(self) -> BinarySolution:
         pass
@@ -105,8 +104,8 @@ class FloatProblem(Problem[FloatSolution]):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, rf_path: str = None):
-        super(FloatProblem, self).__init__(reference_front_path=rf_path)
+    def __init__(self, reference_front: List[S]):
+        super(FloatProblem, self).__init__(reference_front=reference_front)
         self.lower_bound = None
         self.upper_bound = None
 
@@ -128,8 +127,8 @@ class IntegerProblem(Problem[IntegerSolution]):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, rf_path: str = None):
-        super(IntegerProblem, self).__init__(reference_front_path=rf_path)
+    def __init__(self, reference_front: List[S]):
+        super(IntegerProblem, self).__init__(reference_front=reference_front)
         self.lower_bound = None
         self.upper_bound = None
 

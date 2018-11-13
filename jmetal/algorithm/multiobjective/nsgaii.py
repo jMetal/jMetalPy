@@ -47,13 +47,15 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
         :param evaluator: An evaluator object to evaluate the individuals of the population.
         """
         super(NSGAII, self).__init__(
-            problem,
-            population_size,
-            max_evaluations,
-            mutation,
-            crossover,
-            selection,
-            evaluator)
+            problem=problem,
+            population_size=population_size,
+            mating_pool_size=population_size,
+            offspring_population_size=population_size,
+            max_evaluations=max_evaluations,
+            mutation=mutation,
+            crossover=crossover,
+            selection=selection,
+            evaluator=evaluator)
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
         """ This method joins the current and offspring populations to produce the population of the next generation

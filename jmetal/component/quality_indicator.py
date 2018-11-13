@@ -18,6 +18,9 @@ class Metric:
 
     __metaclass__ = ABCMeta
 
+    def __init__(self, is_minimization: bool):
+        self.is_minimization = is_minimization
+
     @abstractmethod
     def get_name(self) -> str:
         return self.__class__.__name__
@@ -25,6 +28,7 @@ class Metric:
     @abstractmethod
     def compute(self, front: List[Solution]):
         pass
+
 
 class HyperVolume(Metric):
     """ Hypervolume computation based on variant 3 of the algorithm in the paper:
@@ -38,6 +42,7 @@ class HyperVolume(Metric):
 
     def __init__(self, reference_point: list):
         """Constructor."""
+        super().__init__(is_minimization=False)
         self.referencePoint = reference_point
         self.list: MultiList = []
 
