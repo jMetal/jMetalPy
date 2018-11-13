@@ -7,6 +7,10 @@ from jmetal.core.solution import FloatSolution, IntegerSolution
 class FloatProblemTestCases(unittest.TestCase):
 
     class DummyFloatProblem(FloatProblem):
+
+        def __init__(self):
+            super(FloatProblem, self).__init__(reference_front=None)
+
         def evaluate(self, solution: FloatSolution) -> FloatSolution:
             pass
 
@@ -40,6 +44,10 @@ class FloatProblemTestCases(unittest.TestCase):
 class IntegerProblemTestCases(unittest.TestCase):
 
     class DummyIntegerProblem(IntegerProblem):
+
+        def __init__(self):
+            super(IntegerProblem, self).__init__(reference_front=None)
+
         def evaluate(self, solution: IntegerSolution) -> IntegerSolution:
             pass
 
