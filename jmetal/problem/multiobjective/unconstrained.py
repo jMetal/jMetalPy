@@ -1,7 +1,8 @@
+import random
 from math import sqrt, exp, pow, sin
 
-from jmetal.core.problem import FloatProblem
-from jmetal.core.solution import FloatSolution
+from jmetal.core.problem import FloatProblem, BinaryProblem
+from jmetal.core.solution import FloatSolution, BinarySolution
 
 """
 .. module:: constrained
@@ -15,7 +16,7 @@ from jmetal.core.solution import FloatSolution
 class Kursawe(FloatProblem):
     """ Class representing problem Kursawe. """
 
-    def __init__(self, number_of_variables: int=3, reference_front=None):
+    def __init__(self, number_of_variables: int = 3, reference_front=None):
         super(Kursawe, self).__init__(reference_front=reference_front)
         self.number_of_objectives = 2
         self.number_of_variables = number_of_variables
@@ -138,3 +139,55 @@ class Viennet2(FloatProblem):
 
     def get_name(self):
         return 'Viennet2'
+
+
+class SubsetSum(BinaryProblem):
+
+    def __init__(self, C: int, W: list):
+        """ The goal is to find a subset S of W whose elements sum is closest to (without exceeding) C.
+
+        :param C: Large integer.
+        :param W: Set of intergers."""
+        super(SubsetSum, self).__init__(reference_front=None)
+        self.C = C
+        self.W = W
+
+        self.number_of_bits = len(self.W)
+        self.number_of_objectives = 2
+        self.number_of_variables = 1
+        self.number_of_constraints = 0
+
+        self.obj_directions = [self.MAXIMIZE, self.MINIMIZE]
+        self.obj_labels = ['Sum', 'No. of Objects']
+
+    def evaluate(self, solution: BinarySolution) -> BinarySolution:
+
+        total_sum = 0.0
+        number_of_objects = 0
+
+        for index, bits in enumerate(solution.variables[0]):
+            if bits:
+                total_sum += self.W[index]
+                number_of_objects += 1
+
+        if total_sum > self.C:
+            total_sum = self.C - total_sum * 0.1
+
+            if total_sum < 0.0:
+                total_sum = 0.0
+
+        solution.objectives[0] = -1.0 * total_sum
+        solution.objectives[1] = number_of_objects
+
+        return solution
+
+    def create_solution(self) -> BinarySolution:
+        new_solution = BinarySolution(number_of_variables=self.number_of_variables,
+                                      number_of_objectives=self.number_of_objectives)
+        new_solution.variables[0] = \
+            [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
+
+        return new_solution
+
+    def get_name(self) -> str:
+        return 'Subset Sum'

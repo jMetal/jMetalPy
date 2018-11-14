@@ -74,11 +74,11 @@ class Experiment:
         pass
 
     def compute_statiscal_analysis_2(self, data_list: list):
-        """ :param data_list: List of data sets.
-
-        The application scheme listed here is as described in
+        """ The application scheme listed here is as described in
 
         * G. Luque, E. Alba, Parallel Genetic Algorithms, Springer-Verlag, ISBN 978-3-642-22084-5, 2011
+
+        :param data_list: List of data sets.
         """
         if len(data_list) < 2:
             raise Exception('Data sets number must be equal or greater than two')

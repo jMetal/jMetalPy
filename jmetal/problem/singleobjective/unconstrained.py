@@ -82,7 +82,7 @@ class SubsetSum(BinaryProblem):
         :param C: Large integer.
         :param W: Set of intergers."""
         super(SubsetSum, self).__init__(reference_front=None)
-        self.C = -C
+        self.C = C
         self.W = W
 
         self.number_of_bits = len(self.W)
@@ -91,18 +91,22 @@ class SubsetSum(BinaryProblem):
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MAXIMIZE]
-        self.obj_labels = ['f(x)']
+        self.obj_labels = ['Sum']
 
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
+        total_sum = 0.0
+
         for index, bits in enumerate(solution.variables[0]):
             if bits:
-                solution.objectives[0] += -self.W[index]
+                total_sum += self.W[index]
 
-        if solution.objectives[0] < self.C:
-            solution.objectives[0] = self.C - solution.objectives[0] * 0.1
+        if total_sum > self.C:
+            total_sum = self.C - total_sum * 0.1
 
-            if solution.objectives[0] > 0.0:
-                solution.objectives[0] = 0.0
+            if total_sum < 0.0:
+                total_sum = 0.0
+
+        solution.objectives[0] = -1.0 * total_sum
 
         return solution
 

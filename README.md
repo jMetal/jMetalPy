@@ -34,7 +34,7 @@ Examples of configuring and running all the included algorithms are located [in 
 ## Features
 The current release of jMetalPy (v0.5.1) contains the following components:
 
-* Algorithms: random search, [NSGA-II](https://jmetalpy.readthedocs.io/en/latest/examples/ea.html#nsga-ii-with-plotting), [SMPSO](https://jmetalpy.readthedocs.io/en/latest/examples/pso.html#smpso-with-standard-settings), [SMPSO/RP](https://jmetalpy.readthedocs.io/en/latest/examples/pso.html#smpso-rp-with-standard-settings).
+* Algorithms: random search, ssGA, generational GA, [NSGA-II](https://jmetalpy.readthedocs.io/en/latest/examples/ea.html#nsga-ii-with-plotting), [SMPSO](https://jmetalpy.readthedocs.io/en/latest/examples/pso.html#smpso-with-standard-settings), [SMPSO/RP](https://jmetalpy.readthedocs.io/en/latest/examples/pso.html#smpso-rp-with-standard-settings).
 * Benchmark problems: ZDT1-6, DTLZ1-2, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2), constrained (Srinivas, Tanaka).
 * Encodings: real, binary.
 * Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random).
