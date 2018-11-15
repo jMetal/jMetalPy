@@ -1,13 +1,14 @@
 Experiments
 ========================
 
-This is an example of an experimental study based on solving two problems of the ZDT family with two versions of the same algorithm (NSGAII).
+This is an example of an experimental study based on solving two problems of the ZDT family with two versions of the same algorithm (NSGA-II).
 The hypervolume indicator is used for performance assessment.
 
 .. code-block:: python
 
    # Configure experiment
    problem_list = [ZDT1(), ZDT2()]
+   metric_list = [HyperVolume(reference_point=[1, 1])]
    algorithm_list = []
 
    for problem in problem_list:
@@ -34,10 +35,30 @@ The hypervolume indicator is used for performance assessment.
           ))
       )
 
-   study = Experiment(algorithm_list, n_runs=30)
+   study = Experiment(base_directory='./experiment',
+                      algorithm_list=algorithm_list,
+                      problem_list=problem_list,
+                      metric_list=metric_list,
+                      n_runs=3)
    study.run()
+   print(study.compute_metrics())
 
-   # Compute quality indicators
-   metric_list = [HyperVolume(reference_point=[1, 1])]
+.. table::
 
-   print(study.compute_metrics(metric_list))
+    +-------+-----------+----+--------+--------+
+    |       |           |    |NSGAII_A|NSGAII_B|
+    +-------+-----------+----+--------+--------+
+    |Problem|Metric     |Run |        |        |
+    +=======+===========+====+========+========+
+    |ZDT1   |Hypervolume|0   |        |        |
+    +-------+-----------+----+--------+--------+
+    |       |           |1   |        |        |
+    +-------+-----------+----+--------+--------+
+    |       |           |2   |        |        |
+    +-------+-----------+----+--------+--------+
+    |ZDT2   |Hypervolume|0   |        |        |
+    +-------+-----------+----+--------+--------+
+    |       |           |1   |        |        |
+    +-------+-----------+----+--------+--------+
+    |       |           |2   |        |        |
+    +-------+-----------+----+--------+--------+

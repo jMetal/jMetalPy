@@ -24,7 +24,7 @@ The :py:mod:`jmetal.util.graphic` module contains two classes useful for plottin
 
      pareto_front.export(filename='output', include_plotlyjs=False)
 
-- :code:`ScatterStreaming` is intended to be used as an observer. The visualizer observer displays the front in real-time (although **it only works for problems with two and three objectives**; otherwise, an exception is raised):
+- :code:`ScatterStreaming` is intended to be used as an observer. The visualizer observer displays the front in real-time (although **it only works for problems with two and three objectives**):
 
   .. code-block:: python
 

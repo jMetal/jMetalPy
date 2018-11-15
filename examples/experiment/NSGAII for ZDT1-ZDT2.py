@@ -44,8 +44,11 @@ for problem in problem_list:
         )}
     )
 
-study = Experiment(base_directory='./experiment', algorithm_list=algorithm_list, problem_list=problem_list,
-                   metric_list=metric_list, n_runs=1)
+study = Experiment(base_directory='./experiment',
+                   algorithm_list=algorithm_list,
+                   problem_list=problem_list,
+                   metric_list=metric_list,
+                   n_runs=5)
 study.run()
 results = study.compute_metrics()
 

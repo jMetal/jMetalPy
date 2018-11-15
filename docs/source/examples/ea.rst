@@ -5,36 +5,38 @@ Common imports for these examples:
 
 .. code-block:: python
 
+   from jmetal.core.problem import Problem
    from jmetal.algorithm import NSGAII
    from jmetal.operator import Polynomial, SBX, BinaryTournamentSelection
    from jmetal.component import RankingAndCrowdingDistanceComparator
 
    from jmetal.util import FrontPlot
 
-NSGA-II with plotting
+NSGA-II
 ------------------------------------
 
 .. code-block:: python
 
    from jmetal.problem import ZDT1
 
-    problem = ZDT1(rf_path='resources/reference_front/ZDT1.pf')
+   reference_front = Problem.read_front_from_file_as_solutions('resources/reference_front/ZDT1.pf')
+   problem = ZDT1(reference_front=reference_front)
 
-    algorithm = NSGAII(
-        problem=problem,
-        population_size=100,
-        max_evaluations=25000,
-        mutation=Polynomial(probability=1.0/problem.number_of_variables, distribution_index=20),
-        crossover=SBX(probability=1.0, distribution_index=20),
-        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
-    )
+   algorithm = NSGAII(
+       problem=problem,
+       population_size=100,
+       max_evaluations=25000,
+       mutation=Polynomial(probability=1.0/problem.number_of_variables, distribution_index=20),
+       crossover=SBX(probability=1.0, distribution_index=20),
+       selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
+   )
 
-    algorithm.run()
-    front = algorithm.get_result()
+   algorithm.run()
+   front = algorithm.get_result()
 
-    pareto_front = FrontPlot(plot_title='NSGAII-ZDT1', axis_labels=problem.obj_labels)
-    pareto_front.plot(front, reference_front=problem.reference_front)
-    pareto_front.to_html(filename='NSGAII-ZDT1')
+   pareto_front = FrontPlot(plot_title='NSGAII-ZDT1', axis_labels=problem.obj_labels)
+   pareto_front.plot(front, reference_front=problem.reference_front)
+   pareto_front.to_html(filename='NSGAII-ZDT1')
 
 .. raw:: html
 
@@ -45,23 +47,24 @@ NSGA-II with plotting
 
    from jmetal.problem import DTLZ1
 
-    problem = DTLZ1(rf_path='resources/reference_front/DTLZ1.pf')
+   reference_front = Problem.read_front_from_file_as_solutions('resources/reference_front/DTLZ1.pf')
+   problem = DTLZ1(reference_front=reference_front)
 
-    algorithm = NSGAII(
-        problem=problem,
-        population_size=100,
-        max_evaluations=50000,
-        mutation=Polynomial(probability=1.0/problem.number_of_variables, distribution_index=20),
-        crossover=SBX(probability=1.0, distribution_index=20),
-        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
-    )
+   algorithm = NSGAII(
+       problem=problem,
+       population_size=100,
+       max_evaluations=50000,
+       mutation=Polynomial(probability=1.0/problem.number_of_variables, distribution_index=20),
+       crossover=SBX(probability=1.0, distribution_index=20),
+       selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
+   )
 
-    algorithm.run()
-    front = algorithm.get_result()
+   algorithm.run()
+   front = algorithm.get_result()
 
-    pareto_front = FrontPlot(plot_title='NSGAII-DTLZ1', axis_labels=problem.obj_labels)
-    pareto_front.plot(front, reference_front=problem.reference_front)
-    pareto_front.to_html(filename='NSGAII-DTLZ1')
+   pareto_front = FrontPlot(plot_title='NSGAII-DTLZ1', axis_labels=problem.obj_labels)
+   pareto_front.plot(front, reference_front=problem.reference_front)
+   pareto_front.to_html(filename='NSGAII-DTLZ1')
 
 .. raw:: html
 
