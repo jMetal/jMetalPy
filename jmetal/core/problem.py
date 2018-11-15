@@ -71,7 +71,7 @@ class Problem(Generic[S]):
     @abstractmethod
     def evaluate(self, solution: S) -> S:
         """ Evaluate a solution. For any new problem inheriting from :class:`Problem`, this method should be
-        replaced. Note that this framework ASSUME minimization, thus solutions should be evaluated in consequence.
+        replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.
 
         :return: Evaluated solution. """
         pass

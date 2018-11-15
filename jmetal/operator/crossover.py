@@ -163,3 +163,32 @@ class SPX(Crossover[BinarySolution, BinarySolution]):
 
     def get_name(self):
         return 'Single point crossover'
+
+
+class DifferentialEvolution(Crossover[FloatSolution, FloatSolution]):
+
+    def __init__(self, probability: float, distribution_index: float, neighbour_index: list, CR: float, F: float, gamma: float):
+        super(DifferentialEvolution, self).__init__(probability=probability)
+        self.distribution_index = distribution_index
+        self.neighbour_index = neighbour_index
+        self.gamma = gamma
+        self.CR = CR
+        self.F = F
+
+    def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
+        if len(parents) != 2:
+            raise Exception('The number of parents is not two: {}'.format(len(parents)))
+
+        offspring = [copy.copy(parents[0]), copy.copy(parents[1])]
+        rand = random.random()
+
+        if rand <= self.probability:
+            pass
+
+        return offspring
+
+    def get_number_of_parents(self):
+        return 2
+
+    def get_name(self):
+        return 'Differential Evolution crossover'

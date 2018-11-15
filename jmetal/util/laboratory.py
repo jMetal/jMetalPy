@@ -20,7 +20,7 @@ jMetalPyLogger = logging.getLogger('jMetalPy')
 class Experiment:
 
     def __init__(self, base_directory: str, algorithm_list: list, problem_list: list, metric_list: list,
-                 n_runs: int = 1, m_workers: int = 6):
+                 n_runs: int = 1, m_workers: int = 3):
         """ Run an experiment to evaluate algorithms and/or problems.
 
         :param base_directory: Directory to save partial outputs.
@@ -40,15 +40,15 @@ class Experiment:
         self.m_workers = m_workers
 
     def run(self) -> None:
-        self.__setup_experiments()
+        self.__setup_runs()
+        futures = []
 
-        with ProcessPoolExecutor(max_workers=self.m_workers) as pool:
+        with ProcessPoolExecutor(max_workers=self.m_workers) as executor:
             for label, algorithm, n_run in self.experiment_list:
                 # algorithm.observable.register(observer=WriteFrontToFileObserver(output_directory=self.base_dir + label))
-                pool.submit(algorithm.run())
+                futures.append(executor.submit(algorithm.run()))
 
-            # Wait until all computation is done for this problem
-            pool.shutdown(wait=True)
+        print(futures)
 
     def compute_metrics(self) -> pd.DataFrame:
         runs = list(range(0, self.n_runs)) * len(self.metric_list) * len(self.problem_list)
@@ -109,7 +109,7 @@ class Experiment:
             else:
                 pass
 
-    def __setup_experiments(self):
+    def __setup_runs(self):
         """ Configure the algorithm list, by making a triple of (label, algorithm, n_run). """
         for n_run in range(self.n_runs):
             for configuration in self.algorithm_list:

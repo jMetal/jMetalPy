@@ -1,7 +1,7 @@
-from jmetal.algorithm import NSGAII, SMPSO
+from jmetal.algorithm import NSGAII
 from jmetal.operator import NullMutation, SBX, BinaryTournamentSelection, Polynomial
 from jmetal.problem import ZDT1, ZDT2
-from jmetal.component import CrowdingDistanceArchive, RankingAndCrowdingDistanceComparator, HyperVolume
+from jmetal.component import RankingAndCrowdingDistanceComparator, HyperVolume
 from jmetal.util.laboratory import Experiment
 
 
@@ -33,22 +33,12 @@ for problem in problem_list:
              selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
         )}
     )
-    algorithm_list.append({
-        'label': 'SMPSO',
-        'algorithm': SMPSO(
-             problem=problem,
-             swarm_size=100,
-             max_evaluations=5000,
-             mutation=Polynomial(probability=0.5, distribution_index=20),
-             leaders=CrowdingDistanceArchive(100)
-        )}
-    )
 
 study = Experiment(base_directory='./experiment',
                    algorithm_list=algorithm_list,
                    problem_list=problem_list,
                    metric_list=metric_list,
-                   n_runs=5)
+                   n_runs=3)
 study.run()
 results = study.compute_metrics()
 

@@ -147,7 +147,7 @@ class SubsetSum(BinaryProblem):
         """ The goal is to find a subset S of W whose elements sum is closest to (without exceeding) C.
 
         :param C: Large integer.
-        :param W: Set of intergers."""
+        :param W: Set of non-negative integers."""
         super(SubsetSum, self).__init__(reference_front=None)
         self.C = C
         self.W = W
@@ -161,7 +161,6 @@ class SubsetSum(BinaryProblem):
         self.obj_labels = ['Sum', 'No. of Objects']
 
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
-
         total_sum = 0.0
         number_of_objects = 0
 
