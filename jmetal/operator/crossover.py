@@ -167,25 +167,45 @@ class SPX(Crossover[BinarySolution, BinarySolution]):
 
 class DifferentialEvolution(Crossover[FloatSolution, FloatSolution]):
 
-    def __init__(self, probability: float, distribution_index: float, neighbour_index: int, CR: float, F: float, gamma: float):
-        super(DifferentialEvolution, self).__init__(probability=probability)
-        self.distribution_index = distribution_index
-        self.neighbour_index = neighbour_index
-        self.gamma = gamma
+    """ This operator receives two parameters: the current individual and an array of three parent individuals. The
+    best and rand variants depends on the third parent, according whether it represents the current of the "best"
+    individual or a random one. The implementation of both variants are the same, due to that the parent selection is
+    external to the crossover operator.
+    """
+
+    def __init__(self, CR: float, F: float, K: float):
+        super(DifferentialEvolution, self).__init__(probability=1.0)
         self.CR = CR
         self.F = F
+        self.K = K
+
+        self.current_individual: FloatSolution=None
 
     def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
+        """ Execute the differential evolution crossover ('best/1/bin' variant in jMetal).
+        """
         if len(parents) != self.get_number_of_parents():
             raise Exception('The number of parents is not {}: {}'.format(self.get_number_of_parents(), len(parents)))
 
-        offspring = [copy.copy(parents[0]), copy.copy(parents[1])]
-        rand = random.random()
+        child = copy.copy(self.current_individual)
 
-        if rand <= self.probability:
-            pass
+        number_of_variables = parents[0].number_of_variables
+        rand = random.randint(0, number_of_variables - 1)
 
-        return offspring
+        for i in range(number_of_variables):
+            if random.random() < self.CR or i == rand:
+                value = parents[2].variables[i] + self.F * (parents[0].variables[i] - parents[1].variables[i])
+
+                if value < child.lower_bound[i]:
+                    value = child.lower_bound[i]
+                if value > child.upper_bound[i]:
+                    value = child.upper_bound[i]
+            else:
+                value = child.variables[i]
+
+            child.variables[i] = value
+
+        return [child]
 
     def get_number_of_parents(self):
         return 3
