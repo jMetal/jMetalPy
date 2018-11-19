@@ -1,4 +1,4 @@
-from typing import TypeVar, List, Generic
+from typing import TypeVar, List
 
 from jmetal.component.archive import NonDominatedSolutionListArchive
 from jmetal.core.problem import Problem
@@ -14,7 +14,7 @@ S = TypeVar('S')
 """
 
 
-class RandomSearch(Generic[S]):
+class RandomSearch:
 
     def __init__(self,
                  problem: Problem[S],
@@ -24,7 +24,7 @@ class RandomSearch(Generic[S]):
         self.archive = NonDominatedSolutionListArchive()
 
     def run(self) -> None:
-        for i in range(self.max_evaluations):
+        for _ in range(self.max_evaluations):
             new_solution = self.problem.create_solution()
             self.problem.evaluate(new_solution)
             self.archive.add(new_solution)

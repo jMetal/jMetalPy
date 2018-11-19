@@ -19,11 +19,10 @@ class ZDT1(FloatProblem):
     .. note:: Continuous problem having a convex Pareto front
     """
 
-    def __init__(self, number_of_variables: int=30, reference_front=None):
+    def __init__(self, number_of_variables: int=30):
         """ :param number_of_variables: Number of decision variables of the problem.
-        :param reference_front: List of solutions with the reference front. Default to None.
         """
-        super(ZDT1, self).__init__(reference_front=reference_front)
+        super(ZDT1, self).__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -93,11 +92,10 @@ class ZDT4(ZDT1):
     .. note:: Continuous multi-modal problem having a convex Pareto front
     """
 
-    def __init__(self, number_of_variables: int=10, reference_front=None):
+    def __init__(self, number_of_variables: int=10):
         """ :param number_of_variables: Number of decision variables of the problem.
-        :param reference_front: List of solutions with the reference front. Default to None.
         """
-        super(ZDT4, self).__init__(number_of_variables=number_of_variables, reference_front=reference_front)
+        super(ZDT4, self).__init__(number_of_variables=number_of_variables)
         self.lower_bound = self.number_of_variables * [-5.0]
         self.upper_bound = self.number_of_variables * [5.0]
         self.lower_bound[0] = 0.0
@@ -127,11 +125,10 @@ class ZDT6(ZDT1):
     .. note:: Continuous problem having a non-convex Pareto front
     """
 
-    def __init__(self, number_of_variables: int=10, reference_front=None):
+    def __init__(self, number_of_variables: int=10):
         """ :param number_of_variables: Number of decision variables of the problem.
-        :param reference_front: List of solutions with the reference front. Default to None.
         """
-        super(ZDT6, self).__init__(number_of_variables=number_of_variables, reference_front=reference_front)
+        super(ZDT6, self).__init__(number_of_variables=number_of_variables)
 
     def __eval_g(self, solution: FloatSolution):
         g = sum(solution.variables) - solution.variables[0]

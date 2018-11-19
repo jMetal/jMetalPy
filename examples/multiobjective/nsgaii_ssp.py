@@ -28,6 +28,8 @@ if __name__ == '__main__':
     algorithm = NSGAII(
         problem=problem,
         population_size=100,
+        offspring_size=100,
+        mating_pool_size=100,
         max_evaluations=25000,
         mutation=BitFlip(probability=0.5),
         crossover=SPX(probability=0.8),

@@ -1,22 +1,24 @@
 import math
 import random
-import time
 from enum import Enum
 from pathlib import Path
 from typing import TypeVar, List
 
 import numpy as np
 
-from jmetal.algorithm.singleobjective.evolutionaryalgorithm import GenerationalGeneticAlgorithm
-from jmetal.component.evaluator import SequentialEvaluator
+from jmetal.algorithm.singleobjective.genetic import GeneticAlgorithm
+from jmetal.core.solution import Solution
+from jmetal.core.evaluator import Evaluator
+from jmetal.core.generator import Generator
 from jmetal.core.operator import Mutation, Crossover
 from jmetal.core.problem import Problem
 
 S = TypeVar('S')
-R = TypeVar(List[S])
+R = List[S]
 
 
-class MOEAD(GenerationalGeneticAlgorithm[S, R]):
+class MOEAD(GeneticAlgorithm):
+
     class FitnessFunction(Enum):
         AGG = 'AGG'
         TCHE = 'TCHE'
@@ -25,19 +27,20 @@ class MOEAD(GenerationalGeneticAlgorithm[S, R]):
         NEIGHBOR = 'NEIGHBOR'
 
     def __init__(self,
-                 problem: Problem[S],
+                 problem: Problem,
                  population_size: int,
                  output_population_size: int,
                  neighbourhood_size: int,
                  max_evaluations: int,
-                 mutation: Mutation[S],
-                 crossover: Crossover[S, S],
+                 mutation: Mutation,
+                 crossover: Crossover,
                  neighbourhood_selection_probability: float,
                  max_number_of_replaced_solutions: int,
                  ffunction_type: FitnessFunction,
-                 weights_path: str = None):
+                 weights_path: str = None,
+                 population_generator: Generator = None,
+                 evaluator: Evaluator = None):
         """
-
         :param max_number_of_replaced_solutions: (eta in Zhang & Li paper).
         :param neighbourhood_size: Size of the neighborhood used for mating (T in Zhang & Li paper).
         :param neighbourhood_selection_probability: Probability of mating with a solution in the neighborhood rather
@@ -46,13 +49,15 @@ class MOEAD(GenerationalGeneticAlgorithm[S, R]):
         super(MOEAD, self).__init__(
             problem=problem,
             population_size=population_size,
+            population_generator=population_generator,
+            offspring_size=population_size,
             mating_pool_size=population_size,
-            offspring_population_size=population_size,
             max_evaluations=max_evaluations,
             mutation=mutation,
             crossover=crossover,
             selection=None,
-            evaluator=SequentialEvaluator[S]())
+            evaluator=evaluator
+        )
 
         self.ideal_point = [math.inf] * problem.number_of_objectives  # (Z vector in Zhang & Li paper)
 
@@ -171,7 +176,7 @@ class MOEAD(GenerationalGeneticAlgorithm[S, R]):
 
         return parents
 
-    def fitness_function(self, individual: R, lambda_: np.array) -> float:
+    def fitness_function(self, individual: Solution, lambda_: np.array) -> float:
         if self.ffunction_type == self.FitnessFunction.TCHE:
             max_fun = -1.0e+30
             for i in range(self.problem.number_of_objectives):
@@ -231,43 +236,6 @@ class MOEAD(GenerationalGeneticAlgorithm[S, R]):
             if times >= self.max_number_of_replaced_solutions:
                 return
 
-    def run(self):
-        self.start_computing_time = time.time()
-
-        self.population = self.create_initial_population()
-        self.population = self.evaluate_population(self.population)
-
-        self.init_progress()
-
-        self.__initialize_uniform_weight()
-        self.__initialize_neighbourhood()
-
-        for individual in self.population:
-            self.ideal_point = self.update_ideal_point(self.ideal_point, individual)
-
-        while not self.is_stopping_condition_reached():
-            permutation = self.random_permutations(self.population_size)
-
-            for i in range(self.population_size):
-                subproblem_id = permutation[i]
-
-                parents = self.parents_selection(subproblem_id)
-
-                self.crossover_operator.current_individual = self.population[subproblem_id]
-                children = self.crossover_operator.execute(parents)
-                child = children[0]
-
-                child = self.mutation_operator.execute(child)
-
-                self.evaluator.evaluate_solution(child, problem=self.problem)
-
-                self.ideal_point = self.update_ideal_point(self.ideal_point, child)
-                self.update_neighbourhood(child, subproblem_id)
-
-            self.update_progress()
-
-        self.total_computing_time = self.get_current_computing_time()
-
     def two_objectives_case(self, population: List[S], new_population_size: int):
 
         def scalarizing_fitness_function(solution: S, ideal_point: list, weights: list, min_weight=0.0001):
@@ -316,6 +284,41 @@ class MOEAD(GenerationalGeneticAlgorithm[S, R]):
 
         return new_population
 
+    def init_progress(self) -> None:
+        self.evaluations = self.population_size
+
+        self.population = [self.generator.new(self.problem) for _ in range(self.population_size)]
+        self.population = self.evaluate_all(self.population)
+
+        self.init_progress()
+
+        self.__initialize_uniform_weight()
+        self.__initialize_neighbourhood()
+
+        for individual in self.population:
+            self.ideal_point = self.update_ideal_point(self.ideal_point, individual)
+
+    def step(self) -> None:
+        permutation = self.random_permutations(self.population_size)
+
+        for i in range(self.population_size):
+            subproblem_id = permutation[i]
+
+            parents = self.parents_selection(subproblem_id)
+
+            self.crossover_operator.current_individual = self.population[subproblem_id]
+            children = self.crossover_operator.execute(parents)
+            child = children[0]
+
+            child = self.mutation_operator.execute(child)
+
+            self.evaluator.evaluate_solution(child, problem=self.problem)
+
+            self.ideal_point = self.update_ideal_point(self.ideal_point, child)
+            self.update_neighbourhood(child, subproblem_id)
+
+        self.update_progress()
+
     def get_result(self) -> R:
         if self.population_size > self.output_population_size:
             return self.get_subset_of_evenly_distributed_solutions(self.population, self.output_population_size)
@@ -323,4 +326,4 @@ class MOEAD(GenerationalGeneticAlgorithm[S, R]):
             return self.population
 
     def get_name(self) -> str:
-        return 'Multiobjective Evolutionary Algorithm Based on Decomposition'
+        return 'Multiobjective Evolutionary Algorithm Based on Decomposition (MOEA/D)'

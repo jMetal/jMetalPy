@@ -17,6 +17,35 @@ S = TypeVar('S')
 """
 
 
+class RouletteWheelSelection(Selection[List[S], S]):
+    """Performs roulette wheel selection.
+    """
+
+    def __init__(self):
+        super(RouletteWheelSelection).__init__()
+
+    def execute(self, front: List[S]) -> S:
+        if front is None:
+            raise Exception('The front is null')
+        elif len(front) == 0:
+            raise Exception('The front is empty')
+
+        maximum = sum([solution.objectives[0] for solution in front])
+        rand = random.uniform(0.0, maximum)
+        value = 0.0
+
+        for solution in front:
+            value += solution.objectives[0]
+
+            if value > rand:
+                return solution
+
+        return None
+
+    def get_name(self) -> str:
+        return 'Roulette wheel selection'
+
+
 class BinaryTournamentSelection(Selection[List[S], S]):
 
     def __init__(self, comparator: Comparator = DominanceComparator()):
@@ -64,6 +93,7 @@ class BestSolutionSelection(Selection[List[S], S]):
             raise Exception('The front is empty')
 
         result = front[0]
+
         for solution in front[1:]:
             if DominanceComparator().compare(solution, result) < 0:
                 result = solution
@@ -122,6 +152,11 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
         self.max_population_size = max_population_size
 
     def execute(self, front: List[S]) -> List[S]:
+        if front is None:
+            raise Exception('The front is null')
+        elif len(front) == 0:
+            raise Exception('The front is empty')
+
         ranking = FastNonDominatedRanking()
         crowding_distance = CrowdingDistance()
         ranking.compute_ranking(front)

@@ -1,4 +1,4 @@
-from jmetal.algorithm.singleobjective.evolutionaryalgorithm import GenerationalGeneticAlgorithm
+from jmetal.algorithm.singleobjective.evolution_strategy import GenerationalGeneticAlgorithm
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import SBX
 from jmetal.operator.mutation import Polynomial

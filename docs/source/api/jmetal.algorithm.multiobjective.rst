@@ -17,6 +17,14 @@ SMPSO
     :undoc-members:
     :show-inheritance:
 
+MOEA/D
+--------------------------------------------
+
+.. automodule:: jmetal.algorithm.multiobjective.moead
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Random Search
 ---------------------------------------------------
 

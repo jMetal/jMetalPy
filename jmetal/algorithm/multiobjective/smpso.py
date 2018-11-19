@@ -6,12 +6,14 @@ import random
 import numpy
 
 from jmetal.component.archive import BoundedArchive
-from jmetal.component.evaluator import Evaluator, SequentialEvaluator
+from jmetal.component.comparator import DominanceComparator
+from jmetal.core.evaluator import Evaluator
+from jmetal.core.observable import Observable
 from jmetal.core.algorithm import ParticleSwarmOptimization
+from jmetal.core.generator import Generator
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
-from jmetal.component.comparator import DominanceComparator
 
 R = TypeVar('R')
 
@@ -30,9 +32,10 @@ class SMPSO(ParticleSwarmOptimization):
                  problem: FloatProblem,
                  swarm_size: int,
                  max_evaluations: int,
-                 mutation: Mutation[FloatSolution],
-                 leaders: BoundedArchive[FloatSolution],
-                 evaluator: Evaluator[FloatSolution] = SequentialEvaluator[FloatSolution]()):
+                 mutation: Mutation,
+                 leaders: BoundedArchive,
+                 swarm_generator: Generator = None,
+                 evaluator: Evaluator = None):
         """ This class implements the SMPSO algorithm as described in
 
         * SMPSO: A new PSO-based metaheuristic for multi-objective optimization
@@ -42,21 +45,20 @@ class SMPSO(ParticleSwarmOptimization):
         templates section of the documentation.
 
         :param problem: The problem to solve.
-        :param swarm_size: Swarm size.
-        :param max_evaluations: Maximum number of evaluations.
-        :param mutation: Mutation operator.
+        :param swarm_size: Size of the swarm.
+        :param max_evaluations: Maximum number of evaluations/iterations.
+        :param mutation: Mutation operator (see :py:mod:`jmetal.operator.mutation`).
         :param leaders: Archive for leaders.
-        :param evaluator: An evaluator object to evaluate the solutions in the population.
         """
-        super(SMPSO, self).__init__()
-        self.problem = problem
-        self.swarm_size = swarm_size
-        self.max_evaluations = max_evaluations
+        super(SMPSO, self).__init__(
+            problem=problem,
+            swarm_size=swarm_size,
+            swarm_generator=swarm_generator,
+            max_evaluations=max_evaluations,
+            evaluator=evaluator
+        )
         self.mutation = mutation
         self.leaders = leaders
-        self.evaluator = evaluator
-
-        self.evaluations = 0
 
         self.c1_min = 1.5
         self.c1_max = 2.5
@@ -86,28 +88,25 @@ class SMPSO(ParticleSwarmOptimization):
         self.evaluations = self.swarm_size
         self.leaders.compute_density_estimator()
 
+        self.swarm = [self.problem.create_solution() for _ in range(self.swarm_size)]
+        self.swarm = self.evaluate_all(self.swarm)
+
+        self.initialize_velocity(self.swarm)
+        self.initialize_particle_best(self.swarm)
+        self.initialize_global_best(self.swarm)
+
     def update_progress(self) -> None:
         self.evaluations += self.swarm_size
         self.leaders.compute_density_estimator()
 
-        observable_data = {'evaluations': self.evaluations,
-                           'computing time': self.get_current_computing_time(),
-                           'population': self.leaders.solution_list,
-                           'reference_front': self.problem.reference_front}
+        observable_data = {
+            'problem': self.problem,
+            'population': self.swarm,
+            'evaluations': self.evaluations,
+            'computing time': self.current_computing_time,
+        }
 
         self.observable.notify_all(**observable_data)
-
-    def is_stopping_condition_reached(self) -> bool:
-        return self.evaluations >= self.max_evaluations
-
-    def create_initial_swarm(self) -> List[FloatSolution]:
-        swarm = []
-        for _ in range(self.swarm_size):
-            swarm.append(self.problem.create_solution())
-        return swarm
-
-    def evaluate_swarm(self, swarm: List[FloatSolution]) -> List[FloatSolution]:
-        return self.evaluator.evaluate(swarm, self.problem)
 
     def initialize_global_best(self, swarm: List[FloatSolution]) -> None:
         for particle in swarm:
@@ -158,11 +157,6 @@ class SMPSO(ParticleSwarmOptimization):
                     particle.variables[j] = self.problem.upper_bound[j]
                     self.speed[i][j] *= self.change_velocity2
 
-    def perturbation(self, swarm: List[FloatSolution]) -> None:
-        for i in range(self.swarm_size):
-            if (i % 6) == 0:
-                self.mutation.execute(swarm[i])
-
     def update_global_best(self, swarm: List[FloatSolution]) -> None:
         for particle in swarm:
             self.leaders.add(copy(particle))
@@ -174,6 +168,11 @@ class SMPSO(ParticleSwarmOptimization):
                 swarm[i].attributes['local_best'])
             if flag != 1:
                 swarm[i].attributes['local_best'] = copy(swarm[i])
+
+    def perturbation(self, swarm: List[FloatSolution]) -> None:
+        for i in range(self.swarm_size):
+            if (i % 6) == 0:
+                self.mutation.execute(swarm[i])
 
     def get_result(self) -> List[FloatSolution]:
         return self.leaders.solution_list
@@ -222,10 +221,11 @@ class SMPSORP(SMPSO):
                  problem: FloatProblem,
                  swarm_size: int,
                  max_evaluations: int,
-                 mutation: Mutation[FloatSolution],
+                 mutation: Mutation,
                  reference_points: List[List[float]],
-                 leaders: List[BoundedArchive[FloatSolution]],
-                 evaluator: Evaluator[FloatSolution] = SequentialEvaluator[FloatSolution]()):
+                 leaders: List[BoundedArchive],
+                 evaluator: Evaluator = None,
+                 observable: Observable = None):
         """ This class implements the SMPSORP algorithm.
 
         :param problem: The problem to solve.
@@ -245,17 +245,22 @@ class SMPSORP(SMPSO):
         self.reference_points = reference_points
         self.leaders = leaders
 
-    def update_leaders_density_estimator(self):
+    def init_progress(self) -> None:
+        self.evaluations = self.swarm_size
         for leader in self.leaders:
             leader.compute_density_estimator()
 
-    def init_progress(self) -> None:
-        self.evaluations = self.swarm_size
-        self.update_leaders_density_estimator()
+        self.swarm = [self.problem.create_solution() for _ in range(self.swarm_size)]
+        self.swarm = self.evaluate_all(self.swarm)
+
+        self.initialize_velocity(self.swarm)
+        self.initialize_particle_best(self.swarm)
+        self.initialize_global_best(self.swarm)
 
     def update_progress(self) -> None:
         self.evaluations += self.swarm_size
-        self.update_leaders_density_estimator()
+        for leader in self.leaders:
+            leader.compute_density_estimator()
 
         reference_points = []
         for i, _ in enumerate(self.reference_points):
@@ -263,10 +268,12 @@ class SMPSORP(SMPSO):
             point.objectives = self.reference_points[i]
             reference_points.append(point)
 
-        observable_data = {'evaluations': self.evaluations,
-                           'computing time': self.get_current_computing_time(),
-                           'population': self.get_result() + reference_points,
-                           'reference_front': self.problem.reference_front}
+        observable_data = {
+            'problem': self.problem,
+            'population': self.get_result() + reference_points,
+            'evaluations': self.evaluations,
+            'computing time': self.current_computing_time,
+        }
 
         self.observable.notify_all(**observable_data)
 
@@ -279,15 +286,6 @@ class SMPSORP(SMPSO):
         for particle in swarm:
             for leader in self.leaders:
                 leader.add(copy(particle))
-
-    def get_result(self) -> List[FloatSolution]:
-        result = []
-
-        for leader in self.leaders:
-            for solution in leader.solution_list:
-                result.append(solution)
-
-        return result
 
     def select_global_best(self) -> FloatSolution:
         selected = False
@@ -311,3 +309,12 @@ class SMPSORP(SMPSO):
             best_global = copy(self.leaders[selected_swarm_index].solution_list[0])
 
         return best_global
+
+    def get_result(self) -> List[FloatSolution]:
+        result = []
+
+        for leader in self.leaders:
+            for solution in leader.solution_list:
+                result.append(solution)
+
+        return result

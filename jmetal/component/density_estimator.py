@@ -2,7 +2,7 @@ import logging
 from abc import ABCMeta, abstractmethod
 from typing import TypeVar, List
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger('jmetal')
 
 S = TypeVar('S')
 
@@ -71,7 +71,7 @@ class CrowdingDistance(DensityEstimator[List[S]]):
 
                 # Check if minimum and maximum are the same (in which case do nothing)
                 if objective_maxn - objective_minn == 0:
-                    logger.warning('Minimum and maximum are the same!')
+                    LOGGER.warning('Minimum and maximum are the same!')
                 else:
                     distance = distance / (objective_maxn - objective_minn)
 

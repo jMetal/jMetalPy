@@ -1,5 +1,3 @@
-from jmetal.core.problem import Problem
-
 from jmetal.algorithm import NSGAII
 from jmetal.problem import DTLZ1
 from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
@@ -8,12 +6,14 @@ from jmetal.util import FrontPlot, SolutionList
 
 
 if __name__ == '__main__':
-    reference_front = Problem.read_front_from_file_as_solutions('../../resources/reference_front/DTLZ1.pf')
-    problem = DTLZ1(reference_front=reference_front)
+    problem = DTLZ1()
+    problem.read_front(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
     algorithm = NSGAII(
         problem=problem,
         population_size=100,
+        offspring_size=100,
+        mating_pool_size=100,
         max_evaluations=50000,
         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
         crossover=SBX(probability=1.0, distribution_index=20),

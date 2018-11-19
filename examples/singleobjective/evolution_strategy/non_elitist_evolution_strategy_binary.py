@@ -1,4 +1,4 @@
-from jmetal.algorithm.singleobjective.evolutionaryalgorithm import NonElitistEvolutionStrategy
+from jmetal.algorithm.singleobjective.evolution_strategy import NonElitistEvolutionStrategy
 from jmetal.core.solution import BinarySolution
 from jmetal.operator.mutation import BitFlip
 from jmetal.problem.singleobjective.unconstrained import OneMax

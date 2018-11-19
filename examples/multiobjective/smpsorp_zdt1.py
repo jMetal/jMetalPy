@@ -1,5 +1,3 @@
-from jmetal.core.problem import Problem
-
 from jmetal.algorithm import SMPSORP
 from jmetal.component import ProgressBarObserver, VisualizerObserver, CrowdingDistanceArchiveWithReferencePoint
 from jmetal.problem import ZDT1
@@ -18,8 +16,8 @@ def points_to_solutions(points):
 
 
 if __name__ == '__main__':
-    reference_front = Problem.read_front_from_file_as_solutions('../../resources/reference_front/ZDT1.pf')
-    problem = ZDT1(reference_front=reference_front)
+    problem = ZDT1()
+    problem.read_front(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
     swarm_size = 100
 

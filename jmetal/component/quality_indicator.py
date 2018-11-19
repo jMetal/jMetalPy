@@ -4,7 +4,7 @@ from typing import List, TypeVar
 from jmetal.core.solution import Solution
 
 """
-.. module:: indicators
+.. module:: indicator
    :platform: Unix, Windows
    :synopsis: Quality indicators implementation.
 

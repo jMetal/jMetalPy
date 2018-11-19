@@ -18,15 +18,13 @@ class LZ09(FloatProblem):
     __metaclass__ = ABCMeta
 
     def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int,
-                 ptype: int, dtype: int, ltype: int, reference_front=None):
+                 ptype: int, dtype: int, ltype: int):
         """ LZ09 benchmark family as defined in:
 
         * H. Li and Q. Zhang. Multiobjective optimization problems with complicated pareto sets, MOEA/D and NSGA-II.
         IEEE Transactions on Evolutionary Computation, 12(2):284-302, April 2009.
-
-        :param reference_front: List of solutions with the reference front. Default to None.
         """
-        super(LZ09, self).__init__(reference_front=reference_front)
+        super(LZ09, self).__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = number_of_objectives
         self.number_of_constraints = number_of_constraints
@@ -265,11 +263,11 @@ class LZ09(FloatProblem):
 
 class LZ09_F2(LZ09):
 
-    def __init__(self, reference_front=None):
+    def __init__(self):
         """ :param reference_front: List of solutions with the reference front. Default to None.
         """
         super(LZ09_F2, self).__init__(number_of_variables=30, number_of_objectives=2, number_of_constraints=0,
-                                      dtype=1, ltype=22, ptype=21, reference_front=reference_front)
+                                      dtype=1, ltype=22, ptype=21)
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables

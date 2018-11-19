@@ -9,7 +9,7 @@ class FloatProblemTestCases(unittest.TestCase):
     class DummyFloatProblem(FloatProblem):
 
         def __init__(self):
-            super(FloatProblem, self).__init__(reference_front=None)
+            super(FloatProblem, self).__init__()
 
         def evaluate(self, solution: FloatSolution) -> FloatSolution:
             pass
@@ -46,7 +46,7 @@ class IntegerProblemTestCases(unittest.TestCase):
     class DummyIntegerProblem(IntegerProblem):
 
         def __init__(self):
-            super(IntegerProblem, self).__init__(reference_front=None)
+            super(IntegerProblem, self).__init__()
 
         def evaluate(self, solution: IntegerSolution) -> IntegerSolution:
             pass

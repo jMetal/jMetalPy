@@ -33,6 +33,14 @@ Evaluator
     :undoc-members:
     :show-inheritance:
 
+Generator
+---------------------------------
+
+.. automodule:: jmetal.component.generator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Observer
 --------------------------------
 

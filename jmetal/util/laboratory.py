@@ -6,7 +6,7 @@ from itertools import chain
 from scipy import stats
 import pandas as pd
 
-jMetalPyLogger = logging.getLogger('jMetalPy')
+LOGGER = logging.getLogger('jmetal')
 
 """
 .. module:: laboratory

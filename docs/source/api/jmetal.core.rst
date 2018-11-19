@@ -11,6 +11,30 @@ Algorithm
     :undoc-members:
     :show-inheritance:
 
+Evaluator
+---------------------------------
+
+.. automodule:: jmetal.core.evaluator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Generator
+---------------------------------
+
+.. automodule:: jmetal.core.generator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Observable
+-----------------------------
+
+.. automodule:: jmetal.core.observable
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Operator
 ---------------------------
 
@@ -31,14 +55,6 @@ Solution
 ---------------------------
 
 .. automodule:: jmetal.core.solution
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-Observable
------------------------------
-
-.. automodule:: jmetal.core.observable
     :members:
     :undoc-members:
     :show-inheritance:

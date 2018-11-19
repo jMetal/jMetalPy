@@ -8,7 +8,7 @@ from plotly import graph_objs as go
 from plotly.offline import plot
 from pandas import DataFrame
 
-jMetalPyLogger = logging.getLogger('jMetalPy')
+LOGGER = logging.getLogger('jmetal')
 S = TypeVar('S')
 
 """
@@ -71,7 +71,7 @@ class ScatterStreaming(Plot):
         self.__initialize()
 
         if reference_front:
-            jMetalPyLogger.info('Reference front found')
+            LOGGER.info('Reference front found')
             ref_objectives = self.get_objectives(reference_front)
 
             if self.number_of_objectives == 2:
@@ -102,7 +102,7 @@ class ScatterStreaming(Plot):
         :param persistence: If True, keep old points; else, replace them with new values.
         """
         if self.sc is None:
-            jMetalPyLogger.warning('Plot must be initialized first.')
+            LOGGER.debug('Plot must be initialized first.')
             self.plot(front, reference_front, show=False)
             return
 
@@ -145,7 +145,7 @@ class ScatterStreaming(Plot):
 
     def __initialize(self) -> None:
         """ Initialize the scatter plot for the first time. """
-        jMetalPyLogger.info('Generating plot')
+        LOGGER.info('Generating plot')
 
         # Initialize a plot
         self.fig.canvas.set_window_title('jMetalPy')
@@ -171,7 +171,7 @@ class ScatterStreaming(Plot):
         self.axis.grid(color='#f0f0f5', linestyle='-', linewidth=1, alpha=0.5)
         self.fig.suptitle(self.plot_title, fontsize=13)
 
-        jMetalPyLogger.info('Plot initialized')
+        LOGGER.info('Plot initialized')
 
     def __plot(self, x_values, y_values, z_values, **kwargs) -> None:
         if self.number_of_objectives == 2:
@@ -184,7 +184,7 @@ class ScatterStreaming(Plot):
         line, ind = event.artist, event.ind[0]
         x, y = line.get_xdata(), line.get_ydata()
 
-        jMetalPyLogger.debug('Selected front point ({0}): ({1}, {2})'.format(ind, x[ind], y[ind]))
+        LOGGER.debug('Selected front point ({0}): ({1}, {2})'.format(ind, x[ind], y[ind]))
 
         sol = next((solution for solution in front
                     if solution.objectives[0] == x[ind] and solution.objectives[1] == y[ind]), None)
@@ -193,7 +193,7 @@ class ScatterStreaming(Plot):
             with open('{0}-{1}'.format(x[ind], y[ind]), 'w') as of:
                 of.write(sol.__str__())
         else:
-            jMetalPyLogger.warning('Solution is none')
+            LOGGER.warning('Solution is none')
             return True
 
 
@@ -239,7 +239,7 @@ class FrontPlot(Plot):
         :param legend: Legend to be included.
         :param normalize: Normalize the input front between 0 and 1 (for problems with more than 3 objectives). """
         if self.figure is None:
-            jMetalPyLogger.warning('Plot must be initialized first.')
+            LOGGER.warning('Plot must be initialized first.')
             self.plot(data, reference_front=None, normalize=normalize)
             return
 
@@ -324,7 +324,7 @@ class FrontPlot(Plot):
 
     def __initialize(self):
         """ Initialize the graph for the first time. """
-        jMetalPyLogger.info('Generating graph')
+        LOGGER.info('Generating graph')
 
         self.layout = go.Layout(
             margin=dict(l=80, r=80, b=80, t=150),

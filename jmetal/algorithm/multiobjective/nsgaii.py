@@ -1,13 +1,18 @@
 from typing import TypeVar, List
 
-from jmetal.algorithm.singleobjective.evolutionaryalgorithm import GenerationalGeneticAlgorithm
-from jmetal.component.evaluator import SequentialEvaluator, Evaluator
+from jmetal.core.observable import Observable
+
+from jmetal.component.evaluator import Evaluator
+
+from jmetal.config import store
 from jmetal.core.operator import Mutation, Crossover, Selection
+from jmetal.core.generator import Generator
 from jmetal.core.problem import Problem
-from jmetal.operator.selection import RankingAndCrowdingDistanceSelection
+from jmetal.algorithm.singleobjective.genetic import GeneticAlgorithm
+from jmetal.operator import RankingAndCrowdingDistanceSelection
 
 S = TypeVar('S')
-R = TypeVar(List[S])
+R = TypeVar('R')
 
 """
 .. module:: NSGA-II
@@ -18,16 +23,19 @@ R = TypeVar(List[S])
 """
 
 
-class NSGAII(GenerationalGeneticAlgorithm[S, R]):
+class NSGAII(GeneticAlgorithm):
 
     def __init__(self,
-                 problem: Problem[S],
+                 problem: Problem,
                  population_size: int,
+                 offspring_size: int,
+                 mating_pool_size: int,
                  max_evaluations: int,
-                 mutation: Mutation[S],
-                 crossover: Crossover[S, S],
-                 selection: Selection[List[S], S],
-                 evaluator: Evaluator[S] = SequentialEvaluator[S]()):
+                 mutation: Mutation,
+                 crossover: Crossover,
+                 selection: Selection,
+                 population_generator: Generator = None,
+                 evaluator: Evaluator = None):
         """  NSGA-II implementation as described in
 
         * K. Deb, A. Pratap, S. Agarwal and T. Meyarivan, "A fast and elitist
@@ -38,24 +46,27 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
         family. The implementation of NSGA-II provided in jMetalPy follows the evolutionary
         algorithm template described in the algorithm module (:py:mod:`jmetal.core.algorithm`).
 
+        .. note:: A steady-state version of this algorithm can be run by setting the offspring size to 1 and the mating pool size to 2.
+
         :param problem: The problem to solve.
         :param population_size: Size of the population.
         :param max_evaluations: Maximum number of evaluations/iterations.
         :param mutation: Mutation operator (see :py:mod:`jmetal.operator.mutation`).
         :param crossover: Crossover operator (see :py:mod:`jmetal.operator.crossover`).
         :param selection: Selection operator (see :py:mod:`jmetal.operator.selection`).
-        :param evaluator: An evaluator object to evaluate the individuals of the population.
         """
         super(NSGAII, self).__init__(
             problem=problem,
             population_size=population_size,
-            mating_pool_size=population_size,
-            offspring_population_size=population_size,
+            population_generator=population_generator,
+            offspring_size=offspring_size,
+            mating_pool_size=mating_pool_size,
             max_evaluations=max_evaluations,
             mutation=mutation,
             crossover=crossover,
             selection=selection,
-            evaluator=evaluator)
+            evaluator=evaluator
+        )
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
         """ This method joins the current and offspring populations to produce the population of the next generation
@@ -72,4 +83,4 @@ class NSGAII(GenerationalGeneticAlgorithm[S, R]):
         return self.population
 
     def get_name(self) -> str:
-        return 'Non-dominated Sorting Genetic Algorithm II'
+        return 'Non-dominated Sorting Genetic Algorithm II (NSGA-II)'

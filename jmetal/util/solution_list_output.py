@@ -1,7 +1,7 @@
 import logging
 from typing import TypeVar, Generic
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger('jmetal')
 
 S = TypeVar('S')
 
@@ -23,7 +23,7 @@ class SolutionList(Generic[S]):
 
     @staticmethod
     def print_variables_to_file(solution_list: list, file_name):
-        logger.info("Output file (variables): " + file_name)
+        LOGGER.info("Output file (variables): " + file_name)
         with open(file_name, 'w') as of:
             for solution in solution_list:
                 for variables in solution.variables:
@@ -39,7 +39,7 @@ class SolutionList(Generic[S]):
 
     @staticmethod
     def print_function_values_to_file(solution_list: list, file_name):
-        logger.info("Output file (function values): " + file_name)
+        LOGGER.info("Output file (function values): " + file_name)
         with open(file_name, 'w') as of:
             for solution in solution_list:
                 for function_value in solution.objectives:

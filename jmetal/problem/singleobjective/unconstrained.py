@@ -14,8 +14,8 @@ from jmetal.core.solution import BinarySolution, FloatSolution
 
 class OneMax(BinaryProblem):
 
-    def __init__(self, number_of_bits: int=256, reference_front=None):
-        super(OneMax, self).__init__(reference_front=reference_front)
+    def __init__(self, number_of_bits: int=256):
+        super(OneMax, self).__init__()
         self.number_of_bits = number_of_bits
         self.number_of_objectives = 1
         self.number_of_variables = 1
@@ -46,8 +46,8 @@ class OneMax(BinaryProblem):
 
 class Sphere(FloatProblem):
 
-    def __init__(self, number_of_variables: int=10, reference_front=None):
-        super(Sphere, self).__init__(reference_front=reference_front)
+    def __init__(self, number_of_variables: int=10):
+        super(Sphere, self).__init__()
         self.number_of_objectives = 1
         self.number_of_variables = number_of_variables
         self.number_of_constraints = 0
@@ -81,7 +81,7 @@ class SubsetSum(BinaryProblem):
 
         :param C: Large integer.
         :param W: Set of non-negative integers."""
-        super(SubsetSum, self).__init__(reference_front=None)
+        super(SubsetSum, self).__init__()
         self.C = C
         self.W = W
 

@@ -1,4 +1,4 @@
-from jmetal.algorithm.singleobjective.evolutionaryalgorithm import ElitistEvolutionStrategy
+from jmetal.algorithm.singleobjective.evolution_strategy import ElitistEvolutionStrategy
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.mutation import Polynomial
 from jmetal.problem.singleobjective.unconstrained import Sphere

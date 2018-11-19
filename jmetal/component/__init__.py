@@ -4,7 +4,8 @@ from .comparator import EqualSolutionsComparator, SolutionAttributeComparator, R
     DominanceComparator
 from .density_estimator import CrowdingDistance
 from .evaluator import SequentialEvaluator, MapEvaluator
-from .observer import ProgressBarObserver, BasicAlgorithmObserver, WriteFrontToFileObserver, VisualizerObserver
+from .generator import RandomGenerator, InjectorGenerator
+from .observer import ProgressBarObserver, BasicObserver, WriteFrontToFileObserver, VisualizerObserver
 from .quality_indicator import HyperVolume
 from .ranking import FastNonDominatedRanking
 
@@ -14,8 +15,9 @@ __all__ = [
     'EqualSolutionsComparator', 'SolutionAttributeComparator', 'RankingAndCrowdingDistanceComparator',
     'DominanceComparator',
     'CrowdingDistance',
+    'RandomGenerator', 'InjectorGenerator',
     'SequentialEvaluator', 'MapEvaluator',
-    'ProgressBarObserver', 'BasicAlgorithmObserver', 'WriteFrontToFileObserver', 'VisualizerObserver',
+    'ProgressBarObserver', 'BasicObserver', 'WriteFrontToFileObserver', 'VisualizerObserver',
     'HyperVolume',
     'FastNonDominatedRanking'
 ]

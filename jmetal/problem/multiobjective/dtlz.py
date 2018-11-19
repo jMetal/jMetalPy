@@ -18,11 +18,10 @@ class DTLZ1(FloatProblem):
     .. note:: Unconstrained problem. The default number of variables and objectives are, respectively, 7 and 3.
     """
 
-    def __init__(self, number_of_variables: int = 7, number_of_objectives=3, reference_front=None):
+    def __init__(self, number_of_variables: int = 7, number_of_objectives=3):
         """ :param number_of_variables: number of decision variables of the problem.
-        :param reference_front: List of solutions with the reference front. Default to None.
         """
-        super(DTLZ1, self).__init__(reference_front=reference_front)
+        super(DTLZ1, self).__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = number_of_objectives
         self.number_of_constraints = 0
@@ -62,11 +61,10 @@ class DTLZ2(FloatProblem):
     .. note:: Unconstrained problem. The default number of variables and objectives are, respectively, 12 and 3.
     """
 
-    def __init__(self, number_of_variables: int = 12, number_of_objectives=3, reference_front=None):
+    def __init__(self, number_of_variables: int = 12, number_of_objectives=3):
         """:param number_of_variables: number of decision variables of the problem
-        :param reference_front: List of solutions with the reference front. Default to None.
         """
-        super(DTLZ2, self).__init__(reference_front=reference_front)
+        super(DTLZ2, self).__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = number_of_objectives
         self.number_of_constraints = 0

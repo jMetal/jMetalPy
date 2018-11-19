@@ -1,5 +1,4 @@
-from jmetal.algorithm.singleobjective.evolutionaryalgorithm import ElitistEvolutionStrategy
-from jmetal.core.solution import BinarySolution
+from jmetal.algorithm.singleobjective.evolution_strategy import ElitistEvolutionStrategy
 from jmetal.operator.mutation import BitFlip
 from jmetal.problem.singleobjective.unconstrained import OneMax
 
@@ -8,10 +7,10 @@ def main() -> None:
     bits = 512
     problem = OneMax(bits)
 
-    algorithm = ElitistEvolutionStrategy[BinarySolution, BinarySolution](
+    algorithm = ElitistEvolutionStrategy(
         problem=problem,
         mu=1,
-        lambd_a=10,
+        lambda_=10,
         max_evaluations=25000,
         mutation=BitFlip(probability=1.0/bits)
     )

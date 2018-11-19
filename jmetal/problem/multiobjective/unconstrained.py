@@ -16,8 +16,8 @@ from jmetal.core.solution import FloatSolution, BinarySolution
 class Kursawe(FloatProblem):
     """ Class representing problem Kursawe. """
 
-    def __init__(self, number_of_variables: int = 3, reference_front=None):
-        super(Kursawe, self).__init__(reference_front=reference_front)
+    def __init__(self, number_of_variables: int = 3):
+        super(Kursawe, self).__init__()
         self.number_of_objectives = 2
         self.number_of_variables = number_of_variables
         self.number_of_constraints = 0
@@ -51,8 +51,8 @@ class Kursawe(FloatProblem):
 
 class Fonseca(FloatProblem):
 
-    def __init__(self, reference_front=None):
-        super(Fonseca, self).__init__(reference_front=reference_front)
+    def __init__(self):
+        super(Fonseca, self).__init__()
         self.number_of_variables = 3
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -79,8 +79,8 @@ class Fonseca(FloatProblem):
 
 class Schaffer(FloatProblem):
 
-    def __init__(self, reference_front=None):
-        super(Schaffer, self).__init__(reference_front=reference_front)
+    def __init__(self):
+        super(Schaffer, self).__init__()
         self.number_of_variables = 1
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -108,8 +108,8 @@ class Schaffer(FloatProblem):
 
 class Viennet2(FloatProblem):
 
-    def __init__(self, reference_front=None):
-        super(Viennet2, self).__init__(reference_front=reference_front)
+    def __init__(self):
+        super(Viennet2, self).__init__()
         self.number_of_variables = 2
         self.number_of_objectives = 3
         self.number_of_constraints = 0
@@ -148,7 +148,7 @@ class SubsetSum(BinaryProblem):
 
         :param C: Large integer.
         :param W: Set of non-negative integers."""
-        super(SubsetSum, self).__init__(reference_front=None)
+        super(SubsetSum, self).__init__()
         self.C = C
         self.W = W
 

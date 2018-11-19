@@ -7,7 +7,7 @@ from jmetal.util.graphic import ScatterStreaming
 from jmetal.core.observable import Observer
 from jmetal.util.solution_list_output import SolutionList
 
-jMetalPyLogger = logging.getLogger('jMetalPy')
+LOGGER = logging.getLogger('jmetal')
 
 """
 .. module:: observer
@@ -39,7 +39,7 @@ class ProgressBarObserver(Observer):
             self.progress_bar.close()
 
 
-class BasicAlgorithmObserver(Observer):
+class BasicObserver(Observer):
 
     def __init__(self, frequency: float = 1.0) -> None:
         """ Show the number of evaluations, best fitness and computing time.
@@ -53,7 +53,7 @@ class BasicAlgorithmObserver(Observer):
         front = kwargs['population']
 
         if (evaluations % self.display_frequency) == 0:
-            jMetalPyLogger.debug(
+            LOGGER.debug(
                 'Evaluations: {0} \n Best fitness: {1} \n Computing time: {2}'.format(
                     evaluations, front[0].objectives, computing_time
                 )
@@ -70,17 +70,17 @@ class WriteFrontToFileObserver(Observer):
         self.directory = output_directory
 
         if os.path.isdir(self.directory):
-            jMetalPyLogger.warning('Directory {} exists. Removing contents.'.format(self.directory))
+            LOGGER.warning('Directory {} exists. Removing contents.'.format(self.directory))
             for file in os.listdir(self.directory):
                 os.remove('{0}/{1}'.format(self.directory, file))
         else:
-            jMetalPyLogger.warning('Directory {} does not exist. Creating it.'.format(self.directory))
+            LOGGER.warning('Directory {} does not exist. Creating it.'.format(self.directory))
             os.mkdir(self.directory)
 
     def update(self, *args, **kwargs):
-        front = kwargs['population']
+        population = kwargs['population']
 
-        SolutionList.print_function_values_to_file(front, '{0}/FUN.{1}'.format(self.directory, self.counter))
+        SolutionList.print_function_values_to_file(population, '{0}/FUN.{1}'.format(self.directory, self.counter))
         self.counter += 1
 
 
@@ -89,16 +89,16 @@ class VisualizerObserver(Observer):
     def __init__(self, replace: bool=True) -> None:
         self.display_frequency = 1.0
         self.replace = replace
-        self.plot = ScatterStreaming(plot_title='jMetalPy')
+        self.plot = ScatterStreaming(plot_title='jMetal')
 
     def update(self, *args, **kwargs):
         computing_time = kwargs['computing time']
         evaluations = kwargs['evaluations']
 
-        front = kwargs['population']
-        reference_front = kwargs['reference_front']
+        population = kwargs['population']
+        problem = kwargs['problem']
 
         title = '{0}, Eval: {1}, Time: {2}'.format('VisualizerObserver', evaluations, computing_time)
 
         if (evaluations % self.display_frequency) == 0:
-            self.plot.update(front, reference_front, rename_title=title, persistence=self.replace)
+            self.plot.update(population, problem.reference_front, rename_title=title, persistence=self.replace)

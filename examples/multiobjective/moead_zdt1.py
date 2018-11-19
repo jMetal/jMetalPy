@@ -1,15 +1,12 @@
-from jmetal.core.problem import Problem
-
-from jmetal.component import ProgressBarObserver
-
 from jmetal.algorithm import MOEAD
-from jmetal.problem import LZ09_F2
+from jmetal.problem import LZ09_F2, ZDT1
 from jmetal.operator import Polynomial, DifferentialEvolution
+from jmetal.component import ProgressBarObserver
 from jmetal.util import FrontPlot
 
 if __name__ == '__main__':
-    reference_front = Problem.read_front_from_file_as_solutions('../../resources/reference_front/LZ09_F2.pf')
-    problem = LZ09_F2(reference_front=reference_front)
+    problem = ZDT1()
+    problem.read_front(file_path='../../resources/reference_front/LZ09_F2.pf')
 
     algorithm = MOEAD(
         problem=problem,

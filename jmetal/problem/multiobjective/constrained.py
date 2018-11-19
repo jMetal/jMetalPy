@@ -15,8 +15,8 @@ from jmetal.core.problem import FloatProblem
 class Srinivas(FloatProblem):
     """ Class representing problem Srinivas. """
 
-    def __init__(self, reference_front=None):
-        super(Srinivas, self).__init__(reference_front=reference_front)
+    def __init__(self):
+        super(Srinivas, self).__init__()
         self.number_of_objectives = 2
         self.number_of_variables = 2
         self.number_of_constraints = 2
@@ -64,10 +64,10 @@ class Srinivas(FloatProblem):
 
 
 class Tanaka(FloatProblem):
-    """ Class representing problem Tanaka """
+    """ Class representing problem Tanaka. """
 
-    def __init__(self, reference_front=None):
-        super(Tanaka, self).__init__(reference_front=reference_front)
+    def __init__(self):
+        super(Tanaka, self).__init__()
         self.number_of_objectives = 2
         self.number_of_variables = 2
         self.number_of_constraints = 2
