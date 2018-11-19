@@ -108,3 +108,6 @@ ENV/
 
 # Dask
 dask-worker-space
+
+# Plotly
+*.html
