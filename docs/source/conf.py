@@ -19,8 +19,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 # http://blog.rtwilson.com/how-to-make-your-sphinx-documentation-compile-with-readthedocs-when-youre-using-numpy-and-scipy/
 import mock
 
-MOCK_MODULES = ['numpy', 'pandas',
-                'tqdm',
+MOCK_MODULES = ['numpy', 'pandas', 'scipy', 'tqdm',
                 'plotly', 'plotly.offline',
                 'matplotlib', 'matplotlib.pyplot', 'mpl_toolkits', 'mpl_toolkits.mplot3d']
 for mod_name in MOCK_MODULES:
@@ -49,6 +48,7 @@ release = ''
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.mathjax'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -161,7 +161,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'jMetalPy', 'jMetalPy Documentation',
-     author, 'jMetalPy', 'One line description of project.',
+     author, 'jMetalPy', 'Python version of the jMetal framework.',
      'Miscellaneous'),
 ]
 
