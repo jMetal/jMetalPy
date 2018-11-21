@@ -1,11 +1,9 @@
 from os.path import dirname, join
 import unittest
 
-from jmetal.core.problem import Problem
-
 from jmetal.core.solution import Solution
 from jmetal.problem import ZDT1
-from jmetal.component.quality_indicator import HyperVolume
+from jmetal.util.indicator import HyperVolume
 
 
 class HyperVolumeTestCases(unittest.TestCase):

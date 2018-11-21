@@ -1,12 +1,8 @@
-from jmetal.algorithm import SteadyStateGeneticAlgorithm
-from jmetal.core.solution import FloatSolution
-from jmetal.operator.crossover import SPX
-from jmetal.operator.mutation import BitFlip
-from jmetal.operator.selection import BinaryTournamentSelection
+from jmetal.algorithm import GeneticAlgorithm
+from jmetal.operator import SPX, BitFlip, BinaryTournamentSelection
 from jmetal.problem.singleobjective.unconstrained import SubsetSum
 
-
-def main() -> None:
+if __name__ == '__main__':
     C = 300500
     W = [2902, 5235, 357, 6058, 4846, 8280, 1295, 181, 3264,
          7285, 8806, 2344, 9203, 6806, 1511, 2172, 843, 4697,
@@ -26,9 +22,11 @@ def main() -> None:
 
     problem = SubsetSum(C, W)
 
-    algorithm = SteadyStateGeneticAlgorithm[FloatSolution, FloatSolution](
+    algorithm = GeneticAlgorithm(
         problem=problem,
         population_size=100,
+        mating_pool_size=2,
+        offspring_size=1,
         max_evaluations=100000,
         mutation=BitFlip(probability=0.1),
         crossover=SPX(probability=0.8),
@@ -38,12 +36,8 @@ def main() -> None:
     algorithm.run()
     subset = algorithm.get_result()
 
-    print("Algorithm: " + algorithm.get_name())
-    print("Problem: " + problem.get_name())
-    print("Solution: " + str(subset.variables))
-    print("Fitness:  " + str(-subset.objectives[0]))
-    print("Computing time: " + str(algorithm.total_computing_time))
-
-
-if __name__ == '__main__':
-    main()
+    print('Algorithm: {}'.format(algorithm.get_name()))
+    print('Problem: {}'.format(problem.get_name()))
+    print('Solution: {}'.format(subset.variables))
+    print('Fitness: {}'.format(subset.objectives[0]))
+    print('Computing time: {}'.format(algorithm.total_computing_time))

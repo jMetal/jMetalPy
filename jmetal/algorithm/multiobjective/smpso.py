@@ -1,16 +1,16 @@
-from typing import TypeVar, List
+import random
 from copy import copy
 from math import sqrt
-import random
+from typing import TypeVar, List
 
 import numpy
 
 from jmetal.component.archive import BoundedArchive
 from jmetal.component.comparator import DominanceComparator
-from jmetal.core.evaluator import Evaluator
-from jmetal.core.observable import Observable
+from jmetal.component.evaluator import Evaluator
+from jmetal.component.generator import Generator
 from jmetal.core.algorithm import ParticleSwarmOptimization
-from jmetal.core.generator import Generator
+from jmetal.core.observable import Observable
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution

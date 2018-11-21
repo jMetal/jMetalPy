@@ -1,10 +1,14 @@
 import io
 import logging
 from concurrent.futures import ProcessPoolExecutor
-from itertools import chain
+from typing import List
 
-from scipy import stats
 import pandas as pd
+from scipy import stats
+
+from jmetal.component import WriteFrontToFileObserver
+from jmetal.core.algorithm import Algorithm
+from jmetal.util.indicator import Metric
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -17,63 +21,71 @@ LOGGER = logging.getLogger('jmetal')
 """
 
 
+class Job:
+
+    def __init__(self, algorithm: Algorithm, problem_name: str, label: str, run: int):
+        self.algorithm = algorithm
+        self.problem_name = problem_name
+        self.id_ = run
+        self.label_ = label
+
+        self.executed = False
+
+    def run(self):
+        self.algorithm.run()
+        self.executed = True
+
+    def evaluate(self, metric: Metric):
+        if not self.executed:
+            raise Exception('Algorithm must be run first')
+
+        return metric.compute(self.algorithm)
+
+
 class Experiment:
 
-    def __init__(self, base_directory: str, algorithm_list: list, problem_list: list, metric_list: list,
-                 n_runs: int = 1, m_workers: int = 3):
+    def __init__(self, base_directory: str, jobs: list, m_workers: int = 3):
         """ Run an experiment to evaluate algorithms and/or problems.
 
         :param base_directory: Directory to save partial outputs.
-        :param algorithm_list: List of algorithms as Tuple(Algorithm, dic() with parameters).
-        :param metric_list: List of metrics. Each metric should inherit from :py:class:`Metric` or, at least,
-        contain a method `compute`.
-        :param m_workers: Maximum number of workers for ProcessPoolExecutor.
+        :param jobs: List of Jobs (from :py:mod:`jmetal.util.laboratory)`) to be executed.
+        :param m_workers: Maximum number of workers to execute the Jobs in parallel.
         """
         self.base_dir = base_directory
-
-        self.algorithm_list = algorithm_list
-        self.problem_list = problem_list
-        self.metric_list = metric_list
-        self.experiment_list = list()
-
-        self.n_runs = n_runs
+        self.jobs = jobs
         self.m_workers = m_workers
 
     def run(self) -> None:
-        self.__setup_runs()
-        futures = []
-
         with ProcessPoolExecutor(max_workers=self.m_workers) as executor:
-            for label, algorithm, n_run in self.experiment_list:
-                # algorithm.observable.register(observer=WriteFrontToFileObserver(output_directory=self.base_dir + label))
-                futures.append(executor.submit(algorithm.run()))
+            for job in self.jobs:
+                executor.submit(job.run())
 
-        print(futures)
+    def compute_metrics(self, metrics: list) -> pd.DataFrame:
+        col_names = ['problem', 'metric', 'run']
 
-    def compute_metrics(self) -> pd.DataFrame:
-        runs = list(range(0, self.n_runs)) * len(self.metric_list) * len(self.problem_list)
-        metrics = [[metric.get_name()] * self.n_runs for metric in self.metric_list] * len(self.problem_list)
-        problems = [[problem.get_name()] * self.n_runs * len(self.metric_list) for problem in self.problem_list]
+        for job in self.jobs:
+            if job.label_ not in col_names:
+                col_names.append(job.label_)
 
-        arrays = [list(chain(*problems)), list(chain(*metrics)), runs]
-        index = pd.MultiIndex.from_arrays(arrays, names=['problem', 'metric', 'run'])
-        df = pd.DataFrame(data=None, columns=set([c['label'] for c in self.algorithm_list]), index=index, dtype=float)
+        df = pd.DataFrame(columns=col_names)
 
-        for label, algorithm, n_run in self.experiment_list:
-            for metric in self.metric_list:
-                r = metric.compute(algorithm.get_result())
-                df.loc[(algorithm.problem.get_name(), metric.get_name(), n_run), label] = r
+        for job in self.jobs:
+            for metric in metrics:
+                value = job.evaluate(metric)
+                new_data = pd.DataFrame(data=[[job.algorithm.problem.get_name(), metric.get_name(), job.id_, value]],
+                                        columns=['problem', 'metric', 'run', job.label_])
+
+                df = df.append(new_data)
+
+        # Get rid of NaN values by grouping rows by columns
+        df = df.groupby(['problem', 'metric', 'run']).mean()
+
+        # Save to file
+        df.to_csv(self.base_dir + '/metrics_df.csv', sep='\t', encoding='utf-8')
 
         return df
 
-    def compute_statistical_analysis(self, data: pd.DataFrame):
-        """ Compute the mean and standard deviation, median and interquartile range.
-
-        :param data_list: List of data sets.
-        """
-        pass
-
-    def compute_statiscal_analysis_2(self, data_list: list):
+    def __compute_statistical_analysis(self, data_list: List[list]):
         """ The application scheme listed here is as described in
 
         * G. Luque, E. Alba, Parallel Genetic Algorithms, Springer-Verlag, ISBN 978-3-642-22084-5, 2011
@@ -82,10 +94,6 @@ class Experiment:
         """
         if len(data_list) < 2:
             raise Exception('Data sets number must be equal or greater than two')
-
-        dt = pd.DataFrame(data=None,
-                          columns=[algorithm[0] for algorithm in self.algorithm_list],
-                          index=[problem.get_name() for problem in self.problem_list])
 
         normality_test = True
 
@@ -109,14 +117,9 @@ class Experiment:
             else:
                 pass
 
-    def __setup_runs(self):
-        """ Configure the algorithm list, by making a triple of (label, algorithm, n_run). """
-        for n_run in range(self.n_runs):
-            for configuration in self.algorithm_list:
-                self.experiment_list.append((configuration['label'], configuration['algorithm'], n_run))
-
-    def convert_to_latex(self, df: pd.DataFrame, caption: str='Experiment', label: str='tab:exp', alignment: str='c'):
-        """ Convert a pandas dataframe to a LaTeX tabular. Prints labels in bold, does not use math mode. """
+    @staticmethod
+    def convert_to_latex(df: pd.DataFrame, caption: str = 'Experiment', label: str = 'tab:exp', alignment: str = 'c'):
+        """ Convert a pandas DataFrame to a LaTeX tabular. Prints labels in bold, does not use math mode. """
         num_columns, num_rows = df.shape[1], df.shape[0]
         output = io.StringIO()
 

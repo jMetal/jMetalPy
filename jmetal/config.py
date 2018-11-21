@@ -1,8 +1,13 @@
-from jmetal.core.observable import DefaultObservable
-from jmetal.component import SequentialEvaluator, RandomGenerator
+from jmetal.component import SequentialEvaluator, RandomGenerator, DefaultObservable
 
-store = {
-    'default_observable': DefaultObservable(),
-    'default_evaluator': SequentialEvaluator(),
-    'default_generator': RandomGenerator()
-}
+
+class _Store(object):
+
+    def __init__(self):
+        super(_Store, self).__init__()
+        self.default_observable = DefaultObservable()
+        self.default_evaluator = SequentialEvaluator()
+        self.default_generator = RandomGenerator()
+
+
+store = _Store()

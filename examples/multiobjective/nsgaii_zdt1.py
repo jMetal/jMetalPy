@@ -1,9 +1,10 @@
-from jmetal.algorithm import NSGAII
-from jmetal.problem import ZDT1
-from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
-from jmetal.component import ProgressBarObserver, RankingAndCrowdingDistanceComparator, VisualizerObserver
-from jmetal.util import FrontPlot, SolutionList
+import copy
 
+from jmetal.algorithm import NSGAII
+from jmetal.component import ProgressBarObserver, RankingAndCrowdingDistanceComparator, VisualizerObserver
+from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
+from jmetal.problem import ZDT1
+from jmetal.util import FrontPlot, SolutionList
 
 if __name__ == '__main__':
     problem = ZDT1()

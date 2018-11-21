@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
-from typing import List, TypeVar
+from typing import TypeVar
 
-from jmetal.core.solution import Solution
+from jmetal.core.algorithm import Algorithm
 
 """
 .. module:: indicator
@@ -22,12 +22,29 @@ class Metric:
         self.is_minimization = is_minimization
 
     @abstractmethod
-    def get_name(self) -> str:
-        return self.__class__.__name__
+    def compute(self, data):
+        pass
 
     @abstractmethod
-    def compute(self, front: List[Solution]):
+    def get_name(self) -> str:
         pass
+
+
+class ComputingTime(Metric):
+
+    def __init__(self):
+        super().__init__(is_minimization=True)
+
+    def compute(self, data):
+        value = -1
+
+        if isinstance(data, Algorithm):
+            value = data.total_computing_time
+
+        return value
+
+    def get_name(self) -> str:
+        return 'Total computing time'
 
 
 class HyperVolume(Metric):
@@ -46,15 +63,18 @@ class HyperVolume(Metric):
         self.referencePoint = reference_point
         self.list: MultiList = []
 
-    def compute(self, front: List[Solution]):
+    def compute(self, data):
         """Before the HV computation, front and reference point are translated, so
         that the reference point is [0, ..., 0].
 
         :return: The hypervolume that is dominated by a non-dominated front.
         """
+        if isinstance(data, Algorithm):
+            front = data.get_result()
+
         def get_variables() -> list:
             result = []
-            for solution in front:
+            for solution in data:
                 result.append(solution.objectives)
 
             return result

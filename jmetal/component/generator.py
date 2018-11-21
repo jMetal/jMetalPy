@@ -1,9 +1,11 @@
 import copy
-from typing import List
+from abc import ABCMeta, abstractmethod
+from typing import TypeVar, Generic, List
 
-from jmetal.core.generator import Generator
 from jmetal.core.problem import Problem
 from jmetal.core.solution import Solution
+
+R = TypeVar('R')
 
 """
 .. module:: generator
@@ -12,6 +14,15 @@ from jmetal.core.solution import Solution
 
 .. moduleauthor:: Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
+
+
+class Generator(Generic[R]):
+
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def new(self, problem: Problem) -> R:
+        pass
 
 
 class RandomGenerator(Generator):
@@ -34,7 +45,7 @@ class InjectorGenerator(Generator):
             # If we have more solutions to inject, return one from the list
             return self.population.pop()
         else:
-            # Otherwise generate a random solution
+            # Otherwise generate a new solution
             solution = problem.create_solution()
 
         return solution

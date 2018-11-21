@@ -3,10 +3,10 @@ import time
 from abc import ABCMeta, abstractmethod
 from typing import TypeVar, Generic, List
 
+from jmetal.component.evaluator import Evaluator
+from jmetal.component.generator import Generator
 from jmetal.config import store
-from jmetal.core.generator import Generator
 from jmetal.core.problem import Problem
-from jmetal.core.evaluator import Evaluator
 from jmetal.core.solution import FloatSolution
 
 S = TypeVar('S')
@@ -41,12 +41,12 @@ class Algorithm(Generic[S, R], threading.Thread):
         self.start_computing_time = 0
         self.total_computing_time = 0
 
-        self.observable = store['default_observable']
+        self.observable = store.default_observable
 
         if not self.generator:
-            self.generator = store['default_generator']
+            self.generator = store.default_generator
         if not self.evaluator:
-            self.evaluator = store['default_evaluator']
+            self.evaluator = store.default_evaluator
 
     @abstractmethod
     def init_progress(self) -> None:
@@ -86,8 +86,13 @@ class Algorithm(Generic[S, R], threading.Thread):
 
         self.total_computing_time = self.current_computing_time
 
+    @abstractmethod
+    def get_result(self) -> R:
+        pass
+
+    @abstractmethod
     def get_name(self) -> str:
-        return self.__class__.__name__
+        pass
 
 
 class EvolutionaryAlgorithm(Algorithm[S, R]):
@@ -147,6 +152,14 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
         }
 
         self.observable.notify_all(**observable_data)
+
+    @abstractmethod
+    def get_result(self) -> R:
+        pass
+
+    @abstractmethod
+    def get_name(self) -> str:
+        pass
 
 
 class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]]):
@@ -229,3 +242,11 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]]):
         }
 
         self.observable.notify_all(**observable_data)
+
+    @abstractmethod
+    def get_result(self) -> R:
+        pass
+
+    @abstractmethod
+    def get_name(self) -> str:
+        pass

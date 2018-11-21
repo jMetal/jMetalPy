@@ -1,11 +1,12 @@
 import logging
 import os
+from pathlib import Path
 
 from tqdm import tqdm
 
-from jmetal.util.graphic import ScatterStreaming
 from jmetal.core.observable import Observer
-from jmetal.util.solution_list_output import SolutionList
+from jmetal.util.graphic import ScatterStreaming
+from jmetal.util.solution_list import print_function_values_to_file
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -20,7 +21,7 @@ LOGGER = logging.getLogger('jmetal')
 
 class ProgressBarObserver(Observer):
 
-    def __init__(self, step: int, maximum: int, desc: str= 'Progress') -> None:
+    def __init__(self, step: int, maximum: int, desc: str = 'Progress') -> None:
         """ Show a smart progress meter with the number of evaluations and computing time.
 
         :param step: Initial counter value.
@@ -54,7 +55,7 @@ class BasicObserver(Observer):
 
         if (evaluations % self.display_frequency) == 0:
             LOGGER.debug(
-                'Evaluations: {0} \n Best fitness: {1} \n Computing time: {2}'.format(
+                'Evaluations: {} \n Best fitness: {} \n Computing time: {}'.format(
                     evaluations, front[0].objectives, computing_time
                 )
             )
@@ -62,34 +63,34 @@ class BasicObserver(Observer):
 
 class WriteFrontToFileObserver(Observer):
 
-    def __init__(self, output_directory) -> None:
+    def __init__(self, output_directory: str) -> None:
         """ Write function values of the front into files.
 
         :param output_directory: Output directory. Each front will be saved on a file `FUN.x`. """
         self.counter = 0
         self.directory = output_directory
 
-        if os.path.isdir(self.directory):
+        if Path(self.directory).is_dir():
             LOGGER.warning('Directory {} exists. Removing contents.'.format(self.directory))
             for file in os.listdir(self.directory):
                 os.remove('{0}/{1}'.format(self.directory, file))
         else:
             LOGGER.warning('Directory {} does not exist. Creating it.'.format(self.directory))
-            os.mkdir(self.directory)
+            Path(self.directory).mkdir(parents=True)
 
     def update(self, *args, **kwargs):
         population = kwargs['population']
 
-        SolutionList.print_function_values_to_file(population, '{0}/FUN.{1}'.format(self.directory, self.counter))
+        print_function_values_to_file(population, '{}/FUN.{}'.format(self.directory, self.counter))
         self.counter += 1
 
 
 class VisualizerObserver(Observer):
 
-    def __init__(self, replace: bool=True) -> None:
+    def __init__(self, replace: bool = True) -> None:
         self.display_frequency = 1.0
         self.replace = replace
-        self.plot = ScatterStreaming(plot_title='jMetal')
+        self.plot = ScatterStreaming(plot_title='jmetal')
 
     def update(self, *args, **kwargs):
         computing_time = kwargs['computing time']
@@ -98,7 +99,7 @@ class VisualizerObserver(Observer):
         population = kwargs['population']
         problem = kwargs['problem']
 
-        title = '{0}, Eval: {1}, Time: {2}'.format('VisualizerObserver', evaluations, computing_time)
+        title = '{}, Eval: {}, Time: {}'.format('VisualizerObserver', evaluations, computing_time)
 
         if (evaluations % self.display_frequency) == 0:
             self.plot.update(population, problem.reference_front, rename_title=title, persistence=self.replace)

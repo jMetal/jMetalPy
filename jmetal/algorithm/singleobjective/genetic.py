@@ -1,12 +1,10 @@
 from typing import TypeVar, List
 
-from jmetal.config import store
+from jmetal.component.evaluator import Evaluator
+from jmetal.component.generator import Generator
 from jmetal.core.algorithm import EvolutionaryAlgorithm
-from jmetal.core.generator import Generator
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
-from jmetal.core.evaluator import Evaluator
-from jmetal.core.observable import Observable
 
 S = TypeVar('S')
 R = TypeVar('R')

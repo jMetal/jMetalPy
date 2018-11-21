@@ -1,11 +1,9 @@
 from copy import copy
 from typing import TypeVar, List
 
-from jmetal.core.observable import Observable
-
+from jmetal.component.evaluator import Evaluator
+from jmetal.component.generator import Generator
 from jmetal.core.algorithm import EvolutionaryAlgorithm
-from jmetal.core.evaluator import Evaluator
-from jmetal.core.generator import Generator
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
 
@@ -25,13 +23,13 @@ class EvolutionStrategy(EvolutionaryAlgorithm):
 
     def __init__(self,
                  problem: Problem,
-                 population_generator: Generator,
                  max_evaluations: int,
                  mu: int,
                  lambda_: int,
                  mutation: Mutation,
                  elitist: bool = True,
-                 evaluator: Evaluator = None):
+                 evaluator: Evaluator = None,
+                 population_generator: Generator = None):
         super(EvolutionStrategy, self).__init__(
             problem=problem,
             population_size=mu,

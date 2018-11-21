@@ -1,14 +1,10 @@
 from typing import TypeVar, List
 
-from jmetal.core.observable import Observable
-
-from jmetal.component.evaluator import Evaluator
-
-from jmetal.config import store
-from jmetal.core.operator import Mutation, Crossover, Selection
-from jmetal.core.generator import Generator
-from jmetal.core.problem import Problem
 from jmetal.algorithm.singleobjective.genetic import GeneticAlgorithm
+from jmetal.component.evaluator import Evaluator
+from jmetal.component.generator import Generator
+from jmetal.core.operator import Mutation, Crossover, Selection
+from jmetal.core.problem import Problem
 from jmetal.operator import RankingAndCrowdingDistanceSelection
 
 S = TypeVar('S')

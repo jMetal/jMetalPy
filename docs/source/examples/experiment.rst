@@ -6,59 +6,87 @@ The hypervolume indicator is used for performance assessment.
 
 .. code-block:: python
 
-   # Configure experiment
-   problem_list = [ZDT1(), ZDT2()]
-   metric_list = [HyperVolume(reference_point=[1, 1])]
-   algorithm_list = []
+   from jmetal.util.laboratory import Experiment, Job
 
-   for problem in problem_list:
-      algorithm_list.append(
-         ('NSGAII_A',
-          NSGAII(
-             problem=problem,
-             population_size=100,
-             max_evaluations=25000,
-             mutation=NullMutation(),
-             crossover=SBX(probability=1.0, distribution_index=20),
-             selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
-          ))
-      )
-      algorithm_list.append(
-         ('NSGAII_B',
-          NSGAII(
-             problem=problem,
-             population_size=100,
-             max_evaluations=25000,
-             mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
-             crossover=SBX(probability=1.0, distribution_index=20),
-             selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
-          ))
-      )
+   def configure_experiment(problems: list, n_run: int):
+    jobs = []
 
-   study = Experiment(base_directory='./experiment',
-                      algorithm_list=algorithm_list,
-                      problem_list=problem_list,
-                      metric_list=metric_list,
-                      n_runs=3)
-   study.run()
-   print(study.compute_metrics())
+    for run in range(n_run):
+        for problem in problems:
+            jobs.append(
+                Job(
+                    algorithm=NSGAII(
+                        problem=problem,
+                        population_size=100,
+                        mating_pool_size=100,
+                        offspring_size=100,
+                        max_evaluations=5000,
+                        mutation=NullMutation(),
+                        crossover=SBX(probability=1.0, distribution_index=20),
+                        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
+                    ),
+                    label='NSGAII with Null Mutation',
+                    run=run,
+                )
+            )
+            jobs.append(
+                Job(
+                    algorithm=NSGAII(
+                        problem=problem,
+                        population_size=100,
+                        mating_pool_size=100,
+                        offspring_size=100,
+                        max_evaluations=5000,
+                        mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
+                        crossover=SBX(probability=1.0, distribution_index=20),
+                        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
+                    ),
+                    label='NSGAII with Polynomial Mutation',
+                    run=run
+                )
+            )
+
+    return jobs
+
+   if __name__ == '__main__':
+    jobs = configure_experiment(problems=[ZDT1(), ZDT2()], n_run=3)
+
+    test = Experiment(
+        base_directory='./experiment',
+        jobs=jobs
+    )
+    test.run()
+
+    metrics = [HyperVolume(reference_point=[1, 1]), ComputingTime()]
+    data = test.compute_metrics(metrics)
+    print(data)
 
 .. table::
 
-    +-------+-----------+----+--------+--------+
-    |       |           |    |NSGAII_A|NSGAII_B|
-    +-------+-----------+----+--------+--------+
-    |Problem|Metric     |Run |        |        |
-    +=======+===========+====+========+========+
-    |ZDT1   |Hypervolume|0   |        |        |
-    +-------+-----------+----+--------+--------+
-    |       |           |1   |        |        |
-    +-------+-----------+----+--------+--------+
-    |       |           |2   |        |        |
-    +-------+-----------+----+--------+--------+
-    |ZDT2   |Hypervolume|0   |        |        |
-    +-------+-----------+----+--------+--------+
-    |       |           |1   |        |        |
-    +-------+-----------+----+--------+--------+
-    |       |           |2   |        |        |
-    +-------+-----------+----+--------+--------+
+    +-------+-----------+----+-------------------------+-------------------------------+
+    |       |           |    |NSGAII with Null Mutation|NSGAII with Polynomial Mutation|
+    +-------+-----------+----+-------------------------+-------------------------------+
+    |Problem|Metric     |Run |                         |                               |
+    +=======+===========+====+=========================+===============================+
+    |ZDT1   |Hypervolume|0   |0.315708                 |0.516258                       |
+    +-------+-----------+----+-------------------------+-------------------------------+
+    |       |           |1   |0.323271                 |0.491973                       |
+    +-------+-----------+----+-------------------------+-------------------------------+
+    |       |           |2   |0.414953                 |0.507568                       |
+    +-------+-----------+----+-------------------------+-------------------------------+
+    |ZDT2   |Hypervolume|0   |0.293225                 |0.504027                       |
+    +-------+-----------+----+-------------------------+-------------------------------+
+    |       |           |1   |0.280499                 |0.417048                       |
+    +-------+-----------+----+-------------------------+-------------------------------+
+    |       |           |2   |0.357358                 |0.489576                       |
+    +-------+-----------+----+-------------------------+-------------------------------+
+
+The return value of :code:`compute_metrics()` is a pandas DataFrame, so we can use all the methods that pandas makes available for us:
+
+.. code-block:: python
+
+   mean_results = data.groupby(['problem', 'metric']).mean()
+   median_results = data.groupby(['problem', 'metric']).median()
+   only_one_metric = data.xs('Hypervolume', level='metric')
+   min_values = data.groupby(['problem', 'metric']).min()
+   max_values = data.groupby(['problem', 'metric']).max()

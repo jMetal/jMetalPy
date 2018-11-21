@@ -7,11 +7,11 @@ from typing import TypeVar, List
 import numpy as np
 
 from jmetal.algorithm.singleobjective.genetic import GeneticAlgorithm
-from jmetal.core.solution import Solution
-from jmetal.core.evaluator import Evaluator
-from jmetal.core.generator import Generator
+from jmetal.component.evaluator import Evaluator
+from jmetal.component.generator import Generator
 from jmetal.core.operator import Mutation, Crossover
 from jmetal.core.problem import Problem
+from jmetal.core.solution import Solution
 
 S = TypeVar('S')
 R = List[S]
