@@ -7,7 +7,7 @@ Common imports for these examples:
 
    from jmetal.operator import Polynomial
 
-   from jmetal.util import FrontPlot
+   from jmetal.util.graphic import FrontPlot
 
 SMPSO
 ------------------------------------
@@ -69,8 +69,8 @@ SMPSO/RP
 
        return solutions
 
-   reference_front = Problem.read_front_from_file_as_solutions('resources/reference_front/ZDT1.pf')
-   problem = ZDT1(reference_front=reference_front)
+   problem = ZDT1()
+   problem.read_front(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
    swarm_size = 100
    reference_points = [[0.8, 0.2], [0.4, 0.6]]

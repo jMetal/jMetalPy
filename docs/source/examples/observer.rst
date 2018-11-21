@@ -13,13 +13,15 @@ A progress bar observer will print a `smart progress meter <https://github.com/t
 
 .. code-block:: python
 
-   algorithm = GenerationalGeneticAlgorithm(
-      problem=problem,
-      population_size=100,
-      max_evaluations=25000,
-      mutation=BitFlip(1.0/bits),
-      crossover=SP(0.9),
-      selection=BinaryTournamentSelection()
+   algorithm = GeneticAlgorithm(
+        problem=problem,
+        population_size=100,
+        mating_pool_size=100,
+        offspring_size=100,
+        max_evaluations=25000,
+        mutation=BitFlip(1.0 / problem.number_of_bits),
+        crossover=SPX(0.9),
+        selection=BinaryTournamentSelection()
    )
 
    progress_bar = ProgressBarObserver(step=100, maximum=25000)

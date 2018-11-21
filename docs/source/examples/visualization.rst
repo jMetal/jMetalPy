@@ -7,7 +7,7 @@ The :py:mod:`jmetal.util.graphic` module contains two classes useful for plottin
 
   .. code-block:: python
 
-     from jmetal.util import FrontPlot
+     from jmetal.util.graphic import FrontPlot
 
      front = algorithm.get_result()
 

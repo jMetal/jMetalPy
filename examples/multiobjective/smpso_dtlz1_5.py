@@ -1,9 +1,9 @@
 from jmetal.algorithm import SMPSO
-from jmetal.problem import DTLZ1
-from jmetal.operator import Polynomial
 from jmetal.component import ProgressBarObserver, CrowdingDistanceArchive
-from jmetal.util import FrontPlot, SolutionList
-
+from jmetal.operator import Polynomial
+from jmetal.problem import DTLZ1
+from jmetal.util.graphic import FrontPlot
+from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
 
 if __name__ == '__main__':
     problem = DTLZ1(number_of_objectives=5)
@@ -32,8 +32,8 @@ if __name__ == '__main__':
     pareto_front.to_html(filename='SMPSO-DTLZ1-5-norm')
 
     # Save variables to file
-    SolutionList.print_function_values_to_file(front, 'FUN.SMPSO.DTLZ1-5')
-    SolutionList.print_variables_to_file(front, 'VAR.SMPSO.DTLZ1-5')
+    print_function_values_to_file(front, 'FUN.SMPSO.DTLZ1-5')
+    print_variables_to_file(front, 'VAR.SMPSO.DTLZ1-5')
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())

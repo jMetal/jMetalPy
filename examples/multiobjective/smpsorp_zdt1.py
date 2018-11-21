@@ -1,8 +1,8 @@
 from jmetal.algorithm import SMPSORP
 from jmetal.component import ProgressBarObserver, VisualizerObserver, CrowdingDistanceArchiveWithReferencePoint
-from jmetal.problem import ZDT1
 from jmetal.operator import Polynomial
-from jmetal.util import FrontPlot
+from jmetal.problem import ZDT1
+from jmetal.util.graphic import FrontPlot
 
 
 def points_to_solutions(points):

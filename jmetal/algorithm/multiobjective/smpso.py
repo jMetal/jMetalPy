@@ -214,6 +214,9 @@ class SMPSO(ParticleSwarmOptimization):
 
         return result
 
+    def get_name(self) -> str:
+        return 'Speed Constrained PSO'
+
 
 class SMPSORP(SMPSO):
 
@@ -318,3 +321,6 @@ class SMPSORP(SMPSO):
                 result.append(solution)
 
         return result
+
+    def get_name(self) -> str:
+        return 'Speed Constrained PSO with Reference Points'

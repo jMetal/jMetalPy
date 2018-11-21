@@ -9,6 +9,14 @@ Graphic
     :undoc-members:
     :show-inheritance:
 
+Quality indicator
+-----------------------------
+
+.. automodule:: jmetal.component.indicator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Lab of experiments
 --------------------------
 
@@ -17,10 +25,10 @@ Lab of experiments
     :undoc-members:
     :show-inheritance:
 
-Solution list output
+Solution list
 -----------------------------------------
 
-.. automodule:: jmetal.util.solution_list_output
+.. automodule:: jmetal.util.solution_list
     :members:
     :undoc-members:
     :show-inheritance:

@@ -1,9 +1,9 @@
 from jmetal.algorithm import NSGAII
-from jmetal.problem import DTLZ1
-from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
 from jmetal.component import ProgressBarObserver, VisualizerObserver, RankingAndCrowdingDistanceComparator
-from jmetal.util import FrontPlot, SolutionList
-
+from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
+from jmetal.problem import DTLZ1
+from jmetal.util.graphic import FrontPlot
+from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
 
 if __name__ == '__main__':
     problem = DTLZ1()
@@ -34,8 +34,8 @@ if __name__ == '__main__':
     pareto_front.to_html(filename='NSGAII-DTLZ1')
 
     # Save variables to file
-    SolutionList.print_function_values_to_file(front, 'FUN.NSGAII.DTLZ1')
-    SolutionList.print_variables_to_file(front, 'VAR.NSGAII.DTLZ1')
+    print_function_values_to_file(front, 'FUN.NSGAII.DTLZ1')
+    print_variables_to_file(front, 'VAR.NSGAII.DTLZ1')
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())

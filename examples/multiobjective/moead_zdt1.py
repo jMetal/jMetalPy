@@ -1,11 +1,11 @@
 from jmetal.algorithm import MOEAD
-from jmetal.problem import LZ09_F2, ZDT1
+from jmetal.problem import LZ09_F2
 from jmetal.operator import Polynomial, DifferentialEvolution
 from jmetal.component import ProgressBarObserver
-from jmetal.util import FrontPlot
+from jmetal.util.graphic import FrontPlot
 
 if __name__ == '__main__':
-    problem = ZDT1()
+    problem = LZ09_F2()
     problem.read_front(file_path='../../resources/reference_front/LZ09_F2.pf')
 
     algorithm = MOEAD(

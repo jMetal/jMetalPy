@@ -11,22 +11,6 @@ Algorithm
     :undoc-members:
     :show-inheritance:
 
-Evaluator
----------------------------------
-
-.. automodule:: jmetal.core.evaluator
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-Generator
----------------------------------
-
-.. automodule:: jmetal.core.generator
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 Observable
 -----------------------------
 

@@ -41,18 +41,18 @@ Generator
     :undoc-members:
     :show-inheritance:
 
-Observer
---------------------------------
+Observable
+---------------------------------
 
-.. automodule:: jmetal.component.observer
+.. automodule:: jmetal.component.observable
     :members:
     :undoc-members:
     :show-inheritance:
 
-Quality indicator
------------------------------
+Observer
+--------------------------------
 
-.. automodule:: jmetal.component.quality_indicator
+.. automodule:: jmetal.component.observer
     :members:
     :undoc-members:
     :show-inheritance:

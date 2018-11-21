@@ -1,9 +1,8 @@
 from jmetal.algorithm import NSGAII
-from jmetal.operator import BinaryTournamentSelection, BitFlip, SPX
 from jmetal.component import ProgressBarObserver, RankingAndCrowdingDistanceComparator
+from jmetal.operator import BinaryTournamentSelection, BitFlip, SPX
 from jmetal.problem.multiobjective.unconstrained import SubsetSum
-from jmetal.util import FrontPlot
-
+from jmetal.util.graphic import FrontPlot
 
 if __name__ == '__main__':
     C = 300500
