@@ -34,24 +34,22 @@ class ZDT1(FloatProblem):
         self.upper_bound = self.number_of_variables * [1.0]
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
-        g = self.__eval_g(solution)
-        h = self.__eval_h(solution.variables[0], g)
+        g = self.eval_g(solution)
+        h = self.eval_h(solution.variables[0], g)
 
         solution.objectives[0] = solution.variables[0]
         solution.objectives[1] = h * g
 
         return solution
 
-    def __eval_g(self, solution: FloatSolution):
+    def eval_g(self, solution: FloatSolution):
         g = sum(solution.variables) - solution.variables[0]
 
         constant = 9.0 / (solution.number_of_variables - 1)
-        g = constant * g
-        g = g + 1.0
 
-        return g
+        return constant * g + 1.0
 
-    def __eval_h(self, f: float, g: float) -> float:
+    def eval_h(self, f: float, g: float) -> float:
         return 1.0 - sqrt(f / g)
 
     def get_name(self):
@@ -65,7 +63,9 @@ class ZDT2(ZDT1):
     .. note:: Continuous problem having a non-convex Pareto front
     """
 
-    def __eval_h(self, f: float, g: float) -> float:
+    def eval_h(self, f: float, g: float) -> float:
+        print("h222:" + self.get_name())
+
         return 1.0 - pow(f / g, 2.0)
 
     def get_name(self):
@@ -78,7 +78,7 @@ class ZDT3(ZDT1):
     .. note:: Bi-objective unconstrained problem. The default number of variables is 30.
     .. note:: Continuous problem having a partitioned Pareto front
     """
-    def __eval_h(self, f: float, g: float) -> float:
+    def eval_h(self, f: float, g: float) -> float:
         return 1.0 - sqrt(f / g) - (f / g) * sin(10.0 * f * pi)
 
     def get_name(self):
@@ -101,7 +101,7 @@ class ZDT4(ZDT1):
         self.lower_bound[0] = 0.0
         self.upper_bound[0] = 1.0
 
-    def __eval_g(self, solution: FloatSolution):
+    def eval_g(self, solution: FloatSolution):
         g = 0.0
 
         for i in range(1, solution.number_of_variables):
@@ -111,7 +111,7 @@ class ZDT4(ZDT1):
 
         return g
 
-    def __eval_h(self, f: float, g: float) -> float:
+    def eval_h(self, f: float, g: float) -> float:
         return 1.0 - sqrt(f / g)
 
     def get_name(self):
@@ -130,7 +130,7 @@ class ZDT6(ZDT1):
         """
         super(ZDT6, self).__init__(number_of_variables=number_of_variables)
 
-    def __eval_g(self, solution: FloatSolution):
+    def eval_g(self, solution: FloatSolution):
         g = sum(solution.variables) - solution.variables[0]
         g = g / (solution.number_of_variables - 1)
         g = pow(g, 0.25)
@@ -139,7 +139,7 @@ class ZDT6(ZDT1):
 
         return g
 
-    def __eval_h(self, f: float, g: float) -> float:
+    def eval_h(self, f: float, g: float) -> float:
         return 1.0 - pow(f / g, 2.0)
 
     def get_name(self):
