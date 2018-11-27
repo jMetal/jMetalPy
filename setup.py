@@ -29,7 +29,7 @@ setup(
         'numpy',
         'pandas',
         'plotly',
-        'matplotlib==2.0.2',
+        'matplotlib==3.0.2',
     ],
     tests_require=[
         'mockito'
