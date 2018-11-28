@@ -237,16 +237,21 @@ class CrowdingDistanceArchiveTestCases(unittest.TestCase):
         """
         archive = CrowdingDistanceArchive(4)
 
-        solution1 = Solution(2, 2)
+        solution1 = Solution(1, 2)
+        solution1.variables = [1.0]
         solution1.objectives = [0.0, 3.0]
-        solution2 = Solution(2, 2)
+        solution2 = Solution(1, 2)
+        solution2.variables = [2.0]
         solution2.objectives = [1.0, 2.0]
-        solution3 = Solution(2, 2)
+        solution3 = Solution(1, 2)
+        solution3.variables = [3.0]
         solution3.objectives = [2.0, 1.5]
-        solution4 = Solution(2, 2)
+        solution4 = Solution(1, 2)
+        solution4.variables = [4.0]
         solution4.objectives = [3.0, 0.0]
 
-        new_solution = Solution(2, 2)
+        new_solution = Solution(1, 2)
+        new_solution.variables = [5.0]
         new_solution.objectives = [1.1, 1.9]
 
         archive.add(solution1)

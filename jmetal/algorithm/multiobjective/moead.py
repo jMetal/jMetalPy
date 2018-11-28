@@ -39,7 +39,7 @@ class MOEAD(GeneticAlgorithm):
                  ffunction_type: FitnessFunction,
                  weights_path: str = None,
                  population_generator: Generator = None,
-                 evaluator: Evaluator = None):
+                 pop_evaluator: Evaluator = None):
         """
         :param max_number_of_replaced_solutions: (eta in Zhang & Li paper).
         :param neighbourhood_size: Size of the neighborhood used for mating (T in Zhang & Li paper).
@@ -56,7 +56,7 @@ class MOEAD(GeneticAlgorithm):
             mutation=mutation,
             crossover=crossover,
             selection=None,
-            evaluator=evaluator
+            pop_evaluator=pop_evaluator
         )
 
         self.ideal_point = [math.inf] * problem.number_of_objectives  # (Z vector in Zhang & Li paper)
@@ -287,8 +287,8 @@ class MOEAD(GeneticAlgorithm):
     def init_progress(self) -> None:
         self.evaluations = self.population_size
 
-        self.population = [self.generator.new(self.problem) for _ in range(self.population_size)]
-        self.population = self.evaluate_all(self.population)
+        self.population = [self.pop_generator.new(self.problem) for _ in range(self.population_size)]
+        self.population = self.evaluate(self.population)
 
         self.init_progress()
 
@@ -312,7 +312,7 @@ class MOEAD(GeneticAlgorithm):
 
             child = self.mutation_operator.execute(child)
 
-            self.evaluator.evaluate_solution(child, problem=self.problem)
+            self.pop_evaluator.evaluate_solution(child, problem=self.problem)
 
             self.ideal_point = self.update_ideal_point(self.ideal_point, child)
             self.update_neighbourhood(child, subproblem_id)

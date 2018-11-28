@@ -17,7 +17,7 @@ R = TypeVar('R')
    :platform: Unix, Windows
    :synopsis: Templates for algorithms.
 
-.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
 
@@ -25,16 +25,16 @@ class Algorithm(Generic[S, R], threading.Thread):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, problem: Problem[S], generator: Generator[R], evaluator: Evaluator[S], max_evaluations: int):
+    def __init__(self, problem: Problem[S], pop_generator: Generator[R], pop_evaluator: Evaluator[S], max_evaluations: int):
         """ :param problem: The problem to solve.
-        :param generator: Generator of solutions.
-        :param evaluator: Evaluator of solutions.
+        :param pop_generator: Generator of solutions.
+        :param pop_evaluator: Evaluator of solutions.
         :param max_evaluations: Maximum number of evaluations/iterations.
         """
         threading.Thread.__init__(self)
         self.problem = problem
-        self.generator = generator
-        self.evaluator = evaluator
+        self.pop_generator = pop_generator
+        self.pop_evaluator = pop_evaluator
         self.max_evaluations = max_evaluations
 
         self.evaluations = 0
@@ -43,10 +43,10 @@ class Algorithm(Generic[S, R], threading.Thread):
 
         self.observable = store.default_observable
 
-        if not self.generator:
-            self.generator = store.default_generator
-        if not self.evaluator:
-            self.evaluator = store.default_evaluator
+        if not self.pop_generator:
+            self.pop_generator = store.default_generator
+        if not self.pop_evaluator:
+            self.pop_evaluator = store.default_evaluator
 
     @abstractmethod
     def init_progress(self) -> None:
@@ -71,18 +71,21 @@ class Algorithm(Generic[S, R], threading.Thread):
     def is_stopping_condition_reached(self) -> bool:
         return self.evaluations >= self.max_evaluations
 
-    def evaluate_all(self, solutions: List[S]) -> List[S]:
+    def evaluate(self, solutions: List[S]) -> List[S]:
         """ Evaluate the individual fitness of new individuals. """
-        return self.evaluator.evaluate(solutions, self.problem)
+        return self.pop_evaluator.evaluate(solutions, self.problem)
 
     def run(self):
         """ Execute the algorithm. """
         self.start_computing_time = time.time()
         self.init_progress()
 
-        while not self.is_stopping_condition_reached:
-            self.step()
-            self.update_progress()
+        try:
+            while not self.is_stopping_condition_reached:
+                self.step()
+                self.update_progress()
+        except KeyboardInterrupt:
+            pass
 
         self.total_computing_time = self.current_computing_time
 
@@ -104,12 +107,12 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
                  population_size: int,
                  population_generator: Generator[R],
                  max_evaluations: int,
-                 evaluator: Evaluator[S]):
+                 pop_evaluator: Evaluator[S]):
         super(EvolutionaryAlgorithm, self).__init__(
             problem=problem,
-            generator=population_generator,
+            pop_generator=population_generator,
             max_evaluations=max_evaluations,
-            evaluator=evaluator
+            pop_evaluator=pop_evaluator
         )
         self.population = []
         self.population_size = population_size
@@ -132,13 +135,13 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
     def init_progress(self) -> None:
         self.evaluations = self.population_size
 
-        self.population = [self.generator.new(self.problem) for _ in range(self.population_size)]
-        self.population = self.evaluate_all(self.population)
+        self.population = [self.pop_generator.new(self.problem) for _ in range(self.population_size)]
+        self.population = self.evaluate(self.population)
 
     def step(self) -> None:
         mating_population = self.selection(self.population)
         offspring_population = self.reproduction(mating_population)
-        offspring_population = self.evaluate_all(offspring_population)
+        offspring_population = self.evaluate(offspring_population)
         self.population = self.replacement(self.population, offspring_population)
 
     def update_progress(self) -> None:
@@ -171,12 +174,12 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]]):
                  swarm_size: int,
                  swarm_generator: Generator[FloatSolution],
                  max_evaluations: int,
-                 evaluator: Evaluator[FloatSolution]):
+                 pop_evaluator: Evaluator[FloatSolution]):
         super(ParticleSwarmOptimization, self).__init__(
             problem=problem,
-            generator=swarm_generator,
+            pop_generator=swarm_generator,
             max_evaluations=max_evaluations,
-            evaluator=evaluator
+            pop_evaluator=pop_evaluator
         )
         self.swarm = []
         self.swarm_size = swarm_size
@@ -216,8 +219,8 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]]):
     def init_progress(self) -> None:
         self.evaluations = self.swarm_size
 
-        self.swarm = [self.generator.new(self.problem) for _ in range(self.swarm_size)]
-        self.swarm = self.evaluate_all(self.swarm)
+        self.swarm = [self.pop_generator.new(self.problem) for _ in range(self.swarm_size)]
+        self.swarm = self.evaluate(self.swarm)
 
         self.initialize_velocity(self.swarm)
         self.initialize_particle_best(self.swarm)
@@ -227,7 +230,7 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]]):
         self.update_velocity(self.swarm)
         self.update_position(self.swarm)
         self.perturbation(self.swarm)
-        self.swarm = self.evaluate_all(self.swarm)
+        self.swarm = self.evaluate(self.swarm)
         self.update_global_best(self.swarm)
         self.update_particle_best(self.swarm)
 

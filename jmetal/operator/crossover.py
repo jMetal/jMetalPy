@@ -10,7 +10,7 @@ from jmetal.core.solution import Solution, FloatSolution, BinarySolution
    :platform: Unix, Windows
    :synopsis: Module implementing crossover operators.
 
-.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
 
@@ -25,7 +25,10 @@ class NullCrossover(Crossover[Solution, Solution]):
 
         return parents
 
-    def get_number_of_parents(self):
+    def get_number_of_parents(self) -> int:
+        return 2
+
+    def get_number_of_children(self) -> int:
         return 2
 
     def get_name(self):
@@ -102,10 +105,13 @@ class SBX(Crossover[FloatSolution, FloatSolution]):
                     offspring[1].variables[i] = value_x2
         return offspring
 
-    def get_number_of_parents(self):
+    def get_number_of_parents(self) -> int:
         return 2
 
-    def get_name(self):
+    def get_number_of_children(self) -> int:
+        return 2
+
+    def get_name(self) -> str:
         return 'SBX crossover'
 
 
@@ -158,10 +164,13 @@ class SPX(Crossover[BinarySolution, BinarySolution]):
 
         return offspring
 
-    def get_number_of_parents(self):
+    def get_number_of_parents(self) -> int:
         return 2
 
-    def get_name(self):
+    def get_number_of_children(self) -> int:
+        return 2
+
+    def get_name(self) -> str:
         return 'Single point crossover'
 
 
@@ -207,8 +216,11 @@ class DifferentialEvolution(Crossover[FloatSolution, FloatSolution]):
 
         return [child]
 
-    def get_number_of_parents(self):
+    def get_number_of_parents(self) -> int:
         return 3
 
-    def get_name(self):
+    def get_number_of_children(self) -> int:
+        return 1
+
+    def get_name(self) -> str:
         return 'Differential Evolution crossover'

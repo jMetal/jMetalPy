@@ -14,7 +14,7 @@ R = TypeVar('R')
    :platform: Unix, Windows
    :synopsis: Implementation of Genetic Algorithms.
 
-.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
 
@@ -30,7 +30,7 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
                  crossover: Crossover,
                  selection: Selection,
                  population_generator: Generator = None,
-                 evaluator: Evaluator = None):
+                 pop_evaluator: Evaluator = None):
         """
         .. note:: A steady-state version of this algorithm can be run by setting the offspring size to 1 and the mating pool size to 2.
         """
@@ -39,7 +39,7 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
             population_size=population_size,
             population_generator=population_generator,
             max_evaluations=max_evaluations,
-            evaluator=evaluator
+            pop_evaluator=pop_evaluator
         )
         self.offspring_size = offspring_size
         self.mating_pool_size = mating_pool_size

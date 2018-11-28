@@ -8,7 +8,7 @@ from jmetal.core.solution import BinarySolution, Solution, FloatSolution, Intege
    :platform: Unix, Windows
    :synopsis: Module implementing mutation operators.
 
-.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
 
