@@ -101,7 +101,7 @@ class SMPSO(ParticleSwarmOptimization):
 
         observable_data = {
             'problem': self.problem,
-            'population': self.swarm,
+            'population': self.leaders.solution_list,
             'evaluations': self.evaluations,
             'computing time': self.current_computing_time,
         }
