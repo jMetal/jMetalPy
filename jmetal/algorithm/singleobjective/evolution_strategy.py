@@ -28,14 +28,14 @@ class EvolutionStrategy(EvolutionaryAlgorithm):
                  lambda_: int,
                  mutation: Mutation,
                  elitist: bool = True,
-                 evaluator: Evaluator = None,
+                 pop_evaluator: Evaluator = None,
                  population_generator: Generator = None):
         super(EvolutionStrategy, self).__init__(
             problem=problem,
             population_size=mu,
             population_generator=population_generator,
             max_evaluations=max_evaluations,
-            evaluator=evaluator
+            pop_evaluator=pop_evaluator
         )
         self.mu = mu
         self.lambda_ = lambda_

@@ -1,7 +1,6 @@
 import logging
 from abc import ABCMeta, abstractmethod
 from typing import Generic, TypeVar, List
-from pathlib import Path
 import random
 
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
@@ -26,29 +25,8 @@ class Problem(Generic[S]):
 
         self.reference_front: List[S] = None
 
-        self.obj_directions: List[int] = []
-        self.obj_labels: List[str] = []
-
-    def read_front(self, file_path: str) -> None:
-        """ Reads a reference front from a file.
-
-        :param file_path: File path where the front is located.
-        """
-        front = []
-
-        if Path(file_path).is_file():
-            with open(file_path) as file:
-                for line in file:
-                    vector = [float(x) for x in line.split()]
-
-                    solution = FloatSolution(2, 2, 0, [], [])
-                    solution.objectives = vector
-
-                    front.append(solution)
-        else:
-            LOGGER.warning('Reference front file was not found at {}'.format(file_path))
-
-        self.reference_front = front
+        self.directions: List[int] = []
+        self.labels: List[str] = []
 
     @abstractmethod
     def create_solution(self) -> S:
@@ -68,8 +46,9 @@ class Problem(Generic[S]):
     def evaluate_constraints(self, solution: S):
         pass
 
+    @abstractmethod
     def get_name(self) -> str:
-        return self.__class__.__name__
+        pass
 
 
 class BinaryProblem(Problem[BinarySolution]):
@@ -85,6 +64,10 @@ class BinaryProblem(Problem[BinarySolution]):
 
     @abstractmethod
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
+        pass
+
+    @abstractmethod
+    def get_name(self) -> str:
         pass
 
 
@@ -108,6 +91,10 @@ class FloatProblem(Problem[FloatSolution]):
 
     @abstractmethod
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
+        pass
+
+    @abstractmethod
+    def get_name(self) -> str:
         pass
 
 
@@ -136,4 +123,8 @@ class IntegerProblem(Problem[IntegerSolution]):
 
     @abstractmethod
     def evaluate(self, solution: IntegerSolution) -> IntegerSolution:
+        pass
+
+    @abstractmethod
+    def get_name(self) -> str:
         pass

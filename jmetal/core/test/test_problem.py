@@ -14,6 +14,9 @@ class FloatProblemTestCases(unittest.TestCase):
         def evaluate(self, solution: FloatSolution) -> FloatSolution:
             pass
 
+        def get_name(self) -> str:
+            pass
+
     def test_should_default_constructor_create_a_valid_problem(self) -> None:
         problem = self.DummyFloatProblem()
         problem.number_of_variables = 1
@@ -49,6 +52,9 @@ class IntegerProblemTestCases(unittest.TestCase):
             super(IntegerProblem, self).__init__()
 
         def evaluate(self, solution: IntegerSolution) -> IntegerSolution:
+            pass
+
+        def get_name(self) -> str:
             pass
 
     def test_should_default_constructor_create_a_valid_problem(self) -> None:

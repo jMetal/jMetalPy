@@ -1,6 +1,4 @@
 from abc import ABCMeta, abstractmethod
-from typing import TypeVar
-
 from jmetal.core.algorithm import Algorithm
 
 """
@@ -11,10 +9,8 @@ from jmetal.core.algorithm import Algorithm
 .. moduleauthor:: Antonio Benítez-Hidalgo <antonio.b@uma.es>, Simon Wessing
 """
 
-S = TypeVar('S')
 
-
-class Metric:
+class QualityIndicator:
 
     __metaclass__ = ABCMeta
 
@@ -30,7 +26,7 @@ class Metric:
         pass
 
 
-class ComputingTime(Metric):
+class ComputingTime(QualityIndicator):
 
     def __init__(self):
         super().__init__(is_minimization=True)
@@ -47,7 +43,7 @@ class ComputingTime(Metric):
         return 'Total computing time'
 
 
-class HyperVolume(Metric):
+class HyperVolume(QualityIndicator):
     """ Hypervolume computation based on variant 3 of the algorithm in the paper:
 
     * C. M. Fonseca, L. Paquete, and M. Lopez-Ibanez. An improved dimension-sweep

@@ -63,7 +63,11 @@ class Crossover(Operator[List[S], List[R]]):
         self.probability = probability
 
     @abstractmethod
-    def get_number_of_parents(self):
+    def get_number_of_parents(self) -> int:
+        pass
+
+    @abstractmethod
+    def get_number_of_children(self) -> int:
         pass
 
     @abstractmethod

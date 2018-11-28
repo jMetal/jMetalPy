@@ -35,7 +35,7 @@ class SMPSO(ParticleSwarmOptimization):
                  mutation: Mutation,
                  leaders: BoundedArchive,
                  swarm_generator: Generator = None,
-                 evaluator: Evaluator = None):
+                 pop_evaluator: Evaluator = None):
         """ This class implements the SMPSO algorithm as described in
 
         * SMPSO: A new PSO-based metaheuristic for multi-objective optimization
@@ -55,7 +55,7 @@ class SMPSO(ParticleSwarmOptimization):
             swarm_size=swarm_size,
             swarm_generator=swarm_generator,
             max_evaluations=max_evaluations,
-            evaluator=evaluator
+            pop_evaluator=pop_evaluator
         )
         self.mutation = mutation
         self.leaders = leaders
@@ -89,7 +89,7 @@ class SMPSO(ParticleSwarmOptimization):
         self.leaders.compute_density_estimator()
 
         self.swarm = [self.problem.create_solution() for _ in range(self.swarm_size)]
-        self.swarm = self.evaluate_all(self.swarm)
+        self.swarm = self.evaluate(self.swarm)
 
         self.initialize_velocity(self.swarm)
         self.initialize_particle_best(self.swarm)
@@ -227,7 +227,7 @@ class SMPSORP(SMPSO):
                  mutation: Mutation,
                  reference_points: List[List[float]],
                  leaders: List[BoundedArchive],
-                 evaluator: Evaluator = None,
+                 pop_evaluator: Evaluator = None,
                  observable: Observable = None):
         """ This class implements the SMPSORP algorithm.
 
@@ -236,7 +236,7 @@ class SMPSORP(SMPSO):
         :param max_evaluations:
         :param mutation:
         :param leaders: List of bounded archives.
-        :param evaluator: An evaluator object to evaluate the solutions in the population.
+        :param pop_evaluator: An evaluator object to evaluate the solutions in the population.
         """
         super(SMPSORP, self).__init__(
             problem=problem,
@@ -244,7 +244,7 @@ class SMPSORP(SMPSO):
             max_evaluations=max_evaluations,
             mutation=mutation,
             leaders=None,
-            evaluator=evaluator)
+            pop_evaluator=pop_evaluator)
         self.reference_points = reference_points
         self.leaders = leaders
 
@@ -254,7 +254,7 @@ class SMPSORP(SMPSO):
             leader.compute_density_estimator()
 
         self.swarm = [self.problem.create_solution() for _ in range(self.swarm_size)]
-        self.swarm = self.evaluate_all(self.swarm)
+        self.swarm = self.evaluate(self.swarm)
 
         self.initialize_velocity(self.swarm)
         self.initialize_particle_best(self.swarm)

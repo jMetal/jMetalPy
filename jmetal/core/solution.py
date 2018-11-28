@@ -19,14 +19,13 @@ class Solution(Generic[S]):
         self.variables = [[] for _ in range(self.number_of_variables)]
         self.attributes = {}
 
-    def __str__(self) -> str:
-        solution = 'number_of_objectives: {0} \nnumber_of_variables: {1} \nnumber_of_constraints: {2} \n'.format(
-            self.number_of_objectives, self.number_of_variables, self.number_of_constraints
-        )
-        solution += 'objectives: \n {0} \n'.format(self.objectives)
-        solution += 'variables: \n {0}'.format(self.variables)
+    def __eq__(self, solution) -> bool:
+        if isinstance(solution, self.__class__):
+            return self.variables == solution.variables
+        return False
 
-        return solution
+    def __str__(self) -> str:
+        return 'objectives: \n {0} \n variables: \n {0}'.format(self.objectives, self.variables)
 
 
 class BinarySolution(Solution[BitSet]):

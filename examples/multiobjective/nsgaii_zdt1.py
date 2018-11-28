@@ -1,13 +1,13 @@
-from jmetal.algorithm import NSGAII
+from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.component import ProgressBarObserver, RankingAndCrowdingDistanceComparator, VisualizerObserver
 from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
 from jmetal.problem import ZDT1
 from jmetal.util.graphic import FrontPlot
-from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
+from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_front
 
 if __name__ == '__main__':
     problem = ZDT1()
-    problem.read_front(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
+    problem.reference_front = read_front(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
     algorithm = NSGAII(
         problem=problem,
