@@ -13,7 +13,7 @@ S = TypeVar('S')
    :platform: Unix, Windows
    :synopsis: Module implementing selection operators.
 
-.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
 

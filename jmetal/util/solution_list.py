@@ -11,7 +11,7 @@ LOGGER = logging.getLogger('jmetal')
    :platform: Unix, Windows
    :synopsis: Utils to print solutions.
 
-.. moduleauthor:: Antonio J. Nebro <ajnebro@uma.es>
+.. moduleauthor:: Antonio J. Nebro <ajnebro@uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
 

@@ -15,7 +15,7 @@ R = TypeVar('R')
    :platform: Unix, Windows
    :synopsis: NSGA-II (Non-dominance Sorting Genetic Algorithm II) implementation.
 
-.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
 

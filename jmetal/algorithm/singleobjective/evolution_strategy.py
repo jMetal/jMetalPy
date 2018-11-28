@@ -15,7 +15,7 @@ R = TypeVar('R')
    :platform: Unix, Windows
    :synopsis: Implementation of Evolutionary Algorithms.
 
-.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
 

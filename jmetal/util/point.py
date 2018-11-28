@@ -13,11 +13,11 @@ class Point:
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def get(self) ->[]:
+    def get(self) -> []:
         pass
 
     @abstractmethod
-    def update(self, vector:[]) -> None:
+    def update(self, vector: []) -> None:
         pass
 
 
@@ -28,5 +28,5 @@ class IdealPoint(Point):
     def get(self):
         return self.point
 
-    def update(self, vector:[]) -> None:
+    def update(self, vector: []) -> None:
         self.point = [y if x > y else x for x, y in zip(self.point, vector)]

@@ -10,7 +10,7 @@ from jmetal.core.solution import Solution, FloatSolution, BinarySolution
    :platform: Unix, Windows
    :synopsis: Module implementing crossover operators.
 
-.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
 
