@@ -17,7 +17,7 @@ if __name__ == '__main__':
         max_evaluations=10000,
         crossover=DifferentialEvolution(CR=1.0, F=0.5, K=0.5),
         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
-        fitness_function=Chebyshev(dimension=problem.number_of_objectives),
+        aggregative_function=Chebyshev(dimension=problem.number_of_objectives),
         neighbourhood=WeightVectorNeighborhood(300, 20, weights_path='../../resources/MOEAD_weights/'),
         neighbourhood_selection_probability=0.9,
         max_number_of_replaced_solutions=2

@@ -23,7 +23,7 @@ class MOEAD(GeneticAlgorithm):
                  max_evaluations: int,
                  mutation: Mutation,
                  crossover: Crossover,
-                 fitness_function: AggregativeFunction,
+                 aggregative_function: AggregativeFunction,
                  neighbourhood: WeightNeighborhood,
                  neighbourhood_selection_probability: float,
                  max_number_of_replaced_solutions: int,
@@ -47,7 +47,7 @@ class MOEAD(GeneticAlgorithm):
             pop_evaluator=pop_evaluator
         )
         self.max_number_of_replaced_solutions = max_number_of_replaced_solutions
-        self.fitness_function = fitness_function
+        self.fitness_function = aggregative_function
         self.neighbourhood = neighbourhood
         self.neighbourhood_selection_probability = neighbourhood_selection_probability
 
@@ -156,6 +156,9 @@ class MOEAD(GeneticAlgorithm):
             self.update_neighbourhood(index, offspring_population[0])
 
         self.update_progress()
+
+    def get_result(self) -> R:
+        return self.population
 
     def get_name(self) -> str:
         return 'Multiobjective Evolutionary Algorithm Based on Decomposition (MOEA/D)'
