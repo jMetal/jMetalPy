@@ -105,12 +105,12 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
     def __init__(self,
                  problem: Problem[S],
                  population_size: int,
-                 population_generator: Generator[R],
+                 pop_generator: Generator[R],
                  max_evaluations: int,
                  pop_evaluator: Evaluator[S]):
         super(EvolutionaryAlgorithm, self).__init__(
             problem=problem,
-            pop_generator=population_generator,
+            pop_generator=pop_generator,
             max_evaluations=max_evaluations,
             pop_evaluator=pop_evaluator
         )

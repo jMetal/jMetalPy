@@ -29,11 +29,11 @@ class EvolutionStrategy(EvolutionaryAlgorithm):
                  mutation: Mutation,
                  elitist: bool = True,
                  pop_evaluator: Evaluator = None,
-                 population_generator: Generator = None):
+                 pop_generator: Generator = None):
         super(EvolutionStrategy, self).__init__(
             problem=problem,
             population_size=mu,
-            population_generator=population_generator,
+            pop_generator=pop_generator,
             max_evaluations=max_evaluations,
             pop_evaluator=pop_evaluator
         )

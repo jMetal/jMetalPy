@@ -1,4 +1,4 @@
-from jmetal.algorithm import SMPSO
+from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.component import ProgressBarObserver, CrowdingDistanceArchive
 from jmetal.operator import Polynomial
 from jmetal.problem import DTLZ1

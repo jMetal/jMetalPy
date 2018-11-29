@@ -29,7 +29,7 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
                  mutation: Mutation,
                  crossover: Crossover,
                  selection: Selection,
-                 population_generator: Generator = None,
+                 pop_generator: Generator = None,
                  pop_evaluator: Evaluator = None):
         """
         .. note:: A steady-state version of this algorithm can be run by setting the offspring size to 1 and the mating pool size to 2.
@@ -37,7 +37,7 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
         super(GeneticAlgorithm, self).__init__(
             problem=problem,
             population_size=population_size,
-            population_generator=population_generator,
+            pop_generator=pop_generator,
             max_evaluations=max_evaluations,
             pop_evaluator=pop_evaluator
         )

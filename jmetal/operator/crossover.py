@@ -175,7 +175,6 @@ class SPX(Crossover[BinarySolution, BinarySolution]):
 
 
 class DifferentialEvolution(Crossover[FloatSolution, FloatSolution]):
-
     """ This operator receives two parameters: the current individual and an array of three parent individuals. The
     best and rand variants depends on the third parent, according whether it represents the current of the "best"
     individual or a random one. The implementation of both variants are the same, due to that the parent selection is
@@ -188,7 +187,7 @@ class DifferentialEvolution(Crossover[FloatSolution, FloatSolution]):
         self.F = F
         self.K = K
 
-        self.current_individual: FloatSolution=None
+        self.current_individual: FloatSolution = None
 
     def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
         """ Execute the differential evolution crossover ('best/1/bin' variant in jMetal).
