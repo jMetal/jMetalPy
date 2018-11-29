@@ -25,6 +25,9 @@ class MockedProblem(FloatProblem):
 
         return solution
 
+    def get_name(self) -> str:
+        pass
+
 
 class SequentialEvaluatorTestCases(unittest.TestCase):
 

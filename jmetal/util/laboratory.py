@@ -6,9 +6,8 @@ from typing import List
 import pandas as pd
 from scipy import stats
 
-from jmetal.component import WriteFrontToFileObserver
 from jmetal.core.algorithm import Algorithm
-from jmetal.util.indicator import Metric
+from jmetal.component.quality_indicator import QualityIndicator
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -35,7 +34,7 @@ class Job:
         self.algorithm.run()
         self.executed = True
 
-    def evaluate(self, metric: Metric):
+    def evaluate(self, metric: QualityIndicator):
         if not self.executed:
             raise Exception('Algorithm must be run first')
 

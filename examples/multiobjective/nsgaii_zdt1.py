@@ -1,15 +1,19 @@
+<<<<<<< HEAD
 
 
 from jmetal.algorithm import NSGAII
+=======
+from jmetal.algorithm.multiobjective.nsgaii import NSGAII
+>>>>>>> 6bd9a34c72c6bbc2bc13bb864330b6eab6bb8ba3
 from jmetal.component import ProgressBarObserver, RankingAndCrowdingDistanceComparator, VisualizerObserver
 from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
 from jmetal.problem import ZDT1
 from jmetal.util.graphic import FrontPlot
-from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
+from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_front
 
 if __name__ == '__main__':
     problem = ZDT1()
-    problem.read_front(file_path='resources/reference_front/{}.pf'.format(problem.get_name()))
+    problem.reference_front = read_front(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
     algorithm = NSGAII(
         problem=problem,
@@ -22,7 +26,7 @@ if __name__ == '__main__':
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
     )
 
-    progress_bar = ProgressBarObserver(step=100, maximum=25000)
+    progress_bar = ProgressBarObserver(initial=algorithm.population_size, step=algorithm.offspring_size, maximum=algorithm.max_evaluations)
     visualizer = VisualizerObserver()
     algorithm.observable.register(observer=progress_bar)
     algorithm.observable.register(observer=visualizer)

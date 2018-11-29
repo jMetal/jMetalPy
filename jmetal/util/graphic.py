@@ -21,13 +21,14 @@ S = TypeVar('S')
 
 
 class Plot:
+
     __metaclass__ = ABCMeta
 
     def __init__(self, plot_title: str, axis_labels: list):
         self.plot_title = plot_title
         self.axis_labels = axis_labels
 
-        self.number_of_objectives: int = None
+        self.number_of_objectives = None
 
     @staticmethod
     def get_objectives(front: List[S]) -> DataFrame:

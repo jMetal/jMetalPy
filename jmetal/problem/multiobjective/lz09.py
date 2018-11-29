@@ -279,4 +279,4 @@ class LZ09_F2(LZ09):
         return solution
 
     def get_name(self):
-        return 'LZ09'
+        return 'LZ09_F2'

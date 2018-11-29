@@ -9,7 +9,7 @@ R = TypeVar('R')
    :platform: Unix, Windows
    :synopsis: Templates for operators.
 
-.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
 
@@ -63,7 +63,11 @@ class Crossover(Operator[List[S], List[R]]):
         self.probability = probability
 
     @abstractmethod
-    def get_number_of_parents(self):
+    def get_number_of_parents(self) -> int:
+        pass
+
+    @abstractmethod
+    def get_number_of_children(self) -> int:
         pass
 
     @abstractmethod

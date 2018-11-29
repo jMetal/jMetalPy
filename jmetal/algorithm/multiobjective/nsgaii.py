@@ -15,7 +15,7 @@ R = TypeVar('R')
    :platform: Unix, Windows
    :synopsis: NSGA-II (Non-dominance Sorting Genetic Algorithm II) implementation.
 
-.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
 
@@ -30,8 +30,8 @@ class NSGAII(GeneticAlgorithm):
                  mutation: Mutation,
                  crossover: Crossover,
                  selection: Selection,
-                 population_generator: Generator = None,
-                 evaluator: Evaluator = None):
+                 pop_generator: Generator = None,
+                 pop_evaluator: Evaluator = None):
         """  NSGA-II implementation as described in
 
         * K. Deb, A. Pratap, S. Agarwal and T. Meyarivan, "A fast and elitist
@@ -54,14 +54,14 @@ class NSGAII(GeneticAlgorithm):
         super(NSGAII, self).__init__(
             problem=problem,
             population_size=population_size,
-            population_generator=population_generator,
+            pop_generator=pop_generator,
             offspring_size=offspring_size,
             mating_pool_size=mating_pool_size,
             max_evaluations=max_evaluations,
             mutation=mutation,
             crossover=crossover,
             selection=selection,
-            evaluator=evaluator
+            pop_evaluator=pop_evaluator
         )
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
