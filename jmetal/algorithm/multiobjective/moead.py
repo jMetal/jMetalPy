@@ -93,15 +93,15 @@ class MOEAD(GeneticAlgorithm):
         """
         parents = list()
         from_neighbourhood = False
-        neighbors_size = len(self.neighbourhood.get_neighbors(index, self.population))
 
         if random.random() <= self.neighbourhood_selection_probability:
             from_neighbourhood = True
 
+        neighbors = self.neighbourhood.get_neighbors(index, self.population)
+
         while len(parents) < self.mating_pool_size:
             if from_neighbourhood:
-                neighbor = random.randint(0, neighbors_size - 1)
-                selected_parent = self.neighbourhood.get_neighbors(index, self.population)[neighbor]
+                selected_parent = neighbors[random.randint(0, len(neighbors) - 1)]
             else:
                 selected_parent = self.population[random.randint(0, self.population_size - 1)]
 
