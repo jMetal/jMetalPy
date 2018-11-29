@@ -30,6 +30,6 @@ if __name__ == '__main__':
     front = algorithm.get_result()
 
     # Plot frontier to file
-    pareto_front = FrontPlot(plot_title='MOEAD-LZ09_F2', axis_labels=problem.obj_labels)
+    pareto_front = FrontPlot(plot_title='MOEAD-{}'.format(problem.get_name()), axis_labels=problem.obj_labels)
     pareto_front.plot(front, reference_front=problem.reference_front)
-    pareto_front.to_html(filename='MOEAD-LZ09_F2')
+    pareto_front.to_html(filename='MOEAD-{}'.format(problem.get_name()))

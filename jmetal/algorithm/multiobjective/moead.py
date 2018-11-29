@@ -51,6 +51,9 @@ class MOEAD(GeneticAlgorithm):
         self.neighbourhood = neighbourhood
         self.neighbourhood_selection_probability = neighbourhood_selection_probability
 
+        if any([d != Problem.MINIMIZE for d in problem.directions]):
+            raise Exception('MOEA/D currently only works with minimization problems')
+
     @staticmethod
     def random_permutations(size):
         """ Picks position from 1 to size at random and increments when value is already picked.
@@ -70,7 +73,7 @@ class MOEAD(GeneticAlgorithm):
 
             while True:
                 if flag[start]:
-                    # Add position to order of permutation.
+                    # Add position to order of permutation
                     permutations[counter] = index[start]
                     flag[start] = False
 
@@ -85,15 +88,21 @@ class MOEAD(GeneticAlgorithm):
         return permutations
 
     def mating_selection(self, index: int):
-        """ Selects n distinct parents, either from the neighbourhood or the population.
+        """ Selects n distinct parents, either from the neighbourhood or the population based on the neighbourhood
+        selection probability.
         """
         parents = list()
+        from_neighbourhood = False
         neighbors_size = len(self.neighbourhood.get_neighbors(index, self.population))
 
+        if random.random() <= self.neighbourhood_selection_probability:
+            from_neighbourhood = True
+
         while len(parents) < self.mating_pool_size:
-            if random.random() < self.neighbourhood_selection_probability:
-                selected_parent = self.neighbourhood.get_neighbors(index, self.population)[
-                    random.randint(0, neighbors_size - 1)]
+            if from_neighbourhood:
+                selected_parent = self.neighbourhood.get_neighbors(
+                    index, self.population)[random.randint(0, neighbors_size - 1)
+                ]
             else:
                 selected_parent = self.population[random.randint(0, self.population_size - 1)]
 
@@ -111,7 +120,9 @@ class MOEAD(GeneticAlgorithm):
 
         return parents
 
-    def update_neighbourhood(self, index: int, individual: S):
+    def update_individual(self, index: int, individual: S):
+        """ Select pool for replacement.
+        """
         size = len(self.neighbourhood.neighborhood[index])
         permutations = self.random_permutations(size)
 
@@ -153,7 +164,7 @@ class MOEAD(GeneticAlgorithm):
             offspring_population = self.evaluate(offspring_population)
 
             self.fitness_function.update(offspring_population[0].objectives)
-            self.update_neighbourhood(index, offspring_population[0])
+            self.update_individual(index, offspring_population[0])
 
         self.update_progress()
 
