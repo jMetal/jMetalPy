@@ -7,7 +7,7 @@ except ImportError:
 
 setup(
     name='jmetalpy',
-    version='0.5.1',
+    version='0.5.5',
     description='JMetalPy. Python version of the jMetal framework',
     author='Antonio J. Nebro',
     author_email='antonio@lcc.uma.es',
@@ -26,9 +26,9 @@ setup(
     ],
     install_requires=[
         'tqdm',
-        'numpy',
-        'pandas',
-        'plotly',
+        'numpy==1.13.1',
+        'pandas==0.22.0',
+        'plotly==3.3.0',
         'matplotlib==3.0.2',
     ],
     tests_require=[
