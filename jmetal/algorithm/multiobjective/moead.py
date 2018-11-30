@@ -31,8 +31,7 @@ class MOEAD(GeneticAlgorithm):
                  pop_evaluator: Evaluator = None):
         """
         :param max_number_of_replaced_solutions: (eta in Zhang & Li paper).
-        :param neighbourhood_selection_probability: Probability of mating with a solution in the neighborhood rather
-        than the entire population (Delta in Zhang & Li paper).
+        :param neighbourhood_selection_probability: Probability of mating with a solution in the neighborhood rather than the entire population (Delta in Zhang & Li paper).
         """
         super(MOEAD, self).__init__(
             problem=problem,

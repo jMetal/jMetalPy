@@ -10,7 +10,7 @@ S = TypeVar('S')
 R = TypeVar('R')
 
 """
-.. module:: evolutionary_algorithm
+.. module:: genetic_algorithm
    :platform: Unix, Windows
    :synopsis: Implementation of Genetic Algorithms.
 
