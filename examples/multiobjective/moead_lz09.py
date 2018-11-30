@@ -25,7 +25,7 @@ if __name__ == '__main__':
         max_number_of_replaced_solutions=2
     )
 
-    progress_bar = ProgressBarObserver(initial=algorithm.population_size, step=algorithm.offspring_size, maximum=algorithm.max_evaluations)
+    progress_bar = ProgressBarObserver(initial=algorithm.population_size, step=algorithm.population_size, maximum=algorithm.max_evaluations)
     algorithm.observable.register(observer=progress_bar)
 
     algorithm.run()
