@@ -1,6 +1,7 @@
 import logging
 import os
 from pathlib import Path
+import faust
 
 from tqdm import tqdm
 
@@ -87,8 +88,8 @@ class WriteFrontToFileObserver(Observer):
 
 class VisualizerObserver(Observer):
 
-    def __init__(self, replace: bool = True) -> None:
-        self.display_frequency = 1.0
+    def __init__(self, display_frequency: float = 1.0, replace: bool = True) -> None:
+        self.display_frequency = display_frequency
         self.replace = replace
         self.plot = ScatterStreaming(plot_title='jmetal')
 

@@ -17,8 +17,13 @@ class LZ09(FloatProblem):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int,
-                 ptype: int, dtype: int, ltype: int):
+    def __init__(self,
+                 number_of_variables: int,
+                 number_of_objectives: int,
+                 number_of_constraints: int,
+                 ptype: int,
+                 dtype: int,
+                 ltype: int):
         """ LZ09 benchmark family as defined in:
 
         * H. Li and Q. Zhang. Multiobjective optimization problems with complicated pareto sets, MOEA/D and NSGA-II.
@@ -39,9 +44,14 @@ class LZ09(FloatProblem):
         self.dtype = dtype
         self.ltype = ltype
 
-    @abstractmethod
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
-        pass
+        x = solution.variables
+        y = self.objective(x)
+
+        for i in range(self.number_of_objectives):
+            solution.objectives[i] = y[i]
+
+        return solution
 
     def __ps_func2(self, x: float, t1: float, dim: int, type: int, css: int) -> float:
         """ Control the PS shapes of 2-D instances.
@@ -261,22 +271,91 @@ class LZ09(FloatProblem):
         return 'LZ09'
 
 
+class LZ09_F1(LZ09):
+
+    def __init__(self):
+        super(LZ09_F1, self).__init__(number_of_variables=10, number_of_objectives=2, number_of_constraints=0,
+                                      dtype=1, ltype=21, ptype=21)
+
+    def get_name(self):
+        return 'LZ09_F1'
+
+
 class LZ09_F2(LZ09):
 
     def __init__(self):
-        """ :param reference_front: List of solutions with the reference front. Default to None.
-        """
         super(LZ09_F2, self).__init__(number_of_variables=30, number_of_objectives=2, number_of_constraints=0,
                                       dtype=1, ltype=22, ptype=21)
 
-    def evaluate(self, solution: FloatSolution) -> FloatSolution:
-        x = solution.variables
-        y = self.objective(x)
-
-        for i in range(self.number_of_objectives):
-            solution.objectives[i] = y[i]
-
-        return solution
-
     def get_name(self):
         return 'LZ09_F2'
+
+
+class LZ09_F3(LZ09):
+
+    def __init__(self):
+        super(LZ09_F3, self).__init__(number_of_variables=30, number_of_objectives=2, number_of_constraints=0,
+                                      dtype=1, ltype=23, ptype=21)
+
+    def get_name(self):
+        return 'LZ09_F3'
+
+
+class LZ09_F4(LZ09):
+
+    def __init__(self):
+        super(LZ09_F4, self).__init__(number_of_variables=30, number_of_objectives=2, number_of_constraints=0,
+                                      dtype=1, ltype=24, ptype=21)
+
+    def get_name(self):
+        return 'LZ09_F4'
+
+
+class LZ09_F5(LZ09):
+
+    def __init__(self):
+        super(LZ09_F5, self).__init__(number_of_variables=30, number_of_objectives=2, number_of_constraints=0,
+                                      dtype=1, ltype=26, ptype=21)
+
+    def get_name(self):
+        return 'LZ09_F5'
+
+
+class LZ09_F6(LZ09):
+
+    def __init__(self):
+        super(LZ09_F6, self).__init__(number_of_variables=10, number_of_objectives=3, number_of_constraints=0,
+                                      dtype=1, ltype=32, ptype=31)
+
+    def get_name(self):
+        return 'LZ09_F6'
+
+
+class LZ09_F7(LZ09):
+
+    def __init__(self):
+        super(LZ09_F7, self).__init__(number_of_variables=10, number_of_objectives=2, number_of_constraints=0,
+                                      dtype=3, ltype=21, ptype=21)
+
+    def get_name(self):
+        return 'LZ09_F7'
+
+
+class LZ09_F8(LZ09):
+
+    def __init__(self):
+        super(LZ09_F8, self).__init__(number_of_variables=10, number_of_objectives=2, number_of_constraints=0,
+                                      dtype=4, ltype=21, ptype=21)
+
+    def get_name(self):
+        return 'LZ09_F8'
+
+
+class LZ09_F9(LZ09):
+
+    def __init__(self):
+        super(LZ09_F9, self).__init__(number_of_variables=30, number_of_objectives=2, number_of_constraints=0,
+                                      dtype=1, ltype=22, ptype=22)
+
+    def get_name(self):
+        return 'LZ09_F9'
