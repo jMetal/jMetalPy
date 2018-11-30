@@ -88,8 +88,8 @@ class MOEAD(GeneticAlgorithm):
         return permutations
 
     def mating_selection(self, index: int):
-        """ Selects n distinct parents, either from the neighbourhood or the population based on the neighbourhood
-        selection probability.
+        """ Selects `mating_pool_size` distinct parents, either from the neighbourhood or the population based on the
+        neighbourhood selection probability.
         """
         parents = list()
         from_neighbourhood = False
@@ -98,6 +98,7 @@ class MOEAD(GeneticAlgorithm):
             from_neighbourhood = True
 
         neighbors = self.neighbourhood.get_neighbors(index, self.population)
+        parents.append(self.population[index])
 
         while len(parents) < self.mating_pool_size:
             if from_neighbourhood:
@@ -114,8 +115,6 @@ class MOEAD(GeneticAlgorithm):
                     break
             if flag:
                 parents.append(selected_parent)
-
-        parents.append(self.population[index])
 
         return parents
 
@@ -158,7 +157,6 @@ class MOEAD(GeneticAlgorithm):
             mating_population = self.mating_selection(index)
 
             self.crossover_operator.current_individual = self.population[index]
-
             offspring_population = self.reproduction(mating_population)
             offspring_population = self.evaluate(offspring_population)
 

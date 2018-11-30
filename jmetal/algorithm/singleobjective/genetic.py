@@ -59,7 +59,7 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
     def reproduction(self, population: List[S]) -> List[S]:
         number_of_parents_to_combine = self.crossover_operator.get_number_of_parents()
 
-        if self.population_size % number_of_parents_to_combine != 0:
+        if len(population) % number_of_parents_to_combine != 0:
             raise Exception('Wrong number of parents')
 
         offspring_population = []
