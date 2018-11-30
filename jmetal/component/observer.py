@@ -1,7 +1,6 @@
 import logging
 import os
 from pathlib import Path
-import faust
 
 from tqdm import tqdm
 
