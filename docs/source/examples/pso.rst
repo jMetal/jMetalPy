@@ -1,39 +1,33 @@
 PSO
 ========================
 
-Common imports for these examples:
-
-.. code-block:: python
-
-   from jmetal.operator import Polynomial
-
-   from jmetal.util.graphic import FrontPlot
-
 SMPSO
 ------------------------------------
 
 .. code-block:: python
 
-   from jmetal.algorithm import SMPSO
-   from jmetal.component import CrowdingDistanceArchive
-   from jmetal.problem import DTLZ1
+    from jmetal.algorithm.multiobjective.smpso import SMPSO
+    from jmetal.component import ProgressBarObserver, CrowdingDistanceArchive
+    from jmetal.operator import Polynomial
+    from jmetal.problem import DTLZ1
+    from jmetal.util.graphic import FrontPlot
 
-   problem = DTLZ1(number_of_objectives=5)
+    problem = DTLZ1(number_of_objectives=5)
 
-   algorithm = SMPSO(
-       problem=problem,
-       swarm_size=100,
-       max_evaluations=25000,
-       mutation=Polynomial(probability=1.0/problem.number_of_variables, distribution_index=20),
-       leaders=CrowdingDistanceArchive(100)
-   )
+    algorithm = SMPSO(
+        problem=problem,
+        swarm_size=100,
+        max_evaluations=25000,
+        mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
+        leaders=CrowdingDistanceArchive(100)
+    )
 
-   algorithm.run()
-   front = algorithm.get_result()
+    algorithm.run()
+    front = algorithm.get_result()
 
-   pareto_front = FrontPlot(plot_title='SMPSO-DTLZ1-5', axis_labels=problem.obj_labels)
-   pareto_front.plot(front, reference_front=problem.reference_front)
-   pareto_front.to_html(filename='SMPSO-DTLZ1-5')
+    pareto_front = FrontPlot(plot_title='SMPSO-DTLZ1-5', axis_labels=problem.obj_labels)
+    pareto_front.plot(front, reference_front=problem.reference_front)
+    pareto_front.to_html(filename='SMPSO-DTLZ1-5')
 
 .. raw:: html
 
@@ -56,47 +50,52 @@ SMPSO/RP
 
 .. code-block:: python
 
-   from jmetal.algorithm import SMPSORP
-   from jmetal.component import CrowdingDistanceArchiveWithReferencePoint
-   from jmetal.problem import ZDT1
+    from jmetal.algorithm.multiobjective.smpso import SMPSORP
+    from jmetal.component import CrowdingDistanceArchiveWithReferencePoint
+    from jmetal.operator import Polynomial
+    from jmetal.problem import ZDT1
+    from jmetal.util.graphic import FrontPlot
+    from jmetal.util.solution_list import read_front
 
-   def points_to_solutions(points):
-       solutions = []
-       for i, _ in enumerate(points):
-           point = problem.create_solution()
-           point.objectives = points[i]
-           solutions.append(point)
 
-       return solutions
+    def points_to_solutions(points):
+        solutions = []
+        for i, _ in enumerate(points):
+            point = problem.create_solution()
+            point.objectives = points[i]
+            solutions.append(point)
 
-   problem = ZDT1()
-   problem.read_front(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
+        return solutions
 
-   swarm_size = 100
-   reference_points = [[0.8, 0.2], [0.4, 0.6]]
-   archives_with_reference_points = []
+    problem = ZDT1()
+    problem.reference_front = read_front(file_path='/resources/reference_front/{}.pf'.format(problem.get_name()))
 
-   for point in reference_points:
-       archives_with_reference_points.append(
-           CrowdingDistanceArchiveWithReferencePoint(swarm_size, point)
-       )
+    swarm_size = 100
 
-   algorithm = SMPSORP(
-       problem=problem,
-       swarm_size=swarm_size,
-       max_evaluations=25000,
-       mutation=Polynomial(probability=1.0/problem.number_of_variables, distribution_index=20),
-       reference_points=reference_points,
-       leaders=archives_with_reference_points
-   )
+    reference_points = [[0.5, 0.5], [0.2, 0.8]]
+    archives_with_reference_points = []
 
-   algorithm.run()
-   front = algorithm.get_result()
+    for point in reference_points:
+        archives_with_reference_points.append(
+            CrowdingDistanceArchiveWithReferencePoint(swarm_size, point)
+        )
 
-   pareto_front = FrontPlot(plot_title='SMPSORP-ZDT1', axis_labels=problem.obj_labels)
-   pareto_front.plot(front, reference_front=problem.reference_front)
-   pareto_front.update(points_to_solutions(reference_points), legend='reference points')
-   pareto_front.to_html(filename='SMPSORP-ZDT1')
+    algorithm = SMPSORP(
+        problem=problem,
+        swarm_size=swarm_size,
+        max_evaluations=25000,
+        mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
+        reference_points=reference_points,
+        leaders=archives_with_reference_points
+    )
+
+    algorithm.run()
+    front = algorithm.get_result()
+
+    pareto_front = FrontPlot(plot_title='SMPSORP-ZDT1', axis_labels=problem.obj_labels)
+    pareto_front.plot(front, reference_front=problem.reference_front)
+    pareto_front.update(points_to_solutions(reference_points), legend='reference points')
+    pareto_front.to_html(filename='SMPSORP-ZDT1')
 
 .. raw:: html
 

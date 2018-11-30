@@ -1,5 +1,6 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.component import ProgressBarObserver, RankingAndCrowdingDistanceComparator, VisualizerObserver
+from jmetal.component.observer import KafkaObserver
 from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
 from jmetal.problem import ZDT1
 from jmetal.util.graphic import FrontPlot
@@ -21,9 +22,9 @@ if __name__ == '__main__':
     )
 
     progress_bar = ProgressBarObserver(initial=algorithm.population_size, step=algorithm.offspring_size, maximum=algorithm.max_evaluations)
-    visualizer = VisualizerObserver()
     algorithm.observable.register(observer=progress_bar)
-    algorithm.observable.register(observer=visualizer)
+    algorithm.observable.register(observer=VisualizerObserver())
+    algorithm.observable.register(observer=KafkaObserver('ejemplo', broker='kafka://192.168.44.10:9092'))
 
     algorithm.run()
     front = algorithm.get_result()

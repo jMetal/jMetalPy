@@ -32,16 +32,17 @@ $ pip install jmetalpy
 Examples of configuring and running all the included algorithms are located [in the docs](https://jmetalpy.readthedocs.io/en/latest/examples.html).
 
 ## Features
-The current release of jMetalPy (v0.5.1) contains the following components:
+The current release of jMetalPy (v0.5.5) contains the following components:
 
-* Algorithms: random search, ssGA, generational GA, [NSGA-II](https://jmetalpy.readthedocs.io/en/latest/examples/ea.html#nsga-ii-with-plotting), [SMPSO](https://jmetalpy.readthedocs.io/en/latest/examples/pso.html#smpso-with-standard-settings), [SMPSO/RP](https://jmetalpy.readthedocs.io/en/latest/examples/pso.html#smpso-rp-with-standard-settings).
-* Benchmark problems: ZDT1-6, DTLZ1-2, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2), constrained (Srinivas, Tanaka).
+* Algorithms: random search, GA, EA, [NSGA-II](https://jmetalpy.readthedocs.io/en/latest/examples/ea.html#nsga-ii), [SMPSO](https://jmetalpy.readthedocs.io/en/latest/examples/pso.html#smpso), [SMPSO/RP](https://jmetalpy.readthedocs.io/en/latest/examples/pso.html#smpso-rp), [MOEA/D](https://jmetalpy.readthedocs.io/en/latest/examples/ea.html#moea-d) (and steady-state variants)
+* Benchmark problems:
+  * Singleobjective:  unconstrained (OneMax, Sphere, SubsetSum).
+  * Multiobjective: ZDT1-6, DTLZ1-2, LZ09, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2, SubsetSum), constrained (Srinivas, Tanaka).
 * Encodings: real, binary.
-* Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random).
-* Quality indicators: [hypervolume](https://jmetalpy.readthedocs.io/en/latest/api/jmetal.component.html#module-jmetal.component.quality_indicator).
-* Density estimator: crowding distance.
-* Laboratory: [Experiment class for performing studies](https://jmetalpy.readthedocs.io/en/latest/examples/experiment.html).
-* Graphics: Pareto front plotting for problems with two or more objectives (as scatter plot/parallel coordinates).
+* A full range of genetic operators.
+* Quality indicators: hypervolume.
+* [Experiment class for performing studies](https://jmetalpy.readthedocs.io/en/latest/examples/experiment.html).
+* Pareto front plotting for problems with two or more objectives (as scatter plot/parallel coordinates).
 
 <p align="center">
   <br/>

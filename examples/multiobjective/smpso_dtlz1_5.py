@@ -16,7 +16,7 @@ if __name__ == '__main__':
         leaders=CrowdingDistanceArchive(100)
     )
 
-    progress_bar = ProgressBarObserver(step=100, maximum=25000)
+    progress_bar = ProgressBarObserver(initial=algorithm.swarm_size, step=algorithm.swarm_size, maximum=algorithm.max_evaluations)
     algorithm.observable.register(observer=progress_bar)
 
     algorithm.run()
