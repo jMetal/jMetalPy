@@ -46,14 +46,15 @@ class GenerationalDistance(QualityIndicator):
         self.p = p
 
     def compute(self, solutions: List[S]):
-        value = sum([math.pow(self.__distance_to_neatest(s, self.reference_front), self.p) for s in solutions])
+        value = sum([math.pow(self.distance_to_neatest(s, self.reference_front), self.p) for s in solutions])
         return math.pow(value, 1.0 / self.p) / len(solutions)
 
-    def __distance_to_neatest(self, solution: S, reference_front: List[S]):
+    def distance_to_neatest(self, solution: S, reference_front: List[S]):
         reference_front = np.asarray([s.objectives for s in reference_front])
         solution = np.asarray(solution.objectives)
+        distance = np.sum((reference_front - solution) ** 2, axis=1)
 
-        return np.argmin(np.sum((reference_front - solution) ** 2, axis=1))
+        return min(distance)
 
     def get_name(self) -> str:
         return 'Generational distance'
@@ -64,7 +65,7 @@ class InvertedGenerationalDistance(GenerationalDistance):
     __metaclass__ = ABCMeta
 
     def compute(self, solutions: List[S]):
-        value = sum([math.pow(self.__distance_to_neatest(rs, solutions), self.p) for rs in self.reference_front])
+        value = sum([math.pow(self.distance_to_neatest(rs, solutions), self.p) for rs in self.reference_front])
         return math.pow(value, 1.0 / self.p) / len(self.reference_front)
 
     def get_name(self) -> str:
