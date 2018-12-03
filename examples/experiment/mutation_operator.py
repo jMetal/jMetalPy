@@ -1,4 +1,4 @@
-from jmetal.algorithm import NSGAII
+from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import NullMutation, SBX, BinaryTournamentSelection, Polynomial
 from jmetal.problem import ZDT1, ZDT2, ZDT3
 from jmetal.component import RankingAndCrowdingDistanceComparator, HyperVolume, ComputingTime
@@ -22,7 +22,7 @@ def configure_experiment(problems: list, n_run: int):
                         crossover=SBX(probability=1.0, distribution_index=20),
                         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
                     ),
-                    label='NSGAII with Null Mutation',
+                    label='NSGAIIa',
                     problem_name=problem.get_name(),
                     run=run,
                 )
@@ -39,7 +39,7 @@ def configure_experiment(problems: list, n_run: int):
                         crossover=SBX(probability=1.0, distribution_index=20),
                         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
                     ),
-                    label='NSGAII with Polynomial Mutation',
+                    label='NSGAIIb',
                     problem_name=problem.get_name(),
                     run=run
                 )
@@ -50,9 +50,9 @@ def configure_experiment(problems: list, n_run: int):
 
 if __name__ == '__main__':
     problems = [ZDT1(), ZDT2(), ZDT3()]
-    jobs = configure_experiment(problems=problems, n_run=4)
+    jobs = configure_experiment(problems=problems, n_run=30)
 
-    experiment_with_mutation_operator = Experiment(base_directory='./experiment_mut', jobs=jobs)
+    experiment_with_mutation_operator = Experiment(base_directory='C:\\Users\\makis\\Proyectos\\jMetalPy\\examples', jobs=jobs)
     experiment_with_mutation_operator.run()
 
     metrics = [HyperVolume(reference_point=[1, 1]), ComputingTime()]
@@ -61,4 +61,9 @@ if __name__ == '__main__':
     print(data)
     print(data.groupby(['problem', 'metric']).mean())
     print(data.groupby(['problem', 'metric']).median())
-    print(data.xs('Hypervolume', level='metric'))
+
+    ss = data.xs(('ZDT1', 'Hypervolume'), level=('problem', 'metric'))
+    print(ss)
+
+    statistic, pvalue = Experiment.compute_statistical_analysis([ss['NSGAIIa'].tolist(), ss['NSGAIIb'].tolist()])
+    print(statistic, pvalue)

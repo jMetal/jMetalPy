@@ -18,7 +18,7 @@ class QualityIndicator:
         self.is_minimization = is_minimization
 
     @abstractmethod
-    def compute(self, data):
+    def compute(self, algorithm: Algorithm):
         pass
 
     @abstractmethod
@@ -31,13 +31,8 @@ class ComputingTime(QualityIndicator):
     def __init__(self):
         super().__init__(is_minimization=True)
 
-    def compute(self, data):
-        value = -1
-
-        if isinstance(data, Algorithm):
-            value = data.total_computing_time
-
-        return value
+    def compute(self, algorithm: Algorithm):
+        return algorithm.total_computing_time
 
     def get_name(self) -> str:
         return 'Total computing time'
@@ -59,23 +54,15 @@ class HyperVolume(QualityIndicator):
         self.referencePoint = reference_point
         self.list: MultiList = []
 
-    def compute(self, data):
-        """Before the HV computation, front and reference point are translated, so
-        that the reference point is [0, ..., 0].
+    def compute(self, algorithm: Algorithm):
+        """Before the HV computation, front and reference point are translated, so that the reference point is [0, ..., 0].
 
         :return: The hypervolume that is dominated by a non-dominated front.
         """
-        if isinstance(data, Algorithm):
-            front = data.get_result()
+        front = []
 
-        def get_variables() -> list:
-            result = []
-            for solution in data:
-                result.append(solution.objectives)
-
-            return result
-
-        front = get_variables()
+        for solution in algorithm.get_result():
+            front.append(solution.objectives)
 
         def weakly_dominates(point, other):
             for i in range(len(point)):

@@ -6,8 +6,8 @@ from typing import List
 import pandas as pd
 from scipy import stats
 
-from jmetal.core.algorithm import Algorithm
 from jmetal.component.quality_indicator import QualityIndicator
+from jmetal.core.algorithm import Algorithm
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -71,7 +71,7 @@ class Experiment:
         for job in self.jobs:
             for metric in metrics:
                 value = job.evaluate(metric)
-                new_data = pd.DataFrame(data=[[job.algorithm.problem.get_name(), metric.get_name(), job.id_, value]],
+                new_data = pd.DataFrame(data=[[job.problem_name, metric.get_name(), job.id_, value]],
                                         columns=['problem', 'metric', 'run', job.label_])
 
                 df = df.append(new_data)
@@ -80,11 +80,13 @@ class Experiment:
         df = df.groupby(['problem', 'metric', 'run']).mean()
 
         # Save to file
-        df.to_csv(self.base_dir + '/metrics_df.csv', sep='\t', encoding='utf-8')
+        LOGGER.debug('Saving output to {}'.format(self.base_dir + '/metrics_df.csv'))
+        df.to_csv(self.base_dir + '/metrics_df.csv', header=True, sep=',', encoding='utf-8')
 
         return df
 
-    def __compute_statistical_analysis(self, data_list: List[list]):
+    @staticmethod
+    def compute_statistical_analysis(data_list: List[list]):
         """ The application scheme listed here is as described in
 
         * G. Luque, E. Alba, Parallel Genetic Algorithms, Springer-Verlag, ISBN 978-3-642-22084-5, 2011
@@ -103,18 +105,26 @@ class Experiment:
                 normality_test = False
                 break
 
+        statistic, pvalue = -1, -1
+
         if not normality_test:
+            LOGGER.info('Non-normal variables')
             # non-normal variables (median comparison, non-parametric tests)
             if len(data_list) == 2:
+                LOGGER.info('Running non-parametric test: Wilcoxon signed-rank test')
                 statistic, pvalue = stats.wilcoxon(data_list[0], data_list[1])
             else:
+                LOGGER.info('Running non-parametric test: Kruskal-Wallis test')
                 statistic, pvalue = stats.kruskal(*data_list)
         else:
+            LOGGER.info('Normal variables')
             # normal variables (mean comparison, parametric tests)
             if len(data_list) == 2:
                 pass
             else:
                 pass
+
+        return statistic, pvalue
 
     @staticmethod
     def convert_to_latex(df: pd.DataFrame, caption: str = 'Experiment', label: str = 'tab:exp', alignment: str = 'c'):
