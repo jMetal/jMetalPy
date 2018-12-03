@@ -93,13 +93,13 @@ class VisualizerObserver(Observer):
         self.plot = ScatterStreaming(plot_title='jmetal')
 
     def update(self, *args, **kwargs):
-        computing_time = kwargs['computing time']
-        evaluations = kwargs['evaluations']
+        computing_time = kwargs['COMPUTING_TIME']
+        evaluations = kwargs['EVALUATIONS']
 
-        population = kwargs['population']
-        problem = kwargs['problem']
+        population = kwargs['POPULATION']
+        problem = kwargs['PROBLEM']
 
-        title = '{}, Eval: {}, Time: {}'.format('VisualizerObserver', evaluations, computing_time)
+        title = 'Eval: {}, Time: {}'.format(evaluations, computing_time)
 
         if (evaluations % self.display_frequency) == 0:
             self.plot.update(population, problem.reference_front, rename_title=title, persistence=self.replace)
