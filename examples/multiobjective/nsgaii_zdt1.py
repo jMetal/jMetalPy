@@ -1,5 +1,6 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.component import ProgressBarObserver, RankingAndCrowdingDistanceComparator, HyperVolume
+from jmetal.component.observer import VisualizerObserver
 from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
 from jmetal.problem import ZDT1
 from jmetal.util.graphic import FrontPlot
@@ -25,6 +26,7 @@ if __name__ == '__main__':
 
     progress_bar = ProgressBarObserver(initial=100, step=100, maximum=25000)
     algorithm.observable.register(observer=progress_bar)
+    algorithm.observable.register(observer=VisualizerObserver())
 
     algorithm.run()
     front = algorithm.get_result()

@@ -43,14 +43,12 @@ class Job:
 
 class Experiment:
 
-    def __init__(self, base_directory: str, jobs: List[Job], m_workers: int = 3):
+    def __init__(self,jobs: List[Job], m_workers: int = 3):
         """ Run an experiment to evaluate algorithms and/or problems.
 
-        :param base_directory: Directory to save partial outputs.
         :param jobs: List of Jobs (from :py:mod:`jmetal.util.laboratory)`) to be executed.
         :param m_workers: Maximum number of workers to execute the Jobs in parallel.
         """
-        self.base_dir = base_directory
         self.jobs = jobs
         self.m_workers = m_workers
 
@@ -59,33 +57,28 @@ class Experiment:
             for job in self.jobs:
                 executor.submit(job.run())
 
-    def compute_metrics(self, metrics: list) -> pd.DataFrame:
+    def compute_quality_indicator(self, qi: QualityIndicator) -> pd.DataFrame:
+        pd.set_option('display.float_format', '{:.2e}'.format)
         df = pd.DataFrame()
 
         for job in self.jobs:
-            for metric in metrics:
-                new_data = pd.DataFrame({
-                    ('problem', 'name'): job.problem_name,
-                    ('execution', 'run'): job.id_,
-                    (metric.get_name(), job.label_): [job.evaluate(metric)],
-                })
-                df = df.append(new_data)
-
-        print('FINAL')
-        print(df)
+            new_data = pd.DataFrame({
+                'problem': job.problem_name,
+                'run': job.id_,
+                job.label_: [job.evaluate(qi)]
+            })
+            df = df.append(new_data)
 
         # Get rid of NaN values by grouping rows by columns
-        df = df.groupby([('problem', 'name'), ('execution', 'run')]).mean()
-        print(df)
+        df = df.groupby(['problem', 'run']).mean()
 
         # Save to file
-        LOGGER.debug('Saving output to {}'.format(self.base_dir + '/metrics_df.csv'))
-        df.to_csv(self.base_dir + '/metrics_df.csv', header=True, sep=',', encoding='utf-8')
+        LOGGER.debug('Saving output to experiment_df.csv')
+        df.to_csv('experiment_df.csv', header=True, sep=',', encoding='utf-8')
 
         return df
 
-    @staticmethod
-    def compute_statistical_analysis(data_list: List[list]):
+    def __compute_statistical_analysis(self, data_list: List[list]):
         """ The application scheme listed here is as described in
 
         * G. Luque, E. Alba, Parallel Genetic Algorithms, Springer-Verlag, ISBN 978-3-642-22084-5, 2011

@@ -54,21 +54,15 @@ if __name__ == '__main__':
     problems = [ZDT1(), ZDT2(), ZDT3()]
     jobs = configure_experiment(problems=problems, n_run=3)
 
-    experiment_with_mutation_operator = Experiment(base_directory='./', jobs=jobs)
-    experiment_with_mutation_operator.run()
+    experiment = Experiment(jobs=jobs)
+    experiment.run()
 
-    metrics = [HyperVolume(reference_point=[1, 1]), NonIndicator()]
-    data = experiment_with_mutation_operator.compute_metrics(metrics)
+    results = experiment.compute_quality_indicator(qi=NonIndicator())
+    print(results)
 
-    print(data.info())
-    print(data.columns)
-    print(data['Hypervolume'])
-    print(data['Hypervolume', 'NSGAIIa'])
+    median = results.groupby(level=0).median()
+    iqr = results.groupby(level=0).quantile(0.75) - results.groupby(level=0).quantile(0.25)
+    table = median.applymap('{:.2e}'.format) + '_{' + iqr.applymap('{:.2e}'.format) + '}'
 
-    median = data.groupby(level=0).median()
-    mean = data.groupby(level=0).mean()
-
-    print(median)
-
-    test_values = data['Test']
-    print(test_values.groupby(level=0).mean())
+    print(table)
+    print(Experiment.convert_to_latex(table))
