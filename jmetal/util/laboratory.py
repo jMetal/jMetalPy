@@ -38,12 +38,12 @@ class Job:
         if not self.executed:
             raise Exception('Algorithm must be run first')
 
-        return metric.compute(self.algorithm)
+        return metric.compute(self.algorithm.get_result())
 
 
 class Experiment:
 
-    def __init__(self, base_directory: str, jobs: list, m_workers: int = 3):
+    def __init__(self, base_directory: str, jobs: List[Job], m_workers: int = 3):
         """ Run an experiment to evaluate algorithms and/or problems.
 
         :param base_directory: Directory to save partial outputs.
@@ -60,24 +60,23 @@ class Experiment:
                 executor.submit(job.run())
 
     def compute_metrics(self, metrics: list) -> pd.DataFrame:
-        col_names = ['problem', 'metric', 'run']
-
-        for job in self.jobs:
-            if job.label_ not in col_names:
-                col_names.append(job.label_)
-
-        df = pd.DataFrame(columns=col_names)
+        df = pd.DataFrame()
 
         for job in self.jobs:
             for metric in metrics:
-                value = job.evaluate(metric)
-                new_data = pd.DataFrame(data=[[job.problem_name, metric.get_name(), job.id_, value]],
-                                        columns=['problem', 'metric', 'run', job.label_])
-
+                new_data = pd.DataFrame({
+                    ('problem', 'name'): job.problem_name,
+                    ('execution', 'run'): job.id_,
+                    (metric.get_name(), job.label_): [job.evaluate(metric)],
+                })
                 df = df.append(new_data)
 
+        print('FINAL')
+        print(df)
+
         # Get rid of NaN values by grouping rows by columns
-        df = df.groupby(['problem', 'metric', 'run']).mean()
+        df = df.groupby([('problem', 'name'), ('execution', 'run')]).mean()
+        print(df)
 
         # Save to file
         LOGGER.debug('Saving output to {}'.format(self.base_dir + '/metrics_df.csv'))

@@ -1,4 +1,5 @@
 import math
+import random
 from abc import ABCMeta, abstractmethod
 from typing import TypeVar, List
 
@@ -30,6 +31,20 @@ class QualityIndicator:
     @abstractmethod
     def get_name(self) -> str:
         pass
+
+
+class NonIndicator(QualityIndicator):
+
+    __metaclass__ = ABCMeta
+
+    def __init__(self):
+        super(NonIndicator, self).__init__(is_minimization=True)
+
+    def compute(self, solutions: List[S]):
+        return random.random()
+
+    def get_name(self) -> str:
+        return 'Test'
 
 
 class GenerationalDistance(QualityIndicator):
