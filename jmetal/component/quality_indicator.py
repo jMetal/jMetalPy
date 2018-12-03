@@ -1,5 +1,9 @@
+import math
 from abc import ABCMeta, abstractmethod
 from typing import TypeVar, List
+
+import numpy as np
+from scipy import spatial
 
 S = TypeVar('S')
 
@@ -28,6 +32,65 @@ class QualityIndicator:
         pass
 
 
+class GenerationalDistance(QualityIndicator):
+
+    __metaclass__ = ABCMeta
+
+    def __init__(self, reference_front: List[S], p: float = 2.0):
+        """
+        * Van Veldhuizen, D.A., Lamont, G.B.: Multiobjective Evolutionary Algorithm Research: A History and Analysis.
+          Technical Report TR-98-03, Dept. Elec. Comput. Eng., Air Force. Inst. Technol. (1998)
+        """
+        super(GenerationalDistance, self).__init__(is_minimization=True)
+        self.reference_front = reference_front
+        self.p = p
+
+    def compute(self, solutions: List[S]):
+        value = sum([math.pow(self.__distance_to_neatest(s, self.reference_front), self.p) for s in solutions])
+        return math.pow(value, 1.0 / self.p) / len(solutions)
+
+    def __distance_to_neatest(self, solution: S, reference_front: List[S]):
+        reference_front = np.asarray([s.objectives for s in reference_front])
+        solution = np.asarray(solution.objectives)
+
+        return np.argmin(np.sum((reference_front - solution) ** 2, axis=1))
+
+    def get_name(self) -> str:
+        return 'Generational distance'
+
+
+class InvertedGenerationalDistance(GenerationalDistance):
+
+    __metaclass__ = ABCMeta
+
+    def compute(self, solutions: List[S]):
+        value = sum([math.pow(self.__distance_to_neatest(rs, solutions), self.p) for rs in self.reference_front])
+        return math.pow(value, 1.0 / self.p) / len(self.reference_front)
+
+    def get_name(self) -> str:
+        return 'Inverted Generational distance'
+
+
+class EpsilonIndicator(QualityIndicator):
+
+    __metaclass__ = ABCMeta
+
+    def __init__(self, reference_front: List[S]):
+        """
+        * Zitzler, E. Thiele, L. Laummanns, M., Fonseca, C., and Grunert da Fonseca. V (2003): Performance Assessment of Multiobjective Optimizers: An Analysis and Review.
+        """
+        super(EpsilonIndicator, self).__init__(is_minimization=True)
+        self.reference_front = reference_front
+
+    def compute(self, solutions: List[S]):
+        return max([min(
+            [max([s2.objectives[k] - s1.objectives[k] for k in range(s2.number_of_objectives)]) for s2 in
+             solutions]) for s1 in self.reference_front])
+
+    def get_name(self) -> str:
+        return 'Unary Epsilon'
+
+
 class HyperVolume(QualityIndicator):
     """ Hypervolume computation based on variant 3 of the algorithm in the paper:
 
@@ -38,9 +101,8 @@ class HyperVolume(QualityIndicator):
     Minimization is implicitly assumed here!
     """
 
-    def __init__(self, reference_point: list):
-        """Constructor."""
-        super().__init__(is_minimization=False)
+    def __init__(self, reference_point: List[float]):
+        super(HyperVolume, self).__init__(is_minimization=False)
         self.referencePoint = reference_point
         self.list: MultiList = []
 
