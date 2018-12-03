@@ -10,6 +10,7 @@ from jmetal.core.operator import Mutation, Crossover
 from jmetal.core.problem import Problem
 from jmetal.util.aggregative_function import AggregativeFunction
 from jmetal.util.neighborhood import WeightNeighborhood
+from jmetal.util.termination_criteria import TerminationCriteria
 
 S = TypeVar('S')
 R = List[S]
@@ -20,13 +21,13 @@ class MOEAD(GeneticAlgorithm):
     def __init__(self,
                  problem: Problem,
                  population_size: int,
-                 max_evaluations: int,
                  mutation: Mutation,
                  crossover: Crossover,
                  aggregative_function: AggregativeFunction,
                  neighbourhood: WeightNeighborhood,
                  neighbourhood_selection_probability: float,
                  max_number_of_replaced_solutions: int,
+                 termination_criteria: TerminationCriteria,
                  pop_generator: Generator = None,
                  pop_evaluator: Evaluator = None):
         """
@@ -36,22 +37,19 @@ class MOEAD(GeneticAlgorithm):
         super(MOEAD, self).__init__(
             problem=problem,
             population_size=population_size,
-            pop_generator=pop_generator,
             offspring_size=1,
             mating_pool_size=3,
-            max_evaluations=max_evaluations,
             mutation=mutation,
             crossover=crossover,
             selection=None,
-            pop_evaluator=pop_evaluator
+            pop_evaluator=pop_evaluator,
+            pop_generator=pop_generator,
+            termination_criteria=termination_criteria
         )
         self.max_number_of_replaced_solutions = max_number_of_replaced_solutions
         self.fitness_function = aggregative_function
         self.neighbourhood = neighbourhood
         self.neighbourhood_selection_probability = neighbourhood_selection_probability
-
-        if any([d != Problem.MINIMIZE for d in problem.directions]):
-            raise Exception('MOEA/D currently only works with minimization problems')
 
     @staticmethod
     def random_permutations(size):
@@ -166,10 +164,10 @@ class MOEAD(GeneticAlgorithm):
         self.evaluations += self.population_size
 
         observable_data = {
-            'problem': self.problem,
-            'population': self.population,
-            'evaluations': self.evaluations,
-            'computing time': self.current_computing_time,
+            'PROBLEM': self.problem,
+            'POPULATION': self.population,
+            'EVALUATIONS': self.evaluations,
+            'COMPUTING_TIME': self.current_computing_time,
         }
 
         self.observable.notify_all(**observable_data)
@@ -178,4 +176,4 @@ class MOEAD(GeneticAlgorithm):
         return self.population
 
     def get_name(self) -> str:
-        return 'Multiobjective Evolutionary Algorithm Based on Decomposition (MOEA/D)'
+        return 'Multiobjective Evolutionary Algorithm Based on Decomposition'

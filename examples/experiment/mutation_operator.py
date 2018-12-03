@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import NullMutation, SBX, BinaryTournamentSelection, Polynomial
 from jmetal.problem import ZDT1, ZDT2, ZDT3
-from jmetal.component import RankingAndCrowdingDistanceComparator, HyperVolume, ComputingTime
+from jmetal.component import RankingAndCrowdingDistanceComparator, HyperVolume
 from jmetal.util.laboratory import Experiment, Job
 
 
@@ -52,10 +52,10 @@ if __name__ == '__main__':
     problems = [ZDT1(), ZDT2(), ZDT3()]
     jobs = configure_experiment(problems=problems, n_run=30)
 
-    experiment_with_mutation_operator = Experiment(base_directory='C:\\Users\\makis\\Proyectos\\jMetalPy\\examples', jobs=jobs)
+    experiment_with_mutation_operator = Experiment(base_directory='./new_experiment', jobs=jobs)
     experiment_with_mutation_operator.run()
 
-    metrics = [HyperVolume(reference_point=[1, 1]), ComputingTime()]
+    metrics = [HyperVolume(reference_point=[1, 1])]
     data = experiment_with_mutation_operator.compute_metrics(metrics)
 
     print(data)

@@ -2,10 +2,6 @@ import logging
 from abc import ABCMeta
 from typing import TypeVar, List
 
-import matplotlib
-
-matplotlib.use('Qt5Agg')
-
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from plotly import graph_objs as go
@@ -13,6 +9,7 @@ from plotly.offline import plot
 from pandas import DataFrame
 
 LOGGER = logging.getLogger('jmetal')
+
 S = TypeVar('S')
 
 """

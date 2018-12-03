@@ -5,6 +5,7 @@ from jmetal.component.generator import Generator
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
+from jmetal.util.termination_criteria import TerminationCriteria
 
 S = TypeVar('S')
 R = TypeVar('R')
@@ -25,10 +26,10 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
                  population_size: int,
                  offspring_size: int,
                  mating_pool_size: int,
-                 max_evaluations: int,
                  mutation: Mutation,
                  crossover: Crossover,
                  selection: Selection,
+                 termination_criteria: TerminationCriteria,
                  pop_generator: Generator = None,
                  pop_evaluator: Evaluator = None):
         """
@@ -38,8 +39,8 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
             problem=problem,
             population_size=population_size,
             pop_generator=pop_generator,
-            max_evaluations=max_evaluations,
-            pop_evaluator=pop_evaluator
+            pop_evaluator=pop_evaluator,
+            termination_criteria=termination_criteria
         )
         self.offspring_size = offspring_size
         self.mating_pool_size = mating_pool_size
@@ -51,7 +52,7 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
         mating_population = []
 
         for i in range(self.mating_pool_size):
-            solution = self.selection_operator.execute(self.population)
+            solution = self.selection_operator.execute(population)
             mating_population.append(solution)
 
         return mating_population
@@ -93,10 +94,10 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
         self.evaluations += self.offspring_size
 
         observable_data = {
-            'problem': self.problem,
-            'population': self.population,
-            'evaluations': self.evaluations,
-            'computing time': self.current_computing_time,
+            'PROBLEM': self.problem,
+            'POPULATION': self.population,
+            'EVALUATIONS': self.evaluations,
+            'COMPUTING_TIME': self.current_computing_time,
         }
 
         self.observable.notify_all(**observable_data)

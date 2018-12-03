@@ -7,7 +7,7 @@ from .evaluator import SequentialEvaluator, MapEvaluator
 from .generator import RandomGenerator, InjectorGenerator
 from jmetal.util.observable import DefaultObservable
 from .observer import ProgressBarObserver, BasicObserver, WriteFrontToFileObserver, VisualizerObserver
-from jmetal.component.quality_indicator import HyperVolume, ComputingTime
+from jmetal.component.quality_indicator import HyperVolume
 from .ranking import FastNonDominatedRanking
 
 __all__ = [
@@ -18,6 +18,6 @@ __all__ = [
     'DefaultObservable',
     'SequentialEvaluator', 'MapEvaluator',
     'ProgressBarObserver', 'BasicObserver', 'WriteFrontToFileObserver', 'VisualizerObserver',
-    'HyperVolume', 'ComputingTime',
+    'HyperVolume',
     'FastNonDominatedRanking'
 ]

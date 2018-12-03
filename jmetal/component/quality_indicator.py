@@ -1,5 +1,7 @@
 from abc import ABCMeta, abstractmethod
-from jmetal.core.algorithm import Algorithm
+from typing import TypeVar, List
+
+S = TypeVar('S')
 
 """
 .. module:: indicator
@@ -18,24 +20,12 @@ class QualityIndicator:
         self.is_minimization = is_minimization
 
     @abstractmethod
-    def compute(self, algorithm: Algorithm):
+    def compute(self, solutions: List[S]):
         pass
 
     @abstractmethod
     def get_name(self) -> str:
         pass
-
-
-class ComputingTime(QualityIndicator):
-
-    def __init__(self):
-        super().__init__(is_minimization=True)
-
-    def compute(self, algorithm: Algorithm):
-        return algorithm.total_computing_time
-
-    def get_name(self) -> str:
-        return 'Total computing time'
 
 
 class HyperVolume(QualityIndicator):
@@ -54,15 +44,12 @@ class HyperVolume(QualityIndicator):
         self.referencePoint = reference_point
         self.list: MultiList = []
 
-    def compute(self, algorithm: Algorithm):
+    def compute(self, solutions: List[S]):
         """Before the HV computation, front and reference point are translated, so that the reference point is [0, ..., 0].
 
         :return: The hypervolume that is dominated by a non-dominated front.
         """
-        front = []
-
-        for solution in algorithm.get_result():
-            front.append(solution.objectives)
+        front = [s.objectives for s in solutions]
 
         def weakly_dominates(point, other):
             for i in range(len(point)):
