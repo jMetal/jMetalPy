@@ -201,20 +201,15 @@ class SMPSO(ParticleSwarmOptimization):
         self.evaluations += self.swarm_size
         self.leaders.compute_density_estimator()
 
-        observable_data = {
-            'PROBLEM': self.problem,
-            'POPULATION': self.leaders.solution_list,
-            'EVALUATIONS': self.evaluations,
-            'COMPUTING_TIME': self.current_computing_time,
-        }
-
+        observable_data = self.get_observable_data()
+        observable_data['POPULATION'] = self.leaders.solution_list
         self.observable.notify_all(**observable_data)
 
     def get_result(self) -> List[FloatSolution]:
         return self.leaders.solution_list
 
     def get_name(self) -> str:
-        return 'Speed Constrained PSO'
+        return 'SMPSO'
 
 
 class SMPSORP(SMPSO):
@@ -305,13 +300,8 @@ class SMPSORP(SMPSO):
             point.objectives = self.reference_points[i]
             reference_points.append(point)
 
-        observable_data = {
-            'PROBLEM': self.problem,
-            'POPULATION': self.get_result() + reference_points,
-            'EVALUATIONS': self.evaluations,
-            'COMPUTING_TIME': self.current_computing_time
-        }
-
+        observable_data = self.get_observable_data()
+        observable_data['SOLUTIONS'] = self.get_result() + reference_points
         self.observable.notify_all(**observable_data)
 
     def get_result(self) -> List[FloatSolution]:
@@ -324,4 +314,4 @@ class SMPSORP(SMPSO):
         return result
 
     def get_name(self) -> str:
-        return 'Speed Constrained PSO with Reference Points'
+        return 'SMPSO-RP'

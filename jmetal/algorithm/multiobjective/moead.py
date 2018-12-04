@@ -163,17 +163,12 @@ class MOEAD(GeneticAlgorithm):
     def update_progress(self) -> None:
         self.evaluations += self.population_size
 
-        observable_data = {
-            'PROBLEM': self.problem,
-            'POPULATION': self.population,
-            'EVALUATIONS': self.evaluations,
-            'COMPUTING_TIME': self.current_computing_time,
-        }
-
+        observable_data = self.get_observable_data()
+        observable_data['SOLUTIONS'] = self.population
         self.observable.notify_all(**observable_data)
 
     def get_result(self) -> R:
         return self.population
 
     def get_name(self) -> str:
-        return 'Multiobjective Evolutionary Algorithm Based on Decomposition'
+        return 'MOEAD'

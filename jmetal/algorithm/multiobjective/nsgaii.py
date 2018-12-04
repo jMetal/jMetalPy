@@ -80,4 +80,4 @@ class NSGAII(GeneticAlgorithm):
         return self.population
 
     def get_name(self) -> str:
-        return 'Non-dominated Sorting Genetic Algorithm II (NSGA-II)'
+        return 'NSGAII'

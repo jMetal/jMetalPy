@@ -5,9 +5,11 @@ from typing import List
 
 import pandas as pd
 from scipy import stats
+from scipy.stats import friedmanchisquare
 
 from jmetal.component.quality_indicator import QualityIndicator
 from jmetal.core.algorithm import Algorithm
+from jmetal.util.solution_list import print_function_values_to_file
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -22,9 +24,8 @@ LOGGER = logging.getLogger('jmetal')
 
 class Job:
 
-    def __init__(self, algorithm: Algorithm, problem_name: str, label: str, run: int):
+    def __init__(self, algorithm: Algorithm, label: str, run: int):
         self.algorithm = algorithm
-        self.problem_name = problem_name
         self.id_ = run
         self.label_ = label
 
@@ -36,14 +37,17 @@ class Job:
 
     def evaluate(self, metric: QualityIndicator):
         if not self.executed:
-            raise Exception('Algorithm must be run first')
+            self.run()
+
+        if hasattr(metric, 'reference_front'):
+            metric.reference_front = self.algorithm.problem.reference_front
 
         return metric.compute(self.algorithm.get_result())
 
 
 class Experiment:
 
-    def __init__(self,jobs: List[Job], m_workers: int = 3):
+    def __init__(self, jobs: List[Job], m_workers: int = 3):
         """ Run an experiment to evaluate algorithms and/or problems.
 
         :param jobs: List of Jobs (from :py:mod:`jmetal.util.laboratory)`) to be executed.
@@ -63,64 +67,61 @@ class Experiment:
 
         for job in self.jobs:
             new_data = pd.DataFrame({
-                'problem': job.problem_name,
+                'problem': job.algorithm.problem.get_name(),
                 'run': job.id_,
                 job.label_: [job.evaluate(qi)]
             })
             df = df.append(new_data)
+
+            # Save front to file
+            file_name = 'data/{}/{}/FUN.{}.ps'.format(job.label_, job.algorithm.problem.get_name(), job.id_)
+            print_function_values_to_file(job.algorithm.get_result(), file_name=file_name)
 
         # Get rid of NaN values by grouping rows by columns
         df = df.groupby(['problem', 'run']).mean()
 
         # Save to file
         LOGGER.debug('Saving output to experiment_df.csv')
-        df.to_csv('experiment_df.csv', header=True, sep=',', encoding='utf-8')
+        df.to_csv('data/experiment_df.csv', header=True, sep=',', encoding='utf-8')
 
         return df
 
-    def __compute_statistical_analysis(self, data_list: List[list]):
+    @staticmethod
+    def compute_statistical_analysis(df: pd.DataFrame):
         """ The application scheme listed here is as described in
 
         * G. Luque, E. Alba, Parallel Genetic Algorithms, Springer-Verlag, ISBN 978-3-642-22084-5, 2011
 
-        :param data_list: List of data sets.
+        :param df: Experiment data frame.
         """
-        if len(data_list) < 2:
+        if len(df.columns) < 2:
             raise Exception('Data sets number must be equal or greater than two')
 
-        normality_test = True
-
-        for data in data_list:
-            statistic, pvalue = stats.kstest(data, 'norm')
-
-            if pvalue > 0.05:
-                normality_test = False
-                break
-
         statistic, pvalue = -1, -1
+        result = pd.DataFrame()
 
-        if not normality_test:
-            LOGGER.info('Non-normal variables')
-            # non-normal variables (median comparison, non-parametric tests)
-            if len(data_list) == 2:
-                LOGGER.info('Running non-parametric test: Wilcoxon signed-rank test')
-                statistic, pvalue = stats.wilcoxon(data_list[0], data_list[1])
-            else:
-                LOGGER.info('Running non-parametric test: Kruskal-Wallis test')
-                statistic, pvalue = stats.kruskal(*data_list)
+        # we assume non-normal variables (median comparison, non-parametric tests)
+        if len(df.columns) == 2:
+            LOGGER.info('Running non-parametric test: Wilcoxon signed-rank test')
+            statistic, pvalue = stats.wilcoxon(df[df.columns[0]], df[df.columns[1]])
         else:
-            LOGGER.info('Normal variables')
-            # normal variables (mean comparison, parametric tests)
-            if len(data_list) == 2:
-                pass
-            else:
-                pass
+            LOGGER.info('Running non-parametric test: Kruskal-Wallis test')
+            for _, subset in df.groupby(level=0):
+                statistic, pvalue = stats.kruskal(*subset.values.tolist())
 
-        return statistic, pvalue
+                test = pd.DataFrame({
+                    'Kruskal-Wallis': '*' if pvalue < 0.05 else '-'
+                }, index=[subset.index.values[0][0]], columns=['Kruskal-Wallis'])
+                test.index.name = 'problem'
+
+                result = result.append(test)
+
+        return result
 
     @staticmethod
-    def convert_to_latex(df: pd.DataFrame, caption: str = 'Experiment', label: str = 'tab:exp', alignment: str = 'c'):
-        """ Convert a pandas DataFrame to a LaTeX tabular. Prints labels in bold, does not use math mode. """
+    def convert_to_latex(df: pd.DataFrame, caption: str, label: str = 'tab:exp', alignment: str = 'c'):
+        """ Convert a pandas DataFrame to a LaTeX tabular. Prints labels in bold, does not use math mode.
+        """
         num_columns, num_rows = df.shape[1], df.shape[0]
         output = io.StringIO()
 

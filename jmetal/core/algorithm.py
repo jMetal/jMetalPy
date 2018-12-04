@@ -74,10 +74,6 @@ class Algorithm(Generic[S, R], threading.Thread):
         """ Update the progress after each iteration. """
         pass
 
-    @property
-    def current_computing_time(self) -> float:
-        return time.time() - self.start_computing_time
-
     def evaluate(self, solutions: List[S]) -> List[S]:
         """ Evaluate the individual fitness of new individuals. """
         return self.pop_evaluator.evaluate(solutions, self.problem)
@@ -85,16 +81,28 @@ class Algorithm(Generic[S, R], threading.Thread):
     def run(self):
         """ Execute the algorithm. """
         self.start_computing_time = time.time()
+
+        LOGGER.debug('Initializing progress')
         self.init_progress()
 
         try:
+            LOGGER.debug('Running main loop until termination criteria is met')
             while not self.termination_criteria.is_met:
                 self.step()
                 self.update_progress()
         except KeyboardInterrupt:
             LOGGER.warning('Interrupted by keyboard')
 
-        self.total_computing_time = self.current_computing_time
+        self.total_computing_time = time.time() - self.start_computing_time
+
+    def get_observable_data(self) -> dict:
+        """ Get observable data, with the information that will be send to all observers each time. """
+        return {
+            'PROBLEM': self.problem,
+            'EVALUATIONS': self.evaluations,
+            'SOLUTIONS': [],
+            'COMPUTING_TIME': time.time() - self.start_computing_time,
+        }
 
     @abstractmethod
     def get_result(self) -> R:
@@ -140,10 +148,11 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
         pass
 
     def init_progress(self) -> None:
-        self.evaluations = self.population_size
-
         self.population = [self.pop_generator.new(self.problem) for _ in range(self.population_size)]
         self.population = self.evaluate(self.population)
+
+        observable_data = self.get_observable_data()
+        self.observable.notify_all(**observable_data)
 
     def step(self) -> None:
         mating_population = self.selection(self.population)
@@ -154,13 +163,8 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
     def update_progress(self) -> None:
         self.evaluations += self.population_size
 
-        observable_data = {
-            'PROBLEM': self.problem,
-            'POPULATION': self.population,
-            'EVALUATIONS': self.evaluations,
-            'COMPUTING_TIME': self.current_computing_time,
-        }
-
+        observable_data = self.get_observable_data()
+        observable_data['SOLUTIONS'] = self.population
         self.observable.notify_all(**observable_data)
 
     @abstractmethod
@@ -244,13 +248,8 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]]):
     def update_progress(self) -> None:
         self.evaluations += self.swarm_size
 
-        observable_data = {
-            'PROBLEM': self.problem,
-            'POPULATION': self.swarm,
-            'EVALUATIONS': self.evaluations,
-            'COMPUTING_TIME': self.current_computing_time,
-        }
-
+        observable_data = self.get_observable_data()
+        observable_data['SOLUTIONS'] = self.swarm
         self.observable.notify_all(**observable_data)
 
     @abstractmethod

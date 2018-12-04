@@ -93,13 +93,8 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
     def update_progress(self):
         self.evaluations += self.offspring_size
 
-        observable_data = {
-            'PROBLEM': self.problem,
-            'POPULATION': self.population,
-            'EVALUATIONS': self.evaluations,
-            'COMPUTING_TIME': self.current_computing_time,
-        }
-
+        observable_data = self.get_observable_data()
+        observable_data['SOLUTIONS'] = self.population
         self.observable.notify_all(**observable_data)
 
     def get_result(self) -> R:

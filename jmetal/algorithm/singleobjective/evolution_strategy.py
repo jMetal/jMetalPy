@@ -6,6 +6,7 @@ from jmetal.component.generator import Generator
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
+from jmetal.util.termination_criteria import TerminationCriteria
 
 S = TypeVar('S')
 R = TypeVar('R')
@@ -23,10 +24,10 @@ class EvolutionStrategy(EvolutionaryAlgorithm):
 
     def __init__(self,
                  problem: Problem,
-                 max_evaluations: int,
                  mu: int,
                  lambda_: int,
                  mutation: Mutation,
+                 termination_criteria: TerminationCriteria,
                  elitist: bool = True,
                  pop_evaluator: Evaluator = None,
                  pop_generator: Generator = None):
@@ -34,8 +35,8 @@ class EvolutionStrategy(EvolutionaryAlgorithm):
             problem=problem,
             population_size=mu,
             pop_generator=pop_generator,
-            max_evaluations=max_evaluations,
-            pop_evaluator=pop_evaluator
+            pop_evaluator=pop_evaluator,
+            termination_criteria=termination_criteria
         )
         self.mu = mu
         self.lambda_ = lambda_
@@ -74,13 +75,8 @@ class EvolutionStrategy(EvolutionaryAlgorithm):
     def update_progress(self):
         self.evaluations += self.lambda_
 
-        observable_data = {
-            'problem': self.problem,
-            'population': self.population,
-            'evaluations': self.evaluations,
-            'computing time': self.current_computing_time,
-        }
-
+        observable_data = self.get_observable_data()
+        observable_data['SOLUTIONS'] = self.population
         self.observable.notify_all(**observable_data)
 
     def get_result(self) -> R:

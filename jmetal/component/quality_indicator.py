@@ -51,7 +51,7 @@ class GenerationalDistance(QualityIndicator):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, reference_front: List[S], p: float = 2.0):
+    def __init__(self, reference_front: List[S] = None, p: float = 2.0):
         """
         * Van Veldhuizen, D.A., Lamont, G.B.: Multiobjective Evolutionary Algorithm Research: A History and Analysis.
           Technical Report TR-98-03, Dept. Elec. Comput. Eng., Air Force. Inst. Technol. (1998)
@@ -61,6 +61,9 @@ class GenerationalDistance(QualityIndicator):
         self.p = p
 
     def compute(self, solutions: List[S]):
+        if not self.reference_front:
+            raise Exception('Reference front is none')
+
         value = sum([math.pow(self.distance_to_neatest(s, self.reference_front), self.p) for s in solutions])
         return math.pow(value, 1.0 / self.p) / len(solutions)
 
@@ -80,6 +83,9 @@ class InvertedGenerationalDistance(GenerationalDistance):
     __metaclass__ = ABCMeta
 
     def compute(self, solutions: List[S]):
+        if not self.reference_front:
+            raise Exception('Reference front is none')
+
         value = sum([math.pow(self.distance_to_neatest(rs, solutions), self.p) for rs in self.reference_front])
         return math.pow(value, 1.0 / self.p) / len(self.reference_front)
 
@@ -91,7 +97,7 @@ class EpsilonIndicator(QualityIndicator):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, reference_front: List[S]):
+    def __init__(self, reference_front: List[S] = None):
         """
         * Zitzler, E. Thiele, L. Laummanns, M., Fonseca, C., and Grunert da Fonseca. V (2003): Performance Assessment of Multiobjective Optimizers: An Analysis and Review.
         """
@@ -99,6 +105,9 @@ class EpsilonIndicator(QualityIndicator):
         self.reference_front = reference_front
 
     def compute(self, solutions: List[S]):
+        if not self.reference_front:
+            raise Exception('Reference front is none')
+
         return max([min(
             [max([s2.objectives[k] - s1.objectives[k] for k in range(s2.number_of_objectives)]) for s2 in
              solutions]) for s1 in self.reference_front])
