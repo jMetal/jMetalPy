@@ -277,7 +277,6 @@ class SMPSORP(SMPSO):
         return best_global
 
     def init_progress(self) -> None:
-        self.evaluations = self.swarm_size
         for leader in self.leaders:
             leader.compute_density_estimator()
 
@@ -289,8 +288,6 @@ class SMPSORP(SMPSO):
         self.initialize_global_best(self.swarm)
 
     def update_progress(self) -> None:
-        self.evaluations += self.swarm_size
-
         for leader in self.leaders:
             leader.compute_density_estimator()
 

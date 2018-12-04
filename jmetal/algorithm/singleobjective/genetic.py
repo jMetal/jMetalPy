@@ -91,8 +91,6 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
         return offspring_population
 
     def update_progress(self):
-        self.evaluations += self.offspring_size
-
         observable_data = self.get_observable_data()
         observable_data['SOLUTIONS'] = self.population
         self.observable.notify_all(**observable_data)
@@ -101,4 +99,4 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
         return self.population[0]
 
     def get_name(self) -> str:
-        return 'Genetic Algorithm (GA)'
+        return 'GA'

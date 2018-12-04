@@ -2,11 +2,10 @@ import pandas as pd
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.algorithm.multiobjective.smpso import SMPSO
-from jmetal.component.quality_indicator import EpsilonIndicator, NonIndicator, GenerationalDistance
 from jmetal.operator import SBX, BinaryTournamentSelection, Polynomial
 from jmetal.problem import ZDT1, ZDT2, ZDT3
 from jmetal.component import RankingAndCrowdingDistanceComparator, HyperVolume, CrowdingDistanceArchive
-from jmetal.util.laboratory import Experiment, Job
+from jmetal.util.laboratory import Experiment, Job, convert_to_latex, compute_statistical_analysis
 from jmetal.util.solution_list import read_front
 from jmetal.util.termination_criteria import StoppingByEvaluations
 
@@ -42,7 +41,7 @@ def configure_experiment(problems: list, n_run: int):
                         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
                         crossover=SBX(probability=1.0, distribution_index=20),
                         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
-                        termination_criteria=StoppingByEvaluations(max=10000)
+                        termination_criteria=StoppingByEvaluations(max=25000)
                     ),
                     label='NSGAIIb',
                     run=run
@@ -55,7 +54,7 @@ def configure_experiment(problems: list, n_run: int):
                         swarm_size=100,
                         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
                         leaders=CrowdingDistanceArchive(100),
-                        termination_criteria=StoppingByEvaluations(max=5000)
+                        termination_criteria=StoppingByEvaluations(max=25000)
                     ),
                     label='SMPSO',
                     run=run
@@ -75,7 +74,7 @@ if __name__ == '__main__':
     zdt3_problem = ZDT3()
     zdt3_problem.reference_front = read_front(file_path='../../resources/reference_front/ZDT3.pf')
 
-    jobs = configure_experiment(problems=[zdt1_problem, zdt2_problem, zdt3_problem], n_run=2)
+    jobs = configure_experiment(problems=[zdt1_problem, zdt2_problem, zdt3_problem], n_run=30)
 
     experiment = Experiment(jobs=jobs)
     experiment.run()
@@ -90,11 +89,10 @@ if __name__ == '__main__':
     table = median.applymap('{:.2e}'.format) + '_{' + iqr.applymap('{:.2e}'.format) + '}'
 
     # Add statistical analysis
-    significance = Experiment.compute_statistical_analysis(df)
+    significance = compute_statistical_analysis(df)
     table = pd.concat([table, significance], axis=1)
 
     print(table)
 
     # Convert to LaTeX
-    print(Experiment.convert_to_latex(table, caption='Experiment'))
-
+    print(convert_to_latex(table, caption='Experiment'))

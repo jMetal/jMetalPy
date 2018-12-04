@@ -21,20 +21,21 @@ LOGGER = logging.getLogger('jmetal')
 
 class ProgressBarObserver(Observer):
 
-    def __init__(self, step: int, maximum: int, desc: str = 'Progress') -> None:
+    def __init__(self, max: int, desc: str = 'Progress') -> None:
         """ Show a smart progress meter with the number of evaluations and computing time.
 
-        :param step: Initial counter value.
-        :param maximum: Number of expected iterations.
-        :param desc: Prefix for the progressbar. """
-        self.progress_bar = tqdm(total=maximum, ascii=True, desc=desc)
-        self.progress = step
-        self.step = step
-        self.maxx = maximum
+        :param max: Number of expected iterations.
+        :param desc: Prefix for the progressbar.
+        """
+        self.progress_bar = tqdm(total=max, ascii=True, desc=desc)
+        self.progress = 0
+        self.maxx = max
 
     def update(self, *args, **kwargs):
-        self.progress_bar.update(self.step)
-        self.progress += self.step
+        evaluations = kwargs['EVALUATIONS']
+
+        self.progress_bar.update(evaluations - self.progress)
+        self.progress = evaluations
 
         if self.progress >= self.maxx:
             self.progress_bar.close()

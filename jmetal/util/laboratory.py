@@ -86,68 +86,68 @@ class Experiment:
 
         return df
 
-    @staticmethod
-    def compute_statistical_analysis(df: pd.DataFrame):
-        """ The application scheme listed here is as described in
 
-        * G. Luque, E. Alba, Parallel Genetic Algorithms, Springer-Verlag, ISBN 978-3-642-22084-5, 2011
+def compute_statistical_analysis(df: pd.DataFrame):
+    """ The application scheme listed here is as described in
 
-        :param df: Experiment data frame.
-        """
-        if len(df.columns) < 2:
-            raise Exception('Data sets number must be equal or greater than two')
+    * G. Luque, E. Alba, Parallel Genetic Algorithms, Springer-Verlag, ISBN 978-3-642-22084-5, 2011
 
-        statistic, pvalue = -1, -1
-        result = pd.DataFrame()
+    :param df: Experiment data frame.
+    """
+    if len(df.columns) < 2:
+        raise Exception('Data sets number must be equal or greater than two')
 
-        # we assume non-normal variables (median comparison, non-parametric tests)
-        if len(df.columns) == 2:
-            LOGGER.info('Running non-parametric test: Wilcoxon signed-rank test')
-            statistic, pvalue = stats.wilcoxon(df[df.columns[0]], df[df.columns[1]])
-        else:
-            LOGGER.info('Running non-parametric test: Kruskal-Wallis test')
-            for _, subset in df.groupby(level=0):
-                statistic, pvalue = stats.kruskal(*subset.values.tolist())
+    statistic, pvalue = -1, -1
+    result = pd.DataFrame()
 
-                test = pd.DataFrame({
-                    'Kruskal-Wallis': '*' if pvalue < 0.05 else '-'
-                }, index=[subset.index.values[0][0]], columns=['Kruskal-Wallis'])
-                test.index.name = 'problem'
+    # we assume non-normal variables (median comparison, non-parametric tests)
+    if len(df.columns) == 2:
+        LOGGER.info('Running non-parametric test: Wilcoxon signed-rank test')
+        statistic, pvalue = stats.wilcoxon(df[df.columns[0]], df[df.columns[1]])
+    else:
+        LOGGER.info('Running non-parametric test: Kruskal-Wallis test')
+        for _, subset in df.groupby(level=0):
+            statistic, pvalue = stats.kruskal(*subset.values.tolist())
 
-                result = result.append(test)
+            test = pd.DataFrame({
+                'Kruskal-Wallis': '*' if pvalue < 0.05 else '-'
+            }, index=[subset.index.values[0][0]], columns=['Kruskal-Wallis'])
+            test.index.name = 'problem'
 
-        return result
+            result = result.append(test)
 
-    @staticmethod
-    def convert_to_latex(df: pd.DataFrame, caption: str, label: str = 'tab:exp', alignment: str = 'c'):
-        """ Convert a pandas DataFrame to a LaTeX tabular. Prints labels in bold, does not use math mode.
-        """
-        num_columns, num_rows = df.shape[1], df.shape[0]
-        output = io.StringIO()
+    return result
 
-        col_format = '{}|{}'.format(alignment, alignment * num_columns)
-        column_labels = ['\\textbf{{{0}}}'.format(label.replace('_', '\\_')) for label in df.columns]
 
-        # Write header
-        output.write('\\begin{table}\n')
-        output.write('\\caption{{{}}}\n'.format(caption))
-        output.write('\\label{{{}}}\n'.format(label))
-        output.write('\\centering\n')
-        output.write('\\begin{scriptsize}\n')
-        output.write('\\begin{tabular}{%s}\n' % col_format)
-        output.write('\\hline\n')
-        output.write('& {} \\\\\\hline\n'.format(' & '.join(column_labels)))
+def convert_to_latex(df: pd.DataFrame, caption: str, label: str = 'tab:exp', alignment: str = 'c'):
+    """ Convert a pandas DataFrame to a LaTeX tabular. Prints labels in bold, does not use math mode.
+    """
+    num_columns, num_rows = df.shape[1], df.shape[0]
+    output = io.StringIO()
 
-        # Write data lines
-        for i in range(num_rows):
-            output.write('\\textbf{{{0}}} & ${1}$ \\\\\n'.format(
-                df.index[i], '$ & $'.join([str(val) for val in df.ix[i]]))
-            )
+    col_format = '{}|{}'.format(alignment, alignment * num_columns)
+    column_labels = ['\\textbf{{{0}}}'.format(label.replace('_', '\\_')) for label in df.columns]
 
-        # Write footer
-        output.write('\\hline\n')
-        output.write('\\end{tabular}\n')
-        output.write('\\end{scriptsize}\n')
-        output.write('\\end{table}')
+    # Write header
+    output.write('\\begin{table}\n')
+    output.write('\\caption{{{}}}\n'.format(caption))
+    output.write('\\label{{{}}}\n'.format(label))
+    output.write('\\centering\n')
+    output.write('\\begin{scriptsize}\n')
+    output.write('\\begin{tabular}{%s}\n' % col_format)
+    output.write('\\hline\n')
+    output.write('& {} \\\\\\hline\n'.format(' & '.join(column_labels)))
 
-        return output.getvalue()
+    # Write data lines
+    for i in range(num_rows):
+        output.write('\\textbf{{{0}}} & ${1}$ \\\\\n'.format(
+            df.index[i], '$ & $'.join([str(val) for val in df.ix[i]]))
+        )
+
+    # Write footer
+    output.write('\\hline\n')
+    output.write('\\end{tabular}\n')
+    output.write('\\end{scriptsize}\n')
+    output.write('\\end{table}')
+
+    return output.getvalue()

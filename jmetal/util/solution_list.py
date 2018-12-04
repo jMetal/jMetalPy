@@ -40,7 +40,12 @@ def read_front(file_path: str) -> List[FloatSolution]:
 
 def print_variables_to_file(solution_list: list, file_name):
     LOGGER.info('Output file (variables): ' + file_name)
-    os.makedirs(os.path.dirname(file_name), exist_ok=True)
+
+    try:
+        os.makedirs(os.path.dirname(file_name), exist_ok=True)
+    except FileNotFoundError:
+        pass
+
     with open(file_name, 'w') as of:
         for solution in solution_list:
             for variables in solution.variables:
@@ -55,7 +60,12 @@ def print_variables_to_screen(solution_list: list):
 
 def print_function_values_to_file(solution_list: list, file_name):
     LOGGER.info('Output file (function values): ' + file_name)
-    os.makedirs(os.path.dirname(file_name), exist_ok=True)
+
+    try:
+        os.makedirs(os.path.dirname(file_name), exist_ok=True)
+    except FileNotFoundError:
+        pass
+
     with open(file_name, 'w') as of:
         for solution in solution_list:
             for function_value in solution.objectives:

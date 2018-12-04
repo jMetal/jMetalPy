@@ -137,8 +137,6 @@ class MOEAD(GeneticAlgorithm):
                 return
 
     def init_progress(self) -> None:
-        self.evaluations = self.population_size
-
         self.population = [self.pop_generator.new(self.problem) for _ in range(self.population_size)]
         self.population = self.evaluate(self.population)
 
@@ -161,8 +159,6 @@ class MOEAD(GeneticAlgorithm):
             self.update_individual(index, offspring_population[0])
 
     def update_progress(self) -> None:
-        self.evaluations += self.population_size
-
         observable_data = self.get_observable_data()
         observable_data['SOLUTIONS'] = self.population
         self.observable.notify_all(**observable_data)

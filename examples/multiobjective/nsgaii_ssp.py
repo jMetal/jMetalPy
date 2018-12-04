@@ -36,7 +36,7 @@ if __name__ == '__main__':
         termination_criteria=StoppingByEvaluations(max=25000)
     )
 
-    progress_bar = ProgressBarObserver(initial=100, step=100, maximum=25000)
+    progress_bar = ProgressBarObserver(max=25000)
     algorithm.observable.register(observer=progress_bar)
 
     algorithm.run()

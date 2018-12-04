@@ -47,7 +47,6 @@ class NSGAII(GeneticAlgorithm):
 
         :param problem: The problem to solve.
         :param population_size: Size of the population.
-        :param max_evaluations: Maximum number of evaluations/iterations.
         :param mutation: Mutation operator (see :py:mod:`jmetal.operator.mutation`).
         :param crossover: Crossover operator (see :py:mod:`jmetal.operator.crossover`).
         :param selection: Selection operator (see :py:mod:`jmetal.operator.selection`).

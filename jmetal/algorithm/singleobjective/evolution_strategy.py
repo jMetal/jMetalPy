@@ -73,8 +73,6 @@ class EvolutionStrategy(EvolutionaryAlgorithm):
         return new_population
 
     def update_progress(self):
-        self.evaluations += self.lambda_
-
         observable_data = self.get_observable_data()
         observable_data['SOLUTIONS'] = self.population
         self.observable.notify_all(**observable_data)

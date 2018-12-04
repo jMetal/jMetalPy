@@ -34,10 +34,11 @@ class Algorithm(Generic[S, R], threading.Thread):
                  pop_generator: Generator[R],
                  pop_evaluator: Evaluator[S],
                  termination_criteria: TerminationCriteria):
-        """ :param problem: The problem to solve.
+        """
+        :param problem: The problem to solve.
         :param pop_generator: Generator of solutions.
         :param pop_evaluator: Evaluator of solutions.
-        :param max_evaluations: Maximum number of evaluations/iterations.
+        :param termination_criteria: Termination criteria.
         """
         threading.Thread.__init__(self)
         self.problem = problem
@@ -76,6 +77,7 @@ class Algorithm(Generic[S, R], threading.Thread):
 
     def evaluate(self, solutions: List[S]) -> List[S]:
         """ Evaluate the individual fitness of new individuals. """
+        self.evaluations += len(solutions)
         return self.pop_evaluator.evaluate(solutions, self.problem)
 
     def run(self):
@@ -97,12 +99,8 @@ class Algorithm(Generic[S, R], threading.Thread):
 
     def get_observable_data(self) -> dict:
         """ Get observable data, with the information that will be send to all observers each time. """
-        return {
-            'PROBLEM': self.problem,
-            'EVALUATIONS': self.evaluations,
-            'SOLUTIONS': [],
-            'COMPUTING_TIME': time.time() - self.start_computing_time,
-        }
+        ctime = time.time() - self.start_computing_time
+        return {'PROBLEM': self.problem, 'EVALUATIONS': self.evaluations, 'SOLUTIONS': [], 'COMPUTING_TIME': ctime}
 
     @abstractmethod
     def get_result(self) -> R:
@@ -161,8 +159,6 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
         self.population = self.replacement(self.population, offspring_population)
 
     def update_progress(self) -> None:
-        self.evaluations += self.population_size
-
         observable_data = self.get_observable_data()
         observable_data['SOLUTIONS'] = self.population
         self.observable.notify_all(**observable_data)
@@ -228,8 +224,6 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]]):
         pass
 
     def init_progress(self) -> None:
-        self.evaluations = self.swarm_size
-
         self.swarm = [self.pop_generator.new(self.problem) for _ in range(self.swarm_size)]
         self.swarm = self.evaluate(self.swarm)
 
@@ -246,8 +240,6 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]]):
         self.update_particle_best(self.swarm)
 
     def update_progress(self) -> None:
-        self.evaluations += self.swarm_size
-
         observable_data = self.get_observable_data()
         observable_data['SOLUTIONS'] = self.swarm
         self.observable.notify_all(**observable_data)

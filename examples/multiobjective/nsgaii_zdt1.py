@@ -24,7 +24,7 @@ if __name__ == '__main__':
         #termination_criteria=StoppingByQualityIndicator(quality_indicator=HyperVolume([1.0, 1.0]), expected_value=0.5, degree=0.95)
     )
 
-    progress_bar = ProgressBarObserver(initial=100, step=100, maximum=25000)
+    progress_bar = ProgressBarObserver(max=25000)
     algorithm.observable.register(observer=progress_bar)
     algorithm.observable.register(observer=VisualizerObserver())
 
