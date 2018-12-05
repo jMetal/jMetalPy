@@ -202,7 +202,7 @@ class SMPSO(ParticleSwarmOptimization):
         self.leaders.compute_density_estimator()
 
         observable_data = self.get_observable_data()
-        observable_data['POPULATION'] = self.leaders.solution_list
+        observable_data['SOLUTIONS'] = self.leaders.solution_list
         self.observable.notify_all(**observable_data)
 
     def get_result(self) -> List[FloatSolution]:
