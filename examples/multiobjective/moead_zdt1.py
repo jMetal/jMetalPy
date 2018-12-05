@@ -1,5 +1,5 @@
 from jmetal.algorithm.multiobjective.moead import MOEAD
-from jmetal.component import ProgressBarObserver
+from jmetal.component import ProgressBarObserver, VisualizerObserver
 from jmetal.operator import Polynomial, DifferentialEvolution
 from jmetal.problem import LZ09_F2
 from jmetal.util.aggregative_function import Chebyshev
@@ -13,8 +13,8 @@ if __name__ == '__main__':
 
     algorithm = MOEAD(
         problem=problem,
-        population_size=300,
-        max_evaluations=10000,
+        population_size=100,
+        max_evaluations=100000,
         crossover=DifferentialEvolution(CR=1.0, F=0.5, K=0.5),
         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
         aggregative_function=Chebyshev(dimension=problem.number_of_objectives),
@@ -24,7 +24,10 @@ if __name__ == '__main__':
     )
 
     progress_bar = ProgressBarObserver(initial=algorithm.population_size, step=algorithm.offspring_size, maximum=algorithm.max_evaluations)
+    visualizer = VisualizerObserver()
     algorithm.observable.register(observer=progress_bar)
+    algorithm.observable.register(observer=visualizer)
+
 
     algorithm.run()
     front = algorithm.get_result()

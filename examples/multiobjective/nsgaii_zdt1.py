@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-
-
-from jmetal.algorithm import NSGAII
-=======
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
->>>>>>> 6bd9a34c72c6bbc2bc13bb864330b6eab6bb8ba3
 from jmetal.component import ProgressBarObserver, RankingAndCrowdingDistanceComparator, VisualizerObserver
 from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
 from jmetal.problem import ZDT1
