@@ -136,3 +136,33 @@ class DominanceComparator(Comparator):
             result = 0
 
         return result
+
+class GDominanceComparator(DominanceComparator):
+    def __init__(self, reference_point:[], constraint_comparator=SolutionAttributeComparator("overall_constraint_violation", False)):
+        super(GDominanceComparator, self).__init__(constraint_comparator)
+        self.reference_point = reference_point
+
+    def compare(self, solution1: Solution, solution2: Solution):
+        if self.__flag(solution1) > self.__flag(solution2):
+            result = -1
+        elif self.__flag(solution1) < self.__flag(solution2):
+            result = 1
+        else:
+            result = super(GDominanceComparator, self).compare(solution1, solution2)
+
+        return result
+
+    def __flag(self, solution: Solution):
+        result = 1
+        for i in range(solution.number_of_objectives):
+            if solution.objectives[i] > self.reference_point[i]:
+                result = 0
+
+        if result == 0:
+            result = 1
+            for i in range(solution.number_of_objectives):
+                if solution.objectives[i] < self.reference_point[i]:
+                    result = 0
+
+
+        return result

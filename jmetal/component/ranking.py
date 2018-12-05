@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from typing import TypeVar, List
 
-from jmetal.component.comparator import DominanceComparator
+from jmetal.component.comparator import DominanceComparator, GDominanceComparator
 
 S = TypeVar('S')
 
@@ -31,8 +31,9 @@ class Ranking(List[S]):
 class FastNonDominatedRanking(Ranking[List[S]]):
     """ Class implementing the non-dominated ranking of NSGA-II. """
 
-    def __init__(self):
+    def __init__(self, comparator = DominanceComparator()):
         super(FastNonDominatedRanking, self).__init__()
+        self.comparator = comparator
 
     def compute_ranking(self, solution_list: List[S]):
         # number of solutions dominating solution ith
@@ -46,7 +47,7 @@ class FastNonDominatedRanking(Ranking[List[S]]):
 
         for p in range(len(solution_list) - 1):
             for q in range(p + 1, len(solution_list)):
-                dominance_test_result = DominanceComparator().compare(solution_list[p], solution_list[q])
+                dominance_test_result = self.comparator.compare(solution_list[p], solution_list[q])
                 self.number_of_comparisons += 1
 
                 if dominance_test_result == -1:
