@@ -97,13 +97,20 @@ def compute_statistical_analysis(df: pd.DataFrame):
     if len(df.columns) < 2:
         raise Exception('Data sets number must be equal or greater than two')
 
-    statistic, pvalue = -1, -1
     result = pd.DataFrame()
 
     # we assume non-normal variables (median comparison, non-parametric tests)
     if len(df.columns) == 2:
         LOGGER.info('Running non-parametric test: Wilcoxon signed-rank test')
-        statistic, pvalue = stats.wilcoxon(df[df.columns[0]], df[df.columns[1]])
+        for _, subset in df.groupby(level=0):
+            statistic, pvalue = stats.wilcoxon(subset[subset.columns[0]], subset[subset.columns[1]])
+
+            test = pd.DataFrame({
+                'Wilcoxon': '*' if pvalue < 0.05 else '-'
+            }, index=[subset.index.values[0][0]], columns=['Wilcoxon'])
+            test.index.name = 'problem'
+
+            result = result.append(test)
     else:
         LOGGER.info('Running non-parametric test: Kruskal-Wallis test')
         for _, subset in df.groupby(level=0):
