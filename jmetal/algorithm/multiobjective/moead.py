@@ -3,7 +3,7 @@ from typing import TypeVar, List
 
 import numpy as np
 
-from jmetal.algorithm.singleobjective.genetic import GeneticAlgorithm
+from jmetal.algorithm.singleobjective.geneticalgorithm import GeneticAlgorithm
 from jmetal.component.evaluator import Evaluator
 from jmetal.component.generator import Generator
 from jmetal.core.operator import Mutation, Crossover
