@@ -11,7 +11,7 @@ setup(
     description='JMetalPy. Python version of the jMetal framework',
     author='Antonio J. Nebro',
     author_email='antonio@lcc.uma.es',
-    maintainer='Antonio J. Nebro, Antonio Benítez-Hidalgo',
+    maintainer='Antonio J. Nebro, Antonio Benitez-Hidalgo',
     maintainer_email='antonio@lcc.uma.es, antonio.b@uma.es',
     license='MIT',
     url='https://github.com/jMetal/jMetalPy',
