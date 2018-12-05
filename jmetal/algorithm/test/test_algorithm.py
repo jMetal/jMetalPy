@@ -5,6 +5,7 @@ from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.component import RankingAndCrowdingDistanceComparator, CrowdingDistanceArchive
 from jmetal.operator import Polynomial, SBX, BinaryTournamentSelection
 from jmetal.problem import ZDT1
+from jmetal.util.termination_criteria import StoppingByEvaluations
 
 
 class RunningAlgorithmsTestCases(unittest.TestCase):
@@ -24,19 +25,19 @@ class RunningAlgorithmsTestCases(unittest.TestCase):
             population_size=self.population_size,
             offspring_size=self.offspring_size,
             mating_pool_size=self.mating_pool_size,
-            max_evaluations=self.max_evaluations,
             mutation=self.mutation,
             crossover=self.crossover,
-            selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
+            selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
+            termination_criteria=StoppingByEvaluations(max=1000)
         ).run()
 
     def test_SMPSO(self):
         SMPSO(
             problem=self.problem,
             swarm_size=self.population_size,
-            max_evaluations=self.max_evaluations,
             mutation=self.mutation,
-            leaders=CrowdingDistanceArchive(100)
+            leaders=CrowdingDistanceArchive(100),
+            termination_criteria=StoppingByEvaluations(max=1000)
         ).run()
 
 

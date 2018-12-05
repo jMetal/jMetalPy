@@ -10,6 +10,7 @@ from jmetal.core.operator import Mutation, Crossover
 from jmetal.core.problem import Problem
 from jmetal.util.aggregative_function import AggregativeFunction
 from jmetal.util.neighborhood import WeightNeighborhood
+from jmetal.util.termination_criteria import TerminationCriteria
 
 S = TypeVar('S')
 R = List[S]
@@ -20,39 +21,35 @@ class MOEAD(GeneticAlgorithm):
     def __init__(self,
                  problem: Problem,
                  population_size: int,
-                 max_evaluations: int,
                  mutation: Mutation,
                  crossover: Crossover,
                  aggregative_function: AggregativeFunction,
                  neighbourhood: WeightNeighborhood,
                  neighbourhood_selection_probability: float,
                  max_number_of_replaced_solutions: int,
+                 termination_criteria: TerminationCriteria,
                  pop_generator: Generator = None,
                  pop_evaluator: Evaluator = None):
         """
         :param max_number_of_replaced_solutions: (eta in Zhang & Li paper).
-        :param neighbourhood_selection_probability: Probability of mating with a solution in the neighborhood rather
-        than the entire population (Delta in Zhang & Li paper).
+        :param neighbourhood_selection_probability: Probability of mating with a solution in the neighborhood rather than the entire population (Delta in Zhang & Li paper).
         """
         super(MOEAD, self).__init__(
             problem=problem,
             population_size=population_size,
-            pop_generator=pop_generator,
             offspring_size=1,
             mating_pool_size=3,
-            max_evaluations=max_evaluations,
             mutation=mutation,
             crossover=crossover,
             selection=None,
-            pop_evaluator=pop_evaluator
+            pop_evaluator=pop_evaluator,
+            pop_generator=pop_generator,
+            termination_criteria=termination_criteria
         )
         self.max_number_of_replaced_solutions = max_number_of_replaced_solutions
         self.fitness_function = aggregative_function
         self.neighbourhood = neighbourhood
         self.neighbourhood_selection_probability = neighbourhood_selection_probability
-
-        if any([d != Problem.MINIMIZE for d in problem.directions]):
-            raise Exception('MOEA/D currently only works with minimization problems')
 
     @staticmethod
     def random_permutations(size):
@@ -88,8 +85,8 @@ class MOEAD(GeneticAlgorithm):
         return permutations
 
     def mating_selection(self, index: int):
-        """ Selects n distinct parents, either from the neighbourhood or the population based on the neighbourhood
-        selection probability.
+        """ Selects `mating_pool_size` distinct parents, either from the neighbourhood or the population based on the
+        neighbourhood selection probability.
         """
         parents = list()
         from_neighbourhood = False
@@ -98,6 +95,7 @@ class MOEAD(GeneticAlgorithm):
             from_neighbourhood = True
 
         neighbors = self.neighbourhood.get_neighbors(index, self.population)
+        parents.append(self.population[index])
 
         while len(parents) < self.mating_pool_size:
             if from_neighbourhood:
@@ -114,8 +112,6 @@ class MOEAD(GeneticAlgorithm):
                     break
             if flag:
                 parents.append(selected_parent)
-
-        parents.append(self.population[index])
 
         return parents
 
@@ -141,8 +137,6 @@ class MOEAD(GeneticAlgorithm):
                 return
 
     def init_progress(self) -> None:
-        self.evaluations = self.population_size
-
         self.population = [self.pop_generator.new(self.problem) for _ in range(self.population_size)]
         self.population = self.evaluate(self.population)
 
@@ -158,17 +152,19 @@ class MOEAD(GeneticAlgorithm):
             mating_population = self.mating_selection(index)
 
             self.crossover_operator.current_individual = self.population[index]
-
             offspring_population = self.reproduction(mating_population)
             offspring_population = self.evaluate(offspring_population)
 
             self.fitness_function.update(offspring_population[0].objectives)
             self.update_individual(index, offspring_population[0])
 
-        self.update_progress()
+    def update_progress(self) -> None:
+        observable_data = self.get_observable_data()
+        observable_data['SOLUTIONS'] = self.population
+        self.observable.notify_all(**observable_data)
 
     def get_result(self) -> R:
         return self.population
 
     def get_name(self) -> str:
-        return 'Multiobjective Evolutionary Algorithm Based on Decomposition (MOEA/D)'
+        return 'MOEAD'

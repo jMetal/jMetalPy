@@ -1,5 +1,12 @@
+import math
+import random
 from abc import ABCMeta, abstractmethod
-from jmetal.core.algorithm import Algorithm
+from typing import TypeVar, List
+
+import numpy as np
+from scipy import spatial
+
+S = TypeVar('S')
 
 """
 .. module:: indicator
@@ -18,7 +25,7 @@ class QualityIndicator:
         self.is_minimization = is_minimization
 
     @abstractmethod
-    def compute(self, data):
+    def compute(self, solutions: List[S]):
         pass
 
     @abstractmethod
@@ -26,21 +33,87 @@ class QualityIndicator:
         pass
 
 
-class ComputingTime(QualityIndicator):
+class NonIndicator(QualityIndicator):
+
+    __metaclass__ = ABCMeta
 
     def __init__(self):
-        super().__init__(is_minimization=True)
+        super(NonIndicator, self).__init__(is_minimization=True)
 
-    def compute(self, data):
-        value = -1
-
-        if isinstance(data, Algorithm):
-            value = data.total_computing_time
-
-        return value
+    def compute(self, solutions: List[S]):
+        return random.random()
 
     def get_name(self) -> str:
-        return 'Total computing time'
+        return 'Test'
+
+
+class GenerationalDistance(QualityIndicator):
+
+    __metaclass__ = ABCMeta
+
+    def __init__(self, reference_front: List[S] = None, p: float = 2.0):
+        """
+        * Van Veldhuizen, D.A., Lamont, G.B.: Multiobjective Evolutionary Algorithm Research: A History and Analysis.
+          Technical Report TR-98-03, Dept. Elec. Comput. Eng., Air Force. Inst. Technol. (1998)
+        """
+        super(GenerationalDistance, self).__init__(is_minimization=True)
+        self.reference_front = reference_front
+        self.p = p
+
+    def compute(self, solutions: List[S]):
+        if not self.reference_front:
+            raise Exception('Reference front is none')
+
+        value = sum([math.pow(self.distance_to_neatest(s, self.reference_front), self.p) for s in solutions])
+        return math.pow(value, 1.0 / self.p) / len(solutions)
+
+    def distance_to_neatest(self, solution: S, reference_front: List[S]):
+        reference_front = np.asarray([s.objectives for s in reference_front])
+        solution = np.asarray(solution.objectives)
+        distance = np.sum((reference_front - solution) ** 2, axis=1)
+
+        return min(distance)
+
+    def get_name(self) -> str:
+        return 'Generational distance'
+
+
+class InvertedGenerationalDistance(GenerationalDistance):
+
+    __metaclass__ = ABCMeta
+
+    def compute(self, solutions: List[S]):
+        if not self.reference_front:
+            raise Exception('Reference front is none')
+
+        value = sum([math.pow(self.distance_to_neatest(rs, solutions), self.p) for rs in self.reference_front])
+        return math.pow(value, 1.0 / self.p) / len(self.reference_front)
+
+    def get_name(self) -> str:
+        return 'Inverted Generational distance'
+
+
+class EpsilonIndicator(QualityIndicator):
+
+    __metaclass__ = ABCMeta
+
+    def __init__(self, reference_front: List[S] = None):
+        """
+        * Zitzler, E. Thiele, L. Laummanns, M., Fonseca, C., and Grunert da Fonseca. V (2003): Performance Assessment of Multiobjective Optimizers: An Analysis and Review.
+        """
+        super(EpsilonIndicator, self).__init__(is_minimization=True)
+        self.reference_front = reference_front
+
+    def compute(self, solutions: List[S]):
+        if not self.reference_front:
+            raise Exception('Reference front is none')
+
+        return max([min(
+            [max([s2.objectives[k] - s1.objectives[k] for k in range(s2.number_of_objectives)]) for s2 in
+             solutions]) for s1 in self.reference_front])
+
+    def get_name(self) -> str:
+        return 'Unary Epsilon'
 
 
 class HyperVolume(QualityIndicator):
@@ -53,29 +126,17 @@ class HyperVolume(QualityIndicator):
     Minimization is implicitly assumed here!
     """
 
-    def __init__(self, reference_point: list):
-        """Constructor."""
-        super().__init__(is_minimization=False)
+    def __init__(self, reference_point: List[float]):
+        super(HyperVolume, self).__init__(is_minimization=False)
         self.referencePoint = reference_point
         self.list: MultiList = []
 
-    def compute(self, data):
-        """Before the HV computation, front and reference point are translated, so
-        that the reference point is [0, ..., 0].
+    def compute(self, solutions: List[S]):
+        """Before the HV computation, front and reference point are translated, so that the reference point is [0, ..., 0].
 
         :return: The hypervolume that is dominated by a non-dominated front.
         """
-        if isinstance(data, Algorithm):
-            front = data.get_result()
-
-        def get_variables() -> list:
-            result = []
-            for solution in data:
-                result.append(solution.objectives)
-
-            return result
-
-        front = get_variables()
+        front = [s.objectives for s in solutions]
 
         def weakly_dominates(point, other):
             for i in range(len(point)):

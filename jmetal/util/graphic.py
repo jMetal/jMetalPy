@@ -9,6 +9,7 @@ from plotly.offline import plot
 from pandas import DataFrame
 
 LOGGER = logging.getLogger('jmetal')
+
 S = TypeVar('S')
 
 """
@@ -72,7 +73,7 @@ class ScatterStreaming(Plot):
         self.__initialize()
 
         if reference_front:
-            LOGGER.info('Reference front found')
+            LOGGER.debug('Reference front found')
             ref_objectives = self.get_objectives(reference_front)
 
             if self.number_of_objectives == 2:
@@ -134,7 +135,6 @@ class ScatterStreaming(Plot):
         self.axis.autoscale_view(True, True, True)
 
         try:
-            # Draw
             self.fig.canvas.draw()
         except KeyboardInterrupt:
             pass
@@ -146,7 +146,7 @@ class ScatterStreaming(Plot):
 
     def __initialize(self) -> None:
         """ Initialize the scatter plot for the first time. """
-        LOGGER.info('Generating plot')
+        LOGGER.debug('Generating plot')
 
         # Initialize a plot
         self.fig.canvas.set_window_title('jMetalPy')
@@ -172,7 +172,7 @@ class ScatterStreaming(Plot):
         self.axis.grid(color='#f0f0f5', linestyle='-', linewidth=1, alpha=0.5)
         self.fig.suptitle(self.plot_title, fontsize=13)
 
-        LOGGER.info('Plot initialized')
+        LOGGER.debug('Plot initialized')
 
     def __plot(self, x_values, y_values, z_values, **kwargs) -> None:
         if self.number_of_objectives == 2:
@@ -200,7 +200,7 @@ class ScatterStreaming(Plot):
 
 class FrontPlot(Plot):
 
-    def __init__(self, plot_title: str, axis_labels: list = None):
+    def __init__(self, plot_title: str = 'jmetal', axis_labels: list = None):
         """ Creates a new :class:`FrontPlot` instance. Suitable for problems with 2 or more objectives.
 
         :param plot_title: Title of the graph.
@@ -325,7 +325,7 @@ class FrontPlot(Plot):
 
     def __initialize(self):
         """ Initialize the graph for the first time. """
-        LOGGER.info('Generating graph')
+        LOGGER.debug('Generating graph')
 
         self.layout = go.Layout(
             margin=dict(l=80, r=80, b=80, t=150),

@@ -96,4 +96,9 @@ class WeightVectorNeighborhood(WeightNeighborhood):
             self.neighborhood[i, :] = indexes[0:self.neighborhood_size]
 
     def get_neighbors(self, index: int, solution_list: List[Solution]) -> List[Solution]:
-        return [solution_list[i] for i in self.neighborhood[index]]
+        neighbors_indexes = self.neighborhood[index]
+
+        if any(i > len(solution_list) for i in neighbors_indexes):
+            raise IndexError('Neighbor index out of range')
+
+        return [solution_list[i] for i in neighbors_indexes]

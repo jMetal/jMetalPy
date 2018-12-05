@@ -41,14 +41,6 @@ Generator
     :undoc-members:
     :show-inheritance:
 
-Observable
----------------------------------
-
-.. automodule:: jmetal.component.observable
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 Observer
 --------------------------------
 
@@ -56,6 +48,15 @@ Observer
     :members:
     :undoc-members:
     :show-inheritance:
+
+Quality Indicator
+--------------------------------
+
+.. automodule:: jmetal.component.quality_indicator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Ranking
 --------------------------

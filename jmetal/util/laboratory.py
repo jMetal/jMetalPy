@@ -5,9 +5,11 @@ from typing import List
 
 import pandas as pd
 from scipy import stats
+from scipy.stats import friedmanchisquare
 
-from jmetal.core.algorithm import Algorithm
 from jmetal.component.quality_indicator import QualityIndicator
+from jmetal.core.algorithm import Algorithm
+from jmetal.util.solution_list import print_function_values_to_file
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -22,9 +24,8 @@ LOGGER = logging.getLogger('jmetal')
 
 class Job:
 
-    def __init__(self, algorithm: Algorithm, problem_name: str, label: str, run: int):
+    def __init__(self, algorithm: Algorithm, label: str, run: int):
         self.algorithm = algorithm
-        self.problem_name = problem_name
         self.id_ = run
         self.label_ = label
 
@@ -36,21 +37,22 @@ class Job:
 
     def evaluate(self, metric: QualityIndicator):
         if not self.executed:
-            raise Exception('Algorithm must be run first')
+            self.run()
 
-        return metric.compute(self.algorithm)
+        if hasattr(metric, 'reference_front'):
+            metric.reference_front = self.algorithm.problem.reference_front
+
+        return metric.compute(self.algorithm.get_result())
 
 
 class Experiment:
 
-    def __init__(self, base_directory: str, jobs: list, m_workers: int = 3):
+    def __init__(self, jobs: List[Job], m_workers: int = 3):
         """ Run an experiment to evaluate algorithms and/or problems.
 
-        :param base_directory: Directory to save partial outputs.
         :param jobs: List of Jobs (from :py:mod:`jmetal.util.laboratory)`) to be executed.
         :param m_workers: Maximum number of workers to execute the Jobs in parallel.
         """
-        self.base_dir = base_directory
         self.jobs = jobs
         self.m_workers = m_workers
 
@@ -59,92 +61,100 @@ class Experiment:
             for job in self.jobs:
                 executor.submit(job.run())
 
-    def compute_metrics(self, metrics: list) -> pd.DataFrame:
-        col_names = ['problem', 'metric', 'run']
+    def compute_quality_indicator(self, qi: QualityIndicator) -> pd.DataFrame:
+        pd.set_option('display.float_format', '{:.2e}'.format)
+        df = pd.DataFrame()
 
         for job in self.jobs:
-            if job.label_ not in col_names:
-                col_names.append(job.label_)
+            new_data = pd.DataFrame({
+                'problem': job.algorithm.problem.get_name(),
+                'run': job.id_,
+                job.label_: [job.evaluate(qi)]
+            })
+            df = df.append(new_data)
 
-        df = pd.DataFrame(columns=col_names)
-
-        for job in self.jobs:
-            for metric in metrics:
-                value = job.evaluate(metric)
-                new_data = pd.DataFrame(data=[[job.algorithm.problem.get_name(), metric.get_name(), job.id_, value]],
-                                        columns=['problem', 'metric', 'run', job.label_])
-
-                df = df.append(new_data)
+            # Save front to file
+            file_name = 'data/{}/{}/FUN.{}.ps'.format(job.label_, job.algorithm.problem.get_name(), job.id_)
+            print_function_values_to_file(job.algorithm.get_result(), file_name=file_name)
 
         # Get rid of NaN values by grouping rows by columns
-        df = df.groupby(['problem', 'metric', 'run']).mean()
+        df = df.groupby(['problem', 'run']).mean()
 
         # Save to file
-        df.to_csv(self.base_dir + '/metrics_df.csv', sep='\t', encoding='utf-8')
+        LOGGER.debug('Saving output to experiment_df.csv')
+        df.to_csv('data/experiment_df.csv', header=True, sep=',', encoding='utf-8')
 
         return df
 
-    def __compute_statistical_analysis(self, data_list: List[list]):
-        """ The application scheme listed here is as described in
 
-        * G. Luque, E. Alba, Parallel Genetic Algorithms, Springer-Verlag, ISBN 978-3-642-22084-5, 2011
+def compute_statistical_analysis(df: pd.DataFrame):
+    """ The application scheme listed here is as described in
 
-        :param data_list: List of data sets.
-        """
-        if len(data_list) < 2:
-            raise Exception('Data sets number must be equal or greater than two')
+    * G. Luque, E. Alba, Parallel Genetic Algorithms, Springer-Verlag, ISBN 978-3-642-22084-5, 2011
 
-        normality_test = True
+    :param df: Experiment data frame.
+    """
+    if len(df.columns) < 2:
+        raise Exception('Data sets number must be equal or greater than two')
 
-        for data in data_list:
-            statistic, pvalue = stats.kstest(data, 'norm')
+    result = pd.DataFrame()
 
-            if pvalue > 0.05:
-                normality_test = False
-                break
+    # we assume non-normal variables (median comparison, non-parametric tests)
+    if len(df.columns) == 2:
+        LOGGER.info('Running non-parametric test: Wilcoxon signed-rank test')
+        for _, subset in df.groupby(level=0):
+            statistic, pvalue = stats.wilcoxon(subset[subset.columns[0]], subset[subset.columns[1]])
 
-        if not normality_test:
-            # non-normal variables (median comparison, non-parametric tests)
-            if len(data_list) == 2:
-                statistic, pvalue = stats.wilcoxon(data_list[0], data_list[1])
-            else:
-                statistic, pvalue = stats.kruskal(*data_list)
-        else:
-            # normal variables (mean comparison, parametric tests)
-            if len(data_list) == 2:
-                pass
-            else:
-                pass
+            test = pd.DataFrame({
+                'Wilcoxon': '*' if pvalue < 0.05 else '-'
+            }, index=[subset.index.values[0][0]], columns=['Wilcoxon'])
+            test.index.name = 'problem'
 
-    @staticmethod
-    def convert_to_latex(df: pd.DataFrame, caption: str = 'Experiment', label: str = 'tab:exp', alignment: str = 'c'):
-        """ Convert a pandas DataFrame to a LaTeX tabular. Prints labels in bold, does not use math mode. """
-        num_columns, num_rows = df.shape[1], df.shape[0]
-        output = io.StringIO()
+            result = result.append(test)
+    else:
+        LOGGER.info('Running non-parametric test: Kruskal-Wallis test')
+        for _, subset in df.groupby(level=0):
+            statistic, pvalue = stats.kruskal(*subset.values.tolist())
 
-        col_format = '{}|{}'.format(alignment, alignment * num_columns)
-        column_labels = ['\\textbf{{{0}}}'.format(label.replace('_', '\\_')) for label in df.columns]
+            test = pd.DataFrame({
+                'Kruskal-Wallis': '*' if pvalue < 0.05 else '-'
+            }, index=[subset.index.values[0][0]], columns=['Kruskal-Wallis'])
+            test.index.name = 'problem'
 
-        # Write header
-        output.write('\\begin{table}\n')
-        output.write('\\caption{{{}}}\n'.format(caption))
-        output.write('\\label{{{}}}\n'.format(label))
-        output.write('\\centering\n')
-        output.write('\\begin{scriptsize}\n')
-        output.write('\\begin{tabular}{%s}\n' % col_format)
-        output.write('\\hline\n')
-        output.write('& {} \\\\\\hline\n'.format(' & '.join(column_labels)))
+            result = result.append(test)
 
-        # Write data lines
-        for i in range(num_rows):
-            output.write('\\textbf{{{0}}} & ${1}$ \\\\\n'.format(
-                df.index[i], '$ & $'.join([str(val) for val in df.ix[i]]))
-            )
+    return result
 
-        # Write footer
-        output.write('\\hline\n')
-        output.write('\\end{tabular}\n')
-        output.write('\\end{scriptsize}\n')
-        output.write('\\end{table}')
 
-        return output.getvalue()
+def convert_to_latex(df: pd.DataFrame, caption: str, label: str = 'tab:exp', alignment: str = 'c'):
+    """ Convert a pandas DataFrame to a LaTeX tabular. Prints labels in bold, does not use math mode.
+    """
+    num_columns, num_rows = df.shape[1], df.shape[0]
+    output = io.StringIO()
+
+    col_format = '{}|{}'.format(alignment, alignment * num_columns)
+    column_labels = ['\\textbf{{{0}}}'.format(label.replace('_', '\\_')) for label in df.columns]
+
+    # Write header
+    output.write('\\begin{table}\n')
+    output.write('\\caption{{{}}}\n'.format(caption))
+    output.write('\\label{{{}}}\n'.format(label))
+    output.write('\\centering\n')
+    output.write('\\begin{scriptsize}\n')
+    output.write('\\begin{tabular}{%s}\n' % col_format)
+    output.write('\\hline\n')
+    output.write('& {} \\\\\\hline\n'.format(' & '.join(column_labels)))
+
+    # Write data lines
+    for i in range(num_rows):
+        output.write('\\textbf{{{0}}} & ${1}$ \\\\\n'.format(
+            df.index[i], '$ & $'.join([str(val) for val in df.ix[i]]))
+        )
+
+    # Write footer
+    output.write('\\hline\n')
+    output.write('\\end{tabular}\n')
+    output.write('\\end{scriptsize}\n')
+    output.write('\\end{table}')
+
+    return output.getvalue()

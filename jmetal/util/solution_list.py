@@ -1,4 +1,5 @@
 import logging
+import os
 from pathlib import Path
 from typing import List
 
@@ -39,6 +40,12 @@ def read_front(file_path: str) -> List[FloatSolution]:
 
 def print_variables_to_file(solution_list: list, file_name):
     LOGGER.info('Output file (variables): ' + file_name)
+
+    try:
+        os.makedirs(os.path.dirname(file_name), exist_ok=True)
+    except FileNotFoundError:
+        pass
+
     with open(file_name, 'w') as of:
         for solution in solution_list:
             for variables in solution.variables:
@@ -51,17 +58,23 @@ def print_variables_to_screen(solution_list: list):
         print(solution.variables[0])
 
 
+def print_function_values_to_file(solution_list: list, file_name):
+    LOGGER.info('Output file (function values): ' + file_name)
+
+    try:
+        os.makedirs(os.path.dirname(file_name), exist_ok=True)
+    except FileNotFoundError:
+        pass
+
+    with open(file_name, 'w') as of:
+        for solution in solution_list:
+            for function_value in solution.objectives:
+                of.write(str(function_value) + ' ')
+            of.write('\n')
+
+
 def print_function_values_to_screen(solution_list: list):
     for solution in solution_list:
         print(str(solution_list.index(solution)) + ": ", sep='  ', end='', flush=True)
         print(solution.objectives, sep='  ', end='', flush=True)
         print()
-
-
-def print_function_values_to_file(solution_list: list, file_name):
-    LOGGER.info('Output file (function values): ' + file_name)
-    with open(file_name, 'w') as of:
-        for solution in solution_list:
-            for function_value in solution.objectives:
-                of.write(str(function_value) + " ")
-            of.write("\n")

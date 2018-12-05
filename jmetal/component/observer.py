@@ -21,20 +21,21 @@ LOGGER = logging.getLogger('jmetal')
 
 class ProgressBarObserver(Observer):
 
-    def __init__(self, initial: int, step: int, maximum: int, desc: str = 'Progress') -> None:
+    def __init__(self, max: int, desc: str = 'Progress') -> None:
         """ Show a smart progress meter with the number of evaluations and computing time.
 
-        :param step: Initial counter value.
-        :param maximum: Number of expected iterations.
-        :param desc: Prefix for the progressbar. """
-        self.progress_bar = tqdm(total=maximum, initial=initial, ascii=True, desc=desc)
-        self.progress = step
-        self.step = step
-        self.maxx = maximum
+        :param max: Number of expected iterations.
+        :param desc: Prefix for the progressbar.
+        """
+        self.progress_bar = tqdm(total=max, ascii=True, desc=desc)
+        self.progress = 0
+        self.maxx = max
 
     def update(self, *args, **kwargs):
-        self.progress_bar.update(self.step)
-        self.progress += self.step
+        evaluations = kwargs['EVALUATIONS']
+
+        self.progress_bar.update(evaluations - self.progress)
+        self.progress = evaluations
 
         if self.progress >= self.maxx:
             self.progress_bar.close()
@@ -49,14 +50,14 @@ class BasicObserver(Observer):
         self.display_frequency = frequency
 
     def update(self, *args, **kwargs):
-        computing_time = kwargs['computing time']
-        evaluations = kwargs['evaluations']
-        front = kwargs['population']
+        computing_time = kwargs['COMPUTING_TIME']
+        evaluations = kwargs['EVALUATIONS']
+        solutions = kwargs['SOLUTIONS']
 
-        if (evaluations % self.display_frequency) == 0:
+        if (evaluations % self.display_frequency) == 0 and solutions:
             LOGGER.debug(
                 'Evaluations: {} \n Best fitness: {} \n Computing time: {}'.format(
-                    evaluations, front[0].objectives, computing_time
+                    evaluations, solutions[0].objectives, computing_time
                 )
             )
 
@@ -79,27 +80,27 @@ class WriteFrontToFileObserver(Observer):
             Path(self.directory).mkdir(parents=True)
 
     def update(self, *args, **kwargs):
-        population = kwargs['population']
+        solutions = kwargs['SOLUTIONS']
 
-        print_function_values_to_file(population, '{}/FUN.{}'.format(self.directory, self.counter))
-        self.counter += 1
+        if solutions:
+            print_function_values_to_file(solutions, '{}/FUN.{}'.format(self.directory, self.counter))
+            self.counter += 1
 
 
 class VisualizerObserver(Observer):
 
-    def __init__(self, replace: bool = True) -> None:
-        self.display_frequency = 1.0
+    def __init__(self, display_frequency: float = 1.0, replace: bool = True) -> None:
+        self.display_frequency = display_frequency
         self.replace = replace
         self.plot = ScatterStreaming(plot_title='jmetal')
 
     def update(self, *args, **kwargs):
-        computing_time = kwargs['computing time']
-        evaluations = kwargs['evaluations']
+        computing_time = kwargs['COMPUTING_TIME']
+        evaluations = kwargs['EVALUATIONS']
 
-        population = kwargs['population']
-        problem = kwargs['problem']
+        solutions = kwargs['SOLUTIONS']
+        problem = kwargs['PROBLEM']
 
-        title = '{}, Eval: {}, Time: {}'.format('VisualizerObserver', evaluations, computing_time)
-
-        if (evaluations % self.display_frequency) == 0:
-            self.plot.update(population, problem.reference_front, rename_title=title, persistence=self.replace)
+        if (evaluations % self.display_frequency) == 0 and solutions:
+            title = 'Eval: {}, Time: {}'.format(evaluations, computing_time)
+            self.plot.update(solutions, problem.reference_front, rename_title=title, persistence=self.replace)

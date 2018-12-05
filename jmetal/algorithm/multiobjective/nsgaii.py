@@ -6,6 +6,7 @@ from jmetal.component.generator import Generator
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
 from jmetal.operator import RankingAndCrowdingDistanceSelection
+from jmetal.util.termination_criteria import TerminationCriteria
 
 S = TypeVar('S')
 R = TypeVar('R')
@@ -26,10 +27,10 @@ class NSGAII(GeneticAlgorithm):
                  population_size: int,
                  offspring_size: int,
                  mating_pool_size: int,
-                 max_evaluations: int,
                  mutation: Mutation,
                  crossover: Crossover,
                  selection: Selection,
+                 termination_criteria: TerminationCriteria,
                  pop_generator: Generator = None,
                  pop_evaluator: Evaluator = None):
         """  NSGA-II implementation as described in
@@ -46,7 +47,6 @@ class NSGAII(GeneticAlgorithm):
 
         :param problem: The problem to solve.
         :param population_size: Size of the population.
-        :param max_evaluations: Maximum number of evaluations/iterations.
         :param mutation: Mutation operator (see :py:mod:`jmetal.operator.mutation`).
         :param crossover: Crossover operator (see :py:mod:`jmetal.operator.crossover`).
         :param selection: Selection operator (see :py:mod:`jmetal.operator.selection`).
@@ -54,14 +54,14 @@ class NSGAII(GeneticAlgorithm):
         super(NSGAII, self).__init__(
             problem=problem,
             population_size=population_size,
-            pop_generator=pop_generator,
             offspring_size=offspring_size,
             mating_pool_size=mating_pool_size,
-            max_evaluations=max_evaluations,
             mutation=mutation,
             crossover=crossover,
             selection=selection,
-            pop_evaluator=pop_evaluator
+            pop_evaluator=pop_evaluator,
+            pop_generator=pop_generator,
+            termination_criteria=termination_criteria
         )
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
@@ -79,4 +79,4 @@ class NSGAII(GeneticAlgorithm):
         return self.population
 
     def get_name(self) -> str:
-        return 'Non-dominated Sorting Genetic Algorithm II (NSGA-II)'
+        return 'NSGAII'

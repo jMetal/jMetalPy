@@ -1,8 +1,10 @@
-from jmetal.algorithm import SMPSORP
+from jmetal.algorithm.multiobjective.smpso import SMPSORP
 from jmetal.component import ProgressBarObserver, VisualizerObserver, CrowdingDistanceArchiveWithReferencePoint
 from jmetal.operator import Polynomial
 from jmetal.problem import ZDT1
 from jmetal.util.graphic import FrontPlot
+from jmetal.util.solution_list import read_front
+from jmetal.util.termination_criteria import StoppingByEvaluations
 
 
 def points_to_solutions(points):
@@ -17,7 +19,7 @@ def points_to_solutions(points):
 
 if __name__ == '__main__':
     problem = ZDT1()
-    problem.read_front(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
+    problem.reference_front = read_front(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
     swarm_size = 100
 
@@ -32,13 +34,13 @@ if __name__ == '__main__':
     algorithm = SMPSORP(
         problem=problem,
         swarm_size=swarm_size,
-        max_evaluations=25000,
         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
         reference_points=reference_points,
-        leaders=archives_with_reference_points
+        leaders=archives_with_reference_points,
+        termination_criteria=StoppingByEvaluations(max=25000)
     )
 
-    progress_bar = ProgressBarObserver(step=100, maximum=25000)
+    progress_bar = ProgressBarObserver(max=25000)
     visualizer = VisualizerObserver()
     algorithm.observable.register(observer=progress_bar)
     algorithm.observable.register(observer=visualizer)

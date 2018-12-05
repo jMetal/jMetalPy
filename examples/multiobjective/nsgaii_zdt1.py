@@ -1,9 +1,11 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.component import ProgressBarObserver, RankingAndCrowdingDistanceComparator, VisualizerObserver
+from jmetal.component import ProgressBarObserver, RankingAndCrowdingDistanceComparator, HyperVolume
+from jmetal.component.observer import VisualizerObserver
 from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
 from jmetal.problem import ZDT1
 from jmetal.util.graphic import FrontPlot
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_front
+from jmetal.util.termination_criteria import StoppingByEvaluations, StoppingByQualityIndicator, StoppingByTime
 
 if __name__ == '__main__':
     problem = ZDT1()
@@ -14,16 +16,17 @@ if __name__ == '__main__':
         population_size=100,
         offspring_size=100,
         mating_pool_size=100,
-        max_evaluations=25000,
         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
         crossover=SBX(probability=1.0, distribution_index=20),
-        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
+        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
+        termination_criteria=StoppingByEvaluations(max=25000),
+        #termination_criteria=StoppingByTime(max_seconds=20),
+        #termination_criteria=StoppingByQualityIndicator(quality_indicator=HyperVolume([1.0, 1.0]), expected_value=0.5, degree=0.95)
     )
 
-    progress_bar = ProgressBarObserver(initial=algorithm.population_size, step=algorithm.offspring_size, maximum=algorithm.max_evaluations)
-    visualizer = VisualizerObserver()
+    progress_bar = ProgressBarObserver(max=25000)
     algorithm.observable.register(observer=progress_bar)
-    algorithm.observable.register(observer=visualizer)
+    algorithm.observable.register(observer=VisualizerObserver())
 
     algorithm.run()
     front = algorithm.get_result()

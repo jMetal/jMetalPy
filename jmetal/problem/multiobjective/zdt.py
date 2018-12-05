@@ -64,8 +64,6 @@ class ZDT2(ZDT1):
     """
 
     def eval_h(self, f: float, g: float) -> float:
-        print("h222:" + self.get_name())
-
         return 1.0 - pow(f / g, 2.0)
 
     def get_name(self):
