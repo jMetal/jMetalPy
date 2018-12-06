@@ -138,7 +138,7 @@ class DominanceComparator(Comparator):
         return result
 
 class GDominanceComparator(DominanceComparator):
-    def __init__(self, reference_point:[], constraint_comparator=SolutionAttributeComparator("overall_constraint_violation", False)):
+    def __init__(self, reference_point:(), constraint_comparator=SolutionAttributeComparator("overall_constraint_violation", False)):
         super(GDominanceComparator, self).__init__(constraint_comparator)
         self.reference_point = reference_point
 

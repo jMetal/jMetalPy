@@ -1,6 +1,7 @@
 from typing import TypeVar, List
 
 from jmetal.algorithm.singleobjective.geneticalgorithm import GeneticAlgorithm
+from jmetal.component import DominanceComparator
 from jmetal.component.evaluator import Evaluator
 from jmetal.component.generator import Generator
 from jmetal.core.operator import Mutation, Crossover, Selection
@@ -32,7 +33,8 @@ class NSGAII(GeneticAlgorithm):
                  selection: Selection,
                  termination_criteria: TerminationCriteria,
                  pop_generator: Generator = None,
-                 pop_evaluator: Evaluator = None):
+                 pop_evaluator: Evaluator = None,
+                 dominance_comparator:DominanceComparator =DominanceComparator()):
         """  NSGA-II implementation as described in
 
         * K. Deb, A. Pratap, S. Agarwal and T. Meyarivan, "A fast and elitist
@@ -63,6 +65,7 @@ class NSGAII(GeneticAlgorithm):
             pop_generator=pop_generator,
             termination_criteria=termination_criteria
         )
+        self.dominance_comparator = dominance_comparator
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
         """ This method joins the current and offspring populations to produce the population of the next generation
@@ -73,7 +76,7 @@ class NSGAII(GeneticAlgorithm):
         :return: New population after ranking and crowding distance selection is applied.
         """
         join_population = population + offspring_population
-        return RankingAndCrowdingDistanceSelection(self.population_size).execute(join_population)
+        return RankingAndCrowdingDistanceSelection(self.population_size, dominance_comparator=self.dominance_comparator).execute(join_population)
 
     def get_result(self) -> R:
         return self.population

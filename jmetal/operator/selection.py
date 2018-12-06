@@ -147,9 +147,10 @@ class RandomSolutionSelection(Selection[List[S], S]):
 
 class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
 
-    def __init__(self, max_population_size: int):
+    def __init__(self, max_population_size: int, dominance_comparator = DominanceComparator()):
         super(RankingAndCrowdingDistanceSelection, self).__init__()
         self.max_population_size = max_population_size
+        self.dominance_comparator = dominance_comparator
 
     def execute(self, front: List[S]) -> List[S]:
         if front is None:
@@ -157,7 +158,7 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
         elif len(front) == 0:
             raise Exception('The front is empty')
 
-        ranking = FastNonDominatedRanking()
+        ranking = FastNonDominatedRanking(self.dominance_comparator)
         crowding_distance = CrowdingDistance()
         ranking.compute_ranking(front)
 
