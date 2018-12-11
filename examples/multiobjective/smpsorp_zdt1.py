@@ -7,16 +7,6 @@ from jmetal.util.solution_list import read_front
 from jmetal.util.termination_criteria import StoppingByEvaluations
 
 
-def points_to_solutions(points):
-    solutions = []
-    for i, _ in enumerate(points):
-        point = problem.create_solution()
-        point.objectives = points[i]
-        solutions.append(point)
-
-    return solutions
-
-
 if __name__ == '__main__':
     problem = ZDT1()
     problem.reference_front = read_front(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
@@ -51,7 +41,7 @@ if __name__ == '__main__':
     # Plot frontier to file
     pareto_front = FrontPlot(plot_title='SMPSORP-ZDT1', axis_labels=problem.obj_labels)
     pareto_front.plot(front, reference_front=problem.reference_front)
-    pareto_front.update(points_to_solutions(reference_points), legend='reference points')
+    pareto_front.update(reference_points, legend='reference points')
     pareto_front.to_html(filename='SMPSORP-ZDT1')
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())

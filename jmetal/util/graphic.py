@@ -2,27 +2,29 @@ import logging
 from abc import ABCMeta
 from typing import TypeVar, List
 
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
+from IPython.display import display
+import holoviews as hv
+from holoviews.streams import Pipe
+from pandas import DataFrame
 from plotly import graph_objs as go
 from plotly.offline import plot
-from pandas import DataFrame
 
 LOGGER = logging.getLogger('jmetal')
+
+hv.extension('matplotlib')
 
 S = TypeVar('S')
 
 """
 .. module:: visualization
    :platform: Unix, Windows
-   :synopsis: Classes for plotting fronts.
+   :synopsis: Classes for plotting solutions.
 
 .. moduleauthor:: Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
 
 class Plot:
-
     __metaclass__ = ABCMeta
 
     def __init__(self, plot_title: str, axis_labels: list):
@@ -43,171 +45,52 @@ class Plot:
         return DataFrame(list(solution.objectives for solution in front))
 
 
-class ScatterStreaming(Plot):
+class StreamingPlot(Plot):
 
-    def __init__(self, plot_title: str, axis_labels: list = None):
-        """ Creates a new :class:`ScatterStreaming` instance. Suitable for problems with 2 or 3 objectives in streaming.
+    def __init__(self, plot_title: str = 'jmetal', axis_labels: list = None):
+        super(StreamingPlot, self).__init__(plot_title, axis_labels)
+        self.figure = None
+        self.pipe = Pipe(data=[])
 
-        :param plot_title: Title of the diagram.
-        :param axis_labels: List of axis labels. """
-        super(ScatterStreaming, self).__init__(plot_title, axis_labels)
-
-        import warnings
-        warnings.filterwarnings("ignore", ".*GUI is implemented.*")
-
-        self.fig = plt.figure()
-        self.sc = None
-        self.axis = None
-
-    def plot(self, front: List[S], reference_front: List[S], filename: str = '', show: bool = True) -> None:
-        """ Plot a front of solutions (2D or 3D).
-
-        :param front: List of solutions.
-        :param reference_front: Reference solution list (if any).
-        :param filename: If specified, save the plot into a file.
-        :param show: If True, show the final diagram (default to True). """
+    def plot(self, front: List[S], reference_front: List[S] = None):
         objectives = self.get_objectives(front)
-
-        # Initialize plot
-        self.number_of_objectives = objectives.shape[1]
-        self.__initialize()
+        dimension = objectives.shape[1]
 
         if reference_front:
-            LOGGER.debug('Reference front found')
-            ref_objectives = self.get_objectives(reference_front)
-
-            if self.number_of_objectives == 2:
-                self.__plot(ref_objectives[0], ref_objectives[1], None,
-                            color='#323232', marker='*', markersize=3)
-            else:
-                self.__plot(ref_objectives[0], ref_objectives[1], ref_objectives[2],
-                            color='#323232', marker='*', markersize=3)
-
-        if self.number_of_objectives == 2:
-            self.__plot(objectives[0], objectives[1], None, color='#98FB98', marker='o', markersize=3)
+            reference_objectives = self.get_objectives(reference_front).values.tolist()
+            self.figure = hv.Scatter(reference_objectives, label='Reference front') * hv.DynamicMap(
+                hv.Scatter if dimension == 2 else hv.Scatter3D, streams=[self.pipe])
         else:
-            self.__plot(objectives[0], objectives[1], objectives[2], color='#98FB98', marker='o', markersize=3)
+            self.figure = hv.DynamicMap(hv.Scatter if dimension == 2 else hv.Scatter3D, streams=[self.pipe])
 
-        if filename:
-            self.fig.savefig(filename, format='png', dpi=200)
-        if show:
-            self.fig.canvas.mpl_connect('pick_event', lambda event: self.__pick_handler(front, event))
-            plt.show()
+        display(self.figure)
+        self.pipe.send(objectives.values.tolist())
 
-    def update(self, front: List[S], reference_front: List[S], rename_title: str = '',
-               persistence: bool = True) -> None:
-        """ Update an already created plot.
-
-        :param front: List of solutions.
-        :param reference_front: Reference solution list (if any).
-        :param rename_title: New title of the plot.
-        :param persistence: If True, keep old points; else, replace them with new values.
-        """
-        if self.sc is None:
-            LOGGER.debug('Plot must be initialized first.')
-            self.plot(front, reference_front, show=False)
+    def update(self, front: List[S], reference_front: List[S] = None):
+        if self.figure is None:
+            self.plot(front, reference_front)
             return
 
         objectives = self.get_objectives(front)
+        self.pipe.send(objectives.values.tolist())
 
-        if persistence:
-            # Replace with new points
-            self.sc.set_data(objectives[0], objectives[1])
+    def export(self, file_name: str, file_format: str = 'svg'):
+        renderer = hv.renderer('matplotlib').instance(fig=file_format)
+        renderer.save(self.figure, file_name)
 
-            if self.number_of_objectives == 3:
-                self.sc.set_3d_properties(objectives[2])
-        else:
-            # Add new points
-            if self.number_of_objectives == 2:
-                self.__plot(objectives[0], objectives[1], None, color='#98FB98', marker='o', markersize=3)
-            else:
-                self.__plot(objectives[0], objectives[1], objectives[2], color='#98FB98', marker='o', markersize=3)
-
-        # Also, add event handler
-        event_handler = \
-            self.fig.canvas.mpl_connect('pick_event', lambda event: self.__pick_handler(front, event))
-
-        # Update title with new times and evaluations
-        self.fig.suptitle(rename_title, fontsize=13)
-
-        # Re-align the axis
-        self.axis.relim()
-        self.axis.autoscale_view(True, True, True)
-
-        try:
-            self.fig.canvas.draw()
-        except KeyboardInterrupt:
-            pass
-
-        plt.pause(0.01)
-
-        # Disconnect the pick event for the next update
-        self.fig.canvas.mpl_disconnect(event_handler)
-
-    def __initialize(self) -> None:
-        """ Initialize the scatter plot for the first time. """
-        LOGGER.debug('Generating plot')
-
-        # Initialize a plot
-        self.fig.canvas.set_window_title('jMetalPy')
-
-        if self.number_of_objectives == 2:
-            self.axis = self.fig.add_subplot(111)
-
-            # Stylize axis
-            self.axis.spines['top'].set_visible(False)
-            self.axis.spines['right'].set_visible(False)
-            self.axis.get_xaxis().tick_bottom()
-            self.axis.get_yaxis().tick_left()
-        elif self.number_of_objectives == 3:
-            self.axis = Axes3D(self.fig)
-            self.axis.autoscale(enable=True, axis='both')
-        else:
-            raise Exception('Number of objectives must be either 2 or 3')
-
-        self.axis.set_autoscale_on(True)
-        self.axis.autoscale_view(True, True, True)
-
-        # Style options
-        self.axis.grid(color='#f0f0f5', linestyle='-', linewidth=1, alpha=0.5)
-        self.fig.suptitle(self.plot_title, fontsize=13)
-
-        LOGGER.debug('Plot initialized')
-
-    def __plot(self, x_values, y_values, z_values, **kwargs) -> None:
-        if self.number_of_objectives == 2:
-            self.sc, = self.axis.plot(x_values, y_values, ls='None', picker=10, **kwargs)
-        else:
-            self.sc, = self.axis.plot(x_values, y_values, z_values, ls='None', picker=10, **kwargs)
-
-    def __pick_handler(self, front: List[S], event):
-        """ Handler for picking points from the plot. """
-        line, ind = event.artist, event.ind[0]
-        x, y = line.get_xdata(), line.get_ydata()
-
-        LOGGER.debug('Selected front point ({0}): ({1}, {2})'.format(ind, x[ind], y[ind]))
-
-        sol = next((solution for solution in front
-                    if solution.objectives[0] == x[ind] and solution.objectives[1] == y[ind]), None)
-
-        if sol is not None:
-            with open('{0}-{1}'.format(x[ind], y[ind]), 'w') as of:
-                of.write(sol.__str__())
-        else:
-            LOGGER.warning('Solution is none')
-            return True
+    def show(self):
+        return self.figure
 
 
-class FrontPlot(Plot):
+class InteractivePlot(Plot):
 
     def __init__(self, plot_title: str = 'jmetal', axis_labels: list = None):
         """ Creates a new :class:`FrontPlot` instance. Suitable for problems with 2 or more objectives.
 
         :param plot_title: Title of the graph.
         :param axis_labels: List of axis labels. """
-        super(FrontPlot, self).__init__(plot_title, axis_labels)
-
-        self.figure: go.Figure = None
+        super(InteractivePlot, self).__init__(plot_title, axis_labels)
+        self.figure = None
         self.layout = None
         self.data = []
 
@@ -216,19 +99,20 @@ class FrontPlot(Plot):
 
         :param front: List of solutions.
         :param reference_front: Reference solution list (if any).
-        :param normalize: Normalize the input front between 0 and 1 (for problems with more than 3 objectives). """
-        self.__initialize()
+        :param normalize: Normalize the input front between 0 and 1 (for problems with more than 3 objectives).
+        """
+        self.create_layout()
 
         if reference_front:
             objectives = self.get_objectives(reference_front)
-            trace = self.__generate_trace(objectives=objectives, legend='reference front', normalize=normalize,
-                                          color='rgb(2, 130, 242)')
+            trace = self.generate_trace(objectives=objectives, legend='reference front', normalize=normalize,
+                                        color='rgb(2, 130, 242)')
             self.data.append(trace)
 
         objectives = self.get_objectives(front)
         metadata = list(solution.__str__() for solution in front)
-        trace = self.__generate_trace(objectives=objectives, metadata=metadata, legend='front', normalize=normalize,
-                                      symbol='diamond-open')
+        trace = self.generate_trace(objectives=objectives, metadata=metadata, legend='front', normalize=normalize,
+                                    symbol='diamond-open')
         self.data.append(trace)
 
         self.figure = go.Figure(data=self.data, layout=self.layout)
@@ -238,20 +122,20 @@ class FrontPlot(Plot):
 
         :param data: List of solutions to be included.
         :param legend: Legend to be included.
-        :param normalize: Normalize the input front between 0 and 1 (for problems with more than 3 objectives). """
+        :param normalize: Normalize the input front between 0 and 1 (for problems with more than 3 objectives).
+        """
         if self.figure is None:
-            LOGGER.warning('Plot must be initialized first.')
             self.plot(data, reference_front=None, normalize=normalize)
             return
 
         objectives = self.get_objectives(data)
-        new_data = self.__generate_trace(objectives=objectives, legend=legend, normalize=normalize,
-                                         color='rgb(255, 170, 0)')
+        new_data = self.generate_trace(objectives=objectives, legend=legend, normalize=normalize,
+                                       color='rgb(255, 170, 0)')
         self.data.append(new_data)
 
         self.figure = go.Figure(data=self.data, layout=self.layout)
 
-    def to_html(self, filename: str = 'front') -> str:
+    def export_html(self, filename: str = 'front') -> str:
         """ Export the graph to an interactive HTML (solutions can be selected to show some metadata).
 
         :param filename: Output file name.
@@ -276,17 +160,17 @@ class FrontPlot(Plot):
                 <a class="float" href="https://jmetalpy.readthedocs.io/en/latest/">
                   <img src="https://raw.githubusercontent.com/jMetal/jMetalPy/master/docs/source/jmetalpy.png" height="20px"/>
                 </a>
-                ''' + self.export(include_plotlyjs=False) + '''
+                ''' + self.export_div(include_plotlyjs=False) + '''
                 <script>                
                     var myPlot = document.querySelectorAll('div')[0];
                     myPlot.on('plotly_click', function(data){
                         var pts = '';
-                        
+
                         for(var i=0; i < data.points.length; i++){
                             pts = '(x, y) = ('+data.points[i].x +', '+ data.points[i].y.toPrecision(4)+')';
                             cs = data.points[i].customdata
                         }
-                        
+
                         if(typeof cs !== "undefined"){
                             swal({
                               title: 'Closest solution clicked:',
@@ -296,7 +180,7 @@ class FrontPlot(Plot):
                             })
                         }
                     });
-                    
+
                     window.onresize = function() {
                        Plotly.Plots.resize(myPlot);
                     };
@@ -309,22 +193,23 @@ class FrontPlot(Plot):
 
         return html_string
 
-    def export(self, filename: str = '', include_plotlyjs: bool = False) -> str:
+    def export_div(self, filename: str = 'output', include_plotlyjs: bool = False) -> str:
         """ Export as a `div` for embedding the graph in an HTML file.
 
         :param filename: Output file name (if desired, default to None).
         :param include_plotlyjs: If True, include plot.ly JS script (default to False).
-        :return: Script as string. """
+        :return: Script as string.
+        """
         script = plot(self.figure, output_type='div', include_plotlyjs=include_plotlyjs, show_link=False)
 
-        if filename:
-            with open(filename + '.html', 'w') as outf:
-                outf.write(script)
+        with open(filename + '.html', 'w') as outf:
+            outf.write(script)
 
         return script
 
-    def __initialize(self):
-        """ Initialize the graph for the first time. """
+    def create_layout(self):
+        """ Initialize the graph for the first time.
+        """
         LOGGER.debug('Generating graph')
 
         self.layout = go.Layout(
@@ -339,9 +224,9 @@ class FrontPlot(Plot):
             hovermode='closest'
         )
 
-    def __generate_trace(self, objectives: DataFrame, metadata: list = None, legend: str = '', normalize: bool = False,
-                         **kwargs):
-        number_of_objectives = objectives.shape[1]
+    def generate_trace(self, objectives: DataFrame, metadata: list = None, legend: str = '', normalize: bool = False,
+                       **kwargs):
+        dimensions = objectives.shape[1]
 
         if normalize:
             objectives = (objectives - objectives.min()) / (objectives.max() - objectives.min())
@@ -358,7 +243,7 @@ class FrontPlot(Plot):
         )
         marker.update(**kwargs)
 
-        if number_of_objectives == 2:
+        if dimensions == 2:
             trace = go.Scattergl(
                 x=objectives[0],
                 y=objectives[1],
@@ -367,7 +252,7 @@ class FrontPlot(Plot):
                 name=legend,
                 customdata=metadata
             )
-        elif number_of_objectives == 3:
+        elif dimensions == 3:
             trace = go.Scatter3d(
                 x=objectives[0],
                 y=objectives[1],
@@ -393,7 +278,3 @@ class FrontPlot(Plot):
             )
 
         return trace
-
-    def __save(self, filename: str = 'front', show: bool = False) -> None:
-        """ Save the graph. """
-        plot(self.figure, filename=filename + '.html', auto_open=show, show_link=False)

@@ -1,8 +1,0 @@
-scipy==1.1.0
-numpy==1.13.1
-pandas
-matplotlib==3.0.2
-plotly==3.3.0
-tqdm==4.23.4
-PyHamcrest==1.9.0
-mockito==1.0.11
