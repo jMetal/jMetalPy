@@ -1,9 +1,5 @@
 from setuptools import find_packages
-
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup
 
 setup(
     name='jmetalpy',
@@ -27,12 +23,15 @@ setup(
     install_requires=[
         'tqdm',
         'numpy==1.13.1',
-        'pandas==0.22.0',
+        'pandas==0.23.4',
+        'scipy==1.1.0',
+        'ipython',
+        'holoviews==1.10.9',
         'plotly==3.3.0',
         'matplotlib==3.0.2',
     ],
     tests_require=[
-        'mockito'
+        'mockito',
         'PyHamcrest',
     ]
 )
