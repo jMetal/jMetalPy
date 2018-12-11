@@ -1,10 +1,10 @@
 import random
 from typing import List, TypeVar
 
-from jmetal.component.density_estimator import CrowdingDistance
-from jmetal.core.operator import Selection
 from jmetal.component.comparator import Comparator, DominanceComparator
+from jmetal.component.density_estimator import CrowdingDistance
 from jmetal.component.ranking import FastNonDominatedRanking
+from jmetal.core.operator import Selection
 
 S = TypeVar('S')
 
@@ -147,7 +147,7 @@ class RandomSolutionSelection(Selection[List[S], S]):
 
 class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
 
-    def __init__(self, max_population_size: int, dominance_comparator = DominanceComparator()):
+    def __init__(self, max_population_size: int, dominance_comparator: Comparator = DominanceComparator()):
         super(RankingAndCrowdingDistanceSelection, self).__init__()
         self.max_population_size = max_population_size
         self.dominance_comparator = dominance_comparator

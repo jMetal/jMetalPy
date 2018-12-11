@@ -34,7 +34,7 @@ class NSGAII(GeneticAlgorithm):
                  termination_criteria: TerminationCriteria,
                  pop_generator: Generator = None,
                  pop_evaluator: Evaluator = None,
-                 dominance_comparator:DominanceComparator =DominanceComparator()):
+                 dominance_comparator: DominanceComparator = DominanceComparator()):
         """  NSGA-II implementation as described in
 
         * K. Deb, A. Pratap, S. Agarwal and T. Meyarivan, "A fast and elitist

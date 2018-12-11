@@ -240,8 +240,12 @@ class SMPSORP(SMPSO):
             swarm_generator=swarm_generator,
             swarm_evaluator=swarm_evaluator,
             termination_criteria=termination_criteria)
-        self.reference_points = reference_points
         self.leaders = leaders
+        self.reference_points = []
+        for i, _ in enumerate(self.reference_points):
+            point = self.problem.create_solution()
+            point.objectives = self.reference_points[i]
+            reference_points.append(point)
 
     def initialize_global_best(self, swarm: List[FloatSolution]) -> None:
         for particle in swarm:
@@ -291,14 +295,8 @@ class SMPSORP(SMPSO):
         for leader in self.leaders:
             leader.compute_density_estimator()
 
-        reference_points = []
-        for i, _ in enumerate(self.reference_points):
-            point = self.problem.create_solution()
-            point.objectives = self.reference_points[i]
-            reference_points.append(point)
-
         observable_data = self.get_observable_data()
-        observable_data['SOLUTIONS'] = self.get_result() + reference_points
+        observable_data['SOLUTIONS'] = self.get_result() + self.reference_points
         self.observable.notify_all(**observable_data)
 
     def get_result(self) -> List[FloatSolution]:

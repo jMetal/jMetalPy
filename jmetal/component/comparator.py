@@ -7,7 +7,6 @@ S = TypeVar('S')
 
 
 class Comparator(Generic[S]):
-
     __metaclass__ = ABCMeta
 
     @abstractmethod
@@ -137,8 +136,12 @@ class DominanceComparator(Comparator):
 
         return result
 
+
 class GDominanceComparator(DominanceComparator):
-    def __init__(self, reference_point:(), constraint_comparator=SolutionAttributeComparator("overall_constraint_violation", False)):
+
+    def __init__(self,
+                 reference_point: (),
+                 constraint_comparator=SolutionAttributeComparator('overall_constraint_violation', False)):
         super(GDominanceComparator, self).__init__(constraint_comparator)
         self.reference_point = reference_point
 
@@ -163,6 +166,5 @@ class GDominanceComparator(DominanceComparator):
             for i in range(solution.number_of_objectives):
                 if solution.objectives[i] < self.reference_point[i]:
                     result = 0
-
 
         return result
