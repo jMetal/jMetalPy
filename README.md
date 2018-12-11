@@ -9,7 +9,7 @@
 [![Read the Docs](https://img.shields.io/readthedocs/jmetalpy.svg?style=flat-square)](https://readthedocs.org/projects/jmetalpy/)
 [![PyPI License](https://img.shields.io/pypi/l/jMetalPy.svg?style=flat-square)]()
 [![PyPI Python version](https://img.shields.io/pypi/pyversions/jMetalPy.svg?style=flat-square)]()
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jMetal/jMetalPy/)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jMetal/jMetalPy/develop)
 
 ## Table of Contents
 - [Installation](#installation)
