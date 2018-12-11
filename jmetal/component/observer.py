@@ -5,7 +5,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 from jmetal.core.observable import Observer
-from jmetal.util.graphic import ScatterStreaming
+from jmetal.util.graphic import StreamingPlot
 from jmetal.util.solution_list import print_function_values_to_file
 
 LOGGER = logging.getLogger('jmetal')
@@ -21,17 +21,20 @@ LOGGER = logging.getLogger('jmetal')
 
 class ProgressBarObserver(Observer):
 
-    def __init__(self, max: int, desc: str = 'Progress') -> None:
+    def __init__(self, max: int) -> None:
         """ Show a smart progress meter with the number of evaluations and computing time.
 
         :param max: Number of expected iterations.
         :param desc: Prefix for the progressbar.
         """
-        self.progress_bar = tqdm(total=max, ascii=True, desc=desc)
+        self.progress_bar = None
         self.progress = 0
         self.maxx = max
 
     def update(self, *args, **kwargs):
+        if not self.progress_bar:
+            self.progress_bar = tqdm(total=self.maxx, ascii=True, desc='Progress')
+
         evaluations = kwargs['EVALUATIONS']
 
         self.progress_bar.update(evaluations - self.progress)
@@ -89,18 +92,14 @@ class WriteFrontToFileObserver(Observer):
 
 class VisualizerObserver(Observer):
 
-    def __init__(self, display_frequency: float = 1.0, replace: bool = True) -> None:
+    def __init__(self, display_frequency: float = 1.0, replace: int = 100) -> None:
+        self.figure = StreamingPlot(replace=replace)
         self.display_frequency = display_frequency
-        self.replace = replace
-        self.plot = ScatterStreaming(plot_title='jmetal')
 
     def update(self, *args, **kwargs):
-        computing_time = kwargs['COMPUTING_TIME']
         evaluations = kwargs['EVALUATIONS']
-
         solutions = kwargs['SOLUTIONS']
         problem = kwargs['PROBLEM']
 
         if (evaluations % self.display_frequency) == 0 and solutions:
-            title = 'Eval: {}, Time: {}'.format(evaluations, computing_time)
-            self.plot.update(solutions, problem.reference_front, rename_title=title, persistence=self.replace)
+            self.figure.update(solutions, problem.reference_front)
