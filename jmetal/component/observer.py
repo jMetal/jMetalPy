@@ -92,8 +92,8 @@ class WriteFrontToFileObserver(Observer):
 
 class VisualizerObserver(Observer):
 
-    def __init__(self, display_frequency: float = 1.0, replace: int = 100) -> None:
-        self.figure = StreamingPlot(replace=replace)
+    def __init__(self, display_frequency: float = 1.0) -> None:
+        self.figure = StreamingPlot()
         self.display_frequency = display_frequency
 
     def update(self, *args, **kwargs):
