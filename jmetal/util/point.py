@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 
 """
 .. module:: point
@@ -9,8 +9,7 @@ from abc import ABCMeta, abstractmethod
 """
 
 
-class Point:
-    __metaclass__ = ABCMeta
+class Point(ABC):
 
     @abstractmethod
     def update(self, vector: []) -> None:

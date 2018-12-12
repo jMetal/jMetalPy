@@ -1,5 +1,5 @@
 import logging
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 from typing import Generic, TypeVar, List
 import random
 
@@ -10,10 +10,8 @@ LOGGER = logging.getLogger('jmetal')
 S = TypeVar('S')
 
 
-class Problem(Generic[S]):
+class Problem(Generic[S], ABC):
     """ Class representing problems. """
-
-    __metaclass__ = ABCMeta
 
     MINIMIZE = -1
     MAXIMIZE = 1
@@ -51,10 +49,8 @@ class Problem(Generic[S]):
         pass
 
 
-class BinaryProblem(Problem[BinarySolution]):
+class BinaryProblem(Problem[BinarySolution], ABC):
     """ Class representing binary problems. """
-
-    __metaclass__ = ABCMeta
 
     def __init__(self):
         super(BinaryProblem, self).__init__()
@@ -62,19 +58,9 @@ class BinaryProblem(Problem[BinarySolution]):
     def create_solution(self) -> BinarySolution:
         pass
 
-    @abstractmethod
-    def evaluate(self, solution: BinarySolution) -> BinarySolution:
-        pass
 
-    @abstractmethod
-    def get_name(self) -> str:
-        pass
-
-
-class FloatProblem(Problem[FloatSolution]):
+class FloatProblem(Problem[FloatSolution], ABC):
     """ Class representing float problems. """
-
-    __metaclass__ = ABCMeta
 
     def __init__(self):
         super(FloatProblem, self).__init__()
@@ -89,19 +75,9 @@ class FloatProblem(Problem[FloatSolution]):
 
         return new_solution
 
-    @abstractmethod
-    def evaluate(self, solution: FloatSolution) -> FloatSolution:
-        pass
 
-    @abstractmethod
-    def get_name(self) -> str:
-        pass
-
-
-class IntegerProblem(Problem[IntegerSolution]):
+class IntegerProblem(Problem[IntegerSolution], ABC):
     """ Class representing integer problems. """
-
-    __metaclass__ = ABCMeta
 
     def __init__(self):
         super(IntegerProblem, self).__init__()
@@ -120,11 +96,3 @@ class IntegerProblem(Problem[IntegerSolution]):
              for i in range(self.number_of_variables)]
 
         return new_solution
-
-    @abstractmethod
-    def evaluate(self, solution: IntegerSolution) -> IntegerSolution:
-        pass
-
-    @abstractmethod
-    def get_name(self) -> str:
-        pass

@@ -4,7 +4,6 @@ from jmetal.component.comparator import GDominanceComparator
 from jmetal.component.observer import VisualizerObserver
 from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
 from jmetal.problem import ZDT2
-from jmetal.util.graphic import FrontPlot
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_front
 from jmetal.util.termination_criteria import StoppingByEvaluations
 
@@ -37,17 +36,10 @@ if __name__ == '__main__':
         # termination_criteria=StoppingByQualityIndicator(quality_indicator=HyperVolume([1.0, 1.0]), expected_value=0.5, degree=0.95)
     )
 
-    progress_bar = ProgressBarObserver(max=25000)
-    algorithm.observable.register(observer=progress_bar)
     algorithm.observable.register(observer=VisualizerObserver())
 
     algorithm.run()
     front = algorithm.get_result()
-
-    # Plot frontier to file
-    pareto_front = FrontPlot(plot_title='GNSGAII-ZDT2', axis_labels=problem.obj_labels)
-    pareto_front.plot(front, reference_front=problem.reference_front)
-    pareto_front.to_html(filename='GNSGAII-ZDT2')
 
     # Save variables to file
     print_function_values_to_file(front, 'FUN.GNSGAII.ZDT2')

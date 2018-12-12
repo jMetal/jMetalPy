@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 
 from jmetal.component.quality_indicator import QualityIndicator
 from jmetal.util.observable import Observer
@@ -12,9 +12,7 @@ from jmetal.util.observable import Observer
 """
 
 
-class TerminationCriteria(Observer):
-
-    __metaclass__ = ABCMeta
+class TerminationCriteria(Observer, ABC):
 
     @abstractmethod
     def update(self, *args, **kwargs):

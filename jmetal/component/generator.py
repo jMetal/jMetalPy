@@ -1,5 +1,5 @@
 import copy
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, List
 
 from jmetal.core.problem import Problem
@@ -16,9 +16,7 @@ R = TypeVar('R')
 """
 
 
-class Generator(Generic[R]):
-
-    __metaclass__ = ABCMeta
+class Generator(Generic[R], ABC):
 
     @abstractmethod
     def new(self, problem: Problem) -> R:

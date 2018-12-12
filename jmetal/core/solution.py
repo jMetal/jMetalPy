@@ -1,14 +1,12 @@
-from abc import ABCMeta
+from abc import ABC
 from typing import List, Generic, TypeVar
 
 BitSet = List[bool]
 S = TypeVar('S')
 
 
-class Solution(Generic[S]):
+class Solution(Generic[S], ABC):
     """ Class representing solutions """
-
-    __metaclass__ = ABCMeta
 
     def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int = 0):
         self.number_of_objectives = number_of_objectives

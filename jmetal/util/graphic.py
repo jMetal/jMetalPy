@@ -1,13 +1,13 @@
 import logging
-from abc import ABCMeta
-from typing import TypeVar, List
+from abc import ABC
 
-from IPython.display import display
 import holoviews as hv
+from IPython.display import display
 from holoviews.streams import Pipe
 from pandas import DataFrame
 from plotly import graph_objs as go
 from plotly.offline import plot
+from typing import TypeVar, List
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -24,8 +24,7 @@ S = TypeVar('S')
 """
 
 
-class Plot:
-    __metaclass__ = ABCMeta
+class Plot(ABC):
 
     def __init__(self, plot_title: str, axis_labels: list):
         self.plot_title = plot_title

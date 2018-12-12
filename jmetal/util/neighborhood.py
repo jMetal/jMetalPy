@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import TypeVar, Generic, List
 import numpy
@@ -17,18 +17,14 @@ from jmetal.core.solution import Solution
 S = TypeVar('S')
 
 
-class Neighborhood(Generic[S]):
-
-    __metaclass__ = ABCMeta
+class Neighborhood(Generic[S], ABC):
 
     @abstractmethod
     def get_neighbors(self, index: int, solution_list: List[S]) -> List[S]:
         pass
 
 
-class WeightNeighborhood(Neighborhood[Solution]):
-
-    __metaclass__ = ABCMeta
+class WeightNeighborhood(Neighborhood[Solution], ABC):
 
     def __init__(self,
                  number_of_weight_vectors: int,
@@ -42,10 +38,6 @@ class WeightNeighborhood(Neighborhood[Solution]):
 
         self.neighborhood = numpy.zeros((number_of_weight_vectors, neighborhood_size), dtype=int)
         self.weight_vectors = numpy.zeros((number_of_weight_vectors, weight_vector_size))
-
-    @abstractmethod
-    def get_neighbors(self, index: int, solution_list: List[S]) -> List[S]:
-        pass
 
 
 class WeightVectorNeighborhood(WeightNeighborhood):

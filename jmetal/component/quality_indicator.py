@@ -1,10 +1,9 @@
 import math
 import random
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 from typing import TypeVar, List
 
 import numpy as np
-from scipy import spatial
 
 S = TypeVar('S')
 
@@ -17,9 +16,7 @@ S = TypeVar('S')
 """
 
 
-class QualityIndicator:
-
-    __metaclass__ = ABCMeta
+class QualityIndicator(ABC):
 
     def __init__(self, is_minimization: bool):
         self.is_minimization = is_minimization
@@ -35,8 +32,6 @@ class QualityIndicator:
 
 class NonIndicator(QualityIndicator):
 
-    __metaclass__ = ABCMeta
-
     def __init__(self):
         super(NonIndicator, self).__init__(is_minimization=True)
 
@@ -48,8 +43,6 @@ class NonIndicator(QualityIndicator):
 
 
 class GenerationalDistance(QualityIndicator):
-
-    __metaclass__ = ABCMeta
 
     def __init__(self, reference_front: List[S] = None, p: float = 2.0):
         """
@@ -80,8 +73,6 @@ class GenerationalDistance(QualityIndicator):
 
 class InvertedGenerationalDistance(GenerationalDistance):
 
-    __metaclass__ = ABCMeta
-
     def compute(self, solutions: List[S]):
         if not self.reference_front:
             raise Exception('Reference front is none')
@@ -94,8 +85,6 @@ class InvertedGenerationalDistance(GenerationalDistance):
 
 
 class EpsilonIndicator(QualityIndicator):
-
-    __metaclass__ = ABCMeta
 
     def __init__(self, reference_front: List[S] = None):
         """

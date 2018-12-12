@@ -1,5 +1,5 @@
 import logging
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 from typing import TypeVar, List
 
 LOGGER = logging.getLogger('jmetal')
@@ -15,11 +15,9 @@ S = TypeVar('S')
 """
 
 
-class DensityEstimator(List[S]):
+class DensityEstimator(List[S], ABC):
     """This is the interface of any density estimator algorithm.
     """
-
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def compute_density_estimator(self, solution_list: List[S]) -> float:

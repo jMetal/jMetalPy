@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 from multiprocessing.pool import ThreadPool
 from typing import TypeVar, List, Generic
 
@@ -7,9 +7,7 @@ from jmetal.core.problem import Problem
 S = TypeVar('S')
 
 
-class Evaluator(Generic[S]):
-
-    __metaclass__ = ABCMeta
+class Evaluator(Generic[S], ABC):
 
     @abstractmethod
     def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:

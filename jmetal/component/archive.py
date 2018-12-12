@@ -1,6 +1,6 @@
 import random
 import copy
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, List
 
 from jmetal.component.density_estimator import CrowdingDistance, DensityEstimator
@@ -18,9 +18,7 @@ S = TypeVar('S')
 """
 
 
-class Archive(Generic[S]):
-
-    __metaclass__ = ABCMeta
+class Archive(Generic[S], ABC):
 
     def __init__(self):
         self.solution_list: List[S] = []

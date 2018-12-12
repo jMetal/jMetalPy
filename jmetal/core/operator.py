@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, List
 
 S = TypeVar('S')
@@ -13,10 +13,8 @@ R = TypeVar('R')
 """
 
 
-class Operator(Generic[S, R]):
+class Operator(Generic[S, R], ABC):
     """ Class representing operator """
-
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def execute(self, source: S) -> R:
@@ -27,10 +25,8 @@ class Operator(Generic[S, R]):
         pass
 
 
-class Mutation(Operator[S, S]):
+class Mutation(Operator[S, S], ABC):
     """ Class representing mutation operator. """
-
-    __metaclass__ = ABCMeta
 
     def __init__(self, probability: float):
         if probability > 1.0:
@@ -40,19 +36,9 @@ class Mutation(Operator[S, S]):
 
         self.probability = probability
 
-    @abstractmethod
-    def execute(self, source: S) -> R:
-        pass
 
-    @abstractmethod
-    def get_name(self) -> str:
-        pass
-
-
-class Crossover(Operator[List[S], List[R]]):
+class Crossover(Operator[List[S], List[R]], ABC):
     """ Class representing crossover operator. """
-
-    __metaclass__ = ABCMeta
 
     def __init__(self, probability: float):
         if probability > 1.0:
@@ -70,27 +56,9 @@ class Crossover(Operator[List[S], List[R]]):
     def get_number_of_children(self) -> int:
         pass
 
-    @abstractmethod
-    def execute(self, source: S) -> R:
-        pass
 
-    @abstractmethod
-    def get_name(self) -> str:
-        pass
-
-
-class Selection(Operator[S, R]):
+class Selection(Operator[S, R], ABC):
     """ Class representing selection operator. """
 
-    __metaclass__ = ABCMeta
-
     def __init__(self):
-        pass
-
-    @abstractmethod
-    def execute(self, source: S) -> R:
-        pass
-
-    @abstractmethod
-    def get_name(self) -> str:
         pass

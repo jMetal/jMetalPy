@@ -1,14 +1,12 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 from typing import TypeVar, List
 
-from jmetal.component.comparator import DominanceComparator, GDominanceComparator
+from jmetal.component.comparator import DominanceComparator
 
 S = TypeVar('S')
 
 
-class Ranking(List[S]):
-
-    __metaclass__ = ABCMeta
+class Ranking(List[S], ABC):
 
     def __init__(self):
         super(Ranking, self).__init__()

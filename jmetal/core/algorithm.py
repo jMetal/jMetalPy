@@ -1,7 +1,7 @@
 import logging
 import threading
 import time
-from abc import ABCMeta, abstractmethod
+from abc import abstractmethod, ABC
 from typing import TypeVar, Generic, List
 
 from jmetal.component.evaluator import Evaluator
@@ -25,9 +25,7 @@ R = TypeVar('R')
 """
 
 
-class Algorithm(Generic[S, R], threading.Thread):
-
-    __metaclass__ = ABCMeta
+class Algorithm(Generic[S, R], threading.Thread, ABC):
 
     def __init__(self,
                  problem: Problem[S],
@@ -111,9 +109,7 @@ class Algorithm(Generic[S, R], threading.Thread):
         pass
 
 
-class EvolutionaryAlgorithm(Algorithm[S, R]):
-
-    __metaclass__ = ABCMeta
+class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
 
     def __init__(self,
                  problem: Problem[S],
@@ -163,18 +159,8 @@ class EvolutionaryAlgorithm(Algorithm[S, R]):
         observable_data['SOLUTIONS'] = self.population
         self.observable.notify_all(**observable_data)
 
-    @abstractmethod
-    def get_result(self) -> R:
-        pass
 
-    @abstractmethod
-    def get_name(self) -> str:
-        pass
-
-
-class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]]):
-
-    __metaclass__ = ABCMeta
+class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], ABC):
 
     def __init__(self,
                  problem: Problem,
@@ -243,11 +229,3 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]]):
         observable_data = self.get_observable_data()
         observable_data['SOLUTIONS'] = self.swarm
         self.observable.notify_all(**observable_data)
-
-    @abstractmethod
-    def get_result(self) -> R:
-        pass
-
-    @abstractmethod
-    def get_name(self) -> str:
-        pass

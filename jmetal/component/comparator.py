@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 from typing import TypeVar, Generic
 
 from jmetal.core.solution import Solution
@@ -6,8 +6,7 @@ from jmetal.core.solution import Solution
 S = TypeVar('S')
 
 
-class Comparator(Generic[S]):
-    __metaclass__ = ABCMeta
+class Comparator(Generic[S], ABC):
 
     @abstractmethod
     def compare(self, solution1: S, solution2: S) -> int:

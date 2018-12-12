@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 
 from jmetal.util.point import IdealPoint
 
@@ -11,8 +11,7 @@ from jmetal.util.point import IdealPoint
 """
 
 
-class AggregativeFunction:
-    __metaclass__ = ABCMeta
+class AggregativeFunction(ABC):
 
     @abstractmethod
     def compute(self, vector: [], weight_vector: []) -> float:
