@@ -111,3 +111,7 @@ dask-worker-space
 
 # Plotly
 *.html
+
+# jMetalPy
+FUN*
+VAR*
