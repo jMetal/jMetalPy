@@ -12,7 +12,7 @@ Evolution Strategy
 Genetic Algorithm
 -------------------------------------------------------------
 
-.. automodule:: jmetal.algorithm.singleobjective.genetic
+.. automodule:: jmetal.algorithm.singleobjective.genetic_algorithm
     :members:
     :undoc-members:
     :show-inheritance:

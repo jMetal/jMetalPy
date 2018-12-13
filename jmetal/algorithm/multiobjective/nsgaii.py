@@ -1,6 +1,6 @@
 from typing import TypeVar, List
 
-from jmetal.algorithm.singleobjective.geneticalgorithm import GeneticAlgorithm
+from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.component import DominanceComparator
 from jmetal.component.evaluator import Evaluator
 from jmetal.component.generator import Generator
