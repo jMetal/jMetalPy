@@ -4,7 +4,7 @@ from setuptools import setup
 setup(
     name='jmetalpy',
     version='0.5.5',
-    description='JMetalPy. Python version of the jMetal framework',
+    description='Python version of the jMetal framework',
     author='Antonio J. Nebro',
     author_email='antonio@lcc.uma.es',
     maintainer='Antonio J. Nebro, Antonio Benitez-Hidalgo',
@@ -33,5 +33,6 @@ setup(
     tests_require=[
         'mockito',
         'PyHamcrest',
+        'mock'
     ]
 )
