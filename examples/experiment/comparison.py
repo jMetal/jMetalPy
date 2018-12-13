@@ -2,11 +2,12 @@ import pandas as pd
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.algorithm.multiobjective.smpso import SMPSO
+from jmetal.component import RankingAndCrowdingDistanceComparator, HyperVolume, CrowdingDistanceArchive
+from jmetal.component.quality_indicator import GenerationalDistance
 from jmetal.operator import SBX, BinaryTournamentSelection, Polynomial
 from jmetal.problem import ZDT1, ZDT2, ZDT3
-from jmetal.component import RankingAndCrowdingDistanceComparator, HyperVolume, CrowdingDistanceArchive
-from jmetal.util.laboratory import Experiment, Job, convert_to_latex, compute_statistical_analysis
-from jmetal.util.solution_list import read_front
+from jmetal.util.laboratory import Experiment, Job, convert_to_latex, compute_statistical_analysis, \
+    compute_quality_indicator, create_tables_from_experiment
 from jmetal.util.termination_criteria import StoppingByEvaluations
 
 
@@ -27,7 +28,7 @@ def configure_experiment(problems: list, n_run: int):
                         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
                         termination_criteria=StoppingByEvaluations(max=5000)
                     ),
-                    label='NSGAIIa',
+                    problem='NSGAIIa',
                     run=run,
                 )
             )
@@ -43,7 +44,7 @@ def configure_experiment(problems: list, n_run: int):
                         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
                         termination_criteria=StoppingByEvaluations(max=5000)
                     ),
-                    label='NSGAIIb',
+                    problem='NSGAIIb',
                     run=run
                 )
             )
@@ -56,7 +57,7 @@ def configure_experiment(problems: list, n_run: int):
                         leaders=CrowdingDistanceArchive(100),
                         termination_criteria=StoppingByEvaluations(max=5000)
                     ),
-                    label='SMPSO',
+                    problem='SMPSO',
                     run=run
                 )
             )
@@ -65,31 +66,28 @@ def configure_experiment(problems: list, n_run: int):
 
 
 if __name__ == '__main__':
-    zdt1_problem = ZDT1()
-    zdt1_problem.reference_front = read_front(file_path='../../resources/reference_front/ZDT1.pf')
+    base_directory = 'data'
+    reference_fronts = '/home/benhid/Proyectos/jMetalPy/resources/reference_front'
 
-    zdt2_problem = ZDT2()
-    zdt2_problem.reference_front = read_front(file_path='../../resources/reference_front/ZDT2.pf')
-
-    zdt3_problem = ZDT3()
-    zdt3_problem.reference_front = read_front(file_path='../../resources/reference_front/ZDT3.pf')
-
+    zdt1_problem, zdt2_problem, zdt3_problem = ZDT1(), ZDT2(), ZDT3()
     jobs = configure_experiment(problems=[zdt1_problem, zdt2_problem, zdt3_problem], n_run=5)
 
-    experiment = Experiment(jobs=jobs)
+    experiment = Experiment(base_directory=base_directory, jobs=jobs)
     experiment.run()
 
-    # Compute quality indicators
-    df = experiment.compute_quality_indicator(qi=HyperVolume([1.0, 1.0]))
-    print(df)
+    compute_quality_indicator(input_data=base_directory,
+                              reference_fronts=reference_fronts,
+                              quality_indicators=[HyperVolume([1.0, 1.0]), GenerationalDistance(None)])
+
+    nsgaii_a = create_tables_from_experiment(input_data='./data/NSGAIIa')
 
     # Generate a table with Median and Interquartile range.
-    median = df.groupby(level=0).median()
-    iqr = df.groupby(level=0).quantile(0.75) - df.groupby(level=0).quantile(0.25)
+    median = nsgaii_a.groupby(level=0).median()
+    iqr = nsgaii_a.groupby(level=0).quantile(0.75) - nsgaii_a.groupby(level=0).quantile(0.25)
     table = median.applymap('{:.2e}'.format) + '_{' + iqr.applymap('{:.2e}'.format) + '}'
 
     # Add statistical analysis
-    significance = compute_statistical_analysis(df)
+    significance = compute_statistical_analysis(nsgaii_a)
     table = pd.concat([table, significance], axis=1)
 
     print(table)
