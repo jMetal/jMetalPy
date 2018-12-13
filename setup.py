@@ -29,6 +29,7 @@ setup(
         'holoviews==1.10.9',
         'plotly==3.3.0',
         'matplotlib==3.0.2',
+        'statsmodels'
     ],
     tests_require=[
         'mockito',

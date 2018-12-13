@@ -3,6 +3,7 @@ import pandas as pd
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.component import RankingAndCrowdingDistanceComparator, HyperVolume, CrowdingDistanceArchive
+from jmetal.component.critical_distance import CDplot
 from jmetal.component.quality_indicator import GenerationalDistance
 from jmetal.operator import SBX, BinaryTournamentSelection, Polynomial
 from jmetal.problem import ZDT1, ZDT2, ZDT3
@@ -26,9 +27,10 @@ def configure_experiment(problems: list, n_run: int):
                         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
                         crossover=SBX(probability=1.0, distribution_index=20),
                         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
-                        termination_criteria=StoppingByEvaluations(max=5000)
+                        termination_criteria=StoppingByEvaluations(max=25000)
                     ),
                     algorithm_tag='NSGAIIa',
+                    problem_tag=problem.get_name(),
                     run=run,
                 )
             )
@@ -42,9 +44,10 @@ def configure_experiment(problems: list, n_run: int):
                         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
                         crossover=SBX(probability=1.0, distribution_index=20),
                         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
-                        termination_criteria=StoppingByEvaluations(max=5000)
+                        termination_criteria=StoppingByEvaluations(max=25000)
                     ),
                     algorithm_tag='NSGAIIb',
+                    problem_tag=problem.get_name(),
                     run=run
                 )
             )
@@ -55,9 +58,10 @@ def configure_experiment(problems: list, n_run: int):
                         swarm_size=100,
                         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
                         leaders=CrowdingDistanceArchive(100),
-                        termination_criteria=StoppingByEvaluations(max=5000)
+                        termination_criteria=StoppingByEvaluations(max=25000)
                     ),
                     algorithm_tag='SMPSO',
+                    problem_tag=problem.get_name(),
                     run=run
                 )
             )
@@ -70,16 +74,16 @@ if __name__ == '__main__':
     reference_fronts = '/home/benhid/Proyectos/jMetalPy/resources/reference_front'
 
     zdt1_problem, zdt2_problem, zdt3_problem = ZDT1(), ZDT2(), ZDT3()
-    jobs = configure_experiment(problems=[zdt1_problem, zdt2_problem, zdt3_problem], n_run=5)
-
+    jobs = configure_experiment(problems=[zdt1_problem, zdt2_problem, zdt3_problem], n_run=10)
+    """
     experiment = Experiment(base_directory=base_directory, jobs=jobs)
     experiment.run()
 
     compute_quality_indicator(input_data=base_directory,
                               reference_fronts=reference_fronts,
                               quality_indicators=[HyperVolume([1.0, 1.0]), GenerationalDistance(None)])
-
-    nsgaii_a = create_tables_from_experiment(input_data='./data/NSGAIIa')
+    """
+    nsgaii_a = create_tables_from_experiment(input_data='data/NSGAIIa')
 
     # Generate a table with Median and Interquartile range.
     median = nsgaii_a.groupby(level=0).median()
@@ -90,7 +94,14 @@ if __name__ == '__main__':
     significance = compute_statistical_analysis(nsgaii_a)
     table = pd.concat([table, significance], axis=1)
 
-    print(table)
-
     # Convert to LaTeX
     print(convert_to_latex(table, caption='Experiment'))
+
+    # Plot CD
+    results_hv = []
+    labels = ['NSGAIIa', 'NSGAIIb', 'SMPSO']
+    for algorithm in labels:
+        values = create_tables_from_experiment(input_data='data/' + algorithm).groupby(level=0).median()['QI.GD'].tolist()
+        results_hv.append(values)
+
+    CDplot(results_hv, alg_names=labels)

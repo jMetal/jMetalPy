@@ -30,18 +30,6 @@ class QualityIndicator(ABC):
         pass
 
 
-class NonIndicator(QualityIndicator):
-
-    def __init__(self):
-        super(NonIndicator, self).__init__(is_minimization=True)
-
-    def compute(self, solutions: List[S]):
-        return random.random()
-
-    def get_name(self) -> str:
-        return 'Test'
-
-
 class GenerationalDistance(QualityIndicator):
 
     def __init__(self, reference_front: List[S] = None, p: float = 2.0):
@@ -68,7 +56,7 @@ class GenerationalDistance(QualityIndicator):
         return min(distance)
 
     def get_name(self) -> str:
-        return 'Generational distance'
+        return 'GD'
 
 
 class InvertedGenerationalDistance(GenerationalDistance):
@@ -81,7 +69,7 @@ class InvertedGenerationalDistance(GenerationalDistance):
         return math.pow(value, 1.0 / self.p) / len(self.reference_front)
 
     def get_name(self) -> str:
-        return 'Inverted Generational distance'
+        return 'IGD'
 
 
 class EpsilonIndicator(QualityIndicator):
@@ -102,7 +90,7 @@ class EpsilonIndicator(QualityIndicator):
              solutions]) for s1 in self.reference_front])
 
     def get_name(self) -> str:
-        return 'Unary Epsilon'
+        return 'U-EP'
 
 
 class HyperVolume(QualityIndicator):
@@ -250,7 +238,7 @@ class HyperVolume(QualityIndicator):
         nodes[:] = [node for (_, node) in decorated]
 
     def get_name(self) -> str:
-        return 'Hypervolume'
+        return 'HV'
 
 
 class MultiList:

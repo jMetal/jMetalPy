@@ -25,24 +25,25 @@ LOGGER = logging.getLogger('jmetal')
 
 class Job:
 
-    def __init__(self, algorithm: Algorithm, algorithm_tag: str, run: int):
+    def __init__(self, algorithm: Algorithm, algorithm_tag: str, problem_tag: str, run: int):
         self.algorithm = algorithm
         self.algorithm_tag = algorithm_tag
+        self.problem_tag = problem_tag
         self.run_tag = run
 
     def execute(self, path: str):
         self.algorithm.run()
 
-        file_name = os.path.join(path, 'FUN.{}.ps'.format(self.run_tag))
+        file_name = os.path.join(path, self.algorithm_tag, self.problem_tag, 'FUN.{}.ps'.format(self.run_tag))
         print_function_values_to_file(self.algorithm.get_result(), file_name=file_name)
 
-        file_name = os.path.join(path, 'VAR.{}.ps'.format(self.run_tag))
+        file_name = os.path.join(path, self.algorithm_tag, self.problem_tag, 'VAR.{}.ps'.format(self.run_tag))
         print_variables_to_file(self.algorithm.get_result(), file_name=file_name)
 
 
 class Experiment:
 
-    def __init__(self, base_directory: str, jobs: List[Job], m_workers: int = 3):
+    def __init__(self, base_directory: str, jobs: List[Job], m_workers: int = 6):
         """ Run an experiment to evaluate algorithms and/or problems.
 
         :param jobs: List of Jobs (from :py:mod:`jmetal.util.laboratory)`) to be executed.
@@ -53,6 +54,7 @@ class Experiment:
         self.base_directory = base_directory
 
     def run(self) -> None:
+        # todo This doesn't seems to be working properly
         with ProcessPoolExecutor(max_workers=self.m_workers) as executor:
             for job in self.jobs:
                 executor.submit(job.execute(self.base_directory))
