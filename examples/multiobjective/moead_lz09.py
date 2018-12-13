@@ -5,12 +5,12 @@ from jmetal.problem import LZ09_F2
 from jmetal.util.aggregative_function import Chebyshev
 from jmetal.util.graphic import FrontPlot
 from jmetal.util.neighborhood import WeightVectorNeighborhood
-from jmetal.util.solution_list import read_front
+from jmetal.util.solution_list import read_solutions
 from jmetal.util.termination_criteria import StoppingByEvaluations
 
 if __name__ == '__main__':
     problem = LZ09_F2()
-    problem.reference_front = read_front(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
+    problem.reference_front = read_solutions(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
     population_size = 100
 

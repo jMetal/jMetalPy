@@ -1,5 +1,6 @@
 import logging
 from abc import ABC
+from typing import TypeVar, List
 
 import holoviews as hv
 from IPython.display import display
@@ -7,7 +8,6 @@ from holoviews.streams import Pipe
 from pandas import DataFrame
 from plotly import graph_objs as go
 from plotly.offline import plot
-from typing import TypeVar, List
 
 LOGGER = logging.getLogger('jmetal')
 

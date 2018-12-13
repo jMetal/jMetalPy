@@ -13,7 +13,7 @@ if __name__ == '__main__':
         mutation=Polynomial(probability=1.0 / problem.number_of_variables)
     )
 
-    algorithm.run()
+    algorithm.execute()
     result = algorithm.get_result()
 
     print('Algorithm: {}'.format(algorithm.get_name()))

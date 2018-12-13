@@ -16,7 +16,7 @@ if __name__ == '__main__':
         selection=BinaryTournamentSelection()
     )
 
-    algorithm.run()
+    algorithm.execute()
     result = algorithm.get_result()
 
     print('Algorithm: {}'.format(algorithm.get_name()))

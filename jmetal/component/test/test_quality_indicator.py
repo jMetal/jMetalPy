@@ -4,7 +4,7 @@ import unittest
 from jmetal.core.solution import Solution
 from jmetal.problem import ZDT1
 from jmetal.component.quality_indicator import HyperVolume, GenerationalDistance, InvertedGenerationalDistance
-from jmetal.util.solution_list import read_front
+from jmetal.util.solution_list import read_solutions
 
 
 class HyperVolumeTestCases(unittest.TestCase):
@@ -30,7 +30,7 @@ class HyperVolumeTestCases(unittest.TestCase):
 
     def test_should_hypervolume_return_the_correct_value_when_applied_to_the_ZDT1_reference_front(self):
         problem = ZDT1()
-        problem.reference_front = read_front(file_path='resources/reference_front/ZDT1.pf')
+        problem.reference_front = read_solutions(file_path='resources/reference_front/ZDT1.pf')
 
         reference_point = [1, 1]
 

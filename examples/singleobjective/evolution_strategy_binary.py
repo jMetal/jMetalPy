@@ -14,7 +14,7 @@ if __name__ == '__main__':
         elitist=True
     )
 
-    algorithm.run()
+    algorithm.execute()
     result = algorithm.get_result()
 
     print('Algorithm: ' + algorithm.get_name())

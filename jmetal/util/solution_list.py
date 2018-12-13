@@ -16,7 +16,7 @@ LOGGER = logging.getLogger('jmetal')
 """
 
 
-def read_front(file_path: str) -> List[FloatSolution]:
+def read_solutions(file_path: str) -> List[FloatSolution]:
     """ Reads a reference front from a file.
 
     :param file_path: File path where the front is located.
