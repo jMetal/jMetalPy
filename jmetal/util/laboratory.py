@@ -25,10 +25,10 @@ LOGGER = logging.getLogger('jmetal')
 
 class Job:
 
-    def __init__(self, algorithm: Algorithm, problem: str, run: int):
+    def __init__(self, algorithm: Algorithm, algorithm_tag: str, run: int):
         self.algorithm = algorithm
+        self.algorithm_tag = algorithm_tag
         self.run_tag = run
-        self.problem_tag = problem
 
     def execute(self, path: str):
         self.algorithm.run()

@@ -28,7 +28,7 @@ def configure_experiment(problems: list, n_run: int):
                         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
                         termination_criteria=StoppingByEvaluations(max=5000)
                     ),
-                    problem='NSGAIIa',
+                    algorithm_tag='NSGAIIa',
                     run=run,
                 )
             )
@@ -44,7 +44,7 @@ def configure_experiment(problems: list, n_run: int):
                         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
                         termination_criteria=StoppingByEvaluations(max=5000)
                     ),
-                    problem='NSGAIIb',
+                    algorithm_tag='NSGAIIb',
                     run=run
                 )
             )
@@ -57,7 +57,7 @@ def configure_experiment(problems: list, n_run: int):
                         leaders=CrowdingDistanceArchive(100),
                         termination_criteria=StoppingByEvaluations(max=5000)
                     ),
-                    problem='SMPSO',
+                    algorithm_tag='SMPSO',
                     run=run
                 )
             )
