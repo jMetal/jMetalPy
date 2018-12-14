@@ -31,33 +31,36 @@ class Job:
         self.problem_tag = problem_tag
         self.run_tag = run
 
-    def execute(self, path: str):
+    def execute(self, output_path: str = ''):
         self.algorithm.run()
 
-        file_name = os.path.join(path, self.algorithm_tag, self.problem_tag, 'FUN.{}.ps'.format(self.run_tag))
-        print_function_values_to_file(self.algorithm.get_result(), file_name=file_name)
+        if output_path:
+            file_name = os.path.join(output_path, 'FUN.{}.tsv'.format(self.run_tag))
+            print_function_values_to_file(self.algorithm.get_result(), file_name=file_name)
 
-        file_name = os.path.join(path, self.algorithm_tag, self.problem_tag, 'VAR.{}.ps'.format(self.run_tag))
-        print_variables_to_file(self.algorithm.get_result(), file_name=file_name)
+            file_name = os.path.join(output_path, 'VAR.{}.tsv'.format(self.run_tag))
+            print_variables_to_file(self.algorithm.get_result(), file_name=file_name)
 
 
 class Experiment:
 
-    def __init__(self, base_directory: str, jobs: List[Job], m_workers: int = 6):
-        """ Run an experiment to evaluate algorithms and/or problems.
+    def __init__(self, base_dir: str, jobs: List[Job], m_workers: int = 6):
+        """ Run an experiment to execute a list of jobs.
 
+        :param base_dir: Base directory where each job will save its results.
         :param jobs: List of Jobs (from :py:mod:`jmetal.util.laboratory)`) to be executed.
         :param m_workers: Maximum number of workers to execute the Jobs in parallel.
         """
         self.jobs = jobs
         self.m_workers = m_workers
-        self.base_directory = base_directory
+        self.base_dir = base_dir
 
     def run(self) -> None:
         # todo This doesn't seems to be working properly
         with ProcessPoolExecutor(max_workers=self.m_workers) as executor:
             for job in self.jobs:
-                executor.submit(job.execute(self.base_directory))
+                output_path = os.path.join(self.base_dir, job.algorithm_tag, job.problem_tag)
+                executor.submit(job.execute(output_path))
 
 
 def compute_quality_indicator(input_data: str, quality_indicators: List[QualityIndicator],
@@ -125,7 +128,7 @@ def compute_quality_indicator(input_data: str, quality_indicators: List[QualityI
                         of.writelines(contents)
 
 
-def create_tables_from_experiment(input_data: str):
+def create_tables_from_data(input_data: str, output_filename: str = 'table'):
     pd.set_option('display.float_format', '{:.2e}'.format)
     df = pd.DataFrame()
 
@@ -139,14 +142,15 @@ def create_tables_from_experiment(input_data: str):
 
                     for index, value in enumerate(contents):
                         new_data = pd.DataFrame({
-                            'problem': problem,
-                            'run': index,
+                            'Problem': problem,
+                            'ExecutionId': index,
                             filename: [float(value)]
                         })
                         df = df.append(new_data)
 
     # Get rid of NaN values by grouping rows by columns
     df = df.groupby(['problem', 'run']).mean()
+    df.to_csv(os.path.join(input_data, output_filename + '.csv'), sep='\t', encoding='utf-8')
 
     return df
 
@@ -156,14 +160,15 @@ def compute_statistical_analysis(df: pd.DataFrame):
 
     * G. Luque, E. Alba, Parallel Genetic Algorithms, Springer-Verlag, ISBN 978-3-642-22084-5, 2011
 
+    ..note: We assume non-normal variables (median comparison, non-parametric tests).
+
     :param df: Experiment data frame.
     """
     if len(df.columns) < 2:
-        raise Exception('Data sets number must be equal or greater than two')
+        raise Exception('At least two algorithms are necessary to compare')
 
     result = pd.DataFrame()
 
-    # we assume non-normal variables (median comparison, non-parametric tests)
     if len(df.columns) == 2:
         LOGGER.info('Running non-parametric test: Wilcoxon signed-rank test')
         for _, subset in df.groupby(level=0):
@@ -190,8 +195,8 @@ def compute_statistical_analysis(df: pd.DataFrame):
     return result
 
 
-def convert_to_latex(df: pd.DataFrame, caption: str, label: str = 'tab:exp', alignment: str = 'c'):
-    """ Convert a pandas DataFrame to a LaTeX tabular. Prints labels in bold, does not use math mode.
+def convert_table_to_latex(df: pd.DataFrame, caption: str, label: str = 'tab:exp', alignment: str = 'c'):
+    """ Convert a pandas DataFrame to a LaTeX tabular. Prints labels in bold and does use math mode.
     """
     num_columns, num_rows = df.shape[1], df.shape[0]
     output = io.StringIO()
