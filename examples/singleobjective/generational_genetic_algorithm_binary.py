@@ -1,6 +1,7 @@
-from jmetal.algorithm import GeneticAlgorithm
+from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.operator import SPX, BitFlip, BinaryTournamentSelection
 from jmetal.problem import OneMax
+from jmetal.util.termination_criteria import StoppingByEvaluations
 
 if __name__ == '__main__':
     problem = OneMax(number_of_bits=256)
@@ -10,13 +11,13 @@ if __name__ == '__main__':
         population_size=100,
         mating_pool_size=100,
         offspring_size=100,
-        max_evaluations=150000,
         mutation=BitFlip(1.0 / problem.number_of_bits),
         crossover=SPX(0.9),
-        selection=BinaryTournamentSelection()
+        selection=BinaryTournamentSelection(),
+        termination_criteria=StoppingByEvaluations(max=25000)
     )
 
-    algorithm.execute()
+    algorithm.run()
     result = algorithm.get_result()
 
     print('Algorithm: {}'.format(algorithm.get_name()))

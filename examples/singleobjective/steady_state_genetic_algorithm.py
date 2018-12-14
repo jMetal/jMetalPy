@@ -1,4 +1,6 @@
-from jmetal.algorithm import GeneticAlgorithm
+from jmetal.util.termination_criteria import StoppingByEvaluations
+
+from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.operator import SPX, BitFlip, BinaryTournamentSelection
 from jmetal.problem.singleobjective.unconstrained import SubsetSum
 
@@ -27,13 +29,13 @@ if __name__ == '__main__':
         population_size=100,
         mating_pool_size=2,
         offspring_size=1,
-        max_evaluations=100000,
         mutation=BitFlip(probability=0.1),
         crossover=SPX(probability=0.8),
-        selection=BinaryTournamentSelection()
+        selection=BinaryTournamentSelection(),
+        termination_criteria=StoppingByEvaluations(max=25000)
     )
 
-    algorithm.execute()
+    algorithm.run()
     subset = algorithm.get_result()
 
     print('Algorithm: {}'.format(algorithm.get_name()))

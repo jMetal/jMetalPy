@@ -1,7 +1,6 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.component import ProgressBarObserver, RankingAndCrowdingDistanceComparator
+from jmetal.component import RankingAndCrowdingDistanceComparator
 from jmetal.component.comparator import GDominanceComparator
-from jmetal.component.observer import VisualizerObserver
 from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
 from jmetal.problem import ZDT2
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_solutions
@@ -35,8 +34,6 @@ if __name__ == '__main__':
         # termination_criteria=StoppingByTime(max_seconds=20),
         # termination_criteria=StoppingByQualityIndicator(quality_indicator=HyperVolume([1.0, 1.0]), expected_value=0.5, degree=0.95)
     )
-
-    algorithm.observable.register(observer=VisualizerObserver())
 
     algorithm.run()
     front = algorithm.get_result()

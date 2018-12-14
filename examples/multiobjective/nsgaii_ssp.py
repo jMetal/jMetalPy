@@ -2,7 +2,6 @@ from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.component import ProgressBarObserver, RankingAndCrowdingDistanceComparator
 from jmetal.operator import BinaryTournamentSelection, BitFlip, SPX
 from jmetal.problem.multiobjective.unconstrained import SubsetSum
-from jmetal.util.graphic import FrontPlot
 from jmetal.util.termination_criteria import StoppingByEvaluations
 
 if __name__ == '__main__':
@@ -41,11 +40,6 @@ if __name__ == '__main__':
 
     algorithm.run()
     front = algorithm.get_result()
-
-    # Plot frontier to file
-    pareto_front = FrontPlot(plot_title='NSGAII-SSP', axis_labels=problem.obj_labels)
-    pareto_front.plot(front)
-    pareto_front.to_html(filename='NSGAII-SSP')
 
     print('Algorithm (binary problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())

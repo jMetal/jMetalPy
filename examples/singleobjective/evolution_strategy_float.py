@@ -1,6 +1,7 @@
-from jmetal.algorithm import EvolutionStrategy
+from jmetal.algorithm.singleobjective.evolution_strategy import EvolutionStrategy
 from jmetal.operator import Polynomial
 from jmetal.problem import Sphere
+from jmetal.util.termination_criteria import StoppingByEvaluations
 
 if __name__ == '__main__':
     problem = Sphere(number_of_variables=10)
@@ -9,11 +10,11 @@ if __name__ == '__main__':
         problem=problem,
         mu=10,
         lambda_=10,
-        max_evaluations=50000,
-        mutation=Polynomial(probability=1.0 / problem.number_of_variables)
+        mutation=Polynomial(probability=1.0 / problem.number_of_variables),
+        termination_criteria=StoppingByEvaluations(max=25000)
     )
 
-    algorithm.execute()
+    algorithm.run()
     result = algorithm.get_result()
 
     print('Algorithm: {}'.format(algorithm.get_name()))
