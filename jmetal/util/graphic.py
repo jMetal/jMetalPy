@@ -57,10 +57,10 @@ class StreamingPlot(Plot):
 
         if reference_front:
             reference_objectives = self.get_objectives(reference_front).values.tolist()
-            self.figure = hv.Scatter(reference_objectives, label='Reference front').opts(framewise=True) * hv.DynamicMap(
+            self.figure = hv.Scatter(reference_objectives, label='Reference front') * hv.DynamicMap(
                 hv.Scatter if dimension == 2 else hv.Scatter3D, streams=[self.pipe])
         else:
-            self.figure = hv.DynamicMap(hv.Scatter if dimension == 2 else hv.Scatter3D, streams=[self.pipe]).opts(framewise=True)
+            self.figure = hv.DynamicMap(hv.Scatter if dimension == 2 else hv.Scatter3D, streams=[self.pipe])
 
         display(self.figure)
         self.pipe.send(objectives.values.tolist())
