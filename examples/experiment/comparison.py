@@ -1,14 +1,13 @@
 import pandas as pd
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.algorithm.multiobjective.smpso import SMPSO
-from jmetal.component import RankingAndCrowdingDistanceComparator, HyperVolume, CrowdingDistanceArchive
+from jmetal.component import RankingAndCrowdingDistanceComparator, HyperVolume
 from jmetal.component.critical_distance import CDplot
 from jmetal.component.quality_indicator import GenerationalDistance
 from jmetal.operator import SBX, BinaryTournamentSelection, Polynomial, NullMutation
 from jmetal.problem import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
 from jmetal.util.laboratory import Experiment, Job, convert_table_to_latex, compute_statistical_analysis, \
-    compute_quality_indicator, create_tables_from_data
+    compute_quality_indicator, create_tables_from_experiment
 from jmetal.util.termination_criteria import StoppingByEvaluations
 
 
@@ -99,29 +98,6 @@ if __name__ == '__main__':
     experiment = Experiment(base_dir=base_directory, jobs=jobs)
     experiment.run()
     
-    compute_quality_indicator(input_data=base_directory,
+    compute_quality_indicator(input_dir=base_directory,
                               reference_fronts=reference_fronts,
                               quality_indicators=[HyperVolume([1.0, 1.0]), GenerationalDistance(None)])
-
-    nsgaii_a = create_tables_from_data(input_data='data/NSGAIIa/', output_filename='results')
-
-    # Generate a table with Median and Interquartile range
-    median = nsgaii_a.groupby(level=0).median()
-    iqr = nsgaii_a.groupby(level=0).quantile(0.75) - nsgaii_a.groupby(level=0).quantile(0.25)
-    table = median.applymap('{:.2e}'.format) + '_{' + iqr.applymap('{:.2e}'.format) + '}'
-
-    # Add statistical analysis
-    significance = compute_statistical_analysis(nsgaii_a)
-    table = pd.concat([table, significance], axis=1)
-
-    # Convert to LaTeX
-    print(convert_table_to_latex(table, caption='Experiment'))
-
-    # Plot CD
-    results_hv = []
-    labels = ['NSGAIIa', 'NSGAIIb', 'NSGAIIc', 'NSGAIId']
-    for algorithm in labels:
-        values = create_tables_from_data(input_data='data/' + algorithm).groupby(level=0).median()['QI.GD'].tolist()
-        results_hv.append(values)
-
-    CDplot(results_hv, alg_names=labels)

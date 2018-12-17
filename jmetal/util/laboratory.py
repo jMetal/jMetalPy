@@ -63,8 +63,8 @@ class Experiment:
                 executor.submit(job.execute(output_path))
 
 
-def compute_quality_indicator(input_data: str, quality_indicators: List[QualityIndicator],
-                              reference_fronts: str = '') -> None:
+def compute_quality_indicator(input_dir: str, quality_indicators: List[QualityIndicator],
+                              reference_fronts: str = ''):
     """ Compute a list of quality indicators. The input data directory *must* met the following structure (this is generated
     automatically by the Experiment class):
 
@@ -94,12 +94,16 @@ def compute_quality_indicator(input_data: str, quality_indicators: List[QualityI
 
     For each indicator a new file `QI.<name_of_the_indicator>` is created inside each problem folder, containing the values computed for each front.
 
-    :param input_data: Directory where all the input data is found (function values and variables).
+    :param input_dir: Directory where all the input data is found (function values and variables).
     :param reference_fronts: Directory where reference fronts are found.
     :param quality_indicators: List of quality indicators to compute.
     :return: None.
     """
-    for dirname, _, filenames in os.walk(input_data):
+
+    with open(os.path.join(input_dir, 'QualityIndicatorSummary.csv'), 'w+') as of:
+        of.write('Algorithm,Problem,ExecutionId,IndicatorName,IndicatorValue')
+
+    for dirname, _, filenames in os.walk(input_dir):
         for filename in filenames:
             algorithm, problem = dirname.split('/')[-2:]
 
@@ -116,46 +120,52 @@ def compute_quality_indicator(input_data: str, quality_indicators: List[QualityI
                         else:
                             LOGGER.warning('Reference front not found at', reference_front_file)
 
+                    run_tag = [int(s) for s in filename.split('.') if s.isdigit()].pop()
+                    result = indicator.compute(solutions)
+
                     # Save quality indicator value to file
                     # Note: We need to ensure that the result is inserted at the correct row inside the file
-                    with open('{}/QI.{}'.format(dirname, indicator.get_name()), 'a+') as of:
-                        index = [int(s) for s in filename.split('.') if s.isdigit()].pop()
+                    with open(os.path.join(input_dir, 'QI.Summary.csv'), 'a+') as of:
+                        of.write(','.join([algorithm, problem, run_tag, indicator.get_name(), result]))
 
+                    with open(os.path.join(dirname, 'QI.' + indicator.get_name()), 'a+') as of:
                         contents = of.readlines()
-                        contents.insert(index, str(indicator.compute(solutions)) + '\n')
+                        contents.insert(run_tag, str(result) + '\n')
 
                         of.seek(0)  # readlines consumes the iterator, so we need to start over
                         of.writelines(contents)
 
 
-def create_tables_from_data(input_data: str, output_filename: str = 'table'):
-    pd.set_option('display.float_format', '{:.2e}'.format)
-    df = pd.DataFrame()
+def create_tables_from_experiment(base_dir: str, filename: str):
+    # pd.set_option('display.float_format', '{:.2e}'.format)
+    df = pd.read_csv(os.path.join(base_dir, filename), skipinitialspace=True)
 
-    for dirname, _, filenames in os.walk(input_data):
-        for filename in filenames:
-            algorithm, problem = dirname.split('/')[-2:]
+    if {'Problem', 'ExecutionId', 'IndicatorName', 'IndicatorValue'} == set(df.columns.tolist()):
+        raise Exception('Wrong column names')
 
-            if 'QI' in filename:
-                with open(os.path.join(dirname, filename), 'r+') as of:
-                    contents = of.readlines()
+    median_iqr = pd.DataFrame()
 
-                    for index, value in enumerate(contents):
-                        new_data = pd.DataFrame({
-                            'Problem': problem,
-                            'ExecutionId': index,
-                            filename: [float(value)]
-                        })
-                        df = df.append(new_data)
+    for algorithm_name, subset in df.groupby('Algorithm'):
+        subset = subset.drop('Algorithm', axis=1)
+        subset = subset.set_index(['Problem', 'IndicatorName', 'ExecutionId'])
+        subset.to_csv(os.path.join(base_dir, 'QualityIndicator' + algorithm_name + '.csv'), sep='\t', encoding='utf-8')
 
-    # Get rid of NaN values by grouping rows by columns
-    df = df.groupby(['problem', 'run']).mean()
-    df.to_csv(os.path.join(input_data, output_filename + '.csv'), sep='\t', encoding='utf-8')
+        # Compute Median and Interquartile range
+        median = subset.groupby(level=[0, 1]).median()
+        iqr = subset.groupby(level=[0, 1]).quantile(0.75) - subset.groupby(level=[0, 1]).quantile(0.25)
+        table = median.applymap('{:.2e}'.format) + '_{' + iqr.applymap('{:.2e}'.format) + '}'
+        table = table.rename(columns={'IndicatorValue': algorithm_name})
 
-    return df
+        median_iqr = pd.concat([median_iqr, table], axis=1)
+
+    median_iqr.to_csv(os.path.join(base_dir, 'MedianIQR.csv'), sep='\t', encoding='utf-8')
+
+    for iqr_name, subset in median_iqr.groupby('IndicatorName'):
+        subset.index = subset.index.droplevel(1)
+        subset.to_csv(os.path.join(base_dir, 'MedianIQR{}.csv'.format(iqr_name)), sep='\t', encoding='utf-8')
 
 
-def compute_statistical_analysis(df: pd.DataFrame):
+def __compute_statistical_analysis(df: pd.DataFrame):
     """ The application scheme listed here is as described in
 
     * G. Luque, E. Alba, Parallel Genetic Algorithms, Springer-Verlag, ISBN 978-3-642-22084-5, 2011
