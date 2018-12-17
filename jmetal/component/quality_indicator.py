@@ -1,9 +1,8 @@
-import math
-import random
 from abc import ABC, abstractmethod
 from typing import TypeVar, List
 
 import numpy as np
+from scipy.spatial.distance import cdist
 
 S = TypeVar('S')
 
@@ -45,28 +44,34 @@ class GenerationalDistance(QualityIndicator):
         if not self.reference_front:
             raise Exception('Reference front is none')
 
-        value = sum([math.pow(self.distance_to_neatest(s, self.reference_front), self.p) for s in solutions])
-        return math.pow(value, 1.0 / self.p) / len(solutions)
+        reference_front = [s.objectives for s in self.reference_front]
+        solutions = [s.objectives for s in solutions]
 
-    def distance_to_neatest(self, solution: S, reference_front: List[S]):
-        reference_front = np.asarray([s.objectives for s in reference_front])
-        solution = np.asarray(solution.objectives)
-        distance = np.sum((reference_front - solution) ** 2, axis=1)
+        distances = cdist(np.asarray(solutions), np.asarray(reference_front))
 
-        return min(distance)
+        return np.mean(np.min(distances, axis=1))
 
     def get_name(self) -> str:
         return 'GD'
 
 
-class InvertedGenerationalDistance(GenerationalDistance):
+class InvertedGenerationalDistance(QualityIndicator):
+
+    def __init__(self, reference_front: List[S] = None, p: float = 2.0):
+        super(InvertedGenerationalDistance, self).__init__(is_minimization=True)
+        self.reference_front = reference_front
+        self.p = p
 
     def compute(self, solutions: List[S]):
         if not self.reference_front:
             raise Exception('Reference front is none')
 
-        value = sum([math.pow(self.distance_to_neatest(rs, solutions), self.p) for rs in self.reference_front])
-        return math.pow(value, 1.0 / self.p) / len(self.reference_front)
+        reference_front = [s.objectives for s in self.reference_front]
+        solutions = [s.objectives for s in solutions]
+
+        distances = cdist(np.asarray(reference_front), np.asarray(solutions))
+
+        return np.mean(np.min(distances, axis=1))
 
     def get_name(self) -> str:
         return 'IGD'
