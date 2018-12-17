@@ -91,7 +91,7 @@ def CDplot(results: np.array, alpha: float = 0.05, alg_names: list = None):
             [r'$m_{' + str(cn + 1) + '}$' for cn in range(num_alg)])
     else:
         alg_names = np.array(alg_names)
-    print(results, type(results))
+
     # Get the critical difference
     cd = NemenyiCD(alpha, num_alg, num_dataset)
 
