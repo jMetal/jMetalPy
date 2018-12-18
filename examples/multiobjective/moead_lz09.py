@@ -5,7 +5,7 @@ from jmetal.problem import LZ09_F2
 from jmetal.util.aggregative_function import Chebyshev
 from jmetal.util.neighborhood import WeightVectorNeighborhood
 from jmetal.util.solution_list import read_solutions
-from jmetal.util.termination_criteria import StoppingByEvaluations
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
     problem = LZ09_F2()

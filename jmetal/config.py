@@ -1,7 +1,7 @@
 from jmetal.operator import Polynomial, BitFlip
 
 from jmetal.component import SequentialEvaluator, RandomGenerator, DefaultObservable
-from jmetal.util.termination_criteria import StoppingByEvaluations
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
 
 class _Store(object):

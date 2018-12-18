@@ -4,7 +4,7 @@ from jmetal.operator import Polynomial
 from jmetal.problem import ZDT1
 from jmetal.util.graphic import InteractivePlot
 from jmetal.util.solution_list import read_solutions
-from jmetal.util.termination_criteria import StoppingByEvaluations
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
 
 if __name__ == '__main__':

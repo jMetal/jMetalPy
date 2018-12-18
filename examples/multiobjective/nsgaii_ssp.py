@@ -2,7 +2,7 @@ from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.component import ProgressBarObserver, RankingAndCrowdingDistanceComparator
 from jmetal.operator import BinaryTournamentSelection, BitFlip, SPX
 from jmetal.problem.multiobjective.unconstrained import SubsetSum
-from jmetal.util.termination_criteria import StoppingByEvaluations
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
     C = 300500

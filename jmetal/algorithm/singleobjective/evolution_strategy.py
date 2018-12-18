@@ -6,7 +6,7 @@ from jmetal.component.generator import Generator
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
-from jmetal.util.termination_criteria import TerminationCriteria
+from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
 R = TypeVar('R')
@@ -20,14 +20,14 @@ R = TypeVar('R')
 """
 
 
-class EvolutionStrategy(EvolutionaryAlgorithm):
+class EvolutionStrategy(EvolutionaryAlgorithm[S, R]):
 
     def __init__(self,
                  problem: Problem,
                  mu: int,
                  lambda_: int,
                  mutation: Mutation,
-                 termination_criteria: TerminationCriteria,
+                 termination_criterion: TerminationCriterion,
                  elitist: bool = True,
                  pop_evaluator: Evaluator = None,
                  pop_generator: Generator = None):
@@ -36,12 +36,20 @@ class EvolutionStrategy(EvolutionaryAlgorithm):
             population_size=mu,
             pop_generator=pop_generator,
             pop_evaluator=pop_evaluator,
-            termination_criteria=termination_criteria
-        )
+            termination_criterion=termination_criterion)
         self.mu = mu
         self.lambda_ = lambda_
         self.elitist = elitist
         self.mutation = mutation
+
+    def create_initial_solutions(self) -> List[S]:
+        return [self.pop_generator.new(self.problem) for _ in range(self.mu)]
+
+    def evaluate(self, solution_list: List[S]) -> List[S]:
+        return self.pop_evaluator.evaluate(solution_list)
+
+    def stopping_condition_is_met(self) -> bool:
+        return self.termination_criteria.is_met
 
     def selection(self, population: List[S]) -> List[S]:
         return population

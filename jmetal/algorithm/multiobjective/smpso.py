@@ -14,7 +14,7 @@ from jmetal.core.observable import Observable
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
-from jmetal.util.termination_criteria import TerminationCriteria
+from jmetal.util.termination_criterion import TerminationCriteria
 
 R = TypeVar('R')
 

@@ -5,7 +5,7 @@ from jmetal.component.generator import Generator
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
-from jmetal.util.termination_criteria import TerminationCriteria
+from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
 R = TypeVar('R')
@@ -29,7 +29,7 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
                  mutation: Mutation,
                  crossover: Crossover,
                  selection: Selection,
-                 termination_criteria: TerminationCriteria,
+                 termination_criterion: TerminationCriterion,
                  pop_generator: Generator = None,
                  pop_evaluator: Evaluator = None):
         """
@@ -37,16 +37,24 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
         """
         super(GeneticAlgorithm, self).__init__(
             problem=problem,
-            population_size=population_size,
-            pop_generator=pop_generator,
-            pop_evaluator=pop_evaluator,
-            termination_criteria=termination_criteria
-        )
+            population_size=population_size)
         self.offspring_size = offspring_size
         self.mating_pool_size = mating_pool_size
         self.mutation_operator = mutation
         self.crossover_operator = crossover
         self.selection_operator = selection
+        self.pop_generator = pop_generator
+        self.pop_evaluator = pop_evaluator
+        self.termination_criterion = termination_criterion
+
+    def create_initial_solutions(self) -> List[S]:
+        return [self.pop_generator.new(self.problem) for _ in range(self.population_size)]
+
+    def evaluate(self, solution_list:List[S]):
+        return self.pop_evaluator.evaluate(solution_list)
+
+    def stopping_condition_is_met(self) -> bool:
+        return self.termination_criteria.is_met
 
     def selection(self, population: List[S]):
         mating_population = []
@@ -99,4 +107,4 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
         return self.population[0]
 
     def get_name(self) -> str:
-        return 'GA'
+        return 'Genetic algorithm'

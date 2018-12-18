@@ -1,9 +1,12 @@
 from typing import TypeVar, List
 
 from jmetal.component.archive import NonDominatedSolutionListArchive
+from jmetal.core.algorithm import Algorithm
 from jmetal.core.problem import Problem
+from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
+R = TypeVar('R')
 
 """
 .. module:: RamdomSearch
@@ -14,20 +17,34 @@ S = TypeVar('S')
 """
 
 
-class RandomSearch:
+class RandomSearch(Algorithm[S, R]):
 
     def __init__(self,
                  problem: Problem[S],
-                 max_evaluations: int = 25000):
+                 termination_criterion: TerminationCriterion):
         self.problem = problem
-        self.max_evaluations = max_evaluations
+        self.termination_criterion = termination_criterion
         self.archive = NonDominatedSolutionListArchive()
 
-    def run(self) -> None:
-        for _ in range(self.max_evaluations):
-            new_solution = self.problem.create_solution()
-            self.problem.evaluate(new_solution)
-            self.archive.add(new_solution)
+    def create_initial_solutions(self) -> List[S]:
+        return [self.problem.create_solution()]
+
+    def evaluate(self, solution_list: List[S]) -> List[S]:
+        return [self.problem.evaluate(solution_list[0])]
+
+    def init_progress(self) -> None:
+        self.evaluations = 1
+
+    def stopping_condition_is_met(self) -> bool:
+        return self.termination_criterion.is_met
+
+    def step(self) -> None:
+        new_solution = self.problem.create_solution()
+        self.problem.evaluate(new_solution)
+        self.archive.add(new_solution)
+
+    def update_progress(self) -> None:
+        self.evaluations += 1
 
     def get_result(self) -> List[S]:
         return self.archive.solution_list

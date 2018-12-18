@@ -4,7 +4,7 @@ from jmetal.component.comparator import GDominanceComparator
 from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
 from jmetal.problem import ZDT2
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_solutions
-from jmetal.util.termination_criteria import StoppingByEvaluations
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
 """
 .. module:: GNSGA-II

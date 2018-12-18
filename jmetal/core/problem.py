@@ -49,6 +49,17 @@ class Problem(Generic[S], ABC):
         pass
 
 
+class DynamicProblem(Problem[S], ABC):
+
+    @abstractmethod
+    def the_problem_has_changed(self) -> bool:
+        pass
+
+    @abstractmethod
+    def reset(self) -> None:
+        pass
+
+
 class BinaryProblem(Problem[BinarySolution], ABC):
     """ Class representing binary problems. """
 

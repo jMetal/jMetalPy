@@ -4,7 +4,7 @@ from jmetal.component.quality_indicator import QualityIndicator
 from jmetal.util.observable import Observer
 
 """
-.. module:: termination_criteria
+.. module:: termination_criterion
    :platform: Unix, Windows
    :synopsis: Implementation of stopping conditions.
 
@@ -12,7 +12,7 @@ from jmetal.util.observable import Observer
 """
 
 
-class TerminationCriteria(Observer, ABC):
+class TerminationCriterion(Observer, ABC):
 
     @abstractmethod
     def update(self, *args, **kwargs):
@@ -24,7 +24,7 @@ class TerminationCriteria(Observer, ABC):
         pass
 
 
-class StoppingByEvaluations(TerminationCriteria):
+class StoppingByEvaluations(TerminationCriterion):
 
     def __init__(self, max: int):
         super(StoppingByEvaluations, self).__init__()
@@ -39,7 +39,7 @@ class StoppingByEvaluations(TerminationCriteria):
         return self.evaluations >= self.max_evaluations
 
 
-class StoppingByTime(TerminationCriteria):
+class StoppingByTime(TerminationCriterion):
 
     def __init__(self, max_seconds: int):
         super(StoppingByTime, self).__init__()
@@ -54,7 +54,7 @@ class StoppingByTime(TerminationCriteria):
         return self.seconds >= self.max_seconds
 
 
-class StoppingByQualityIndicator(TerminationCriteria):
+class StoppingByQualityIndicator(TerminationCriterion):
 
     def __init__(self, quality_indicator: QualityIndicator, expected_value: float, degree: float):
         super(StoppingByQualityIndicator, self).__init__()

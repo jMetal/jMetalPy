@@ -4,7 +4,7 @@ from jmetal.operator import Polynomial
 from jmetal.problem import DTLZ1
 from jmetal.util.graphic import InteractivePlot
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
-from jmetal.util.termination_criteria import StoppingByEvaluations
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
     problem = DTLZ1(number_of_objectives=5)

@@ -8,7 +8,7 @@ from jmetal.operator import SBX, BinaryTournamentSelection, Polynomial, NullMuta
 from jmetal.problem import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
 from jmetal.util.laboratory import Experiment, Job, convert_table_to_latex, compute_statistical_analysis, \
     compute_quality_indicator, create_tables_from_experiment
-from jmetal.util.termination_criteria import StoppingByEvaluations
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
 
 def configure_experiment(problems: list, n_run: int):

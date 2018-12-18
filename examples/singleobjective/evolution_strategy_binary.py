@@ -1,7 +1,7 @@
 from jmetal.algorithm.singleobjective.evolution_strategy import EvolutionStrategy
 from jmetal.operator import BitFlip
 from jmetal.problem import OneMax
-from jmetal.util.termination_criteria import StoppingByEvaluations
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
     problem = OneMax(number_of_bits=512)

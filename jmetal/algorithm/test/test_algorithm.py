@@ -5,7 +5,7 @@ from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.component import RankingAndCrowdingDistanceComparator, CrowdingDistanceArchive
 from jmetal.operator import Polynomial, SBX, BinaryTournamentSelection
 from jmetal.problem import ZDT1
-from jmetal.util.termination_criteria import StoppingByEvaluations
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
 
 class RunningAlgorithmsTestCases(unittest.TestCase):
