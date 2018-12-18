@@ -5,8 +5,8 @@ from distributed import as_completed, Client
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.component import DominanceComparator
-from jmetal.component.evaluator import Evaluator
-from jmetal.component.generator import Generator
+from jmetal.component.evaluator import Evaluator, SequentialEvaluator
+from jmetal.component.generator import Generator, RandomGenerator
 from jmetal.config import store
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem, DynamicProblem
@@ -30,14 +30,14 @@ class NSGAII(GeneticAlgorithm[S, R]):
     def __init__(self,
                  problem: Problem,
                  population_size: int,
-                 offspring_size: int,
+                 offspring_population_size: int,
                  mating_pool_size: int,
                  mutation: Mutation,
                  crossover: Crossover,
                  selection: Selection,
                  termination_criterion: TerminationCriterion,
-                 pop_generator: Generator = None,
-                 pop_evaluator: Evaluator = None,
+                 pop_generator: Generator = RandomGenerator(),
+                 pop_evaluator: Evaluator = SequentialEvaluator(),
                  dominance_comparator: DominanceComparator = DominanceComparator()):
         """  NSGA-II implementation as described in
 
@@ -60,14 +60,14 @@ class NSGAII(GeneticAlgorithm[S, R]):
         super(NSGAII, self).__init__(
             problem=problem,
             population_size=population_size,
-            offspring_size=offspring_size,
+            offspring_population_size=offspring_population_size,
             mating_pool_size=mating_pool_size,
             mutation=mutation,
             crossover=crossover,
             selection=selection,
+            termination_criterion=termination_criterion,
             pop_evaluator=pop_evaluator,
-            pop_generator=pop_generator,
-            termination_criterion=termination_criterion
+            pop_generator=pop_generator
         )
         self.dominance_comparator = dominance_comparator
 
@@ -83,7 +83,7 @@ class NSGAII(GeneticAlgorithm[S, R]):
         return RankingAndCrowdingDistanceSelection(self.population_size, dominance_comparator=self.dominance_comparator).execute(join_population)
 
     def get_result(self) -> R:
-        return self.population
+        return self.solutions
 
     def get_name(self) -> str:
         return 'NSGAII'

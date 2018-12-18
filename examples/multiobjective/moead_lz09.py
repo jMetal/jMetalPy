@@ -29,7 +29,6 @@ if __name__ == '__main__':
     progress_bar = ProgressBarObserver(max=175000)
     algorithm.observable.register(observer=progress_bar)
     algorithm.observable.register(observer=VisualizerObserver())
-    algorithm.observable.register(observer=VisualizerObserver())
 
     algorithm.run()
     front = algorithm.get_result()

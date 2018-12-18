@@ -19,12 +19,12 @@ R = TypeVar('R')
 """
 
 
-class GeneticAlgorithm(EvolutionaryAlgorithm):
+class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
 
     def __init__(self,
-                 problem: Problem,
+                 problem: Problem[S],
                  population_size: int,
-                 offspring_size: int,
+                 offspring_population_size: int,
                  mating_pool_size: int,
                  mutation: Mutation,
                  crossover: Crossover,
@@ -37,8 +37,8 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
         """
         super(GeneticAlgorithm, self).__init__(
             problem=problem,
-            population_size=population_size)
-        self.offspring_size = offspring_size
+            population_size=population_size,
+            offspring_population_size=offspring_population_size)
         self.mating_pool_size = mating_pool_size
         self.mutation_operator = mutation
         self.crossover_operator = crossover
@@ -47,14 +47,16 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
         self.pop_evaluator = pop_evaluator
         self.termination_criterion = termination_criterion
 
+        self.observable.register(termination_criterion)
+
     def create_initial_solutions(self) -> List[S]:
         return [self.pop_generator.new(self.problem) for _ in range(self.population_size)]
 
     def evaluate(self, solution_list:List[S]):
-        return self.pop_evaluator.evaluate(solution_list)
+        return self.pop_evaluator.evaluate(solution_list, self.problem)
 
     def stopping_condition_is_met(self) -> bool:
-        return self.termination_criteria.is_met
+        return self.termination_criterion.is_met
 
     def selection(self, population: List[S]):
         mating_population = []
@@ -72,7 +74,7 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
             raise Exception('Wrong number of parents')
 
         offspring_population = []
-        for i in range(0, self.offspring_size, number_of_parents_to_combine):
+        for i in range(0, self.offspring_population_size, number_of_parents_to_combine):
             parents = []
             for j in range(number_of_parents_to_combine):
                 parents.append(population[i + j])
@@ -97,11 +99,6 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
         offspring_population.pop()
 
         return offspring_population
-
-    def update_progress(self):
-        observable_data = self.get_observable_data()
-        observable_data['SOLUTIONS'] = self.population
-        self.observable.notify_all(**observable_data)
 
     def get_result(self) -> R:
         return self.population[0]

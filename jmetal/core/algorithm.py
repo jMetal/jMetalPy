@@ -29,6 +29,7 @@ class Algorithm(Generic[S, R], threading.Thread, ABC):
         """
         threading.Thread.__init__(self)
 
+        self.solutions = List[S]
         self.evaluations = 0
         self.start_computing_time = 0
         self.total_computing_time = 0
@@ -56,7 +57,7 @@ class Algorithm(Generic[S, R], threading.Thread, ABC):
         pass
 
     @abstractmethod
-    def step(self) -> None:
+    def step(self, solutions:[]) -> None:
         """ Performs one iteration/step of the algorithm's loop. """
         pass
 
@@ -69,15 +70,15 @@ class Algorithm(Generic[S, R], threading.Thread, ABC):
         """ Execute the algorithm. """
         self.start_computing_time = time.time()
 
-        solution_list = self.create_initial_solutions()
-        solution_list = self.evaluate(solution_list)
+        self.solutions = self.create_initial_solutions()
+        self.solutions = self.evaluate(self.solutions)
 
         LOGGER.debug('Initializing progress')
         self.init_progress()
 
         LOGGER.debug('Running main loop until termination criteria is met')
-        while self.stopping_condition_is_met():
-            self.step(solution_list)
+        while not self.stopping_condition_is_met():
+            self.solutions = self.step(self.solutions)
             self.update_progress()
 
         self.total_computing_time = time.time() - self.start_computing_time
@@ -108,9 +109,7 @@ class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
                  problem: Problem[S],
                  population_size: int,
                  offspring_population_size: int):
-        super(EvolutionaryAlgorithm, self).__init__(
-            problem=problem
-        )
+        super(EvolutionaryAlgorithm, self).__init__()
         self.problem = problem
         self.population_size = population_size
         self.offspring_population_size = offspring_population_size
@@ -133,16 +132,20 @@ class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
     def init_progress(self) -> None:
         observable_data = self.get_observable_data()
         self.observable.notify_all(**observable_data)
+        self.evaluations = self.population_size
 
-    def step(self) -> None:
-        mating_population = self.selection(self.solution_list)
+    def step(self, population:[]) -> List[S]:
+        mating_population = self.selection(population)
         offspring_population = self.reproduction(mating_population)
         offspring_population = self.evaluate(offspring_population)
-        self.solution_list = self.replacement(self.solution_list, offspring_population)
+
+        return self.replacement(population, offspring_population)
 
     def update_progress(self) -> None:
+        self.evaluations += self.offspring_population_size
+
         observable_data = self.get_observable_data()
-        observable_data['SOLUTIONS'] = self.solution_list
+        observable_data['SOLUTIONS'] = self.solutions
         self.observable.notify_all(**observable_data)
 
 
