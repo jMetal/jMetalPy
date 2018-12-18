@@ -4,24 +4,26 @@ from jmetal.component import RankingAndCrowdingDistanceComparator, ProgressBarOb
 from jmetal.component.evaluator import SparkEvaluator
 from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
 from jmetal.util.solution_list import read_solutions, print_function_values_to_file
-from jmetal.util.termination_criteria import StoppingByEvaluations
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
     problem = ZDT1Modified()
-    problem.reference_front = read_solutions(file_path='resources/reference_front/{}.pf'.format(problem.get_name()))
+    problem.reference_front = read_solutions(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
+
+    max_evaluations = 100
     algorithm = NSGAII(
-        #pop_evaluator=SparkEvaluator(),
+        pop_evaluator=SparkEvaluator(),
         problem=problem,
         population_size=10,
-        offspring_size=10,
+        offspring_population_size=10,
         mating_pool_size=10,
         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
         crossover=SBX(probability=1.0, distribution_index=20),
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
-        termination_criteria=StoppingByEvaluations(max=100)
+        termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
-    progress_bar = ProgressBarObserver(max=100)
+    progress_bar = ProgressBarObserver(max=max_evaluations)
     algorithm.observable.register(observer=progress_bar)
 
     algorithm.run()

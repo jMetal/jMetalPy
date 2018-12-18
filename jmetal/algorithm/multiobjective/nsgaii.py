@@ -2,6 +2,7 @@ import time
 from typing import TypeVar, List, Generic
 
 from distributed import as_completed, Client
+from jmetal.util.solution_list import print_function_values_to_file
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.component import DominanceComparator
@@ -93,19 +94,19 @@ class DynamicNSGAII(NSGAII[S, R]):
     def __init__(self,
                  problem: DynamicProblem,
                  population_size: int,
-                 offspring_size: int,
+                 offspring_population_size: int,
                  mating_pool_size: int,
                  mutation: Mutation,
                  crossover: Crossover,
                  selection: Selection,
                  termination_criterion: TerminationCriterion,
-                 pop_generator: Generator = None,
-                 pop_evaluator: Evaluator = None,
+                 pop_generator: Generator = RandomGenerator(),
+                 pop_evaluator: Evaluator = SequentialEvaluator(),
                  dominance_comparator: DominanceComparator = DominanceComparator()):
-        super(DynamicNSGAII, self).__init(
+        super(DynamicNSGAII, self).__init__(
             problem=problem,
             population_size=population_size,
-            offspring_size=offspring_size,
+            offspring_population_size=offspring_population_size,
             mating_pool_size=mating_pool_size,
             mutation=mutation,
             crossover=crossover,
@@ -114,22 +115,35 @@ class DynamicNSGAII(NSGAII[S, R]):
             pop_generator=pop_generator,
             termination_criterion=termination_criterion,
             dominance_comparator=dominance_comparator)
+        self.completed_iterations = 0
+
+    def restart(self) -> None:
+        pass
 
     def update_progress(self):
         if self.__get_dynamic_problem().the_problem_has_changed():
             self.restart()
-            self.pop_evaluator.evaluate(self.solution_list, self.__get_dynamic_problem())
+            self.pop_evaluator.evaluate(self.solutions, self.__get_dynamic_problem())
             self.__get_dynamic_problem().reset()
+
+        observable_data = self.get_observable_data()
+        self.observable.notify_all(**observable_data)
+
+        self.evaluations += self.offspring_population_size
 
     def stopping_condition_is_met(self):
         if self.termination_criterion.is_met:
             observable_data = self.get_observable_data()
-            observable_data['SOLUTIONS'] = self.population
+            observable_data['SOLUTIONS'] = self.solutions
             self.observable.notify_all(**observable_data)
 
             self.restart()
-            self.pop_evaluator.evaluate(self.solution_list, self.__get_dynamic_problem())
+            self.pop_evaluator.evaluate(self.solutions, self.__get_dynamic_problem())
             self.init_progress()
+
+            self.completed_iterations += 1
+            print("ITER: " + str(self.completed_iterations) + ". EVALS: " + str(self.evaluations))
+            print_function_values_to_file(self.solutions, 'FUN.' + str(self.completed_iterations))
 
     def __get_dynamic_problem(self) -> DynamicProblem:
         return self.problem
@@ -192,7 +206,6 @@ class DistributedNSGAII(Generic[S, R]):
         population = []
         # MAIN LOOP
         for future in task_pool:
-            print("TASK_POOL_SIZE: " + str(len(task_pool.futures)))
             self.evaluations += 1
             # The initial population is not full
             if len(population) < self.population_size:
