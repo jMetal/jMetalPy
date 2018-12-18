@@ -292,17 +292,21 @@ class SMPSORP(SMPSO):
         return best_global
 
     def init_progress(self) -> None:
+        self.evaluations = self.swarm_size
+
         for leader in self.leaders:
             leader.compute_density_estimator()
 
-        self.swarm = [self.problem.create_solution() for _ in range(self.swarm_size)]
-        self.swarm = self.evaluate(self.swarm)
+        #self.solutions = [self.problem.create_solution() for _ in range(self.swarm_size)]
+        #self.solutions = self.evaluate(self.swarm)
 
-        self.initialize_velocity(self.swarm)
-        self.initialize_particle_best(self.swarm)
-        self.initialize_global_best(self.swarm)
+        self.initialize_velocity(self.solutions)
+        self.initialize_particle_best(self.solutions)
+        self.initialize_global_best(self.solutions)
 
     def update_progress(self) -> None:
+        self.evaluations += self.swarm_size
+
         for leader in self.leaders:
             leader.compute_density_estimator()
 
