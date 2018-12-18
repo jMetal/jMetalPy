@@ -4,17 +4,18 @@ from math import sqrt
 from typing import TypeVar, List
 
 import numpy
+from jmetal.component import SequentialEvaluator
 
 from jmetal.component.archive import BoundedArchive
 from jmetal.component.comparator import DominanceComparator
 from jmetal.component.evaluator import Evaluator
-from jmetal.component.generator import Generator
+from jmetal.component.generator import Generator, RandomGenerator
 from jmetal.core.algorithm import ParticleSwarmOptimization
 from jmetal.core.observable import Observable
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
-from jmetal.util.termination_criterion import TerminationCriteria
+from jmetal.util.termination_criterion import TerminationCriterion
 
 R = TypeVar('R')
 
@@ -34,9 +35,9 @@ class SMPSO(ParticleSwarmOptimization):
                  swarm_size: int,
                  mutation: Mutation,
                  leaders: BoundedArchive,
-                 termination_criteria: TerminationCriteria,
-                 swarm_generator: Generator = None,
-                 swarm_evaluator: Evaluator = None):
+                 termination_criterion: TerminationCriterion,
+                 swarm_generator: Generator = RandomGenerator(),
+                 swarm_evaluator: Evaluator = SequentialEvaluator()):
         """ This class implements the SMPSO algorithm as described in
 
         * SMPSO: A new PSO-based metaheuristic for multi-objective optimization
@@ -51,15 +52,16 @@ class SMPSO(ParticleSwarmOptimization):
         :param mutation: Mutation operator (see :py:mod:`jmetal.operator.mutation`).
         :param leaders: Archive for leaders.
         """
-        super(SMPSO, self).__init__(
-            problem=problem,
-            swarm_size=swarm_size,
-            swarm_generator=swarm_generator,
-            swarm_evaluator=swarm_evaluator,
-            termination_criteria=termination_criteria
-        )
+        super(SMPSO, self).__init__(swarm_size=swarm_size)
+        self.problem = problem
+        self.swarm_generator = swarm_generator
+        self.swarm_evaluator = swarm_evaluator
+        self.termination_criterion = termination_criterion
+
         self.mutation = mutation
         self.leaders = leaders
+
+        self.observable.register(termination_criterion)
 
         self.c1_min = 1.5
         self.c1_max = 2.5
@@ -80,6 +82,15 @@ class SMPSO(ParticleSwarmOptimization):
         self.speed = numpy.zeros((self.swarm_size, self.problem.number_of_variables), dtype=float)
         self.delta_max, self.delta_min = numpy.empty(problem.number_of_variables), \
                                          numpy.empty(problem.number_of_variables)
+
+    def create_initial_solutions(self) -> List[FloatSolution]:
+        return [self.swarm_generator.new(self.problem) for _ in range(self.swarm_size)]
+
+    def evaluate(self, solution_list:List[FloatSolution]):
+        return self.swarm_evaluator.evaluate(solution_list, self.problem)
+
+    def stopping_condition_is_met(self) -> bool:
+        return self.termination_criterion.is_met
 
     def initialize_global_best(self, swarm: List[FloatSolution]) -> None:
         for particle in swarm:
@@ -190,12 +201,12 @@ class SMPSO(ParticleSwarmOptimization):
         self.evaluations = self.swarm_size
         self.leaders.compute_density_estimator()
 
-        self.swarm = [self.problem.create_solution() for _ in range(self.swarm_size)]
-        self.swarm = self.evaluate(self.swarm)
+        #self.swarm = [self.problem.create_solution() for _ in range(self.swarm_size)]
+        #self.swarm = self.evaluate(self.swarm)
 
-        self.initialize_velocity(self.swarm)
-        self.initialize_particle_best(self.swarm)
-        self.initialize_global_best(self.swarm)
+        self.initialize_velocity(self.solutions)
+        self.initialize_particle_best(self.solutions)
+        self.initialize_global_best(self.solutions)
 
     def update_progress(self) -> None:
         self.evaluations += self.swarm_size
@@ -220,9 +231,9 @@ class SMPSORP(SMPSO):
                  mutation: Mutation,
                  reference_points: List[List[float]],
                  leaders: List[BoundedArchive],
-                 termination_criteria: TerminationCriteria,
-                 swarm_generator: Evaluator = None,
-                 swarm_evaluator: Evaluator = None,
+                 termination_criterion: TerminationCriterion,
+                 swarm_generator: Evaluator = RandomGenerator(),
+                 swarm_evaluator: Evaluator = SequentialEvaluator(),
                  observable: Observable = None):
         """ This class implements the SMPSORP algorithm.
 
@@ -239,7 +250,7 @@ class SMPSORP(SMPSO):
             leaders=None,
             swarm_generator=swarm_generator,
             swarm_evaluator=swarm_evaluator,
-            termination_criteria=termination_criteria)
+            termination_criterion=termination_criterion)
         self.leaders = leaders
         self.reference_points = []
         for i, _ in enumerate(self.reference_points):

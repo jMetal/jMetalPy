@@ -27,12 +27,12 @@ if __name__ == '__main__':
     algorithm = NSGAII(
         problem=problem,
         population_size=100,
-        offspring_size=100,
+        offspring_population_size=100,
         mating_pool_size=100,
         mutation=BitFlip(probability=0.5),
         crossover=SPX(probability=0.8),
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
-        termination_criteria=StoppingByEvaluations(max=25000)
+        termination_criterion=StoppingByEvaluations(max=25000)
     )
 
     progress_bar = ProgressBarObserver(max=25000)

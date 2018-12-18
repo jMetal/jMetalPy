@@ -78,7 +78,7 @@ class Algorithm(Generic[S, R], threading.Thread, ABC):
 
         LOGGER.debug('Running main loop until termination criteria is met')
         while not self.stopping_condition_is_met():
-            self.solutions = self.step(self.solutions)
+            self.step()
             self.update_progress()
 
         self.total_computing_time = time.time() - self.start_computing_time
@@ -134,12 +134,12 @@ class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
         self.observable.notify_all(**observable_data)
         self.evaluations = self.population_size
 
-    def step(self, population:[]) -> List[S]:
-        mating_population = self.selection(population)
+    def step(self) -> List[S]:
+        mating_population = self.selection(self.solutions)
         offspring_population = self.reproduction(mating_population)
         offspring_population = self.evaluate(offspring_population)
 
-        return self.replacement(population, offspring_population)
+        self.solutions = self.replacement(self.solutions, offspring_population)
 
     def update_progress(self) -> None:
         self.evaluations += self.offspring_population_size
@@ -151,10 +151,8 @@ class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
 
 class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], ABC):
 
-    def __init__(self,
-                 problem: Problem,
-                 swarm_size: int):
-        super(ParticleSwarmOptimization, self).__init__(problem=problem)
+    def __init__(self,swarm_size: int):
+        super(ParticleSwarmOptimization, self).__init__()
         self.swarm_size = swarm_size
 
     @abstractmethod
@@ -190,19 +188,23 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], A
         pass
 
     def init_progress(self) -> None:
-        self.initialize_velocity(self.solution_list)
-        self.initialize_particle_best(self.solution_list)
-        self.initialize_global_best(self.solution_list)
+        self.evaluations = self.swarm_size
+
+        self.initialize_velocity(self.solutions)
+        self.initialize_particle_best(self.solutions)
+        self.initialize_global_best(self.solutions)
 
     def step(self):
-        self.update_velocity(self.solution_list)
-        self.update_position(self.solution_list)
-        self.perturbation(self.solution_list)
-        self.solution_list = self.evaluate(self.solution_list)
-        self.update_global_best(self.solution_list)
-        self.update_particle_best(self.solution_list)
+        self.update_velocity(self.solutions)
+        self.update_position(self.solutions)
+        self.perturbation(self.solutions)
+        self.solutions = self.evaluate(self.solutions)
+        self.update_global_best(self.solutions)
+        self.update_particle_best(self.solutions)
 
     def update_progress(self) -> None:
+        self.evaluations += self.swarm_size
+
         observable_data = self.get_observable_data()
-        observable_data['SOLUTIONS'] = self.swarm
+        observable_data['SOLUTIONS'] = self.solutions
         self.observable.notify_all(**observable_data)
