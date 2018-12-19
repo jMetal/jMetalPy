@@ -18,8 +18,6 @@ class Evaluator(Generic[S], ABC):
     @staticmethod
     def evaluate_solution(solution: S, problem: Problem) -> None:
         problem.evaluate(solution)
-        if problem.number_of_constraints > 0:
-            problem.evaluate_constraints(solution)
 
 
 class SequentialEvaluator(Evaluator[S]):

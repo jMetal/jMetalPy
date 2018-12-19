@@ -37,9 +37,11 @@ class Srinivas(FloatProblem):
         solution.objectives[0] = 2.0 + (x1 - 2.0) * (x1 - 2.0) + (x2 - 1.0) * (x2 - 1.0)
         solution.objectives[1] = 9.0 * x1 - (x2 - 1.0) * (x2 - 1.0)
 
+        self.__evaluate_constraints(solution)
+
         return solution
 
-    def evaluate_constraints(self, solution: FloatSolution) -> None:
+    def __evaluate_constraints(self, solution: FloatSolution) -> None:
         constraints = [0.0 for _ in range(self.number_of_constraints)]
 
         x1 = solution.variables[0]
@@ -85,9 +87,11 @@ class Tanaka(FloatProblem):
         solution.objectives[0] = solution.variables[0]
         solution.objectives[1] = solution.variables[1]
 
+        self.__evaluate_constraints(solution)
+
         return solution
 
-    def evaluate_constraints(self, solution: FloatSolution) -> None:
+    def __evaluate_constraints(self, solution: FloatSolution) -> None:
         constraints = [0.0 for _ in range(self.number_of_constraints)]
 
         x1 = solution.variables[0]
