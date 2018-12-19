@@ -6,6 +6,14 @@ from jmetal.operator.mutation import BitFlip, Uniform, SimpleRandom, Polynomial,
 
 class PolynomialMutationTestMethods(unittest.TestCase):
 
+    def test_should_constructor_raises_an_exception_is_probability_is_negative(self) -> None:
+        with self.assertRaises(Exception):
+            Polynomial(-1)
+
+    def test_should_constructor_raises_an_exception_is_probability_is_higher_than_one(self) -> None:
+        with self.assertRaises(Exception):
+            Polynomial(1.01)
+
     def test_should_constructor_create_a_non_null_object(self):
         mutation = Polynomial(1.0)
         self.assertIsNotNone(mutation)
@@ -45,6 +53,14 @@ class PolynomialMutationTestMethods(unittest.TestCase):
 
 class BitFlipTestCases(unittest.TestCase):
 
+    def test_should_constructor_raises_an_exception_is_probability_is_negative(self) -> None:
+        with self.assertRaises(Exception):
+            BitFlip(-1)
+
+    def test_should_constructor_raises_an_exception_is_probability_is_higher_than_one(self) -> None:
+        with self.assertRaises(Exception):
+            BitFlip(1.01)
+
     def test_should_constructor_create_a_non_null_object(self):
         solution = BitFlip(1.0)
         self.assertIsNotNone(solution)
@@ -81,6 +97,14 @@ class BitFlipTestCases(unittest.TestCase):
 
 
 class UniformMutationTestCases(unittest.TestCase):
+
+    def test_should_constructor_raises_an_exception_is_probability_is_negative(self) -> None:
+        with self.assertRaises(Exception):
+            Uniform(-1)
+
+    def test_should_constructor_raises_an_exception_is_probability_is_higher_than_one(self) -> None:
+        with self.assertRaises(Exception):
+            Uniform(1.01)
 
     def test_should_constructor_create_a_non_null_object(self):
         operator = Uniform(0.3)
@@ -130,6 +154,14 @@ class UniformMutationTestCases(unittest.TestCase):
 
 class RandomMutationTestCases(unittest.TestCase):
 
+    def test_should_constructor_raises_an_exception_is_probability_is_negative(self) -> None:
+        with self.assertRaises(Exception):
+            SimpleRandom(-1)
+
+    def test_should_constructor_raises_an_exception_is_probability_is_higher_than_one(self) -> None:
+        with self.assertRaises(Exception):
+            SimpleRandom(1.01)
+
     def test_should_constructor_create_a_non_null_object(self):
         operator = SimpleRandom(1.0)
         self.assertIsNotNone(operator)
@@ -174,6 +206,14 @@ class RandomMutationTestCases(unittest.TestCase):
 
 
 class IntegerPolynomialMutationTestCases(unittest.TestCase):
+
+    def test_should_constructor_raises_an_exception_is_probability_is_negative(self) -> None:
+        with self.assertRaises(Exception):
+            IntegerPolynomial(-1)
+
+    def test_should_constructor_raises_an_exception_is_probability_is_higher_than_one(self) -> None:
+        with self.assertRaises(Exception):
+            IntegerPolynomial(1.01)
 
     def test_should_constructor_create_a_non_null_object(self):
         operator = IntegerPolynomial(1.0)

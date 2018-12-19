@@ -7,6 +7,14 @@ from jmetal.operator.crossover import NullCrossover, SPX
 
 class NullCrossoverTestCases(unittest.TestCase):
 
+    def test_should_constructor_raises_an_exception_is_probability_is_negative(self) -> None:
+        with self.assertRaises(Exception):
+            NullCrossover()(-1)
+
+    def test_should_constructor_raises_an_exception_is_probability_is_higher_than_one(self) -> None:
+        with self.assertRaises(Exception):
+            NullCrossover()(1.01)
+
     def test_should_constructor_create_a_non_null_object(self):
         solution = NullCrossover()
         self.assertIsNotNone(solution)
@@ -28,6 +36,14 @@ class NullCrossoverTestCases(unittest.TestCase):
 
 
 class SinglePointTestCases(unittest.TestCase):
+
+    def test_should_constructor_raises_an_exception_is_probability_is_negative(self) -> None:
+        with self.assertRaises(Exception):
+            SPX()(-1)
+
+    def test_should_constructor_raises_an_exception_is_probability_is_higher_than_one(self) -> None:
+        with self.assertRaises(Exception):
+            SPX()(1.01)
 
     def test_should_constructor_create_a_non_null_object(self):
         solution = SPX(1.0)
