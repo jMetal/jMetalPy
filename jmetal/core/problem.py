@@ -53,7 +53,7 @@ class DynamicProblem(Problem[S], ABC):
         pass
 
     @abstractmethod
-    def reset(self) -> None:
+    def clear_changed(self) -> None:
         pass
 
 

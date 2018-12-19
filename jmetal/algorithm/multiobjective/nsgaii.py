@@ -124,7 +124,7 @@ class DynamicNSGAII(NSGAII[S, R]):
         if self.__get_dynamic_problem().the_problem_has_changed():
             self.restart()
             self.pop_evaluator.evaluate(self.solutions, self.__get_dynamic_problem())
-            self.__get_dynamic_problem().reset()
+            self.__get_dynamic_problem().clear_changed()
 
         observable_data = self.get_observable_data()
         self.observable.notify_all(**observable_data)

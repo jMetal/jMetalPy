@@ -34,7 +34,7 @@ class FDA(DynamicProblem, FloatProblem, ABC):
     def the_problem_has_changed(self) -> bool:
         return self.problem_modified
 
-    def reset(self) -> None:
+    def clear_changed(self) -> None:
         self.problem_modified = False
 
     @abstractmethod
