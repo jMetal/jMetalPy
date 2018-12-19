@@ -130,9 +130,10 @@ class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
         pass
 
     def init_progress(self) -> None:
+        self.evaluations = self.population_size
+
         observable_data = self.get_observable_data()
         self.observable.notify_all(**observable_data)
-        self.evaluations = self.population_size
 
     def step(self) -> List[S]:
         mating_population = self.selection(self.solutions)
