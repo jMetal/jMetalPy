@@ -41,9 +41,6 @@ class Problem(Generic[S], ABC):
         :return: Evaluated solution. """
         pass
 
-    def evaluate_constraints(self, solution: S):
-        pass
-
     @abstractmethod
     def get_name(self) -> str:
         pass
