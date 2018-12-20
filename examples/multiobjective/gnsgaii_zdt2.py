@@ -1,5 +1,5 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.component import RankingAndCrowdingDistanceComparator
+from jmetal.component import RankingAndCrowdingDistanceComparator, VisualizerObserver
 from jmetal.component.comparator import GDominanceComparator
 from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
 from jmetal.problem import ZDT2
@@ -34,6 +34,9 @@ if __name__ == '__main__':
         # termination_criteria=StoppingByTime(max_seconds=20),
         # termination_criteria=StoppingByQualityIndicator(quality_indicator=HyperVolume([1.0, 1.0]), expected_value=0.5, degree=0.95)
     )
+
+    visualizer = VisualizerObserver(reference_point=[0.5, 0.5], reference_front=problem.reference_front)
+    algorithm.observable.register(visualizer)
 
     algorithm.run()
     front = algorithm.get_result()

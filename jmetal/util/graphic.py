@@ -25,6 +25,16 @@ S = TypeVar('S')
 .. moduleauthor:: Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
+# Define some colors
+tableau20 = [(31, 119, 180), (174, 199, 232), (255, 127, 14), (255, 187, 120),
+             (44, 160, 44), (152, 223, 138), (214, 39, 40), (255, 152, 150),
+             (148, 103, 189), (197, 176, 213), (140, 86, 75), (196, 156, 148),
+             (227, 119, 194), (247, 182, 210), (127, 127, 127), (199, 199, 199),
+             (188, 189, 34), (219, 219, 141), (23, 190, 207), (158, 218, 229)]
+for i in range(len(tableau20)):
+    r, g, b = tableau20[i]
+    tableau20[i] = (r / 255., g / 255., b / 255.)
+
 
 class Plot(ABC):
 
@@ -54,18 +64,8 @@ class Plot(ABC):
         return points, points.shape[1]
 
     def two_dim(self, solutions: S):
-        fig = plt.figure()
-
-        ax = fig.add_subplot(111, projection='2d')
-        ax.scatter([s.objectives[0] for s in solutions],
-                   [s.objectives[1] for s in solutions])
-        ax.set_xlabel("$f_1(x)$")
-        ax.set_ylabel("$f_2(x)$")
-        ax.set_xlim([0, 1.1])
-        ax.set_ylim([0, 1.1])
-        ax.view_init(elev=30.0, azim=15)
-
-        plt.show()
+        points, _ = self.get_points(solutions)
+        points.plot(kind='scatter', x=0, y=1)
 
     def three_dim(self, solutions: S):
         fig = plt.figure()
@@ -92,7 +92,7 @@ class StreamingPlot(Plot):
         import warnings
         warnings.filterwarnings("ignore", ".*GUI is implemented.*")
 
-        self.fig = plt.figure()
+        self.fig, self.ax = plt.subplots()
         self.sc = None
         self.axis = None
 
@@ -103,26 +103,22 @@ class StreamingPlot(Plot):
         # Create an empty figure
         self.create_layout(dimension)
 
+        # If any reference point, plot
+        if self.reference_point:
+            self.sc, = self.ax.plot(*[[point] for point in self.reference_point],
+                                    c=tableau20[10], ls='None', marker='*', markersize=2)
+
         # If any reference front, plot
         if self.reference_front:
-            reference_points, _ = self.get_points(self.reference_front)
-
-            if dimension == 2:
-                self.sc, = self.axis.plot(reference_points[0], reference_points[1],
-                                          ls='None', picker=10, color='#323232', marker='*', markersize=3)
-            elif dimension == 3:
-                self.sc, = self.axis.plot(reference_points[0], reference_points[1], reference_points[2],
-                                          ls='None', picker=10, color='#323232', marker='*', markersize=3)
+            rpoints, _ = self.get_points(self.reference_front)
+            self.sc, = self.ax.plot(*[rpoints[column].tolist() for column in rpoints.columns.values],
+                                    c=tableau20[15], ls='None', marker='*', markersize=2)
 
         # Plot data
-        if dimension == 2:
-            self.sc, = self.axis.plot(points[0], points[1],
-                                      ls='None', picker=10, color='#98FB98', marker='o', markersize=3)
-        elif dimension == 3:
-            self.sc, = self.axis.plot(points[0], points[1], points[2],
-                                      ls='None', picker=10, color='#98FB98', marker='o', markersize=3)
+        self.sc, = self.ax.plot(*[points[column].tolist() for column in points.columns.values],
+                                c=tableau20[3], ls='None', marker='o', markersize=2)
 
-    def update(self, front: List[S], new_title: str = '') -> None:
+    def update(self, front: List[S]) -> None:
         if self.sc is None:
             raise Exception('Figure is none')
 
@@ -131,16 +127,12 @@ class StreamingPlot(Plot):
         # Replace with new points
         self.sc.set_data(points[0], points[1])
 
-        if self.dimension == 3:
+        if dimension == 3:
             self.sc.set_3d_properties(points[2])
 
-        # Update title with new times and evaluations
-        if new_title:
-            self.fig.suptitle(new_title, fontsize=13)
-
         # Re-align the axis
-        self.axis.relim()
-        self.axis.autoscale_view(True, True, True)
+        self.ax.relim()
+        self.ax.autoscale_view(True, True, True)
 
         try:
             self.fig.canvas.draw()
@@ -153,24 +145,22 @@ class StreamingPlot(Plot):
         self.fig.canvas.set_window_title(self.plot_title)
 
         if dimension == 2:
-            self.axis = self.fig.add_subplot(111)
-
             # Stylize axis
-            self.axis.spines['top'].set_visible(False)
-            self.axis.spines['right'].set_visible(False)
-            self.axis.get_xaxis().tick_bottom()
-            self.axis.get_yaxis().tick_left()
+            self.ax.spines['top'].set_visible(False)
+            self.ax.spines['right'].set_visible(False)
+            self.ax.get_xaxis().tick_bottom()
+            self.ax.get_yaxis().tick_left()
         elif dimension == 3:
-            self.axis = Axes3D(self.fig)
-            self.axis.autoscale(enable=True, axis='both')
+            self.ax = Axes3D(self.fig)
+            self.ax.autoscale(enable=True, axis='both')
         else:
             raise Exception('Number of objectives must be either 2 or 3')
 
-        self.axis.set_autoscale_on(True)
-        self.axis.autoscale_view(True, True, True)
+        self.ax.set_autoscale_on(True)
+        self.ax.autoscale_view(True, True, True)
 
         # Style options
-        self.axis.grid(color='#f0f0f5', linestyle='-', linewidth=1, alpha=0.5)
+        self.ax.grid(color='#f0f0f5', linestyle='-', linewidth=0.5, alpha=0.5)
         self.fig.suptitle(self.plot_title, fontsize=13)
 
 
@@ -199,13 +189,13 @@ class IStreamingPlot(Plot):
 
         # If any reference front, plot
         if self.reference_front:
-            reference_points, dimension = self.get_points(self.reference_front)
-            reference_points = reference_points.values.tolist()
+            rpoints, dimension = self.get_points(self.reference_front)
+            rpoints = rpoints.values.tolist()
 
             if dimension == 2:
-                self.figure = self.figure * hv.Scatter(reference_points, label='Reference front')
+                self.figure = self.figure * hv.Scatter(rpoints, label='Reference front')
             elif dimension == 3:
-                self.figure = self.figure * hv.Scatter3D(reference_points, label='Reference front')
+                self.figure = self.figure * hv.Scatter3D(rpoints, label='Reference front')
 
         # Plot data
         display(self.figure)  # Display figure in IPython
@@ -301,18 +291,8 @@ class InteractivePlot(Plot):
                 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
                 <script src="https://unpkg.com/sweetalert2@7.7.0/dist/sweetalert2.all.js"></script>
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-                <style>
-                    .float{
-                      position:fixed;
-                      right:40px;
-                      bottom:40px;
-                    }
-                </style>
             </head>
             <body>
-                <a class="float" href="https://jmetalpy.readthedocs.io/en/latest/">
-                  <img src="https://raw.githubusercontent.com/jMetal/jMetalPy/master/docs/source/jmetalpy.png" height="20px"/>
-                </a>
                 ''' + self.export_to_div(include_plotlyjs=False) + '''
                 <script>                
                     var myPlot = document.querySelectorAll('div')[0];

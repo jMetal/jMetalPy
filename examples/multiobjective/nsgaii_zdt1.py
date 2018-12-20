@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.component import RankingAndCrowdingDistanceComparator, VisualizerObserver
 from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
-from jmetal.problem import ZDT1
+from jmetal.problem import ZDT1, DTLZ1
 from jmetal.util.solution_list import read_solutions
 from jmetal.util.termination_criteria import StoppingByEvaluations
 
