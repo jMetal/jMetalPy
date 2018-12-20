@@ -4,7 +4,7 @@ from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.component import RankingAndCrowdingDistanceComparator, HyperVolume
 from jmetal.component.critical_distance import CDplot
 from jmetal.component.quality_indicator import GenerationalDistance
-from jmetal.operator import SBX, BinaryTournamentSelection, Polynomial, NullMutation
+from jmetal.operator import SBXCrossover, BinaryTournamentSelection, Polynomial, NullMutation
 from jmetal.problem import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
 from jmetal.util.laboratory import Experiment, Job, convert_table_to_latex, compute_statistical_analysis, \
     compute_quality_indicator, create_tables_from_experiment
@@ -24,7 +24,7 @@ def configure_experiment(problems: list, n_run: int):
                         mating_pool_size=100,
                         offspring_size=100,
                         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
-                        crossover=SBX(probability=0.8, distribution_index=20),
+                        crossover=SBXCrossover(probability=0.8, distribution_index=20),
                         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
                         termination_criteria=StoppingByEvaluations(max=25000)
                     ),
@@ -41,7 +41,7 @@ def configure_experiment(problems: list, n_run: int):
                         mating_pool_size=100,
                         offspring_size=100,
                         mutation=NullMutation(),
-                        crossover=SBX(probability=1.0, distribution_index=20),
+                        crossover=SBXCrossover(probability=1.0, distribution_index=20),
                         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
                         termination_criteria=StoppingByEvaluations(max=25000)
                     ),
@@ -58,7 +58,7 @@ def configure_experiment(problems: list, n_run: int):
                         mating_pool_size=100,
                         offspring_size=100,
                         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
-                        crossover=SBX(probability=1.0, distribution_index=20),
+                        crossover=SBXCrossover(probability=1.0, distribution_index=20),
                         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
                         termination_criteria=StoppingByEvaluations(max=25000)
                     ),
@@ -75,7 +75,7 @@ def configure_experiment(problems: list, n_run: int):
                         mating_pool_size=100,
                         offspring_size=100,
                         mutation=Polynomial(probability=0.2, distribution_index=20),
-                        crossover=SBX(probability=0.2, distribution_index=20),
+                        crossover=SBXCrossover(probability=0.2, distribution_index=20),
                         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
                         termination_criteria=StoppingByEvaluations(max=25000)
                     ),

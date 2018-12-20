@@ -1,7 +1,7 @@
 from examples.multiobjective.distributed_nsgaII import ZDT1Modified
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.component import RankingAndCrowdingDistanceComparator, ProgressBarObserver
-from jmetal.component.evaluator import SparkEvaluator
+from jmetal.component.evaluator import SparkEvaluator, MapEvaluator
 from jmetal.operator import SBXCrossover, Polynomial, BinaryTournamentSelection
 from jmetal.util.solution_list import read_solutions, print_function_values_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
@@ -10,9 +10,10 @@ if __name__ == '__main__':
     problem = ZDT1Modified()
     problem.reference_front = read_solutions(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
+
     max_evaluations = 100
     algorithm = NSGAII(
-        evaluator=SparkEvaluator(),
+        evaluator=MapEvaluator(8),
         problem=problem,
         population_size=10,
         offspring_population_size=10,

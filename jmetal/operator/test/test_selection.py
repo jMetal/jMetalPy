@@ -4,7 +4,8 @@ from hamcrest import assert_that, any_of
 
 from jmetal.core.solution import Solution
 from jmetal.operator.selection import BinaryTournamentSelection, BestSolutionSelection, RandomSolutionSelection, \
-    NaryRandomSolutionSelection, RankingAndCrowdingDistanceSelection, BinaryTournament2Selection
+    NaryRandomSolutionSelection, RankingAndCrowdingDistanceSelection, BinaryTournament2Selection, \
+    DifferentialEvolutionSelection
 from jmetal.component.comparator import SolutionAttributeComparator, EqualSolutionsComparator
 
 
@@ -173,6 +174,60 @@ class RandomSolutionSelectionTestCases(unittest.TestCase):
 
         solution_list = [solution1, solution2, solution3, solution4, solution5]
         self.assertTrue(self.selection.execute(solution_list) in solution_list)
+
+
+class DifferentialEvolutionSelectionTestCases(unittest.TestCase):
+    def test_should_constructor_create_a_non_null_object(self):
+        selection = DifferentialEvolutionSelection[Solution]()
+        self.assertIsNotNone(selection)
+
+    def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_none(self):
+        selection = DifferentialEvolutionSelection[Solution]()
+        solution_list = None
+        with self.assertRaises(Exception):
+            selection.execute(solution_list)
+
+    def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_empty(self):
+        selection = DifferentialEvolutionSelection[Solution]()
+        solution_list = []
+        with self.assertRaises(Exception):
+            selection.execute(solution_list)
+
+    def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_smaller_than_required(self):
+        selection = DifferentialEvolutionSelection[Solution]()
+        solution_list = [Solution(1, 1), Solution(1, 1), Solution(1,1)]
+        with self.assertRaises(Exception):
+            selection.execute(solution_list)
+
+    def test_should_execute_return_three_solutions_if_the_list_of_solutions_larger_than_three(self):
+        selection = DifferentialEvolutionSelection[Solution]()
+        solution_list = [Solution(1, 1), Solution(1, 1), Solution(1,1), Solution(1,1)]
+
+        self.assertEqual(3, len(selection.execute(solution_list)))
+
+    def test_should_execute_exclude_the_indicated_solution_if_the_list_of_solutions_has_size_four(self):
+        selection = DifferentialEvolutionSelection[Solution]()
+        solution1 = Solution(2, 2)
+        solution1.variables = [1, 2]
+        solution2 = Solution(2, 2)
+        solution2.variables = [3, 4]
+        solution3 = Solution(2, 2)
+        solution3.variables = [5, 6]
+        solution4 = Solution(2, 2)
+        solution4.variables = [7, 8]
+        solution_list = [solution1, solution2, solution3, solution4]
+
+        selection.set_index_to_exclude(0)
+        selected_solutions = selection.execute(solution_list)
+
+        self.assertEqual(3, len(selected_solutions))
+        self.assertTrue(solution1 not in selected_solutions)
+
+        selection.set_index_to_exclude(3)
+        selected_solutions = selection.execute(solution_list)
+
+        self.assertEqual(3, len(selected_solutions))
+        self.assertTrue(solution4 not in selected_solutions)
 
 
 class NaryRandomSolutionSelectionTestCases(unittest.TestCase):

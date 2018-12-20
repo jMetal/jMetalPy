@@ -45,6 +45,13 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         self.evaluator = evaluator
         self.termination_criterion = termination_criterion
 
+        self.mating_pool_size = \
+            self.offspring_population_size * \
+            self.crossover_operator.get_number_of_parents() // self.crossover_operator.get_number_of_children()
+
+        if self.mating_pool_size < self.crossover_operator.get_number_of_children():
+            self.mating_pool_size = self.crossover_operator.get_number_of_children()
+
         self.observable.register(termination_criterion)
 
     def create_initial_solutions(self) -> List[S]:
@@ -58,14 +65,8 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
 
     def selection(self, population: List[S]):
         mating_population = []
-        mating_pool_size: int = \
-            self.offspring_population_size * \
-            self.crossover_operator.get_number_of_parents() // self.crossover_operator.get_number_of_children()
 
-        if mating_pool_size < self.crossover_operator.get_number_of_children():
-            mating_pool_size = self.crossover_operator.get_number_of_children()
-
-        for i in range(mating_pool_size):
+        for i in range(self.mating_pool_size):
             solution = self.selection_operator.execute(population)
             mating_population.append(solution)
 

@@ -8,7 +8,7 @@ from jmetal.component import RankingAndCrowdingDistanceComparator, ProgressBarOb
 from jmetal.algorithm.multiobjective.nsgaii import DistributedNSGAII
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
-from jmetal.operator import Polynomial, SBX, BinaryTournamentSelection
+from jmetal.operator import Polynomial, SBXCrossover, BinaryTournamentSelection
 from jmetal.util.solution_list import print_function_values_to_file
 
 
@@ -73,7 +73,7 @@ if __name__ == '__main__':
         population_size=10,
         max_evaluations=100,
         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
-        crossover=SBX(probability=1.0, distribution_index=20),
+        crossover=SBXCrossover(probability=1.0, distribution_index=20),
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
         number_of_cores=8,
         client=client

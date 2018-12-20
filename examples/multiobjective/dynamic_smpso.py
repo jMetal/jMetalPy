@@ -1,9 +1,8 @@
-from jmetal.component import RankingAndCrowdingDistanceComparator, ProgressBarObserver
-
-from jmetal.algorithm.multiobjective.nsgaii import DynamicNSGAII
+from jmetal.algorithm.multiobjective.smpso import DynamicSMPSO
+from jmetal.component import ProgressBarObserver, CrowdingDistanceArchive, VisualizerObserver
 from jmetal.component.observable import TimeCounter
 from jmetal.core.problem import DynamicProblem
-from jmetal.operator import Polynomial, SBXCrossover, BinaryTournamentSelection
+from jmetal.operator import Polynomial
 from jmetal.problem.multiobjective.fda import FDA2
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
@@ -14,13 +13,12 @@ if __name__ == '__main__':
     time_counter.start()
 
     max_evaluations = 25000
-    algorithm = DynamicNSGAII(
+
+    algorithm = DynamicSMPSO(
         problem=problem,
-        population_size=100,
-        offspring_population_size=100,
+        swarm_size=100,
         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
-        crossover=SBXCrossover(probability=1.0, distribution_index=20),
-        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
+        leaders=CrowdingDistanceArchive(100),
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 

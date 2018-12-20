@@ -30,7 +30,7 @@ setup(
         'plotly==3.3.0',
         'matplotlib==3.0.2',
         'statsmodels'
-        'dask=1.0.0'
+        'dask==1.0.0'
     ],
     tests_require=[
         'mockito',

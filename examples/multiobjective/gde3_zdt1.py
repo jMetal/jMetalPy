@@ -1,6 +1,7 @@
-from jmetal.algorithm.multiobjective.nsgaii import NSGAII
+from jmetal.component.comparator import GDominanceComparator
+
+from jmetal.algorithm.multiobjective.gde3 import GDE3
 from jmetal.component import RankingAndCrowdingDistanceComparator, ProgressBarObserver, VisualizerObserver
-from jmetal.operator import SBXCrossover, Polynomial, BinaryTournamentSelection
 from jmetal.problem import ZDT1
 from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
@@ -10,13 +11,11 @@ if __name__ == '__main__':
     problem.reference_front = read_solutions(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
     max_evaluations = 25000
-    algorithm = NSGAII(
+    algorithm = GDE3(
         problem=problem,
         population_size=100,
-        offspring_population_size=100,
-        mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
-        crossover=SBXCrossover(probability=1.0, distribution_index=20),
-        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
+        cr=0.5,
+        f=0.5,
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 

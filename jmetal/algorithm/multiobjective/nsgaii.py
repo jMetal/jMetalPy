@@ -92,7 +92,7 @@ class NSGAII(GeneticAlgorithm[S, R]):
 
 class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
     def __init__(self,
-                 problem: DynamicProblem,
+                 problem: DynamicProblem[S],
                  population_size: int,
                  offspring_population_size: int,
                  mutation: Mutation,

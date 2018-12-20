@@ -35,11 +35,11 @@ class NullCrossover(Crossover[Solution, Solution]):
         return 'Null crossover'
 
 
-class SBX(Crossover[FloatSolution, FloatSolution]):
+class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
     __EPS = 1.0e-14
 
     def __init__(self, probability: float, distribution_index: float = 20.0):
-        super(SBX, self).__init__(probability=probability)
+        super(SBXCrossover, self).__init__(probability=probability)
         self.distribution_index = distribution_index
 
     def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
@@ -115,10 +115,10 @@ class SBX(Crossover[FloatSolution, FloatSolution]):
         return 'SBX crossover'
 
 
-class SPX(Crossover[BinarySolution, BinarySolution]):
+class SPXCrossover(Crossover[BinarySolution, BinarySolution]):
 
     def __init__(self, probability: float):
-        super(SPX, self).__init__(probability=probability)
+        super(SPXCrossover, self).__init__(probability=probability)
 
     def execute(self, parents: List[BinarySolution]) -> List[BinarySolution]:
         if len(parents) != 2:
@@ -174,7 +174,7 @@ class SPX(Crossover[BinarySolution, BinarySolution]):
         return 'Single point crossover'
 
 
-class DifferentialEvolution(Crossover[FloatSolution, FloatSolution]):
+class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
     """ This operator receives two parameters: the current individual and an array of three parent individuals. The
     best and rand variants depends on the third parent, according whether it represents the current of the "best"
     individual or a random one. The implementation of both variants are the same, due to that the parent selection is
@@ -182,7 +182,7 @@ class DifferentialEvolution(Crossover[FloatSolution, FloatSolution]):
     """
 
     def __init__(self, CR: float, F: float, K: float):
-        super(DifferentialEvolution, self).__init__(probability=1.0)
+        super(DifferentialEvolutionCrossover, self).__init__(probability=1.0)
         self.CR = CR
         self.F = F
         self.K = K

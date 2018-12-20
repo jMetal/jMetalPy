@@ -10,11 +10,12 @@ from jmetal.component.archive import BoundedArchive
 from jmetal.component.comparator import DominanceComparator
 from jmetal.component.evaluator import Evaluator
 from jmetal.component.generator import Generator, RandomGenerator
-from jmetal.core.algorithm import ParticleSwarmOptimization
+from jmetal.core.algorithm import ParticleSwarmOptimization, DynamicAlgorithm
 from jmetal.core.observable import Observable
 from jmetal.core.operator import Mutation
-from jmetal.core.problem import FloatProblem
+from jmetal.core.problem import FloatProblem, DynamicProblem
 from jmetal.core.solution import FloatSolution
+from jmetal.util.solution_list import print_function_values_to_file
 from jmetal.util.termination_criterion import TerminationCriterion
 
 R = TypeVar('R')
@@ -201,9 +202,6 @@ class SMPSO(ParticleSwarmOptimization):
         self.evaluations = self.swarm_size
         self.leaders.compute_density_estimator()
 
-        #self.swarm = [self.problem.create_solution() for _ in range(self.swarm_size)]
-        #self.swarm = self.evaluate(self.swarm)
-
         self.initialize_velocity(self.solutions)
         self.initialize_particle_best(self.solutions)
         self.initialize_global_best(self.solutions)
@@ -221,6 +219,59 @@ class SMPSO(ParticleSwarmOptimization):
 
     def get_name(self) -> str:
         return 'SMPSO'
+
+
+class DynamicSMPSO(SMPSO, DynamicAlgorithm):
+
+    def __init__(self,
+                 problem: DynamicProblem[FloatSolution],
+                 swarm_size: int,
+                 mutation: Mutation,
+                 leaders: BoundedArchive,
+                 termination_criterion: TerminationCriterion,
+                 swarm_generator: Generator = RandomGenerator(),
+                 swarm_evaluator: Evaluator = SequentialEvaluator()
+                 ):
+        super(DynamicSMPSO, self).__init__(
+            problem,
+            swarm_size,
+            mutation,
+            leaders,
+            termination_criterion,
+            swarm_generator,
+            swarm_evaluator)
+        self.completed_iterations = 0
+
+    def restart(self) -> None:
+        #self.leaders.solution_list = []
+        #self.swarm_evaluator.evaluate(self.solutions, self.__get_dynamic_problem())
+        pass
+
+    def update_progress(self):
+        if self.__get_dynamic_problem().the_problem_has_changed():
+            self.restart()
+            self.__get_dynamic_problem().clear_changed()
+
+        observable_data = self.get_observable_data()
+        self.observable.notify_all(**observable_data)
+
+        self.evaluations += self.swarm_size
+
+    def stopping_condition_is_met(self):
+        if self.termination_criterion.is_met:
+            observable_data = self.get_observable_data()
+            observable_data['SOLUTIONS'] = self.solutions
+            self.observable.notify_all(**observable_data)
+
+            self.restart()
+            self.leaders.solution_list = []
+            self.init_progress()
+
+            self.completed_iterations += 1
+            print_function_values_to_file(self.leaders.solution_list, 'FUN.' + str(self.completed_iterations))
+
+    def __get_dynamic_problem(self) -> DynamicProblem:
+        return self.problem
 
 
 class SMPSORP(SMPSO):
