@@ -1,5 +1,5 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.component import RankingAndCrowdingDistanceComparator
+from jmetal.component import RankingAndCrowdingDistanceComparator, VisualizerObserver
 from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
 from jmetal.problem import ZDT1
 from jmetal.util.solution_list import read_solutions
@@ -19,6 +19,8 @@ if __name__ == '__main__':
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
         termination_criteria=StoppingByEvaluations(max=25000)
     )
+
+    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front))
 
     algorithm.run()
     front = algorithm.get_result()

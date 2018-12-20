@@ -107,14 +107,15 @@ class VisualizerObserver(Observer):
         evaluations = kwargs['EVALUATIONS']
         solutions = kwargs['SOLUTIONS']
 
-        if self.figure is None:
-            self.figure = StreamingPlot(plot_title='VisualizerObserver',
-                                        reference_point=self.reference_point,
-                                        reference_front=self.reference_front)
-            self.figure.plot(solutions)
+        if solutions:
+            if self.figure is None:
+                self.figure = StreamingPlot(plot_title='VisualizerObserver',
+                                            reference_point=self.reference_point,
+                                            reference_front=self.reference_front)
+                self.figure.plot(solutions)
 
-        if (evaluations % self.display_frequency) == 0 and solutions:
-            self.figure.update(solutions)
+            if (evaluations % self.display_frequency) == 0:
+                self.figure.update(solutions)
 
 
 class IVisualizerObserver(Observer):
@@ -131,11 +132,12 @@ class IVisualizerObserver(Observer):
         evaluations = kwargs['EVALUATIONS']
         solutions = kwargs['SOLUTIONS']
 
-        if self.figure is None:
-            self.figure = IStreamingPlot(plot_title='VisualizerObserver',
-                                         reference_point=self.reference_point,
-                                         reference_front=self.reference_front)
-            self.figure.plot(solutions)
+        if solutions:
+            if self.figure is None:
+                self.figure = IStreamingPlot(plot_title='VisualizerObserver',
+                                             reference_point=self.reference_point,
+                                             reference_front=self.reference_front)
+                self.figure.plot(solutions)
 
-        if (evaluations % self.display_frequency) == 0 and solutions:
-            self.figure.update(solutions)
+            if (evaluations % self.display_frequency) == 0:
+                self.figure.update(solutions)
