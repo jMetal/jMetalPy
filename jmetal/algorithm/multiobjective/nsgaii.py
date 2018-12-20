@@ -2,6 +2,8 @@ import time
 from typing import TypeVar, List, Generic
 
 from distributed import as_completed, Client
+
+from jmetal.core.algorithm import DynamicAlgorithm
 from jmetal.util.solution_list import print_function_values_to_file
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
@@ -32,13 +34,12 @@ class NSGAII(GeneticAlgorithm[S, R]):
                  problem: Problem,
                  population_size: int,
                  offspring_population_size: int,
-                 mating_pool_size: int,
                  mutation: Mutation,
                  crossover: Crossover,
                  selection: Selection,
                  termination_criterion: TerminationCriterion,
-                 pop_generator: Generator = RandomGenerator(),
-                 pop_evaluator: Evaluator = SequentialEvaluator(),
+                 population_generator: Generator = RandomGenerator(),
+                 evaluator: Evaluator = SequentialEvaluator(),
                  dominance_comparator: DominanceComparator = DominanceComparator()):
         """  NSGA-II implementation as described in
 
@@ -62,13 +63,12 @@ class NSGAII(GeneticAlgorithm[S, R]):
             problem=problem,
             population_size=population_size,
             offspring_population_size=offspring_population_size,
-            mating_pool_size=mating_pool_size,
             mutation=mutation,
             crossover=crossover,
             selection=selection,
             termination_criterion=termination_criterion,
-            pop_evaluator=pop_evaluator,
-            pop_generator=pop_generator
+            evaluator=evaluator,
+            population_generator=population_generator
         )
         self.dominance_comparator = dominance_comparator
 
@@ -90,29 +90,27 @@ class NSGAII(GeneticAlgorithm[S, R]):
         return 'NSGAII'
 
 
-class DynamicNSGAII(NSGAII[S, R]):
+class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
     def __init__(self,
                  problem: DynamicProblem,
                  population_size: int,
                  offspring_population_size: int,
-                 mating_pool_size: int,
                  mutation: Mutation,
                  crossover: Crossover,
                  selection: Selection,
                  termination_criterion: TerminationCriterion,
-                 pop_generator: Generator = RandomGenerator(),
-                 pop_evaluator: Evaluator = SequentialEvaluator(),
+                 population_generator: Generator = RandomGenerator(),
+                 evaluator: Evaluator = SequentialEvaluator(),
                  dominance_comparator: DominanceComparator = DominanceComparator()):
         super(DynamicNSGAII, self).__init__(
             problem=problem,
             population_size=population_size,
             offspring_population_size=offspring_population_size,
-            mating_pool_size=mating_pool_size,
             mutation=mutation,
             crossover=crossover,
             selection=selection,
-            pop_evaluator=pop_evaluator,
-            pop_generator=pop_generator,
+            evaluator=evaluator,
+            population_generator=population_generator,
             termination_criterion=termination_criterion,
             dominance_comparator=dominance_comparator)
         self.completed_iterations = 0
@@ -123,7 +121,7 @@ class DynamicNSGAII(NSGAII[S, R]):
     def update_progress(self):
         if self.__get_dynamic_problem().the_problem_has_changed():
             self.restart()
-            self.pop_evaluator.evaluate(self.solutions, self.__get_dynamic_problem())
+            self.evaluator.evaluate(self.solutions, self.__get_dynamic_problem())
             self.__get_dynamic_problem().clear_changed()
 
         observable_data = self.get_observable_data()
@@ -138,7 +136,7 @@ class DynamicNSGAII(NSGAII[S, R]):
             self.observable.notify_all(**observable_data)
 
             self.restart()
-            self.pop_evaluator.evaluate(self.solutions, self.__get_dynamic_problem())
+            self.evaluator.evaluate(self.solutions, self.__get_dynamic_problem())
             self.init_progress()
 
             self.completed_iterations += 1

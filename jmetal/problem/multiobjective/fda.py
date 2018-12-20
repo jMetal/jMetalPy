@@ -1,9 +1,6 @@
 from abc import ABCMeta, ABC, abstractmethod
 from math import sqrt, pow, sin, pi, cos, floor
 
-from jmetal.util.observable import DefaultObservable
-
-from jmetal.core.observable import Observable
 from jmetal.core.problem import FloatProblem, DynamicProblem
 from jmetal.core.solution import FloatSolution
 
@@ -17,14 +14,12 @@ from jmetal.core.solution import FloatSolution
 
 
 class FDA(DynamicProblem, FloatProblem, ABC):
-    def __init__(self, observable: Observable = DefaultObservable()):
+    def __init__(self):
         super(FDA, self).__init__()
-        self.observable = observable
         self.tau_T = 5
         self.nT = 10
         self.time = 1.0
         self.problem_modified = False
-        self.observable.register(self)
 
     def update(self, *args, **kwargs):
         counter: int = kwargs["COUNTER"]

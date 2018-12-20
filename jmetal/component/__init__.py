@@ -5,7 +5,7 @@ from .comparator import EqualSolutionsComparator, SolutionAttributeComparator, R
 from .density_estimator import CrowdingDistance
 from .evaluator import SequentialEvaluator, MapEvaluator
 from .generator import RandomGenerator, InjectorGenerator
-from jmetal.util.observable import DefaultObservable
+from jmetal.core.observable import DefaultObservable
 from .observer import ProgressBarObserver, BasicObserver, WriteFrontToFileObserver, VisualizerObserver
 from jmetal.component.quality_indicator import HyperVolume
 from .ranking import FastNonDominatedRanking

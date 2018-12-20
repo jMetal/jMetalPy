@@ -103,7 +103,7 @@ class NonDominatedSolutionListArchive(Archive[S]):
                     is_dominated = True
                     break
                 elif is_dominated_flag == 0:
-                    if EqualSolutionsComparator().compare(solution, current_solution) == 0:
+                    if solution.objectives == current_solution.objectives:
                         is_contained = True
                         break
 

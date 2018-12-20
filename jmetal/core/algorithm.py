@@ -97,7 +97,7 @@ class Algorithm(Generic[S, R], threading.Thread, ABC):
         pass
 
 
-class DynamicAlgorithm(ABC):
+class DynamicAlgorithm(Algorithm[S,R], ABC):
     @abstractmethod
     def restart(self) -> None:
         pass
@@ -209,3 +209,4 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], A
         observable_data = self.get_observable_data()
         observable_data['SOLUTIONS'] = self.solutions
         self.observable.notify_all(**observable_data)
+

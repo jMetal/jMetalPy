@@ -43,7 +43,7 @@ class MOEAD(GeneticAlgorithm):
             crossover=crossover,
             selection=None,
             pop_evaluator=pop_evaluator,
-            pop_generator=pop_generator,
+            population_generator=pop_generator,
             termination_criteria=termination_criteria
         )
         self.max_number_of_replaced_solutions = max_number_of_replaced_solutions

@@ -28,7 +28,6 @@ if __name__ == '__main__':
         problem=problem,
         population_size=100,
         offspring_population_size=100,
-        mating_pool_size=100,
         mutation=BitFlip(probability=0.5),
         crossover=SPX(probability=0.8),
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),

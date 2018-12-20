@@ -15,7 +15,8 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
     problem: DynamicProblem = FDA2()
-    time_counter = TimeCounter(problem.observable, 1)
+    time_counter = TimeCounter(delay=1)
+    time_counter.observable.register(problem)
     time_counter.start()
 
     max_evaluations = 25000
@@ -23,7 +24,6 @@ if __name__ == '__main__':
         problem=problem,
         population_size=100,
         offspring_population_size=100,
-        mating_pool_size=100,
         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
         crossover=SBX(probability=1.0, distribution_index=20),
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),

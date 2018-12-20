@@ -1,12 +1,6 @@
 import logging
-import os
-from pathlib import Path
 
-from tqdm import tqdm
-
-from jmetal.core.observable import Observer
-from jmetal.util.graphic import StreamingPlot
-from jmetal.util.solution_list import print_function_values_to_file
+from jmetal.core.observable import Observer, DefaultObservable
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -36,7 +30,7 @@ LOGGER = logging.getLogger('jmetal')
 
 
 class TimeCounter(threading.Thread):
-    def __init__(self, observable: Observable, delay: int):
+    def __init__(self, delay: int, observable: Observable = DefaultObservable()):
         super(TimeCounter, self).__init__()
         self.observable = observable
         self.delay = delay

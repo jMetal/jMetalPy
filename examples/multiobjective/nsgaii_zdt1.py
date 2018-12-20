@@ -14,7 +14,6 @@ if __name__ == '__main__':
         problem=problem,
         population_size=100,
         offspring_population_size=100,
-        mating_pool_size=100,
         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
         crossover=SBX(probability=1.0, distribution_index=20),
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
@@ -23,7 +22,7 @@ if __name__ == '__main__':
 
     progress_bar = ProgressBarObserver(max=max_evaluations)
     algorithm.observable.register(observer=progress_bar)
-    algorithm.observable.register(observer=VisualizerObserver())
+    #algorithm.observable.register(observer=VisualizerObserver())
 
     algorithm.run()
     front = algorithm.get_result()

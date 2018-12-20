@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from jmetal.component.quality_indicator import QualityIndicator
-from jmetal.util.observable import Observer
+from jmetal.core.observable import Observer
 
 """
 .. module:: termination_criterion
