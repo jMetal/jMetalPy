@@ -1,13 +1,9 @@
-import pandas as pd
-
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.component import RankingAndCrowdingDistanceComparator, HyperVolume
-from jmetal.component.critical_distance import CDplot
 from jmetal.component.quality_indicator import GenerationalDistance
 from jmetal.operator import SBX, BinaryTournamentSelection, Polynomial, NullMutation
 from jmetal.problem import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
-from jmetal.util.laboratory import Experiment, Job, convert_table_to_latex, compute_statistical_analysis, \
-    compute_quality_indicator, create_tables_from_experiment
+from jmetal.util.laboratory import Experiment, Job, compute_quality_indicator
 from jmetal.util.termination_criteria import StoppingByEvaluations
 
 
