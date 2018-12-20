@@ -296,7 +296,7 @@ class SMPSORP(SMPSO):
             leader.compute_density_estimator()
 
         observable_data = self.get_observable_data()
-        observable_data['SOLUTIONS'] = self.get_result() + self.reference_points
+        observable_data['SOLUTIONS'] = self.get_result()
         self.observable.notify_all(**observable_data)
 
     def get_result(self) -> List[FloatSolution]:

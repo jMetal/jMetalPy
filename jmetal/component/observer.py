@@ -1,12 +1,15 @@
 import logging
 import os
 from pathlib import Path
+from typing import List, TypeVar
 
 from tqdm import tqdm
 
 from jmetal.core.observable import Observer
-from jmetal.util.graphic import StreamingPlot
+from jmetal.util.graphic import StreamingPlot, IStreamingPlot
 from jmetal.util.solution_list import print_function_values_to_file
+
+S = TypeVar('S')
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -92,14 +95,47 @@ class WriteFrontToFileObserver(Observer):
 
 class VisualizerObserver(Observer):
 
-    def __init__(self, display_frequency: float = 1.0) -> None:
-        self.figure = StreamingPlot()
+    def __init__(self, reference_front: List[S] = None, reference_point: List[float] = None,
+                 display_frequency: float = 1.0) -> None:
+        self.figure = None
         self.display_frequency = display_frequency
+
+        self.reference_point = reference_point
+        self.reference_front = reference_front
 
     def update(self, *args, **kwargs):
         evaluations = kwargs['EVALUATIONS']
         solutions = kwargs['SOLUTIONS']
-        problem = kwargs['PROBLEM']
+
+        if self.figure is None:
+            self.figure = StreamingPlot(plot_title='VisualizerObserver',
+                                        reference_point=self.reference_point,
+                                        reference_front=self.reference_front)
+            self.figure.plot(solutions)
 
         if (evaluations % self.display_frequency) == 0 and solutions:
-            self.figure.update(solutions, problem.reference_front)
+            self.figure.update(solutions)
+
+
+class IVisualizerObserver(Observer):
+
+    def __init__(self, reference_front: List[S] = None, reference_point: List[float] = None,
+                 display_frequency: float = 1.0) -> None:
+        self.figure = None
+        self.display_frequency = display_frequency
+
+        self.reference_point = reference_point
+        self.reference_front = reference_front
+
+    def update(self, *args, **kwargs):
+        evaluations = kwargs['EVALUATIONS']
+        solutions = kwargs['SOLUTIONS']
+
+        if self.figure is None:
+            self.figure = IStreamingPlot(plot_title='VisualizerObserver',
+                                         reference_point=self.reference_point,
+                                         reference_front=self.reference_front)
+            self.figure.plot(solutions)
+
+        if (evaluations % self.display_frequency) == 0 and solutions:
+            self.figure.update(solutions)

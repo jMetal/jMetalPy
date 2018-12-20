@@ -1,5 +1,5 @@
 from jmetal.algorithm.multiobjective.smpso import SMPSORP
-from jmetal.component import ProgressBarObserver, CrowdingDistanceArchiveWithReferencePoint
+from jmetal.component import ProgressBarObserver, CrowdingDistanceArchiveWithReferencePoint, VisualizerObserver
 from jmetal.operator import Polynomial
 from jmetal.problem import ZDT1
 from jmetal.util.graphic import InteractivePlot
@@ -30,17 +30,16 @@ if __name__ == '__main__':
         termination_criteria=StoppingByEvaluations(max=25000)
     )
 
-    progress_bar = ProgressBarObserver(max=25000)
-    algorithm.observable.register(observer=progress_bar)
+    algorithm.observable.register(observer=ProgressBarObserver(max=25000))
+    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front))
 
     algorithm.run()
     front = algorithm.get_result()
 
     # Plot frontier to file
-    pareto_front = InteractivePlot(plot_title='SMPSORP-ZDT1', axis_labels=problem.obj_labels)
-    pareto_front.plot(front, reference_front=problem.reference_front)
-    pareto_front.update(reference_points, legend='reference points')
-    pareto_front.export_html(filename='SMPSORP-ZDT1')
+    pareto_front = InteractivePlot(plot_title='SMPSORP-ZDT1', reference_point=reference_points, reference_front=problem.reference_front, axis_labels=problem.obj_labels)
+    pareto_front.plot(front)
+    pareto_front.export_to_html(filename='SMPSORP-ZDT1')
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())

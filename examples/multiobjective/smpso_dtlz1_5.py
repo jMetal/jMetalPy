@@ -24,13 +24,13 @@ if __name__ == '__main__':
     front = algorithm.get_result()
 
     # Plot frontier to file
-    pareto_front = InteractivePlot(plot_title='SMPSO-DTLZ1-5', axis_labels=problem.obj_labels)
-    pareto_front.plot(front, reference_front=problem.reference_front)
-    pareto_front.export_html(filename='SMPSO-DTLZ1-5')
+    pareto_front = InteractivePlot(plot_title='SMPSO-DTLZ1-5', reference_front=problem.reference_front, axis_labels=problem.obj_labels)
+    pareto_front.plot(front)
+    pareto_front.export_to_html(filename='SMPSO-DTLZ1-5')
 
-    pareto_front = InteractivePlot(plot_title='SMPSO-DTLZ1-5-norm', axis_labels=problem.obj_labels)
-    pareto_front.plot(front, reference_front=problem.reference_front, normalize=True)
-    pareto_front.export_html(filename='SMPSO-DTLZ1-5-norm')
+    pareto_front = InteractivePlot(plot_title='SMPSO-DTLZ1-5-norm', reference_front=problem.reference_front, axis_labels=problem.obj_labels)
+    pareto_front.plot(front, normalize=True)
+    pareto_front.export_to_html(filename='SMPSO-DTLZ1-5-norm')
 
     # Save variables to file
     print_function_values_to_file(front, 'FUN.SMPSO.DTLZ1-5')
