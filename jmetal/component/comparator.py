@@ -5,6 +5,7 @@ from jmetal.core.solution import Solution
 
 S = TypeVar('S')
 
+
 class Comparator(Generic[S], ABC):
 
     @abstractmethod
@@ -109,7 +110,7 @@ class DominanceComparator(Comparator):
 
         result = 0
         if solution1.number_of_constraints > 0:
-        # if solution1.attributes.get(self.constraint_comparator.key) is not None:
+        #if solution1.attributes.get(self.constraint_comparator.key) is not None:
             result = self.constraint_comparator.compare(solution1, solution2)
         if result == 0:
             result = self.__dominance_test(solution1, solution2)

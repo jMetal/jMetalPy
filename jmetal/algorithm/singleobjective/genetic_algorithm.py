@@ -55,7 +55,8 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         self.observable.register(termination_criterion)
 
     def create_initial_solutions(self) -> List[S]:
-        return [self.population_generator.new(self.problem) for _ in range(self.population_size)]
+        return [self.population_generator.new(self.problem)
+                for _ in range(self.population_size)]
 
     def evaluate(self, solution_list:List[S]):
         return self.evaluator.evaluate(solution_list, self.problem)
@@ -89,6 +90,8 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
             for solution in offspring:
                 self.mutation_operator.execute(solution)
                 offspring_population.append(solution)
+                if len(offspring_population) >= self.offspring_population_size:
+                    break
 
         return offspring_population
 
