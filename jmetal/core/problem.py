@@ -77,7 +77,7 @@ class FloatProblem(Problem[FloatSolution], ABC):
         self.upper_bound = None
 
     def create_solution(self) -> FloatSolution:
-        new_solution = FloatSolution(self.number_of_variables, self.number_of_objectives, self.number_of_constraints,
+        new_solution = FloatSolution(self.number_of_variables, self.number_of_objectives,
                                      self.lower_bound, self.upper_bound)
         new_solution.variables = \
             [random.uniform(self.lower_bound[i]*1.0, self.upper_bound[i]*1.0) for i in range(self.number_of_variables)]

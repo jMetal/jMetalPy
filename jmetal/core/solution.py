@@ -8,10 +8,9 @@ S = TypeVar('S')
 class Solution(Generic[S], ABC):
     """ Class representing solutions """
 
-    def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int = 0):
+    def __init__(self, number_of_variables: int, number_of_objectives: int):
         self.number_of_objectives = number_of_objectives
         self.number_of_variables = number_of_variables
-        self.number_of_constraints = number_of_constraints
 
         self.objectives = [0.0 for _ in range(self.number_of_objectives)]
         self.variables = [[] for _ in range(self.number_of_variables)]
@@ -29,14 +28,13 @@ class Solution(Generic[S], ABC):
 class BinarySolution(Solution[BitSet]):
     """ Class representing float solutions """
 
-    def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int=0):
-        super(BinarySolution, self).__init__(number_of_variables, number_of_objectives, number_of_constraints)
+    def __init__(self, number_of_variables: int, number_of_objectives: int):
+        super(BinarySolution, self).__init__(number_of_variables, number_of_objectives)
 
     def __copy__(self):
         new_solution = BinarySolution(
             self.number_of_variables,
-            self.number_of_objectives,
-            self.number_of_constraints)
+            self.number_of_objectives)
         new_solution.objectives = self.objectives[:]
         new_solution.variables = self.variables[:]
 
@@ -53,9 +51,9 @@ class BinarySolution(Solution[BitSet]):
 class FloatSolution(Solution[float]):
     """ Class representing float solutions """
 
-    def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int,
+    def __init__(self, number_of_variables: int, number_of_objectives: int,
                  lower_bound: List[float], upper_bound: List[float]):
-        super(FloatSolution, self).__init__(number_of_variables, number_of_objectives, number_of_constraints)
+        super(FloatSolution, self).__init__(number_of_variables, number_of_objectives)
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
 
@@ -63,7 +61,6 @@ class FloatSolution(Solution[float]):
         new_solution = FloatSolution(
             self.number_of_variables,
             self.number_of_objectives,
-            self.number_of_constraints,
             self.lower_bound,
             self.upper_bound)
         new_solution.objectives = self.objectives[:]
@@ -77,7 +74,7 @@ class IntegerSolution(Solution[int]):
 
     def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int,
                  lower_bound: List[int], upper_bound: List[int]):
-        super(IntegerSolution, self).__init__(number_of_variables, number_of_objectives, number_of_constraints)
+        super(IntegerSolution, self).__init__(number_of_variables, number_of_objectives)
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
 
@@ -85,7 +82,6 @@ class IntegerSolution(Solution[int]):
         new_solution = FloatSolution(
             self.number_of_variables,
             self.number_of_objectives,
-            self.number_of_constraints,
             self.lower_bound,
             self.upper_bound)
         new_solution.objectives = self.objectives[:]
