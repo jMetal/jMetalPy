@@ -3,6 +3,8 @@ from abc import ABC, abstractmethod
 from jmetal.component.quality_indicator import QualityIndicator
 from jmetal.core.observable import Observer
 
+import threading
+
 """
 .. module:: termination_criterion
    :platform: Unix, Windows
@@ -52,6 +54,31 @@ class StoppingByTime(TerminationCriterion):
     @property
     def is_met(self):
         return self.seconds >= self.max_seconds
+
+
+def key_has_been_pressed(stopping_by_keyboard):
+    input("PRESS ANY KEY + ENTER: ")
+    print("KEY PRESSSSSS")
+    stopping_by_keyboard.key_has_been_pressed()
+
+
+class StoppingByKeyboard(TerminationCriterion):
+
+    def __init__(self):
+        super(StoppingByKeyboard, self).__init__()
+        self.key_pressed = False
+        thread = threading.Thread(target=key_has_been_pressed, args=(self, ))
+        thread.start()
+
+    def key_has_been_pressed(self):
+        self.key_pressed = True
+
+    def update(self, *args, **kwargs):
+        pass
+
+    @property
+    def is_met(self):
+        return self.key_pressed
 
 
 class StoppingByQualityIndicator(TerminationCriterion):

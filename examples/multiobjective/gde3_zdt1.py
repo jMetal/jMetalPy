@@ -4,7 +4,7 @@ from jmetal.algorithm.multiobjective.gde3 import GDE3
 from jmetal.component import RankingAndCrowdingDistanceComparator, ProgressBarObserver, VisualizerObserver
 from jmetal.problem import ZDT1
 from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
-from jmetal.util.termination_criterion import StoppingByEvaluations
+from jmetal.util.termination_criterion import StoppingByEvaluations, StoppingByKeyboard
 
 if __name__ == '__main__':
     problem = ZDT1()
@@ -16,11 +16,12 @@ if __name__ == '__main__':
         population_size=100,
         cr=0.5,
         f=0.5,
-        termination_criterion=StoppingByEvaluations(max=max_evaluations)
+        #termination_criterion=StoppingByEvaluations(max=max_evaluations)
+        termination_criterion = StoppingByKeyboard()
     )
 
-    progress_bar = ProgressBarObserver(max=max_evaluations)
-    algorithm.observable.register(observer=progress_bar)
+    #progress_bar = ProgressBarObserver(max=max_evaluations)
+    #algorithm.observable.register(observer=progress_bar)
     #algorithm.observable.register(observer=VisualizerObserver())
 
     algorithm.run()
