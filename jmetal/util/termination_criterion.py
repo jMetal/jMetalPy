@@ -58,7 +58,6 @@ class StoppingByTime(TerminationCriterion):
 
 def key_has_been_pressed(stopping_by_keyboard):
     input("PRESS ANY KEY + ENTER: ")
-    print("KEY PRESSSSSS")
     stopping_by_keyboard.key_has_been_pressed()
 
 
