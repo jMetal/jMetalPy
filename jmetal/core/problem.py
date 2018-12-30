@@ -20,7 +20,6 @@ class Problem(Generic[S], ABC):
     def __init__(self):
         self.number_of_variables: int = None
         self.number_of_objectives: int = None
-        self.number_of_constraints: int = None
 
         self.reference_front: List[S] = None
 
@@ -77,8 +76,11 @@ class FloatProblem(Problem[FloatSolution], ABC):
         self.upper_bound = None
 
     def create_solution(self) -> FloatSolution:
-        new_solution = FloatSolution(self.number_of_variables, self.number_of_objectives,
-                                     self.lower_bound, self.upper_bound)
+        new_solution = FloatSolution(
+            self.number_of_variables,
+            self.number_of_objectives,
+            self.lower_bound,
+            self.upper_bound)
         new_solution.variables = \
             [random.uniform(self.lower_bound[i]*1.0, self.upper_bound[i]*1.0) for i in range(self.number_of_variables)]
 
@@ -97,8 +99,8 @@ class IntegerProblem(Problem[IntegerSolution], ABC):
         new_solution = IntegerSolution(
             self.number_of_variables,
             self.number_of_objectives,
-            self.number_of_constraints,
-            self.lower_bound, self.upper_bound)
+            self.lower_bound,
+            self.upper_bound)
 
         new_solution.variables = \
             [int(random.uniform(self.lower_bound[i]*1.0, self.upper_bound[i]*1.0))
