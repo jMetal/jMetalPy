@@ -6,17 +6,18 @@ from jmetal.component import RandomGenerator, DominanceComparator, NonDominatedS
 
 from jmetal.core.solution import FloatSolution
 
-from jmetal.core.algorithm import EvolutionaryAlgorithm
+from jmetal.core.algorithm import EvolutionaryAlgorithm, DynamicAlgorithm
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.component.evaluator import Evaluator, SequentialEvaluator
 from jmetal.component.generator import Generator
 from jmetal.core.operator import Mutation, Crossover
-from jmetal.core.problem import Problem
+from jmetal.core.problem import Problem, DynamicProblem
 from jmetal.operator import DifferentialEvolutionCrossover, RankingAndCrowdingDistanceSelection
 from jmetal.operator.selection import DifferentialEvolutionSelection
 from jmetal.util.aggregative_function import AggregativeFunction
 from jmetal.util.neighborhood import WeightNeighborhood
+from jmetal.util.solution_list import print_function_values_to_file
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -107,3 +108,52 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
 
     def get_name(self) -> str:
         return 'GDE3'
+
+
+class DynamicGDE3(GDE3, DynamicAlgorithm):
+    def __init__(self,
+                 problem: Problem,
+                 population_size: int,
+                 cr: float,
+                 f: float,
+                 termination_criterion: TerminationCriterion,
+                 k: float = 0.5,
+                 population_generator: Generator = RandomGenerator(),
+                 evaluator: Evaluator = SequentialEvaluator(),
+                 dominance_comparator = DominanceComparator()):
+        super(DynamicGDE3, self).__init__(
+            problem, population_size, cr, f, termination_criterion, k,
+            population_generator, evaluator, dominance_comparator)
+
+        self.completed_iterations = 0
+
+    def restart(self) -> None:
+        pass
+
+    def update_progress(self):
+        if self.__get_dynamic_problem().the_problem_has_changed():
+            self.restart()
+            self.evaluator.evaluate(self.solutions, self.__get_dynamic_problem())
+            self.__get_dynamic_problem().clear_changed()
+
+        observable_data = self.get_observable_data()
+        self.observable.notify_all(**observable_data)
+
+        self.evaluations += self.offspring_population_size
+
+    def stopping_condition_is_met(self):
+        if self.termination_criterion.is_met:
+            observable_data = self.get_observable_data()
+            observable_data['SOLUTIONS'] = self.solutions
+            self.observable.notify_all(**observable_data)
+
+            self.restart()
+            self.evaluator.evaluate(self.solutions, self.__get_dynamic_problem())
+            self.init_progress()
+
+            self.completed_iterations += 1
+            print("ITER: " + str(self.completed_iterations) + ". EVALS: " + str(self.evaluations))
+            print_function_values_to_file(self.solutions, 'FUN.' + str(self.completed_iterations))
+
+    def __get_dynamic_problem(self) -> DynamicProblem:
+        return self.problem
