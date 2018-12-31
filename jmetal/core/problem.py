@@ -18,8 +18,9 @@ class Problem(Generic[S], ABC):
     MAXIMIZE = 1
 
     def __init__(self):
-        self.number_of_variables: int = None
-        self.number_of_objectives: int = None
+        self.number_of_variables: int = 0
+        self.number_of_objectives: int = 0
+        self.number_of_constraints: int = None
 
         self.reference_front: List[S] = None
 
@@ -72,8 +73,8 @@ class FloatProblem(Problem[FloatSolution], ABC):
 
     def __init__(self):
         super(FloatProblem, self).__init__()
-        self.lower_bound = None
-        self.upper_bound = None
+        self.lower_bound = []
+        self.upper_bound = []
 
     def create_solution(self) -> FloatSolution:
         new_solution = FloatSolution(
@@ -85,6 +86,46 @@ class FloatProblem(Problem[FloatSolution], ABC):
             [random.uniform(self.lower_bound[i]*1.0, self.upper_bound[i]*1.0) for i in range(self.number_of_variables)]
 
         return new_solution
+
+
+class OnTheFlyFloatProblem(FloatProblem):
+
+    def __init__(self):
+        super(OnTheFlyFloatProblem, self).__init__()
+        self.objective_functions = []
+        self.constraints = []
+        self.name = ""
+
+    def set_name(self, name):
+        self.name = name
+
+        return self
+
+    def add_function(self, function):
+        self.objective_functions.append(function)
+        self.number_of_objectives += 1
+
+        return self
+
+    def add_constraint(self, constraint):
+        self.constraints.append(constraint)
+        self.number_of_constraints += 1
+
+        return self
+
+    def add_variable(self, lower_bound, upper_bound):
+        self.lower_bound.append(lower_bound)
+        self.upper_bound.append(upper_bound)
+        self.number_of_variables += 1
+
+        return self
+
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
+        for i in range(self.number_of_objectives):
+            solution.objectives[i] = self.objective_functions[i](solution.variables)
+
+    def get_name(self) -> str:
+        return self.name
 
 
 class IntegerProblem(Problem[IntegerSolution], ABC):
@@ -107,3 +148,6 @@ class IntegerProblem(Problem[IntegerSolution], ABC):
              for i in range(self.number_of_variables)]
 
         return new_solution
+
+
+
