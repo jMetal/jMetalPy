@@ -38,6 +38,8 @@ class BinarySolution(Solution[BitSet]):
         new_solution.objectives = self.objectives[:]
         new_solution.variables = self.variables[:]
 
+        new_solution.attributes = self.attributes.copy()
+
         return new_solution
 
     def get_total_number_of_bits(self) -> int:
@@ -66,6 +68,8 @@ class FloatSolution(Solution[float]):
         new_solution.objectives = self.objectives[:]
         new_solution.variables = self.variables[:]
 
+        new_solution.attributes = self.attributes.copy()
+
         return new_solution
 
 
@@ -86,5 +90,7 @@ class IntegerSolution(Solution[int]):
             self.upper_bound)
         new_solution.objectives = self.objectives[:]
         new_solution.variables = self.variables[:]
+
+        new_solution.attributes = self.attributes.copy()
 
         return new_solution
