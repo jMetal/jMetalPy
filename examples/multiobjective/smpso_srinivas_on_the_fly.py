@@ -22,8 +22,7 @@ if __name__ == '__main__':
     def c2(x:[float]):
         return (3.0 * x[1] - x[0]) / 10.0 - 1.0
 
-    problem = OnTheFlyFloatProblem()
-    problem\
+    problem = OnTheFlyFloatProblem()\
         .set_name("Srinivas")\
         .add_variable(-20.0, 20.0)\
         .add_variable(-20.0, 20.0)\

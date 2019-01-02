@@ -89,7 +89,33 @@ class FloatProblem(Problem[FloatSolution], ABC):
 
 
 class OnTheFlyFloatProblem(FloatProblem):
+    """ Class for defining float problems on the fly
 
+        Example:
+
+        # Defining problem Srinivas on the fly
+        def f1(x:[float]):
+            return 2.0 + (x[0] - 2.0) * (x[0] - 2.0) + (x[1] - 1.0) * (x[1] - 1.0)
+
+        def f2(x:[float]):
+            return 9.0 * x[0] - (x[1] - 1.0) * (x[1] - 1.0)
+
+        def c1(x:[float]):
+            return 1.0 - (x[0] * x[0] + x[1] * x[1]) / 225.0
+
+        def c2(x:[float]):
+            return (3.0 * x[1] - x[0]) / 10.0 - 1.0
+
+        problem = OnTheFlyFloatProblem()\
+            .set_name("Srinivas")\
+            .add_variable(-20.0, 20.0)\
+            .add_variable(-20.0, 20.0)\
+            .add_function(f1)\
+            .add_function(f2)\
+            .add_constraint(c1)\
+            .add_constraint(c2)
+
+    """
     def __init__(self):
         super(OnTheFlyFloatProblem, self).__init__()
         self.objective_functions = []
