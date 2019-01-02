@@ -20,7 +20,7 @@ class Problem(Generic[S], ABC):
     def __init__(self):
         self.number_of_variables: int = 0
         self.number_of_objectives: int = 0
-        self.number_of_constraints: int = None
+        self.number_of_constraints: int = 0
 
         self.reference_front: List[S] = None
 
@@ -123,6 +123,19 @@ class OnTheFlyFloatProblem(FloatProblem):
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         for i in range(self.number_of_objectives):
             solution.objectives[i] = self.objective_functions[i](solution.variables)
+
+        if self.number_of_constraints > 0:
+            overall_constraint_violation = 0.0
+            number_of_violated_constraints = 0.0
+
+            for constrain in self.constraints:
+                violation_degree = constrain(solution.variables)
+                if violation_degree < 0.0:
+                    overall_constraint_violation += violation_degree
+                    number_of_violated_constraints += 1
+
+            solution.attributes['overall_constraint_violation'] = overall_constraint_violation
+            solution.attributes['number_of_violated_constraints'] = number_of_violated_constraints
 
     def get_name(self) -> str:
         return self.name
