@@ -24,6 +24,10 @@ class Solution(Generic[S], ABC):
     def __str__(self) -> str:
         return 'Solution(objectives={},variables={})'.format(self.objectives, self.variables)
 
+    def is_feasible(self) -> bool:
+        return (self.attributes.get('overall_constraint_violation') is None) or \
+               (self.attributes['overall_constraint_violation'] == 0)
+
 
 class BinarySolution(Solution[BitSet]):
     """ Class representing float solutions """
@@ -76,7 +80,7 @@ class FloatSolution(Solution[float]):
 class IntegerSolution(Solution[int]):
     """ Class representing integer solutions """
 
-    def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int,
+    def __init__(self, number_of_variables: int, number_of_objectives: int,
                  lower_bound: List[int], upper_bound: List[int]):
         super(IntegerSolution, self).__init__(number_of_variables, number_of_objectives)
         self.lower_bound = lower_bound
