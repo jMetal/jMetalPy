@@ -157,3 +157,4 @@ class DynamicGDE3(GDE3, DynamicAlgorithm):
 
     def __get_dynamic_problem(self) -> DynamicProblem:
         return self.problem
+
