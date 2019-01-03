@@ -1,8 +1,8 @@
+from jmetal.problem import ZDT4
+
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.component import ProgressBarObserver, CrowdingDistanceArchive, VisualizerObserver
 from jmetal.operator import Polynomial
-from jmetal.problem import DTLZ1, ZDT4
-from jmetal.util.graphic import InteractivePlot
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
