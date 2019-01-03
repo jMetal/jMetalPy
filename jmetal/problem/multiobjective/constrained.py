@@ -116,7 +116,7 @@ class Tanaka(FloatProblem):
 
 
 class Osyczka2(FloatProblem):
-    """ Class representing problem Tanaka. """
+    """ Class representing problem Osyczka2. """
 
     def __init__(self):
         super(Osyczka2, self).__init__()
@@ -135,13 +135,14 @@ class Osyczka2(FloatProblem):
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
-        solution.objectives[0] = - (25.0*(x[0]-2.0)**2 +
+        solution.objectives[0] = - (25.0*
+                  (x[0]-2.0)**2 +
                   (x[1]-2.0)**2 +
                   (x[2]-1.0)**2 +
                   (x[3]-4.0)**2 +
                   (x[4]-1.0)**2)
-        solution.objectives[1] = x[0]**2 + x[1]**2 + x[2]**3 + \
-                                 x[3]**2 + x[4]**2 + x[5]**2
+
+        solution.objectives[1] = sum([x[i]**2 for i in range(len(x))])
 
         self.__evaluate_constraints(solution)
 
@@ -171,3 +172,52 @@ class Osyczka2(FloatProblem):
 
     def get_name(self):
         return 'Osyczka2'
+
+
+class Binh2(FloatProblem):
+    """ Class representing problem Binh2. """
+
+    def __init__(self):
+        super(Binh2, self).__init__()
+        self.number_of_variables = 2
+        self.number_of_objectives = 2
+        self.number_of_constraints = 2
+
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+        self.obj_labels = ['f(x)', 'f(y)']
+
+        self.lower_bound = [0.0, 0.0]
+        self.upper_bound = [5.0, 3.0]
+
+        FloatSolution.lower_bound = self.lower_bound
+        FloatSolution.upper_bound = self.upper_bound
+
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
+        x = solution.variables
+        solution.objectives[0] = 4.0 * x[0] * x[0] + 4 * x[1] * x[1]
+        solution.objectives[1] = (x[0] - 5.0) * (x[0] - 5.0) + (x[1] - 5.0) * (x[1] - 5.0)
+
+        self.__evaluate_constraints(solution)
+
+        return solution
+
+    def __evaluate_constraints(self, solution: FloatSolution) -> None:
+        constraints = [0.0 for _ in range(self.number_of_constraints)]
+
+        x = solution.variables
+        constraints[0] = -1.0 * (x[0] - 5) * (x[0] - 5) - x[1] * x[1] + 25.0
+        constraints[1] = (x[0] - 8) * (x[0] - 8) + (x[1] + 3) * (x[1] + 3) - 7.7
+
+        overall_constraint_violation = 0.0
+        number_of_violated_constraints = 0.0
+
+        for constrain in constraints:
+            if constrain < 0.0:
+                overall_constraint_violation += constrain
+                number_of_violated_constraints += 1
+
+        solution.attributes['overall_constraint_violation'] = overall_constraint_violation
+        solution.attributes['number_of_violated_constraints'] = number_of_violated_constraints
+
+    def get_name(self):
+        return 'Binh2'
