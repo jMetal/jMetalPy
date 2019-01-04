@@ -154,3 +154,109 @@ class DTLZ4(DTLZ1):
     def get_name(self):
         return 'DTLZ4'
 
+
+class DTLZ5(DTLZ1):
+    """ Problem DTLZ5. Continuous problem having a convex Pareto front
+
+    .. note:: Unconstrained problem. The default number of variables and objectives are, respectively, 12 and 3.
+    """
+
+    def __init__(self, number_of_variables: int = 12, number_of_objectives=3):
+        """:param number_of_variables: number of decision variables of the problem
+        """
+        super(DTLZ5, self).__init__(number_of_variables, number_of_objectives)
+
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
+        k = self.number_of_variables - self.number_of_objectives + 1
+
+        g = sum([(x - 0.5) ** 2 for x in solution.variables[self.number_of_variables - k:]])
+        t = pi/(4.0 * (1.0 + g))
+
+        theta = [0.0]*(self.number_of_objectives - 1)
+        theta[0] = solution.variables[0]*pi/2.0
+        theta[1:] = [t * (1.0 + 2.0 * g * solution.variables[i]) for i in range(1,self.number_of_objectives-1)]
+
+        f = [1.0 + g for _ in range(self.number_of_objectives)]
+
+        for i in range(self.number_of_objectives):
+            for j in range(self.number_of_objectives - (i + 1)):
+                f[i] *= cos(theta[j])
+
+            if i != 0:
+                aux = self.number_of_objectives - (i + 1)
+                f[i] *= sin(theta[aux])
+
+        solution.objectives = [f[x] for x in range(self.number_of_objectives)]
+
+        return solution
+
+    def get_name(self):
+        return 'DTLZ5'
+
+
+class DTLZ6(DTLZ1):
+    """ Problem DTLZ6. Continuous problem having a convex Pareto front
+
+    .. note:: Unconstrained problem. The default number of variables and objectives are, respectively, 12 and 3.
+    """
+
+    def __init__(self, number_of_variables: int = 12, number_of_objectives=3):
+        """:param number_of_variables: number of decision variables of the problem
+        """
+        super(DTLZ6, self).__init__(number_of_variables, number_of_objectives)
+
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
+        k = self.number_of_variables - self.number_of_objectives + 1
+
+        g = sum([pow(x, 0.1) for x in solution.variables[self.number_of_variables - k:]])
+        t = pi/(4.0 * (1.0 + g))
+
+        theta = [0.0]*(self.number_of_objectives - 1)
+        theta[0] = solution.variables[0]*pi/2.0
+        theta[1:] = [t * (1.0 + 2.0 * g * solution.variables[i]) for i in range(1,self.number_of_objectives-1)]
+
+        f = [1.0 + g for _ in range(self.number_of_objectives)]
+
+        for i in range(self.number_of_objectives):
+            for j in range(self.number_of_objectives - (i + 1)):
+                f[i] *= cos(theta[j])
+
+            if i != 0:
+                aux = self.number_of_objectives - (i + 1)
+                f[i] *= sin(theta[aux])
+
+        solution.objectives = [f[x] for x in range(self.number_of_objectives)]
+
+        return solution
+
+    def get_name(self):
+        return 'DTLZ6'
+
+
+class DTLZ7(DTLZ1):
+    """ Problem DTLZ6. Continuous problem having a disconnected Pareto front
+
+    .. note:: Unconstrained problem. The default number of variables and objectives are, respectively, 22 and 3.
+    """
+
+    def __init__(self, number_of_variables: int = 22, number_of_objectives=3):
+        """:param number_of_variables: number of decision variables of the problem
+        """
+        super(DTLZ7, self).__init__(number_of_variables, number_of_objectives)
+
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
+        k = self.number_of_variables - self.number_of_objectives + 1
+
+        g = sum([x for x in solution.variables[self.number_of_variables - k:]])
+        g = 1.0 + (9.0 * g) / k
+
+        h = sum([(x / (1.0 + g)) * (1 + sin(3.0 * pi * x)) for x in solution.variables[:self.number_of_objectives-1]])
+        h = self.number_of_objectives - h
+
+        solution.objectives[:self.number_of_objectives-1] = solution.variables[:self.number_of_objectives-1]
+        solution.objectives[-1] = (1.0 + g) * h
+
+        return solution
+
+    def get_name(self):
+        return 'DTLZ7'
