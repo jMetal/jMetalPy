@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from jmetal.component.quality_indicator import QualityIndicator
+from jmetal.core.quality_indicator import QualityIndicator
 from jmetal.core.observable import Observer
 
 import threading

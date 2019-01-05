@@ -3,7 +3,7 @@ import unittest
 
 from jmetal.core.solution import Solution
 from jmetal.problem import ZDT1
-from jmetal.component.quality_indicator import HyperVolume, GenerationalDistance, InvertedGenerationalDistance
+from jmetal.core.quality_indicator import HyperVolume, GenerationalDistance, InvertedGenerationalDistance
 from jmetal.util.solution_list import read_solutions
 
 
@@ -52,7 +52,7 @@ class GenerationalDistanceTestCases(unittest.TestCase):
         reference_front = [solution1, solution2]
 
         gd = GenerationalDistance(reference_front)
-        value = gd.distance_to_neatest(solution1, reference_front)
+        value = gd.compute([solution1])
 
         self.assertEqual(0, value)
 
