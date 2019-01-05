@@ -6,7 +6,7 @@ from typing import TypeVar, List
 import numpy
 from jmetal.component import SequentialEvaluator
 
-from jmetal.component.archive import BoundedArchive
+from jmetal.util.archive import BoundedArchive
 from jmetal.component.comparator import DominanceComparator
 from jmetal.component.evaluator import Evaluator
 from jmetal.component.generator import Generator, RandomGenerator

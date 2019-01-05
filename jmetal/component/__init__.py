@@ -1,4 +1,4 @@
-from .archive import BoundedArchive, NonDominatedSolutionListArchive, CrowdingDistanceArchive,  \
+from jmetal.util.archive import BoundedArchive, NonDominatedSolutionListArchive, CrowdingDistanceArchive,  \
     CrowdingDistanceArchiveWithReferencePoint
 from .comparator import EqualSolutionsComparator, SolutionAttributeComparator, RankingAndCrowdingDistanceComparator, \
     DominanceComparator
