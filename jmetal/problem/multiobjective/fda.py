@@ -125,3 +125,63 @@ class FDA2(FDA):
     def get_name(self):
         return 'FDA2'
 
+class FDA3(FDA):
+    """ Problem FDA3
+
+    .. note:: Bi-objective dynamic unconstrained problem. The default number of variables is 30.
+    """
+
+    def __init__(self, number_of_variables: int = 30):
+        """ :param number_of_variables: Number of decision variables of the problem.
+        """
+        super(FDA3, self).__init__()
+        self.number_of_variables = number_of_variables
+        self.number_of_objectives = 2
+        self.number_of_constraints = 0
+        self.limitInfI = 0
+        self.limitSupI = 1
+        self.limitInfII = 1
+
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+        self.obj_labels = ['f(x)', 'f(y)']
+
+        self.lower_bound = self.number_of_variables * [-1.0]
+        self.upper_bound = self.number_of_variables * [1.0]
+
+        self.lower_bound[0] = 0.0
+        self.upper_bound[0] = 1.0
+
+
+
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
+        g = self.__eval_g(solution, self.limitInfII)
+        h = self.__eval_h(solution.variables[0], g)
+
+        solution.objectives[0] = self.__evalF(solution,self.limitInfI,self.limitSupI)
+        solution.objectives[1] = g * h
+
+        return solution
+
+    def __evalF(self,solution: FloatSolution, lower_limit: int, upper_limit:int):
+        f = 0.0
+        aux = 2.0 * sin(0.5*pi*self.time)
+        ft = pow(10,aux)
+        f += sum([pow(v , ft) for v in solution.variables[lower_limit:upper_limit]])
+
+        return  f
+
+    def __eval_g(self, solution: FloatSolution, lower_limit: int):
+        g = 0
+        gt = abs(sin(0.5*pi*self.time))
+        g += sum([pow(v-gt, 2) for v in solution.variables[lower_limit:]])
+        g = g + 1.0 + gt
+
+        return g
+
+    def __eval_h(self, f: float, g: float) -> float:
+        h = 1.0 - sqrt(f/g)
+        return h
+
+    def get_name(self):
+        return 'FDA3'
+
