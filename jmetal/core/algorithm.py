@@ -4,12 +4,9 @@ import time
 from abc import abstractmethod, ABC
 from typing import TypeVar, Generic, List
 
-from jmetal.component.evaluator import Evaluator
-from jmetal.component.generator import Generator
 from jmetal.config import store
 from jmetal.core.problem import Problem
 from jmetal.core.solution import FloatSolution
-from jmetal.util.termination_criteria import TerminationCriteria
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -27,40 +24,34 @@ R = TypeVar('R')
 
 class Algorithm(Generic[S, R], threading.Thread, ABC):
 
-    def __init__(self,
-                 problem: Problem[S],
-                 pop_generator: Generator[R],
-                 pop_evaluator: Evaluator[S],
-                 termination_criteria: TerminationCriteria):
-        """
-        :param problem: The problem to solve.
-        :param pop_generator: Generator of solutions.
-        :param pop_evaluator: Evaluator of solutions.
-        :param termination_criteria: Termination criteria.
-        """
+    def __init__(self):
         threading.Thread.__init__(self)
-        self.problem = problem
-        self.pop_generator = pop_generator
-        self.pop_evaluator = pop_evaluator
-        self.termination_criteria = termination_criteria
 
+        self.solutions: List[S] = []
         self.evaluations = 0
         self.start_computing_time = 0
         self.total_computing_time = 0
 
-        if not self.pop_generator:
-            self.pop_generator = store.default_generator
-        if not self.pop_evaluator:
-            self.pop_evaluator = store.default_evaluator
-        if not self.termination_criteria:
-            self.termination_criteria = store.default_termination_criteria
-
         self.observable = store.default_observable
-        self.observable.register(self.termination_criteria)
+
+    @abstractmethod
+    def create_initial_solutions(self) -> List[S]:
+        """ Creates the initial list of solutions of a metaheuristic. """
+        pass
+
+    @abstractmethod
+    def evaluate(self, solution_list: List[S]) -> List[S]:
+        """ Evaluates a solution list. """
+        pass
 
     @abstractmethod
     def init_progress(self) -> None:
         """ Initialize the algorithm. """
+        pass
+
+    @abstractmethod
+    def stopping_condition_is_met(self) -> bool:
+        """ The stopping condition is met or not. """
         pass
 
     @abstractmethod
@@ -73,32 +64,27 @@ class Algorithm(Generic[S, R], threading.Thread, ABC):
         """ Update the progress after each iteration. """
         pass
 
-    def evaluate(self, solutions: List[S]) -> List[S]:
-        """ Evaluate the individual fitness of new individuals. """
-        self.evaluations += len(solutions)
-        return self.pop_evaluator.evaluate(solutions, self.problem)
+    @abstractmethod
+    def get_observable_data(self) -> dict:
+        """ Get observable data, with the information that will be send to all observers each time. """
+        pass
 
     def run(self):
         """ Execute the algorithm. """
         self.start_computing_time = time.time()
 
+        self.solutions = self.create_initial_solutions()
+        self.solutions = self.evaluate(self.solutions)
+
         LOGGER.debug('Initializing progress')
         self.init_progress()
 
-        try:
-            LOGGER.debug('Running main loop until termination criteria is met')
-            while not self.termination_criteria.is_met:
-                self.step()
-                self.update_progress()
-        except KeyboardInterrupt:
-            LOGGER.warning('Interrupted by keyboard')
+        LOGGER.debug('Running main loop until termination criteria is met')
+        while not self.stopping_condition_is_met():
+            self.step()
+            self.update_progress()
 
         self.total_computing_time = time.time() - self.start_computing_time
-
-    def get_observable_data(self) -> dict:
-        """ Get observable data, with the information that will be send to all observers each time. """
-        ctime = time.time() - self.start_computing_time
-        return {'PROBLEM': self.problem, 'EVALUATIONS': self.evaluations, 'SOLUTIONS': [], 'COMPUTING_TIME': ctime}
 
     @abstractmethod
     def get_result(self) -> R:
@@ -109,22 +95,23 @@ class Algorithm(Generic[S, R], threading.Thread, ABC):
         pass
 
 
+class DynamicAlgorithm(Algorithm[S, R], ABC):
+
+    @abstractmethod
+    def restart(self) -> None:
+        pass
+
+
 class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
 
     def __init__(self,
                  problem: Problem[S],
                  population_size: int,
-                 pop_generator: Generator[R],
-                 pop_evaluator: Evaluator[S],
-                 termination_criteria: TerminationCriteria):
-        super(EvolutionaryAlgorithm, self).__init__(
-            problem=problem,
-            pop_generator=pop_generator,
-            pop_evaluator=pop_evaluator,
-            termination_criteria=termination_criteria
-        )
-        self.population = []
+                 offspring_population_size: int):
+        super(EvolutionaryAlgorithm, self).__init__()
+        self.problem = problem
         self.population_size = population_size
+        self.offspring_population_size = offspring_population_size
 
     @abstractmethod
     def selection(self, population: List[S]) -> List[S]:
@@ -141,40 +128,37 @@ class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
         """ Replace least-fit population with new individuals. """
         pass
 
+    def get_observable_data(self) -> dict:
+        ctime = time.time() - self.start_computing_time
+        return {'PROBLEM': self.problem, 'EVALUATIONS': self.evaluations, 'SOLUTIONS': self.get_result(), 'COMPUTING_TIME': ctime}
+
     def init_progress(self) -> None:
-        self.population = [self.pop_generator.new(self.problem) for _ in range(self.population_size)]
-        self.population = self.evaluate(self.population)
+        self.evaluations = self.population_size
 
         observable_data = self.get_observable_data()
         self.observable.notify_all(**observable_data)
 
-    def step(self) -> None:
-        mating_population = self.selection(self.population)
+    def step(self):
+        mating_population = self.selection(self.solutions)
         offspring_population = self.reproduction(mating_population)
         offspring_population = self.evaluate(offspring_population)
-        self.population = self.replacement(self.population, offspring_population)
+
+        self.solutions = self.replacement(self.solutions, offspring_population)
 
     def update_progress(self) -> None:
+        self.evaluations += self.offspring_population_size
+
         observable_data = self.get_observable_data()
-        observable_data['SOLUTIONS'] = self.population
         self.observable.notify_all(**observable_data)
 
 
 class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], ABC):
 
     def __init__(self,
-                 problem: Problem,
-                 swarm_size: int,
-                 swarm_generator: Generator[FloatSolution],
-                 swarm_evaluator: Evaluator[FloatSolution],
-                 termination_criteria: TerminationCriteria):
-        super(ParticleSwarmOptimization, self).__init__(
-            problem=problem,
-            pop_generator=swarm_generator,
-            pop_evaluator=swarm_evaluator,
-            termination_criteria=termination_criteria
-        )
-        self.swarm = []
+                 problem: Problem[S],
+                 swarm_size: int):
+        super(ParticleSwarmOptimization, self).__init__()
+        self.problem = problem
         self.swarm_size = swarm_size
 
     @abstractmethod
@@ -209,23 +193,30 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], A
     def perturbation(self, swarm: List[FloatSolution]) -> None:
         pass
 
-    def init_progress(self) -> None:
-        self.swarm = [self.pop_generator.new(self.problem) for _ in range(self.swarm_size)]
-        self.swarm = self.evaluate(self.swarm)
+    def get_observable_data(self) -> dict:
+        ctime = time.time() - self.start_computing_time
+        return {'PROBLEM': self.problem, 'EVALUATIONS': self.evaluations, 'SOLUTIONS': self.get_result(), 'COMPUTING_TIME': ctime}
 
-        self.initialize_velocity(self.swarm)
-        self.initialize_particle_best(self.swarm)
-        self.initialize_global_best(self.swarm)
+    def init_progress(self) -> None:
+        self.evaluations = self.swarm_size
+
+        self.initialize_velocity(self.solutions)
+        self.initialize_particle_best(self.solutions)
+        self.initialize_global_best(self.solutions)
+
+        observable_data = self.get_observable_data()
+        self.observable.notify_all(**observable_data)
 
     def step(self):
-        self.update_velocity(self.swarm)
-        self.update_position(self.swarm)
-        self.perturbation(self.swarm)
-        self.swarm = self.evaluate(self.swarm)
-        self.update_global_best(self.swarm)
-        self.update_particle_best(self.swarm)
+        self.update_velocity(self.solutions)
+        self.update_position(self.solutions)
+        self.perturbation(self.solutions)
+        self.solutions = self.evaluate(self.solutions)
+        self.update_global_best(self.solutions)
+        self.update_particle_best(self.solutions)
 
     def update_progress(self) -> None:
+        self.evaluations += self.swarm_size
+
         observable_data = self.get_observable_data()
-        observable_data['SOLUTIONS'] = self.swarm
         self.observable.notify_all(**observable_data)

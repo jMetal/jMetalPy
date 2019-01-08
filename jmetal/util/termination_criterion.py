@@ -1,10 +1,11 @@
+import threading
 from abc import ABC, abstractmethod
 
-from jmetal.component.quality_indicator import QualityIndicator
-from jmetal.util.observable import Observer
+from jmetal.core.observable import Observer
+from jmetal.core.quality_indicator import QualityIndicator
 
 """
-.. module:: termination_criteria
+.. module:: termination_criterion
    :platform: Unix, Windows
    :synopsis: Implementation of stopping conditions.
 
@@ -12,7 +13,7 @@ from jmetal.util.observable import Observer
 """
 
 
-class TerminationCriteria(Observer, ABC):
+class TerminationCriterion(Observer, ABC):
 
     @abstractmethod
     def update(self, *args, **kwargs):
@@ -24,7 +25,7 @@ class TerminationCriteria(Observer, ABC):
         pass
 
 
-class StoppingByEvaluations(TerminationCriteria):
+class StoppingByEvaluations(TerminationCriterion):
 
     def __init__(self, max: int):
         super(StoppingByEvaluations, self).__init__()
@@ -39,7 +40,7 @@ class StoppingByEvaluations(TerminationCriteria):
         return self.evaluations >= self.max_evaluations
 
 
-class StoppingByTime(TerminationCriteria):
+class StoppingByTime(TerminationCriterion):
 
     def __init__(self, max_seconds: int):
         super(StoppingByTime, self).__init__()
@@ -54,7 +55,28 @@ class StoppingByTime(TerminationCriteria):
         return self.seconds >= self.max_seconds
 
 
-class StoppingByQualityIndicator(TerminationCriteria):
+def key_has_been_pressed(stopping_by_keyboard):
+    input('PRESS ANY KEY + ENTER: ')
+    stopping_by_keyboard.key_pressed = True
+
+
+class StoppingByKeyboard(TerminationCriterion):
+
+    def __init__(self):
+        super(StoppingByKeyboard, self).__init__()
+        self.key_pressed = False
+        thread = threading.Thread(target=key_has_been_pressed, args=(self,))
+        thread.start()
+
+    def update(self, *args, **kwargs):
+        pass
+
+    @property
+    def is_met(self):
+        return self.key_pressed
+
+
+class StoppingByQualityIndicator(TerminationCriterion):
 
     def __init__(self, quality_indicator: QualityIndicator, expected_value: float, degree: float):
         super(StoppingByQualityIndicator, self).__init__()

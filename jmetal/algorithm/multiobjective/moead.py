@@ -4,13 +4,13 @@ from typing import TypeVar, List
 import numpy as np
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
-from jmetal.component.evaluator import Evaluator
-from jmetal.component.generator import Generator
+from jmetal.component.evaluator import Evaluator, SequentialEvaluator
+from jmetal.component.generator import Generator, RandomGenerator
 from jmetal.core.operator import Mutation, Crossover
 from jmetal.core.problem import Problem
 from jmetal.util.aggregative_function import AggregativeFunction
 from jmetal.util.neighborhood import WeightNeighborhood
-from jmetal.util.termination_criteria import TerminationCriteria
+from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
 R = List[S]
@@ -27,9 +27,9 @@ class MOEAD(GeneticAlgorithm):
                  neighbourhood: WeightNeighborhood,
                  neighbourhood_selection_probability: float,
                  max_number_of_replaced_solutions: int,
-                 termination_criteria: TerminationCriteria,
-                 pop_generator: Generator = None,
-                 pop_evaluator: Evaluator = None):
+                 termination_criterion: TerminationCriterion,
+                 population_generator: Generator = RandomGenerator(),
+                 population_evaluator: Evaluator = SequentialEvaluator()):
         """
         :param max_number_of_replaced_solutions: (eta in Zhang & Li paper).
         :param neighbourhood_selection_probability: Probability of mating with a solution in the neighborhood rather than the entire population (Delta in Zhang & Li paper).
@@ -37,14 +37,13 @@ class MOEAD(GeneticAlgorithm):
         super(MOEAD, self).__init__(
             problem=problem,
             population_size=population_size,
-            offspring_size=1,
-            mating_pool_size=3,
+            offspring_population_size=1,
             mutation=mutation,
             crossover=crossover,
             selection=None,
-            pop_evaluator=pop_evaluator,
-            pop_generator=pop_generator,
-            termination_criteria=termination_criteria
+            population_evaluator=population_evaluator,
+            population_generator=population_generator,
+            termination_criterion=termination_criterion
         )
         self.max_number_of_replaced_solutions = max_number_of_replaced_solutions
         self.fitness_function = aggregative_function
@@ -94,14 +93,14 @@ class MOEAD(GeneticAlgorithm):
         if random.random() <= self.neighbourhood_selection_probability:
             from_neighbourhood = True
 
-        neighbors = self.neighbourhood.get_neighbors(index, self.population)
-        parents.append(self.population[index])
+        neighbors = self.neighbourhood.get_neighbors(index, self.solutions)
+        parents.append(self.solutions[index])
 
         while len(parents) < self.mating_pool_size:
             if from_neighbourhood:
                 selected_parent = neighbors[random.randint(0, len(neighbors) - 1)]
             else:
-                selected_parent = self.population[random.randint(0, self.population_size - 1)]
+                selected_parent = self.solutions[random.randint(0, self.population_size - 1)]
 
             flag = True
 
@@ -126,21 +125,21 @@ class MOEAD(GeneticAlgorithm):
         for i in range(size):
             k = self.neighbourhood.neighborhood[index][permutations[i]]
 
-            f1 = self.fitness_function.compute(self.population[k].objectives, self.neighbourhood.weight_vectors[k])
+            f1 = self.fitness_function.compute(self.solutions[k].objectives, self.neighbourhood.weight_vectors[k])
             f2 = self.fitness_function.compute(individual.objectives, self.neighbourhood.weight_vectors[k])
 
             if f2 < f1:
-                self.population[k] = individual
+                self.solutions[k] = individual
                 c += 1
 
             if c >= self.max_number_of_replaced_solutions:
                 return
 
     def init_progress(self) -> None:
-        self.population = [self.pop_generator.new(self.problem) for _ in range(self.population_size)]
-        self.population = self.evaluate(self.population)
+        self.solutions = [self.population_generator.new(self.problem) for _ in range(self.population_size)]
+        self.solutions = self.evaluate(self.solutions)
 
-        for individual in self.population:
+        for individual in self.solutions:
             self.fitness_function.update(individual.objectives)
 
     def step(self) -> None:
@@ -151,20 +150,15 @@ class MOEAD(GeneticAlgorithm):
 
             mating_population = self.mating_selection(index)
 
-            self.crossover_operator.current_individual = self.population[index]
+            self.crossover_operator.current_individual = self.solutions[index]
             offspring_population = self.reproduction(mating_population)
             offspring_population = self.evaluate(offspring_population)
 
             self.fitness_function.update(offspring_population[0].objectives)
             self.update_individual(index, offspring_population[0])
 
-    def update_progress(self) -> None:
-        observable_data = self.get_observable_data()
-        observable_data['SOLUTIONS'] = self.population
-        self.observable.notify_all(**observable_data)
-
     def get_result(self) -> R:
-        return self.population
+        return self.solutions
 
     def get_name(self) -> str:
-        return 'MOEAD'
+        return 'MOEA/D'

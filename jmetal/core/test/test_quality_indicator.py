@@ -1,9 +1,13 @@
-from os.path import dirname, join
 import unittest
+from os.path import dirname, join
 
+from jmetal.component.quality_indicator import HyperVolume, GenerationalDistance
 from jmetal.core.solution import Solution
 from jmetal.problem import ZDT1
-from jmetal.component.quality_indicator import HyperVolume, GenerationalDistance, InvertedGenerationalDistance
+<<<<<<< HEAD:jmetal/component/test/test_quality_indicator.py
+=======
+from jmetal.core.quality_indicator import HyperVolume, GenerationalDistance, InvertedGenerationalDistance
+>>>>>>> origin/refactor:jmetal/core/test/test_quality_indicator.py
 from jmetal.util.solution_list import read_solutions
 
 
@@ -42,6 +46,8 @@ class HyperVolumeTestCases(unittest.TestCase):
 
 class GenerationalDistanceTestCases(unittest.TestCase):
 
+<<<<<<< HEAD:jmetal/component/test/test_quality_indicator.py
+=======
     def test_should_gd_return_the_closest_point_case_a(self):
         solution1 = Solution(1, 3)
         solution1.objectives = [1, 1, 1]
@@ -52,7 +58,7 @@ class GenerationalDistanceTestCases(unittest.TestCase):
         reference_front = [solution1, solution2]
 
         gd = GenerationalDistance(reference_front)
-        value = gd.distance_to_neatest(solution1, reference_front)
+        value = gd.compute([solution1])
 
         self.assertEqual(0, value)
 
@@ -70,6 +76,7 @@ class GenerationalDistanceTestCases(unittest.TestCase):
 
         self.assertEqual(8, value)
 
+>>>>>>> origin/refactor:jmetal/core/test/test_quality_indicator.py
     def test_should_gd_return_0(self):
         solution1 = Solution(1, 3)
         solution1.objectives = [1, 0, 1]
@@ -87,33 +94,7 @@ class GenerationalDistanceTestCases(unittest.TestCase):
 
 class InvertedGenerationalDistanceTestCases(unittest.TestCase):
 
-    def test_should_igd_return_the_closest_point_case_a(self):
-        solution1 = Solution(1, 3)
-        solution1.objectives = [1, 1, 1]
-
-        solution2 = Solution(1, 3)
-        solution2.objectives = [2, 2, 2]
-
-        reference_front = [solution1, solution2]
-
-        gd = InvertedGenerationalDistance(reference_front)
-        value = gd.distance_to_neatest(solution1, reference_front)
-
-        self.assertEqual(0, value)
-
-    def test_should_igd_return_the_closest_point_case_b(self):
-        solution1 = Solution(1, 2)
-        solution1.objectives = [1, 1]
-
-        solution2 = Solution(1, 2)
-        solution2.objectives = [3, 3]
-
-        reference_front = [solution2]
-
-        gd = GenerationalDistance(reference_front)
-        value = gd.distance_to_neatest(solution1, reference_front)
-
-        self.assertEqual(8, value)
+    pass
 
 
 if __name__ == '__main__':

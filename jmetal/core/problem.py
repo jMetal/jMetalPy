@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from typing import Generic, TypeVar, List
 import random
 
+from jmetal.core.observable import Observer
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
 
 LOGGER = logging.getLogger('jmetal')
@@ -17,9 +18,9 @@ class Problem(Generic[S], ABC):
     MAXIMIZE = 1
 
     def __init__(self):
-        self.number_of_variables: int = None
-        self.number_of_objectives: int = None
-        self.number_of_constraints: int = None
+        self.number_of_variables: int = 0
+        self.number_of_objectives: int = 0
+        self.number_of_constraints: int = 0
 
         self.reference_front: List[S] = None
 
@@ -41,11 +42,19 @@ class Problem(Generic[S], ABC):
         :return: Evaluated solution. """
         pass
 
-    def evaluate_constraints(self, solution: S):
+    @abstractmethod
+    def get_name(self) -> str:
+        pass
+
+
+class DynamicProblem(Problem[S], Observer, ABC):
+
+    @abstractmethod
+    def the_problem_has_changed(self) -> bool:
         pass
 
     @abstractmethod
-    def get_name(self) -> str:
+    def clear_changed(self) -> None:
         pass
 
 
@@ -64,16 +73,98 @@ class FloatProblem(Problem[FloatSolution], ABC):
 
     def __init__(self):
         super(FloatProblem, self).__init__()
-        self.lower_bound = None
-        self.upper_bound = None
+        self.lower_bound = []
+        self.upper_bound = []
 
     def create_solution(self) -> FloatSolution:
-        new_solution = FloatSolution(self.number_of_variables, self.number_of_objectives, self.number_of_constraints,
-                                     self.lower_bound, self.upper_bound)
+        new_solution = FloatSolution(
+            self.number_of_variables,
+            self.number_of_objectives,
+            self.lower_bound,
+            self.upper_bound)
         new_solution.variables = \
             [random.uniform(self.lower_bound[i]*1.0, self.upper_bound[i]*1.0) for i in range(self.number_of_variables)]
 
         return new_solution
+
+
+class OnTheFlyFloatProblem(FloatProblem):
+    """ Class for defining float problems on the fly
+
+        Example:
+
+        # Defining problem Srinivas on the fly
+        def f1(x:[float]):
+            return 2.0 + (x[0] - 2.0) * (x[0] - 2.0) + (x[1] - 1.0) * (x[1] - 1.0)
+
+        def f2(x:[float]):
+            return 9.0 * x[0] - (x[1] - 1.0) * (x[1] - 1.0)
+
+        def c1(x:[float]):
+            return 1.0 - (x[0] * x[0] + x[1] * x[1]) / 225.0
+
+        def c2(x:[float]):
+            return (3.0 * x[1] - x[0]) / 10.0 - 1.0
+
+        problem = OnTheFlyFloatProblem()\
+            .set_name("Srinivas")\
+            .add_variable(-20.0, 20.0)\
+            .add_variable(-20.0, 20.0)\
+            .add_function(f1)\
+            .add_function(f2)\
+            .add_constraint(c1)\
+            .add_constraint(c2)
+
+    """
+    def __init__(self):
+        super(OnTheFlyFloatProblem, self).__init__()
+        self.objective_functions = []
+        self.constraints = []
+        self.name = ""
+
+    def set_name(self, name):
+        self.name = name
+
+        return self
+
+    def add_function(self, function):
+        self.objective_functions.append(function)
+        self.number_of_objectives += 1
+
+        return self
+
+    def add_constraint(self, constraint):
+        self.constraints.append(constraint)
+        self.number_of_constraints += 1
+
+        return self
+
+    def add_variable(self, lower_bound, upper_bound):
+        self.lower_bound.append(lower_bound)
+        self.upper_bound.append(upper_bound)
+        self.number_of_variables += 1
+
+        return self
+
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
+        for i in range(self.number_of_objectives):
+            solution.objectives[i] = self.objective_functions[i](solution.variables)
+
+        if self.number_of_constraints > 0:
+            overall_constraint_violation = 0.0
+            number_of_violated_constraints = 0.0
+
+            for constrain in self.constraints:
+                violation_degree = constrain(solution.variables)
+                if violation_degree < 0.0:
+                    overall_constraint_violation += violation_degree
+                    number_of_violated_constraints += 1
+
+            solution.attributes['overall_constraint_violation'] = overall_constraint_violation
+            solution.attributes['number_of_violated_constraints'] = number_of_violated_constraints
+
+    def get_name(self) -> str:
+        return self.name
 
 
 class IntegerProblem(Problem[IntegerSolution], ABC):
@@ -88,11 +179,14 @@ class IntegerProblem(Problem[IntegerSolution], ABC):
         new_solution = IntegerSolution(
             self.number_of_variables,
             self.number_of_objectives,
-            self.number_of_constraints,
-            self.lower_bound, self.upper_bound)
+            self.lower_bound,
+            self.upper_bound)
 
         new_solution.variables = \
             [int(random.uniform(self.lower_bound[i]*1.0, self.upper_bound[i]*1.0))
              for i in range(self.number_of_variables)]
 
         return new_solution
+
+
+

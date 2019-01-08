@@ -8,8 +8,8 @@ from typing import List
 import pandas as pd
 from scipy import stats
 
-from jmetal.component.quality_indicator import QualityIndicator
 from jmetal.core.algorithm import Algorithm
+from jmetal.core.quality_indicator import QualityIndicator
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_solutions
 
 LOGGER = logging.getLogger('jmetal')

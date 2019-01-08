@@ -1,14 +1,15 @@
-import pandas as pd
-
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.component import RankingAndCrowdingDistanceComparator, HyperVolume
-from jmetal.component.critical_distance import CDplot
 from jmetal.component.quality_indicator import GenerationalDistance
 from jmetal.operator import SBX, BinaryTournamentSelection, Polynomial, NullMutation
 from jmetal.problem import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
-from jmetal.util.laboratory import Experiment, Job, convert_table_to_latex, compute_statistical_analysis, \
-    compute_quality_indicator, create_tables_from_experiment
+from jmetal.util.laboratory import Experiment, Job, compute_quality_indicator
 from jmetal.util.termination_criteria import StoppingByEvaluations
+from jmetal.core.quality_indicator import GenerationalDistance
+from jmetal.operator import SBXCrossover, BinaryTournamentSelection, Polynomial, NullMutation
+from jmetal.problem import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
+from jmetal.util.laboratory import Experiment, Job, compute_quality_indicator
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
 
 def configure_experiment(problems: list, n_run: int):
@@ -21,12 +22,11 @@ def configure_experiment(problems: list, n_run: int):
                     algorithm=NSGAII(
                         problem=problem,
                         population_size=100,
-                        mating_pool_size=100,
-                        offspring_size=100,
+                        offspring_population_size=100,
                         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
-                        crossover=SBX(probability=0.8, distribution_index=20),
+                        crossover=SBXCrossover(probability=0.8, distribution_index=20),
                         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
-                        termination_criteria=StoppingByEvaluations(max=25000)
+                        termination_criterion=StoppingByEvaluations(max=25000)
                     ),
                     algorithm_tag='NSGAIIa',
                     problem_tag=problem.get_name(),
@@ -38,12 +38,11 @@ def configure_experiment(problems: list, n_run: int):
                     algorithm=NSGAII(
                         problem=problem,
                         population_size=100,
-                        mating_pool_size=100,
-                        offspring_size=100,
+                        offspring_population_size=100,
                         mutation=NullMutation(),
-                        crossover=SBX(probability=1.0, distribution_index=20),
+                        crossover=SBXCrossover(probability=1.0, distribution_index=20),
                         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
-                        termination_criteria=StoppingByEvaluations(max=25000)
+                        termination_criterion=StoppingByEvaluations(max=25000)
                     ),
                     algorithm_tag='NSGAIIb',
                     problem_tag=problem.get_name(),
@@ -55,12 +54,11 @@ def configure_experiment(problems: list, n_run: int):
                     algorithm=NSGAII(
                         problem=problem,
                         population_size=100,
-                        mating_pool_size=100,
-                        offspring_size=100,
+                        offspring_population_size=100,
                         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
-                        crossover=SBX(probability=1.0, distribution_index=20),
+                        crossover=SBXCrossover(probability=1.0, distribution_index=20),
                         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
-                        termination_criteria=StoppingByEvaluations(max=25000)
+                        termination_criterion=StoppingByEvaluations(max=25000)
                     ),
                     algorithm_tag='NSGAIIc',
                     problem_tag=problem.get_name(),
@@ -72,12 +70,11 @@ def configure_experiment(problems: list, n_run: int):
                     algorithm=NSGAII(
                         problem=problem,
                         population_size=100,
-                        mating_pool_size=100,
-                        offspring_size=100,
+                        offspring_population_size=100,
                         mutation=Polynomial(probability=0.2, distribution_index=20),
-                        crossover=SBX(probability=0.2, distribution_index=20),
+                        crossover=SBXCrossover(probability=0.2, distribution_index=20),
                         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
-                        termination_criteria=StoppingByEvaluations(max=25000)
+                        termination_criterion=StoppingByEvaluations(max=25000)
                     ),
                     algorithm_tag='NSGAIId',
                     problem_tag=problem.get_name(),
@@ -98,6 +95,7 @@ if __name__ == '__main__':
     experiment = Experiment(base_dir=base_directory, jobs=jobs)
     experiment.run()
     
-    compute_quality_indicator(input_dir=base_directory,
-                              reference_fronts=reference_fronts,
-                              quality_indicators=[HyperVolume([1.0, 1.0]), GenerationalDistance(None)])
+    compute_quality_indicator(
+        input_dir=base_directory,
+        reference_fronts=reference_fronts,
+        quality_indicators=[HyperVolume([1.0, 1.0]), GenerationalDistance(None)])
