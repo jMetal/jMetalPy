@@ -3,11 +3,12 @@ from jmetal.problem import ZDT4
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.component import ProgressBarObserver, CrowdingDistanceArchive, VisualizerObserver
 from jmetal.operator import Polynomial
-from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
+from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
     problem = ZDT4()
+    problem.reference_front = read_solutions(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
     max_evaluations = 25000
     algorithm = SMPSO(
@@ -20,7 +21,7 @@ if __name__ == '__main__':
 
     progress_bar = ProgressBarObserver(max=max_evaluations)
     algorithm.observable.register(observer=progress_bar)
-    algorithm.observable.register(observer=VisualizerObserver())
+    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front))
 
     algorithm.run()
     front = algorithm.get_result()
