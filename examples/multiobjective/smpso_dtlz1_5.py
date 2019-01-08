@@ -4,7 +4,7 @@ from jmetal.operator import Polynomial
 from jmetal.problem import DTLZ1
 from jmetal.util.graphic import InteractivePlot
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
-from jmetal.util.termination_criteria import StoppingByEvaluations
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
     problem = DTLZ1(number_of_objectives=5)
@@ -14,7 +14,7 @@ if __name__ == '__main__':
         swarm_size=100,
         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
         leaders=CrowdingDistanceArchive(100),
-        termination_criteria=StoppingByEvaluations(max=25000)
+        termination_criterion=StoppingByEvaluations(max=25000)
     )
 
     progress_bar = ProgressBarObserver(max=25000)

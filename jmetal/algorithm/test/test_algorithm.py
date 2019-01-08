@@ -3,9 +3,9 @@ import unittest
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.component import RankingAndCrowdingDistanceComparator, CrowdingDistanceArchive
-from jmetal.operator import Polynomial, SBX, BinaryTournamentSelection
+from jmetal.operator import Polynomial, SBXCrossover, BinaryTournamentSelection
 from jmetal.problem import ZDT1
-from jmetal.util.termination_criteria import StoppingByEvaluations
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
 
 class RunningAlgorithmsTestCases(unittest.TestCase):
@@ -17,7 +17,7 @@ class RunningAlgorithmsTestCases(unittest.TestCase):
         self.mating_pool_size = 100
         self.max_evaluations = 100
         self.mutation = Polynomial(probability=1.0 / self.problem.number_of_variables, distribution_index=20)
-        self.crossover = SBX(probability=1.0, distribution_index=20)
+        self.crossover = SBXCrossover(probability=1.0, distribution_index=20)
 
     def test_NSGAII(self):
         NSGAII(

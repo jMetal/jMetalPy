@@ -1,11 +1,10 @@
-import random
 import copy
+import random
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, List
 
+from jmetal.component.comparator import Comparator, DominanceComparator, SolutionAttributeComparator
 from jmetal.component.density_estimator import CrowdingDistance, DensityEstimator
-from jmetal.component.comparator import Comparator, DominanceComparator, EqualSolutionsComparator, \
-    SolutionAttributeComparator
 
 S = TypeVar('S')
 
@@ -41,8 +40,8 @@ class BoundedArchive(Archive[S]):
 
     def __init__(self,
                  maximum_size: int,
-                 comparator: Comparator[S]=None,
-                 density_estimator: DensityEstimator=None):
+                 comparator: Comparator[S] = None,
+                 density_estimator: DensityEstimator = None):
         super(BoundedArchive, self).__init__()
         self.maximum_size = maximum_size
         self.comparator = comparator
@@ -97,13 +96,13 @@ class NonDominatedSolutionListArchive(Archive[S]):
             for index, current_solution in enumerate(list(self.solution_list)):
                 is_dominated_flag = self.comparator.compare(solution, current_solution)
                 if is_dominated_flag == -1:
-                    del self.solution_list[index-number_of_deleted_solutions]
+                    del self.solution_list[index - number_of_deleted_solutions]
                     number_of_deleted_solutions += 1
                 elif is_dominated_flag == 1:
                     is_dominated = True
                     break
                 elif is_dominated_flag == 0:
-                    if EqualSolutionsComparator().compare(solution, current_solution) == 0:
+                    if solution.objectives == current_solution.objectives:
                         is_contained = True
                         break
 
@@ -168,7 +167,7 @@ class ArchiveWithReferencePoint(BoundedArchive[S]):
 
         return result
 
-    def get_reference_point(self)->List[float]:
+    def get_reference_point(self) -> List[float]:
         return self.__reference_point
 
     def __dominance_test(self, solution1: S, solution2: S) -> int:

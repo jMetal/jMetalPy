@@ -6,6 +6,7 @@ from typing import List, TypeVar
 from tqdm import tqdm
 
 from jmetal.core.observable import Observer
+from jmetal.core.problem import DynamicProblem
 from jmetal.util.graphic import StreamingPlot, IStreamingPlot
 from jmetal.util.solution_list import print_function_values_to_file
 

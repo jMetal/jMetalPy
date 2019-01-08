@@ -1,11 +1,11 @@
 from typing import TypeVar, List
 
-from jmetal.component.evaluator import Evaluator
-from jmetal.component.generator import Generator
+from jmetal.component.evaluator import Evaluator, SequentialEvaluator
+from jmetal.component.generator import Generator, RandomGenerator
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
-from jmetal.util.termination_criteria import TerminationCriteria
+from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
 R = TypeVar('R')
@@ -19,34 +19,48 @@ R = TypeVar('R')
 """
 
 
-class GeneticAlgorithm(EvolutionaryAlgorithm):
+class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
 
     def __init__(self,
-                 problem: Problem,
+                 problem: Problem[S],
                  population_size: int,
-                 offspring_size: int,
-                 mating_pool_size: int,
+                 offspring_population_size: int,
                  mutation: Mutation,
                  crossover: Crossover,
                  selection: Selection,
-                 termination_criteria: TerminationCriteria,
-                 pop_generator: Generator = None,
-                 pop_evaluator: Evaluator = None):
-        """
-        .. note:: A steady-state version of this algorithm can be run by setting the offspring size to 1 and the mating pool size to 2.
-        """
+                 termination_criterion: TerminationCriterion,
+                 population_generator: Generator = RandomGenerator(),
+                 population_evaluator: Evaluator = SequentialEvaluator()):
         super(GeneticAlgorithm, self).__init__(
             problem=problem,
             population_size=population_size,
-            pop_generator=pop_generator,
-            pop_evaluator=pop_evaluator,
-            termination_criteria=termination_criteria
-        )
-        self.offspring_size = offspring_size
-        self.mating_pool_size = mating_pool_size
+            offspring_population_size=offspring_population_size)
         self.mutation_operator = mutation
         self.crossover_operator = crossover
         self.selection_operator = selection
+
+        self.population_generator = population_generator
+        self.population_evaluator = population_evaluator
+
+        self.termination_criterion = termination_criterion
+        self.observable.register(termination_criterion)
+
+        self.mating_pool_size = \
+            self.offspring_population_size * \
+            self.crossover_operator.get_number_of_parents() // self.crossover_operator.get_number_of_children()
+
+        if self.mating_pool_size < self.crossover_operator.get_number_of_children():
+            self.mating_pool_size = self.crossover_operator.get_number_of_children()
+
+    def create_initial_solutions(self) -> List[S]:
+        return [self.population_generator.new(self.problem)
+                for _ in range(self.population_size)]
+
+    def evaluate(self, solution_list: List[S]):
+        return self.population_evaluator.evaluate(solution_list, self.problem)
+
+    def stopping_condition_is_met(self) -> bool:
+        return self.termination_criterion.is_met
 
     def selection(self, population: List[S]):
         mating_population = []
@@ -57,23 +71,25 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
 
         return mating_population
 
-    def reproduction(self, population: List[S]) -> List[S]:
+    def reproduction(self, mating_population: List[S]) -> List[S]:
         number_of_parents_to_combine = self.crossover_operator.get_number_of_parents()
 
-        if len(population) % number_of_parents_to_combine != 0:
+        if len(mating_population) % number_of_parents_to_combine != 0:
             raise Exception('Wrong number of parents')
 
         offspring_population = []
-        for i in range(0, self.offspring_size, number_of_parents_to_combine):
+        for i in range(0, self.offspring_population_size, number_of_parents_to_combine):
             parents = []
             for j in range(number_of_parents_to_combine):
-                parents.append(population[i + j])
+                parents.append(mating_population[i + j])
 
             offspring = self.crossover_operator.execute(parents)
 
             for solution in offspring:
                 self.mutation_operator.execute(solution)
                 offspring_population.append(solution)
+                if len(offspring_population) >= self.offspring_population_size:
+                    break
 
         return offspring_population
 
@@ -90,13 +106,8 @@ class GeneticAlgorithm(EvolutionaryAlgorithm):
 
         return offspring_population
 
-    def update_progress(self):
-        observable_data = self.get_observable_data()
-        observable_data['SOLUTIONS'] = self.population
-        self.observable.notify_all(**observable_data)
-
     def get_result(self) -> R:
-        return self.population[0]
+        return self.solutions[0]
 
     def get_name(self) -> str:
-        return 'GA'
+        return 'Genetic algorithm'

@@ -96,7 +96,8 @@ class RankingAndCrowdingDistanceComparator(Comparator):
 
 class DominanceComparator(Comparator):
 
-    def __init__(self, constraint_comparator=SolutionAttributeComparator("overall_constraint_violation", False)):
+    def __init__(self,
+                 constraint_comparator: SolutionAttributeComparator=SolutionAttributeComparator("overall_constraint_violation", False)):
         self.constraint_comparator = constraint_comparator
 
     def compare(self, solution1: Solution, solution2: Solution) -> int:
@@ -107,7 +108,10 @@ class DominanceComparator(Comparator):
         # elif len(solution1.objectives) != len(solution2.objectives):
         #    raise Exception("The solutions have different number of objectives")
 
-        result = self.constraint_comparator.compare(solution1, solution2)
+        result = 0
+        #if solution1.number_of_constraints > 0:
+        if solution1.attributes.get(self.constraint_comparator.key) is not None:
+            result = self.constraint_comparator.compare(solution1, solution2)
         if result == 0:
             result = self.__dominance_test(solution1, solution2)
 

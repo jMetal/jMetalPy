@@ -1,12 +1,12 @@
 from copy import copy
 from typing import TypeVar, List
 
-from jmetal.component.evaluator import Evaluator
-from jmetal.component.generator import Generator
+from jmetal.component.evaluator import Evaluator, SequentialEvaluator
+from jmetal.component.generator import Generator, RandomGenerator
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
-from jmetal.util.termination_criteria import TerminationCriteria
+from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
 R = TypeVar('R')
@@ -20,28 +20,42 @@ R = TypeVar('R')
 """
 
 
-class EvolutionStrategy(EvolutionaryAlgorithm):
+class EvolutionStrategy(EvolutionaryAlgorithm[S, R]):
 
     def __init__(self,
                  problem: Problem,
                  mu: int,
                  lambda_: int,
+                 elitist: bool,
                  mutation: Mutation,
-                 termination_criteria: TerminationCriteria,
-                 elitist: bool = True,
-                 pop_evaluator: Evaluator = None,
-                 pop_generator: Generator = None):
+                 termination_criterion: TerminationCriterion,
+                 population_generator: Generator = RandomGenerator(),
+                 population_evaluator: Evaluator = SequentialEvaluator()):
         super(EvolutionStrategy, self).__init__(
             problem=problem,
             population_size=mu,
-            pop_generator=pop_generator,
-            pop_evaluator=pop_evaluator,
-            termination_criteria=termination_criteria
-        )
+            offspring_population_size=lambda_)
         self.mu = mu
         self.lambda_ = lambda_
         self.elitist = elitist
-        self.mutation = mutation
+
+        self.mutation_operator = mutation
+
+        self.population_generator = population_generator
+        self.population_evaluator = population_evaluator
+
+        self.termination_criterion = termination_criterion
+        self.observable.register(termination_criterion)
+
+    def create_initial_solutions(self) -> List[S]:
+        return [self.population_generator.new(self.problem)
+                for _ in range(self.population_size)]
+
+    def evaluate(self, solution_list: List[S]):
+        return self.population_evaluator.evaluate(solution_list, self.problem)
+
+    def stopping_condition_is_met(self) -> bool:
+        return self.termination_criterion.is_met
 
     def selection(self, population: List[S]) -> List[S]:
         return population
@@ -51,7 +65,7 @@ class EvolutionStrategy(EvolutionaryAlgorithm):
         for solution in population:
             for j in range(int(self.lambda_ / self.mu)):
                 new_solution = copy(solution)
-                offspring_population.append(self.mutation.execute(new_solution))
+                offspring_population.append(self.mutation_operator.execute(new_solution))
 
         return offspring_population
 
@@ -72,13 +86,8 @@ class EvolutionStrategy(EvolutionaryAlgorithm):
 
         return new_population
 
-    def update_progress(self):
-        observable_data = self.get_observable_data()
-        observable_data['SOLUTIONS'] = self.population
-        self.observable.notify_all(**observable_data)
-
     def get_result(self) -> R:
-        return self.population[0]
+        return self.solutions[0]
 
     def get_name(self) -> str:
         return 'Elitist evolution Strategy'

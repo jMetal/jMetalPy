@@ -3,8 +3,8 @@ from jmetal.component import ProgressBarObserver, CrowdingDistanceArchiveWithRef
 from jmetal.operator import Polynomial
 from jmetal.problem import ZDT1
 from jmetal.util.graphic import InteractivePlot
-from jmetal.util.solution_list import read_solutions
-from jmetal.util.termination_criteria import StoppingByEvaluations
+from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
 
 if __name__ == '__main__':
@@ -13,21 +13,22 @@ if __name__ == '__main__':
 
     swarm_size = 100
 
-    reference_points = [[0.5, 0.5], [0.2, 0.8]]
+    reference_points = [[0.5, 0.5], [0.1, 0.55]]
     archives_with_reference_points = []
 
     for point in reference_points:
         archives_with_reference_points.append(
-            CrowdingDistanceArchiveWithReferencePoint(swarm_size, point)
+            CrowdingDistanceArchiveWithReferencePoint(swarm_size/len(reference_points), point)
         )
 
+    max_evaluations = 25000
     algorithm = SMPSORP(
         problem=problem,
         swarm_size=swarm_size,
         mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
         reference_points=reference_points,
         leaders=archives_with_reference_points,
-        termination_criteria=StoppingByEvaluations(max=25000)
+        termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
     algorithm.observable.register(observer=ProgressBarObserver(max=25000))
@@ -35,6 +36,10 @@ if __name__ == '__main__':
 
     algorithm.run()
     front = algorithm.get_result()
+
+    # Save results to file
+    print_function_values_to_file(front, 'FUN.' + algorithm.get_name() + "." + problem.get_name())
+    print_variables_to_file(front, 'VAR.'+ algorithm.get_name() + "." + problem.get_name())
 
     # Plot frontier to file
     pareto_front = InteractivePlot(plot_title='SMPSORP-ZDT1', reference_point=reference_points, reference_front=problem.reference_front, axis_labels=problem.obj_labels)

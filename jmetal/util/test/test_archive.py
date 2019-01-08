@@ -1,7 +1,7 @@
 import unittest
 
-from jmetal.component.archive import NonDominatedSolutionListArchive, BoundedArchive, CrowdingDistanceArchive, Archive
 from jmetal.core.solution import Solution
+from jmetal.util.archive import NonDominatedSolutionListArchive, BoundedArchive, CrowdingDistanceArchive, Archive
 
 
 class ArchiveTestCases(unittest.TestCase):
