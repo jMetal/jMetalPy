@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 from statsmodels.sandbox.stats.multicomp import get_tukeyQcrit
 
+from jmetal.util.statistical_test.functions import ranks
+
 
 def NemenyiCD(alpha: float, num_alg, num_dataset):
     """ Computes Nemenyi's critical difference:
@@ -23,36 +25,6 @@ def NemenyiCD(alpha: float, num_alg, num_dataset):
     cd = q_alpha * np.sqrt(num_alg * (num_alg + 1) / (6.0 * num_dataset))
 
     return cd
-
-
-def ranks(data: np.array, descending=False):
-    """ Computes the rank of the elements in data.
-
-    :param data: 2-D matrix
-    :param descending: boolean (default False). If true, rank is sorted in descending order.
-    :return: ranks, where ranks[i][j] == rank of the i-th row w.r.t the j-th column.
-    """
-
-    s = 0 if (descending is False) else 1
-
-    # Compute ranks. (ranks[i][j] == rank of the i-th treatment on the j-th sample.)
-    if data.ndim == 2:
-        ranks = np.ones(data.shape)
-        for i in range(data.shape[0]):
-            values, indices, rep = np.unique(
-                (-1) ** s * np.sort((-1) ** s * data[i, :]), return_index=True, return_counts=True, )
-            for j in range(data.shape[1]):
-                ranks[i, j] += indices[values == data[i, j]] + \
-                               0.5 * (rep[values == data[i, j]] - 1)
-        return ranks
-    elif data.ndim == 1:
-        ranks = np.ones((data.size,))
-        values, indices, rep = np.unique(
-            (-1) ** s * np.sort((-1) ** s * data), return_index=True, return_counts=True, )
-        for i in range(data.size):
-            ranks[i] += indices[values == data[i]] + \
-                        0.5 * (rep[values == data[i]] - 1)
-        return ranks
 
 
 def CDplot(results, alpha: float = 0.05, alg_names: list = None):
@@ -239,4 +211,5 @@ def CDplot(results, alpha: float = 0.05, alg_names: list = None):
                                             lowest - 0.025) / (highest - lowest),
                       xmax=sleft + lline * (right_lines[i, 1] - lowest + 0.025) / (highest - lowest), linewidth=2)
 
+    plt.savefig('CDplot.png', bbox_inches='tight')
     plt.show()
