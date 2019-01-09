@@ -1,6 +1,6 @@
 from jmetal.algorithm.multiobjective.gde3 import GDE3
-from jmetal.component import VisualizerObserver
 from jmetal.problem import ZDT1
+from jmetal.util.observer import VisualizerObserver
 from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByKeyboard
 
