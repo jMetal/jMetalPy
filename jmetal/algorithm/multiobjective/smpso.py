@@ -243,7 +243,15 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
         self.completed_iterations = 0
 
     def restart(self) -> None:
-        pass
+        self.solutions = self.create_initial_solutions()
+        self.solutions = self.evaluate(self.solutions)
+        """self.leaders = CrowdingDistanceArchive(self.swarm_size)"""
+        self.leaders.__init__(self.leaders.maximum_size)
+        self.initialize_velocity(self.solutions)
+        self.initialize_particle_best(self.solutions)
+        self.initialize_global_best(self.solutions)
+        self.init_progress()
+
 
     def update_progress(self):
         if self.problem.the_problem_has_changed():
@@ -254,19 +262,24 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
         self.observable.notify_all(**observable_data)
 
         self.evaluations += self.swarm_size
+        self.leaders.compute_density_estimator()
+
+
 
     def stopping_condition_is_met(self):
         if self.termination_criterion.is_met:
             observable_data = self.get_observable_data()
             self.observable.notify_all(**observable_data)
 
+            print_function_values_to_file(self.leaders.solution_list,
+                                          'FUN.DynamicSMPSO.' + str(self.completed_iterations))
             self.restart()
 
-            self.leaders.__init__(self.leaders.maximum_size)
+
             self.init_progress()
 
             self.completed_iterations += 1
-            print_function_values_to_file(self.leaders.solution_list, 'FUN.DynamicSMPSO.' + str(self.completed_iterations))
+
 
 
 class SMPSORP(SMPSO):
