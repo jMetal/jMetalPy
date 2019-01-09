@@ -1,8 +1,9 @@
 from examples.multiobjective.distributed_nsgaII import ZDT1Modified
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.component import RankingAndCrowdingDistanceComparator, ProgressBarObserver
-from jmetal.component.evaluator import SparkEvaluator
+from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
+from jmetal.util.evaluator import SparkEvaluator
 from jmetal.operator import SBXCrossover, Polynomial, BinaryTournamentSelection
+from jmetal.util.observer import ProgressBarObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
@@ -20,8 +21,8 @@ if __name__ == '__main__':
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
-    progress_bar = ProgressBarObserver(max=max_evaluations)
-    algorithm.observable.register(observer=progress_bar)
+
+    algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
 
     algorithm.run()
     front = algorithm.get_result()

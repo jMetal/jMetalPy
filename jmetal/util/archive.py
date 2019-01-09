@@ -3,8 +3,8 @@ import random
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, List
 
-from jmetal.component.comparator import Comparator, DominanceComparator, SolutionAttributeComparator
-from jmetal.component.density_estimator import CrowdingDistance, DensityEstimator
+from jmetal.util.comparator import Comparator, DominanceComparator, SolutionAttributeComparator
+from jmetal.util.density_estimator import CrowdingDistance, DensityEstimator
 
 S = TypeVar('S')
 

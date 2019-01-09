@@ -1,6 +1,6 @@
 from jmetal.algorithm.multiobjective.smpso import DynamicSMPSO
 from jmetal.component import CrowdingDistanceArchive, VisualizerObserver
-from jmetal.component.observable import TimeCounter
+from jmetal.util.observable import TimeCounter
 from jmetal.operator import Polynomial
 from jmetal.problem.multiobjective.fda import FDA2
 from jmetal.util.termination_criterion import StoppingByEvaluations

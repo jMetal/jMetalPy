@@ -5,10 +5,9 @@ from typing import TypeVar, List, Optional
 
 import numpy
 
-from jmetal.component import SequentialEvaluator
-from jmetal.component.comparator import DominanceComparator
-from jmetal.component.evaluator import Evaluator
-from jmetal.component.generator import Generator, RandomGenerator
+from jmetal.util.comparator import DominanceComparator
+from jmetal.util.evaluator import Evaluator, SequentialEvaluator
+from jmetal.util.generator import Generator, RandomGenerator
 from jmetal.core.algorithm import ParticleSwarmOptimization, DynamicAlgorithm
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import FloatProblem, DynamicProblem

@@ -5,10 +5,11 @@ import dask
 from dask.distributed import Client
 
 from jmetal.algorithm.multiobjective.nsgaii import DistributedNSGAII
-from jmetal.component import RankingAndCrowdingDistanceComparator, ProgressBarObserver
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.operator import Polynomial, SBXCrossover, BinaryTournamentSelection
+from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
+from jmetal.util.observer import ProgressBarObserver
 
 
 class ZDT1Modified(FloatProblem):
@@ -78,8 +79,7 @@ if __name__ == '__main__':
         client=client
     )
 
-    progress_bar = ProgressBarObserver(max=100)
-    algorithm.observable.register(observer=progress_bar)
+    algorithm.observable.register(observer=ProgressBarObserver(max=100))
 
     algorithm.run()
     front = algorithm.get_result()

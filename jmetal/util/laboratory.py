@@ -5,8 +5,8 @@ from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 from typing import List
 
+import numpy as np
 import pandas as pd
-from scipy import stats
 
 from jmetal.core.algorithm import Algorithm
 from jmetal.core.quality_indicator import QualityIndicator
@@ -44,27 +44,26 @@ class Job:
 
 class Experiment:
 
-    def __init__(self, base_dir: str, jobs: List[Job], m_workers: int = 6):
+    def __init__(self, output_dir: str, jobs: List[Job], m_workers: int = 6):
         """ Run an experiment to execute a list of jobs.
 
-        :param base_dir: Base directory where each job will save its results.
+        :param output_dir: Base directory where each job will save its results.
         :param jobs: List of Jobs (from :py:mod:`jmetal.util.laboratory)`) to be executed.
         :param m_workers: Maximum number of workers to execute the Jobs in parallel.
         """
         self.jobs = jobs
         self.m_workers = m_workers
-        self.base_dir = base_dir
+        self.output_dir = output_dir
 
     def run(self) -> None:
-        # todo This doesn't seems to be working properly
         with ProcessPoolExecutor(max_workers=self.m_workers) as executor:
             for job in self.jobs:
-                output_path = os.path.join(self.base_dir, job.algorithm_tag, job.problem_tag)
+                output_path = os.path.join(self.output_dir, job.algorithm_tag, job.problem_tag)
                 executor.submit(job.execute(output_path))
 
 
-def compute_quality_indicator(input_dir: str, quality_indicators: List[QualityIndicator],
-                              reference_fronts: str = ''):
+def generate_summary_from_experiment(input_dir: str, quality_indicators: List[QualityIndicator],
+                                     reference_fronts: str = ''):
     """ Compute a list of quality indicators. The input data directory *must* met the following structure (this is generated
     automatically by the Experiment class):
 
@@ -136,76 +135,71 @@ def compute_quality_indicator(input_dir: str, quality_indicators: List[QualityIn
                         of.writelines(contents)
 
 
-def create_tables_from_experiment(base_dir: str, filename: str):
-    # pd.set_option('display.float_format', '{:.2e}'.format)
-    df = pd.read_csv(os.path.join(base_dir, filename), skipinitialspace=True)
+def compute_median_iqr_tables(filename: str):
+    """ Compute the mean and IQR of each quality indicator.
+    :param filename: Input summary file.
+    """
+    df = pd.read_csv(filename, skipinitialspace=True)
 
-    if {'Problem', 'ExecutionId', 'IndicatorName', 'IndicatorValue'} == set(df.columns.tolist()):
-        raise Exception('Wrong column names')
+    if len(set(df.columns.tolist())) != 5:
+        raise Exception('Wrong number of columns')
 
     median_iqr = pd.DataFrame()
 
     for algorithm_name, subset in df.groupby('Algorithm'):
         subset = subset.drop('Algorithm', axis=1)
         subset = subset.set_index(['Problem', 'IndicatorName', 'ExecutionId'])
-        subset.to_csv(os.path.join(base_dir, 'QualityIndicator' + algorithm_name + '.csv'), sep='\t', encoding='utf-8')
 
         # Compute Median and Interquartile range
         median = subset.groupby(level=[0, 1]).median()
         iqr = subset.groupby(level=[0, 1]).quantile(0.75) - subset.groupby(level=[0, 1]).quantile(0.25)
         table = median.applymap('{:.2e}'.format) + '_{' + iqr.applymap('{:.2e}'.format) + '}'
+
         table = table.rename(columns={'IndicatorValue': algorithm_name})
-
         median_iqr = pd.concat([median_iqr, table], axis=1)
-
-    median_iqr.to_csv(os.path.join(base_dir, 'MedianIQR.csv'), sep='\t', encoding='utf-8')
 
     for iqr_name, subset in median_iqr.groupby('IndicatorName'):
         subset.index = subset.index.droplevel(1)
-        subset.to_csv(os.path.join(base_dir, 'MedianIQR{}.csv'.format(iqr_name)), sep='\t', encoding='utf-8')
+        subset.to_csv('MedianIQR{}.csv'.format(iqr_name), sep='\t', encoding='utf-8')
+
+        with open('MedianIQR{}.tex'.format(iqr_name), 'w') as latex:
+            latex.write(__convert_table_to_latex(
+                subset, caption='Median and Interquartile Range of the {} quality indicator'.format(iqr_name), label='')
+            )
 
 
-def __compute_statistical_analysis(df: pd.DataFrame):
-    """ The application scheme listed here is as described in
-
-    * G. Luque, E. Alba, Parallel Genetic Algorithms, Springer-Verlag, ISBN 978-3-642-22084-5, 2011
-
-    ..note: We assume non-normal variables (median comparison, non-parametric tests).
-
-    :param df: Experiment data frame.
+def compute_mean_indicator(filename: str, indicator_name: str):
+    """ Compute the mean values of an indicator.
+    :param filename:
+    :param indicator_name: Quality indicator name.
     """
-    if len(df.columns) < 2:
-        raise Exception('At least two algorithms are necessary to compare')
+    df = pd.read_csv(filename, skipinitialspace=True)
 
-    result = pd.DataFrame()
+    if len(set(df.columns.tolist())) != 5:
+        raise Exception('Wrong number of columns')
 
-    if len(df.columns) == 2:
-        LOGGER.info('Running non-parametric test: Wilcoxon signed-rank test')
-        for _, subset in df.groupby(level=0):
-            statistic, pvalue = stats.wilcoxon(subset[subset.columns[0]], subset[subset.columns[1]])
+    algorithms = pd.unique(df['Algorithm'])
+    problems = pd.unique(df['Problem'])
 
-            test = pd.DataFrame({
-                'Wilcoxon': '*' if pvalue < 0.05 else '-'
-            }, index=[subset.index.values[0][0]], columns=['Wilcoxon'])
-            test.index.name = 'problem'
+    # We consider the quality indicator indicator_name
+    data = df[df['IndicatorName'] == indicator_name]
 
-            result = result.append(test)
-    else:
-        LOGGER.info('Running non-parametric test: Kruskal-Wallis test')
-        for _, subset in df.groupby(level=0):
-            statistic, pvalue = stats.kruskal(*subset.values.tolist())
+    # Compute for each pair algorithm/problem the average of IndicatorValue
+    average_values = np.zeros((problems.size, algorithms.size))
+    j = 0
+    for alg in algorithms:
+        i = 0
+        for pr in problems:
+            average_values[i, j] = data['IndicatorValue'][np.logical_and(
+                data['Algorithm'] == alg, data['Problem'] == pr)].mean()
+            i += 1
+        j += 1
 
-            test = pd.DataFrame({
-                'Kruskal-Wallis': '*' if pvalue < 0.05 else '-'
-            }, index=[subset.index.values[0][0]], columns=['Kruskal-Wallis'])
-            test.index.name = 'problem'
-
-            result = result.append(test)
-
-    return result
+    # Generate dataFrame from average values
+    return pd.DataFrame(data=average_values, index=problems, columns=algorithms)
 
 
-def convert_table_to_latex(df: pd.DataFrame, caption: str, label: str = 'tab:exp', alignment: str = 'c'):
+def __convert_table_to_latex(df: pd.DataFrame, caption: str, label: str, alignment: str = 'c'):
     """ Convert a pandas DataFrame to a LaTeX tabular. Prints labels in bold and does use math mode.
     """
     num_columns, num_rows = df.shape[1], df.shape[0]

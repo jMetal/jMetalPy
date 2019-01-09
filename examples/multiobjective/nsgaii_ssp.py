@@ -1,7 +1,8 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.component import ProgressBarObserver, RankingAndCrowdingDistanceComparator
 from jmetal.operator import BinaryTournamentSelection, BitFlip, SPXCrossover
 from jmetal.problem.multiobjective.unconstrained import SubsetSum
+from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
+from jmetal.util.observer import ProgressBarObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 

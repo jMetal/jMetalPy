@@ -1,7 +1,7 @@
 from examples.multiobjective.distributed_nsgaII import ZDT1Modified
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.component import RankingAndCrowdingDistanceComparator, ProgressBarObserver
-from jmetal.component.evaluator import MapEvaluator
+from jmetal.util.evaluator import MapEvaluator
 from jmetal.operator import SBXCrossover, Polynomial, BinaryTournamentSelection
 from jmetal.util.termination_criterion import StoppingByEvaluations
 

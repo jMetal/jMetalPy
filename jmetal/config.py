@@ -1,6 +1,9 @@
-from jmetal.operator import Polynomial, BitFlip
+from jmetal.core.observable import DefaultObservable
 
-from jmetal.component import SequentialEvaluator, RandomGenerator, DefaultObservable
+from jmetal.operator import Polynomial, BitFlip
+from jmetal.util.evaluator import SequentialEvaluator
+from jmetal.util.generator import RandomGenerator
+
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 

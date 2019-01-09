@@ -1,14 +1,9 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.component import RankingAndCrowdingDistanceComparator, HyperVolume
-from jmetal.component.quality_indicator import GenerationalDistance
-from jmetal.operator import SBX, BinaryTournamentSelection, Polynomial, NullMutation
-from jmetal.problem import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
-from jmetal.util.laboratory import Experiment, Job, compute_quality_indicator
-from jmetal.util.termination_criteria import StoppingByEvaluations
-from jmetal.core.quality_indicator import GenerationalDistance
+from jmetal.core.quality_indicator import GenerationalDistance, HyperVolume
 from jmetal.operator import SBXCrossover, BinaryTournamentSelection, Polynomial, NullMutation
 from jmetal.problem import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
-from jmetal.util.laboratory import Experiment, Job, compute_quality_indicator
+from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
+from jmetal.util.laboratory import Experiment, Job, generate_summary_from_experiment
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 
@@ -92,10 +87,10 @@ if __name__ == '__main__':
     zdt1, zdt2, zdt3, zdt4, zdt6 = ZDT1(), ZDT2(), ZDT3(), ZDT4(), ZDT6()
     jobs = configure_experiment(problems=[zdt1, zdt2, zdt3, zdt4, zdt6], n_run=25)
 
-    experiment = Experiment(base_dir=base_directory, jobs=jobs)
+    experiment = Experiment(output_dir=base_directory, jobs=jobs)
     experiment.run()
     
-    compute_quality_indicator(
+    generate_summary_from_experiment(
         input_dir=base_directory,
         reference_fronts=reference_fronts,
         quality_indicators=[HyperVolume([1.0, 1.0]), GenerationalDistance(None)])
