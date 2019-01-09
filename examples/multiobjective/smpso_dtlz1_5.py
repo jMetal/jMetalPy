@@ -24,17 +24,18 @@ if __name__ == '__main__':
     front = algorithm.get_result()
 
     # Plot frontier to file
-    pareto_front = InteractivePlot(plot_title='SMPSO-DTLZ1-5', reference_front=problem.reference_front, axis_labels=problem.obj_labels)
+    plot_tile = algorithm.get_name() + "-" + problem.get_name() + "-" + str(problem.number_of_objectives)
+    pareto_front = InteractivePlot(plot_title=plot_tile, reference_front=problem.reference_front, axis_labels=problem.obj_labels)
     pareto_front.plot(front)
-    pareto_front.export_to_html(filename='SMPSO-DTLZ1-5')
+    pareto_front.export_to_html(filename=plot_tile)
 
-    pareto_front = InteractivePlot(plot_title='SMPSO-DTLZ1-5-norm', reference_front=problem.reference_front, axis_labels=problem.obj_labels)
+    pareto_front = InteractivePlot(plot_title=plot_tile + '-norm', reference_front=problem.reference_front, axis_labels=problem.obj_labels)
     pareto_front.plot(front, normalize=True)
-    pareto_front.export_to_html(filename='SMPSO-DTLZ1-5-norm')
+    pareto_front.export_to_html(filename=plot_tile + '-norm')
 
     # Save variables to file
-    print_function_values_to_file(front, 'FUN.SMPSO.DTLZ1-5')
-    print_variables_to_file(front, 'VAR.SMPSO.DTLZ1-5')
+    print_function_values_to_file(front, 'FUN-' + plot_tile)
+    print_variables_to_file(front, 'VAR-' + plot_tile)
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())
