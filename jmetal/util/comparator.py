@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic
+import math
 
 from jmetal.core.solution import Solution
 
@@ -171,3 +172,56 @@ class GDominanceComparator(DominanceComparator):
                     result = 0
 
         return result
+
+
+class EpsilonDominanceComparator(DominanceComparator):
+    def __init__(self,
+                 epsilon: float,
+                 constraint_comparator=SolutionAttributeComparator('overall_constraint_violation', False)):
+        super(EpsilonDominanceComparator, self).__init__(constraint_comparator)
+        self.epsilon = epsilon
+
+    def compare(self, solution1: Solution, solution2: Solution):
+        result = self.constraint_comparator.compare(solution1, solution2)
+        if result == 0:
+            result = self.__dominance_test(solution1, solution2)
+
+        return result
+
+    def __dominance_test(self, solution1: Solution, solution2: Solution):
+        best_is_one = False
+        best_is_two = False
+        for i in range(solution1.number_of_objectives):
+            value1 = math.floor(solution1.objectives[i] / self.epsilon)
+            value2 = math.floor(solution2.objectives[i] / self.epsilon)
+
+            if value1 < value2:
+                best_is_one = True
+                if best_is_two:
+                    return 0
+            elif value2 < value1:
+                best_is_two = True
+                if best_is_one:
+                    return 0
+
+        if not best_is_one and not best_is_two:
+            dist1 = 0.0
+            dist2 = 0.0
+
+            for i in range(solution1.number_of_objectives):
+                index1 = math.floor(solution1.objectives[i]/self.epsilon)
+                index2 = math.floor(solution2.objectives[i]/self.epsilon)
+
+                dist1 += math.pow(solution1.objectives[i] - index1 * self.epsilon, 2.0)
+                dist2 += math.pow(solution2.objectives[i] - index2 * self.epsilon, 2.0)
+
+            if dist1 < dist2:
+                return -1
+            else:
+                return 1
+        else:
+            if best_is_two:
+                return 1
+            else:
+                return -1
+
