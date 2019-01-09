@@ -4,9 +4,9 @@ from typing import TypeVar, List, Generic
 from distributed import as_completed, Client
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
-from jmetal.component import DominanceComparator
-from jmetal.component.evaluator import Evaluator, SequentialEvaluator
-from jmetal.component.generator import Generator, RandomGenerator
+from jmetal.util.comparator import DominanceComparator, Comparator
+from jmetal.util.evaluator import Evaluator, SequentialEvaluator
+from jmetal.util.generator import Generator, RandomGenerator
 from jmetal.config import store
 from jmetal.core.algorithm import DynamicAlgorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
@@ -39,7 +39,7 @@ class NSGAII(GeneticAlgorithm[S, R]):
                  termination_criterion: TerminationCriterion,
                  population_generator: Generator = RandomGenerator(),
                  population_evaluator: Evaluator = SequentialEvaluator(),
-                 dominance_comparator: DominanceComparator = DominanceComparator()):
+                 dominance_comparator: Comparator = DominanceComparator()):
         """  NSGA-II implementation as described in
 
         * K. Deb, A. Pratap, S. Agarwal and T. Meyarivan, "A fast and elitist

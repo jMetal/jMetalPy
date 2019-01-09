@@ -1,5 +1,5 @@
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
-from jmetal.operator import SPXCrossover, BitFlip, BinaryTournamentSelection
+from jmetal.operator import SPXCrossover, BitFlipMutation, BinaryTournamentSelection
 from jmetal.problem.singleobjective.unconstrained import SubsetSum
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
@@ -27,7 +27,7 @@ if __name__ == '__main__':
         problem=problem,
         population_size=100,
         offspring_population_size=2,
-        mutation=BitFlip(probability=0.1),
+        mutation=BitFlipMutation(probability=0.1),
         crossover=SPXCrossover(probability=0.8),
         selection=BinaryTournamentSelection(),
         termination_criterion=StoppingByEvaluations(max=25000)

@@ -4,8 +4,8 @@ from typing import TypeVar, List
 import numpy as np
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
-from jmetal.component.evaluator import Evaluator, SequentialEvaluator
-from jmetal.component.generator import Generator, RandomGenerator
+from jmetal.util.evaluator import Evaluator, SequentialEvaluator
+from jmetal.util.generator import Generator, RandomGenerator
 from jmetal.core.operator import Mutation, Crossover
 from jmetal.core.problem import Problem
 from jmetal.util.aggregative_function import AggregativeFunction

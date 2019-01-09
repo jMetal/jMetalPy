@@ -24,10 +24,10 @@ class NullMutation(Mutation[Solution]):
         return 'Null mutation'
 
 
-class BitFlip(Mutation[BinarySolution]):
+class BitFlipMutation(Mutation[BinarySolution]):
 
     def __init__(self, probability: float):
-        super(BitFlip, self).__init__(probability=probability)
+        super(BitFlipMutation, self).__init__(probability=probability)
 
     def execute(self, solution: BinarySolution) -> BinarySolution:
         for i in range(solution.number_of_variables):
@@ -42,10 +42,10 @@ class BitFlip(Mutation[BinarySolution]):
         return 'BitFlip mutation'
 
 
-class Polynomial(Mutation[FloatSolution]):
+class PolynomialMutation(Mutation[FloatSolution]):
 
     def __init__(self, probability: float, distribution_index: float = 0.20):
-        super(Polynomial, self).__init__(probability=probability)
+        super(PolynomialMutation, self).__init__(probability=probability)
         self.distribution_index = distribution_index
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
@@ -86,10 +86,10 @@ class Polynomial(Mutation[FloatSolution]):
         return 'Polynomial mutation'
 
 
-class IntegerPolynomial(Mutation[IntegerSolution]):
+class IntegerPolynomialMutation(Mutation[IntegerSolution]):
 
     def __init__(self, probability: float, distribution_index: float = 0.20):
-        super(IntegerPolynomial, self).__init__(probability=probability)
+        super(IntegerPolynomialMutation, self).__init__(probability=probability)
         self.distribution_index = distribution_index
 
     def execute(self, solution: IntegerSolution) -> IntegerSolution:
@@ -127,10 +127,10 @@ class IntegerPolynomial(Mutation[IntegerSolution]):
         return 'Polynomial mutation (Integer)'
 
 
-class SimpleRandom(Mutation[FloatSolution]):
+class SimpleRandomMutation(Mutation[FloatSolution]):
 
     def __init__(self, probability: float):
-        super(SimpleRandom, self).__init__(probability=probability)
+        super(SimpleRandomMutation, self).__init__(probability=probability)
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
         for i in range(solution.number_of_variables):
@@ -144,10 +144,10 @@ class SimpleRandom(Mutation[FloatSolution]):
         return 'Simple random mutation'
 
 
-class Uniform(Mutation[FloatSolution]):
+class UniformMutation(Mutation[FloatSolution]):
 
     def __init__(self, probability: float, perturbation: float = 0.5):
-        super(Uniform, self).__init__(probability=probability)
+        super(UniformMutation, self).__init__(probability=probability)
         self.perturbation = perturbation
 
     def execute(self, solution: FloatSolution) -> FloatSolution:

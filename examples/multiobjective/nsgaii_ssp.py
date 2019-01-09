@@ -1,7 +1,8 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.component import ProgressBarObserver, RankingAndCrowdingDistanceComparator
-from jmetal.operator import BinaryTournamentSelection, BitFlip, SPXCrossover
+from jmetal.operator import BinaryTournamentSelection, BitFlipMutation, SPXCrossover
 from jmetal.problem.multiobjective.unconstrained import SubsetSum
+from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
+from jmetal.util.observer import ProgressBarObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 
@@ -29,7 +30,7 @@ if __name__ == '__main__':
         problem=problem,
         population_size=100,
         offspring_population_size=100,
-        mutation=BitFlip(probability=0.5),
+        mutation=BitFlipMutation(probability=0.5),
         crossover=SPXCrossover(probability=0.8),
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
         termination_criterion=StoppingByEvaluations(max=25000)

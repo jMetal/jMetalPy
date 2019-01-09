@@ -1,9 +1,9 @@
 import random
 from typing import List, TypeVar
 
-from jmetal.component.comparator import Comparator, DominanceComparator
-from jmetal.component.density_estimator import CrowdingDistance
-from jmetal.component.ranking import FastNonDominatedRanking
+from jmetal.util.comparator import Comparator, DominanceComparator
+from jmetal.util.density_estimator import CrowdingDistance
+from jmetal.util.ranking import FastNonDominatedRanking
 from jmetal.core.operator import Selection
 
 S = TypeVar('S')

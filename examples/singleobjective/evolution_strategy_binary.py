@@ -1,5 +1,5 @@
 from jmetal.algorithm.singleobjective.evolution_strategy import EvolutionStrategy
-from jmetal.operator import BitFlip
+from jmetal.operator import BitFlipMutation
 from jmetal.problem import OneMax
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
@@ -10,7 +10,7 @@ if __name__ == '__main__':
         problem=problem,
         mu=1,
         lambda_=10,
-        mutation=BitFlip(probability=1.0 / problem.number_of_bits),
+        mutation=BitFlipMutation(probability=1.0 / problem.number_of_bits),
         elitist=True,
         termination_criterion=StoppingByEvaluations(max=25000)
     )

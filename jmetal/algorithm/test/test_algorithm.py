@@ -2,9 +2,10 @@ import unittest
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.algorithm.multiobjective.smpso import SMPSO
-from jmetal.component import RankingAndCrowdingDistanceComparator, CrowdingDistanceArchive
-from jmetal.operator import Polynomial, SBXCrossover, BinaryTournamentSelection
+from jmetal.operator import PolynomialMutation, SBXCrossover, BinaryTournamentSelection
 from jmetal.problem import ZDT1
+from jmetal.util.archive import CrowdingDistanceArchive
+from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 
@@ -16,19 +17,18 @@ class RunningAlgorithmsTestCases(unittest.TestCase):
         self.offspring_size = 100
         self.mating_pool_size = 100
         self.max_evaluations = 100
-        self.mutation = Polynomial(probability=1.0 / self.problem.number_of_variables, distribution_index=20)
+        self.mutation = PolynomialMutation(probability=1.0 / self.problem.number_of_variables, distribution_index=20)
         self.crossover = SBXCrossover(probability=1.0, distribution_index=20)
 
     def test_NSGAII(self):
         NSGAII(
             problem=self.problem,
             population_size=self.population_size,
-            offspring_size=self.offspring_size,
-            mating_pool_size=self.mating_pool_size,
+            offspring_population_size=self.offspring_size,
             mutation=self.mutation,
             crossover=self.crossover,
             selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
-            termination_criteria=StoppingByEvaluations(max=1000)
+            termination_criterion=StoppingByEvaluations(max=1000)
         ).run()
 
     def test_SMPSO(self):
@@ -37,7 +37,7 @@ class RunningAlgorithmsTestCases(unittest.TestCase):
             swarm_size=self.population_size,
             mutation=self.mutation,
             leaders=CrowdingDistanceArchive(100),
-            termination_criteria=StoppingByEvaluations(max=1000)
+            termination_criterion=StoppingByEvaluations(max=1000)
         ).run()
 
 

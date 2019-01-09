@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.gde3 import DynamicGDE3
-from jmetal.component import VisualizerObserver
-from jmetal.component.observable import TimeCounter
 from jmetal.problem.multiobjective.fda import FDA2
+from jmetal.util.observable import TimeCounter
+from jmetal.util.observer import VisualizerObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
@@ -19,6 +19,6 @@ if __name__ == '__main__':
         termination_criterion=StoppingByEvaluations(max=500)
     )
 
-    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front))
+    algorithm.observable.register(observer=VisualizerObserver())
 
     algorithm.run()

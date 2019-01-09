@@ -1,9 +1,9 @@
 from typing import TypeVar, List
 
-from jmetal.component import RandomGenerator, DominanceComparator, NonDominatedSolutionListArchive
-from jmetal.component.comparator import Comparator
-from jmetal.component.evaluator import Evaluator, SequentialEvaluator
-from jmetal.component.generator import Generator
+from jmetal.util.archive import NonDominatedSolutionListArchive
+from jmetal.util.comparator import Comparator, DominanceComparator
+from jmetal.util.evaluator import Evaluator, SequentialEvaluator
+from jmetal.util.generator import Generator, RandomGenerator
 from jmetal.core.algorithm import EvolutionaryAlgorithm, DynamicAlgorithm
 from jmetal.core.problem import Problem
 from jmetal.core.solution import FloatSolution

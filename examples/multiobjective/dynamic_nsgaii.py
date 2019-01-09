@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.nsgaii import DynamicNSGAII
 from jmetal.component import RankingAndCrowdingDistanceComparator, VisualizerObserver
-from jmetal.component.observable import TimeCounter
-from jmetal.operator import Polynomial, SBXCrossover, BinaryTournamentSelection
+from jmetal.util.observable import TimeCounter
+from jmetal.operator import PolynomialMutation, SBXCrossover, BinaryTournamentSelection
 from jmetal.problem.multiobjective.fda import FDA2
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
@@ -17,7 +17,7 @@ if __name__ == '__main__':
         problem=problem,
         population_size=100,
         offspring_population_size=100,
-        mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
+        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
         termination_criterion=StoppingByEvaluations(max=max_evaluations)

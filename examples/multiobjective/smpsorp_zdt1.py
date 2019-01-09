@@ -1,6 +1,6 @@
 from jmetal.algorithm.multiobjective.smpso import SMPSORP
 from jmetal.component import ProgressBarObserver, CrowdingDistanceArchiveWithReferencePoint, VisualizerObserver
-from jmetal.operator import Polynomial
+from jmetal.operator import PolynomialMutation
 from jmetal.problem import ZDT1
 from jmetal.util.graphic import InteractivePlot
 from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
@@ -25,7 +25,7 @@ if __name__ == '__main__':
     algorithm = SMPSORP(
         problem=problem,
         swarm_size=swarm_size,
-        mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
+        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         reference_points=reference_points,
         leaders=archives_with_reference_points,
         termination_criterion=StoppingByEvaluations(max=max_evaluations)

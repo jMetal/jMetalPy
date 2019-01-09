@@ -1,18 +1,13 @@
 import unittest
 from os.path import dirname, join
 
-from jmetal.component.quality_indicator import HyperVolume, GenerationalDistance
 from jmetal.core.solution import Solution
 from jmetal.problem import ZDT1
-<<<<<<< HEAD:jmetal/component/test/test_quality_indicator.py
-=======
 from jmetal.core.quality_indicator import HyperVolume, GenerationalDistance, InvertedGenerationalDistance
->>>>>>> origin/refactor:jmetal/core/test/test_quality_indicator.py
 from jmetal.util.solution_list import read_solutions
 
 
 class HyperVolumeTestCases(unittest.TestCase):
-
     def setUp(self):
         self.file_path = dirname(join(dirname(__file__)))
 
@@ -46,8 +41,6 @@ class HyperVolumeTestCases(unittest.TestCase):
 
 class GenerationalDistanceTestCases(unittest.TestCase):
 
-<<<<<<< HEAD:jmetal/component/test/test_quality_indicator.py
-=======
     def test_should_gd_return_the_closest_point_case_a(self):
         solution1 = Solution(1, 3)
         solution1.objectives = [1, 1, 1]
@@ -76,7 +69,6 @@ class GenerationalDistanceTestCases(unittest.TestCase):
 
         self.assertEqual(8, value)
 
->>>>>>> origin/refactor:jmetal/core/test/test_quality_indicator.py
     def test_should_gd_return_0(self):
         solution1 = Solution(1, 3)
         solution1.objectives = [1, 0, 1]

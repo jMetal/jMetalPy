@@ -1,8 +1,9 @@
 from jmetal.algorithm.multiobjective.smpso import SMPSO
-from jmetal.component import ProgressBarObserver, CrowdingDistanceArchive
-from jmetal.operator import Polynomial
+from jmetal.operator import PolynomialMutation
 from jmetal.problem import DTLZ1
+from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.graphic import InteractivePlot
+from jmetal.util.observer import ProgressBarObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
@@ -12,13 +13,12 @@ if __name__ == '__main__':
     algorithm = SMPSO(
         problem=problem,
         swarm_size=100,
-        mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
+        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         leaders=CrowdingDistanceArchive(100),
         termination_criterion=StoppingByEvaluations(max=25000)
     )
 
-    progress_bar = ProgressBarObserver(max=25000)
-    algorithm.observable.register(observer=progress_bar)
+    algorithm.observable.register(observer=ProgressBarObserver(max=25000))
 
     algorithm.run()
     front = algorithm.get_result()
