@@ -293,7 +293,7 @@ class InteractivePlot(Plot):
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
             </head>
             <body>
-                ''' + self.export_to_div(include_plotlyjs=False) + '''
+                ''' + self.export_to_div(filename=None, include_plotlyjs=False) + '''
                 <script>                
                     var myPlot = document.querySelectorAll('div')[0];
                     myPlot.on('plotly_click', function(data){
@@ -326,7 +326,7 @@ class InteractivePlot(Plot):
 
         return html_string
 
-    def export_to_div(self, filename: str = 'output', include_plotlyjs: bool = False) -> str:
+    def export_to_div(self, filename=None, include_plotlyjs: bool = False) -> str:
         """ Export as a `div` for embedding the graph in an HTML file.
 
         :param filename: Output file name (if desired, default to None).
@@ -335,8 +335,9 @@ class InteractivePlot(Plot):
         """
         script = plot(self.figure, output_type='div', include_plotlyjs=include_plotlyjs, show_link=False)
 
-        with open(filename + '.html', 'w') as outf:
-            outf.write(script)
+        if filename:
+            with open(filename + '.html', 'w') as outf:
+                outf.write(script)
 
         return script
 

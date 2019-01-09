@@ -10,11 +10,10 @@ from jmetal.component.comparator import DominanceComparator
 from jmetal.component.evaluator import Evaluator
 from jmetal.component.generator import Generator, RandomGenerator
 from jmetal.core.algorithm import ParticleSwarmOptimization, DynamicAlgorithm
-from jmetal.core.observable import Observable
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import FloatProblem, DynamicProblem
 from jmetal.core.solution import FloatSolution
-from jmetal.util.archive import BoundedArchive, CrowdingDistanceArchive
+from jmetal.util.archive import BoundedArchive
 from jmetal.util.solution_list import print_function_values_to_file
 from jmetal.util.termination_criterion import TerminationCriterion
 
@@ -245,12 +244,14 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
     def restart(self) -> None:
         self.solutions = self.create_initial_solutions()
         self.solutions = self.evaluate(self.solutions)
+
         self.leaders.__init__(self.leaders.maximum_size)
+
         self.initialize_velocity(self.solutions)
         self.initialize_particle_best(self.solutions)
         self.initialize_global_best(self.solutions)
-        self.init_progress()
 
+        self.init_progress()
 
     def update_progress(self):
         if self.problem.the_problem_has_changed():
@@ -263,8 +264,6 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
         self.evaluations += self.swarm_size
         self.leaders.compute_density_estimator()
 
-
-
     def stopping_condition_is_met(self):
         if self.termination_criterion.is_met:
             observable_data = self.get_observable_data()
@@ -272,13 +271,10 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
 
             print_function_values_to_file(self.leaders.solution_list,
                                           'FUN.DynamicSMPSO.' + str(self.completed_iterations))
+
             self.restart()
-
-
             self.init_progress()
-
             self.completed_iterations += 1
-
 
 
 class SMPSORP(SMPSO):

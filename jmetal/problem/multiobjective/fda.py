@@ -1,5 +1,5 @@
-from abc import ABCMeta, ABC, abstractmethod
-from math import sqrt, pow, sin, pi, cos, floor
+from abc import ABC, abstractmethod
+from math import sqrt, pow, sin, pi, floor
 
 from jmetal.core.problem import FloatProblem, DynamicProblem
 from jmetal.core.solution import FloatSolution
@@ -23,7 +23,7 @@ class FDA(DynamicProblem, FloatProblem, ABC):
 
     def update(self, *args, **kwargs):
         counter: int = kwargs["COUNTER"]
-        self.time = (1.0/self.nT) * floor(counter*1.0/self.tau_T)
+        self.time = (1.0 / self.nT) * floor(counter * 1.0 / self.tau_T)
         self.problem_modified = True
 
     def the_problem_has_changed(self) -> bool:
@@ -70,7 +70,7 @@ class FDA1(FDA):
 
     def __eval_g(self, solution: FloatSolution):
         gT = sin(0.5 * pi * self.time)
-        g = 1.0 + sum([pow(v - gT,2) for v in solution.variables[1:]])
+        g = 1.0 + sum([pow(v - gT, 2) for v in solution.variables[1:]])
 
         return g
 
@@ -112,7 +112,7 @@ class FDA2(FDA):
 
         return solution
 
-    def __eval_g(self, solution: FloatSolution, lower_limit: int, upper_limit:int):
+    def __eval_g(self, solution: FloatSolution, lower_limit: int, upper_limit: int):
         g = sum([pow(v, 2) for v in solution.variables[lower_limit:upper_limit]])
         g += 1.0 + sum([pow(v + 1.0, 2.0) for v in solution.variables[upper_limit:]])
 
@@ -124,6 +124,7 @@ class FDA2(FDA):
 
     def get_name(self):
         return 'FDA2'
+
 
 class FDA3(FDA):
     """ Problem FDA3
@@ -147,41 +148,37 @@ class FDA3(FDA):
 
         self.lower_bound = self.number_of_variables * [-1.0]
         self.upper_bound = self.number_of_variables * [1.0]
-
         self.lower_bound[0] = 0.0
         self.upper_bound[0] = 1.0
-
-
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         g = self.__eval_g(solution, self.limitInfII)
         h = self.__eval_h(solution.variables[0], g)
 
-        solution.objectives[0] = self.__evalF(solution,self.limitInfI,self.limitSupI)
+        solution.objectives[0] = self.__eval_f(solution, self.limitInfI, self.limitSupI)
         solution.objectives[1] = g * h
 
         return solution
 
-    def __evalF(self,solution: FloatSolution, lower_limit: int, upper_limit:int):
+    def __eval_f(self, solution: FloatSolution, lower_limit: int, upper_limit: int):
         f = 0.0
-        aux = 2.0 * sin(0.5*pi*self.time)
-        ft = pow(10,aux)
-        f += sum([pow(v , ft) for v in solution.variables[lower_limit:upper_limit]])
+        aux = 2.0 * sin(0.5 * pi * self.time)
+        ft = pow(10, aux)
+        f += sum([pow(v, ft) for v in solution.variables[lower_limit:upper_limit]])
 
-        return  f
+        return f
 
     def __eval_g(self, solution: FloatSolution, lower_limit: int):
         g = 0
-        gt = abs(sin(0.5*pi*self.time))
-        g += sum([pow(v-gt, 2) for v in solution.variables[lower_limit:]])
+        gt = abs(sin(0.5 * pi * self.time))
+        g += sum([pow(v - gt, 2) for v in solution.variables[lower_limit:]])
         g = g + 1.0 + gt
 
         return g
 
     def __eval_h(self, f: float, g: float) -> float:
-        h = 1.0 - sqrt(f/g)
+        h = 1.0 - sqrt(f / g)
         return h
 
     def get_name(self):
         return 'FDA3'
-
