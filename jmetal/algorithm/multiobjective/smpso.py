@@ -245,7 +245,6 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
     def restart(self) -> None:
         self.solutions = self.create_initial_solutions()
         self.solutions = self.evaluate(self.solutions)
-        """self.leaders = CrowdingDistanceArchive(self.swarm_size)"""
         self.leaders.__init__(self.leaders.maximum_size)
         self.initialize_velocity(self.solutions)
         self.initialize_particle_best(self.solutions)
