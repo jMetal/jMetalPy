@@ -28,7 +28,7 @@ if __name__ == '__main__':
     front = algorithm.get_result()
 
     # Plot frontier to file
-    pareto_front = InteractivePlot(plot_title='NSGAII-ZDT1', reference_front=problem.reference_front, axis_labels=problem.obj_labels)
+    pareto_front = InteractivePlot(plot_title='SMPSORP-ZDT1', reference_front=problem.reference_front, axis_labels=problem.obj_labels)
     pareto_front.plot(front)
     pareto_front.export_to_html(filename='NSGAII-ZDT1')
 
