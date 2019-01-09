@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from math import sqrt, pow, sin, pi, floor
+from math import sqrt, pow, sin, pi, floor,cos
+import numpy
 
 from jmetal.core.problem import FloatProblem, DynamicProblem
 from jmetal.core.solution import FloatSolution
@@ -169,9 +170,9 @@ class FDA3(FDA):
         return f
 
     def __eval_g(self, solution: FloatSolution, lower_limit: int):
-        g = 0
+
         gt = abs(sin(0.5 * pi * self.time))
-        g += sum([pow(v - gt, 2) for v in solution.variables[lower_limit:]])
+        g = sum([pow(v - gt, 2) for v in solution.variables[lower_limit:]])
         g = g + 1.0 + gt
 
         return g
@@ -182,3 +183,123 @@ class FDA3(FDA):
 
     def get_name(self):
         return 'FDA3'
+
+class FDA4(FDA):
+    """ Problem FDA4
+
+    .. note:: Three-objective dynamic unconstrained problem. The default number of variables is 12.
+    """
+    M = 3
+    def __init__(self, number_of_variables: int = 12):
+        """ :param number_of_variables: Number of decision variables of the problem.
+        """
+        super(FDA4, self).__init__()
+        self.number_of_variables = number_of_variables
+        self.number_of_objectives = 3
+        self.number_of_constraints = 0
+
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+        self.obj_labels = ['f(x)', 'f(y)','f(z)']
+
+        self.lower_bound = self.number_of_variables * [0.0]
+        self.upper_bound = self.number_of_variables * [1.0]
+
+
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
+        g = self.__eval_g(solution, self.M-1)
+
+
+        solution.objectives[0] = self.__eval_f1(solution,g)
+        solution.objectives[1] = self.__eval_fk(solution,g,2)
+        solution.objectives[2] = self.__eval_fm(solution,g)
+
+        return solution
+
+    def __eval_g(self, solution: FloatSolution, lower_limit: int):
+        gt = abs(sin(0.5 * pi * self.time))
+        g = sum([pow(v-gt, 2) for v in solution.variables[lower_limit:]])
+
+        return g
+
+    def __eval_f1(self, solution: FloatSolution, g: float) -> float:
+        f = 1.0 + g
+        mult = numpy.prod([cos(v*pi/2.0) for v in solution.variables[:self.M-1]])
+
+        return  f * mult
+
+    def __eval_fk(self, solution: FloatSolution, g: float, k:int) -> float:
+        f = 1.0 + g
+        aux = sin((solution.variables[self.M-k]*pi)/2.0)
+        mult = numpy.prod([cos(v * pi / 2.0) for v in solution.variables[:self.M - k]])
+
+        return f * mult * aux
+
+    def __eval_fm(self, solution: FloatSolution, g: float) -> float:
+        fm = 1.0 + g
+        fm *= sin((solution.variables[0]*pi)/2.0)
+
+        return fm
+
+    def get_name(self):
+        return 'FDA4'
+
+class FDA5(FDA):
+        """ Problem FDA5
+
+        .. note:: Three-objective dynamic unconstrained problem. The default number of variables is 12.
+        """
+        M = 3
+
+        def __init__(self, number_of_variables: int = 12):
+            """ :param number_of_variables: Number of decision variables of the problem.
+            """
+            super(FDA5, self).__init__()
+            self.number_of_variables = number_of_variables
+            self.number_of_objectives = 3
+            self.number_of_constraints = 0
+
+            self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+            self.obj_labels = ['f(x)', 'f(y)', 'f(z)']
+
+            self.lower_bound = self.number_of_variables * [0.0]
+            self.upper_bound = self.number_of_variables * [1.0]
+
+        def evaluate(self, solution: FloatSolution) -> FloatSolution:
+            g = self.__eval_g(solution, self.M - 1)
+            ft = 1.0 + 100.0 * pow(sin(0.5*pi*self.time),4.0)
+
+            solution.objectives[0] = self.__eval_f1(solution, g, ft)
+            solution.objectives[1] = self.__eval_fk(solution, g, 2, ft)
+            solution.objectives[2] = self.__eval_fm(solution, g, ft)
+
+            return solution
+
+        def __eval_g(self, solution: FloatSolution, lower_limit: int):
+            gt = abs(sin(0.5 * pi * self.time))
+            g = sum([pow(v - gt, 2) for v in solution.variables[lower_limit:]])
+
+            return g
+
+        def __eval_f1(self, solution: FloatSolution, g: float, ft:float) -> float:
+            f = 1.0 + g
+            mult = numpy.prod([cos(pow(v,ft)*pi/2.0) for v in solution.variables[:self.M - 1]])
+
+            return f * mult
+
+        def __eval_fk(self, solution: FloatSolution, g: float, k: int, ft:float) -> float:
+            f = 1.0 + g
+
+            mult = numpy.prod([cos(pow(v,ft) * pi / 2.0) for v in solution.variables[:self.M - k]])
+            yy = pow(solution.variables[self.M-k],ft)
+            mult *= sin(yy*pi/2.0)
+            return f * mult
+
+        def __eval_fm(self, solution: FloatSolution, g: float, ft:float) -> float:
+            fm = 1.0 + g
+            y_1 = pow(solution.variables[0],ft)
+            mult = sin(y_1*pi/2.0)
+
+            return fm * mult
+
+        def get_name(self):
+            return 'FDA5'
