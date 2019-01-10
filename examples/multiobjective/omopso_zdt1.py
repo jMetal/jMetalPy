@@ -1,22 +1,27 @@
-from jmetal.operator import PolynomialMutation
-from jmetal.problem import ZDT4
+from jmetal.algorithm.multiobjective.omopso import OMOPSO
+from jmetal.operator import PolynomialMutation, UniformMutation
+from jmetal.operator.mutation import NonUniformMutation
+from jmetal.problem import ZDT4, ZDT1
 
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_solutions
 from jmetal.util.archive import CrowdingDistanceArchive, NonDominatedSolutionListArchive
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
-from jmetal.algorithm.multiobjective.smpso import SMPSO
 
 if __name__ == '__main__':
-    problem = ZDT4()
+    problem = ZDT1()
     problem.reference_front = read_solutions(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
+    mutation_probability = 1.0 / problem.number_of_variables
 
     max_evaluations = 25000
-    algorithm = SMPSO(
+    swarm_size = 100
+    algorithm = OMOPSO(
         problem=problem,
-        swarm_size=100,
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
+        swarm_size=swarm_size,
+        epsilon=0.0075,
+        uniform_mutation=UniformMutation(probability=mutation_probability, perturbation=0.5),
+        non_uniform_mutation=NonUniformMutation(mutation_probability, perturbation=0.5, max_iterations = max_evaluations/swarm_size),
         leaders=CrowdingDistanceArchive(100),
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )

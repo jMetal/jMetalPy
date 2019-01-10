@@ -78,9 +78,9 @@ class BoundedArchive(Archive[S]):
 
 class NonDominatedSolutionListArchive(Archive[S]):
 
-    def __init__(self):
+    def __init__(self, dominance_comparator = DominanceComparator()):
         super(NonDominatedSolutionListArchive, self).__init__()
-        self.comparator = DominanceComparator()
+        self.comparator = dominance_comparator
 
     def add(self, solution: S) -> bool:
         is_dominated = False

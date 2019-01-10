@@ -92,7 +92,7 @@ class SMPSO(ParticleSwarmOptimization):
 
     def initialize_global_best(self, swarm: List[FloatSolution]) -> None:
         for particle in swarm:
-            self.leaders.add(particle)
+            self.leaders.add(copy(particle))
 
     def initialize_particle_best(self, swarm: List[FloatSolution]) -> None:
         for particle in swarm:
