@@ -1,8 +1,9 @@
 from jmetal.algorithm.multiobjective.smpso import DynamicSMPSO
-from jmetal.component import CrowdingDistanceArchive, VisualizerObserver
+from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.observable import TimeCounter
 from jmetal.operator import PolynomialMutation
 from jmetal.problem.multiobjective.fda import FDA2
+from jmetal.util.observer import VisualizerObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
@@ -13,7 +14,6 @@ if __name__ == '__main__':
     time_counter.start()
 
     max_evaluations = 25000
-
     algorithm = DynamicSMPSO(
         problem=problem,
         swarm_size=100,
@@ -22,6 +22,6 @@ if __name__ == '__main__':
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
-    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front))
+    algorithm.observable.register(observer=VisualizerObserver())
 
     algorithm.run()

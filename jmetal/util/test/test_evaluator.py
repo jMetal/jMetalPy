@@ -1,6 +1,6 @@
 import unittest
 
-from jmetal.util.evaluator import SequentialEvaluator, MapEvaluator
+from jmetal.util.solution_list.evaluator import SequentialEvaluator, MapEvaluator
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 

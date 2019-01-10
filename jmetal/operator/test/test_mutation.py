@@ -33,7 +33,7 @@ class PolynomialMutationTestMethods(unittest.TestCase):
 
     def test_should_the_solution_remain_unchanged_if_the_probability_is_zero(self):
         operator = PolynomialMutation(0.0)
-        solution = FloatSolution(2, 1, 0, [-5, -5, -5], [5, 5, 5])
+        solution = FloatSolution(2, 1, [-5, -5, -5], [5, 5, 5])
         solution.variables = [1.0, 2.0, 3.0]
 
         mutated_solution = operator.execute(solution)
@@ -41,7 +41,7 @@ class PolynomialMutationTestMethods(unittest.TestCase):
 
     def test_should_the_solution_change__if_the_probability_is_one(self):
         operator = PolynomialMutation(1.0)
-        solution = FloatSolution(2, 1, 0, [-5, -5, -5], [5, 5, 5])
+        solution = FloatSolution(2, 1, [-5, -5, -5], [5, 5, 5])
         solution.variables = [1.0, 2.0, 3.0]
         FloatSolution.lower_bound = [-5, -5, -5]
         FloatSolution.upper_bound = [5, 5, 5]
@@ -127,7 +127,7 @@ class UniformMutationTestCases(unittest.TestCase):
 
     def test_should_the_solution_remain_unchanged_if_the_probability_is_zero(self):
         operator = UniformMutation(0.0, 3.0)
-        solution = FloatSolution(3, 1, 0, [-5, -5, -5], [5, 5, 5])
+        solution = FloatSolution(3, 1, [-5, -5, -5], [5, 5, 5])
         solution.variables = [1.0, 2.0, 3.0]
 
         mutated_solution = operator.execute(solution)
@@ -135,7 +135,7 @@ class UniformMutationTestCases(unittest.TestCase):
 
     def test_should_the_solution_change_if_the_probability_is_one(self):
         operator = UniformMutation(1.0, 3.0)
-        solution = FloatSolution(3, 1, 0, [-5, -5, -5], [5, 5, 5])
+        solution = FloatSolution(3, 1, [-5, -5, -5], [5, 5, 5])
         solution.variables = [1.0, 2.0, 3.0]
 
         mutated_solution = operator.execute(solution)
@@ -143,7 +143,7 @@ class UniformMutationTestCases(unittest.TestCase):
 
     def test_should_the_solution_change_between_max_and_min_value(self):
         operator = UniformMutation(1.0, 5)
-        solution = FloatSolution(4, 1, 0, [-1, 12, -3, -5], [1, 17, 3, -2])
+        solution = FloatSolution(4, 1, [-1, 12, -3, -5], [1, 17, 3, -2])
         solution.variables = [-7.0, 3.0, 12.0, 13.4]
 
         mutated_solution = operator.execute(solution)
@@ -180,7 +180,7 @@ class RandomMutationTestCases(unittest.TestCase):
 
     def test_should_the_solution_remain_unchanged_if_the_probability_is_zero(self):
         operator = SimpleRandomMutation(0.0)
-        solution = FloatSolution(3, 1, 0, [-5, -5, -5], [5, 5, 5])
+        solution = FloatSolution(3, 1, [-5, -5, -5], [5, 5, 5])
         solution.variables = [1.0, 2.0, 3.0]
 
         mutated_solution = operator.execute(solution)
@@ -188,7 +188,7 @@ class RandomMutationTestCases(unittest.TestCase):
 
     def test_should_the_solution_change_if_the_probability_is_one(self):
         operator = SimpleRandomMutation(1.0)
-        solution = FloatSolution(3, 1, 0, [-5, -5, -5], [5, 5, 5])
+        solution = FloatSolution(3, 1, [-5, -5, -5], [5, 5, 5])
         solution.variables = [1.0, 2.0, 3.0]
 
         mutated_solution = operator.execute(solution)
@@ -196,7 +196,7 @@ class RandomMutationTestCases(unittest.TestCase):
 
     def test_should_the_solution_change_between_max_and_min_value(self):
         operator = SimpleRandomMutation(1.0)
-        solution = FloatSolution(4, 1, 0, [-1, 12, -3, -5], [1, 17, 3, -2])
+        solution = FloatSolution(4, 1, [-1, 12, -3, -5], [1, 17, 3, -2])
         solution.variables = [-7.0, 3.0, 12.0, 13.4]
 
         mutated_solution = operator.execute(solution)
@@ -234,7 +234,7 @@ class IntegerPolynomialMutationTestCases(unittest.TestCase):
 
     def test_should_the_solution_remain_unchanged_if_the_probability_is_zero(self):
         operator = IntegerPolynomialMutation(0.0)
-        solution = IntegerSolution(2, 1, 0, [-5, -5, -5], [5, 5, 5])
+        solution = IntegerSolution(2, 1, [-5, -5, -5], [5, 5, 5])
         solution.variables = [1, 2, 3]
 
         mutated_solution = operator.execute(solution)
@@ -243,7 +243,7 @@ class IntegerPolynomialMutationTestCases(unittest.TestCase):
 
     def test_should_the_solution_change__if_the_probability_is_one(self):
         operator = IntegerPolynomialMutation(1.0)
-        solution = IntegerSolution(2, 1, 0, [-5, -5, -5], [5, 5, 5])
+        solution = IntegerSolution(2, 1, [-5, -5, -5], [5, 5, 5])
         solution.variables = [1, 2, 3]
 
         mutated_solution = operator.execute(solution)

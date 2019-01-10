@@ -5,15 +5,14 @@ from typing import TypeVar, List, Optional
 
 import numpy
 
-from jmetal.util.comparator import DominanceComparator
-from jmetal.util.evaluator import Evaluator, SequentialEvaluator
-from jmetal.util.generator import Generator, RandomGenerator
+from jmetal.config import store
 from jmetal.core.algorithm import ParticleSwarmOptimization, DynamicAlgorithm
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import FloatProblem, DynamicProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.util.archive import BoundedArchive
-from jmetal.util.solution_list import print_function_values_to_file
+from jmetal.util.comparator import DominanceComparator
+from jmetal.util.solution_list import Evaluator, Generator, print_function_values_to_file
 from jmetal.util.termination_criterion import TerminationCriterion
 
 R = TypeVar('R')
@@ -35,8 +34,8 @@ class SMPSO(ParticleSwarmOptimization):
                  mutation: Mutation,
                  leaders: Optional[BoundedArchive],
                  termination_criterion: TerminationCriterion,
-                 swarm_generator: Generator = RandomGenerator(),
-                 swarm_evaluator: Evaluator = SequentialEvaluator()):
+                 swarm_generator: Generator = store.default_generator,
+                 swarm_evaluator: Evaluator = store.default_evaluator):
         """ This class implements the SMPSO algorithm as described in
 
         * SMPSO: A new PSO-based metaheuristic for multi-objective optimization
@@ -227,9 +226,8 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
                  mutation: Mutation,
                  leaders: BoundedArchive,
                  termination_criterion: TerminationCriterion,
-                 swarm_generator: Generator = RandomGenerator(),
-                 swarm_evaluator: Evaluator = SequentialEvaluator()
-                 ):
+                 swarm_generator: Generator = store.default_generator,
+                 swarm_evaluator: Evaluator = store.default_evaluator):
         super(DynamicSMPSO, self).__init__(
             problem=problem,
             swarm_size=swarm_size,
@@ -285,8 +283,8 @@ class SMPSORP(SMPSO):
                  reference_points: List[List[float]],
                  leaders: List[BoundedArchive],
                  termination_criterion: TerminationCriterion,
-                 swarm_generator: Generator = RandomGenerator(),
-                 swarm_evaluator: Evaluator = SequentialEvaluator()):
+                 swarm_generator: Generator = store.default_generator,
+                 swarm_evaluator: Evaluator = store.default_evaluator):
         """ This class implements the SMPSORP algorithm.
 
         :param problem: The problem to solve.

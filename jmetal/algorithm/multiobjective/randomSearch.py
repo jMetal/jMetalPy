@@ -1,3 +1,4 @@
+import time
 from typing import TypeVar, List
 
 from jmetal.util.archive import NonDominatedSolutionListArchive
@@ -27,6 +28,11 @@ class RandomSearch(Algorithm[S, R]):
         self.termination_criterion = termination_criterion
         self.archive = NonDominatedSolutionListArchive()
 
+    def get_observable_data(self) -> dict:
+        ctime = time.time() - self.start_computing_time
+        return {'PROBLEM': self.problem, 'EVALUATIONS': self.evaluations, 'SOLUTIONS': self.get_result(),
+                'COMPUTING_TIME': ctime}
+
     def create_initial_solutions(self) -> List[S]:
         return [self.problem.create_solution()]
 
@@ -50,6 +56,5 @@ class RandomSearch(Algorithm[S, R]):
     def get_result(self) -> List[S]:
         return self.archive.solution_list
 
-    @staticmethod
-    def get_name() -> str:
-        return 'Random Search Algorithm'
+    def get_name(self) -> str:
+        return 'RS'

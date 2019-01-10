@@ -4,12 +4,12 @@ from typing import TypeVar, List
 import numpy as np
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
-from jmetal.util.evaluator import Evaluator, SequentialEvaluator
-from jmetal.util.generator import Generator, RandomGenerator
+from jmetal.config import store
 from jmetal.core.operator import Mutation, Crossover
 from jmetal.core.problem import Problem
 from jmetal.util.aggregative_function import AggregativeFunction
 from jmetal.util.neighborhood import WeightNeighborhood
+from jmetal.util.solution_list import Evaluator, Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -28,8 +28,8 @@ class MOEAD(GeneticAlgorithm):
                  neighbourhood_selection_probability: float,
                  max_number_of_replaced_solutions: int,
                  termination_criterion: TerminationCriterion,
-                 population_generator: Generator = RandomGenerator(),
-                 population_evaluator: Evaluator = SequentialEvaluator()):
+                 population_generator: Generator = store.default_generator,
+                 population_evaluator: Evaluator = store.default_evaluator):
         """
         :param max_number_of_replaced_solutions: (eta in Zhang & Li paper).
         :param neighbourhood_selection_probability: Probability of mating with a solution in the neighborhood rather than the entire population (Delta in Zhang & Li paper).

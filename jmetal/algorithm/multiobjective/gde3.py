@@ -1,15 +1,14 @@
 from typing import TypeVar, List
 
-from jmetal.util.archive import NonDominatedSolutionListArchive
-from jmetal.util.comparator import Comparator, DominanceComparator
-from jmetal.util.evaluator import Evaluator, SequentialEvaluator
-from jmetal.util.generator import Generator, RandomGenerator
+from jmetal.config import store
 from jmetal.core.algorithm import EvolutionaryAlgorithm, DynamicAlgorithm
 from jmetal.core.problem import Problem
 from jmetal.core.solution import FloatSolution
 from jmetal.operator import DifferentialEvolutionCrossover, RankingAndCrowdingDistanceSelection
 from jmetal.operator.selection import DifferentialEvolutionSelection
-from jmetal.util.solution_list import print_function_values_to_file
+from jmetal.util.archive import NonDominatedSolutionListArchive
+from jmetal.util.comparator import Comparator, DominanceComparator
+from jmetal.util.solution_list import Evaluator, Generator, print_function_values_to_file
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -25,18 +24,13 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
                  f: float,
                  termination_criterion: TerminationCriterion,
                  k: float = 0.5,
-                 population_generator: Generator = RandomGenerator(),
-                 population_evaluator: Evaluator = SequentialEvaluator(),
+                 population_generator: Generator = store.default_generator,
+                 population_evaluator: Evaluator = store.default_evaluator,
                  dominance_comparator: Comparator = DominanceComparator()):
-        """
-        :param max_number_of_replaced_solutions: (eta in Zhang & Li paper).
-        :param neighbourhood_selection_probability: Probability of mating with a solution in the neighborhood rather than the entire population (Delta in Zhang & Li paper).
-        """
         super(GDE3, self).__init__(
             problem=problem,
             population_size=population_size,
             offspring_population_size=population_size)
-
         self.dominance_comparator = dominance_comparator
         self.selection_operator = DifferentialEvolutionSelection()
         self.crossover_operator = DifferentialEvolutionCrossover(cr, f, k)
@@ -49,6 +43,7 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
 
     def selection(self, population: List[FloatSolution]) -> List[FloatSolution]:
         mating_pool = []
+
         for i in range(self.population_size):
             self.selection_operator.set_index_to_exclude(i)
             selected_solutions: List[FloatSolution] = self.selection_operator.execute(self.solutions)
@@ -59,6 +54,7 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
     def reproduction(self, mating_pool: List[S]) -> List[S]:
         offspring_population = []
         first_parent_index = 0
+
         for solution in self.solutions:
             self.crossover_operator.current_individual = solution
             parents = mating_pool[first_parent_index:first_parent_index + 3]
@@ -82,9 +78,10 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
                 tmp_list.append(solution2)
 
         join_population = population + offspring_population
-        return RankingAndCrowdingDistanceSelection(self.population_size,
-                                                   dominance_comparator=self.dominance_comparator).execute(
-            join_population)
+
+        return RankingAndCrowdingDistanceSelection(
+            self.population_size, dominance_comparator=self.dominance_comparator
+        ).execute(join_population)
 
     def create_initial_solutions(self) -> List[FloatSolution]:
         return [self.population_generator.new(self.problem) for _ in range(self.population_size)]
@@ -115,9 +112,9 @@ class DynamicGDE3(GDE3, DynamicAlgorithm):
                  f: float,
                  termination_criterion: TerminationCriterion,
                  k: float = 0.5,
-                 population_generator: Generator = RandomGenerator(),
-                 population_evaluator: Evaluator = SequentialEvaluator(),
-                 dominance_comparator=DominanceComparator()):
+                 population_generator: Generator = store.default_generator,
+                 population_evaluator: Evaluator = store.default_evaluator,
+                 dominance_comparator: Comparator = DominanceComparator()):
         super(DynamicGDE3, self).__init__(
             problem, population_size, cr, f, termination_criterion, k,
             population_generator, population_evaluator, dominance_comparator)

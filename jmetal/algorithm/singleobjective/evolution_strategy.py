@@ -1,8 +1,8 @@
 from copy import copy
 from typing import TypeVar, List
 
-from jmetal.util.evaluator import Evaluator, SequentialEvaluator
-from jmetal.util.generator import Generator, RandomGenerator
+from jmetal.util.solution_list.evaluator import Evaluator, SequentialEvaluator
+from jmetal.util.solution_list.generator import Generator, RandomGenerator
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem

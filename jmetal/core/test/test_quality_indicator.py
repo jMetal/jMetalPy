@@ -55,20 +55,6 @@ class GenerationalDistanceTestCases(unittest.TestCase):
 
         self.assertEqual(0, value)
 
-    def test_should_gd_return_the_closest_point_case_b(self):
-        solution1 = Solution(1, 2)
-        solution1.objectives = [1, 1]
-
-        solution2 = Solution(1, 2)
-        solution2.objectives = [3, 3]
-
-        reference_front = [solution2]
-
-        gd = GenerationalDistance(reference_front)
-        value = gd.distance_to_neatest(solution1, reference_front)
-
-        self.assertEqual(8, value)
-
     def test_should_gd_return_0(self):
         solution1 = Solution(1, 3)
         solution1.objectives = [1, 0, 1]

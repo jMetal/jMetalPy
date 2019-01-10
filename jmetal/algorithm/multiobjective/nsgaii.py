@@ -4,15 +4,13 @@ from typing import TypeVar, List, Generic
 from distributed import as_completed, Client
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
-from jmetal.util.comparator import DominanceComparator, Comparator
-from jmetal.util.evaluator import Evaluator, SequentialEvaluator
-from jmetal.util.generator import Generator, RandomGenerator
 from jmetal.config import store
 from jmetal.core.algorithm import DynamicAlgorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem, DynamicProblem
 from jmetal.operator import RankingAndCrowdingDistanceSelection
-from jmetal.util.solution_list import print_function_values_to_file
+from jmetal.util.comparator import DominanceComparator, Comparator
+from jmetal.util.solution_list import Evaluator, Generator, print_function_values_to_file
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -37,8 +35,8 @@ class NSGAII(GeneticAlgorithm[S, R]):
                  crossover: Crossover,
                  selection: Selection,
                  termination_criterion: TerminationCriterion,
-                 population_generator: Generator = RandomGenerator(),
-                 population_evaluator: Evaluator = SequentialEvaluator(),
+                 population_generator: Generator = store.default_generator,
+                 population_evaluator: Evaluator = store.default_evaluator,
                  dominance_comparator: Comparator = DominanceComparator()):
         """  NSGA-II implementation as described in
 
@@ -80,7 +78,10 @@ class NSGAII(GeneticAlgorithm[S, R]):
         :return: New population after ranking and crowding distance selection is applied.
         """
         join_population = population + offspring_population
-        return RankingAndCrowdingDistanceSelection(self.population_size, dominance_comparator=self.dominance_comparator).execute(join_population)
+
+        return RankingAndCrowdingDistanceSelection(
+            self.population_size, dominance_comparator=self.dominance_comparator
+        ).execute(join_population)
 
     def get_result(self) -> R:
         return self.solutions
@@ -98,8 +99,8 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
                  crossover: Crossover,
                  selection: Selection,
                  termination_criterion: TerminationCriterion,
-                 population_generator: Generator = RandomGenerator(),
-                 population_evaluator: Evaluator = SequentialEvaluator(),
+                 population_generator: Generator = store.default_generator,
+                 population_evaluator: Evaluator = store.default_evaluator,
                  dominance_comparator: DominanceComparator = DominanceComparator()):
         super(DynamicNSGAII, self).__init__(
             problem=problem,
@@ -167,7 +168,8 @@ class DistributedNSGAII(Generic[S, R]):
 
     def update_progress(self, population):
         ctime = time.time() - self.start_computing_time
-        observable_data = {'EVALUATIONS': self.evaluations, 'COMPUTING_TIME': ctime, 'SOLUTIONS': population, 'PROBLEM': self.problem}
+        observable_data = {'EVALUATIONS': self.evaluations, 'COMPUTING_TIME': ctime, 'SOLUTIONS': population,
+                           'PROBLEM': self.problem}
         self.observable.notify_all(**observable_data)
 
     def create_initial_population(self) -> List[S]:

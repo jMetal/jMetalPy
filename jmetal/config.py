@@ -1,9 +1,7 @@
 from jmetal.core.observable import DefaultObservable
-
 from jmetal.operator import PolynomialMutation, BitFlipMutation
-from jmetal.util.evaluator import SequentialEvaluator
-from jmetal.util.generator import RandomGenerator
-
+from jmetal.util.solution_list import RandomGenerator
+from jmetal.util.solution_list import SequentialEvaluator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 

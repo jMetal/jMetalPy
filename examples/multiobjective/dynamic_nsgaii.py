@@ -1,8 +1,9 @@
 from jmetal.algorithm.multiobjective.nsgaii import DynamicNSGAII
-from jmetal.component import RankingAndCrowdingDistanceComparator, VisualizerObserver
-from jmetal.util.observable import TimeCounter
 from jmetal.operator import PolynomialMutation, SBXCrossover, BinaryTournamentSelection
 from jmetal.problem.multiobjective.fda import FDA2
+from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
+from jmetal.util.observable import TimeCounter
+from jmetal.util.observer import VisualizerObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':

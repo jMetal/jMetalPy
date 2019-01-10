@@ -4,5 +4,5 @@ from .plotting import Plot
 from .streaming import StreamingPlot, IStreamingPlot
 
 __all__ = [
-    'CDplot', 'InteractivePlot', 'Plot', 'StreamingPlot', 'IStreamingPlot'
+    'Plot', 'InteractivePlot', 'StreamingPlot', 'IStreamingPlot', 'CDplot'
 ]
