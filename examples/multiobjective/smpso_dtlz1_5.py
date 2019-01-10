@@ -2,10 +2,12 @@ from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.operator import PolynomialMutation
 from jmetal.problem import DTLZ1
 from jmetal.util.archive import CrowdingDistanceArchive
+from jmetal.util.solution_list.helper import get_numpy_array_from_objectives
 from jmetal.util.visualization import InteractivePlot, Plot
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
+from jmetal.util.visualization.chord_plot import depict_chord_diagram
 
 if __name__ == '__main__':
     problem = DTLZ1(number_of_objectives=3)
@@ -27,7 +29,7 @@ if __name__ == '__main__':
     # Plot front
     plot_tile = algorithm.get_name() + "-" + problem.get_name() + "-" + str(problem.number_of_objectives)
 
-    plot_front = Plot(plot_title='SMPSO-DTLZ1', reference_front=problem.reference_front)
+    plot_front = Plot(plot_title='SMPSO-' + problem.get_name(), reference_front=problem.reference_front)
     plot_front.plot([algorithm.get_result(),algorithm.get_result()], filename=plot_tile + '.eps')
 
     # Plot interactive front
@@ -44,3 +46,7 @@ if __name__ == '__main__':
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())
     print('Computing time: ' + str(algorithm.total_computing_time))
+
+
+
+

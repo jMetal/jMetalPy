@@ -1,9 +1,10 @@
 import logging
 import os
+import numpy
 from pathlib import Path
 from typing import List
 
-from jmetal.core.solution import FloatSolution
+from jmetal.core.solution import FloatSolution, Solution
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -78,3 +79,13 @@ def print_function_values_to_screen(solution_list: list):
         print(str(solution_list.index(solution)) + ": ", sep='  ', end='', flush=True)
         print(solution.objectives, sep='  ', end='', flush=True)
         print()
+
+
+def get_numpy_array_from_objectives(solution_list: List[Solution]):
+    list_of_objectives = []
+    for solution in solution_list:
+        list_of_objectives.append(solution.objectives)
+
+    return numpy.array(list_of_objectives)
+
+
