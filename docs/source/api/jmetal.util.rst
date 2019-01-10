@@ -1,18 +1,15 @@
 Utils
 ===================
 
+.. toctree::
+
+    jmetal.util.visualization
+    jmetal.util.statistical
+
 Aggregative function
 --------------------------
 
 .. automodule:: jmetal.util.aggregative_function
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-Graphic
---------------------------
-
-.. automodule:: jmetal.util.graphic
     :members:
     :undoc-members:
     :show-inheritance:
@@ -53,6 +50,71 @@ Solution list
 -----------------------------------------
 
 .. automodule:: jmetal.util.solution_list
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Archive
+-------------------------------
+
+.. automodule:: jmetal.util.archive
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Comparator
+-----------------------------
+
+.. automodule:: jmetal.util.comparator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Density Estimator
+------------------------------------------
+
+.. automodule:: jmetal.util.density_estimator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Evaluator
+---------------------------------
+
+.. automodule:: jmetal.util.evaluator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Generator
+---------------------------------
+
+.. automodule:: jmetal.util.generator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Observer
+--------------------------------
+
+.. automodule:: jmetal.util.observer
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Quality Indicator
+--------------------------------
+
+.. automodule:: jmetal.util.quality_indicator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Ranking
+--------------------------
+
+.. automodule:: jmetal.util.ranking
     :members:
     :undoc-members:
     :show-inheritance:
