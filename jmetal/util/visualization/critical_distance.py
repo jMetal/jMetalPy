@@ -153,7 +153,7 @@ def CDplot(results, alpha: float = 0.05, alg_names: list = None):
                   ymin=sbottom + (spoint - 1 - i) * vspace, ymax=stop, color='black', linewidth=0.7)
         ax.hlines(y=sbottom + (spoint - 1 - i) * vspace, xmin=sleft,
                   xmax=sleft +
-                  (lline * (leftalg[i] - lowest)) / (highest - lowest),
+                       (lline * (leftalg[i] - lowest)) / (highest - lowest),
                   color='black', linewidth=0.7)
         ax.text(x=sleft - 0.01, y=sbottom + (spoint - 1 - i) * vspace,
                 s=alg_names[indices][i], ha='right', va='center')
@@ -165,7 +165,7 @@ def CDplot(results, alpha: float = 0.05, alg_names: list = None):
                   ymin=sbottom + i * vspace, ymax=stop, color='black', linewidth=0.7)
         ax.hlines(y=sbottom + i * vspace,
                   xmin=sleft +
-                  (lline * (rightalg[i] - lowest)) / (highest - lowest),
+                       (lline * (rightalg[i] - lowest)) / (highest - lowest),
                   xmax=sright, color='black', linewidth=0.7)
         ax.text(x=sright + 0.01, y=sbottom + i * vspace,
                 s=alg_names[indices][spoint + i], ha='left', va='center')
@@ -173,12 +173,12 @@ def CDplot(results, alpha: float = 0.05, alg_names: list = None):
     # Plot critical difference rule
     if sleft + (cd * lline) / (highest - lowest) <= sright:
         ax.hlines(y=stop + 0.2, xmin=sleft, xmax=sleft +
-                  (cd * lline) / (highest - lowest), linewidth=1.5)
+                                                 (cd * lline) / (highest - lowest), linewidth=1.5)
         ax.text(x=sleft + 0.5 * (cd * lline) /
-                (highest - lowest), y=stop + 0.21, s='CD=%.3f' % cd, ha='center', va='bottom')
+                  (highest - lowest), y=stop + 0.21, s='CD=%.3f' % cd, ha='center', va='bottom')
     else:
         ax.text(x=(sleft + sright) / 2, y=stop + 0.2, s='CD=%.3f' %
-                cd, ha='center', va='bottom')
+                                                        cd, ha='center', va='bottom')
 
     # Get pair of non-significant methods
     nonsig = _join_alg(avranks, num_alg, cd)
