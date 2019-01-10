@@ -158,13 +158,14 @@ def compute_median_iqr_tables(filename: str):
         table = table.rename(columns={'IndicatorValue': algorithm_name})
         median_iqr = pd.concat([median_iqr, table], axis=1)
 
-    for iqr_name, subset in median_iqr.groupby('IndicatorName'):
+    for indicator_name, subset in median_iqr.groupby('IndicatorName'):
         subset.index = subset.index.droplevel(1)
-        subset.to_csv('MedianIQR{}.csv'.format(iqr_name), sep='\t', encoding='utf-8')
+        subset.to_csv('MedianIQR{}.csv'.format(indicator_name), sep='\t', encoding='utf-8')
 
-        with open('MedianIQR{}.tex'.format(iqr_name), 'w') as latex:
+        with open('MedianIQR{}.tex'.format(indicator_name), 'w') as latex:
             latex.write(__convert_table_to_latex(
-                subset, caption='Median and Interquartile Range of the {} quality indicator'.format(iqr_name), label='')
+                subset, caption='Median and Interquartile Range of the {} quality indicator'.format(indicator_name),
+                label='')
             )
 
 
@@ -205,29 +206,56 @@ def __convert_table_to_latex(df: pd.DataFrame, caption: str, label: str, alignme
     num_columns, num_rows = df.shape[1], df.shape[0]
     output = io.StringIO()
 
-    col_format = '{}|{}'.format(alignment, alignment * num_columns)
+    col_format = '{}{}'.format(alignment, alignment * num_columns)
     column_labels = ['\\textbf{{{0}}}'.format(label.replace('_', '\\_')) for label in df.columns]
 
     # Write header
-    output.write('\\begin{table}\n')
-    output.write('\\caption{{{}}}\n'.format(caption))
-    output.write('\\label{{{}}}\n'.format(label))
-    output.write('\\centering\n')
-    output.write('\\begin{scriptsize}\n')
-    output.write('\\begin{tabular}{%s}\n' % col_format)
-    output.write('\\hline\n')
-    output.write('& {} \\\\\\hline\n'.format(' & '.join(column_labels)))
+    output.write('\\documentclass{article}\n')
+
+    output.write('\\usepackage[utf8]{inputenc}\n')
+    output.write('\\usepackage{tabularx}\n')
+    output.write('\\usepackage{colortbl}\n')
+    output.write('\\usepackage[table*]{xcolor}\n')
+
+    output.write('\\xdefinecolor{gray95}{gray}{0.65}\n')
+    output.write('\\xdefinecolor{gray25}{gray}{0.8}\n')
+
+    output.write('\\title{Median and IQR}\n')
+    output.write('\\author{}\n')
+
+    output.write('\\begin{document}\n')
+    output.write('\\maketitle\n')
+
+    output.write('\\section{Table}\n')
+
+    output.write('\\begin{table}[!htp]\n')
+    output.write('  \\caption{{{}}}\n'.format(caption))
+    output.write('  \\label{{{}}}\n'.format(label))
+    output.write('  \\centering\n')
+    output.write('  \\begin{scriptsize}\n')
+    output.write('  \\begin{tabular}{%s}\n' % col_format)
+    output.write('      & {} \\\\\\hline\n'.format(' & '.join(column_labels)))
 
     # Write data lines
     for i in range(num_rows):
-        output.write('\\textbf{{{0}}} & ${1}$ \\\\\n'.format(
-            df.index[i], '$ & $'.join([str(val) for val in df.ix[i]]))
+        values = [str(val) for val in df.ix[i]]
+        median = [float(val.split('_')[0]) for val in values]
+        iqr = [float(val.split('_')[1]) for val in values]
+
+        top_idx = np.lexsort((median, iqr))[-2:]
+
+        values[top_idx[0]] = '\\cellcolor{gray25} ' + values[top_idx[0]]
+        values[top_idx[1]] = '\\cellcolor{gray95} ' + values[top_idx[1]]
+
+        output.write('      \\textbf{{{0}}} & ${1}$ \\\\\n'.format(
+            df.index[i], '$ & $'.join([str(val) for val in values]))
         )
 
     # Write footer
-    output.write('\\hline\n')
-    output.write('\\end{tabular}\n')
-    output.write('\\end{scriptsize}\n')
-    output.write('\\end{table}')
+    output.write('  \\end{tabular}\n')
+    output.write('  \\end{scriptsize}\n')
+    output.write('\\end{table}\n')
+
+    output.write('\\end{document}')
 
     return output.getvalue()

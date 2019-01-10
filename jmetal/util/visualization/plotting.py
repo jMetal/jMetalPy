@@ -44,6 +44,16 @@ class Plot(ABC):
         points = pd.DataFrame(list(solution.objectives for solution in solutions))
         return points, points.shape[1]
 
+    def plot(self, fronts: List[list], labels: List[str] = None, filename: str = None):
+        dimension = fronts[0][0].number_of_objectives
+
+        if dimension == 2:
+            self.two_dim(fronts, labels, filename)
+        elif dimension == 3:
+            self.three_dim(fronts, labels, filename)
+        else:
+            self.pcoords(fronts, filename)
+
     def two_dim(self, fronts: List[list], labels: List[str] = None, filename: str = None):
         """ Plot any arbitrary number of fronts in 2D.
 

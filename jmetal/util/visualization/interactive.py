@@ -22,11 +22,12 @@ class InteractivePlot(Plot):
         self.layout = None
         self.data = []
 
-    def plot(self, front: List[S], normalize: bool = False) -> None:
+    def plot(self, front: List[S], normalize: bool = False, filename: str = None) -> None:
         """ Plot a front of solutions (2D, 3D or parallel coordinates).
 
         :param front: List of solutions.
         :param normalize: Normalize the input front between 0 and 1 (for problems with more than 3 objectives).
+        :param filename: Output filename.
         """
         self.layout = go.Layout(
             margin=dict(l=80, r=80, b=80, t=150),
@@ -56,19 +57,12 @@ class InteractivePlot(Plot):
         self.data.append(trace)
 
         # Plot the figure
+        if filename:
+            self.export_to_html(filename)
+
         self.figure = go.Figure(data=self.data, layout=self.layout)
 
-    def update(self, points: List[S], normalize: bool = False, legend: str = '') -> None:
-        if self.figure is None:
-            raise Exception('Figure is none')
-
-        points, _ = self.get_points(points)
-        new_data = self.__generate_trace(points=points, legend=legend, normalize=normalize, color='rgb(255, 170, 0)')
-
-        self.data.append(new_data)
-        self.figure = go.Figure(data=self.data, layout=self.layout)
-
-    def export_to_html(self, filename: str = 'front') -> str:
+    def export_to_html(self, filename: str) -> str:
         """ Export the graph to an interactive HTML (solutions can be selected to show some metadata).
 
         :param filename: Output file name.

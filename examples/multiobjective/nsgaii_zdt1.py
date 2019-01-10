@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
     # Plot front
     plot_front = Plot(plot_title='NSGAII-ZDT1', reference_front=problem.reference_front)
-    plot_front.two_dim([algorithm.get_result()], labels=['Front'], filename='NSGAII-ZDT1.eps')
+    plot_front.plot([algorithm.get_result()], labels=['Front'], filename='NSGAII-ZDT1.eps')
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.NSGAII.ZDT1')

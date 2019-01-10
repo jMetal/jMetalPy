@@ -28,16 +28,14 @@ if __name__ == '__main__':
     plot_tile = algorithm.get_name() + "-" + problem.get_name() + "-" + str(problem.number_of_objectives)
 
     plot_front = Plot(plot_title='SMPSO-DTLZ1', reference_front=problem.reference_front)
-    plot_front.three_dim([algorithm.get_result(),algorithm.get_result()], filename=plot_tile + '.eps')
+    plot_front.plot([algorithm.get_result(),algorithm.get_result()], filename=plot_tile + '.eps')
 
     # Plot interactive front
     plot_front = InteractivePlot(plot_title=plot_tile, reference_front=problem.reference_front, axis_labels=problem.obj_labels)
-    plot_front.plot(front)
-    plot_front.export_to_html(filename=plot_tile)
+    plot_front.plot(front, filename=plot_tile)
 
     plot_front = InteractivePlot(plot_title=plot_tile + '-norm', reference_front=problem.reference_front, axis_labels=problem.obj_labels)
-    plot_front.plot(front, normalize=True)
-    plot_front.export_to_html(filename=plot_tile + '-norm')
+    plot_front.plot(front, normalize=True, filename=plot_tile + '-norm')
 
     # Save variables to file
     print_function_values_to_file(front, 'FUN-' + plot_tile)
