@@ -6,7 +6,7 @@ from typing import List, TypeVar
 from tqdm import tqdm
 
 from jmetal.core.observable import Observer
-from jmetal.util.graphic import StreamingPlot, IStreamingPlot
+from jmetal.util.visualization import StreamingPlot, IStreamingPlot
 from jmetal.util.solution_list import print_function_values_to_file
 
 S = TypeVar('S')
@@ -95,7 +95,9 @@ class WriteFrontToFileObserver(Observer):
 
 class VisualizerObserver(Observer):
 
-    def __init__(self, reference_front: List[S] = None, reference_point: List[float] = None,
+    def __init__(self,
+                 reference_front: List[S] = None,
+                 reference_point: List[float] = None,
                  display_frequency: float = 1.0) -> None:
         self.figure = None
         self.display_frequency = display_frequency
@@ -109,18 +111,21 @@ class VisualizerObserver(Observer):
 
         if solutions:
             if self.figure is None:
-                self.figure = StreamingPlot(plot_title='VisualizerObserver',
+                self.figure = StreamingPlot(plot_title='jMetalPy',
                                             reference_point=self.reference_point,
                                             reference_front=self.reference_front)
                 self.figure.plot(solutions)
 
             if (evaluations % self.display_frequency) == 0:
                 self.figure.update(solutions)
+                self.figure.fig.suptitle('Eval: {}'.format(evaluations), fontsize=13)
 
 
 class IVisualizerObserver(Observer):
 
-    def __init__(self, reference_front: List[S] = None, reference_point: List[float] = None,
+    def __init__(self,
+                 reference_front: List[S] = None,
+                 reference_point: List[float] = None,
                  display_frequency: float = 1.0) -> None:
         self.figure = None
         self.display_frequency = display_frequency
@@ -134,7 +139,7 @@ class IVisualizerObserver(Observer):
 
         if solutions:
             if self.figure is None:
-                self.figure = IStreamingPlot(plot_title='VisualizerObserver',
+                self.figure = IStreamingPlot(plot_title='jMetalPy',
                                              reference_point=self.reference_point,
                                              reference_front=self.reference_front)
                 self.figure.plot(solutions)

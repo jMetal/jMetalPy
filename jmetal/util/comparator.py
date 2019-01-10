@@ -1,6 +1,6 @@
+import math
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic
-import math
 
 from jmetal.core.solution import Solution
 
@@ -98,7 +98,7 @@ class RankingAndCrowdingDistanceComparator(Comparator):
 class DominanceComparator(Comparator):
 
     def __init__(self,
-                 constraint_comparator: SolutionAttributeComparator=SolutionAttributeComparator("overall_constraint_violation", False)):
+                 constraint_comparator = SolutionAttributeComparator('overall_constraint_violation', False)):
         self.constraint_comparator = constraint_comparator
 
     def compare(self, solution1: Solution, solution2: Solution) -> int:
@@ -106,11 +106,9 @@ class DominanceComparator(Comparator):
             raise Exception("The solution1 is None")
         elif solution2 is None:
             raise Exception("The solution2 is None")
-        # elif len(solution1.objectives) != len(solution2.objectives):
-        #    raise Exception("The solutions have different number of objectives")
 
         result = 0
-        #if solution1.number_of_constraints > 0:
+
         if solution1.attributes.get(self.constraint_comparator.key) is not None:
             result = self.constraint_comparator.compare(solution1, solution2)
         if result == 0:
@@ -175,6 +173,7 @@ class GDominanceComparator(DominanceComparator):
 
 
 class EpsilonDominanceComparator(DominanceComparator):
+
     def __init__(self,
                  epsilon: float,
                  constraint_comparator=SolutionAttributeComparator('overall_constraint_violation', False)):
@@ -209,8 +208,8 @@ class EpsilonDominanceComparator(DominanceComparator):
             dist2 = 0.0
 
             for i in range(solution1.number_of_objectives):
-                index1 = math.floor(solution1.objectives[i]/self.epsilon)
-                index2 = math.floor(solution2.objectives[i]/self.epsilon)
+                index1 = math.floor(solution1.objectives[i] / self.epsilon)
+                index2 = math.floor(solution2.objectives[i] / self.epsilon)
 
                 dist1 += math.pow(solution1.objectives[i] - index1 * self.epsilon, 2.0)
                 dist2 += math.pow(solution2.objectives[i] - index2 * self.epsilon, 2.0)
@@ -224,4 +223,3 @@ class EpsilonDominanceComparator(DominanceComparator):
                 return 1
             else:
                 return -1
-

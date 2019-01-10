@@ -174,7 +174,7 @@ class UniformMutation(Mutation[FloatSolution]):
 class NonUniformMutation(Mutation[FloatSolution]):
 
     def __init__(self, probability: float, perturbation: float = 0.5, max_iterations: int = 0.5):
-        super(UniformMutation, self).__init__(probability=probability)
+        super(NonUniformMutation, self).__init__(probability=probability)
         self.perturbation = perturbation
         self.max_iterations = max_iterations
         self.current_iteration = 0

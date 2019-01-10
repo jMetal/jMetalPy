@@ -2,13 +2,14 @@ from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.operator import PolynomialMutation
 from jmetal.problem import DTLZ1
 from jmetal.util.archive import CrowdingDistanceArchive
-from jmetal.util.graphic import InteractivePlot
-from jmetal.util.observer import ProgressBarObserver
-from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
+from jmetal.util.visualization import InteractivePlot, Plot
+from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
+from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
-    problem = DTLZ1(number_of_objectives=5)
+    problem = DTLZ1(number_of_objectives=3)
+    problem.reference_front = read_solutions(file_path='../../resources/reference_front/DTLZ1.3D.pf')
 
     algorithm = SMPSO(
         problem=problem,
@@ -23,15 +24,20 @@ if __name__ == '__main__':
     algorithm.run()
     front = algorithm.get_result()
 
-    # Plot frontier to file
+    # Plot front
     plot_tile = algorithm.get_name() + "-" + problem.get_name() + "-" + str(problem.number_of_objectives)
-    pareto_front = InteractivePlot(plot_title=plot_tile, reference_front=problem.reference_front, axis_labels=problem.obj_labels)
-    pareto_front.plot(front)
-    pareto_front.export_to_html(filename=plot_tile)
 
-    pareto_front = InteractivePlot(plot_title=plot_tile + '-norm', reference_front=problem.reference_front, axis_labels=problem.obj_labels)
-    pareto_front.plot(front, normalize=True)
-    pareto_front.export_to_html(filename=plot_tile + '-norm')
+    plot_front = Plot(plot_title='SMPSO-DTLZ1', reference_front=problem.reference_front)
+    plot_front.three_dim([algorithm.get_result(),algorithm.get_result()], filename=plot_tile + '.eps')
+
+    # Plot interactive front
+    plot_front = InteractivePlot(plot_title=plot_tile, reference_front=problem.reference_front, axis_labels=problem.obj_labels)
+    plot_front.plot(front)
+    plot_front.export_to_html(filename=plot_tile)
+
+    plot_front = InteractivePlot(plot_title=plot_tile + '-norm', reference_front=problem.reference_front, axis_labels=problem.obj_labels)
+    plot_front.plot(front, normalize=True)
+    plot_front.export_to_html(filename=plot_tile + '-norm')
 
     # Save variables to file
     print_function_values_to_file(front, 'FUN-' + plot_tile)

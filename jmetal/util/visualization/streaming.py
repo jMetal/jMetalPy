@@ -7,7 +7,7 @@ from IPython.display import display
 from holoviews.streams import Pipe
 from mpl_toolkits.mplot3d import Axes3D
 
-from jmetal.util.graphic.plotting import Plot
+from jmetal.util.visualization.plotting import Plot
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -18,7 +18,7 @@ S = TypeVar('S')
 """
 .. module:: streaming
    :platform: Unix, Windows
-   :synopsis: Classes for plotting solutions in real time.
+   :synopsis: Classes for plotting solutions in real-time.
 
 .. moduleauthor:: Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
@@ -37,7 +37,10 @@ for i in range(len(tableau20)):
 
 class StreamingPlot(Plot):
 
-    def __init__(self, plot_title: str, reference_front: List[S] = None, reference_point: list = None,
+    def __init__(self,
+                 plot_title: str,
+                 reference_front: List[S] = None,
+                 reference_point: list = None,
                  axis_labels: list = None):
         super(StreamingPlot, self).__init__(plot_title, reference_front, reference_point, axis_labels)
 
@@ -58,17 +61,17 @@ class StreamingPlot(Plot):
         # If any reference point, plot
         if self.reference_point:
             self.sc, = self.ax.plot(*[[point] for point in self.reference_point],
-                                    c=tableau20[10], ls='None', marker='*', markersize=2)
+                                    c=tableau20[10], ls='None', marker='*', markersize=3)
 
         # If any reference front, plot
         if self.reference_front:
             rpoints, _ = self.get_points(self.reference_front)
             self.sc, = self.ax.plot(*[rpoints[column].tolist() for column in rpoints.columns.values],
-                                    c=tableau20[15], ls='None', marker='*', markersize=2)
+                                    c=tableau20[15], ls='None', marker='*', markersize=3)
 
         # Plot data
         self.sc, = self.ax.plot(*[points[column].tolist() for column in points.columns.values],
-                                c=tableau20[3], ls='None', marker='o', markersize=2)
+                                ls='None', marker='o', markersize=4)
 
     def update(self, front: List[S]) -> None:
         if self.sc is None:
@@ -106,27 +109,30 @@ class StreamingPlot(Plot):
             self.ax = Axes3D(self.fig)
             self.ax.autoscale(enable=True, axis='both')
         else:
-            raise Exception('Number of objectives must be either 2 or 3')
+            raise Exception('Dimension must be either 2 or 3')
 
         self.ax.set_autoscale_on(True)
         self.ax.autoscale_view(True, True, True)
 
         # Style options
         self.ax.grid(color='#f0f0f5', linestyle='-', linewidth=0.5, alpha=0.5)
-        self.fig.suptitle(self.plot_title, fontsize=13)
+        self.ax.set_title(self.plot_title)
 
 
 class IStreamingPlot(Plot):
 
-    def __init__(self, plot_title: str, reference_front: List[S] = None, reference_point: list = None,
+    def __init__(self,
+                 plot_title: str,
+                 reference_front: List[S] = None,
+                 reference_point: list = None,
                  axis_labels: list = None):
         super(IStreamingPlot, self).__init__(plot_title, reference_front, reference_point, axis_labels)
         self.figure = None
         self.pipe = Pipe(data=[])
 
-    def plot(self, front: List[S]):
+    def plot(self, solutions: List[S]):
         # Get data
-        points, dimension = self.get_points(front)
+        points, dimension = self.get_points(solutions)
         points = points.values.tolist()
 
         # Create an empty figure
@@ -153,11 +159,11 @@ class IStreamingPlot(Plot):
         display(self.figure)  # Display figure in IPython
         self.pipe.send(points)
 
-    def update(self, front: List[S]):
+    def update(self, solutions: List[S]):
         if self.figure is None:
             raise Exception('Figure is none')
 
-        points, _ = self.get_points(front)
+        points, _ = self.get_points(solutions)
         points = points.values.tolist()
 
         self.pipe.send(points)
@@ -168,7 +174,7 @@ class IStreamingPlot(Plot):
         elif dimension == 3:
             self.figure = hv.DynamicMap(hv.Scatter3D, streams=[self.pipe])
         else:
-            raise Exception('Number of objectives must be either 2 or 3')
+            raise Exception('Dimension must be either 2 or 3')
 
     def export(self, file_name: str, file_format: str = 'svg'):
         renderer = hv.renderer('matplotlib').instance(fig=file_format)

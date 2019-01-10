@@ -5,13 +5,10 @@ import pandas as pd
 from plotly import graph_objs as go
 from plotly.offline import plot
 
-import holoviews as hv
-
-from jmetal.util.graphic.plotting import Plot
+from jmetal.util.visualization.plotting import Plot
 
 LOGGER = logging.getLogger('jmetal')
 
-hv.extension('matplotlib')
 
 S = TypeVar('S')
 

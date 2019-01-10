@@ -1,4 +1,4 @@
-from jmetal.util.graphic import CDplot
+from jmetal.util.visualization import CDplot
 from jmetal.util.laboratory import compute_median_iqr_tables, compute_mean_indicator
 from jmetal.util.statistical_test.functions import friedman_test, friedman_ph_test, quade_test
 

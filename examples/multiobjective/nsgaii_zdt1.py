@@ -2,14 +2,14 @@ from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
 from jmetal.problem import ZDT1
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
-from jmetal.util.graphic import InteractivePlot
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
+from jmetal.util.visualization import Plot
 
 if __name__ == '__main__':
     problem = ZDT1()
-    problem.reference_front = read_solutions(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
+    problem.reference_front = read_solutions(file_path='../../resources/reference_front/ZDT1.pf')
 
     max_evaluations = 25000
     algorithm = NSGAII(
@@ -28,14 +28,13 @@ if __name__ == '__main__':
     algorithm.run()
     front = algorithm.get_result()
 
-    # Plot frontier to file
-    pareto_front = InteractivePlot(plot_title='SMPSORP-ZDT1', reference_front=problem.reference_front, axis_labels=problem.obj_labels)
-    pareto_front.plot(front)
-    pareto_front.export_to_html(filename='NSGAII-ZDT1')
+    # Plot front
+    plot_front = Plot(plot_title='NSGAII-ZDT1', reference_front=problem.reference_front)
+    plot_front.two_dim([algorithm.get_result()], labels=['Front'], filename='NSGAII-ZDT1.eps')
 
     # Save results to file
-    print_function_values_to_file(front, 'FUN.' + algorithm.get_name() + "." + problem.get_name())
-    print_variables_to_file(front, 'VAR.'+ algorithm.get_name() + "." + problem.get_name())
+    print_function_values_to_file(front, 'FUN.NSGAII.ZDT1')
+    print_variables_to_file(front, 'VAR.NSGAII.ZDT1')
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())
