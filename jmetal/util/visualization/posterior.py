@@ -76,4 +76,4 @@ def plot_posterior(sample):
     # Plot projected points
     ax.hexbin(sample2d[:, 0], sample2d[:, 1], mincnt=1, cmap=plt.cm.plasma)
 
-    return fig
+    plt.show()

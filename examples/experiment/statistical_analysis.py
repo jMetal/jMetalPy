@@ -1,4 +1,5 @@
-from jmetal.util.visualization import CDplot
+from jmetal.util.statistical_test.bayesian import bayesian_sign_test, bayesian_signed_rank_test
+from jmetal.util.visualization import CDplot, plot_posterior
 from jmetal.util.laboratory import compute_median_iqr_tables, compute_mean_indicator
 from jmetal.util.statistical_test.functions import *
 
@@ -39,3 +40,21 @@ if __name__ == '__main__':
 
     # Plot critical distance
     CDplot(avg.T, alpha=0.05)
+
+    print('-------- Bayesian Sign Test --------')
+    bst, DProcess = bayesian_sign_test(avg[['MOCell', 'SMPSO']],
+                             prior_strength=0.5, return_sample=True)
+    print('Pr(MOCell < SMPSO) = %.3f' % bst[0])
+    print('Pr(MOCell ~= SMPSO) = %.3f' % bst[1])
+    print('Pr(MOCell > SMPSO) = %.3f' % bst[2])
+
+    plot_posterior(DProcess)
+
+    print('-------- Bayesian Signed Rank Test --------')
+    bst, DProcess = bayesian_signed_rank_test(
+        avg[['MOCell', 'SMPSO']], prior_strength=0.5, return_sample=True)
+    print('Pr(MOCell < SMPSO) = %.3f' % bst[0])
+    print('Pr(MOCell ~= SMPSO) = %.3f' % bst[1])
+    print('Pr(MOCell > SMPSO) = %.3f' % bst[2])
+
+    plot_posterior(DProcess)
