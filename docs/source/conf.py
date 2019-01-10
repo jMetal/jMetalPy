@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 # http://blog.rtwilson.com/how-to-make-your-sphinx-documentation-compile-with-readthedocs-when-youre-using-numpy-and-scipy/
 import mock
 
-MOCK_MODULES = ['numpy', 'pandas', 'scipy', 'tqdm', 'pyspark',
+MOCK_MODULES = ['numpy', 'pandas', 'scipy', 'scipy.spatial', 'scipy.stats', 'tqdm', 'pyspark',
                 'IPython.display', 'holoviews', 'holoviews.streams',
                 'plotly', 'plotly.offline']
 for mod_name in MOCK_MODULES:

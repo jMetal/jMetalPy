@@ -46,14 +46,6 @@ Point
     :undoc-members:
     :show-inheritance:
 
-Solution list
------------------------------------------
-
-.. automodule:: jmetal.util.solution_list
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 Archive
 -------------------------------
 
@@ -74,22 +66,6 @@ Density Estimator
 ------------------------------------------
 
 .. automodule:: jmetal.util.density_estimator
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-Evaluator
----------------------------------
-
-.. automodule:: jmetal.util.evaluator
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-Generator
----------------------------------
-
-.. automodule:: jmetal.util.generator
     :members:
     :undoc-members:
     :show-inheritance:
