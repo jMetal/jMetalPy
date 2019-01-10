@@ -1,7 +1,8 @@
 from examples.multiobjective.distributed_nsgaII import ZDT1Modified
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.component import RankingAndCrowdingDistanceComparator, ProgressBarObserver
-from jmetal.util.solution_list.evaluator import MapEvaluator
+from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
+from jmetal.util.observer import ProgressBarObserver
+from jmetal.util.solution_list.evaluator import MapEvaluator, DaskEvaluator, MultiprocessEvaluator
 from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
@@ -11,7 +12,7 @@ if __name__ == '__main__':
     max_evaluations = 100
 
     algorithm = NSGAII(
-        population_evaluator=MapEvaluator(8),
+        population_evaluator=MultiprocessEvaluator(8),
         problem=problem,
         population_size=10,
         offspring_population_size=10,

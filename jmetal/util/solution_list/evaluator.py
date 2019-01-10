@@ -1,7 +1,8 @@
+import functools
 from abc import ABC, abstractmethod
-from multiprocessing.pool import ThreadPool
+from multiprocessing.pool import ThreadPool, Pool
 from typing import TypeVar, List, Generic
-
+import dask
 from pyspark import SparkConf, SparkContext
 
 from jmetal.core.problem import Problem
@@ -54,3 +55,29 @@ class SparkEvaluator(Evaluator[S]):
         return solutions_to_evaluate \
             .map(lambda s: problem.evaluate(s)) \
             .collect()
+
+
+def evaluate_solution(solution, problem):
+    Evaluator[S].evaluate_solution(solution, problem)
+    return solution
+
+
+class DaskEvaluator(Evaluator[S]):
+    def __init__(self, scheduler='processes'):
+        self.scheduler = scheduler
+
+    def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
+        with dask.config.set(scheduler=self.scheduler):
+            return list(dask.compute(*[
+                dask.delayed(evaluate_solution)(solution=solution, problem=problem) for solution in solution_list
+            ]))
+
+
+class MultiprocessEvaluator(Evaluator[S]):
+    def __init__(self, processes=None):
+        super().__init__()
+        self.pool = Pool(processes)
+
+    def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
+        return self.pool.map(functools.partial(evaluate_solution, problem=problem), solution_list)
+
