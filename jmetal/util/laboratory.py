@@ -206,7 +206,7 @@ def __convert_table_to_latex(df: pd.DataFrame, caption: str, label: str, alignme
     num_columns, num_rows = df.shape[1], df.shape[0]
     output = io.StringIO()
 
-    col_format = '{}{}'.format(alignment, alignment * num_columns)
+    col_format = '{}|{}'.format(alignment, alignment * num_columns)
     column_labels = ['\\textbf{{{0}}}'.format(label.replace('_', '\\_')) for label in df.columns]
 
     # Write header
@@ -239,10 +239,12 @@ def __convert_table_to_latex(df: pd.DataFrame, caption: str, label: str, alignme
     # Write data lines
     for i in range(num_rows):
         values = [str(val) for val in df.ix[i]]
-        median = [float(val.split('_')[0]) for val in values]
-        iqr = [float(val.split('_')[1]) for val in values]
+        median = [val.split('_')[0] for val in values]
+        top_idx = np.argsort(median)[-2:]
 
-        top_idx = np.lexsort((median, iqr))[-2:]
+        # Median values could be the same. In that case, sort by IQR (the lower the better)
+        if median[top_idx[0]] == median[top_idx[1]]:
+            top_idx = top_idx[::-1]
 
         values[top_idx[0]] = '\\cellcolor{gray25} ' + values[top_idx[0]]
         values[top_idx[1]] = '\\cellcolor{gray95} ' + values[top_idx[1]]

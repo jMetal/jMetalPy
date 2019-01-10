@@ -10,8 +10,6 @@ if __name__ == '__main__':
 
     print(avg)
 
-    CDplot(avg.T, alpha=0.05)
-
     # Non-parametric test
     print('-------- Sign Test --------')
     print(sign_test(avg[['MOCell', 'SMPSO']]))
@@ -38,3 +36,6 @@ if __name__ == '__main__':
     print('z values \n', z)
     print('p-values \n', p_val)
     print('adjusted p-values \n', adj_pval)
+
+    # Plot critical distance
+    CDplot(avg.T, alpha=0.05)
