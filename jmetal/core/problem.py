@@ -4,7 +4,7 @@ from typing import Generic, TypeVar, List
 import random
 
 from jmetal.core.observable import Observer
-from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
+from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, PermutationSolution
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -108,6 +108,16 @@ class IntegerProblem(Problem[IntegerSolution], ABC):
              for i in range(self.number_of_variables)]
 
         return new_solution
+
+
+class PermutationProblem(Problem[PermutationSolution], ABC):
+    """ Class representing permutation problems. """
+
+    def __init__(self):
+        super(PermutationProblem, self).__init__()
+
+    def create_solution(self) -> IntegerSolution:
+        pass
 
 
 class OnTheFlyFloatProblem(FloatProblem):

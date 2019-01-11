@@ -98,3 +98,21 @@ class IntegerSolution(Solution[int]):
         new_solution.attributes = self.attributes.copy()
 
         return new_solution
+
+
+class PermutationSolution(Solution):
+    """ Class representing permutation solutions """
+
+    def __init__(self, number_of_variables: int, number_of_objectives: int):
+        super(PermutationSolution, self).__init__(number_of_variables, number_of_objectives)
+
+    def __copy__(self):
+        new_solution = PermutationSolution(
+            self.number_of_variables,
+            self.number_of_objectives)
+        new_solution.objectives = self.objectives[:]
+        new_solution.variables = self.variables[:]
+
+        new_solution.attributes = self.attributes.copy()
+
+        return new_solution
