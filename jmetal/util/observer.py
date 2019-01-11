@@ -61,9 +61,14 @@ class BasicObserver(Observer):
         solutions = kwargs['SOLUTIONS']
 
         if (evaluations % self.display_frequency) == 0 and solutions:
-            LOGGER.debug(
+            if type(solutions) == list:
+                fitness = solutions[0].objectives
+            else:
+                fitness = solutions.objectives
+
+            LOGGER.info(
                 'Evaluations: {} \n Best fitness: {} \n Computing time: {}'.format(
-                    evaluations, solutions[0].objectives, computing_time
+                    evaluations, fitness, computing_time
                 )
             )
 
