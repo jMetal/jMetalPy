@@ -1,11 +1,9 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-<<<<<<< HEAD
-=======
-from jmetal.component import RankingAndCrowdingDistanceComparator, VisualizerObserver
->>>>>>> origin/refactor
-from jmetal.util.comparator import GDominanceComparator
+
+from jmetal.util.comparator import GDominanceComparator, RankingAndCrowdingDistanceComparator
 from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
 from jmetal.problem import ZDT2
+from jmetal.util.observer import VisualizerObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
@@ -38,14 +36,11 @@ if __name__ == '__main__':
         # termination_criteria=StoppingByQualityIndicator(quality_indicator=HyperVolume([1.0, 1.0]), expected_value=0.5, degree=0.95)
     )
 
-<<<<<<< HEAD
     visualizer = VisualizerObserver(reference_point=[0.5, 0.5], reference_front=problem.reference_front)
     algorithm.observable.register(visualizer)
-=======
     #progress_bar = ProgressBarObserver(max=max_evaluations)
     #algorithm.observable.register(observer=progress_bar)
     #algorithm.observable.register(observer=VisualizerObserver())
->>>>>>> origin/refactor
 
     algorithm.run()
     front = algorithm.get_result()
