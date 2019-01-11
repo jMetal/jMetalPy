@@ -29,6 +29,23 @@ class QualityIndicator(ABC):
         pass
 
 
+class FitnessValue(QualityIndicator):
+
+    def __init__(self, is_minimization: bool = True):
+        super(FitnessValue, self).__init__(is_minimization=is_minimization)
+
+    def compute(self, solutions: List[S]):
+        if self.is_minimization:
+            mean = np.mean([s.objectives for s in solutions])
+        else:
+            mean = -np.mean([s.objectives for s in solutions])
+
+        return mean
+
+    def get_name(self) -> str:
+        return 'Fitness'
+
+
 class GenerationalDistance(QualityIndicator):
 
     def __init__(self, reference_front: List[S] = None, p: float = 2.0):
