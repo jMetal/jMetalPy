@@ -4,16 +4,16 @@ from jmetal.util.laboratory import compute_median_iqr_tables, compute_mean_indic
 from jmetal.util.statistical_test.functions import *
 
 if __name__ == '__main__':
-    base_directory = 'data'
-
+    # Compute Median and IQR tables from the experiment
     compute_median_iqr_tables(filename='QualityIndicatorSummary.csv')
-    avg = compute_mean_indicator(filename='QualityIndicatorSummary.csv', indicator_name='HV')
 
+    # Statistical analysis
+    avg = compute_mean_indicator(filename='QualityIndicatorSummary.csv', indicator_name='Fitness')
     print(avg)
 
     # Non-parametric test
     print('-------- Sign Test --------')
-    print(sign_test(avg[['MOCell', 'SMPSO']]))
+    print(sign_test(avg[['ssGA', 'gGA']]))
     print('-------- Friedman Test --------')
     print(friedman_test(avg))
     print('-------- Friedman Aligned Rank Test --------')
@@ -42,7 +42,7 @@ if __name__ == '__main__':
     CDplot(avg.T, alpha=0.05)
 
     print('-------- Bayesian Sign Test --------')
-    bst, DProcess = bayesian_sign_test(avg[['MOCell', 'SMPSO']],
+    bst, DProcess = bayesian_sign_test(avg[['ssGA', 'gGA']],
                              prior_strength=0.5, return_sample=True)
     print('Pr(MOCell < SMPSO) = %.3f' % bst[0])
     print('Pr(MOCell ~= SMPSO) = %.3f' % bst[1])
