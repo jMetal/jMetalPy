@@ -1,10 +1,9 @@
 import logging
 import os
-import numpy
 from pathlib import Path
 from typing import List
 
-from jmetal.core.solution import FloatSolution, Solution
+from jmetal.core.solution import FloatSolution
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -17,15 +16,15 @@ LOGGER = logging.getLogger('jmetal')
 """
 
 
-def read_solutions(file_path: str) -> List[FloatSolution]:
+def read_solutions(filename: str) -> List[FloatSolution]:
     """ Reads a reference front from a file.
 
-    :param file_path: File path where the front is located.
+    :param filename: File path where the front is located.
     """
     front = []
 
-    if Path(file_path).is_file():
-        with open(file_path) as file:
+    if Path(filename).is_file():
+        with open(filename) as file:
             for line in file:
                 vector = [float(x) for x in line.split()]
 
@@ -34,12 +33,12 @@ def read_solutions(file_path: str) -> List[FloatSolution]:
 
                 front.append(solution)
     else:
-        LOGGER.warning('Reference front file was not found at {}'.format(file_path))
+        LOGGER.warning('Reference front file was not found at {}'.format(filename))
 
     return front
 
 
-def print_variables_to_file(solution_list: list, file_name):
+def print_variables_to_file(solutions, file_name):
     LOGGER.info('Output file (variables): ' + file_name)
 
     try:
@@ -47,19 +46,25 @@ def print_variables_to_file(solution_list: list, file_name):
     except FileNotFoundError:
         pass
 
+    if type(solutions) is not list:
+        solutions = [solutions]
+
     with open(file_name, 'w') as of:
-        for solution in solution_list:
+        for solution in solutions:
             for variables in solution.variables:
                 of.write(str(variables) + " ")
             of.write("\n")
 
 
-def print_variables_to_screen(solution_list: list):
+def print_variables_to_screen(solution_list):
+    if type(solution_list) is not list:
+        solution_list = [solution_list]
+
     for solution in solution_list:
         print(solution.variables[0])
 
 
-def print_function_values_to_file(solution_list: list, file_name):
+def print_function_values_to_file(solutions, file_name):
     LOGGER.info('Output file (function values): ' + file_name)
 
     try:
@@ -67,25 +72,21 @@ def print_function_values_to_file(solution_list: list, file_name):
     except FileNotFoundError:
         pass
 
+    if type(solutions) is not list:
+        solutions = [solutions]
+
     with open(file_name, 'w') as of:
-        for solution in solution_list:
+        for solution in solutions:
             for function_value in solution.objectives:
                 of.write(str(function_value) + ' ')
             of.write('\n')
 
 
-def print_function_values_to_screen(solution_list: list):
-    for solution in solution_list:
-        print(str(solution_list.index(solution)) + ": ", sep='  ', end='', flush=True)
+def print_function_values_to_screen(solutions):
+    if type(solutions) is not list:
+        solutions = [solutions]
+
+    for solution in solutions:
+        print(str(solutions.index(solution)) + ": ", sep='  ', end='', flush=True)
         print(solution.objectives, sep='  ', end='', flush=True)
         print()
-
-
-def get_numpy_array_from_objectives(solution_list: List[Solution]):
-    list_of_objectives = []
-    for solution in solution_list:
-        list_of_objectives.append(solution.objectives)
-
-    return numpy.array(list_of_objectives)
-
-
