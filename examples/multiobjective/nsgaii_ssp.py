@@ -5,7 +5,6 @@ from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
 from jmetal.util.observer import ProgressBarObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
-
 if __name__ == '__main__':
     C = 300500
     W = [2902, 5235, 357, 6058, 4846, 8280, 1295, 181, 3264,

@@ -1,9 +1,13 @@
-import numpy as np
 import colorsys
-from tqdm import tqdm
-import matplotlib.pyplot as plt
-from matplotlib.path import Path
+from typing import List
+
 import matplotlib.patches as patches
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.path import Path
+from tqdm import tqdm
+
+from jmetal.core.solution import FloatSolution
 
 
 def polar_to_cartesian(r, theta):
@@ -104,8 +108,9 @@ def hover_over_bin(event, handleTickers, handlePlots, colors, fig):
                 fig.canvas.draw_idle()
 
 
-def depict_chord_diagram(pointsMatrix, nbins='auto', ax=None, labelsObj=None,
-                         propLabels=dict(fontsize=13, ha='center', va='center'), pad=6):
+def chord_diagram(solutions: List[FloatSolution], nbins='auto', ax=None, labelsObj=None,
+                  propLabels=dict(fontsize=13, ha='center', va='center'), pad=6):
+    pointsMatrix = np.array([s.objectives for s in solutions])
     (NPOINTS, NOBJ) = np.shape(pointsMatrix)
 
     HSV_tuples = [(x * 1.0 / NOBJ, 0.5, 0.5) for x in range(NOBJ)]
@@ -239,21 +244,3 @@ def depict_chord_diagram(pointsMatrix, nbins='auto', ax=None, labelsObj=None,
     fig.canvas.mpl_connect("motion_notify_event",
                            lambda event: hover_over_bin(event, handleTickers, handlePlots, colors, fig))
     plt.show()
-
-
-##################################
-if __name__ == "__main__":
-    # =============================================================================
-    #     EJEMPLO
-    # =============================================================================
-
-    np.random.seed(0)
-    pointsMatrix = np.random.rand(100, 3)  # shape = (Number of samples, number of objectives)
-    depict_chord_diagram(pointsMatrix, nbins='auto')
-    print('Hover mouse over the white patches to depict samples as chords among objectives')
-
-# =============================================================================
-#     FIN EJEMPLO
-# =============================================================================
-
-

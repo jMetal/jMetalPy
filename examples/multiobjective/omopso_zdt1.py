@@ -11,7 +11,8 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
     problem = ZDT1()
-    problem.reference_front = read_solutions(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
+    problem.reference_front = read_solutions(
+        filename='../../resources/reference_front/{}.pf'.format(problem.get_name()))
     mutation_probability = 1.0 / problem.number_of_variables
 
     max_evaluations = 25000

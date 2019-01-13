@@ -16,8 +16,8 @@ from jmetal.core.solution import Solution, FloatSolution, BinarySolution
 
 class NullCrossover(Crossover[Solution, Solution]):
 
-    def __init__(self, probability: float = 0.0):
-        super(NullCrossover, self).__init__(probability=probability)
+    def __init__(self):
+        super(NullCrossover, self).__init__(probability=0.0)
 
     def execute(self, parents: List[Solution]) -> List[Solution]:
         if len(parents) != 2:

@@ -1,8 +1,8 @@
-from examples.multiobjective.distributed_nsgaII import ZDT1Modified
+from examples.multiobjective.parallel.zdt1_modified import ZDT1Modified
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
 from jmetal.util.observer import ProgressBarObserver
-from jmetal.util.solution_list.evaluator import MapEvaluator, DaskEvaluator, MultiprocessEvaluator
+from jmetal.util.solution_list.evaluator import DaskEvaluator
 from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
@@ -12,7 +12,7 @@ if __name__ == '__main__':
     max_evaluations = 100
 
     algorithm = NSGAII(
-        population_evaluator=MultiprocessEvaluator(8),
+        population_evaluator=DaskEvaluator(),
         problem=problem,
         population_size=10,
         offspring_population_size=10,
@@ -21,8 +21,6 @@ if __name__ == '__main__':
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
-    progress_bar = ProgressBarObserver(max=max_evaluations)
-    algorithm.observable.register(observer=progress_bar)
 
     algorithm.run()
     front = algorithm.get_result()

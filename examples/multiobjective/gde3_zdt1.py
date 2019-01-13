@@ -6,7 +6,7 @@ from jmetal.util.termination_criterion import StoppingByKeyboard
 
 if __name__ == '__main__':
     problem = ZDT1()
-    problem.reference_front = read_solutions(file_path='../../resources/reference_front/{}.pf'.format(problem.get_name()))
+    problem.reference_front = read_solutions(filename='../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
     algorithm = GDE3(
         problem=problem,

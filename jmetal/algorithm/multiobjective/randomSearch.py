@@ -26,6 +26,8 @@ class RandomSearch(Algorithm[S, R]):
         super().__init__()
         self.problem = problem
         self.termination_criterion = termination_criterion
+        self.observable.register(termination_criterion)
+
         self.archive = NonDominatedSolutionListArchive()
 
     def get_observable_data(self) -> dict:
