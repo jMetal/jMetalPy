@@ -255,7 +255,7 @@ def friedman_ph_test(data, control=None, apv_procedure=None):
 
     if apv_procedure is not None:
         if apv_procedure not in ['Bonferroni', 'Holm', 'Hochberg', 'Hommel', 'Holland', 'Finner', 'Li', 'Shaffer',
-                                'Nemenyi']:
+                                 'Nemenyi']:
             raise ValueError(
                 'Initialization ERROR. Incorrect value for APVprocedure.')
 

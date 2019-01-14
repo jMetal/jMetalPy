@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from statsmodels.sandbox.stats.multicomp import get_tukeyQcrit
+from statsmodels.stats.libqsturng import qsturng
 
 from jmetal.util.statistical_test.functions import ranks
 
@@ -18,10 +18,10 @@ def NemenyiCD(alpha: float, num_alg, num_dataset):
     :param num_dataset: Number of problems/datasets where the algorithms have been tested.
     """
 
-    # Get critical value
-    q_alpha = get_tukeyQcrit(k=num_alg, df=num_alg * (num_dataset - 1), alpha=alpha) / np.sqrt(2)
+    # get critical value
+    q_alpha = qsturng(p=1 - alpha, r=num_alg, v=num_alg * num_dataset - 1)) / np.sqrt(2)
 
-    # Compute the critical difference
+    # compute the critical difference
     cd = q_alpha * np.sqrt(num_alg * (num_alg + 1) / (6.0 * num_dataset))
 
     return cd
@@ -112,7 +112,7 @@ def CDplot(results, alpha: float = 0.05, alg_names: list = None):
         |     |                           |       |
         |     |                           |       |
         |     |                           |       |
-        |     |                          |       |
+        |     |                           |       |
         +-----+---------------------------+-------+ sbottom
         |     |                           |       |
         +-----+---------------------------+-------+
@@ -121,7 +121,7 @@ def CDplot(results, alpha: float = 0.05, alg_names: list = None):
 
     stop, sbottom, sleft, sright = 0.65, 0.1, 0.15, 0.85
 
-    # Main horizontal axis length
+    # main horizontal axis length
     lline = sright - sleft
 
     # Initialize figure
