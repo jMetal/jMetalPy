@@ -5,6 +5,7 @@ from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 from typing import List
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -83,20 +84,6 @@ def generate_summary_from_experiment(input_dir: str, quality_indicators: List[Qu
           * VAR.1.tsv
           * ...
 
-        * problem_b
-
-          * FUN.0.tsv
-          * FUN.1.tsv
-          * VAR.0.tsv
-          * VAR.1.tsv
-          * ...
-
-      * algorithm_b
-
-        * ...
-
-    For each indicator a new file `QI.<name_of_the_indicator>` is created inside each problem folder, containing the values computed for each front.
-
     :param input_dir: Directory where all the input data is found (function values and variables).
     :param reference_fronts: Directory where reference fronts are found.
     :param quality_indicators: List of quality indicators to compute.
@@ -109,9 +96,14 @@ def generate_summary_from_experiment(input_dir: str, quality_indicators: List[Qu
     with open('QualityIndicatorSummary.csv', 'w+') as of:
         of.write('Algorithm,Problem,ExecutionId,IndicatorName,IndicatorValue\n')
 
-    for dirname, a, filenames in os.walk(input_dir):
+    for dirname, _, filenames in os.walk(input_dir):
         for filename in filenames:
-            algorithm, problem = dirname.split('/')[-2:]
+            try:
+                # Linux filesystem
+                algorithm, problem = dirname.split('/')[-2:]
+            except ValueError:
+                # Windows filesystem
+                algorithm, problem = dirname.split('\\')[-2:]
 
             if 'TIME' in filename:
                 run_tag = [s for s in filename.split('.') if s.isdigit()].pop()
@@ -140,14 +132,47 @@ def generate_summary_from_experiment(input_dir: str, quality_indicators: List[Qu
                     result = indicator.compute(solutions)
 
                     # Save quality indicator value to file
-                    # Note: We need to ensure that the result is inserted at the correct row inside the file
                     with open('QualityIndicatorSummary.csv', 'a+') as of:
                         of.write(','.join([algorithm, problem, run_tag, indicator.get_name(), str(result)]))
                         of.write('\n')
 
 
-def compute_median_iqr_tables(filename: str):
-    """ Compute the mean and IQR of each quality indicator.
+def generate_boxplot(filename: str, indicator_name: str):
+    """ Generate boxplot diagrams.
+    :param filename:
+    :param indicator_name: Quality indicator name.
+    """
+    df = pd.read_csv(filename, skipinitialspace=True)
+
+    if len(set(df.columns.tolist())) != 5:
+        raise Exception('Wrong number of columns')
+
+    algorithms = pd.unique(df['Algorithm'])
+    problems = pd.unique(df['Problem'])
+
+    # We consider the quality indicator indicator_name
+    data = df[df['IndicatorName'] == indicator_name]
+
+    for pr in problems:
+        data_to_plot = []
+
+        for alg in algorithms:
+            data_to_plot.append(data['IndicatorValue'][np.logical_and(
+                data['Algorithm'] == alg, data['Problem'] == pr)])
+
+        # Create a figure instance
+        fig = plt.figure(1, figsize=(9, 6))
+
+        ax = fig.add_subplot(111)
+        ax.boxplot(data_to_plot)
+        ax.set_xticklabels(algorithms)
+
+        plt.savefig('boxplot-{}-{}.png'.format(pr, indicator_name), bbox_inches='tight')
+        plt.cla()
+
+
+def generate_latex_tables(filename: str):
+    """ Computes a number of statistical values (mean, median, standard deviation, interquartile range).
     :param filename: Input summary file.
     """
     df = pd.read_csv(filename, skipinitialspace=True)
@@ -156,6 +181,7 @@ def compute_median_iqr_tables(filename: str):
         raise Exception('Wrong number of columns')
 
     median_iqr = pd.DataFrame()
+    mean_std = pd.DataFrame()
 
     for algorithm_name, subset in df.groupby('Algorithm'):
         subset = subset.drop('Algorithm', axis=1)
@@ -169,15 +195,36 @@ def compute_median_iqr_tables(filename: str):
         table = table.rename(columns={'IndicatorValue': algorithm_name})
         median_iqr = pd.concat([median_iqr, table], axis=1)
 
+        # Compute Mean and Standard deviation
+        mean = subset.groupby(level=[0, 1]).mean()
+        std = subset.groupby(level=[0, 1]).std()
+        table = mean.applymap('{:.2e}'.format) + '_{' + std.applymap('{:.2e}'.format) + '}'
+
+        table = table.rename(columns={'IndicatorValue': algorithm_name})
+        mean_std = pd.concat([median_iqr, table], axis=1)
+
     for indicator_name, subset in median_iqr.groupby('IndicatorName'):
         subset.index = subset.index.droplevel(1)
         subset.to_csv('MedianIQR{}.csv'.format(indicator_name), sep='\t', encoding='utf-8')
 
         with open('MedianIQR{}.tex'.format(indicator_name), 'w') as latex:
             latex.write(
-                __meaniqr_to_latex(
+                __to_latex(
                     subset,
                     caption='Median and Interquartile Range of the {} quality indicator'.format(indicator_name),
+                    label=''
+                )
+            )
+
+    for indicator_name, subset in mean_std.groupby('IndicatorName'):
+        subset.index = subset.index.droplevel(1)
+        subset.to_csv('MeanStd{}.csv'.format(indicator_name), sep='\t', encoding='utf-8')
+
+        with open('MeanStd{}.tex'.format(indicator_name), 'w') as latex:
+            latex.write(
+                __to_latex(
+                    subset,
+                    caption='Mean and Standard Deviation of the {} quality indicator'.format(indicator_name),
                     label=''
                 )
             )
@@ -214,7 +261,7 @@ def compute_mean_indicator(filename: str, indicator_name: str):
     return pd.DataFrame(data=average_values, index=problems, columns=algorithms)
 
 
-def __meaniqr_to_latex(df: pd.DataFrame, caption: str, label: str, alignment: str = 'c'):
+def __to_latex(df: pd.DataFrame, caption: str, label: str, alignment: str = 'c'):
     """ Convert a pandas DataFrame to a LaTeX tabular. Prints labels in bold and does use math mode.
     """
     num_columns, num_rows = df.shape[1], df.shape[0]

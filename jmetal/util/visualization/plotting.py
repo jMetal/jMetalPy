@@ -73,13 +73,16 @@ class Plot(ABC):
             points, _ = self.get_points(fronts[i])
 
             ax = fig.add_subplot(n, n, i + 1)
-            points.plot(kind='scatter', x=0, y=1, ax=ax)
+            points.plot(kind='scatter', x=0, y=1, ax=ax, color='b', alpha=0.2)
 
             if labels:
                 ax.set_title(labels[i])
 
             if self.reference_front:
-                reference.plot(kind='scatter', x=0, y=1, ax=ax)
+                reference.plot(x=0, y=1, ax=ax, color='k', legend=False)
+
+            if self.reference_point:
+                plt.plot([self.reference_point[0]], [self.reference_point[1]], marker='o', markersize=3, color='r')
 
         if filename:
             plt.savefig(filename, format=filename.split('.')[-1], dpi=1000)
