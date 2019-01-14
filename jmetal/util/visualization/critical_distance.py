@@ -19,7 +19,7 @@ def NemenyiCD(alpha: float, num_alg, num_dataset):
     """
 
     # get critical value
-    q_alpha = qsturng(p=1 - alpha, r=num_alg, v=num_alg * num_dataset - 1)) / np.sqrt(2)
+    q_alpha = qsturng(p=1 - alpha, r=num_alg, v=num_alg * num_dataset - 1) / np.sqrt(2)
 
     # compute the critical difference
     cd = q_alpha * np.sqrt(num_alg * (num_alg + 1) / (6.0 * num_dataset))
