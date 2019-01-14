@@ -3,7 +3,7 @@ import random
 from typing import List
 
 from jmetal.core.operator import Crossover
-from jmetal.core.solution import Solution, FloatSolution, BinarySolution
+from jmetal.core.solution import Solution, FloatSolution, BinarySolution, PermutationSolution
 
 """
 .. module:: crossover
@@ -33,6 +33,108 @@ class NullCrossover(Crossover[Solution, Solution]):
 
     def get_name(self):
         return 'Null crossover'
+
+
+class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
+
+    def __init__(self, probability: float):
+        super(PMXCrossover, self).__init__(probability=probability)
+
+    def execute(self, parents: List[PermutationSolution]) -> List[PermutationSolution]:
+        if len(parents) != 2:
+            raise Exception('The number of parents is not two: {}'.format(len(parents)))
+
+        offspring = [copy.copy(parents[0]), copy.copy(parents[1])]
+        rand = random.random()
+
+        if rand <= self.probability:
+            for i in range(parents[0].number_of_variables):
+                size = min(len(offspring[0].variables[i]), len(offspring[1].variables[i]))
+                p1, p2 = [0] * size, [0] * size
+
+                # Initialize the position of each indices in the individuals
+                for j in range(size):
+                    p1[offspring[0].variables[i][j]] = j
+                    p2[offspring[1].variables[i][j]] = j
+
+                # Choose crossover points
+                cxpoint1 = random.randint(0, size)
+                cxpoint2 = random.randint(0, size - 1)
+
+                if cxpoint2 >= cxpoint1:
+                    cxpoint2 += 1
+                else:  # Swap the two cx points
+                    cxpoint1, cxpoint2 = cxpoint2, cxpoint1
+
+                # Apply crossover between cx points
+                for j in range(cxpoint1, cxpoint2):
+                    # Keep track of the selected values
+                    temp1 = offspring[0].variables[i][j]
+                    temp2 = offspring[1].variables[i][j]
+
+                    # Swap the matched value
+                    offspring[0].variables[i][j], offspring[0].variables[i][p1[temp2]] = temp2, temp1
+                    offspring[1].variables[i][j], offspring[1].variables[i][p2[temp1]] = temp1, temp2
+
+                    # Position bookkeeping
+                    p1[temp1], p1[temp2] = p1[temp2], p1[temp1]
+                    p2[temp1], p2[temp2] = p2[temp2], p2[temp1]
+
+                offspring[0].variables[i] = p1
+                offspring[1].variables[i] = p2
+
+        return offspring
+
+    def get_number_of_parents(self) -> int:
+        return 2
+
+    def get_number_of_children(self) -> int:
+        return 2
+
+    def get_name(self):
+        return 'Partially Matched crossover'
+
+
+class CXCrossover(Crossover[PermutationSolution, PermutationSolution]):
+
+    def __init__(self, probability: float):
+        super(CXCrossover, self).__init__(probability=probability)
+
+    def execute(self, parents: List[PermutationSolution]) -> List[PermutationSolution]:
+        if len(parents) != 2:
+            raise Exception('The number of parents is not two: {}'.format(len(parents)))
+
+        offspring = [copy.copy(parents[1]), copy.copy(parents[0])]
+        rand = random.random()
+
+        if rand <= self.probability:
+            for i in range(parents[0].number_of_variables):
+                idx = random.randint(0, len(parents[0].variables[i]) - 1)
+                curr_idx = idx
+                cycle = []
+
+                while True:
+                    cycle.append(curr_idx)
+                    curr_idx = parents[0].variables[i].index(parents[1].variables[i][curr_idx])
+
+                    if curr_idx == idx:
+                        break
+
+                for j in range(len(parents[0].variables[i])):
+                    if j in cycle:
+                        offspring[0].variables[i][j] = parents[0].variables[i][j]
+                        offspring[1].variables[i][j] = parents[0].variables[i][j]
+
+        return offspring
+
+    def get_number_of_parents(self) -> int:
+        return 2
+
+    def get_number_of_children(self) -> int:
+        return 2
+
+    def get_name(self):
+        return 'Cycle crossover'
 
 
 class SBXCrossover(Crossover[FloatSolution, FloatSolution]):

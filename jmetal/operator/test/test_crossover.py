@@ -1,19 +1,11 @@
 import unittest
 from unittest import mock
 
-from jmetal.core.solution import BinarySolution
-from jmetal.operator.crossover import NullCrossover, SPXCrossover
+from jmetal.core.solution import BinarySolution, PermutationSolution
+from jmetal.operator.crossover import NullCrossover, SPXCrossover, CXCrossover
 
 
 class NullCrossoverTestCases(unittest.TestCase):
-
-    def test_should_constructor_raises_an_exception_is_probability_is_negative(self) -> None:
-        with self.assertRaises(Exception):
-            NullCrossover(-1)
-
-    def test_should_constructor_raises_an_exception_is_probability_is_higher_than_one(self) -> None:
-        with self.assertRaises(Exception):
-            NullCrossover(1.01)
 
     def test_should_constructor_create_a_non_null_object(self):
         solution = NullCrossover()
@@ -131,6 +123,53 @@ class SinglePointTestCases(unittest.TestCase):
         self.assertEqual([False, True, False, False, True, True], offspring[1].variables[0])
         self.assertEqual([True, True, False, True, False, False], offspring[1].variables[1])
         self.assertEqual([True, False, True, True, True, True], offspring[1].variables[2])
+
+
+class CXTestCases(unittest.TestCase):
+
+    def test_should_constructor_raises_an_exception_is_probability_is_negative(self) -> None:
+        with self.assertRaises(Exception):
+            CXCrossover(-1)
+
+    def test_should_constructor_raises_an_exception_is_probability_is_higher_than_one(self) -> None:
+        with self.assertRaises(Exception):
+            CXCrossover(1.01)
+
+    def test_should_constructor_create_a_non_null_object(self):
+        solution = CXCrossover(1.0)
+        self.assertIsNotNone(solution)
+
+    def test_should_constructor_create_a_valid_operator(self):
+        operator = CXCrossover(0.5)
+        self.assertEqual(0.5, operator.probability)
+
+    def test_should_constructor_raise_an_exception_if_the_probability_is_greater_than_one(self):
+        with self.assertRaises(Exception):
+            CXCrossover(2)
+
+    def test_should_constructor_raise_an_exception_if_the_probability_is_lower_than_zero(self):
+        with self.assertRaises(Exception):
+            CXCrossover(-12)
+
+    @mock.patch('random.randint')
+    def test_should_the_solution_remain_unchanged_if_the_probability_is_zero(self, random_call):
+        operator = CXCrossover(1.0)
+        solution1 = PermutationSolution(number_of_variables=2, number_of_objectives=1)
+        solution1.variables[0] = [1, 2, 3, 4, 7]
+        solution1.variables[1] = [2, 6, 4, 5, 3]
+
+        solution2 = PermutationSolution(number_of_variables=2, number_of_objectives=1)
+        solution2.variables[0] = [2, 3, 4, 1, 9]
+        solution2.variables[1] = [5, 3, 2, 4, 6]
+
+        random_call.return_value = 0
+        offspring = operator.execute([solution1, solution2])
+
+        self.assertEqual([1, 2, 3, 4, 9], offspring[0].variables[0])
+        self.assertEqual([2, 3, 4, 5, 6], offspring[0].variables[1])
+
+        self.assertEqual([1, 2, 3, 4, 7], offspring[1].variables[0])
+        self.assertEqual([2, 6, 4, 5, 3], offspring[1].variables[1])
 
 
 if __name__ == '__main__':
