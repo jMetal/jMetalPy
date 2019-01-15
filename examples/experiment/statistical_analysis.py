@@ -8,15 +8,15 @@ if __name__ == '__main__':
     generate_latex_tables(filename='QualityIndicatorSummary.csv')
 
     # Generate boxplots
-    generate_boxplot(filename='QualityIndicatorSummary.csv', indicator_name='HV')
+    generate_boxplot(filename='QualityIndicatorSummary.csv', indicator_name='U-EP')
 
     # Statistical analysis
-    avg = compute_mean_indicator(filename='QualityIndicatorSummary.csv', indicator_name='HV')
+    avg = compute_mean_indicator(filename='QualityIndicatorSummary.csv', indicator_name='U-EP')
     print(avg)
 
     # Non-parametric test
     print('-------- Sign Test --------')
-    print(sign_test(avg[['NSGAII', 'MOEAD']]))
+    print(sign_test(avg[['NSGAII', 'SMPSO']]))
     print('-------- Friedman Test --------')
     print(friedman_test(avg))
     print('-------- Friedman Aligned Rank Test --------')
@@ -45,19 +45,19 @@ if __name__ == '__main__':
     CDplot(avg.T, alpha=0.05)
 
     print('-------- Bayesian Sign Test --------')
-    bst, DProcess = bayesian_sign_test(avg[['NSGAII', 'MOEAD']],
+    bst, DProcess = bayesian_sign_test(avg[['NSGAII', 'SMPSO']],
                              prior_strength=0.5, return_sample=True)
-    print('Pr(NSGAII < MOEAD) = %.3f' % bst[0])
-    print('Pr(NSGAII ~= MOEAD) = %.3f' % bst[1])
-    print('Pr(NSGAII > MOEAD) = %.3f' % bst[2])
+    print('Pr(NSGAII < SMPSO) = %.3f' % bst[0])
+    print('Pr(NSGAII ~= SMPSO) = %.3f' % bst[1])
+    print('Pr(NSGAII > SMPSO) = %.3f' % bst[2])
 
     plot_posterior(DProcess)
 
     print('-------- Bayesian Signed Rank Test --------')
     bst, DProcess = bayesian_signed_rank_test(
-        avg[['NSGAII', 'MOEAD']], prior_strength=0.5, return_sample=True)
-    print('Pr(NSGAII < MOEAD) = %.3f' % bst[0])
-    print('Pr(NSGAII ~= MOEAD) = %.3f' % bst[1])
-    print('Pr(NSGAII > MOEAD) = %.3f' % bst[2])
+        avg[['NSGAII', 'SMPSO']], prior_strength=0.5, return_sample=True)
+    print('Pr(NSGAII < SMPSO) = %.3f' % bst[0])
+    print('Pr(NSGAII ~= SMPSO) = %.3f' % bst[1])
+    print('Pr(NSGAII > SMPSO) = %.3f' % bst[2])
 
     plot_posterior(DProcess)
