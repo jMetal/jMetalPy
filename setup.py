@@ -22,7 +22,7 @@ setup(
     ],
     install_requires=[
         'tqdm',
-        'numpy==1.13.1',
+        'numpy==1.15.4',
         'pandas==0.23.4',
         'scipy==1.1.0',
         'ipython',
