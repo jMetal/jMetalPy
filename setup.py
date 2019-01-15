@@ -22,10 +22,10 @@ setup(
     ],
     install_requires=[
         'tqdm',
-        'numpy==1.13.1',
+        'numpy==1.16.0',
         'pandas==0.23.4',
         'scipy==1.1.0',
-        'pyspark',
+        'pyspark==2.4.0',
         'ipython',
         'holoviews==1.10.9',
         'plotly==3.3.0',
