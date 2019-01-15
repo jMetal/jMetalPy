@@ -33,19 +33,19 @@ class FastNonDominatedRanking(Ranking[List[S]]):
         super(FastNonDominatedRanking, self).__init__()
         self.comparator = comparator
 
-    def compute_ranking(self, solution_list: List[S]):
+    def compute_ranking(self, solutions: List[S]):
         # number of solutions dominating solution ith
-        dominating_ith = [0 for _ in range(len(solution_list))]
+        dominating_ith = [0 for _ in range(len(solutions))]
 
         # list of solutions dominated by solution ith
-        ith_dominated = [[] for _ in range(len(solution_list))]
+        ith_dominated = [[] for _ in range(len(solutions))]
 
         # front[i] contains the list of solutions belonging to front i
-        front = [[] for _ in range(len(solution_list) + 1)]
+        front = [[] for _ in range(len(solutions) + 1)]
 
-        for p in range(len(solution_list) - 1):
-            for q in range(p + 1, len(solution_list)):
-                dominance_test_result = self.comparator.compare(solution_list[p], solution_list[q])
+        for p in range(len(solutions) - 1):
+            for q in range(p + 1, len(solutions)):
+                dominance_test_result = self.comparator.compare(solutions[p], solutions[q])
                 self.number_of_comparisons += 1
 
                 if dominance_test_result == -1:
@@ -55,10 +55,10 @@ class FastNonDominatedRanking(Ranking[List[S]]):
                     ith_dominated[q].append(p)
                     dominating_ith[p] += 1
 
-        for i in range(len(solution_list)):
+        for i in range(len(solutions)):
             if dominating_ith[i] is 0:
                 front[0].append(i)
-                solution_list[i].attributes['dominance_ranking'] = 0
+                solutions[i].attributes['dominance_ranking'] = 0
 
         i = 0
         while len(front[i]) != 0:
@@ -69,13 +69,13 @@ class FastNonDominatedRanking(Ranking[List[S]]):
                         dominating_ith[q] -= 1
                         if dominating_ith[q] is 0:
                             front[i].append(q)
-                            solution_list[q].attributes['dominance_ranking'] = i
+                            solutions[q].attributes['dominance_ranking'] = i
 
         self.ranked_sublists = [[]] * i
         for j in range(i):
             q = [0] * len(front[j])
             for k in range(len(front[j])):
-                q[k] = solution_list[front[j][k]]
+                q[k] = solutions[front[j][k]]
             self.ranked_sublists[j] = q
 
         return self.ranked_sublists

@@ -168,6 +168,7 @@ def generate_boxplot(filename: str, indicator_name: str):
         ax.set_xticklabels(algorithms)
 
         plt.savefig('boxplot-{}-{}.png'.format(pr, indicator_name), bbox_inches='tight')
+        plt.savefig('boxplot-{}-{}.eps'.format(pr, indicator_name), bbox_inches='tight')
         plt.cla()
 
 
