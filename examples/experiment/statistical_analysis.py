@@ -8,10 +8,10 @@ if __name__ == '__main__':
     generate_latex_tables(filename='QualityIndicatorSummary.csv')
 
     # Generate boxplots
-    generate_boxplot(filename='QualityIndicatorSummary.csv', indicator_name='U-EP')
+    generate_boxplot(filename='QualityIndicatorSummary.csv', indicator_name='HV')
 
     # Statistical analysis
-    avg = compute_mean_indicator(filename='QualityIndicatorSummary.csv', indicator_name='U-EP')
+    avg = compute_mean_indicator(filename='QualityIndicatorSummary.csv', indicator_name='HV')
     print(avg)
 
     # Non-parametric test
