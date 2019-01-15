@@ -67,9 +67,6 @@ def configure_experiment(problems: dict, n_run: int):
 
 
 if __name__ == '__main__':
-    # Instantiate the problem
-    problem = ZDT1()
-
     # Configure the experiments
     jobs = configure_experiment(problems={'ZDT1': ZDT1(), 'ZDT2': ZDT2(), 'ZDT3': ZDT3()}, n_run=31)
 
