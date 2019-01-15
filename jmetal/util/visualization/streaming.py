@@ -51,9 +51,9 @@ class StreamingPlot(Plot):
         self.sc = None
         self.axis = None
 
-    def plot(self, front: List[S]) -> None:
+    def plot(self, solutions: List[S], labels: List[str] = None, filename: str = None) -> None:
         # Get data
-        points, dimension = self.get_points(front)
+        points, dimension = self.get_points(solutions)
 
         # Create an empty figure
         self.create_layout(dimension)

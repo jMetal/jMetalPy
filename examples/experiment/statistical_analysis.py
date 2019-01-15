@@ -1,19 +1,22 @@
+from jmetal.util.laboratory import generate_boxplot, generate_latex_tables, compute_mean_indicator
 from jmetal.util.statistical_test.bayesian import bayesian_sign_test, bayesian_signed_rank_test
-from jmetal.util.visualization import CDplot, plot_posterior
-from jmetal.util.laboratory import compute_median_iqr_tables, compute_mean_indicator
 from jmetal.util.statistical_test.functions import *
+from jmetal.util.visualization import CDplot, plot_posterior
 
 if __name__ == '__main__':
-    # Compute Median and IQR tables from the experiment
-    compute_median_iqr_tables(filename='QualityIndicatorSummary.csv')
+    # Generate Median & IQR tables
+    generate_latex_tables(filename='QualityIndicatorSummary.csv')
+
+    # Generate boxplots
+    generate_boxplot(filename='QualityIndicatorSummary.csv', indicator_name='HV')
 
     # Statistical analysis
-    avg = compute_mean_indicator(filename='QualityIndicatorSummary.csv', indicator_name='Fitness')
+    avg = compute_mean_indicator(filename='QualityIndicatorSummary.csv', indicator_name='HV')
     print(avg)
 
     # Non-parametric test
     print('-------- Sign Test --------')
-    print(sign_test(avg[['ssGA', 'gGA']]))
+    print(sign_test(avg[['NSGAII', 'MOEAD']]))
     print('-------- Friedman Test --------')
     print(friedman_test(avg))
     print('-------- Friedman Aligned Rank Test --------')
@@ -42,19 +45,19 @@ if __name__ == '__main__':
     CDplot(avg.T, alpha=0.05)
 
     print('-------- Bayesian Sign Test --------')
-    bst, DProcess = bayesian_sign_test(avg[['ssGA', 'gGA']],
+    bst, DProcess = bayesian_sign_test(avg[['NSGAII', 'MOEAD']],
                              prior_strength=0.5, return_sample=True)
-    print('Pr(MOCell < SMPSO) = %.3f' % bst[0])
-    print('Pr(MOCell ~= SMPSO) = %.3f' % bst[1])
-    print('Pr(MOCell > SMPSO) = %.3f' % bst[2])
+    print('Pr(NSGAII < MOEAD) = %.3f' % bst[0])
+    print('Pr(NSGAII ~= MOEAD) = %.3f' % bst[1])
+    print('Pr(NSGAII > MOEAD) = %.3f' % bst[2])
 
     plot_posterior(DProcess)
 
     print('-------- Bayesian Signed Rank Test --------')
     bst, DProcess = bayesian_signed_rank_test(
-        avg[['MOCell', 'SMPSO']], prior_strength=0.5, return_sample=True)
-    print('Pr(MOCell < SMPSO) = %.3f' % bst[0])
-    print('Pr(MOCell ~= SMPSO) = %.3f' % bst[1])
-    print('Pr(MOCell > SMPSO) = %.3f' % bst[2])
+        avg[['NSGAII', 'MOEAD']], prior_strength=0.5, return_sample=True)
+    print('Pr(NSGAII < MOEAD) = %.3f' % bst[0])
+    print('Pr(NSGAII ~= MOEAD) = %.3f' % bst[1])
+    print('Pr(NSGAII > MOEAD) = %.3f' % bst[2])
 
     plot_posterior(DProcess)

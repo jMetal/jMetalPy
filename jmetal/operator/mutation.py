@@ -1,7 +1,7 @@
 import random
 
 from jmetal.core.operator import Mutation
-from jmetal.core.solution import BinarySolution, Solution, FloatSolution, IntegerSolution
+from jmetal.core.solution import BinarySolution, Solution, FloatSolution, IntegerSolution, PermutationSolution
 
 """
 .. module:: mutation
@@ -209,3 +209,48 @@ class NonUniformMutation(Mutation[FloatSolution]):
 
     def get_name(self):
         return 'Uniform mutation'
+
+
+class SwapMutation(Mutation[PermutationSolution]):
+
+    def execute(self, solution: PermutationSolution) -> PermutationSolution:
+        for i in range(solution.number_of_variables):
+            for _ in range(len(solution.variables[i])):
+                rand = random.random()
+
+                if rand <= self.probability:
+                    idx = solution.variables[i]
+                    unsorted = random.sample(idx, 2)
+                    idx[unsorted[0]], idx[unsorted[1]] = idx[unsorted[1]], idx[unsorted[0]]
+
+        return solution
+
+    def get_name(self):
+        return 'Swap'
+
+
+class ScrambleMutation(Mutation[PermutationSolution]):
+
+    def execute(self, solution: PermutationSolution) -> PermutationSolution:
+        for i in range(solution.number_of_variables):
+            rand = random.random()
+
+            if rand <= self.probability:
+                point1 = random.randint(0, len(solution.variables[i]))
+                point2 = random.randint(0, len(solution.variables[i]) - 1)
+
+                if point2 >= point1:
+                    point2 += 1
+                else:
+                    point1, point2 = point2, point1
+
+                if point2 - point1 >= 20:
+                    point2 = point1 + 20
+
+                values = solution.variables[i][point1:point2]
+                solution.variables[i][point1:point2] = random.sample(values, len(values))
+
+        return solution
+
+    def get_name(self):
+        return 'Scramble'
