@@ -29,6 +29,14 @@ R = TypeVar('R')
 """
 
 
+class ReferencePoint(list):
+
+    def __init__(self, *args):
+        list.__init__(self, *args)
+        self.associations_count = 0
+        self.associations = []
+
+
 class NSGAIII(NSGAII):
 
     def __init__(self,
@@ -61,7 +69,6 @@ class NSGAIII(NSGAII):
             population_generator=population_generator
         )
         self.dominance_comparator = dominance_comparator
-        self.ideal_point = [float('inf')] * problem.number_of_objectives
 
     def selection(self, population: List[S]):
         """ Implements NSGA-III selection as described in
@@ -91,39 +98,39 @@ class NSGAIII(NSGAII):
                 mating_population += fronts[f]
 
         # complete selected individuals using the reference point based approach
-        mating_population += self.__niching_select(fronts[limit], self.population_size - len(mating_population))
+        mating_population += self.niching_selection(fronts[limit], self.population_size - len(mating_population))
 
         return mating_population
 
-    def __niching_select(self, population: List[S], k: int):
-        """ Secondary environmental selection based on reference points. Corresponds to steps 13-17 of Algorithm 1.
+    def find_ideal_point(self, solutions: List[S]):
+        ideal_point = [float('inf')] * self.problem.number_of_objectives
 
-        :param population:
-        :param k:
-        :return:
-        """
-
-        # find the reference points
-        reference_points = self.__generate_reference_points(len(population[0].objectives))
-
-        # Steps 9-10 in Algorithm 1
-        if len(population) == k:
-            return population
-
-        # Step 14 / Algorithm 2. Find the ideal point
-        for solution in population:
+        for solution in solutions:
             for i in range(self.problem.number_of_objectives):
-                self.ideal_point[i] = min(self.ideal_point[i], solution.objectives[i])
+                ideal_point[i] = min(ideal_point[i], solution.objectives[i])
 
-        # translate points by ideal point to normalize objectives
-        for solution in population:
-            solution.attributes['normalized_objectives'] = \
-                [solution.objectives[i] - self.ideal_point[i] for i in range(self.problem.number_of_objectives)]
+        return ideal_point
 
-        # find the extreme points
-        extreme_points = [self.__find_extreme_points(population, i) for i in range(self.problem.number_of_objectives)]
+    def find_extreme_points(self, solutions: List[S], objective):
+        nobjs = self.problem.number_of_objectives
 
-        # calculate the axis intersects for a set of individuals and its extremes (construct hyperplane)
+        weights = [0.000001] * nobjs
+        weights[objective] = 1.0
+
+        min_index = -1
+        min_value = float('inf')
+
+        for i in range(len(solutions)):
+            objectives = solutions[i].attributes['normalized_objectives']
+            value = max([objectives[j] / weights[j] for j in range(nobjs)])
+
+            if value < min_value:
+                min_index = i
+                min_value = value
+
+        return solutions[min_index]
+
+    def construct_hyperplane(self, solutions: List[S], extreme_points: list):
         intercepts = []
         degenerate = False
 
@@ -145,65 +152,30 @@ class NSGAIII(NSGAII):
             intercepts = [-float('inf')] * self.problem.number_of_objectives
 
             for i in range(self.problem.number_of_objectives):
-                intercepts[i] = max([s.normalized_objectives[i] for s in population] + [sys.float_info.epsilon])
+                intercepts[i] = max([s.attributes['normalized_objectives'][i] for s in solutions]
+                                    + [sys.float_info.epsilon])
 
-        # normalize objectives using the hyperplane defined by the intercepts as reference
-        for solution in population:
+        return intercepts
+
+    def normalize_objective(self, solution, m, intercepts, ideal_point, epsilon=1e-20):
+        if np.abs(intercepts[m] - ideal_point[m] > epsilon):
+            return solution.objectives[m] / (intercepts[m] - ideal_point[m])
+        else:
+            return solution.objectives[m] / epsilon
+
+    def normalize_objectives(self, solutions: List[S], intercepts: list, ideal_point: list):
+        for solution in solutions:
             solution.attributes['normalized_objectives'] = \
-                [solution.attributes['normalized_objectives'][i] / intercepts[i] for i in
+                [self.normalize_objective(solution, i, intercepts, ideal_point) for i in
                  range(self.problem.number_of_objectives)]
 
-        # Step 15 / Algorithm 3, Step 16. Associate each solution to a reference point
-        members, potential_members = self.__associate_to_reference_point(population, reference_points)
+        return solutions
 
-        # Step 17 / Algorithm 4
-        excluded = set()
-
-        while len(population) < k:
-            # identify reference point with the fewest associated members
-            min_indices = []
-            min_count = sys.maxsize
-
-            for i in range(len(members)):
-                if i not in excluded and len(members[i]) <= min_count:
-                    if len(members[i]) < min_count:
-                        min_indices = []
-                        min_count = len(members[i])
-                    min_indices.append(i)
-
-            # pick one randomly if there are multiple options
-            min_index = random.choice(min_indices)
-
-            # add associated solution
-            if min_count == 0:
-                if len(potential_members[min_index]) == 0:
-                    excluded.add(min_index)
-                else:
-                    min_solution = self.__find_minimum_distance(potential_members[min_index],
-                                                                reference_points[min_index])
-                    population.append(min_solution)
-                    members[min_index].append(min_solution)
-                    potential_members[min_index].remove(min_solution)
-            else:
-                if len(potential_members[min_index]) == 0:
-                    excluded.add(min_index)
-                else:
-                    rand_solution = random.choice(potential_members[min_index])
-                    population.append(rand_solution)
-                    members[min_index].append(rand_solution)
-                    potential_members[min_index].remove(rand_solution)
-
-        return population
-
-    def __generate_reference_points(self, num_objs: int, num_divisions_per_obj: int = 4):
-        """ Generates reference points for NSGA-III selection. This code is based on
-        `jMetal NSGA-III implementation <https://github.com/jMetal/jMetal>`_.
-        """
-
+    def generate_reference_points(self, num_objs: int, num_divisions_per_obj: int = 4):
         def gen_refs_recursive(position, num_objs, left, total, element):
             if element == num_objs - 1:
                 position[element] = left / total
-                return copy.deepcopy(position)
+                return ReferencePoint(copy.deepcopy(position))
             else:
                 res = []
                 for i in range(left):
@@ -214,61 +186,74 @@ class NSGAIII(NSGAII):
         return gen_refs_recursive([0] * num_objs, num_objs, num_objs * num_divisions_per_obj,
                                   num_objs * num_divisions_per_obj, 0)
 
-    def __find_extreme_points(self, solutions: List[S], objective):
-        nobjs = self.problem.number_of_objectives
+    def associate(self, solutions: List[S], reference_points: list):
+        for solution in solutions:
+            rp_dists = [(rp, point_line_dist(solution.attributes['normalized_objectives'], rp))
+                        for rp in reference_points]
+            best_rp, best_dist = sorted(rp_dists, key=lambda rpd: rpd[1])[0]
+            solution.attributes['reference_point'] = best_rp
+            solution.attributes['ref_point_distance'] = best_dist
+            best_rp.associations_count += 1  # update de niche number
+            best_rp.associations += [solution]
 
-        weights = [0.000001] * nobjs
-        weights[objective] = 1.0
+    def niching_selection(self, population: List[S], k: int):
+        """ Secondary environmental selection based on reference points. Corresponds to steps 13-17 of Algorithm 1.
 
-        min_index = -1
-        min_value = float('inf')
+        :param population:
+        :param k:
+        :return:
+        """
 
-        for i in range(len(solutions)):
-            objectives = solutions[i].attributes['normalized_objectives']
-            value = max([objectives[j] / weights[j] for j in range(nobjs)])
+        # Steps 9-10 in Algorithm 1
+        if len(population) == k:
+            return population
 
-            if value < min_value:
-                min_index = i
-                min_value = value
+        # Step 14 / Algorithm 2. Find the ideal point
+        ideal_point = self.find_ideal_point(population)
 
-        return solutions[min_index]
+        # translate points by ideal point
+        for solution in population:
+            solution.attributes['normalized_objectives'] = \
+                [solution.objectives[i] - ideal_point[i] for i in range(self.problem.number_of_objectives)]
 
-    def __associate_to_reference_point(self, solutions: List[S], reference_points):
-        """ Associates individuals to reference points and calculates niche number. """
-        member = [[] for _ in range(len(reference_points))]
-        potential_member = [[] for _ in range(len(reference_points))]
+        # find the extreme points
+        extreme_points = [self.find_extreme_points(population, i) for i in range(self.problem.number_of_objectives)]
 
-        for t, solution in enumerate(solutions):
-            min_index = -1
-            min_distance = float('inf')
+        # calculate the axis intersects for a set of individuals and its extremes (construct hyperplane)
+        intercepts = self.construct_hyperplane(population, extreme_points)
 
-            for i in range(len(reference_points)):
-                distance = point_line_dist(solution.attributes['normalized_objectives'], reference_points[i])
+        # normalize objectives using the hyperplane defined by the intercepts as reference
+        self.normalize_objectives(population, intercepts, ideal_point)
 
-                if distance < min_distance:
-                    min_index = i
-                    min_distance = distance
+        # find the reference points
+        reference_points = self.generate_reference_points(len(population[0].objectives))
 
-            if t+1 != len(solutions):
-                member[min_index].append(solution)
+        # Step 15 / Algorithm 3, Step 16. Associate each solution to a reference point
+        self.associate(population, reference_points)
+
+        # Step 17 / Algorithm 4
+        res = []
+        while len(res) < k:
+            min_assoc_rp = min(reference_points, key=lambda rp: rp.associations_count)
+            min_assoc_rps = [rp for rp in reference_points if rp.associations_count == min_assoc_rp.associations_count]
+            chosen_rp = min_assoc_rps[random.randint(0, len(min_assoc_rps) - 1)]
+
+            associated_inds = chosen_rp.associations
+
+            if associated_inds:
+                if chosen_rp.associations_count == 0:
+                    sel = min(chosen_rp.associations, key=lambda ind: ind.attributes['ref_point_distance'])
+                else:
+                    sel = chosen_rp.associations[random.randint(0, len(chosen_rp.associations) - 1)]
+                res += [sel]
+                print(len(res), k)
+                chosen_rp.associations.remove(sel)
+                chosen_rp.associations_count += 1
+                population.remove(sel)
             else:
-                potential_member[min_index].append(solution)
+                reference_points.remove(chosen_rp)
 
-        return member, potential_member
-
-    def __find_minimum_distance(self, solutions: List[S], reference_point):
-        min_index = -1
-        min_distance = float('inf')
-
-        for i in range(len(solutions)):
-            solution = solutions[i]
-            distance = point_line_dist(solution.attributes['normalized_objectives'], reference_point)
-
-            if distance < min_distance:
-                min_index = i
-                min_distance = distance
-
-        return solutions[min_index]
+        return population
 
     def get_name(self) -> str:
         return 'NSGAIII'
