@@ -97,7 +97,8 @@ class InvertedGenerationalDistance(QualityIndicator):
 class EpsilonIndicator(QualityIndicator):
 
     def __init__(self, reference_front: List[S] = None):
-        """
+        """ Epsilon indicator in the paper:
+
         * Zitzler, E. Thiele, L. Laummanns, M., Fonseca, C., and Grunert da Fonseca. V (2003): Performance Assessment of Multiobjective Optimizers: An Analysis and Review.
         """
         super(EpsilonIndicator, self).__init__(is_minimization=True)
@@ -112,7 +113,7 @@ class EpsilonIndicator(QualityIndicator):
              solutions]) for s1 in self.reference_front])
 
     def get_name(self) -> str:
-        return 'U-EP'
+        return 'EP'
 
 
 class HyperVolume(QualityIndicator):
