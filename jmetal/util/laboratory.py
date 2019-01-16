@@ -343,3 +343,55 @@ def __to_latex(df: pd.DataFrame, caption: str, label: str, minimization=True, al
     output.write('\\end{document}')
 
     return output.getvalue()
+
+
+
+
+def compute_wilcoxon(filename: str, quality_indicators:[]):
+    """ Compute the mean values of an indicator.
+    :param filename:
+    :param indicator_name: Quality indicator name.
+    """
+    df = pd.read_csv(filename, skipinitialspace=True)
+
+    if len(set(df.columns.tolist())) != 5:
+        raise Exception('Wrong number of columns')
+
+    algorithms = pd.unique(df['Algorithm'])
+    problems = pd.unique(df['Problem'])
+    indicators = quality_indicators
+
+    # We consider the quality indicator indicator_name
+    #data = df[df['IndicatorName'] == indicator_name]
+
+    print(algorithms)
+    print(problems)
+    print(indicators)
+
+    header = "         "
+    for algorithm in algorithms[1:]:
+        header += algorithm + " "
+    print(header)
+
+    for raw_algorithm in algorithms[0:-1]:
+        line = raw_algorithm + ": "
+        for col_algorithm in algorithms[1:]:
+            for indicator in indicators:
+                data1 = 
+                line += "+"
+            line += ","
+
+        print(line)
+
+
+    data1 = df[(df["Algorithm"] == "NSGAII") & (df["Problem"] == "ZDT1") & (df["IndicatorName"] == "HV")]
+    alg = df["Algorithm"] == "NSGAII"
+    pro = df["Problem"] == "ZDT1"
+    ind = df["IndicatorName"] == "HV"
+    data = df[alg & pro & ind]
+    print(data["IndicatorValue"])
+
+    return df
+
+
+compute_wilcoxon("QualityIndicatorSummary.csv", ["EP", "SPREAD", "HV"])
