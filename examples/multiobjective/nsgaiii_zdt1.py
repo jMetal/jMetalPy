@@ -27,12 +27,12 @@ if __name__ == '__main__':
     front = algorithm.get_result()
 
     # Plot front
-    plot_front = Plot(plot_title='NSGAII-ZDT1', axis_labels=problem.obj_labels, reference_front=problem.reference_front)
-    plot_front.plot([algorithm.get_result()], labels=['Pareto front'], filename='NSGAII-ZDT1.eps')
+    plot_front = Plot(plot_title='NSGAIII-ZDT1', axis_labels=problem.obj_labels, reference_front=problem.reference_front)
+    plot_front.plot([algorithm.get_result()], labels=['Pareto front'], filename='NSGAIII-ZDT1.eps')
 
     # Save results to file
-    print_function_values_to_file(front, 'FUN.NSGAII.ZDT1')
-    print_variables_to_file(front, 'VAR.NSGAII.ZDT1')
+    print_function_values_to_file(front, 'FUN.NSGAIII.ZDT1')
+    print_variables_to_file(front, 'VAR.NSGAIII.ZDT1')
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())

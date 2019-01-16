@@ -29,7 +29,7 @@ class Ranking(List[S], ABC):
 class FastNonDominatedRanking(Ranking[List[S]]):
     """ Class implementing the non-dominated ranking of NSGA-II. """
 
-    def __init__(self, comparator = DominanceComparator()):
+    def __init__(self, comparator=DominanceComparator()):
         super(FastNonDominatedRanking, self).__init__()
         self.comparator = comparator
 

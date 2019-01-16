@@ -96,17 +96,21 @@ class NSGAIII(NSGAII):
         return mating_population
 
     def __niching_select(self, population: List[S], k: int):
-        """ Secondary niched selection based on reference points. Corresponds to steps 13-17 of Algorithm 1 and to Algorithm 4.
+        """ Secondary environmental selection based on reference points. Corresponds to steps 13-17 of Algorithm 1.
 
         :param population:
         :param k:
         :return:
         """
 
+        # find the reference points
+        reference_points = self.__generate_reference_points(len(population[0].objectives))
+
+        # Steps 9-10 in Algorithm 1
         if len(population) == k:
             return population
 
-        # find the ideal point
+        # Step 14 / Algorithm 2. Find the ideal point
         for solution in population:
             for i in range(self.problem.number_of_objectives):
                 self.ideal_point[i] = min(self.ideal_point[i], solution.objectives[i])
@@ -118,11 +122,6 @@ class NSGAIII(NSGAII):
 
         # find the extreme points
         extreme_points = [self.__find_extreme_points(population, i) for i in range(self.problem.number_of_objectives)]
-
-        # find the reference points
-        print(len(population[0].objectives))
-        reference_points = self.__generate_reference_points(len(population[0].objectives))
-        print(reference_points, len(population[0].objectives))
 
         # calculate the axis intersects for a set of individuals and its extremes (construct hyperplane)
         intercepts = []
@@ -154,16 +153,13 @@ class NSGAIII(NSGAII):
                 [solution.attributes['normalized_objectives'][i] / intercepts[i] for i in
                  range(self.problem.number_of_objectives)]
 
-        # associate each solution to a reference point
-        remaining = []
+        # Step 15 / Algorithm 3, Step 16. Associate each solution to a reference point
+        members, potential_members = self.__associate_to_reference_point(population, reference_points)
 
-        members = self.__associate_to_reference_point(population, reference_points)
-        potential_members = self.__associate_to_reference_point(remaining, reference_points)
-
+        # Step 17 / Algorithm 4
         excluded = set()
 
-        result = []
-        while len(result) < k:
+        while len(population) < k:
             # identify reference point with the fewest associated members
             min_indices = []
             min_count = sys.maxsize
@@ -185,7 +181,7 @@ class NSGAIII(NSGAII):
                 else:
                     min_solution = self.__find_minimum_distance(potential_members[min_index],
                                                                 reference_points[min_index])
-                    result.append(min_solution)
+                    population.append(min_solution)
                     members[min_index].append(min_solution)
                     potential_members[min_index].remove(min_solution)
             else:
@@ -193,27 +189,27 @@ class NSGAIII(NSGAII):
                     excluded.add(min_index)
                 else:
                     rand_solution = random.choice(potential_members[min_index])
-                    result.append(rand_solution)
+                    population.append(rand_solution)
                     members[min_index].append(rand_solution)
                     potential_members[min_index].remove(rand_solution)
 
-        return result
+        return population
 
     def __generate_reference_points(self, num_objs: int, num_divisions_per_obj: int = 4):
         """ Generates reference points for NSGA-III selection. This code is based on
         `jMetal NSGA-III implementation <https://github.com/jMetal/jMetal>`_.
         """
 
-        def gen_refs_recursive(work_point, num_objs, left, total, depth):
-            if depth == num_objs - 1:
-                work_point[depth] = left / total
-                return [copy.deepcopy(work_point)]
+        def gen_refs_recursive(position, num_objs, left, total, element):
+            if element == num_objs - 1:
+                position[element] = left / total
+                return copy.deepcopy(position)
             else:
                 res = []
                 for i in range(left):
-                    work_point[depth] = i / total
-                    res = res + gen_refs_recursive(work_point, num_objs, left - i, total, depth + 1)
-                return
+                    position[element] = i / total
+                    res.append(gen_refs_recursive(position, num_objs, left - i, total, element + 1))
+                return res
 
         return gen_refs_recursive([0] * num_objs, num_objs, num_objs * num_divisions_per_obj,
                                   num_objs * num_divisions_per_obj, 0)
@@ -239,9 +235,10 @@ class NSGAIII(NSGAII):
 
     def __associate_to_reference_point(self, solutions: List[S], reference_points):
         """ Associates individuals to reference points and calculates niche number. """
-        result = [[] for _ in range(len(reference_points))]
+        member = [[] for _ in range(len(reference_points))]
+        potential_member = [[] for _ in range(len(reference_points))]
 
-        for solution in solutions:
+        for t, solution in enumerate(solutions):
             min_index = -1
             min_distance = float('inf')
 
@@ -252,9 +249,12 @@ class NSGAIII(NSGAII):
                     min_index = i
                     min_distance = distance
 
-            result[min_index].append(solution)
+            if t+1 != len(solutions):
+                member[min_index].append(solution)
+            else:
+                potential_member[min_index].append(solution)
 
-        return result
+        return member, potential_member
 
     def __find_minimum_distance(self, solutions: List[S], reference_point):
         min_index = -1
