@@ -156,7 +156,7 @@ def generate_boxplot(filename: str, indicator_name: str):
     for pr in problems:
         data_to_plot = []
 
-        for alg in algorithms:
+        for alg in sorted(algorithms):
             data_to_plot.append(data['IndicatorValue'][np.logical_and(
                 data['Algorithm'] == alg, data['Problem'] == pr)])
 
@@ -165,7 +165,7 @@ def generate_boxplot(filename: str, indicator_name: str):
 
         ax = fig.add_subplot(111)
         ax.boxplot(data_to_plot)
-        ax.set_xticklabels(algorithms)
+        ax.set_xticklabels(sorted(algorithms))
 
         plt.savefig('boxplot-{}-{}.png'.format(pr, indicator_name), bbox_inches='tight')
         plt.savefig('boxplot-{}-{}.eps'.format(pr, indicator_name), bbox_inches='tight')
@@ -207,13 +207,14 @@ def generate_latex_tables(filename: str):
     for indicator_name, subset in median_iqr.groupby('IndicatorName'):
         subset.index = subset.index.droplevel(1)
         subset.to_csv('MedianIQR{}.csv'.format(indicator_name), sep='\t', encoding='utf-8')
-
+        print(indicator_name)
         with open('MedianIQR{}.tex'.format(indicator_name), 'w') as latex:
             latex.write(
                 __to_latex(
                     subset,
                     caption='Median and Interquartile Range of the {} quality indicator'.format(indicator_name),
-                    label=''
+                    minimization=False if indicator_name == 'HV' else True,
+                    label='table:{}'.format(indicator_name)
                 )
             )
 
@@ -226,7 +227,8 @@ def generate_latex_tables(filename: str):
                 __to_latex(
                     subset,
                     caption='Mean and Standard Deviation of the {} quality indicator'.format(indicator_name),
-                    label=''
+                    minimization=False if indicator_name == 'HV' else True,
+                    label='table:{}'.format(indicator_name)
                 )
             )
 
@@ -262,8 +264,13 @@ def compute_mean_indicator(filename: str, indicator_name: str):
     return pd.DataFrame(data=average_values, index=problems, columns=algorithms)
 
 
-def __to_latex(df: pd.DataFrame, caption: str, label: str, alignment: str = 'c'):
+def __to_latex(df: pd.DataFrame, caption: str, label: str, minimization=True, alignment: str = 'c'):
     """ Convert a pandas DataFrame to a LaTeX tabular. Prints labels in bold and does use math mode.
+
+    :param df: Pandas dataframe.
+    :param caption: LaTeX table caption.
+    :param label: LaTeX table label.
+    :param minimization: If indicator is minimization, highlight the best values of mean/median; else, the lowest.
     """
     num_columns, num_rows = df.shape[1], df.shape[0]
     output = io.StringIO()
@@ -301,15 +308,21 @@ def __to_latex(df: pd.DataFrame, caption: str, label: str, alignment: str = 'c')
     # Write data lines
     for i in range(num_rows):
         values = [str(val) for val in df.ix[i]]
+
         median = [val.split('_')[0] for val in values]
-        top_idx = np.argsort(median)[-2:]
 
-        # Median values could be the same. In that case, sort by IQR (the lower the better)
-        if median[top_idx[0]] == median[top_idx[1]]:
-            top_idx = top_idx[::-1]
+        # Sort mean/median values
+        if minimization:
+            median_idx = np.argsort(median)[-2:]
+        else:
+            median_idx = np.argsort(median)[:2][::-1]
 
-        values[top_idx[0]] = '\\cellcolor{gray25} ' + values[top_idx[0]]
-        values[top_idx[1]] = '\\cellcolor{gray95} ' + values[top_idx[1]]
+        # Mean/median values could be the same: in that case, sort by Std/IQR (the lower the better)
+        if median[median_idx[0]] == median[median_idx[1]]:
+            median_idx = median_idx[::-1]
+
+        values[median_idx[0]] = '\\cellcolor{gray25} ' + values[median_idx[0]]
+        values[median_idx[1]] = '\\cellcolor{gray95} ' + values[median_idx[1]]
 
         output.write('      \\textbf{{{0}}} & ${1}$ \\\\\n'.format(
             df.index[i], '$ & $'.join([str(val) for val in values]))
