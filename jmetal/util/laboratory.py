@@ -283,7 +283,7 @@ def compute_wilcoxon(filename: str):
 
     os.makedirs(os.path.dirname('latex/'), exist_ok=True)
 
-    algorithms = pd.unique(df['Algorithm'])
+    algorithms = sorted(pd.unique(df['Algorithm']))
     problems = pd.unique(df['Problem'])
     indicators = pd.unique(df['IndicatorName'])
 
@@ -434,13 +434,9 @@ def __wilcoxon_to_latex(df: pd.DataFrame, caption: str, label: str, alignment: s
 
     output.write('\\usepackage[utf8]{inputenc}\n')
     output.write('\\usepackage{tabularx}\n')
-    output.write('\\usepackage{colortbl}\n')
-    output.write('\\usepackage[table*]{xcolor}\n')
+    output.write('\\usepackage{amssymb}\n')
 
-    output.write('\\xdefinecolor{gray95}{gray}{0.65}\n')
-    output.write('\\xdefinecolor{gray25}{gray}{0.8}\n')
-
-    output.write('\\title{Median and IQR}\n')
+    output.write('\\title{Wilcoxon - Mann-Whitney rank sum test}\n')
     output.write('\\author{}\n')
 
     output.write('\\begin{document}\n')
