@@ -1,8 +1,13 @@
+import copy
 import random
+import sys
 from typing import List, TypeVar
+
+import numpy as np
 
 from jmetal.util.comparator import Comparator, DominanceComparator
 from jmetal.util.density_estimator import CrowdingDistance
+from jmetal.util.point import ReferencePoint
 from jmetal.util.ranking import FastNonDominatedRanking
 from jmetal.core.operator import Selection
 
@@ -259,3 +264,151 @@ class BinaryTournament2Selection(Selection[List[S], S]):
 
     def get_name(self) -> str:
         return 'Binary tournament selection (experimental)'
+
+
+class EnvironmentalSelection(Selection[List[S], S]):
+
+    def __init__(self, number_of_objectives: int, reference_points: list, k: int):
+        super(EnvironmentalSelection, self).__init__()
+        self.number_of_objectives = number_of_objectives
+        self.reference_points = reference_points
+        self.k = k
+
+    def find_ideal_point(self, solutions: List[S]):
+        ideal_point = [float('inf')] * self.number_of_objectives
+
+        for solution in solutions:
+            for i in range(self.number_of_objectives):
+                ideal_point[i] = min(ideal_point[i], solution.objectives[i])
+
+        return ideal_point
+
+    def find_extreme_points(self, solutions: List[S], objective):
+        nobjs = self.number_of_objectives
+
+        weights = [0.000001] * nobjs
+        weights[objective] = 1.0
+
+        min_index = -1
+        min_value = float('inf')
+
+        for i in range(len(solutions)):
+            objectives = solutions[i].attributes['normalized_objectives']
+            value = max([objectives[j] / weights[j] for j in range(nobjs)])
+
+            if value < min_value:
+                min_index = i
+                min_value = value
+
+        return solutions[min_index]
+
+    def construct_hyperplane(self, solutions: List[S], extreme_points: list):
+        """ Calculate the axis intersects for a set of individuals and its extremes (construct hyperplane). """
+        intercepts = []
+        degenerate = False
+
+        try:
+            b = [1.0] * self.number_of_objectives
+            A = [s.attributes['normalized_objectives'] for s in extreme_points]
+            x = np.linalg.solve(A, b)
+            intercepts = [1.0 / i for i in x]
+        except:
+            degenerate = True
+
+        if not degenerate:
+            for i in range(self.number_of_objectives):
+                if intercepts[i] < 0.001:
+                    degenerate = True
+                    break
+
+        if degenerate:
+            intercepts = [-float('inf')] * self.number_of_objectives
+
+            for i in range(self.number_of_objectives):
+                intercepts[i] = max([s.attributes['normalized_objectives'][i] for s in solutions]
+                                    + [sys.float_info.epsilon])
+
+        return intercepts
+
+    def normalize_objective(self, solution, m, intercepts, ideal_point, epsilon=1e-20):
+        if np.abs(intercepts[m] - ideal_point[m] > epsilon):
+            return solution.objectives[m] / (intercepts[m] - ideal_point[m])
+        else:
+            return solution.objectives[m] / epsilon
+
+    def normalize_objectives(self, solutions: List[S], intercepts: list, ideal_point: list):
+        """ Normalize objectives using the hyperplane defined by the intercepts as reference. """
+        for solution in solutions:
+            solution.attributes['normalized_objectives'] = \
+                [self.normalize_objective(solution, i, intercepts, ideal_point) for i in
+                 range(self.number_of_objectives)]
+
+        return solutions
+
+    def associate(self, solutions: List[S], reference_points: list):
+        """ Associate each solution to a reference point. """
+        for solution in solutions:
+            rp_dists = [(rp, self.perpendicular_distance(solution.attributes['normalized_objectives'], rp))
+                        for rp in reference_points]
+            best_rp, best_dist = sorted(rp_dists, key=lambda rpd: rpd[1])[0]
+            solution.attributes['reference_point'] = best_rp
+            solution.attributes['ref_point_distance'] = best_dist
+            best_rp.associations_count += 1  # update de niche number
+            best_rp.associations += [solution]
+
+    def perpendicular_distance(self, direction, point):
+        k = np.dot(direction, point) / np.sum(np.power(direction, 2))
+        d = np.sum(np.power(np.subtract(np.multiply(direction, [k] * len(direction)), point), 2))
+
+        return np.sqrt(d)
+
+    def execute(self, solutions: List[S]):
+        """ Secondary environmental selection based on reference points. Corresponds to steps 13-17 of Algorithm 1.
+
+        :param solutions:
+        :param k:
+        :return:
+        """
+
+        # Steps 9-10 in Algorithm 1
+        if len(solutions) == self.k:
+            return solutions
+
+        # Step 14 / Algorithm 2
+        ideal_point = self.find_ideal_point(solutions)
+
+        # translate points by ideal point
+        for solution in solutions:
+            solution.attributes['normalized_objectives'] = \
+                [solution.objectives[i] - ideal_point[i] for i in range(self.number_of_objectives)]
+
+        extreme_points = [self.find_extreme_points(solutions, i) for i in range(self.number_of_objectives)]
+        intercepts = self.construct_hyperplane(solutions, extreme_points)
+        self.normalize_objectives(solutions, intercepts, ideal_point)
+
+        # Step 15 / Algorithm 3, Step 16
+        self.associate(solutions, self.reference_points)
+
+        # Step 17 / Algorithm 4
+        res = []
+        while len(res) < self.k:
+            min_assoc_rp = min(self.reference_points, key=lambda rp: rp.associations_count)
+            min_assoc_rps = [rp for rp in self.reference_points if rp.associations_count == min_assoc_rp.associations_count]
+            chosen_rp = min_assoc_rps[random.randint(0, len(min_assoc_rps) - 1)]
+
+            if chosen_rp.associations:
+                if chosen_rp.associations_count == 0:
+                    sel = min(chosen_rp.associations, key=lambda ind: ind.attributes['ref_point_distance'])
+                else:
+                    sel = chosen_rp.associations[random.randint(0, len(chosen_rp.associations) - 1)]
+                res += [sel]
+
+                chosen_rp.associations.remove(sel)
+                chosen_rp.associations_count += 1
+            else:
+                self.reference_points.remove(chosen_rp)
+
+        return res
+
+    def get_name(self) -> str:
+        return 'Environmental selection for NSGA-III'

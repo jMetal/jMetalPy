@@ -14,7 +14,7 @@ class Ranking(List[S], ABC):
         self.ranked_sublists = []
 
     @abstractmethod
-    def compute_ranking(self, solution_list: List[S]):
+    def compute_ranking(self, solution_list: List[S], k: int):
         pass
 
     def get_subfront(self, rank: int):
@@ -27,13 +27,18 @@ class Ranking(List[S], ABC):
 
 
 class FastNonDominatedRanking(Ranking[List[S]]):
-    """ Class implementing the non-dominated ranking of NSGA-II. """
+    """ Class implementing the non-dominated ranking of NSGA-II proposed by Deb et al., see [Deb2002]_ """
 
     def __init__(self, comparator=DominanceComparator()):
         super(FastNonDominatedRanking, self).__init__()
         self.comparator = comparator
 
-    def compute_ranking(self, solutions: List[S]):
+    def compute_ranking(self, solutions: List[S], k: int = None):
+        """ Compute ranking of solutions.
+
+        :param solutions: Solution list.
+        :param k: Number of individuals.
+        """
         # number of solutions dominating solution ith
         dominating_ith = [0 for _ in range(len(solutions))]
 
@@ -77,6 +82,13 @@ class FastNonDominatedRanking(Ranking[List[S]]):
             for k in range(len(front[j])):
                 q[k] = solutions[front[j][k]]
             self.ranked_sublists[j] = q
+
+        if k:
+            count = 0
+            for i, front in enumerate(self.ranked_sublists):
+                count += len(front)
+                if count >= k:
+                    return self.ranked_sublists[:i + 1]
 
         return self.ranked_sublists
 
