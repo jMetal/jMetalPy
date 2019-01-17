@@ -162,7 +162,7 @@ def generate_boxplot(filename: str):
         for pr in problems:
             data_to_plot = []
 
-            for alg in sorted(algorithms):
+            for alg in algorithms:
                 data_to_plot.append(data['IndicatorValue'][np.logical_and(
                     data['Algorithm'] == alg, data['Problem'] == pr)])
 
@@ -171,7 +171,7 @@ def generate_boxplot(filename: str):
 
             ax = fig.add_subplot(111)
             ax.boxplot(data_to_plot)
-            ax.set_xticklabels(sorted(algorithms))
+            ax.set_xticklabels(algorithms)
 
             plt.savefig('boxplot/boxplot-{}-{}.png'.format(pr, indicator_name), bbox_inches='tight')
             plt.savefig('boxplot/boxplot-{}-{}.eps'.format(pr, indicator_name), bbox_inches='tight')
@@ -192,7 +192,7 @@ def generate_latex_tables(filename: str):
     median_iqr = pd.DataFrame()
     mean_std = pd.DataFrame()
 
-    for algorithm_name, subset in df.groupby('Algorithm'):
+    for algorithm_name, subset in df.groupby('Algorithm', sort=False):
         subset = subset.drop('Algorithm', axis=1)
         subset = subset.set_index(['Problem', 'IndicatorName', 'ExecutionId'])
 
@@ -212,7 +212,7 @@ def generate_latex_tables(filename: str):
         table = table.rename(columns={'IndicatorValue': algorithm_name})
         mean_std = pd.concat([mean_std, table], axis=1)
 
-    for indicator_name, subset in median_iqr.groupby('IndicatorName'):
+    for indicator_name, subset in median_iqr.groupby('IndicatorName', sort=False):
         subset.index = subset.index.droplevel(1)
         subset.to_csv('latex/MedianIQR-{}.csv'.format(indicator_name), sep='\t', encoding='utf-8')
 
@@ -226,7 +226,7 @@ def generate_latex_tables(filename: str):
                 )
             )
 
-    for indicator_name, subset in mean_std.groupby('IndicatorName'):
+    for indicator_name, subset in mean_std.groupby('IndicatorName', sort=False):
         subset.index = subset.index.droplevel(1)
         subset.to_csv('latex/MeanStd-{}.csv'.format(indicator_name), sep='\t', encoding='utf-8')
 
@@ -270,7 +270,7 @@ def compute_mean_indicator(filename: str, indicator_name: str):
 
     # Generate dataFrame from average values and order columns by name
     df = pd.DataFrame(data=average_values, index=problems, columns=algorithms)
-    df = df.reindex(sorted(df.columns), axis=1)
+    df = df.reindex(df.columns, axis=1)
 
     return df
 
@@ -283,7 +283,7 @@ def compute_wilcoxon(filename: str):
 
     os.makedirs(os.path.dirname('latex/'), exist_ok=True)
 
-    algorithms = sorted(pd.unique(df['Algorithm']))
+    algorithms = pd.unique(df['Algorithm'])
     problems = pd.unique(df['Problem'])
     indicators = pd.unique(df['IndicatorName'])
 
