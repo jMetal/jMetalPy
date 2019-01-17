@@ -43,7 +43,7 @@ class MapEvaluator(Evaluator[S]):
 
 class SparkEvaluator(Evaluator[S]):
     def __init__(self):
-        self.spark_conf = SparkConf()
+        self.spark_conf = SparkConf().setAppName("jMetalPy").setMaster("local[8]")
         self.spark_context = SparkContext(conf=self.spark_conf)
 
         logger = self.spark_context._jvm.org.apache.log4j
