@@ -33,7 +33,7 @@ class ZDT1Modified(FloatProblem):
         solution.objectives[1] = h * g
 
         s: float = 0.0
-        for i in range(10000000):
+        for i in range(50000000):
             s += i * 0.235 / 1.234
 
         return solution
