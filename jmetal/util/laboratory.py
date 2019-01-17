@@ -3,11 +3,13 @@ import logging
 import os
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
+from statistics import median
 from typing import List
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from scipy.stats import mannwhitneyu
 
 from jmetal.core.algorithm import Algorithm
 from jmetal.core.quality_indicator import QualityIndicator
@@ -368,32 +370,48 @@ def compute_wilcoxon(filename: str, quality_indicators:[]):
     print(problems)
     print(indicators)
 
-    header = "         "
-    for algorithm in algorithms[1:]:
-        header += algorithm + " "
-    print(header)
+    print("Row")
+    print(algorithms[0:-1])
+    print("cOL  ")
+    print(algorithms[1:])
 
     for indicator in indicators:
+        header = "         "
+        for algorithm in algorithms[1:]:
+            header += algorithm + " "
+        print(header)
+        print(indicator + ": -------------------")
+        i = 0
         for row_algorithm in algorithms[0:-1]:
             line = row_algorithm + ": "
+            j = 0
             for col_algorithm in algorithms[1:]:
-                for problem in problems:
-                    df1 = df[(df["Algorithm"] == row_algorithm) & (df["Problem"] == problems) & (df["IndicatorName"] == indicator)]
-                    df2 = df[(df["Algorithm"] == col_algorithm) & (df["Problem"] == problems) & (df["IndicatorName"] == indicator)]
-                    data1 = df1["IndicatorValuegi"]
-                line += "+"
-            line += ","
-
-        print(line)
-
-
-    data1 = df[(df["Algorithm"] == "NSGAII") & (df["Problem"] == "ZDT1") & (df["IndicatorName"] == "HV")]
-    alg = df["Algorithm"] == "NSGAII"
-    pro = df["Problem"] == "ZDT1"
-    ind = df["IndicatorName"] == "HV"
-    data = df[alg & pro & ind]
-    print(data["IndicatorValue"])
-
+                if i <= j:
+                    for problem in problems:
+                        df1 = df[(df["Algorithm"] == row_algorithm) & (df["Problem"] == problem) & (df["IndicatorName"] == indicator)]
+                        df2 = df[(df["Algorithm"] == col_algorithm) & (df["Problem"] == problem) & (df["IndicatorName"] == indicator)]
+                        data1 = df1["IndicatorValue"]
+                        data2 = df2["IndicatorValue"]
+                        median1 = median(data1)
+                        median2 = median(data2)
+                        stat, p = mannwhitneyu(data1, data2)
+                        if p <= 0.05:
+                            if indicator != "HV":
+                                if median1 <= median2:
+                                    line += "+"
+                                else:
+                                    line += "o"
+                            else:
+                                if median1 >= median2:
+                                    line += "+"
+                                else:
+                                    line += "o"
+                        else:
+                            line += "-"
+                line += ","
+                j += 1
+            i += 1
+            print(line)
     return df
 
 
