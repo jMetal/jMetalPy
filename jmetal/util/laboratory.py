@@ -147,6 +147,8 @@ def generate_boxplot(filename: str, indicator_name: str):
     if len(set(df.columns.tolist())) != 5:
         raise Exception('Wrong number of columns')
 
+    os.makedirs(os.path.dirname('boxplot/'), exist_ok=True)
+
     algorithms = pd.unique(df['Algorithm'])
     problems = pd.unique(df['Problem'])
 
@@ -156,7 +158,7 @@ def generate_boxplot(filename: str, indicator_name: str):
     for pr in problems:
         data_to_plot = []
 
-        for alg in algorithms:
+        for alg in sorted(algorithms):
             data_to_plot.append(data['IndicatorValue'][np.logical_and(
                 data['Algorithm'] == alg, data['Problem'] == pr)])
 
@@ -165,11 +167,11 @@ def generate_boxplot(filename: str, indicator_name: str):
 
         ax = fig.add_subplot(111)
         ax.boxplot(data_to_plot)
-        ax.set_xticklabels(algorithms)
+        ax.set_xticklabels(sorted(algorithms))
 
-        plt.savefig('boxplot-{}-{}.png'.format(pr, indicator_name), bbox_inches='tight')
-        plt.savefig('boxplot-{}-{}.eps'.format(pr, indicator_name), bbox_inches='tight')
-        plt.cla()
+        plt.savefig('boxplot/boxplot-{}-{}.png'.format(pr, indicator_name), bbox_inches='tight')
+        plt.savefig('boxplot/boxplot-{}-{}.eps'.format(pr, indicator_name), bbox_inches='tight')
+        plt.close(fig)
 
 
 def generate_latex_tables(filename: str):
@@ -180,6 +182,8 @@ def generate_latex_tables(filename: str):
 
     if len(set(df.columns.tolist())) != 5:
         raise Exception('Wrong number of columns')
+
+    os.makedirs(os.path.dirname('latex/'), exist_ok=True)
 
     median_iqr = pd.DataFrame()
     mean_std = pd.DataFrame()
@@ -202,31 +206,33 @@ def generate_latex_tables(filename: str):
         table = mean.applymap('{:.2e}'.format) + '_{' + std.applymap('{:.2e}'.format) + '}'
 
         table = table.rename(columns={'IndicatorValue': algorithm_name})
-        mean_std = pd.concat([median_iqr, table], axis=1)
+        mean_std = pd.concat([mean_std, table], axis=1)
 
     for indicator_name, subset in median_iqr.groupby('IndicatorName'):
         subset.index = subset.index.droplevel(1)
-        subset.to_csv('MedianIQR{}.csv'.format(indicator_name), sep='\t', encoding='utf-8')
+        subset.to_csv('latex/MedianIQR-{}.csv'.format(indicator_name), sep='\t', encoding='utf-8')
 
-        with open('MedianIQR{}.tex'.format(indicator_name), 'w') as latex:
+        with open('latex/MedianIQR-{}.tex'.format(indicator_name), 'w') as latex:
             latex.write(
                 __to_latex(
                     subset,
-                    caption='Median and Interquartile Range of the {} quality indicator'.format(indicator_name),
-                    label=''
+                    caption='Median and Interquartile Range of the {} quality indicator.'.format(indicator_name),
+                    minimization=False if indicator_name in ['HV', 'SPREAD', 'EP'] else True,
+                    label='table:{}'.format(indicator_name)
                 )
             )
 
     for indicator_name, subset in mean_std.groupby('IndicatorName'):
         subset.index = subset.index.droplevel(1)
-        subset.to_csv('MeanStd{}.csv'.format(indicator_name), sep='\t', encoding='utf-8')
+        subset.to_csv('latex/MeanStd-{}.csv'.format(indicator_name), sep='\t', encoding='utf-8')
 
-        with open('MeanStd{}.tex'.format(indicator_name), 'w') as latex:
+        with open('latex/MeanStd-{}.tex'.format(indicator_name), 'w') as latex:
             latex.write(
                 __to_latex(
                     subset,
-                    caption='Mean and Standard Deviation of the {} quality indicator'.format(indicator_name),
-                    label=''
+                    caption='Mean and Standard Deviation of the {} quality indicator.'.format(indicator_name),
+                    minimization=False if indicator_name in ['HV', 'SPREAD', 'EP'] else True,
+                    label='table:{}'.format(indicator_name)
                 )
             )
 
@@ -258,12 +264,20 @@ def compute_mean_indicator(filename: str, indicator_name: str):
             i += 1
         j += 1
 
-    # Generate dataFrame from average values
-    return pd.DataFrame(data=average_values, index=problems, columns=algorithms)
+    # Generate dataFrame from average values and order columns by name
+    df = pd.DataFrame(data=average_values, index=problems, columns=algorithms)
+    df = df.reindex(sorted(df.columns), axis=1)
+
+    return df
 
 
-def __to_latex(df: pd.DataFrame, caption: str, label: str, alignment: str = 'c'):
+def __to_latex(df: pd.DataFrame, caption: str, label: str, minimization=True, alignment: str = 'c'):
     """ Convert a pandas DataFrame to a LaTeX tabular. Prints labels in bold and does use math mode.
+
+    :param df: Pandas dataframe.
+    :param caption: LaTeX table caption.
+    :param label: LaTeX table label.
+    :param minimization: If indicator is minimization, highlight the best values of mean/median; else, the lowest.
     """
     num_columns, num_rows = df.shape[1], df.shape[0]
     output = io.StringIO()
@@ -301,15 +315,21 @@ def __to_latex(df: pd.DataFrame, caption: str, label: str, alignment: str = 'c')
     # Write data lines
     for i in range(num_rows):
         values = [str(val) for val in df.ix[i]]
-        median = [val.split('_')[0] for val in values]
-        top_idx = np.argsort(median)[-2:]
+        median = [float(val.split('_')[0]) for val in values]
 
-        # Median values could be the same. In that case, sort by IQR (the lower the better)
-        if median[top_idx[0]] == median[top_idx[1]]:
-            top_idx = top_idx[::-1]
+        # Sort mean/median values (the lower the better if minimization)
+        if minimization:
+            median_idx = np.argsort(median)[-2:]
+        else:
+            median_idx = np.argsort(median)[:2][::-1]
 
-        values[top_idx[0]] = '\\cellcolor{gray25} ' + values[top_idx[0]]
-        values[top_idx[1]] = '\\cellcolor{gray95} ' + values[top_idx[1]]
+        # Mean/median values could be the same: in that case, sort by Std/IQR (the lower the better)
+        if median[median_idx[0]] == median[median_idx[1]]:
+            iqr = [float(val.split('_')[0]) for val in values]
+            median_idx = np.argsort(iqr)[:2][::-1]
+
+        values[median_idx[0]] = '\\cellcolor{gray25} ' + values[median_idx[0]]
+        values[median_idx[1]] = '\\cellcolor{gray95} ' + values[median_idx[1]]
 
         output.write('      \\textbf{{{0}}} & ${1}$ \\\\\n'.format(
             df.index[i], '$ & $'.join([str(val) for val in values]))
@@ -323,3 +343,58 @@ def __to_latex(df: pd.DataFrame, caption: str, label: str, alignment: str = 'c')
     output.write('\\end{document}')
 
     return output.getvalue()
+
+
+
+
+def compute_wilcoxon(filename: str, quality_indicators:[]):
+    """ Compute the mean values of an indicator.
+    :param filename:
+    :param indicator_name: Quality indicator name.
+    """
+    df = pd.read_csv(filename, skipinitialspace=True)
+
+    if len(set(df.columns.tolist())) != 5:
+        raise Exception('Wrong number of columns')
+
+    algorithms = pd.unique(df['Algorithm'])
+    problems = pd.unique(df['Problem'])
+    indicators = quality_indicators
+
+    # We consider the quality indicator indicator_name
+    #data = df[df['IndicatorName'] == indicator_name]
+
+    print(algorithms)
+    print(problems)
+    print(indicators)
+
+    header = "         "
+    for algorithm in algorithms[1:]:
+        header += algorithm + " "
+    print(header)
+
+    for indicator in indicators:
+        for row_algorithm in algorithms[0:-1]:
+            line = row_algorithm + ": "
+            for col_algorithm in algorithms[1:]:
+                for problem in problems:
+                    df1 = df[(df["Algorithm"] == row_algorithm) & (df["Problem"] == problems) & (df["IndicatorName"] == indicator)]
+                    df2 = df[(df["Algorithm"] == col_algorithm) & (df["Problem"] == problems) & (df["IndicatorName"] == indicator)]
+                    data1 = df1["IndicatorValuegi"]
+                line += "+"
+            line += ","
+
+        print(line)
+
+
+    data1 = df[(df["Algorithm"] == "NSGAII") & (df["Problem"] == "ZDT1") & (df["IndicatorName"] == "HV")]
+    alg = df["Algorithm"] == "NSGAII"
+    pro = df["Problem"] == "ZDT1"
+    ind = df["IndicatorName"] == "HV"
+    data = df[alg & pro & ind]
+    print(data["IndicatorValue"])
+
+    return df
+
+
+#compute_wilcoxon("QualityIndicatorSummary.csv", ["EP", "SPREAD", "HV"])
