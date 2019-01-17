@@ -12,7 +12,7 @@ from jmetal.util.observer import ProgressBarObserver
 if __name__ == '__main__':
     problem = ZDT1Modified()
 
-    dask.config.set(scheduler='threads', pool=ThreadPool(8))
+    #dask.config.set(scheduler='threads', pool=ThreadPool(8))
     client = Client()
 
     algorithm = DistributedNSGAII(
