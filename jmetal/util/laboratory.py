@@ -435,6 +435,7 @@ def __wilcoxon_to_latex(df: pd.DataFrame, caption: str, label: str, alignment: s
     output.write('\\usepackage[utf8]{inputenc}\n')
     output.write('\\usepackage{tabularx}\n')
     output.write('\\usepackage{amssymb}\n')
+    output.write('\\usepackage{amsmath}\n')
 
     output.write('\\title{Wilcoxon - Mann-Whitney rank sum test}\n')
     output.write('\\author{}\n')
@@ -454,7 +455,7 @@ def __wilcoxon_to_latex(df: pd.DataFrame, caption: str, label: str, alignment: s
 
     # Write data lines
     for i in range(num_rows):
-        values = [val.replace('o', '\\blacktriangle').replace('+', '\\triangledown') for val in df.ix[i]]
+        values = [val.replace('o', '\\blacktriangle\ ').replace('+', '\\triangledown\ ').replace('-', '\\text{--}\ ') for val in df.ix[i]]
         output.write('      \\textbf{{{0}}} & ${1}$ \\\\\n'.format(
             df.index[i], ' $ & $ '.join([str(val) for val in values]))
         )
