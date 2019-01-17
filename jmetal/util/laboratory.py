@@ -139,10 +139,9 @@ def generate_summary_from_experiment(input_dir: str, quality_indicators: List[Qu
                         of.write('\n')
 
 
-def generate_boxplot(filename: str, indicator_name: str):
+def generate_boxplot(filename: str):
     """ Generate boxplot diagrams.
     :param filename:
-    :param indicator_name: Quality indicator name.
     """
     df = pd.read_csv(filename, skipinitialspace=True)
 
@@ -153,27 +152,30 @@ def generate_boxplot(filename: str, indicator_name: str):
 
     algorithms = pd.unique(df['Algorithm'])
     problems = pd.unique(df['Problem'])
+    indicators = pd.unique(df['IndicatorName'])
 
     # We consider the quality indicator indicator_name
-    data = df[df['IndicatorName'] == indicator_name]
 
-    for pr in problems:
-        data_to_plot = []
+    for indicator_name in indicators:
+        data = df[df['IndicatorName'] == indicator_name]
 
-        for alg in sorted(algorithms):
-            data_to_plot.append(data['IndicatorValue'][np.logical_and(
-                data['Algorithm'] == alg, data['Problem'] == pr)])
+        for pr in problems:
+            data_to_plot = []
 
-        # Create a figure instance
-        fig = plt.figure(1, figsize=(9, 6))
+            for alg in sorted(algorithms):
+                data_to_plot.append(data['IndicatorValue'][np.logical_and(
+                    data['Algorithm'] == alg, data['Problem'] == pr)])
 
-        ax = fig.add_subplot(111)
-        ax.boxplot(data_to_plot)
-        ax.set_xticklabels(sorted(algorithms))
+            # Create a figure instance
+            fig = plt.figure(1, figsize=(9, 6))
 
-        plt.savefig('boxplot/boxplot-{}-{}.png'.format(pr, indicator_name), bbox_inches='tight')
-        plt.savefig('boxplot/boxplot-{}-{}.eps'.format(pr, indicator_name), bbox_inches='tight')
-        plt.close(fig)
+            ax = fig.add_subplot(111)
+            ax.boxplot(data_to_plot)
+            ax.set_xticklabels(sorted(algorithms))
+
+            plt.savefig('boxplot/boxplot-{}-{}.png'.format(pr, indicator_name), bbox_inches='tight')
+            plt.savefig('boxplot/boxplot-{}-{}.eps'.format(pr, indicator_name), bbox_inches='tight')
+            plt.close(fig)
 
 
 def generate_latex_tables(filename: str):
@@ -216,10 +218,10 @@ def generate_latex_tables(filename: str):
 
         with open('latex/MedianIQR-{}.tex'.format(indicator_name), 'w') as latex:
             latex.write(
-                __to_latex(
+                __averages_to_latex(
                     subset,
                     caption='Median and Interquartile Range of the {} quality indicator.'.format(indicator_name),
-                    minimization=False if indicator_name in ['HV', 'SPREAD', 'EP'] else True,
+                    minimization=check_minimization(indicator_name),
                     label='table:{}'.format(indicator_name)
                 )
             )
@@ -230,10 +232,10 @@ def generate_latex_tables(filename: str):
 
         with open('latex/MeanStd-{}.tex'.format(indicator_name), 'w') as latex:
             latex.write(
-                __to_latex(
+                __averages_to_latex(
                     subset,
                     caption='Mean and Standard Deviation of the {} quality indicator.'.format(indicator_name),
-                    minimization=False if indicator_name in ['HV', 'SPREAD', 'EP'] else True,
+                    minimization=check_minimization(indicator_name),
                     label='table:{}'.format(indicator_name)
                 )
             )
@@ -273,7 +275,73 @@ def compute_mean_indicator(filename: str, indicator_name: str):
     return df
 
 
-def __to_latex(df: pd.DataFrame, caption: str, label: str, minimization=True, alignment: str = 'c'):
+def compute_wilcoxon(filename: str):
+    df = pd.read_csv(filename, skipinitialspace=True)
+
+    if len(set(df.columns.tolist())) != 5:
+        raise Exception('Wrong number of columns')
+
+    os.makedirs(os.path.dirname('latex/'), exist_ok=True)
+
+    algorithms = pd.unique(df['Algorithm'])
+    problems = pd.unique(df['Problem'])
+    indicators = pd.unique(df['IndicatorName'])
+
+    table = pd.DataFrame(index=algorithms[0:-1], columns=algorithms[1:])
+
+    for indicator_name in indicators:
+        for i, row_algorithm in enumerate(algorithms[0:-1]):
+            wilcoxon = []
+            for j, col_algorithm in enumerate(algorithms[1:]):
+                line = []
+
+                if i <= j:
+                    for problem in problems:
+                        df1 = df[(df["Algorithm"] == row_algorithm) & (df["Problem"] == problem) & (
+                                df["IndicatorName"] == indicator_name)]
+                        df2 = df[(df["Algorithm"] == col_algorithm) & (df["Problem"] == problem) & (
+                                df["IndicatorName"] == indicator_name)]
+
+                        data1 = df1["IndicatorValue"]
+                        data2 = df2["IndicatorValue"]
+
+                        median1 = median(data1)
+                        median2 = median(data2)
+
+                        stat, p = mannwhitneyu(data1, data2)
+
+                        if p <= 0.05:
+                            if check_minimization(indicator_name):
+                                if median1 <= median2:
+                                    line.append('+')
+                                else:
+                                    line.append('o')
+                            else:
+                                if median1 >= median2:
+                                    line.append('+')
+                                else:
+                                    line.append('o')
+                        else:
+                            line.append('-')
+                    wilcoxon.append(''.join(line))
+
+            if len(wilcoxon) < len(algorithms): wilcoxon = [''] * (len(algorithms) - len(wilcoxon) - 1) + wilcoxon
+            table.loc[row_algorithm] = wilcoxon
+
+        table.to_csv('latex/Wilcoxon-{}.csv'.format(indicator_name), sep='\t', encoding='utf-8')
+
+        with open('latex/Wilcoxon-{}.tex'.format(indicator_name), 'w') as latex:
+            latex.write(
+                __wilcoxon_to_latex(
+                    table,
+                    caption='Wilcoxon values of the {} quality indicator ({}).'.format(indicator_name,
+                                                                                       ', '.join(problems)),
+                    label='table:{}'.format(indicator_name)
+                )
+            )
+
+
+def __averages_to_latex(df: pd.DataFrame, caption: str, label: str, minimization=True, alignment: str = 'c'):
     """ Convert a pandas DataFrame to a LaTeX tabular. Prints labels in bold and does use math mode.
 
     :param df: Pandas dataframe.
@@ -334,7 +402,7 @@ def __to_latex(df: pd.DataFrame, caption: str, label: str, minimization=True, al
         values[median_idx[1]] = '\\cellcolor{gray95} ' + values[median_idx[1]]
 
         output.write('      \\textbf{{{0}}} & ${1}$ \\\\\n'.format(
-            df.index[i], '$ & $'.join([str(val) for val in values]))
+            df.index[i], ' $ & $ '.join([str(val) for val in values]))
         )
 
     # Write footer
@@ -347,72 +415,66 @@ def __to_latex(df: pd.DataFrame, caption: str, label: str, minimization=True, al
     return output.getvalue()
 
 
+def __wilcoxon_to_latex(df: pd.DataFrame, caption: str, label: str, alignment: str = 'c'):
+    """ Convert a pandas DataFrame to a LaTeX tabular. Prints labels in bold and does use math mode.
 
-
-def compute_wilcoxon(filename: str, quality_indicators:[]):
-    """ Compute the mean values of an indicator.
-    :param filename:
-    :param indicator_name: Quality indicator name.
+    :param df: Pandas dataframe.
+    :param caption: LaTeX table caption.
+    :param label: LaTeX table label.
+    :param minimization: If indicator is minimization, highlight the best values of mean/median; else, the lowest.
     """
-    df = pd.read_csv(filename, skipinitialspace=True)
+    num_columns, num_rows = df.shape[1], df.shape[0]
+    output = io.StringIO()
 
-    if len(set(df.columns.tolist())) != 5:
-        raise Exception('Wrong number of columns')
+    col_format = '{}|{}'.format(alignment, alignment * num_columns)
+    column_labels = ['\\textbf{{{0}}}'.format(label.replace('_', '\\_')) for label in df.columns]
 
-    algorithms = pd.unique(df['Algorithm'])
-    problems = pd.unique(df['Problem'])
-    indicators = quality_indicators
+    # Write header
+    output.write('\\documentclass{article}\n')
 
-    # We consider the quality indicator indicator_name
-    #data = df[df['IndicatorName'] == indicator_name]
+    output.write('\\usepackage[utf8]{inputenc}\n')
+    output.write('\\usepackage{tabularx}\n')
+    output.write('\\usepackage{colortbl}\n')
+    output.write('\\usepackage[table*]{xcolor}\n')
 
-    print(algorithms)
-    print(problems)
-    print(indicators)
+    output.write('\\xdefinecolor{gray95}{gray}{0.65}\n')
+    output.write('\\xdefinecolor{gray25}{gray}{0.8}\n')
 
-    print("Row")
-    print(algorithms[0:-1])
-    print("cOL  ")
-    print(algorithms[1:])
+    output.write('\\title{Median and IQR}\n')
+    output.write('\\author{}\n')
 
-    for indicator in indicators:
-        header = "         "
-        for algorithm in algorithms[1:]:
-            header += algorithm + " "
-        print(header)
-        print(indicator + ": -------------------")
-        i = 0
-        for row_algorithm in algorithms[0:-1]:
-            line = row_algorithm + ": "
-            j = 0
-            for col_algorithm in algorithms[1:]:
-                if i <= j:
-                    for problem in problems:
-                        df1 = df[(df["Algorithm"] == row_algorithm) & (df["Problem"] == problem) & (df["IndicatorName"] == indicator)]
-                        df2 = df[(df["Algorithm"] == col_algorithm) & (df["Problem"] == problem) & (df["IndicatorName"] == indicator)]
-                        data1 = df1["IndicatorValue"]
-                        data2 = df2["IndicatorValue"]
-                        median1 = median(data1)
-                        median2 = median(data2)
-                        stat, p = mannwhitneyu(data1, data2)
-                        if p <= 0.05:
-                            if indicator != "HV":
-                                if median1 <= median2:
-                                    line += "+"
-                                else:
-                                    line += "o"
-                            else:
-                                if median1 >= median2:
-                                    line += "+"
-                                else:
-                                    line += "o"
-                        else:
-                            line += "-"
-                line += ","
-                j += 1
-            i += 1
-            print(line)
-    return df
+    output.write('\\begin{document}\n')
+    output.write('\\maketitle\n')
+
+    output.write('\\section{Table}\n')
+
+    output.write('\\begin{table}[!htp]\n')
+    output.write('  \\caption{{{}}}\n'.format(caption))
+    output.write('  \\label{{{}}}\n'.format(label))
+    output.write('  \\centering\n')
+    output.write('  \\begin{scriptsize}\n')
+    output.write('  \\begin{tabular}{%s}\n' % col_format)
+    output.write('      & {} \\\\\\hline\n'.format(' & '.join(column_labels)))
+
+    # Write data lines
+    for i in range(num_rows):
+        values = [val.replace('o', '\\blacktriangle').replace('+', '\\triangledown') for val in df.ix[i]]
+        output.write('      \\textbf{{{0}}} & ${1}$ \\\\\n'.format(
+            df.index[i], ' $ & $ '.join([str(val) for val in values]))
+        )
+
+    # Write footer
+    output.write('  \\end{tabular}\n')
+    output.write('  \\end{scriptsize}\n')
+    output.write('\\end{table}\n')
+
+    output.write('\\end{document}')
+
+    return output.getvalue()
 
 
-#compute_wilcoxon("QualityIndicatorSummary.csv", ["EP", "SPREAD", "HV"])
+def check_minimization(indicator) -> bool:
+    if indicator == 'HV':
+        return False
+    else:
+        return True
