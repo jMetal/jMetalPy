@@ -373,11 +373,14 @@ def compute_wilcoxon(filename: str, quality_indicators:[]):
         header += algorithm + " "
     print(header)
 
-    for raw_algorithm in algorithms[0:-1]:
-        line = raw_algorithm + ": "
-        for col_algorithm in algorithms[1:]:
-            for indicator in indicators:
-                data1 = 
+    for indicator in indicators:
+        for row_algorithm in algorithms[0:-1]:
+            line = row_algorithm + ": "
+            for col_algorithm in algorithms[1:]:
+                for problem in problems:
+                    df1 = df[(df["Algorithm"] == row_algorithm) & (df["Problem"] == problems) & (df["IndicatorName"] == indicator)]
+                    df2 = df[(df["Algorithm"] == col_algorithm) & (df["Problem"] == problems) & (df["IndicatorName"] == indicator)]
+                    data1 = df1["IndicatorValuegi"]
                 line += "+"
             line += ","
 
