@@ -15,22 +15,22 @@ if __name__ == '__main__':
     algorithm = NSGAII(
         problem=problem,
         population_size=100,
-        offspring_population_size=2,
+        offspring_population_size=1,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
-    algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
-    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front))
+    #algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
+    #algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front))
 
     algorithm.run()
     front = algorithm.get_result()
 
     # Plot front
-    plot_front = Plot(plot_title='NSGAII-ZDT1', axis_labels=problem.obj_labels, reference_front=problem.reference_front)
-    plot_front.plot([algorithm.get_result()], labels=['Pareto front'], filename='NSGAII-ZDT1.eps')
+    #plot_front = Plot(plot_title='NSGAII-ZDT1', axis_labels=problem.obj_labels, reference_front=problem.reference_front)
+    #plot_front.plot([algorithm.get_result()], labels=['Pareto front approximation'], filename='NSGAII-ZDT1.eps')
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.NSGAII.ZDT1')
