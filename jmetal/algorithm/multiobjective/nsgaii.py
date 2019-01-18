@@ -1,7 +1,7 @@
 import time
 from typing import TypeVar, List, Generic
 
-from distributed import as_completed, Client
+from distributed import as_completed, Client, Variable
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
@@ -9,6 +9,7 @@ from jmetal.core.algorithm import DynamicAlgorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem, DynamicProblem
 from jmetal.operator import RankingAndCrowdingDistanceSelection
+from jmetal.problem import ZDT1
 from jmetal.util.comparator import DominanceComparator, Comparator
 from jmetal.util.solution_list import Evaluator, Generator, print_function_values_to_file
 from jmetal.util.termination_criterion import TerminationCriterion
