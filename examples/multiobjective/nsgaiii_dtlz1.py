@@ -2,7 +2,7 @@ from jmetal.algorithm.multiobjective.nsgaiii import NSGAIII
 from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
 from jmetal.problem import DTLZ1
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
-from jmetal.util.observer import ProgressBarObserver
+from jmetal.util.observer import ProgressBarObserver, VisualizerObserver, PlotFrontToFileObserver
 from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.util.visualization import Plot
@@ -20,13 +20,14 @@ if __name__ == '__main__':
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
+    algorithm.observable.register(observer=PlotFrontToFileObserver(output_directory='fronts'))
     algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
 
     algorithm.run()
     front = algorithm.get_result()
 
     # Plot front
-    plot_front = Plot(plot_title='NSGAIII-DTLZ1', axis_labels=problem.obj_labels)
+    plot_front = Plot(plot_title='NSGAIII-DTLZ1', axis_labels=problem.obj_labels, reference_front=problem.reference_front)
     plot_front.plot([algorithm.get_result()], labels=['Pareto front aprox.'], filename='NSGAIII-DTLZ1.eps')
 
     # Save results to file

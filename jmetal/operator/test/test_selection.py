@@ -5,8 +5,9 @@ from hamcrest import assert_that, any_of
 from jmetal.core.solution import Solution
 from jmetal.operator.selection import BinaryTournamentSelection, BestSolutionSelection, RandomSolutionSelection, \
     NaryRandomSolutionSelection, RankingAndCrowdingDistanceSelection, BinaryTournament2Selection, \
-    DifferentialEvolutionSelection
+    DifferentialEvolutionSelection, EnvironmentalSelection
 from jmetal.util.comparator import SolutionAttributeComparator, EqualSolutionsComparator
+from jmetal.util.point import ReferencePoint
 
 
 class BinaryTournamentTestCases(unittest.TestCase):
@@ -383,6 +384,94 @@ class BinaryTournament2TestCases(unittest.TestCase):
         selection1 = operator.execute(solution_list)
 
         self.assertTrue(1, selection1.attributes["dominance_ranking"])
+
+
+class EnvironmentalTestCases(unittest.TestCase):
+
+    def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_none(self):
+        selection = EnvironmentalSelection(2, [], 100)
+
+        with self.assertRaises(Exception):
+            selection.execute(None)
+
+    def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_empty(self):
+        selection = EnvironmentalSelection(2, [], 100)
+
+        with self.assertRaises(Exception):
+            selection.execute([])
+
+    def test_should_find_an_ideal_point(self):
+        solution1 = Solution(3, 2)
+        solution1.objectives = [1.0, 0.1]
+
+        solution2 = Solution(3, 2)
+        solution2.objectives = [0.5, 2.0]
+
+        solutions = [solution1, solution2]
+        selection = EnvironmentalSelection(2, [], 100)
+
+        self.assertEqual([0.5, 0.1], selection.find_ideal_point(solutions))
+
+    def test_should_find_extreme_points(self):
+        solution1 = Solution(0, 2)
+        solution1.objectives = [2.0, 4.0]
+        solution1.attributes['normalized_objectives'] = [2.0, 4.0]
+
+        solution2 = Solution(0, 2)
+        solution2.objectives = [5.0, 3.0]
+        solution2.attributes['normalized_objectives'] = [5.0, 3.0]
+
+        solution3 = Solution(0, 2)
+        solution3.objectives = [6.0, 1.0]
+        solution3.attributes['normalized_objectives'] = [6.0, 1.0]
+
+        solutions = [solution1, solution2, solution3]
+        selection = EnvironmentalSelection(2, [], 100)
+
+        extreme_points = selection.find_extreme_points(solutions)
+
+        self.assertEqual([[6.0, 1.0], [2.0, 4.0]], [s.objectives for s in extreme_points])
+
+    def test_should_associate_solutions_to_reference_points(self):
+        solution1 = Solution(0, 2)
+        solution1.objectives = [2.0, 4.0]
+        solution1.attributes['normalized_objectives'] = [2.0, 4.0]
+
+        solution2 = Solution(0, 2)
+        solution2.objectives = [5.0, 3.0]
+        solution2.attributes['normalized_objectives'] = [5.0, 3.0]
+
+        solution3 = Solution(0, 2)
+        solution3.objectives = [6.0, 1.0]
+        solution3.attributes['normalized_objectives'] = [6.0, 1.0]
+
+        solutions = [solution1, solution2, solution3]
+        reference_points = [ReferencePoint([3.0, 5.0]), ReferencePoint([7.0, 2.0]), ReferencePoint([6.0, 4.0])]
+        selection = EnvironmentalSelection(2, [], 100)
+
+        selection.associate(solutions, reference_points)
+
+        self.assertEqual([1, 1, 1], [s.associations_count for s in reference_points])
+        self.assertEqual([2.0, 4.0], reference_points[0].associations[0].objectives)
+        self.assertEqual([6.0, 1.0], reference_points[1].associations[0].objectives)
+        self.assertEqual([5.0, 3.0], reference_points[2].associations[0].objectives)
+
+    def test_should_construct_a_valid_hyperplane(self):
+        solution1 = Solution(0, 2)
+        solution1.objectives = [2.0, 1.0]
+        solution1.attributes['normalized_objectives'] = [2.0, 1.0]
+
+        solution2 = Solution(0, 2)
+        solution2.objectives = [1.0, 2.0]
+        solution2.attributes['normalized_objectives'] = [1.0, 2.0]
+
+        solutions = [solution1, solution2]
+        selection = EnvironmentalSelection(2, [], 100)
+
+        extreme_points = selection.find_extreme_points(solutions)
+        intercepts = selection.construct_hyperplane(solutions, extreme_points)
+
+        self.assertEqual([2.9999999999999996, 3.0], intercepts)
 
 
 if __name__ == '__main__':

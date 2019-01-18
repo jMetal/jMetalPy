@@ -15,7 +15,7 @@ S = TypeVar('S')
 class Plot(ABC):
 
     def __init__(self,
-                 plot_title: str,
+                 plot_title: str = 'jMetalPy',
                  reference_front: List[S] = None,
                  reference_point: list = None,
                  axis_labels: list = None):
@@ -86,8 +86,8 @@ class Plot(ABC):
 
         if filename:
             plt.savefig(filename, format=filename.split('.')[-1], dpi=1000)
-
-        plt.show()
+        else:
+            plt.show()
 
     def three_dim(self, fronts: List[list], labels: List[str] = None, filename: str = None):
         """ Plot any arbitrary number of fronts in 3D.
@@ -121,8 +121,8 @@ class Plot(ABC):
 
         if filename:
             plt.savefig(filename, format=filename.split('.')[-1], dpi=1000)
-
-        plt.show()
+        else:
+            plt.show()
 
     def pcoords(self, fronts: list, filename: str = None):
         """ Plot any arbitrary number of fronts in parallel coordinates.
@@ -147,5 +147,5 @@ class Plot(ABC):
 
         if filename:
             plt.savefig(filename, format=filename.split('.')[-1], dpi=1000)
-
-        plt.show()
+        else:
+            plt.show()
