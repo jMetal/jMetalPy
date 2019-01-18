@@ -14,7 +14,7 @@ class Ranking(List[S], ABC):
         self.ranked_sublists = []
 
     @abstractmethod
-    def compute_ranking(self, solution_list: List[S], k: int):
+    def compute_ranking(self, solutions: List[S], k: int):
         pass
 
     def get_subfront(self, rank: int):
@@ -79,8 +79,8 @@ class FastNonDominatedRanking(Ranking[List[S]]):
         self.ranked_sublists = [[]] * i
         for j in range(i):
             q = [0] * len(front[j])
-            for k in range(len(front[j])):
-                q[k] = solutions[front[j][k]]
+            for m in range(len(front[j])):
+                q[m] = solutions[front[j][m]]
             self.ranked_sublists[j] = q
 
         if k:
@@ -89,8 +89,8 @@ class FastNonDominatedRanking(Ranking[List[S]]):
                 count += len(front)
                 if count >= k:
                     return self.ranked_sublists[:i + 1]
-
-        return self.ranked_sublists
+        else:
+            return self.ranked_sublists
 
 
 class EfficientNonDominatedRanking(Ranking[List[S]]):
@@ -99,6 +99,6 @@ class EfficientNonDominatedRanking(Ranking[List[S]]):
     def __init__(self):
         super(EfficientNonDominatedRanking, self).__init__()
 
-    def compute_ranking(self, solution_list: List[S]):
+    def compute_ranking(self, solutions: List[S], k: int):
         # todo
         return self.ranked_sublists

@@ -45,8 +45,8 @@ class NSGAIII(NSGAII):
         """
         super(NSGAIII, self).__init__(
             problem=problem,
-            population_size=0,
-            offspring_population_size=0,
+            population_size=92,
+            offspring_population_size=92,
             mutation=mutation,
             crossover=crossover,
             selection=selection,
@@ -55,28 +55,12 @@ class NSGAIII(NSGAII):
             population_generator=population_generator
         )
         self.dominance_comparator = dominance_comparator
-        self.reference_points = self.generate_reference_points(problem.number_of_objectives)
-
-        self.population_size = len(self.reference_points)
-        while self.population_size % 4 > 0:
-            self.population_size += 1
-
-        self.offspring_population_size = self.population_size
-
-    def generate_reference_points(self, num_objs: int, num_divisions_per_obj: int = 4):
-        def gen_refs_recursive(position, num_objs, left, total, element):
-            if element == num_objs - 1:
-                position[element] = left / total
-                return [ReferencePoint(copy.deepcopy(position))]
-            else:
-                res = []
-                for i in range(left):
-                    position[element] = i / total
-                    res += gen_refs_recursive(position, num_objs, left - i, total, element + 1)
-                return res
-
-        return gen_refs_recursive([0] * num_objs, num_objs, num_objs * num_divisions_per_obj,
-                                  num_objs * num_divisions_per_obj, 0)
+        """
+        self.population_size = choose(problem.number_of_objectives + divisions_outer - 1, divisions_outer) + \
+                               (0 if divisions_inner == 0 else choose(problem.number_of_objectives + divisions_inner - 1,
+                                                                      divisions_inner))
+        self.population_size = int(math.ceil(self.population_size / 4.0)) * 4
+        """
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
         """ Implements NSGA-III selection as described in
@@ -96,14 +80,13 @@ class NSGAIII(NSGAII):
 
         while len(pop) < self.population_size:
             if len(ranking.get_subfront(ranking_index)) < self.population_size - len(pop):
-                pop = pop + ranking.get_subfront(ranking_index)
+                pop += ranking.get_subfront(ranking_index)
                 ranking_index += 1
             else:
                 break
 
         # complete selected individuals using the reference point based approach
         selection = EnvironmentalSelection(number_of_objectives=self.problem.number_of_objectives,
-                                           reference_points=self.reference_points,
                                            k=self.population_size - len(pop))
         pop += selection.execute(ranking.get_subfront(ranking_index))
 

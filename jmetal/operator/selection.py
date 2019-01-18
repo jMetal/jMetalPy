@@ -153,7 +153,7 @@ class DifferentialEvolutionSelection(Selection[List[S], List[S]]):
 
         return [front[i] for i in selected_indexes]
 
-    def set_index_to_exclude(self, index:int):
+    def set_index_to_exclude(self, index: int):
         self.index_to_exclude = index
 
     def get_name(self) -> str:
@@ -268,11 +268,26 @@ class BinaryTournament2Selection(Selection[List[S], S]):
 
 class EnvironmentalSelection(Selection[List[S], S]):
 
-    def __init__(self, number_of_objectives: int, reference_points: list, k: int):
+    def __init__(self, number_of_objectives: int, k: int):
         super(EnvironmentalSelection, self).__init__()
         self.number_of_objectives = number_of_objectives
-        self.reference_points = reference_points
+        self.reference_points = self.generate_reference_points(self.number_of_objectives)
         self.k = k
+
+    def generate_reference_points(self, num_objs: int, num_divisions_per_obj: int = 12):
+        def gen_refs_recursive(position, num_objs, left, total, element):
+            if element == num_objs - 1:
+                position[element] = left / total
+                return [ReferencePoint(copy.deepcopy(position))]
+            else:
+                res = []
+                for i in range(left):
+                    position[element] = i / total
+                    res += gen_refs_recursive(position, num_objs, left - i, total, element + 1)
+                return res
+
+        return gen_refs_recursive([0] * num_objs, num_objs, num_objs * num_divisions_per_obj,
+                                  num_objs * num_divisions_per_obj, 0)
 
     def find_ideal_point(self, solutions: List[S]):
         ideal_point = [float('inf')] * self.number_of_objectives
@@ -283,24 +298,33 @@ class EnvironmentalSelection(Selection[List[S], S]):
 
         return ideal_point
 
-    def find_extreme_points(self, solutions: List[S], objective):
-        nobjs = self.number_of_objectives
+    def ASF(self, solution: S, idx: int):
+        """ Achivement Scalarization Function. """
+        max_ratio = -float('inf')
 
-        weights = [0.000001] * nobjs
-        weights[objective] = 1.0
+        for i in range(solution.number_of_objectives):
+            weight = 1.0 if idx == i else 0.000001
+            max_ratio = max(max_ratio, solution.objectives[i] / weight)
 
-        min_index = -1
-        min_value = float('inf')
+        return max_ratio
 
-        for i in range(len(solutions)):
-            objectives = solutions[i].attributes['normalized_objectives']
-            value = max([objectives[j] / weights[j] for j in range(nobjs)])
+    def find_extreme_points(self, solutions: List[S]):
+        extreme_points = []
 
-            if value < min_value:
-                min_index = i
-                min_value = value
+        for i in range(self.number_of_objectives):
+            min_ASF = float('inf')
+            min_solution = None
 
-        return solutions[min_index]
+            for solution in solutions:
+                asf = self.ASF(solution, i)
+
+                if asf < min_ASF:
+                    min_ASF = asf
+                    min_solution = solution
+
+            extreme_points.append(min_solution)
+
+        return extreme_points
 
     def construct_hyperplane(self, solutions: List[S], extreme_points: list):
         """ Calculate the axis intersects for a set of individuals and its extremes (construct hyperplane). """
@@ -330,7 +354,7 @@ class EnvironmentalSelection(Selection[List[S], S]):
 
         return intercepts
 
-    def normalize_objective(self, solution, m, intercepts, ideal_point, epsilon=1e-20):
+    def normalize_objective(self, solution: S, m: int, intercepts, ideal_point, epsilon: float = 1e-20):
         if np.abs(intercepts[m] - ideal_point[m] > epsilon):
             return solution.objectives[m] / (intercepts[m] - ideal_point[m])
         else:
@@ -345,29 +369,26 @@ class EnvironmentalSelection(Selection[List[S], S]):
 
         return solutions
 
-    def associate(self, solutions: List[S], reference_points: list):
-        """ Associate each solution to a reference point. """
-        for solution in solutions:
-            rp_dists = [(rp, self.perpendicular_distance(solution.attributes['normalized_objectives'], rp))
-                        for rp in reference_points]
-            best_rp, best_dist = sorted(rp_dists, key=lambda rpd: rpd[1])[0]
-            solution.attributes['reference_point'] = best_rp
-            solution.attributes['ref_point_distance'] = best_dist
-            best_rp.associations_count += 1  # update de niche number
-            best_rp.associations += [solution]
-
     def perpendicular_distance(self, direction, point):
         k = np.dot(direction, point) / np.sum(np.power(direction, 2))
         d = np.sum(np.power(np.subtract(np.multiply(direction, [k] * len(direction)), point), 2))
 
         return np.sqrt(d)
 
-    def execute(self, solutions: List[S]):
+    def associate(self, solutions: List[S], reference_points: list):
+        """ Associate each solution to a reference point. """
+        for solution in solutions:
+            rp_dists = [(rp, self.perpendicular_distance(solution.attributes['normalized_objectives'], rp))
+                        for rp in reference_points]
+            best_rp, best_dist = sorted(rp_dists, key=lambda rpd: rpd[1])[0]
+            solution.attributes['ref_point_distance'] = best_dist
+            best_rp.associations_count += 1  # update de niche number
+            best_rp.associations += [solution]
+
+    def execute(self, solutions: List[S]) -> List[S]:
         """ Secondary environmental selection based on reference points. Corresponds to steps 13-17 of Algorithm 1.
 
-        :param solutions:
-        :param k:
-        :return:
+        :param solutions: List of solutions.
         """
 
         # Steps 9-10 in Algorithm 1
@@ -382,7 +403,7 @@ class EnvironmentalSelection(Selection[List[S], S]):
             solution.attributes['normalized_objectives'] = \
                 [solution.objectives[i] - ideal_point[i] for i in range(self.number_of_objectives)]
 
-        extreme_points = [self.find_extreme_points(solutions, i) for i in range(self.number_of_objectives)]
+        extreme_points = self.find_extreme_points(solutions)
         intercepts = self.construct_hyperplane(solutions, extreme_points)
         self.normalize_objectives(solutions, intercepts, ideal_point)
 
@@ -390,25 +411,29 @@ class EnvironmentalSelection(Selection[List[S], S]):
         self.associate(solutions, self.reference_points)
 
         # Step 17 / Algorithm 4
-        res = []
-        while len(res) < self.k:
+        pop = []
+        while len(pop) < self.k:
+            # find niche reference point
             min_assoc_rp = min(self.reference_points, key=lambda rp: rp.associations_count)
-            min_assoc_rps = [rp for rp in self.reference_points if rp.associations_count == min_assoc_rp.associations_count]
+            min_assoc_rps = [rp for rp in self.reference_points if
+                             rp.associations_count == min_assoc_rp.associations_count]
             chosen_rp = min_assoc_rps[random.randint(0, len(min_assoc_rps) - 1)]
 
+            # select cluster member
             if chosen_rp.associations:
                 if chosen_rp.associations_count == 0:
-                    sel = min(chosen_rp.associations, key=lambda ind: ind.attributes['ref_point_distance'])
+                    sel = min(chosen_rp.associations, key=lambda s: s.attributes['ref_point_distance'])
                 else:
                     sel = chosen_rp.associations[random.randint(0, len(chosen_rp.associations) - 1)]
-                res += [sel]
+                pop += [sel]
 
                 chosen_rp.associations.remove(sel)
-                chosen_rp.associations_count += 1
+                chosen_rp.associations_count -= 1
             else:
+                # no potential member, disregard this reference point
                 self.reference_points.remove(chosen_rp)
 
-        return res
+        return pop
 
     def get_name(self) -> str:
         return 'Environmental selection for NSGA-III'

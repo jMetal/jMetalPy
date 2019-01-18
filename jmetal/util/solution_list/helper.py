@@ -38,44 +38,44 @@ def read_solutions(filename: str) -> List[FloatSolution]:
     return front
 
 
-def print_variables_to_file(solutions, file_name):
-    LOGGER.info('Output file (variables): ' + file_name)
+def print_variables_to_file(solutions, filename: str):
+    LOGGER.info('Output file (variables): ' + filename)
 
     try:
-        os.makedirs(os.path.dirname(file_name), exist_ok=True)
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
     except FileNotFoundError:
         pass
 
     if type(solutions) is not list:
         solutions = [solutions]
 
-    with open(file_name, 'w') as of:
+    with open(filename, 'w') as of:
         for solution in solutions:
             for variables in solution.variables:
                 of.write(str(variables) + " ")
             of.write("\n")
 
 
-def print_variables_to_screen(solution_list):
-    if type(solution_list) is not list:
-        solution_list = [solution_list]
+def print_variables_to_screen(solutions):
+    if type(solutions) is not list:
+        solutions = [solutions]
 
-    for solution in solution_list:
+    for solution in solutions:
         print(solution.variables[0])
 
 
-def print_function_values_to_file(solutions, file_name):
-    LOGGER.info('Output file (function values): ' + file_name)
+def print_function_values_to_file(solutions, filename: str):
+    LOGGER.info('Output file (function values): ' + filename)
 
     try:
-        os.makedirs(os.path.dirname(file_name), exist_ok=True)
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
     except FileNotFoundError:
         pass
 
     if type(solutions) is not list:
         solutions = [solutions]
 
-    with open(file_name, 'w') as of:
+    with open(filename, 'w') as of:
         for solution in solutions:
             for function_value in solution.objectives:
                 of.write(str(function_value) + ' ')
