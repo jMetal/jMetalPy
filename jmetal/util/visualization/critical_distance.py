@@ -13,7 +13,7 @@ def NemenyiCD(alpha: float, num_alg, num_dataset):
 
     where q_alpha is the critical value, of the Studentized range statistic divided by sqrt(2).
 
-    :param alpha: {0.05, 0.01}. Significance level.
+    :param alpha: {0.1, 0.999}. Significance level.
     :param num_alg: number of tested algorithms.
     :param num_dataset: Number of problems/datasets where the algorithms have been tested.
     """
@@ -33,7 +33,7 @@ def CDplot(results, alpha: float = 0.05, alg_names: list = None):
     * Statistical Comparisons of Classifiers over Multiple Data Sets.
 
     :param results: A 2-D array containing results from each algorithm. Each row of 'results' represents an algorithm, and each column a dataset.
-    :param alpha: {0.05, 0.01}. Significace level for the critical difference.
+    :param alpha: {0.1, 0.999}. Significace level for the critical difference.
     :param alg_names: Names of the tested algorithms.
     """
 
@@ -67,9 +67,6 @@ def CDplot(results, alpha: float = 0.05, alg_names: list = None):
         alg_names = np.array(
             ['Alg%d' % alg for alg in range(results.shape[1])])
 
-    if alpha not in [0.01, 0.05]:
-        raise ValueError(
-            'Initialization ERROR: In CDplot(...) alpha must be 0.01 0 or 0.05')
     if results.ndim == 2:
         num_alg, num_dataset = results.shape
     else:
