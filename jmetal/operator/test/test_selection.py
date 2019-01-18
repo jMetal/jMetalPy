@@ -389,13 +389,13 @@ class BinaryTournament2TestCases(unittest.TestCase):
 class EnvironmentalTestCases(unittest.TestCase):
 
     def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_none(self):
-        selection = EnvironmentalSelection(2, [], 100)
+        selection = EnvironmentalSelection(2, 100)
 
         with self.assertRaises(Exception):
             selection.execute(None)
 
     def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_empty(self):
-        selection = EnvironmentalSelection(2, [], 100)
+        selection = EnvironmentalSelection(2, 100)
 
         with self.assertRaises(Exception):
             selection.execute([])
@@ -408,7 +408,7 @@ class EnvironmentalTestCases(unittest.TestCase):
         solution2.objectives = [0.5, 2.0]
 
         solutions = [solution1, solution2]
-        selection = EnvironmentalSelection(2, [], 100)
+        selection = EnvironmentalSelection(2, 100)
 
         self.assertEqual([0.5, 0.1], selection.find_ideal_point(solutions))
 
@@ -426,7 +426,7 @@ class EnvironmentalTestCases(unittest.TestCase):
         solution3.attributes['normalized_objectives'] = [6.0, 1.0]
 
         solutions = [solution1, solution2, solution3]
-        selection = EnvironmentalSelection(2, [], 100)
+        selection = EnvironmentalSelection(2, 100)
 
         extreme_points = selection.find_extreme_points(solutions)
 
@@ -447,7 +447,7 @@ class EnvironmentalTestCases(unittest.TestCase):
 
         solutions = [solution1, solution2, solution3]
         reference_points = [ReferencePoint([3.0, 5.0]), ReferencePoint([7.0, 2.0]), ReferencePoint([6.0, 4.0])]
-        selection = EnvironmentalSelection(2, [], 100)
+        selection = EnvironmentalSelection(2, 100)
 
         selection.associate(solutions, reference_points)
 
@@ -466,7 +466,7 @@ class EnvironmentalTestCases(unittest.TestCase):
         solution2.attributes['normalized_objectives'] = [1.0, 2.0]
 
         solutions = [solution1, solution2]
-        selection = EnvironmentalSelection(2, [], 100)
+        selection = EnvironmentalSelection(2, 100)
 
         extreme_points = selection.find_extreme_points(solutions)
         intercepts = selection.construct_hyperplane(solutions, extreme_points)

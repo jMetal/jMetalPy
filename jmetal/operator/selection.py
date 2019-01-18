@@ -419,6 +419,7 @@ class EnvironmentalSelection(Selection[List[S], S]):
                              rp.associations_count == min_assoc_rp.associations_count]
             chosen_rp = min_assoc_rps[random.randint(0, len(min_assoc_rps) - 1)]
 
+            # select cluster member
             if chosen_rp.associations:
                 if chosen_rp.associations_count == 0:
                     sel = min(chosen_rp.associations, key=lambda s: s.attributes['ref_point_distance'])
@@ -427,7 +428,7 @@ class EnvironmentalSelection(Selection[List[S], S]):
                 pop += [sel]
 
                 chosen_rp.associations.remove(sel)
-                chosen_rp.associations_count += 1
+                chosen_rp.associations_count -= 1
             else:
                 # no potential member, disregard this reference point
                 self.reference_points.remove(chosen_rp)
