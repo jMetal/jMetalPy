@@ -95,9 +95,9 @@ class FastNonDominatedRankingTestCases(unittest.TestCase):
         solution5.objectives[0] = 0.7
         solution5.objectives[1] = 0.5
 
-        solution_list = [solution1, solution2, solution3, solution4, solution5]
+        solutions = [solution1, solution2, solution3, solution4, solution5]
 
-        ranking = self.ranking.compute_ranking(solution_list)
+        ranking = self.ranking.compute_ranking(solutions)
 
         self.assertEqual(2, self.ranking.get_number_of_subfronts())
         self.assertEqual(3, len(self.ranking.get_subfront(0)))

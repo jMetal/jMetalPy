@@ -11,7 +11,7 @@ if __name__ == '__main__':
     problem = DTLZ1()
     problem.reference_front = read_solutions(filename='../../resources/reference_front/DTLZ1.3D.pf')
 
-    max_evaluations = 200
+    max_evaluations = 10000
     algorithm = NSGAIII(
         problem=problem,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     # Plot front
     plot_front = Plot(plot_title='NSGAIII-DTLZ1', axis_labels=problem.obj_labels, reference_front=problem.reference_front)
-    plot_front.plot([algorithm.get_result()], labels=['Pareto front aprox.'], filename='a', format='gif')
+    plot_front.plot([algorithm.get_result()], labels=['Pareto front aprox.'], filename='NSGAIII-DTLZ1')
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.NSGAIII.DTLZ1')
