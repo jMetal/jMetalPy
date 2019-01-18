@@ -5,6 +5,7 @@ from typing import TypeVar, List, Tuple
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from matplotlib import animation
 from pandas.plotting import parallel_coordinates
 
 LOGGER = logging.getLogger('jmetal')
@@ -44,17 +45,17 @@ class Plot(ABC):
         points = pd.DataFrame(list(solution.objectives for solution in solutions))
         return points, points.shape[1]
 
-    def plot(self, fronts: List[list], labels: List[str] = None, filename: str = None):
+    def plot(self, fronts: List[list], labels: List[str] = None, filename: str = None, format: str = 'eps'):
         dimension = fronts[0][0].number_of_objectives
 
         if dimension == 2:
-            self.two_dim(fronts, labels, filename)
+            self.two_dim(fronts, labels, filename, format)
         elif dimension == 3:
-            self.three_dim(fronts, labels, filename)
+            self.three_dim(fronts, labels, filename, format)
         else:
-            self.pcoords(fronts, filename)
+            self.pcoords(fronts, filename, format)
 
-    def two_dim(self, fronts: List[list], labels: List[str] = None, filename: str = None):
+    def two_dim(self, fronts: List[list], labels: List[str] = None, filename: str = None, format: str = 'eps'):
         """ Plot any arbitrary number of fronts in 2D.
 
         :param fronts: List of fronts (containing solutions).
@@ -85,11 +86,11 @@ class Plot(ABC):
                 plt.plot([self.reference_point[0]], [self.reference_point[1]], marker='o', markersize=3, color='r')
 
         if filename:
-            plt.savefig(filename, format=filename.split('.')[-1], dpi=1000)
+            plt.savefig(filename, format=format, dpi=1000)
         else:
             plt.show()
 
-    def three_dim(self, fronts: List[list], labels: List[str] = None, filename: str = None):
+    def three_dim(self, fronts: List[list], labels: List[str] = None, filename: str = None, format: str = 'eps'):
         """ Plot any arbitrary number of fronts in 3D.
 
         :param fronts: List of fronts (containing solutions).
@@ -120,11 +121,22 @@ class Plot(ABC):
             ax.locator_params(nbins=4)
 
         if filename:
-            plt.savefig(filename, format=filename.split('.')[-1], dpi=1000)
+            if format == 'gif':
+                def animate(i):
+                    ax.view_init(elev=10., azim=i)
+                    return fig,
+
+                anim = animation.FuncAnimation(fig, animate, frames=20, interval=1, blit=True, repeat=False)
+
+                LOGGER.info('Generating GIF (this may take some time...)')
+                anim.save(filename + '.gif', writer=animation.PillowWriter(fps=24))
+                LOGGER.info('Done')
+            else:
+                plt.savefig(filename, format=format, dpi=1000)
         else:
             plt.show()
 
-    def pcoords(self, fronts: list, filename: str = None):
+    def pcoords(self, fronts: list, filename: str = None, format: str = 'eps'):
         """ Plot any arbitrary number of fronts in parallel coordinates.
 
         :param fronts: List of fronts (containing solutions).
@@ -146,6 +158,6 @@ class Plot(ABC):
                 ax.set_xticklabels(self.axis_labels)
 
         if filename:
-            plt.savefig(filename, format=filename.split('.')[-1], dpi=1000)
+            plt.savefig(filename, format=format, dpi=1000)
         else:
             plt.show()
