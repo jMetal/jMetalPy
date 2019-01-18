@@ -6,7 +6,7 @@ from typing import List, TypeVar
 from tqdm import tqdm
 
 from jmetal.core.observable import Observer
-from jmetal.util.visualization import StreamingPlot, IStreamingPlot
+from jmetal.util.visualization import StreamingPlot, IStreamingPlot, Plot
 from jmetal.util.solution_list import print_function_values_to_file
 
 S = TypeVar('S')
@@ -96,6 +96,32 @@ class WriteFrontToFileObserver(Observer):
         if solutions:
             print_function_values_to_file(solutions, '{}/FUN.{}'.format(self.directory, self.counter))
             self.counter += 1
+
+
+class PlotFrontToFileObserver(Observer):
+
+    def __init__(self,
+                 output_directory: str,
+                 display_frequency: float = 1.0) -> None:
+        self.display_frequency = display_frequency
+        self.directory = output_directory
+        self.plot_front = Plot()
+
+        if Path(self.directory).is_dir():
+            LOGGER.warning('Directory {} exists. Removing contents.'.format(self.directory))
+            for file in os.listdir(self.directory):
+                os.remove('{0}/{1}'.format(self.directory, file))
+        else:
+            LOGGER.warning('Directory {} does not exist. Creating it.'.format(self.directory))
+            Path(self.directory).mkdir(parents=True)
+
+    def update(self, *args, **kwargs):
+        evaluations = kwargs['EVALUATIONS']
+        solutions = kwargs['SOLUTIONS']
+
+        if solutions:
+            if (evaluations % self.display_frequency) == 0:
+                self.plot_front.plot([solutions], filename='{}/jmetalpy-{}.png'.format(self.directory, evaluations))
 
 
 class VisualizerObserver(Observer):
