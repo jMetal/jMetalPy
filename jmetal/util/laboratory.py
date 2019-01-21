@@ -168,10 +168,13 @@ def generate_boxplot(filename: str):
 
             # Create a figure instance
             fig = plt.figure(1, figsize=(9, 6))
+            plt.suptitle(pr, y=0.95, fontsize=18)
 
             ax = fig.add_subplot(111)
             ax.boxplot(data_to_plot)
+
             ax.set_xticklabels(algorithms)
+            ax.tick_params(labelsize=20)
 
             plt.savefig('boxplot/boxplot-{}-{}.png'.format(pr, indicator_name), bbox_inches='tight')
             plt.savefig('boxplot/boxplot-{}-{}.eps'.format(pr, indicator_name), bbox_inches='tight')
@@ -388,10 +391,11 @@ def __averages_to_latex(df: pd.DataFrame, caption: str, label: str, minimization
         median = [float(val.split('_')[0]) for val in values]
 
         # Sort mean/median values (the lower the better if minimization)
+
         if minimization:
-            median_idx = np.argsort(median)[-2:]
-        else:
             median_idx = np.argsort(median)[:2][::-1]
+        else:
+            median_idx = np.argsort(median)[-2:]
 
         # Mean/median values could be the same: in that case, sort by Std/IQR (the lower the better)
         if median[median_idx[0]] == median[median_idx[1]]:

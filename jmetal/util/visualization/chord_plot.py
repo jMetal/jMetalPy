@@ -21,8 +21,8 @@ def draw_sector(startAngle=0, endAngle=60, radius=1.0, width=0.2, lw=2, ls='-', 
     startAngle *= np.pi / 180.
     endAngle *= np.pi / 180.
 
-    opt = 4. / 3. * np.tan((
-                                   endAngle - startAngle) / 4.) * radius  # https://stackoverflow.com/questions/1734745/how-to-create-circle-with-b%C3%A9zier-curves
+    # https://stackoverflow.com/questions/1734745/how-to-create-circle-with-b%C3%A9zier-curves
+    opt = 4. / 3. * np.tan((endAngle - startAngle) / 4.) * radius
     inner = radius * (1 - width)
 
     vertsPath = [polar_to_cartesian(radius, startAngle),
@@ -39,7 +39,7 @@ def draw_sector(startAngle=0, endAngle=60, radius=1.0, width=0.2, lw=2, ls='-', 
     codesPaths = [Path.MOVETO, Path.CURVE4, Path.CURVE4, Path.CURVE4, Path.LINETO, Path.CURVE4, Path.CURVE4,
                   Path.CURVE4, Path.CLOSEPOLY]
 
-    if ax == None:
+    if ax is None:
         return vertsPath, codesPaths
     else:
         path = Path(vertsPath, codesPaths)
@@ -116,7 +116,7 @@ def chord_diagram(solutions: List[FloatSolution], nbins='auto', ax=None, labelsO
     HSV_tuples = [(x * 1.0 / NOBJ, 0.5, 0.5) for x in range(NOBJ)]
     colors = list(map(lambda x: colorsys.hsv_to_rgb(*x), HSV_tuples))
 
-    if ax == None:
+    if ax is None:
         fig = plt.figure(figsize=(6, 6))
         ax = plt.axes([0, 0, 1, 1], aspect='equal')
 
@@ -162,7 +162,7 @@ def chord_diagram(solutions: List[FloatSolution], nbins='auto', ax=None, labelsO
     handleTickers = []
     handlePlots = []
 
-    for iobj in tqdm(range(NOBJ)):
+    for iobj in tqdm(range(NOBJ), ascii=True, desc='Chord diagram'):
 
         draw_sector(startAngle=sectorAngles[iobj][0], endAngle=sectorAngles[iobj][1], radius=0.925, width=0.225, ax=ax,
                     fc=(1, 1, 1, 0.0), ec=(0, 0, 0), lw=2, z_order=10)
@@ -211,7 +211,7 @@ def chord_diagram(solutions: List[FloatSolution], nbins='auto', ax=None, labelsO
                 plt.plot([plotPoint1[0], plotPoint2[0]], [plotPoint1[1], plotPoint2[1]], marker='o', markersize=3,
                          c=colors[iobj], lw=2)
 
-                if pointsMatrix[ipoint, iobj] > binsDim[indexBin] and pointsMatrix[ipoint, iobj] <= binsDim[
+                if binsDim[indexBin] < pointsMatrix[ipoint, iobj] <= binsDim[
                     indexBin + 1]:
                     for jdim in range(NOBJ):
                         if jdim >= 1:
