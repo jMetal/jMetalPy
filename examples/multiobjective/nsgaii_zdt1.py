@@ -1,3 +1,5 @@
+from jmetal.component import DominanceComparator
+
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
 from jmetal.problem import ZDT1
@@ -19,7 +21,8 @@ if __name__ == '__main__':
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
-        termination_criterion=StoppingByEvaluations(max=max_evaluations)
+        termination_criterion=StoppingByEvaluations(max=max_evaluations),
+        dominance_comparator=DominanceComparator()
     )
 
     #algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
