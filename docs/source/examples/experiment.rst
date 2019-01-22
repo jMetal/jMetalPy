@@ -1,4 +1,4 @@
-Experiments
+Running experiments
 ========================
 
 This is an example of an experimental study based on solving two problems of the ZDT family with two versions of the same algorithm (NSGA-II).

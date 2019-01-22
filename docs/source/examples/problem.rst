@@ -1,4 +1,4 @@
-Problems
+Defining new problems
 ========================
 
 To include a problem in jMetalPy, it must implement the :code:`Problem` interface from the :py:mod:`jmetal.core.problem` module.

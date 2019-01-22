@@ -20,7 +20,7 @@ Static plots
 
   .. raw:: html
 
-     <object data="../NSGAII-ZDT1.svg" type="image/svg+xml"></object>
+     <img src="../NSGAII-ZDT1.svg" alt="NSGAII-ZDT1"></img>
 
   .. note:: Static charts can be shown in the screen or stored in a file by setting the filename.
 
