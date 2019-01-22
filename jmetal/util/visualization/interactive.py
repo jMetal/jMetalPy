@@ -23,7 +23,7 @@ class InteractivePlot(Plot):
         self.layout = None
         self.data = []
 
-    def plot(self, front: List[S], labels: List[str] = None, normalize: bool = False, filename: str = None, format: str = 'HTML'):
+    def plot(self, front: List[S], label: List[str] = None, normalize: bool = False, filename: str = None, format: str = 'HTML'):
         """ Plot a front of solutions (2D, 3D or parallel coordinates).
 
         :param front: List of solutions.

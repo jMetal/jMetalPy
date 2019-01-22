@@ -14,7 +14,41 @@ Aggregative function
     :undoc-members:
     :show-inheritance:
 
-Lab of experiments
+Archive
+--------------------------
+
+.. automodule:: jmetal.util.archive
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Comparator
+-----------------------------
+
+.. automodule:: jmetal.util.comparator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Density Estimator
+------------------------------------------
+
+.. automodule:: jmetal.util.density_estimator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Distance
+-----------------------------
+
+.. automodule:: jmetal.util.distance
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Laboratory of experiments
 --------------------------
 
 .. automodule:: jmetal.util.laboratory
@@ -38,37 +72,6 @@ Observable
     :undoc-members:
     :show-inheritance:
 
-Point
---------------------------
-
-.. automodule:: jmetal.util.point
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-Archive
--------------------------------
-
-.. automodule:: jmetal.util.archive
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-Comparator
------------------------------
-
-.. automodule:: jmetal.util.comparator
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-Density Estimator
-------------------------------------------
-
-.. automodule:: jmetal.util.density_estimator
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 Observer
 --------------------------------
@@ -78,19 +81,26 @@ Observer
     :undoc-members:
     :show-inheritance:
 
-Quality Indicator
---------------------------------
+Point
+--------------------------
 
-.. automodule:: jmetal.util.quality_indicator
+.. automodule:: jmetal.util.point
     :members:
     :undoc-members:
     :show-inheritance:
-
 
 Ranking
 --------------------------
 
 .. automodule:: jmetal.util.ranking
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Termination criterion
+--------------------------
+
+.. automodule:: jmetal.util.termination_criterion
     :members:
     :undoc-members:
     :show-inheritance:

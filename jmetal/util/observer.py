@@ -135,7 +135,7 @@ class PlotFrontToFileObserver(Observer):
                 if igd_value > 0.005:
                     self.fronts += solutions
                     self.plot_front.plot([self.fronts],
-                                         labels=[problem.get_name()],
+                                         label=[problem.get_name()],
                                          filename='{}/jmetalpy-{}'.format(self.directory, self.counter))
 
                 self.counter += 1
@@ -164,14 +164,14 @@ class VisualizerObserver(Observer):
 
         if solutions:
             if self.figure is None:
-                self.figure = StreamingPlot(plot_title='jMetalPy',
+                self.figure = StreamingPlot(plot_title='Pareto front approximation',
                                             reference_point=self.reference_point,
                                             reference_front=self.reference_front)
                 self.figure.plot(solutions)
 
             if (evaluations % self.display_frequency) == 0:
                 self.figure.update(solutions)
-                self.figure.fig.suptitle('Eval: {}'.format(evaluations), fontsize=13)
+                self.figure.ax.set_title('Eval: {}'.format(evaluations), fontsize=13)
 
 
 class IVisualizerObserver(Observer):
@@ -192,7 +192,7 @@ class IVisualizerObserver(Observer):
 
         if solutions:
             if self.figure is None:
-                self.figure = IStreamingPlot(plot_title='jMetalPy',
+                self.figure = IStreamingPlot(plot_title='Pareto front approximation',
                                              reference_point=self.reference_point,
                                              reference_front=self.reference_front)
                 self.figure.plot(solutions)

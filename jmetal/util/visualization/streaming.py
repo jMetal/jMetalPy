@@ -51,9 +51,9 @@ class StreamingPlot(Plot):
         self.sc = None
         self.axis = None
 
-    def plot(self, solutions: List[S], labels: List[str] = None, filename: str = None) -> None:
+    def plot(self, front: List[S]):
         # Get data
-        points, dimension = self.get_points(solutions)
+        points, dimension = self.get_points(front)
 
         # Create an empty figure
         self.create_layout(dimension)
@@ -98,6 +98,7 @@ class StreamingPlot(Plot):
 
     def create_layout(self, dimension: int) -> None:
         self.fig.canvas.set_window_title(self.plot_title)
+        self.fig.suptitle(self.plot_title, fontsize=16)
 
         if dimension == 2:
             # Stylize axis
@@ -116,7 +117,6 @@ class StreamingPlot(Plot):
 
         # Style options
         self.ax.grid(color='#f0f0f5', linestyle='-', linewidth=0.5, alpha=0.5)
-        self.ax.set_title(self.plot_title)
 
 
 class IStreamingPlot(Plot):

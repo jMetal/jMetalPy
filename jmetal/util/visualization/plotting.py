@@ -45,11 +45,11 @@ class Plot(ABC):
         points = pd.DataFrame(list(solution.objectives for solution in solutions))
         return points, points.shape[1]
 
-    def plot(self, front: List[S], labels: List[str] = None, normalize: bool = False, filename: str = None, format: str = 'eps'):
+    def plot(self, front: List[S], label: List[str] = None, normalize: bool = False, filename: str = None, format: str = 'eps'):
         """ Plot any arbitrary number of fronts in 2D, 3D or p-coords.
 
         :param front: List of fronts.
-        :param labels: List of fronts titles (if any).
+        :param label: List of fronts titles (if any).
         :param normalize: If True, normalize data (for p-coords).
         :param filename: Output filename.
         :param format: Output file format.
@@ -60,9 +60,9 @@ class Plot(ABC):
         dimension = front[0][0].number_of_objectives
 
         if dimension == 2:
-            self.two_dim(front, labels, filename, format)
+            self.two_dim(front, label, filename, format)
         elif dimension == 3:
-            self.three_dim(front, labels, filename, format)
+            self.three_dim(front, label, filename, format)
         else:
             self.pcoords(front, normalize, filename, format)
 
@@ -96,6 +96,10 @@ class Plot(ABC):
             if self.reference_point:
                 plt.plot([self.reference_point[0]], [self.reference_point[1]], marker='o', markersize=3, color='r')
 
+            if self.axis_labels:
+                plt.xlabel(self.axis_labels[0])
+                plt.ylabel(self.axis_labels[1])
+
         if filename:
             plt.savefig(filename, format=format, dpi=200)
         else:
@@ -127,6 +131,10 @@ class Plot(ABC):
                 ax.scatter([s.objectives[0] for s in self.reference_front],
                            [s.objectives[1] for s in self.reference_front],
                            [s.objectives[2] for s in self.reference_front])
+
+            if self.reference_point:
+                # todo
+                pass
 
             ax.relim()
             ax.autoscale_view(True, True, True)

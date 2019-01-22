@@ -42,3 +42,12 @@ Solution
     :members:
     :undoc-members:
     :show-inheritance:
+
+Quality Indicator
+--------------------------------
+
+.. automodule:: jmetal.core.quality_indicator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

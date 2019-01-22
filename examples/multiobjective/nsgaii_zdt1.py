@@ -30,8 +30,8 @@ if __name__ == '__main__':
     front = algorithm.get_result()
 
     # Plot front
-    plot_front = Plot(plot_title='NSGAII-ZDT1', axis_labels=problem.obj_labels, reference_front=problem.reference_front)
-    plot_front.plot([algorithm.get_result()], labels=['Pareto front approximation (ZDT1)'], filename='NSGAII-ZDT1')
+    plot_front = Plot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels, reference_front=problem.reference_front)
+    plot_front.plot([front], label=['NSGAII-ZDT1'], filename='NSGAII-ZDT1')
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.NSGAII.ZDT1')

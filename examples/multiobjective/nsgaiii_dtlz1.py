@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     # Plot front
     plot_front = Plot(plot_title='NSGAIII-DTLZ1', axis_labels=problem.obj_labels, reference_front=problem.reference_front)
-    plot_front.plot([algorithm.get_result()], labels=['Pareto front aprox.'], filename='NSGAIII-DTLZ1')
+    plot_front.plot([algorithm.get_result()], label=['Pareto front aprox.'], filename='NSGAIII-DTLZ1')
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.NSGAIII.DTLZ1')
