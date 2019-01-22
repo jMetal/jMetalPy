@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     # Plot front
     plot_front = Plot(plot_title='gNSGAII-ZDT1', axis_labels=problem.obj_labels, reference_point=reference_point, reference_front=problem.reference_front)
-    plot_front.plot([algorithm.get_result()], labels=['Pareto front'], filename='gNSGAII-ZDT1.eps')
+    plot_front.plot([algorithm.get_result()], labels=['Pareto front approximation'], filename='gNSGAII-ZDT1.eps')
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.' + algorithm.get_name() + "." + problem.get_name())
