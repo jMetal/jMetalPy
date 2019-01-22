@@ -1,9 +1,9 @@
 import colorsys
 from typing import List
 
-import matplotlib.patches as patches
-import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib import patches
+from matplotlib import pyplot as plt
 from matplotlib.path import Path
 from tqdm import tqdm
 
@@ -42,7 +42,7 @@ def draw_sector(startAngle=0, endAngle=60, radius=1.0, width=0.2, lw=2, ls='-', 
     if ax is None:
         return vertsPath, codesPaths
     else:
-        path = Path(vertsPath, codesPaths)
+        path = path.Path(vertsPath, codesPaths)
         patch = patches.PathPatch(path, facecolor=fc, edgecolor=ec, lw=lw, linestyle=ls, zorder=z_order)
         ax.add_patch(patch)
         return (patch)

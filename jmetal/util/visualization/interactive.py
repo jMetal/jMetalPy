@@ -2,14 +2,13 @@ import logging
 from typing import TypeVar, List
 
 import pandas as pd
-import plotly.io as pio
 from plotly import graph_objs as go
-from plotly.offline import plot
+from plotly import io as pio
+from plotly import offline
 
 from jmetal.util.visualization.plotting import Plot
 
 LOGGER = logging.getLogger('jmetal')
-
 
 S = TypeVar('S')
 
@@ -23,17 +22,20 @@ class InteractivePlot(Plot):
         self.layout = None
         self.data = []
 
-    def plot(self, front: List[S], label: List[str] = None, normalize: bool = False, filename: str = None, format: str = 'HTML'):
+    def plot(self, front, label=None, normalize: bool = False, filename: str = None, format: str = 'HTML'):
         """ Plot a front of solutions (2D, 3D or parallel coordinates).
 
         :param front: List of solutions.
         :param normalize: Normalize the input front between 0 and 1 (for problems with more than 3 objectives).
         :param filename: Output filename.
         """
+        if not isinstance(label, list):
+            label = [label]
+
         self.layout = go.Layout(
             margin=dict(l=80, r=80, b=80, t=150),
             height=800,
-            title=self.plot_title,
+            title='{}<br>{}'.format(self.plot_title, label[0]),
             scene=dict(
                 xaxis=dict(title=self.axis_labels[0:1][0] if self.axis_labels[0:1] else None),
                 yaxis=dict(title=self.axis_labels[1:2][0] if self.axis_labels[1:2] else None),
@@ -46,15 +48,15 @@ class InteractivePlot(Plot):
         if self.reference_front:
             points, _ = self.get_points(self.reference_front)
             trace = self.__generate_trace(points=points, legend='Reference front', normalize=normalize,
-                                          color='rgb(2, 130, 242)')
+                                          color='black', size=2)
             self.data.append(trace)
 
         # Get points and metadata
         points, _ = self.get_points(front)
         metadata = list(solution.__str__() for solution in front)
 
-        trace = self.__generate_trace(points=points, metadata=metadata, legend='Front', normalize=normalize,
-                                      symbol='diamond-open')
+        trace = self.__generate_trace(points=points, metadata=metadata, legend='Front approximation',
+                                      normalize=normalize)
         self.data.append(trace)
         self.figure = go.Figure(data=self.data, layout=self.layout)
 
@@ -120,7 +122,7 @@ class InteractivePlot(Plot):
         :param include_plotlyjs: If True, include plot.ly JS script (default to False).
         :return: Script as string.
         """
-        script = plot(self.figure, output_type='div', include_plotlyjs=include_plotlyjs, show_link=False)
+        script = offline.plot(self.figure, output_type='div', include_plotlyjs=include_plotlyjs, show_link=False)
 
         if filename:
             with open(filename + '.html', 'w') as outf:
@@ -136,11 +138,11 @@ class InteractivePlot(Plot):
             points = (points - points.min()) / (points.max() - points.min())
 
         marker = dict(
-            color='rgb(127, 127, 127)',
-            size=3,
-            symbol='x',
+            color='#236FA4',
+            size=8,
+            symbol='circle',
             line=dict(
-                color='rgb(204, 204, 204)',
+                color='#236FA4',
                 width=1
             ),
             opacity=0.8

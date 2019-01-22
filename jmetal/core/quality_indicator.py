@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import TypeVar, List
 
 import numpy as np
-from scipy.spatial.distance import cdist
+from scipy import spatial
 
 S = TypeVar('S')
 
@@ -64,7 +64,7 @@ class GenerationalDistance(QualityIndicator):
         reference_front = [s.objectives for s in self.reference_front]
         solutions = [s.objectives for s in solutions]
 
-        distances = cdist(np.asarray(solutions), np.asarray(reference_front))
+        distances = spatial.distance.cdist(np.asarray(solutions), np.asarray(reference_front))
 
         return np.mean(np.min(distances, axis=1))
 
@@ -86,7 +86,7 @@ class InvertedGenerationalDistance(QualityIndicator):
         reference_front = [s.objectives for s in self.reference_front]
         solutions = [s.objectives for s in solutions]
 
-        distances = cdist(np.asarray(reference_front), np.asarray(solutions))
+        distances = spatial.distance.cdist(np.asarray(reference_front), np.asarray(solutions))
 
         return np.mean(np.min(distances, axis=1))
 

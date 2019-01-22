@@ -1,9 +1,6 @@
 Getting started
 ==================
 
-.. figure:: tree.png
-   :alt: Tree
-
 .. toctree::
    :maxdepth: 2
    :caption: Algorithms:

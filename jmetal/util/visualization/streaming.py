@@ -2,9 +2,9 @@ import logging
 from typing import TypeVar, List
 
 import holoviews as hv
-import matplotlib.pyplot as plt
 from IPython.display import display
 from holoviews.streams import Pipe
+from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 from jmetal.util.visualization.plotting import Plot
@@ -61,13 +61,13 @@ class StreamingPlot(Plot):
         # If any reference point, plot
         if self.reference_point:
             self.sc, = self.ax.plot(*[[point] for point in self.reference_point],
-                                    c=tableau20[10], ls='None', marker='*', markersize=3)
+                                    c='r', ls='None', marker='*', markersize=3)
 
         # If any reference front, plot
         if self.reference_front:
             rpoints, _ = self.get_points(self.reference_front)
             self.sc, = self.ax.plot(*[rpoints[column].tolist() for column in rpoints.columns.values],
-                                    c=tableau20[15], ls='None', marker='*', markersize=3)
+                                    c='k', ls='None', marker='*', markersize=1)
 
         # Plot data
         self.sc, = self.ax.plot(*[points[column].tolist() for column in points.columns.values],

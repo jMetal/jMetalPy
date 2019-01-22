@@ -13,11 +13,7 @@ class Observer(ABC):
 
     @abstractmethod
     def update(self, *args, **kwargs):
-        """ Update method
-
-        :param args:
-        :param kwargs:
-        :return:
+        """ Update method.
         """
         pass
 

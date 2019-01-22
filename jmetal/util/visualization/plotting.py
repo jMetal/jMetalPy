@@ -1,12 +1,12 @@
 import logging
 from abc import ABC
-from typing import TypeVar, List, Tuple
+from typing import TypeVar, List, Tuple, Optional
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib import animation
-from pandas.plotting import parallel_coordinates
+from matplotlib import pyplot as plt
+from pandas import plotting
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -45,7 +45,7 @@ class Plot(ABC):
         points = pd.DataFrame(list(solution.objectives for solution in solutions))
         return points, points.shape[1]
 
-    def plot(self, front: List[S], label: List[str] = None, normalize: bool = False, filename: str = None, format: str = 'eps'):
+    def plot(self, front, label=None, normalize: bool = False, filename: str = None, format: str = 'eps'):
         """ Plot any arbitrary number of fronts in 2D, 3D or p-coords.
 
         :param front: List of fronts.
@@ -56,6 +56,12 @@ class Plot(ABC):
         """
         if not isinstance(front[0], list):
             front = [front]
+
+        if not isinstance(label, list):
+            label = [label]
+
+        if len(front) != len(label):
+            raise Exception('Number of fronts and labels must be the same')
 
         dimension = front[0][0].number_of_objectives
 
@@ -85,7 +91,7 @@ class Plot(ABC):
             points, _ = self.get_points(fronts[i])
 
             ax = fig.add_subplot(n, n, i + 1)
-            points.plot(kind='scatter', x=0, y=1, ax=ax, color='b', alpha=0.2)
+            points.plot(kind='scatter', x=0, y=1, ax=ax, s=10, color='#236FA4', alpha=0.2)
 
             if labels:
                 ax.set_title(labels[i])
@@ -176,7 +182,7 @@ class Plot(ABC):
                 points = (points - points.min()) / (points.max() - points.min())
 
             ax = fig.add_subplot(n, n, i + 1)
-            parallel_coordinates(points, 0, ax=ax)
+            pd.plotting.parallel_coordinates(points, 0, ax=ax)
 
             ax.get_legend().remove()
 

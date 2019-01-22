@@ -39,7 +39,7 @@ def sign_test(data):
     """ Given the results drawn from two algorithms/methods X and Y, the sign test analyses if
     there is a difference between X and Y.
 
-    ..note:: Null Hypothesis: Pr(X<Y)= 0.5
+    .. note:: Null Hypothesis: Pr(X<Y)= 0.5
 
     :param data: An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.
     :return p_value: The associated p-value from the binomial distribution.
