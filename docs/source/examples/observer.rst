@@ -1,4 +1,4 @@
-Observers
+Observer entities
 ========================
 
 It is possible to attach any number of observers to any algorithm to retrieve information from each iteration.
