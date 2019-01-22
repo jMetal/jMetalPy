@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
     # Plot front
     plot_front = Plot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels)
-    plot_front.plot(front, label='NSGAII-ZDT1', filename='NSGAII-ZDT1', format='svg')
+    plot_front.plot(front, label='NSGAII-ZDT1', filename='NSGAII-ZDT1', format='png')
 
     # Plot interactive front
     plot_front = InteractivePlot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels)

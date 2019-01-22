@@ -1,4 +1,4 @@
-PSO
+Examples of running PSOs
 ========================
 
 SMPSO

@@ -91,7 +91,7 @@ class Plot(ABC):
             points, _ = self.get_points(fronts[i])
 
             ax = fig.add_subplot(n, n, i + 1)
-            points.plot(kind='scatter', x=0, y=1, ax=ax, s=10, color='#236FA4', alpha=0.2)
+            points.plot(kind='scatter', x=0, y=1, ax=ax, s=10, color='#236FA4', alpha=1.0)
 
             if labels:
                 ax.set_title(labels[i])

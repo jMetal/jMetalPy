@@ -1,4 +1,4 @@
-Examples
+Examples of running EAs
 ========================
 
 NSGA-II
