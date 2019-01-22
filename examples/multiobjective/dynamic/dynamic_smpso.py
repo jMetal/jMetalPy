@@ -3,7 +3,7 @@ from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.observable import TimeCounter
 from jmetal.operator import PolynomialMutation
 from jmetal.problem.multiobjective.fda import FDA2
-from jmetal.util.observer import VisualizerObserver
+from jmetal.util.observer import VisualizerObserver, PlotDynamicFrontToFileObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
@@ -22,6 +22,6 @@ if __name__ == '__main__':
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
-    algorithm.observable.register(observer=VisualizerObserver())
+    algorithm.observable.register(observer=PlotDynamicFrontToFileObserver('dynamic_front'))
 
     algorithm.run()

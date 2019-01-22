@@ -4,7 +4,7 @@ from jmetal.problem import ZDT1
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
-from jmetal.util.termination_criterion import StoppingByEvaluations, StoppingByKeyboard
+from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.util.visualization import Plot
 
 if __name__ == '__main__':
@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
     # Plot front
     plot_front = Plot(plot_title='NSGAII-ZDT1', axis_labels=problem.obj_labels, reference_front=problem.reference_front)
-    plot_front.plot([algorithm.get_result()], labels=['Pareto front'], filename='NSGAII-ZDT1.eps')
+    plot_front.plot([algorithm.get_result()], labels=['Pareto front approximation (ZDT1)'], filename='NSGAII-ZDT1')
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.NSGAII.ZDT1')

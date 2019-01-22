@@ -1,9 +1,8 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-
-from jmetal.util.comparator import GDominanceComparator, RankingAndCrowdingDistanceComparator
 from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
-from jmetal.problem import ZDT2, ZDT1
-from jmetal.util.observer import VisualizerObserver, ProgressBarObserver
+from jmetal.problem import ZDT2
+from jmetal.util.comparator import GDominanceComparator, RankingAndCrowdingDistanceComparator
+from jmetal.util.observer import ProgressBarObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.util.visualization import Plot

@@ -6,8 +6,10 @@ from typing import List, TypeVar
 from tqdm import tqdm
 
 from jmetal.core.observable import Observer
-from jmetal.util.visualization import StreamingPlot, IStreamingPlot, Plot
+from jmetal.core.problem import DynamicProblem
+from jmetal.core.quality_indicator import InvertedGenerationalDistance
 from jmetal.util.solution_list import print_function_values_to_file
+from jmetal.util.visualization import StreamingPlot, IStreamingPlot, Plot
 
 S = TypeVar('S')
 
@@ -101,11 +103,12 @@ class WriteFrontToFileObserver(Observer):
 class PlotFrontToFileObserver(Observer):
 
     def __init__(self,
-                 output_directory: str,
-                 display_frequency: float = 1.0) -> None:
-        self.display_frequency = display_frequency
+                 output_directory: str) -> None:
         self.directory = output_directory
-        self.plot_front = Plot()
+        self.plot_front = Plot(plot_title='Front approximation')
+        self.last_front = []
+        self.fronts = []
+        self.counter = 0
 
         if Path(self.directory).is_dir():
             LOGGER.warning('Directory {} exists. Removing contents.'.format(self.directory))
@@ -116,12 +119,31 @@ class PlotFrontToFileObserver(Observer):
             Path(self.directory).mkdir(parents=True)
 
     def update(self, *args, **kwargs):
-        evaluations = kwargs['EVALUATIONS']
+        problem = kwargs['PROBLEM']
         solutions = kwargs['SOLUTIONS']
 
-        if solutions:
-            if (evaluations % self.display_frequency) == 0:
-                self.plot_front.plot([solutions], filename='{}/jmetalpy-{}.png'.format(self.directory, evaluations))
+        if solutions and isinstance(problem, DynamicProblem):
+            termination_criterion_is_met = kwargs.get('termination_criterion_is_met', None)
+
+            if termination_criterion_is_met:
+                if self.counter > 0:
+                    igd = InvertedGenerationalDistance(self.last_front)
+                    igd_value = igd.compute(solutions)
+                else:
+                    igd_value = 1
+
+                if igd_value > 0.005:
+                    self.fronts += solutions
+                    self.plot_front.plot([self.fronts],
+                                         labels=[problem.get_name()],
+                                         filename='{}/jmetalpy-{}'.format(self.directory, self.counter))
+
+                self.counter += 1
+                self.last_front = solutions
+        else:
+            evaluations = kwargs['EVALUATIONS']
+            self.plot_front.plot([solutions],
+                                 filename='{}/jmetalpy-{}'.format(self.directory, evaluations))
 
 
 class VisualizerObserver(Observer):

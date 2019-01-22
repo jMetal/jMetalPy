@@ -1,7 +1,7 @@
 import time
 from typing import TypeVar, List, Generic
 
-from distributed import as_completed, Client, Variable
+from distributed import as_completed, Client
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
@@ -9,7 +9,6 @@ from jmetal.core.algorithm import DynamicAlgorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem, DynamicProblem
 from jmetal.operator import RankingAndCrowdingDistanceSelection
-from jmetal.problem import ZDT1
 from jmetal.util.comparator import DominanceComparator, Comparator
 from jmetal.util.solution_list import Evaluator, Generator, print_function_values_to_file
 from jmetal.util.termination_criterion import TerminationCriterion
@@ -117,8 +116,8 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
             dominance_comparator=dominance_comparator)
         self.completed_iterations = 0
 
-    def restart(self) -> None:
-        pass
+    def restart(self):
+        self.solutions = self.evaluate(self.solutions)
 
     def update_progress(self):
         if self.problem.the_problem_has_changed():
@@ -133,13 +132,15 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
     def stopping_condition_is_met(self):
         if self.termination_criterion.is_met:
             observable_data = self.get_observable_data()
+            observable_data['termination_criterion_is_met'] = True
             self.observable.notify_all(**observable_data)
+
+            print_function_values_to_file(self.solutions, 'FUN.DynamicNSGAII.' + str(self.completed_iterations))
 
             self.restart()
             self.init_progress()
 
             self.completed_iterations += 1
-            print_function_values_to_file(self.solutions, 'FUN.DynamicNSGAII.' + str(self.completed_iterations))
 
 
 class DistributedNSGAII(Generic[S, R]):

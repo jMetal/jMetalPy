@@ -3,7 +3,7 @@ from jmetal.operator import PolynomialMutation, SBXCrossover, BinaryTournamentSe
 from jmetal.problem.multiobjective.fda import FDA2
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
 from jmetal.util.observable import TimeCounter
-from jmetal.util.observer import VisualizerObserver
+from jmetal.util.observer import PlotFrontToFileObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
@@ -24,6 +24,6 @@ if __name__ == '__main__':
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
-    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front))
+    algorithm.observable.register(observer=PlotFrontToFileObserver('dynamic_front'))
 
     algorithm.run()

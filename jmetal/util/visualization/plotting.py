@@ -45,15 +45,26 @@ class Plot(ABC):
         points = pd.DataFrame(list(solution.objectives for solution in solutions))
         return points, points.shape[1]
 
-    def plot(self, fronts: List[list], labels: List[str] = None, filename: str = None, format: str = 'eps'):
-        dimension = fronts[0][0].number_of_objectives
+    def plot(self, front: List[S], labels: List[str] = None, normalize: bool = False, filename: str = None, format: str = 'eps'):
+        """ Plot any arbitrary number of fronts in 2D, 3D or p-coords.
+
+        :param front: List of fronts.
+        :param labels: List of fronts titles (if any).
+        :param normalize: If True, normalize data (for p-coords).
+        :param filename: Output filename.
+        :param format: Output file format.
+        """
+        if not isinstance(front[0], list):
+            front = [front]
+
+        dimension = front[0][0].number_of_objectives
 
         if dimension == 2:
-            self.two_dim(fronts, labels, filename, format)
+            self.two_dim(front, labels, filename, format)
         elif dimension == 3:
-            self.three_dim(fronts, labels, filename, format)
+            self.three_dim(front, labels, filename, format)
         else:
-            self.pcoords(fronts, filename, format)
+            self.pcoords(front, normalize, filename, format)
 
     def two_dim(self, fronts: List[list], labels: List[str] = None, filename: str = None, format: str = 'eps'):
         """ Plot any arbitrary number of fronts in 2D.
@@ -86,9 +97,11 @@ class Plot(ABC):
                 plt.plot([self.reference_point[0]], [self.reference_point[1]], marker='o', markersize=3, color='r')
 
         if filename:
-            plt.savefig(filename, format=format, dpi=1000)
+            plt.savefig(filename, format=format, dpi=200)
         else:
             plt.show()
+
+        plt.close(fig)
 
     def three_dim(self, fronts: List[list], labels: List[str] = None, filename: str = None, format: str = 'eps'):
         """ Plot any arbitrary number of fronts in 3D.
@@ -136,7 +149,9 @@ class Plot(ABC):
         else:
             plt.show()
 
-    def pcoords(self, fronts: list, filename: str = None, format: str = 'eps'):
+        plt.close(fig)
+
+    def pcoords(self, fronts: list, normalize: bool = False, filename: str = None, format: str = 'eps'):
         """ Plot any arbitrary number of fronts in parallel coordinates.
 
         :param fronts: List of fronts (containing solutions).
@@ -148,6 +163,9 @@ class Plot(ABC):
 
         for i, _ in enumerate(fronts):
             points, _ = self.get_points(fronts[i])
+
+            if normalize:
+                points = (points - points.min()) / (points.max() - points.min())
 
             ax = fig.add_subplot(n, n, i + 1)
             parallel_coordinates(points, 0, ax=ax)
@@ -161,3 +179,5 @@ class Plot(ABC):
             plt.savefig(filename, format=format, dpi=1000)
         else:
             plt.show()
+
+        plt.close(fig)

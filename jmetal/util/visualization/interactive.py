@@ -2,6 +2,7 @@ import logging
 from typing import TypeVar, List
 
 import pandas as pd
+import plotly.io as pio
 from plotly import graph_objs as go
 from plotly.offline import plot
 
@@ -22,7 +23,7 @@ class InteractivePlot(Plot):
         self.layout = None
         self.data = []
 
-    def plot(self, front: List[S], normalize: bool = False, filename: str = None) -> None:
+    def plot(self, front: List[S], labels: List[str] = None, normalize: bool = False, filename: str = None, format: str = 'HTML'):
         """ Plot a front of solutions (2D, 3D or parallel coordinates).
 
         :param front: List of solutions.
@@ -55,12 +56,14 @@ class InteractivePlot(Plot):
         trace = self.__generate_trace(points=points, metadata=metadata, legend='Front', normalize=normalize,
                                       symbol='diamond-open')
         self.data.append(trace)
+        self.figure = go.Figure(data=self.data, layout=self.layout)
 
         # Plot the figure
         if filename:
-            self.export_to_html(filename)
-
-        self.figure = go.Figure(data=self.data, layout=self.layout)
+            if format == 'HTML':
+                self.export_to_html(filename)
+            else:
+                pio.write_image(self.figure, filename + '.' + format)
 
     def export_to_html(self, filename: str) -> str:
         """ Export the graph to an interactive HTML (solutions can be selected to show some metadata).

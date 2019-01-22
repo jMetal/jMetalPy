@@ -264,6 +264,7 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
     def stopping_condition_is_met(self):
         if self.termination_criterion.is_met:
             observable_data = self.get_observable_data()
+            observable_data['termination_criterion_is_met'] = True
             self.observable.notify_all(**observable_data)
 
             print_function_values_to_file(self.leaders.solution_list,
