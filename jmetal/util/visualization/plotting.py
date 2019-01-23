@@ -109,7 +109,7 @@ class Plot(ABC):
                 plt.ylabel(self.axis_labels[1])
 
         if filename:
-            plt.savefig(filename, format=format, dpi=200)
+            plt.savefig(filename + '.' + format, format=format, dpi=200)
         else:
             plt.show()
 
@@ -161,7 +161,7 @@ class Plot(ABC):
                 anim.save(filename + '.gif', writer=animation.PillowWriter(fps=24))
                 LOGGER.info('Done')
             else:
-                plt.savefig(filename, format=format, dpi=1000)
+                plt.savefig(filename + '.' + format, format=format, dpi=1000)
         else:
             plt.show()
 
@@ -192,7 +192,7 @@ class Plot(ABC):
                 ax.set_xticklabels(self.axis_labels)
 
         if filename:
-            plt.savefig(filename, format=format, dpi=1000)
+            plt.savefig(filename + '.' + format, format=format, dpi=1000)
         else:
             plt.show()
 
