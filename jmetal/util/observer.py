@@ -93,19 +93,26 @@ class WriteFrontToFileObserver(Observer):
             Path(self.directory).mkdir(parents=True)
 
     def update(self, *args, **kwargs):
+        problem = kwargs['PROBLEM']
         solutions = kwargs['SOLUTIONS']
 
         if solutions:
-            print_function_values_to_file(solutions, '{}/FUN.{}'.format(self.directory, self.counter))
-            self.counter += 1
+            if isinstance(problem, DynamicProblem):
+                termination_criterion_is_met = kwargs.get('TERMINATION_CRITERIA_IS_MET', None)
+
+                if termination_criterion_is_met:
+                    print_function_values_to_file(solutions, '{}/FUN.{}'.format(self.directory, self.counter))
+                    self.counter += 1
+            else:
+                print_function_values_to_file(solutions, '{}/FUN.{}'.format(self.directory, self.counter))
+                self.counter += 1
 
 
 class PlotFrontToFileObserver(Observer):
 
-    def __init__(self,
-                 output_directory: str) -> None:
+    def __init__(self, output_directory: str) -> None:
         self.directory = output_directory
-        self.plot_front = Plot(plot_title='Front approximation')
+        self.plot_front = Plot(plot_title='Pareto front approximation')
         self.last_front = []
         self.fronts = []
         self.counter = 0
@@ -122,29 +129,28 @@ class PlotFrontToFileObserver(Observer):
         problem = kwargs['PROBLEM']
         solutions = kwargs['SOLUTIONS']
 
-        if solutions and isinstance(problem, DynamicProblem):
-            termination_criterion_is_met = kwargs.get('termination_criterion_is_met', None)
+        if solutions:
+            if isinstance(problem, DynamicProblem):
+                termination_criterion_is_met = kwargs.get('TERMINATION_CRITERIA_IS_MET', None)
 
-            if termination_criterion_is_met:
-                if self.counter > 0:
-                    igd = InvertedGenerationalDistance(self.last_front)
-                    igd_value = igd.compute(solutions)
-                else:
-                    igd_value = 1
+                if termination_criterion_is_met:
+                    if self.counter > 0:
+                        igd = InvertedGenerationalDistance(self.last_front)
+                        igd_value = igd.compute(solutions)
+                    else:
+                        igd_value = 1
 
-                if igd_value > 0.005:
-                    self.fronts += solutions
-                    self.plot_front.plot([self.fronts],
-                                         label=[problem.get_name()],
-                                         filename='{}/jmetalpy-{}'.format(self.directory, self.counter))
+                    if igd_value > 0.005:
+                        self.fronts += solutions
+                        self.plot_front.plot([self.fronts],
+                                             label=[problem.get_name()],
+                                             filename='{}/front-{}'.format(self.directory, self.counter))
 
+                    self.counter += 1
+                    self.last_front = solutions
+            else:
+                self.plot_front.plot([solutions], filename='{}/front-{}'.format(self.directory, self.counter))
                 self.counter += 1
-                self.last_front = solutions
-        else:
-            evaluations = kwargs['EVALUATIONS']
-            self.plot_front.plot([solutions],
-                                 filename='{}/jmetalpy-{}'.format(self.directory, evaluations))
-
 
 class VisualizerObserver(Observer):
 

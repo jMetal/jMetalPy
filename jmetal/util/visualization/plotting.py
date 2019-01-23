@@ -23,8 +23,8 @@ class Plot(ABC):
         """
         :param plot_title: Title of the graph.
         :param axis_labels: List of axis labels.
-        :param reference_point:
-        :param reference_front:
+        :param reference_point: Reference point (e.g., [0.4, 1.2]).
+        :param reference_front: Reference Pareto front (if any) as solutions.
         """
         self.plot_title = plot_title
         self.axis_labels = axis_labels
@@ -37,7 +37,7 @@ class Plot(ABC):
         """ Get points for each solution of the front.
 
         :param solutions: List of solutions.
-        :return: Pandas df with one column for each objective and one row for each solution.
+        :return: Pandas dataframe with one column for each objective and one row for each solution.
         """
         if solutions is None:
             raise Exception('Front is none!')
@@ -48,8 +48,8 @@ class Plot(ABC):
     def plot(self, front, label=None, normalize: bool = False, filename: str = None, format: str = 'eps'):
         """ Plot any arbitrary number of fronts in 2D, 3D or p-coords.
 
-        :param front: List of fronts.
-        :param label: List of fronts titles (if any).
+        :param front: Pareto front or a list of them.
+        :param label: Pareto front title or a list of them.
         :param normalize: If True, normalize data (for p-coords).
         :param filename: Output filename.
         :param format: Output file format.
@@ -100,7 +100,9 @@ class Plot(ABC):
                 reference.plot(x=0, y=1, ax=ax, color='k', legend=False)
 
             if self.reference_point:
-                plt.plot([self.reference_point[0]], [self.reference_point[1]], marker='o', markersize=3, color='r')
+                plt.plot([self.reference_point[0]], [self.reference_point[1]], marker='o', markersize=5, color='r')
+                plt.plot([self.reference_point[1], self.reference_point[0]], [0, self.reference_point[1]], ':r')
+                plt.plot([0, self.reference_point[0]], [self.reference_point[0], self.reference_point[1]], ':r')
 
             if self.axis_labels:
                 plt.xlabel(self.axis_labels[0])
