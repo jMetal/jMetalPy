@@ -27,7 +27,7 @@ def NemenyiCD(alpha: float, num_alg, num_dataset):
     return cd
 
 
-def CDplot(results, alpha: float = 0.05, alg_names: list = None):
+def CDplot(results, alpha: float = 0.05, higherIsBetter = False, alg_names: list = None):
     """ CDgraph plots the critical difference graph show in Janez Demsar's 2006 work:
 
     * Statistical Comparisons of Classifiers over Multiple Data Sets.
@@ -77,7 +77,8 @@ def CDplot(results, alpha: float = 0.05, alg_names: list = None):
     cd = NemenyiCD(alpha, num_alg, num_dataset)
 
     # Compute ranks. (ranks[i][j] rank of the i-th algorithm on the j-th problem.)
-    rranks = ranks(results.T)
+
+    rranks = ranks(results.T, descending=higherIsBetter)
 
     # Compute for each algorithm the ranking averages.
     avranks = np.transpose(np.mean(rranks, axis=0))

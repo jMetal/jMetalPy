@@ -354,7 +354,7 @@ def compute_wilcoxon(filename: str, output_dir: str = 'latex/wilcoxon'):
 
         table.to_csv(os.path.join(output_dir, 'Wilcoxon-{}.csv'.format(indicator_name)), sep='\t', encoding='utf-8')
 
-        with open(os.path.join(output_dir, 'Wilcoxon-{}.csv'.format(indicator_name)), 'w') as latex:
+        with open(os.path.join(output_dir, 'Wilcoxon-{}.tex'.format(indicator_name)), 'w') as latex:
             latex.write(
                 __wilcoxon_to_latex(
                     table,

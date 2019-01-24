@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 
-def plot_posterior(sample):
+def plot_posterior(sample, higherIsBetter=False, minPointsPerHexbin=2, alg_names: list = None):
     """
     Plots the sample from posterior distribution of a Bayesian statistical test.
 
@@ -44,29 +44,38 @@ def plot_posterior(sample):
     ax.set_ylim(0, 1)
     ax.set_axis_off()
 
-    # Plot triangle
-    ax.plot([0.1, 0.5], [0.2 / np.sqrt(3), 1.4 / np.sqrt(3)],
-            linewidth=1.0, color='grey')
-    ax.plot([0.5, 0.9], [1.4 / np.sqrt(3), 0.2 / np.sqrt(3)],
-            linewidth=1.0, color='grey')
-    ax.plot([0.1, 0.9], [0.2 / np.sqrt(3), 0.2 / np.sqrt(3)],
-            linewidth=1.0, color='grey')
-
-    # plot division lines
-    ax.plot([0.5, 0.5], [0.2 / np.sqrt(3), 0.6 / np.sqrt(3)],
-            linewidth=1.0, color='grey')
-    ax.plot([0.3, 0.5], [0.8 / np.sqrt(3), 0.6 / np.sqrt(3)],
-            linewidth=1.0, color='grey')
-    ax.plot([0.5, 0.7], [0.6 / np.sqrt(3), 0.8 / np.sqrt(3)],
-            linewidth=1.0, color='grey')
-
     # plot text
-    ax.text(x=0.5, y=1.4 / np.sqrt(3) + 0.005,
-            s='rope', ha='center', va='bottom')
-    ax.text(x=0.1, y=0.2 / np.sqrt(3) - 0.005,
-            s='left', ha='right', va='top')
-    ax.text(x=0.9, y=0.2 / np.sqrt(3) - 0.005,
-            s='right', ha='left', va='top')
+
+    if higherIsBetter == False:
+        if alg_names == None:
+            ax.text(x=0.5, y=1.4 / np.sqrt(3) + 0.005,
+                    s='P(rope)', ha='center', va='bottom')
+            ax.text(x=0.15, y=0.175 / np.sqrt(3) - 0.005,
+                    s='P(alg1<alg2)', ha='right', va='top')
+            ax.text(x=0.85, y=0.175 / np.sqrt(3) - 0.005,
+                    s='P(alg1>alg2)', ha='left', va='top')
+        else:
+            ax.text(x=0.5, y=1.4 / np.sqrt(3) + 0.005,
+                    s='P(rope)', ha='center', va='bottom')
+            ax.text(x=0.15, y=0.175 / np.sqrt(3) - 0.005,
+                    s='P(' + alg_names[0] + ')', ha='right', va='top')
+            ax.text(x=0.85, y=0.175 / np.sqrt(3) - 0.005,
+                    s='P(' + alg_names[1] + ')', ha='left', va='top')
+    else:
+        if alg_names == None:
+            ax.text(x=0.5, y=1.4 / np.sqrt(3) + 0.005,
+                    s='P(rope)', ha='center', va='bottom')
+            ax.text(x=0.15, y=0.175 / np.sqrt(3) - 0.005,
+                    s='P(alg2<alg1)', ha='right', va='top')
+            ax.text(x=0.85, y=0.175 / np.sqrt(3) - 0.005,
+                    s='P(alg2>alg1)', ha='left', va='top')
+        else:
+            ax.text(x=0.5, y=1.4 / np.sqrt(3) + 0.005,
+                    s='P(rope)', ha='center', va='bottom')
+            ax.text(x=0.15, y=0.175 / np.sqrt(3) - 0.005,
+                    s='P(' + alg_names[1] + ')', ha='right', va='top')
+            ax.text(x=0.85, y=0.175 / np.sqrt(3) - 0.005,
+                    s='P(' + alg_names[0] + ')', ha='left', va='top')
 
     # Conversion between barycentric and Cartesian coordinates
     sample2d = np.zeros((sample.shape[0], 2))
@@ -74,6 +83,30 @@ def plot_posterior(sample):
         sample2d[p, :] = transform(sample[p, :])
 
     # Plot projected points
-    ax.hexbin(sample2d[:, 0], sample2d[:, 1], mincnt=1, cmap=plt.cm.plasma)
+    ax.hexbin(sample2d[:, 0], sample2d[:, 1], mincnt=minPointsPerHexbin, cmap=plt.cm.plasma)
+
+    # Plot triangle
+
+    ax.plot([0.095, 0.505], [0.2 / np.sqrt(3), 1.4 / np.sqrt(3)],
+            linewidth=3.0, color='white')
+    ax.plot([0.505, 0.905], [1.4 / np.sqrt(3), 0.2 / np.sqrt(3)],
+            linewidth=3.0, color='white')
+    ax.plot([0.09, 0.905], [0.2 / np.sqrt(3), 0.2 / np.sqrt(3)],
+            linewidth=3.0, color='white')
+
+    ax.plot([0.1, 0.5], [0.2 / np.sqrt(3), 1.4 / np.sqrt(3)],
+            linewidth=3.0, color='gray')
+    ax.plot([0.5, 0.9], [1.4 / np.sqrt(3), 0.2 / np.sqrt(3)],
+            linewidth=3.0, color='gray')
+    ax.plot([0.1, 0.9], [0.2 / np.sqrt(3), 0.2 / np.sqrt(3)],
+            linewidth=3.0, color='gray')
+
+    # plot division lines
+    ax.plot([0.5, 0.5], [0.2 / np.sqrt(3), 0.6 / np.sqrt(3)],
+            linewidth=3.0, color='gray')
+    ax.plot([0.3, 0.5], [0.8 / np.sqrt(3), 0.6 / np.sqrt(3)],
+            linewidth=3.0, color='gray')
+    ax.plot([0.5, 0.7], [0.6 / np.sqrt(3), 0.8 / np.sqrt(3)],
+            linewidth=3.0, color='gray')
 
     plt.show()

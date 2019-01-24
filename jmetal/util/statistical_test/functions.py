@@ -59,11 +59,19 @@ def sign_test(data):
     # Compute the differences
     Z = X - Y
     # Compute the number of pairs Z<0
-    W = sum(Z < 0)
+    Wminus = sum(Z < 0)
     # If H_0 is true ---> W follows Binomial(n,0.5)
-    p_value = 1 - binom.cdf(k=W, p=0.5, n=n_perf)
+    p_value_minus = 1 - binom.cdf(k=Wminus, p=0.5, n=n_perf)
 
-    return pd.DataFrame(data=np.array([W, p_value]), index=['Num X<Y', 'p-value'], columns=['Results'])
+    # Compute the number of pairs Z>0
+    Wplus = sum(Z > 0)
+    # If H_0 is true ---> W follows Binomial(n,0.5)
+    p_value_plus = 1 - binom.cdf(k=Wplus, p=0.5, n=n_perf)
+
+    p_value = 2 * min([p_value_minus, p_value_plus])
+
+    return pd.DataFrame(data=np.array([Wminus, Wplus, p_value]), index=['Num X<Y', 'Num X>Y', 'p-value'],
+                        columns=['Results'])
 
 
 def friedman_test(data):
