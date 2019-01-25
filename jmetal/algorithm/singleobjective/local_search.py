@@ -1,5 +1,6 @@
 import copy
 import threading
+import random
 import time
 from typing import TypeVar, List
 
@@ -7,6 +8,7 @@ from jmetal.core.algorithm import Algorithm
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
 from jmetal.core.solution import Solution
+from jmetal.util.comparator import DominanceComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -26,8 +28,10 @@ class LocalSearch(Algorithm[S, R], threading.Thread):
     def __init__(self,
                  problem: Problem[S],
                  mutation: Mutation,
-                 termination_criterion: TerminationCriterion):
+                 termination_criterion: TerminationCriterion,
+                 comparator=DominanceComparator()):
         super(LocalSearch, self).__init__()
+        self.comparator = comparator
         self.problem = problem
         self.mutation = mutation
         self.termination_criterion = termination_criterion
@@ -47,12 +51,18 @@ class LocalSearch(Algorithm[S, R], threading.Thread):
         self.evaluations = 0
 
     def step(self) -> None:
-        mutated_solution = copy.copy(self.solutions[0])
+        mutated_solution = copy.deepcopy(self.solutions[0])
         mutated_solution: Solution = self.mutation.execute(mutated_solution)
         mutated_solution = self.evaluate([mutated_solution])[0]
 
-        if mutated_solution.objectives[0] < self.solutions[0].objectives[0]:
+        result = self.comparator.compare(mutated_solution, self.solutions[0])
+        if result == -1:
             self.solutions[0] = mutated_solution
+        elif result == 1:
+            pass
+        else:
+            if random.random() < 0.5:
+                self.solutions[0] = mutated_solution
 
     def update_progress(self) -> None:
         self.evaluations += 1

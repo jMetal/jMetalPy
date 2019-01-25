@@ -190,3 +190,39 @@ class SubsetSum(BinaryProblem):
 
     def get_name(self) -> str:
         return 'Subset Sum'
+
+
+class OneZeroMax(BinaryProblem):
+
+    def __init__(self, number_of_bits: int = 256):
+        super(OneZeroMax, self).__init__()
+        self.number_of_bits = number_of_bits
+        self.number_of_objectives = 2
+        self.number_of_variables = 1
+        self.number_of_constraints = 0
+
+        self.obj_directions = [self.MINIMIZE]
+        self.obj_labels = ['Ones']
+
+    def evaluate(self, solution: BinarySolution) -> BinarySolution:
+        counter_of_ones = 0
+        counter_of_zeroes = 0
+        for bits in solution.variables[0]:
+            if bits:
+                counter_of_ones += 1
+            else:
+                counter_of_zeroes += 1
+
+        solution.objectives[0] = -1.0 * counter_of_ones
+        solution.objectives[1] = -1.0 * counter_of_zeroes
+
+        return solution
+
+    def create_solution(self) -> BinarySolution:
+        new_solution = BinarySolution(number_of_variables=self.number_of_variables, number_of_objectives=self.number_of_objectives)
+        new_solution.variables[0] = \
+            [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
+        return new_solution
+
+    def get_name(self) -> str:
+        return 'OneZeroMax'

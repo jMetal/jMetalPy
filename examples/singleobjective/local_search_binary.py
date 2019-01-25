@@ -4,11 +4,12 @@ from jmetal.problem import OneMax
 from jmetal.util.observer import ProgressBarObserver, ObjectivesObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
+import random
 
 if __name__ == '__main__':
     problem = OneMax(number_of_bits=512)
 
-    max_evaluations = 50000
+    max_evaluations = 10000
     algorithm = LocalSearch(
         problem=problem,
         mutation=BitFlipMutation(probability=1.0 / problem.number_of_bits),
@@ -16,7 +17,7 @@ if __name__ == '__main__':
     )
 
     progress_bar = ProgressBarObserver(max=max_evaluations)
-    objectives_observer = ObjectivesObserver(frequency=100)
+    objectives_observer = ObjectivesObserver(frequency=1)
     algorithm.observable.register(observer=progress_bar)
     algorithm.observable.register(observer=objectives_observer)
 

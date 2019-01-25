@@ -44,7 +44,7 @@ class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
         if len(parents) != 2:
             raise Exception('The number of parents is not two: {}'.format(len(parents)))
 
-        offspring = [copy.copy(parents[0]), copy.copy(parents[1])]
+        offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
         rand = random.random()
 
         if rand <= self.probability:
@@ -104,7 +104,7 @@ class CXCrossover(Crossover[PermutationSolution, PermutationSolution]):
         if len(parents) != 2:
             raise Exception('The number of parents is not two: {}'.format(len(parents)))
 
-        offspring = [copy.copy(parents[1]), copy.copy(parents[0])]
+        offspring = [copy.deepcopy(parents[1]), copy.deepcopy(parents[0])]
         rand = random.random()
 
         if rand <= self.probability:
@@ -148,7 +148,7 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
         if len(parents) != 2:
             raise Exception('The number of parents is not two: {}'.format(len(parents)))
 
-        offspring = [copy.copy(parents[0]), copy.copy(parents[1])]
+        offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
         rand = random.random()
 
         if rand <= self.probability:
@@ -226,7 +226,7 @@ class SPXCrossover(Crossover[BinarySolution, BinarySolution]):
         if len(parents) != 2:
             raise Exception('The number of parents is not two: {}'.format(len(parents)))
 
-        offspring = [copy.copy(parents[0]), copy.copy(parents[1])]
+        offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
         rand = random.random()
 
         if rand <= self.probability:
@@ -297,7 +297,7 @@ class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
         if len(parents) != self.get_number_of_parents():
             raise Exception('The number of parents is not {}: {}'.format(self.get_number_of_parents(), len(parents)))
 
-        child = copy.copy(self.current_individual)
+        child = copy.deepcopy(self.current_individual)
 
         number_of_variables = parents[0].number_of_variables
         rand = random.randint(0, number_of_variables - 1)
