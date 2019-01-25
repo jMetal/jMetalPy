@@ -1,5 +1,6 @@
 import threading
 import time
+import copy
 from typing import Generic, TypeVar, List
 
 from jmetal.core.algorithm import Algorithm
@@ -36,8 +37,8 @@ class LocalSearch(Algorithm[S, R], threading.Thread):
         self.solutions.append(self.problem.create_solution())
         return self.solutions
 
-    def evaluate(self, solution_list: List[S]) -> List[S]:
-        return [self.problem.evaluate(solution_list[0])]
+    def evaluate(self, solutions: List[S]) -> List[S]:
+        return [self.problem.evaluate(solutions[0])]
 
     def init_progress(self) -> None:
         self.evaluations = 0
@@ -46,10 +47,16 @@ class LocalSearch(Algorithm[S, R], threading.Thread):
         return self.termination_criterion.is_met
 
     def step(self) -> None:
-        mutated_solution: Solution = self.mutation.execute(self.solutions[0])
-        mutated_solution = self.problem.evaluate(mutated_solution)
+        print('1 step', self.solutions[0])
+        mutated_solution = copy.copy(self.solutions[0])
+        mutated_solution: Solution = self.mutation.execute(mutated_solution)
+        mutated_solution = self.evaluate([mutated_solution])[0]
+        print('2 step', mutated_solution)
+        print(mutated_solution.objectives[0], self.solutions[0].objectives[0])
         if mutated_solution.objectives[0] < self.solutions[0].objectives[0]:
+            print('is better!!')
             self.solutions[0] = mutated_solution
+        print('3 step', self.solutions[0])
 
     def update_progress(self) -> None:
         self.evaluations += 1
