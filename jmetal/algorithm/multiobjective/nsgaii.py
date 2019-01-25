@@ -10,7 +10,7 @@ from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem, DynamicProblem
 from jmetal.operator import RankingAndCrowdingDistanceSelection
 from jmetal.util.comparator import DominanceComparator, Comparator
-from jmetal.util.solution_list import Evaluator, Generator, print_function_values_to_file
+from jmetal.util.solution_list import Evaluator, Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -144,15 +144,14 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
 class DistributedNSGAII(Generic[S, R]):
 
     def __init__(self,
-                 population_size: int,
                  problem: Problem[S],
+                 population_size: int,
                  max_evaluations: int,
                  mutation: Mutation[S],
                  crossover: Crossover[S, S],
                  selection: Selection[List[S], S],
                  number_of_cores: int,
                  client: Client):
-        super().__init__()
         self.problem = problem
         self.population_size = population_size
         self.max_evaluations = max_evaluations
@@ -173,16 +172,11 @@ class DistributedNSGAII(Generic[S, R]):
                            'PROBLEM': self.problem}
         self.observable.notify_all(**observable_data)
 
-    def create_initial_population(self) -> List[S]:
-        population = []
-
-        for _ in range(self.number_of_cores):
-            population.append(self.problem.create_solution())
-
-        return population
+    def create_initial_solutions(self) -> List[S]:
+        return [self.problem.create_solution() for _ in range(self.population_size)]
 
     def run(self):
-        population_to_evaluate = self.create_initial_population()
+        population_to_evaluate = self.create_initial_solutions()
 
         self.start_computing_time = time.time()
 
