@@ -1,7 +1,7 @@
-from jmetal.algorithm.singleobjective.evolution_strategy import EvolutionStrategy
 from jmetal.algorithm.singleobjective.local_search import LocalSearch
 from jmetal.operator import BitFlipMutation
 from jmetal.problem import OneMax
+from jmetal.util.observer import ProgressBarObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
@@ -12,6 +12,9 @@ if __name__ == '__main__':
         mutation=BitFlipMutation(probability=1.0 / problem.number_of_bits),
         termination_criterion=StoppingByEvaluations(max=25000)
     )
+
+    progress_bar = ProgressBarObserver(max=25000)
+    algorithm.observable.register(observer=progress_bar)
 
     algorithm.run()
     result = algorithm.get_result()
