@@ -230,3 +230,4 @@ class IVisualizerObserver(Observer):
 
             if (evaluations % self.display_frequency) == 0:
                 self.figure.update(solutions)
+
