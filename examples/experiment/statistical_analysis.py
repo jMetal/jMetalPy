@@ -45,7 +45,7 @@ if __name__ == '__main__':
     print('adjusted p-values \n', adj_pval)
 
     # Plot critical distance
-    CDplot(avg.T, alpha=0.05, higherIsBetter=True)
+    CDplot(avg.T, alpha=0.15, higherIsBetter=True)
 
     print('-------- Bayesian Sign Test --------')
     bst, DProcess = bayesian_sign_test(avg[['NSGAII', 'SMPSO']],rope_limits=[-0.002, 0.002],
