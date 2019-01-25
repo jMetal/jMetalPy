@@ -248,8 +248,8 @@ class SPXCrossover(Crossover[BinarySolution, BinarySolution]):
             crossover_point_in_variable = len(parents[1].variables[variable_to_cut]) - diff
 
             # 5. Apply the crossover to the variable
-            bitset1 = parents[0].variables[variable_to_cut]
-            bitset2 = parents[1].variables[variable_to_cut]
+            bitset1 = copy.copy(parents[0].variables[variable_to_cut])
+            bitset2 = copy.copy(parents[1].variables[variable_to_cut])
 
             for i in range(crossover_point_in_variable, len(bitset1)):
                 swap = bitset1[i]

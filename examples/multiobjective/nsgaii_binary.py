@@ -13,7 +13,7 @@ if __name__ == '__main__':
     binary_string_length = 512
     problem = OneZeroMax(binary_string_length)
 
-    max_evaluations = 5000
+    max_evaluations = 50000
     algorithm = NSGAII(
         problem=problem,
         population_size=100,

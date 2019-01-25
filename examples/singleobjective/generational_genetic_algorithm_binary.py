@@ -5,16 +5,16 @@ from jmetal.util.observer import ObjectivesObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
-    problem = OneMax(number_of_bits=256)
+    problem = OneMax(number_of_bits=512)
 
     algorithm = GeneticAlgorithm(
         problem=problem,
         population_size=100,
         offspring_population_size=100,
         mutation=BitFlipMutation(1.0 / problem.number_of_bits),
-        crossover=SPXCrossover(0.0),
+        crossover=SPXCrossover(1.0),
         selection=BinaryTournamentSelection(),
-        termination_criterion=StoppingByEvaluations(max=25000)
+        termination_criterion=StoppingByEvaluations(max=20000)
     )
 
     algorithm.observable.register(observer=ObjectivesObserver())
