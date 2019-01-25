@@ -75,6 +75,31 @@ class BasicObserver(Observer):
             )
 
 
+class ObjectivesObserver(Observer):
+
+    def __init__(self, frequency: float = 1.0) -> None:
+        """ Show the number of evaluations, best fitness and computing time.
+
+        :param frequency: Display frequency. """
+        self.display_frequency = frequency
+
+    def update(self, *args, **kwargs):
+        evaluations = kwargs['EVALUATIONS']
+        solutions = kwargs['SOLUTIONS']
+
+        if (evaluations % self.display_frequency) == 0 and solutions:
+            if type(solutions) == list:
+                fitness = solutions[0].objectives
+            else:
+                fitness = solutions.objectives
+
+            LOGGER.info(
+                'Evaluations: {}. fitness: {}'.format(
+                    evaluations, fitness
+                )
+            )
+
+
 class WriteFrontToFileObserver(Observer):
 
     def __init__(self, output_directory: str) -> None:
