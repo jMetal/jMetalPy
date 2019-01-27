@@ -1,17 +1,17 @@
 from jmetal.algorithm.singleobjective.local_search import LocalSearch
-from jmetal.operator import BitFlipMutation
-from jmetal.problem import OneMax
+from jmetal.operator import BitFlipMutation, PolynomialMutation
+from jmetal.problem import OneMax, Sphere
 from jmetal.util.observer import ProgressBarObserver, ObjectivesObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
-    problem = OneMax(number_of_bits=512)
+    problem = Sphere(10)
 
-    max_evaluations = 10000
+    max_evaluations = 50000
     algorithm = LocalSearch(
         problem=problem,
-        mutation=BitFlipMutation(probability=1.0 / problem.number_of_bits),
+        mutation=PolynomialMutation(1.0 / problem.number_of_variables, 20.0),
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
@@ -27,6 +27,6 @@ if __name__ == '__main__':
 
     print('Algorithm: ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())
-    print('Solution: ' + result.get_binary_string())
+    print('Solution: ' + str(result.variables))
     print('Fitness:  ' + str(result.objectives[0]))
     print('Computing time: ' + str(algorithm.total_computing_time))
