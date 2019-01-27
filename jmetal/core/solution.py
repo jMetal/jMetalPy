@@ -53,6 +53,12 @@ class BinarySolution(Solution[BitSet]):
 
         return total
 
+    def get_binary_string(self) -> str:
+        string = ""
+        for bit in self.variables[0]:
+            string += '1' if bit else '0'
+        return string
+
 
 class FloatSolution(Solution[float]):
     """ Class representing float solutions """

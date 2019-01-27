@@ -4,7 +4,6 @@ from jmetal.problem import OneMax
 from jmetal.util.observer import ProgressBarObserver, ObjectivesObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
-import random
 
 if __name__ == '__main__':
     problem = OneMax(number_of_bits=512)
@@ -16,9 +15,7 @@ if __name__ == '__main__':
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
-    progress_bar = ProgressBarObserver(max=max_evaluations)
-    objectives_observer = ObjectivesObserver(frequency=1)
-    algorithm.observable.register(observer=progress_bar)
+    objectives_observer = ObjectivesObserver(frequency=100)
     algorithm.observable.register(observer=objectives_observer)
 
     algorithm.run()
@@ -30,6 +27,6 @@ if __name__ == '__main__':
 
     print('Algorithm: ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())
-    print('Solution: ' + str(result.variables[0]))
+    print('Solution: ' + result.get_binary_string())
     print('Fitness:  ' + str(result.objectives[0]))
     print('Computing time: ' + str(algorithm.total_computing_time))
