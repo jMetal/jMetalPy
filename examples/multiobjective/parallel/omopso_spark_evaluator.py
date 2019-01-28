@@ -1,15 +1,11 @@
 from examples.multiobjective.parallel.zdt1_modified import ZDT1Modified
-
 from jmetal.algorithm.multiobjective.omopso import OMOPSO
-from jmetal.operator import PolynomialMutation, UniformMutation
+from jmetal.operator import UniformMutation
 from jmetal.operator.mutation import NonUniformMutation
-from jmetal.problem import ZDT4, ZDT1
-
-from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_solutions, \
-    SparkEvaluator
-from jmetal.util.archive import CrowdingDistanceArchive, NonDominatedSolutionListArchive
-from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
+from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
+from jmetal.util.solution_list import read_solutions, \
+    SparkEvaluator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':

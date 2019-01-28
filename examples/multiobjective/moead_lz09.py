@@ -1,6 +1,6 @@
 from jmetal.algorithm.multiobjective.moead import MOEAD
 from jmetal.operator import PolynomialMutation, DifferentialEvolutionCrossover
-from jmetal.problem import LZ09_F2, ZDT4
+from jmetal.problem import LZ09_F2
 from jmetal.util.aggregative_function import Chebyshev
 from jmetal.util.neighborhood import WeightVectorNeighborhood
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver

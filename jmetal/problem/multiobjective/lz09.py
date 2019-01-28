@@ -1,5 +1,5 @@
 import math
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution

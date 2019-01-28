@@ -1,9 +1,9 @@
 from examples.multiobjective.parallel.zdt1_modified import ZDT1Modified
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
-from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
-from jmetal.util.solution_list.evaluator import MultiprocessEvaluator
 from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
+from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
+from jmetal.util.observer import ProgressBarObserver
+from jmetal.util.solution_list.evaluator import MultiprocessEvaluator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
@@ -22,7 +22,7 @@ if __name__ == '__main__':
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
-    algorithm.observable.register(observer=VisualizerObserver())
+    #algorithm.observable.register(observer=VisualizerObserver())
     algorithm.observable.register(ProgressBarObserver(max=max_evaluations))
 
     algorithm.run()

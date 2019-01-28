@@ -1,9 +1,10 @@
 import unittest
 
+import numpy
+
 from jmetal.core.solution import Solution
 from jmetal.util.neighborhood import WeightVectorNeighborhood
-from jmetal.util.point import Point, IdealPoint
-import numpy
+
 
 class WeightVectorNeighborhoodTestCases(unittest.TestCase):
 

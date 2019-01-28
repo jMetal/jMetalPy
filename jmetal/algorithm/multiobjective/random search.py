@@ -1,9 +1,9 @@
 import time
 from typing import TypeVar, List
 
-from jmetal.util.archive import NonDominatedSolutionListArchive
 from jmetal.core.algorithm import Algorithm
 from jmetal.core.problem import Problem
+from jmetal.util.archive import NonDominatedSolutionListArchive
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')

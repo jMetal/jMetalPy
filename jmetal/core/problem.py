@@ -1,7 +1,7 @@
 import logging
+import random
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar, List
-import random
 
 from jmetal.core.observable import Observer
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, PermutationSolution

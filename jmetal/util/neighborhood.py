@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import TypeVar, Generic, List
+
 import numpy
 
 from jmetal.core.solution import Solution

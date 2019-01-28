@@ -1,6 +1,6 @@
 import unittest
 
-from jmetal.util.distance import EuclideanDistance, CosineDistance
+from jmetal.util.distance import EuclideanDistance
 
 
 class EuclideanDistanceTestCases(unittest.TestCase):

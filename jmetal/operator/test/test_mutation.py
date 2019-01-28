@@ -1,7 +1,8 @@
 import unittest
 
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
-from jmetal.operator.mutation import BitFlipMutation, UniformMutation, SimpleRandomMutation, PolynomialMutation, IntegerPolynomialMutation
+from jmetal.operator.mutation import BitFlipMutation, UniformMutation, SimpleRandomMutation, PolynomialMutation, \
+    IntegerPolynomialMutation
 
 
 class PolynomialMutationTestMethods(unittest.TestCase):

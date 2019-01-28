@@ -1,6 +1,5 @@
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
-from jmetal.operator import SPXCrossover, BitFlipMutation, BinaryTournamentSelection, PolynomialMutation, SBXCrossover
-from jmetal.problem import OneMax, Sphere
+from jmetal.operator import BinaryTournamentSelection, PolynomialMutation, SBXCrossover
 from jmetal.problem.singleobjective.unconstrained import Rastrigin
 from jmetal.util.observer import ObjectivesObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations

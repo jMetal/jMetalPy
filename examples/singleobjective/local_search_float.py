@@ -1,8 +1,7 @@
 from jmetal.algorithm.singleobjective.local_search import LocalSearch
-from jmetal.operator import BitFlipMutation, PolynomialMutation
-from jmetal.problem import OneMax, Sphere
+from jmetal.operator import PolynomialMutation
 from jmetal.problem.singleobjective.unconstrained import Rastrigin
-from jmetal.util.observer import ProgressBarObserver, ObjectivesObserver
+from jmetal.util.observer import ObjectivesObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 

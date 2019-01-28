@@ -1,6 +1,6 @@
 import logging
 from abc import ABC
-from typing import TypeVar, List, Tuple, Optional
+from typing import TypeVar, List, Tuple
 
 import numpy as np
 import pandas as pd
