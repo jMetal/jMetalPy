@@ -10,20 +10,20 @@ if __name__ == '__main__':
     algorithm = GeneticAlgorithm(
         problem=problem,
         population_size=100,
-        offspring_population_size=100,
+        offspring_population_size=30,
         mutation=BitFlipMutation(1.0 / problem.number_of_bits),
         crossover=SPXCrossover(1.0),
         selection=BinaryTournamentSelection(),
         termination_criterion=StoppingByEvaluations(max=20000)
     )
 
-    algorithm.observable.register(observer=ObjectivesObserver())
+    algorithm.observable.register(observer=ObjectivesObserver(frequency=1000))
 
     algorithm.run()
     result = algorithm.get_result()
 
     print('Algorithm: {}'.format(algorithm.get_name()))
     print('Problem: {}'.format(problem.get_name()))
-    print('Solution: {}'.format(result.variables))
-    print('Fitness: {}'.format(result.objectives[0]))
+    print('Solution: ' + result.get_binary_string())
+    print('Fitness:  ' + str(result.objectives[0]))
     print('Computing time: {}'.format(algorithm.total_computing_time))

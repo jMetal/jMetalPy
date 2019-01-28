@@ -69,7 +69,7 @@ class CrowdingDistance(DensityEstimator[List[S]]):
 
                 # Check if minimum and maximum are the same (in which case do nothing)
                 if objective_maxn - objective_minn == 0:
-                    LOGGER.warning('Minimum and maximum are the same!')
+                    pass ; #LOGGER.warning('Minimum and maximum are the same!')
                 else:
                     distance = distance / (objective_maxn - objective_minn)
 

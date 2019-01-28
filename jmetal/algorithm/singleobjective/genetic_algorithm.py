@@ -94,17 +94,11 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         return offspring_population
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
+        population.extend(offspring_population)
+
         population.sort(key=lambda s: s.objectives[0])
 
-        offspring_population.append(population[0])
-        offspring_population.append(population[1])
-
-        offspring_population.sort(key=lambda s: s.objectives[0])
-
-        offspring_population.pop()
-        offspring_population.pop()
-
-        return offspring_population
+        return population[:self.population_size]
 
     def get_result(self) -> R:
         return self.solutions[0]

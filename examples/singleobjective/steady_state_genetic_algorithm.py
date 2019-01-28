@@ -26,7 +26,7 @@ if __name__ == '__main__':
     algorithm = GeneticAlgorithm(
         problem=problem,
         population_size=100,
-        offspring_population_size=2,
+        offspring_population_size=1,
         mutation=BitFlipMutation(probability=0.1),
         crossover=SPXCrossover(probability=0.8),
         selection=BinaryTournamentSelection(),
