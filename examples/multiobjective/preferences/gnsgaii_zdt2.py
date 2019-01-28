@@ -1,8 +1,8 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
-from jmetal.problem import ZDT1
+from jmetal.problem import ZDT1, ZDT2
 from jmetal.util.comparator import GDominanceComparator, RankingAndCrowdingDistanceComparator
-from jmetal.util.observer import ProgressBarObserver
+from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.util.visualization import Plot
@@ -17,7 +17,7 @@ from jmetal.util.visualization import Plot
 """
 
 if __name__ == '__main__':
-    problem = ZDT1()
+    problem = ZDT2()
     problem.reference_front = read_solutions(filename='../../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
     reference_point = [0.5, 0.5]
@@ -35,13 +35,14 @@ if __name__ == '__main__':
     )
 
     algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
+    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front, reference_point=(reference_point)))
 
     algorithm.run()
     front = algorithm.get_result()
 
     # Plot front
     plot_front = Plot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels, reference_point=reference_point, reference_front=problem.reference_front)
-    plot_front.plot(front, label='gNSGAII-ZDT1', filename='gNSGAII-ZDT1.eps')
+    plot_front.plot(front, label='gNSGAII-ZDT1', filename='gNSGAII-ZDT1')
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.' + algorithm.get_name() + "." + problem.get_name())

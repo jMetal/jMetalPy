@@ -1,6 +1,8 @@
+from jmetal.util.visualization import Plot, InteractivePlot
+
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.operator import PolynomialMutation
-from jmetal.problem import ZDT4
+from jmetal.problem import ZDT4, DTLZ1
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
@@ -28,9 +30,19 @@ if __name__ == '__main__':
     algorithm.run()
     front = algorithm.get_result()
 
+    label = algorithm.get_name() + "." + problem.get_name()
+    algorithm_name = label
+    # Plot front
+    plot_front = Plot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels)
+    plot_front.plot(front, label=label, filename=algorithm_name)
+
+    # Plot interactive front
+    plot_front = InteractivePlot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels)
+    plot_front.plot(front, label=label, filename=algorithm_name)
+
     # Save results to file
-    print_function_values_to_file(front, 'FUN.' + algorithm.get_name() + "." + problem.get_name())
-    print_variables_to_file(front, 'VAR.'+ algorithm.get_name() + "." + problem.get_name())
+    print_function_values_to_file(front, 'FUN.' + label)
+    print_variables_to_file(front, 'VAR.'+ label)
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())

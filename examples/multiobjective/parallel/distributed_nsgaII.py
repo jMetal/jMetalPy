@@ -1,18 +1,13 @@
-from multiprocessing.pool import ThreadPool
-
-import dask
 from dask.distributed import Client
 
 from examples.multiobjective.parallel.zdt1_modified import ZDT1Modified
 from jmetal.algorithm.multiobjective.nsgaii import DistributedNSGAII
 from jmetal.operator import PolynomialMutation, SBXCrossover, BinaryTournamentSelection
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
-from jmetal.util.observer import ProgressBarObserver
 
 if __name__ == '__main__':
     problem = ZDT1Modified()
 
-    #dask.config.set(scheduler='threads', pool=ThreadPool(8))
     client = Client()
 
     algorithm = DistributedNSGAII(
