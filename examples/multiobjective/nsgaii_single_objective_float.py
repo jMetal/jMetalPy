@@ -13,7 +13,7 @@ from jmetal.util.visualization import Plot, InteractivePlot
 if __name__ == '__main__':
     problem = Rastrigin(10)
 
-    max_evaluations = 25000
+    max_evaluations = 50000
     algorithm = NSGAII(
         problem=problem,
         population_size=100,
@@ -25,7 +25,7 @@ if __name__ == '__main__':
         dominance_comparator=DominanceComparator()
     )
 
-    algorithm.observable.register(observer=ObjectivesObserver(100))
+    algorithm.observable.register(observer=ObjectivesObserver(1000))
 
     algorithm.run()
     front = algorithm.get_result()

@@ -105,7 +105,7 @@ class Rastrigin(FloatProblem):
         return solution
 
     def get_name(self) -> str:
-        return 'Sphere'
+        return 'Rastrigin'
 
 
 class SubsetSum(BinaryProblem):
