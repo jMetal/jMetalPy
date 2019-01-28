@@ -39,6 +39,7 @@ class SimulatedAnnealing(Algorithm[S, R], threading.Thread):
         self.temperature = 1.0
         self.minimum_temperature = 0.000001
         self.alpha = 0.95
+        self.counter = 0
 
     def create_initial_solutions(self) -> List[S]:
         self.solutions.append(self.problem.create_solution())
