@@ -1,6 +1,6 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
-from jmetal.problem import ZDT1
+from jmetal.problem import ZDT1, ZDT4
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, DominanceComparator
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver, PlotFrontToFileObserver, \
     WriteFrontToFileObserver
@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
     # Plot front
     plot_front = Plot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels)
-    plot_front.plot(front, label='ssNSGAII-ZDT1', filename='ssNSGAII-ZDT1')
+    plot_front.plot(front, label='NSGAII-ZDT1', filename='NSGAII-ZDT1')
 
     # Plot interactive front
     plot_front = InteractivePlot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels)

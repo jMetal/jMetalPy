@@ -1,10 +1,10 @@
 from jmetal.algorithm.multiobjective.moead import MOEAD
 from jmetal.operator import PolynomialMutation, DifferentialEvolutionCrossover
-from jmetal.problem import LZ09_F2
+from jmetal.problem import LZ09_F2, ZDT4
 from jmetal.util.aggregative_function import Chebyshev
 from jmetal.util.neighborhood import WeightVectorNeighborhood
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
-from jmetal.util.solution_list import read_solutions
+from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
@@ -26,8 +26,17 @@ if __name__ == '__main__':
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
-    algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
-    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front))
+    progress_bar = ProgressBarObserver(max=max_evaluations)
+    algorithm.observable.register(observer=progress_bar)
+    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front, display_frequency=500))
 
     algorithm.run()
     front = algorithm.get_result()
+
+    # Save results to file
+    print_function_values_to_file(front, 'FUN.' + algorithm.get_name() + "." + problem.get_name())
+    print_variables_to_file(front, 'VAR.'+ algorithm.get_name() + "." + problem.get_name())
+
+    print('Algorithm (continuous problem): ' + algorithm.get_name())
+    print('Problem: ' + problem.get_name())
+    print('Computing time: ' + str(algorithm.total_computing_time))
