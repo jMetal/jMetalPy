@@ -28,6 +28,10 @@ class Plot(ABC):
         """
         self.plot_title = plot_title
         self.axis_labels = axis_labels
+
+        if not isinstance(reference_point[0], list):
+            reference_point = [reference_point]
+
         self.reference_point = reference_point
         self.reference_front = reference_front
         self.dimension = None
@@ -100,9 +104,10 @@ class Plot(ABC):
                 reference.plot(x=0, y=1, ax=ax, color='k', legend=False)
 
             if self.reference_point:
-                plt.plot([self.reference_point[0]], [self.reference_point[1]], marker='o', markersize=5, color='r')
-                plt.plot([self.reference_point[1], self.reference_point[0]], [0, self.reference_point[1]], ':r')
-                plt.plot([0, self.reference_point[0]], [self.reference_point[0], self.reference_point[1]], ':r')
+                for point in self.reference_point:
+                    plt.plot([point[0]], [point[1]], marker='o', markersize=5, color='r')
+                    plt.plot([point[1], point[0]], [0, point[1]], ':r')
+                    plt.plot([0, point[0]], [point[0], point[1]], ':r')
 
             if self.axis_labels:
                 plt.xlabel(self.axis_labels[0])

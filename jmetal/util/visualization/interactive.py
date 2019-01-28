@@ -51,6 +51,12 @@ class InteractivePlot(Plot):
                                           color='black', size=2)
             self.data.append(trace)
 
+        # If any reference point, plot
+        if self.reference_point:
+            points = pd.DataFrame(self.reference_point)
+            trace = self.__generate_trace(points=points, legend='Reference point', color='red', size=8)
+            self.data.append(trace)
+
         # Get points and metadata
         points, _ = self.get_points(front)
         metadata = list(solution.__str__() for solution in front)

@@ -5,7 +5,7 @@ from jmetal.util.comparator import GDominanceComparator, RankingAndCrowdingDista
 from jmetal.util.observer import ProgressBarObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
-from jmetal.util.visualization import Plot
+from jmetal.util.visualization import Plot, InteractivePlot
 
 """
 .. module:: GNSGA-II
@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
     reference_point = [0.5, 0.5]
 
-    max_evaluations = 25000
+    max_evaluations = 5000
     algorithm = NSGAII(
         problem=problem,
         population_size=100,
@@ -41,7 +41,11 @@ if __name__ == '__main__':
 
     # Plot front
     plot_front = Plot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels, reference_point=reference_point, reference_front=problem.reference_front)
-    plot_front.plot(front, label='gNSGAII-ZDT1', filename='gNSGAII-ZDT1.eps')
+    plot_front.plot(front, label='gNSGAII-ZDT1', filename='gNSGAII-ZDT1')
+
+    # Plot interactive front
+    plot_front = InteractivePlot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels, reference_point=reference_point, reference_front=problem.reference_front)
+    plot_front.plot(front, label='gNSGAII-ZDT1', filename='gNSGAII-ZDT1')
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.' + algorithm.get_name() + "." + problem.get_name())
