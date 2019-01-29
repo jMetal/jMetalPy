@@ -115,6 +115,8 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
             termination_criterion=termination_criterion,
             dominance_comparator=dominance_comparator)
         self.completed_iterations = 0
+        self.start_computing_time = 0
+        self.total_computing_time = 0
 
     def restart(self):
         self.solutions = self.evaluate(self.solutions)
@@ -225,7 +227,8 @@ class DistributedNSGAII(Generic[S, R]):
                     new_task = self.client.submit(self.problem.evaluate, solution_to_evaluate)
                     task_pool.add(new_task)
                 else:
-                    print("TIME: " + str(time.time() - self.start_computing_time))
+                    self.total_computing_time = time.time() - self.start_computing_time
+                    print("TIME: " + str(self.total_computing_time))
                     for future in task_pool.futures:
                         future.cancel()
 

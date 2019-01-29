@@ -1,6 +1,6 @@
-from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
 
 
 def plot_posterior(sample, higherIsBetter=False, minPointsPerHexbin=2, alg_names: list = None):

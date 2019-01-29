@@ -1,4 +1,3 @@
-import copy
 from typing import TypeVar, List
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
@@ -7,7 +6,6 @@ from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
 from jmetal.operator.selection import EnvironmentalSelection
 from jmetal.util.comparator import DominanceComparator, Comparator
-from jmetal.util.point import ReferencePoint
 from jmetal.util.ranking import FastNonDominatedRanking
 from jmetal.util.solution_list import Evaluator, Generator
 from jmetal.util.termination_criterion import TerminationCriterion

@@ -1,7 +1,7 @@
 import unittest
 
-from jmetal.util.density_estimator import CrowdingDistance
 from jmetal.core.solution import Solution
+from jmetal.util.density_estimator import CrowdingDistance
 
 
 class CrowdingDistanceTestCases(unittest.TestCase):

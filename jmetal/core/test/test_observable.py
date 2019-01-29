@@ -1,8 +1,7 @@
 import unittest
 
-from jmetal.util.observable import DefaultObservable
-
 from jmetal.core.observable import Observer
+from jmetal.util.observable import DefaultObservable
 
 
 class ObservableTestCases(unittest.TestCase):

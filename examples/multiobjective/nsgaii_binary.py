@@ -1,13 +1,10 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection, BitFlipMutation, SPXCrossover
-from jmetal.problem import ZDT1, OneMax
+from jmetal.operator import BinaryTournamentSelection, BitFlipMutation, SPXCrossover
 from jmetal.problem.multiobjective.unconstrained import OneZeroMax
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, DominanceComparator
-from jmetal.util.observer import ProgressBarObserver, VisualizerObserver, PlotFrontToFileObserver, \
-    WriteFrontToFileObserver
-from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
+from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
+from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
-from jmetal.util.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
     binary_string_length = 512
@@ -30,10 +27,6 @@ if __name__ == '__main__':
 
     algorithm.run()
     front = algorithm.get_result()
-
-    # Plot front
-    #plot_front = Plot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels)
-    #plot_front.plot(front, label=algorithm.get_name()+"-"+problem.get_name(), filename=algorithm.get_name()+"-"+problem.get_name())
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.'+ algorithm.get_name()+"-"+problem.get_name())

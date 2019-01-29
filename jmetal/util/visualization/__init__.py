@@ -1,7 +1,7 @@
 from .critical_distance import CDplot
-from .posterior import plot_posterior
 from .interactive import InteractivePlot
 from .plotting import Plot
+from .posterior import plot_posterior
 from .streaming import StreamingPlot, IStreamingPlot
 
 __all__ = [

@@ -157,6 +157,12 @@ class MOEAD(GeneticAlgorithm):
             self.fitness_function.update(offspring_population[0].objectives)
             self.update_individual(index, offspring_population[0])
 
+    def update_progress(self) -> None:
+        self.evaluations += self.population_size
+
+        observable_data = self.get_observable_data()
+        self.observable.notify_all(**observable_data)
+
     def get_result(self) -> R:
         return self.solutions
 

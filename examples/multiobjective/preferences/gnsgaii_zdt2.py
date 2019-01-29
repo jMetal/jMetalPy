@@ -1,8 +1,8 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
-from jmetal.problem import ZDT1
+from jmetal.problem import ZDT2
 from jmetal.util.comparator import GDominanceComparator, RankingAndCrowdingDistanceComparator
-from jmetal.util.observer import ProgressBarObserver
+from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.util.visualization import Plot, InteractivePlot
@@ -17,7 +17,7 @@ from jmetal.util.visualization import Plot, InteractivePlot
 """
 
 if __name__ == '__main__':
-    problem = ZDT1()
+    problem = ZDT2()
     problem.reference_front = read_solutions(filename='../../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
     reference_point = [0.5, 0.5]
@@ -35,6 +35,7 @@ if __name__ == '__main__':
     )
 
     algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
+    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front, reference_point=(reference_point)))
 
     algorithm.run()
     front = algorithm.get_result()

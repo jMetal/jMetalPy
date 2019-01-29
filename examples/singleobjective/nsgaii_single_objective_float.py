@@ -1,14 +1,10 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection, BitFlipMutation, SPXCrossover
-from jmetal.problem import ZDT1, OneMax
-from jmetal.problem.multiobjective.unconstrained import OneZeroMax
+from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
 from jmetal.problem.singleobjective.unconstrained import Rastrigin
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, DominanceComparator
-from jmetal.util.observer import ProgressBarObserver, VisualizerObserver, PlotFrontToFileObserver, \
-    WriteFrontToFileObserver, ObjectivesObserver
-from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
+from jmetal.util.observer import PrintObjectivesObserver
+from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
-from jmetal.util.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
     problem = Rastrigin(10)
@@ -25,7 +21,7 @@ if __name__ == '__main__':
         dominance_comparator=DominanceComparator()
     )
 
-    algorithm.observable.register(observer=ObjectivesObserver(1000))
+    algorithm.observable.register(observer=PrintObjectivesObserver(1000))
 
     algorithm.run()
     front = algorithm.get_result()

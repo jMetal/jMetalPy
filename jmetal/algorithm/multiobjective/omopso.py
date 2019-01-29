@@ -6,15 +6,14 @@ from typing import TypeVar, List, Optional
 import numpy
 
 from jmetal.config import store
-from jmetal.core.algorithm import ParticleSwarmOptimization, DynamicAlgorithm
-from jmetal.core.operator import Mutation
-from jmetal.core.problem import FloatProblem, DynamicProblem
+from jmetal.core.algorithm import ParticleSwarmOptimization
+from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.operator import UniformMutation
 from jmetal.operator.mutation import NonUniformMutation
 from jmetal.util.archive import BoundedArchive, NonDominatedSolutionListArchive
 from jmetal.util.comparator import DominanceComparator, EpsilonDominanceComparator
-from jmetal.util.solution_list import Evaluator, Generator, print_function_values_to_file
+from jmetal.util.solution_list import Evaluator, Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 R = TypeVar('R')

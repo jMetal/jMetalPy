@@ -1,4 +1,3 @@
-import math
 from math import sqrt
 
 from jmetal.core.problem import FloatProblem

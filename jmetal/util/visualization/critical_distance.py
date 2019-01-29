@@ -1,6 +1,6 @@
-from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
 from statsmodels.stats.libqsturng import qsturng
 
 from jmetal.util.statistical_test.functions import ranks

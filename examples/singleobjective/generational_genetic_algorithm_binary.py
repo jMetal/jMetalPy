@@ -1,7 +1,7 @@
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.operator import SPXCrossover, BitFlipMutation, BinaryTournamentSelection
 from jmetal.problem import OneMax
-from jmetal.util.observer import ObjectivesObserver
+from jmetal.util.observer import PrintObjectivesObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
@@ -10,14 +10,14 @@ if __name__ == '__main__':
     algorithm = GeneticAlgorithm(
         problem=problem,
         population_size=100,
-        offspring_population_size=30,
+        offspring_population_size=100,
         mutation=BitFlipMutation(1.0 / problem.number_of_bits),
         crossover=SPXCrossover(1.0),
         selection=BinaryTournamentSelection(),
         termination_criterion=StoppingByEvaluations(max=20000)
     )
 
-    algorithm.observable.register(observer=ObjectivesObserver(frequency=1000))
+    algorithm.observable.register(observer=PrintObjectivesObserver(frequency=1000))
 
     algorithm.run()
     result = algorithm.get_result()

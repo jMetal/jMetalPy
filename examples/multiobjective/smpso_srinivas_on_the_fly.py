@@ -1,5 +1,6 @@
-from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.component import ProgressBarObserver, CrowdingDistanceArchive, VisualizerObserver
+
+from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.core.problem import OnTheFlyFloatProblem
 from jmetal.operator import PolynomialMutation
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file

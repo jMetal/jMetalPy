@@ -1,6 +1,6 @@
 import logging
 from abc import ABC
-from typing import TypeVar, List, Tuple, Optional
+from typing import TypeVar, List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -106,8 +106,8 @@ class Plot(ABC):
             if self.reference_point:
                 for point in self.reference_point:
                     plt.plot([point[0]], [point[1]], marker='o', markersize=5, color='r')
-                    plt.plot([point[1], point[0]], [0, point[1]], ':r')
-                    plt.plot([0, point[0]], [point[0], point[1]], ':r')
+                    plt.axvline(x=point[0], color='r', linestyle=':')
+                    plt.axhline(y=point[1], color='r', linestyle=':')
 
             if self.axis_labels:
                 plt.xlabel(self.axis_labels[0])

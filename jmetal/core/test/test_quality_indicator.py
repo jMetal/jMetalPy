@@ -1,10 +1,9 @@
 import unittest
 from os.path import dirname, join
 
-from jmetal.core.algorithm import Algorithm
+from jmetal.core.quality_indicator import HyperVolume, GenerationalDistance
 from jmetal.core.solution import Solution
 from jmetal.problem import ZDT1
-from jmetal.core.quality_indicator import HyperVolume, GenerationalDistance, InvertedGenerationalDistance
 from jmetal.util.solution_list import read_solutions
 
 

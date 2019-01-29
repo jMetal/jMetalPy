@@ -1,17 +1,16 @@
 import copy
-import threading
 import random
+import threading
 import time
 from typing import TypeVar, List
+
+import numpy
 
 from jmetal.core.algorithm import Algorithm
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
 from jmetal.core.solution import Solution
-from jmetal.util.comparator import DominanceComparator
 from jmetal.util.termination_criterion import TerminationCriterion
-import math
-import numpy
 
 S = TypeVar('S')
 R = TypeVar('R')
@@ -39,6 +38,7 @@ class SimulatedAnnealing(Algorithm[S, R], threading.Thread):
         self.temperature = 1.0
         self.minimum_temperature = 0.000001
         self.alpha = 0.95
+        self.counter = 0
 
     def create_initial_solutions(self) -> List[S]:
         self.solutions.append(self.problem.create_solution())

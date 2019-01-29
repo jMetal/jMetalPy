@@ -1,9 +1,8 @@
 import unittest
 from typing import TypeVar
 
-from jmetal.core.operator import Mutation, S, R, Crossover
-
-from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, Solution
+from jmetal.core.operator import Mutation, Crossover
+from jmetal.core.solution import Solution
 
 S = TypeVar('S')
 R = TypeVar('R')
