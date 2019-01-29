@@ -75,7 +75,7 @@ class BasicObserver(Observer):
             )
 
 
-class ObjectivesObserver(Observer):
+class PrintObjectivesObserver(Observer):
 
     def __init__(self, frequency: float = 1.0) -> None:
         """ Show the number of evaluations, best fitness and computing time.
@@ -176,6 +176,7 @@ class PlotFrontToFileObserver(Observer):
             else:
                 self.plot_front.plot([solutions], filename='{}/front-{}'.format(self.directory, self.counter))
                 self.counter += 1
+
 
 class VisualizerObserver(Observer):
 

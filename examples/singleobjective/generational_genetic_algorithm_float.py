@@ -1,7 +1,7 @@
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.operator import BinaryTournamentSelection, PolynomialMutation, SBXCrossover
 from jmetal.problem.singleobjective.unconstrained import Rastrigin
-from jmetal.util.observer import ObjectivesObserver
+from jmetal.util.observer import PrintObjectivesObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
@@ -17,7 +17,7 @@ if __name__ == '__main__':
         termination_criterion=StoppingByEvaluations(max=50000)
     )
 
-    algorithm.observable.register(observer=ObjectivesObserver(1000))
+    algorithm.observable.register(observer=PrintObjectivesObserver(1000))
 
     algorithm.run()
     result = algorithm.get_result()

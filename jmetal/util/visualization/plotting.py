@@ -101,8 +101,8 @@ class Plot(ABC):
 
             if self.reference_point:
                 plt.plot([self.reference_point[0]], [self.reference_point[1]], marker='o', markersize=5, color='r')
-                plt.plot([self.reference_point[1], self.reference_point[0]], [0, self.reference_point[1]], ':r')
-                plt.plot([0, self.reference_point[0]], [self.reference_point[0], self.reference_point[1]], ':r')
+                plt.axvline(x=self.reference_point[0], color='r', linestyle=':')
+                plt.axhline(y=self.reference_point[1], color='r', linestyle=':')
 
             if self.axis_labels:
                 plt.xlabel(self.axis_labels[0])

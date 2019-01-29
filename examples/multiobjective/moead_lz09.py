@@ -3,16 +3,16 @@ from jmetal.operator import PolynomialMutation, DifferentialEvolutionCrossover
 from jmetal.problem import LZ09_F2
 from jmetal.util.aggregative_function import Chebyshev
 from jmetal.util.neighborhood import WeightVectorNeighborhood
-from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
+from jmetal.util.observer import ProgressBarObserver, VisualizerObserver, PlotFrontToFileObserver
 from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
-from jmetal.util.visualization import Plot
+from jmetal.util.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
     problem = LZ09_F2()
     problem.reference_front = read_solutions(filename='../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
-    population_size = 100
+    population_size = 300
     max_evaluations = 175000
 
     algorithm = MOEAD(
@@ -36,6 +36,7 @@ if __name__ == '__main__':
 
     label = algorithm.get_name() + "." + problem.get_name()
     algorithm_name = label
+
     # Plot front
     plot_front = Plot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels)
     plot_front.plot(front, label=label, filename=algorithm_name)

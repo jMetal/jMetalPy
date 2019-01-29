@@ -2,7 +2,7 @@ from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
 from jmetal.problem.singleobjective.unconstrained import Rastrigin
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, DominanceComparator
-from jmetal.util.observer import ObjectivesObserver
+from jmetal.util.observer import PrintObjectivesObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
@@ -21,7 +21,7 @@ if __name__ == '__main__':
         dominance_comparator=DominanceComparator()
     )
 
-    algorithm.observable.register(observer=ObjectivesObserver(1000))
+    algorithm.observable.register(observer=PrintObjectivesObserver(1000))
 
     algorithm.run()
     front = algorithm.get_result()
