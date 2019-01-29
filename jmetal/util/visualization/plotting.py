@@ -29,7 +29,7 @@ class Plot(ABC):
         self.plot_title = plot_title
         self.axis_labels = axis_labels
 
-        if not isinstance(reference_point[0], list):
+        if reference_point and not isinstance(reference_point[0], list):
             reference_point = [reference_point]
 
         self.reference_point = reference_point

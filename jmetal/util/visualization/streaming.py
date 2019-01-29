@@ -60,8 +60,8 @@ class StreamingPlot(Plot):
 
         # If any reference point, plot
         if self.reference_point:
-            self.sc, = self.ax.plot(*[[point] for point in self.reference_point],
-                                    c='r', ls='None', marker='*', markersize=3)
+            for point in self.reference_point:
+                self.sc, = self.ax.plot(*[[p] for p in point], c='r', ls='None', marker='*', markersize=3)
 
         # If any reference front, plot
         if self.reference_front:

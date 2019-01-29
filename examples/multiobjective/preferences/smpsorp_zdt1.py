@@ -5,7 +5,7 @@ from jmetal.util.archive import CrowdingDistanceArchiveWithReferencePoint
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
-from jmetal.util.visualization import InteractivePlot
+from jmetal.util.visualization import InteractivePlot, Plot
 
 if __name__ == '__main__':
     problem = ZDT1()
@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
     swarm_size = 100
 
-    reference_points = ([0.5, 0.5], [0.6, 0.1])
+    reference_points = [[0.5, 0.5], [0.6, 0.1]]
     archives_with_reference_points = []
 
     for point in reference_points:
@@ -32,19 +32,22 @@ if __name__ == '__main__':
     )
 
     algorithm.observable.register(observer=ProgressBarObserver(max=25000))
-    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front))
+    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front, reference_point=reference_points))
 
     algorithm.run()
     front = algorithm.get_result()
 
+    # Plot front
+    plot_front = Plot(plot_title='SMPSORP-ZDT1', reference_front=problem.reference_front, reference_point=reference_points, axis_labels=problem.obj_labels)
+    plot_front.plot(algorithm.get_result(), filename='SMPSORP-ZDT1')
+
+    # Plot interactive front
+    plot_front = InteractivePlot(plot_title='SMPSORP-ZDT1', reference_front=problem.reference_front, reference_point=reference_points, axis_labels=problem.obj_labels)
+    plot_front.plot(front, filename='SMPSORP-ZDT1')
+
     # Save results to file
     print_function_values_to_file(front, 'FUN.' + algorithm.get_name() + "." + problem.get_name())
     print_variables_to_file(front, 'VAR.'+ algorithm.get_name() + "." + problem.get_name())
-
-    # Plot frontier to file
-    pareto_front = InteractivePlot(plot_title='SMPSORP-ZDT1', reference_point=reference_points, reference_front=problem.reference_front, axis_labels=problem.obj_labels)
-    pareto_front.plot(front)
-    pareto_front.export_to_html(filename='SMPSORP-ZDT1')
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())

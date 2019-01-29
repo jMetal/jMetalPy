@@ -182,7 +182,7 @@ class VisualizerObserver(Observer):
 
     def __init__(self,
                  reference_front: List[S] = None,
-                 reference_point: List[float] = None,
+                 reference_point: list = None,
                  display_frequency: float = 1.0) -> None:
         self.figure = None
         self.display_frequency = display_frequency
