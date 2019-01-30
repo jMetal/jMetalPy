@@ -1,6 +1,7 @@
 import copy
 import random
 from abc import ABC, abstractmethod
+from threading import Lock
 from typing import TypeVar, Generic, List
 
 from jmetal.util.comparator import Comparator, DominanceComparator, SolutionAttributeComparator
@@ -134,47 +135,52 @@ class ArchiveWithReferencePoint(BoundedArchive[S]):
         self.__reference_point = reference_point
         self.__comparator = comparator
         self.__density_estimator = density_estimator
-        self.__reference_point_solution = None
+        self.lock = Lock()
 
     def add(self, solution: S) -> bool:
-        if self.__reference_point_solution is None:
-            self.__reference_point_solution = copy.deepcopy(solution)
+        with self.lock:
+            dominated_solution = None
 
-        self.__reference_point_solution.objectives = [value for value in self.__reference_point]
-
-        dominated_solution = None
-
-        if self.__dominance_test(solution, self.__reference_point_solution) == 0:
-            if len(self.solution_list) == 0:
-                result = True
-            else:
-                if random.uniform(0.0, 1.0) < 0.05:
+            if self.__dominance_test(solution.objectives, self.__reference_point) == 0:
+                if len(self.solution_list) == 0:
                     result = True
-                    dominated_solution = solution
                 else:
-                    result = False
-        else:
-            result = True
+                    if random.uniform(0.0, 1.0) < 0.05:
+                        result = True
+                        dominated_solution = solution
+                    else:
+                        result = False
+            else:
+                result = True
 
-        if result:
-            result = super(ArchiveWithReferencePoint, self).add(solution)
+            if result:
+                result = super(ArchiveWithReferencePoint, self).add(solution)
 
-        if result and dominated_solution is not None and len(self.solution_list) > 1:
-            self.solution_list.remove(dominated_solution)
+            if result and dominated_solution is not None and len(self.solution_list) > 1:
+                #if dominated_solution in self.solution_list:
+                self.solution_list.remove(dominated_solution)
 
-        if result and len(self.solution_list) > self.maximum_size:
-            self.compute_density_estimator()
+            if result and len(self.solution_list) > self.maximum_size:
+                self.compute_density_estimator()
 
         return result
 
     def get_reference_point(self) -> List[float]:
-        return self.__reference_point
+        with self.lock:
+            return self.__reference_point
 
-    def __dominance_test(self, solution1: S, solution2: S) -> int:
+    def update_reference_point(self, new_reference_point) -> None:
+        with self.lock:
+            self.__reference_point = new_reference_point
+            for solution in self.solution_list:
+                if self.__dominance_test(solution.objectives, self.__reference_point) == 0:
+                    self.solution_list.remove(solution)
+
+    def __dominance_test(self, vector1: List[float], vector2: List[float]) -> int:
         best_is_one = 0
         best_is_two = 0
 
-        for value1, value2 in zip(solution1.objectives, solution2.objectives):
+        for value1, value2 in zip(vector1, vector2):
             if value1 != value2:
                 if value1 < value2:
                     best_is_one = 1
@@ -201,3 +207,5 @@ class CrowdingDistanceArchiveWithReferencePoint(ArchiveWithReferencePoint[S]):
             reference_point=reference_point,
             comparator=SolutionAttributeComparator("crowding_distance", lowest_is_best=False),
             density_estimator=CrowdingDistance())
+
+

@@ -400,4 +400,7 @@ class SMPSORP(SMPSO):
     def update_reference_point(self, new_reference_points):
         self.reference_points = new_reference_points
         print("Update reference point: " + str(self.reference_points))
+        for index, archive in enumerate(self.leaders):
+            print(new_reference_points[index])
+            archive.update_reference_point(new_reference_points[index])
 

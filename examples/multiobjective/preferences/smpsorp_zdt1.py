@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
     swarm_size = 100
 
-    reference_points = [[0.5, 0.5], [0.6, 0.1]]
+    reference_points = [[0.8, 0.2], [0.1, 0.6]]
     archives_with_reference_points = []
 
     for point in reference_points:
@@ -31,7 +31,7 @@ if __name__ == '__main__':
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
-    algorithm.observable.register(observer=ProgressBarObserver(max=25000))
+    #algorithm.observable.register(observer=ProgressBarObserver(max=25000))
     algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front, reference_point=reference_points))
 
     algorithm.run()
