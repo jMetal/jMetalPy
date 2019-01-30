@@ -1,4 +1,5 @@
 import random
+import threading
 from copy import copy
 from math import sqrt
 from typing import TypeVar, List, Optional
@@ -7,6 +8,7 @@ import numpy
 
 from jmetal.config import store
 from jmetal.core.algorithm import ParticleSwarmOptimization, DynamicAlgorithm
+from jmetal.core.observable import Observer, Observable
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import FloatProblem, DynamicProblem
 from jmetal.core.solution import FloatSolution
@@ -275,8 +277,26 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
             self.completed_iterations += 1
 
 
-class SMPSORP(SMPSO):
+def keyboard_has_been_pressed(algorithm):
+    """
+    Function to read new reference points from the keyboard for the SMPSO/RP algorithm
+    :param algorithm:
+    :return:
+    """
+    number_of_reference_points = len(algorithm.reference_points)
+    number_of_objectives = algorithm.problem.number_of_objectives
+    while(True):
+        print("Enter " + str(number_of_reference_points) +
+              " points of dimension " + str(number_of_objectives) + ": ")
+        read =[float(x) for x in input().split()]
+        print(read)
+        reference_points = []
+        for i in range(0,len(read), number_of_objectives):
+            reference_points.append(read[i:i+number_of_objectives])
+        algorithm.update_reference_point(reference_points)
 
+
+class SMPSORP(SMPSO):
     def __init__(self,
                  problem: FloatProblem,
                  swarm_size: int,
@@ -309,6 +329,9 @@ class SMPSORP(SMPSO):
             point = self.problem.create_solution()
             point.objectives = reference_points[i]
             self.reference_points.append(point)
+
+        thread = threading.Thread(target=keyboard_has_been_pressed, args=(self,))
+        thread.start()
 
     def initialize_global_best(self, swarm: List[FloatSolution]) -> None:
         for particle in swarm:
@@ -373,3 +396,8 @@ class SMPSORP(SMPSO):
 
     def get_name(self) -> str:
         return 'SMPSO/RP'
+
+    def update_reference_point(self, new_reference_points):
+        self.reference_points = new_reference_points
+        print("Update reference point: " + str(self.reference_points))
+
