@@ -404,3 +404,8 @@ class SMPSORP(SMPSO):
             print(new_reference_points[index])
             archive.update_reference_point(new_reference_points[index])
 
+        #observable_data = self.get_observable_data()
+        #observable_data['REFERENCE_POINTS'] = self.reference_points
+        #self.observable.notify_all(**observable_data)
+
+

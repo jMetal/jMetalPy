@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
     swarm_size = 100
 
-    reference_points = [[0.8, 0.2], [0.1, 0.6]]
+    reference_points = [[0.8, 0.2]]
     archives_with_reference_points = []
 
     for point in reference_points:

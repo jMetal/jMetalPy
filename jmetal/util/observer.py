@@ -1,6 +1,7 @@
 import logging
 import os
 from pathlib import Path
+from threading import Lock
 from typing import List, TypeVar
 
 from tqdm import tqdm
@@ -193,6 +194,10 @@ class VisualizerObserver(Observer):
     def update(self, *args, **kwargs):
         evaluations = kwargs['EVALUATIONS']
         solutions = kwargs['SOLUTIONS']
+        if kwargs.get("REFERENCE_POINTS", None) is not None:
+            print("dasdasddasfadfasfsf")
+            self.reference_point = kwargs["REFERENCE_POINTS"]
+            print(self.reference_point)
 
         if solutions:
             if self.figure is None:
