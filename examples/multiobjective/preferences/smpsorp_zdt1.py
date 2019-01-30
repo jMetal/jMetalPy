@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
     for point in reference_points:
         archives_with_reference_points.append(
-            CrowdingDistanceArchiveWithReferencePoint(swarm_size/len(reference_points), point)
+            CrowdingDistanceArchiveWithReferencePoint(int(swarm_size/len(reference_points)), point)
         )
 
     max_evaluations = 25000
@@ -31,7 +31,6 @@ if __name__ == '__main__':
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
-    #algorithm.observable.register(observer=ProgressBarObserver(max=25000))
     algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front, reference_point=reference_points))
 
     algorithm.run()

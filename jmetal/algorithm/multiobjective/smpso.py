@@ -8,11 +8,10 @@ import numpy
 
 from jmetal.config import store
 from jmetal.core.algorithm import ParticleSwarmOptimization, DynamicAlgorithm
-from jmetal.core.observable import Observer, Observable
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import FloatProblem, DynamicProblem
 from jmetal.core.solution import FloatSolution
-from jmetal.util.archive import BoundedArchive
+from jmetal.util.archive import BoundedArchive, ArchiveWithReferencePoint
 from jmetal.util.comparator import DominanceComparator
 from jmetal.util.solution_list import Evaluator, Generator, print_function_values_to_file
 from jmetal.util.termination_criterion import TerminationCriterion
@@ -277,32 +276,14 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
             self.completed_iterations += 1
 
 
-def keyboard_has_been_pressed(algorithm):
-    """
-    Function to read new reference points from the keyboard for the SMPSO/RP algorithm
-    :param algorithm:
-    :return:
-    """
-    number_of_reference_points = len(algorithm.reference_points)
-    number_of_objectives = algorithm.problem.number_of_objectives
-    while(True):
-        print("Enter " + str(number_of_reference_points) +
-              " points of dimension " + str(number_of_objectives) + ": ")
-        read =[float(x) for x in input().split()]
-        print(read)
-        reference_points = []
-        for i in range(0,len(read), number_of_objectives):
-            reference_points.append(read[i:i+number_of_objectives])
-        algorithm.update_reference_point(reference_points)
-
-
 class SMPSORP(SMPSO):
+
     def __init__(self,
                  problem: FloatProblem,
                  swarm_size: int,
                  mutation: Mutation,
                  reference_points: List[List[float]],
-                 leaders: List[BoundedArchive],
+                 leaders: List[ArchiveWithReferencePoint],
                  termination_criterion: TerminationCriterion,
                  swarm_generator: Generator = store.default_generator,
                  swarm_evaluator: Evaluator = store.default_evaluator):
@@ -330,7 +311,7 @@ class SMPSORP(SMPSO):
             point.objectives = reference_points[i]
             self.reference_points.append(point)
 
-        thread = threading.Thread(target=keyboard_has_been_pressed, args=(self,))
+        thread = threading.Thread(target=change_reference_point, args=(self, ))
         thread.start()
 
     def initialize_global_best(self, swarm: List[FloatSolution]) -> None:
@@ -385,6 +366,16 @@ class SMPSORP(SMPSO):
         observable_data = self.get_observable_data()
         self.observable.notify_all(**observable_data)
 
+    def update_reference_point(self, new_reference_points: list):
+        self.reference_points = new_reference_points
+
+        for index, archive in enumerate(self.leaders):
+            archive.update_reference_point(new_reference_points[index])
+
+        observable_data = self.get_observable_data()
+        observable_data['REFERENCE_POINT'] = self.reference_points
+        self.observable.notify_all(**observable_data)
+
     def get_result(self) -> List[FloatSolution]:
         result = []
 
@@ -397,15 +388,24 @@ class SMPSORP(SMPSO):
     def get_name(self) -> str:
         return 'SMPSO/RP'
 
-    def update_reference_point(self, new_reference_points):
-        self.reference_points = new_reference_points
-        print("Update reference point: " + str(self.reference_points))
-        for index, archive in enumerate(self.leaders):
-            print(new_reference_points[index])
-            archive.update_reference_point(new_reference_points[index])
 
-        #observable_data = self.get_observable_data()
-        #observable_data['REFERENCE_POINTS'] = self.reference_points
-        #self.observable.notify_all(**observable_data)
+def change_reference_point(algorithm: SMPSORP):
+    """ Auxiliar function to read new reference points from the keyboard for the SMPSO/RP algorithm
+    :param algorithm:
+    :return:
+    """
+    number_of_reference_points = len(algorithm.reference_points)
+    number_of_objectives = algorithm.problem.number_of_objectives
 
+    while True:
+        print("Enter " + str(number_of_reference_points) +
+              " points of dimension " + str(number_of_objectives) + ": ")
 
+        read = [float(x) for x in input().split()]
+
+        # Update reference points
+        reference_points = []
+        for i in range(0, len(read), number_of_objectives):
+            reference_points.append(read[i:i + number_of_objectives])
+
+        algorithm.update_reference_point(reference_points)

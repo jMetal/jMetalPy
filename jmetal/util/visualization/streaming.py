@@ -1,9 +1,10 @@
 import logging
 from typing import TypeVar, List
 
-import holoviews as hv
-from IPython.display import display
-from holoviews.streams import Pipe
+import matplotlib
+
+matplotlib.use('Qt5Agg')
+
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
@@ -11,7 +12,6 @@ from jmetal.util.visualization.plotting import Plot
 
 LOGGER = logging.getLogger('jmetal')
 
-hv.extension('matplotlib')
 
 S = TypeVar('S')
 
@@ -23,26 +23,23 @@ S = TypeVar('S')
 .. moduleauthor:: Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
-# Define some colors
-tableau20 = [(31, 119, 180), (174, 199, 232), (255, 127, 14), (255, 187, 120),
-             (44, 160, 44), (152, 223, 138), (214, 39, 40), (255, 152, 150),
-             (148, 103, 189), (197, 176, 213), (140, 86, 75), (196, 156, 148),
-             (227, 119, 194), (247, 182, 210), (127, 127, 127), (199, 199, 199),
-             (188, 189, 34), (219, 219, 141), (23, 190, 207), (158, 218, 229)]
 
-for i in range(len(tableau20)):
-    r, g, b = tableau20[i]
-    tableau20[i] = (r / 255., g / 255., b / 255.)
-
-
-class StreamingPlot(Plot):
+class StreamingPlot:
 
     def __init__(self,
                  plot_title: str,
                  reference_front: List[S] = None,
                  reference_point: list = None,
                  axis_labels: list = None):
-        super(StreamingPlot, self).__init__(plot_title, reference_front, reference_point, axis_labels)
+        self.plot_title = plot_title
+        self.axis_labels = axis_labels
+
+        if reference_point and not isinstance(reference_point[0], list):
+            reference_point = [reference_point]
+
+        self.reference_point = reference_point
+        self.reference_front = reference_front
+        self.dimension = None
 
         import warnings
         warnings.filterwarnings("ignore", ".*GUI is implemented.*")
@@ -51,9 +48,9 @@ class StreamingPlot(Plot):
         self.sc = None
         self.axis = None
 
-    def plot(self, front: List[S]):
+    def plot(self, front):
         # Get data
-        points, dimension = self.get_points(front)
+        points, dimension = Plot.get_points(front)
 
         # Create an empty figure
         self.create_layout(dimension)
@@ -61,23 +58,26 @@ class StreamingPlot(Plot):
         # If any reference point, plot
         if self.reference_point:
             for point in self.reference_point:
-                self.sc, = self.ax.plot(*[[p] for p in point], c='r', ls='None', marker='*', markersize=3)
+                self.scp, = self.ax.plot(*[[p] for p in point], c='r', ls='None', marker='*', markersize=3)
 
         # If any reference front, plot
         if self.reference_front:
-            rpoints, _ = self.get_points(self.reference_front)
-            self.sc, = self.ax.plot(*[rpoints[column].tolist() for column in rpoints.columns.values],
+            rpoints, _ = Plot.get_points(self.reference_front)
+            self.scf, = self.ax.plot(*[rpoints[column].tolist() for column in rpoints.columns.values],
                                     c='k', ls='None', marker='*', markersize=1)
 
         # Plot data
         self.sc, = self.ax.plot(*[points[column].tolist() for column in points.columns.values],
                                 ls='None', marker='o', markersize=4)
 
-    def update(self, front: List[S]) -> None:
+        # Show plot
+        plt.show(block=False)
+
+    def update(self, front: List[S], reference_point: list = None) -> None:
         if self.sc is None:
             raise Exception('Figure is none')
 
-        points, dimension = self.get_points(front)
+        points, dimension = Plot.get_points(front)
 
         # Replace with new points
         self.sc.set_data(points[0], points[1])
@@ -85,16 +85,21 @@ class StreamingPlot(Plot):
         if dimension == 3:
             self.sc.set_3d_properties(points[2])
 
+        # If any new reference point, plot
+        if reference_point:
+            self.scp.set_data([p[0] for p in reference_point], [p[1] for p in reference_point])
+
         # Re-align the axis
         self.ax.relim()
         self.ax.autoscale_view(True, True, True)
 
         try:
-            self.fig.canvas.draw()
+            # self.fig.canvas.draw()
+            self.fig.canvas.flush_events()
         except KeyboardInterrupt:
             pass
 
-        plt.pause(0.01)
+        pause(0.01)
 
     def create_layout(self, dimension: int) -> None:
         self.fig.canvas.set_window_title(self.plot_title)
@@ -119,63 +124,14 @@ class StreamingPlot(Plot):
         self.ax.grid(color='#f0f0f5', linestyle='-', linewidth=0.5, alpha=0.5)
 
 
-class IStreamingPlot(Plot):
+def pause(interval: float):
+    backend = plt.rcParams['backend']
 
-    def __init__(self,
-                 plot_title: str,
-                 reference_front: List[S] = None,
-                 reference_point: list = None,
-                 axis_labels: list = None):
-        super(IStreamingPlot, self).__init__(plot_title, reference_front, reference_point, axis_labels)
-        self.figure = None
-        self.pipe = Pipe(data=[])
-
-    def plot(self, solutions: List[S]):
-        # Get data
-        points, dimension = self.get_points(solutions)
-        points = points.values.tolist()
-
-        # Create an empty figure
-        self.create_layout(dimension)
-
-        # If any reference point, plot
-        if self.reference_point:
-            if dimension == 2:
-                self.figure = self.figure * hv.Scatter(self.reference_point, label='Reference point')
-            elif dimension == 3:
-                self.figure = self.figure * hv.Scatter3D(self.reference_point, label='Reference point')
-
-        # If any reference front, plot
-        if self.reference_front:
-            rpoints, dimension = self.get_points(self.reference_front)
-            rpoints = rpoints.values.tolist()
-
-            if dimension == 2:
-                self.figure = self.figure * hv.Scatter(rpoints, label='Reference front')
-            elif dimension == 3:
-                self.figure = self.figure * hv.Scatter3D(rpoints, label='Reference front')
-
-        # Plot data
-        display(self.figure)  # Display figure in IPython
-        self.pipe.send(points)
-
-    def update(self, solutions: List[S]):
-        if self.figure is None:
-            raise Exception('Figure is none')
-
-        points, _ = self.get_points(solutions)
-        points = points.values.tolist()
-
-        self.pipe.send(points)
-
-    def create_layout(self, dimension: int):
-        if dimension == 2:
-            self.figure = hv.DynamicMap(hv.Scatter, streams=[self.pipe])
-        elif dimension == 3:
-            self.figure = hv.DynamicMap(hv.Scatter3D, streams=[self.pipe])
-        else:
-            raise Exception('Dimension must be either 2 or 3')
-
-    def export(self, file_name: str, file_format: str = 'svg'):
-        renderer = hv.renderer('matplotlib').instance(fig=file_format)
-        renderer.save(self.figure, file_name)
+    if backend in matplotlib.rcsetup.interactive_bk:
+        figManager = matplotlib._pylab_helpers.Gcf.get_active()
+        if figManager is not None:
+            canvas = figManager.canvas
+            if canvas.figure.stale:
+                canvas.draw()
+            canvas.start_event_loop(interval)
+            return

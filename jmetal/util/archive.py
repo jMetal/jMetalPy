@@ -1,4 +1,3 @@
-import copy
 import random
 from abc import ABC, abstractmethod
 from threading import Lock
@@ -157,7 +156,7 @@ class ArchiveWithReferencePoint(BoundedArchive[S]):
                 result = super(ArchiveWithReferencePoint, self).add(solution)
 
             if result and dominated_solution is not None and len(self.solution_list) > 1:
-                #if dominated_solution in self.solution_list:
+                # if dominated_solution in self.solution_list:
                 self.solution_list.remove(dominated_solution)
 
             if result and len(self.solution_list) > self.maximum_size:

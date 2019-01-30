@@ -1,7 +1,6 @@
 import logging
 import os
 from pathlib import Path
-from threading import Lock
 from typing import List, TypeVar
 
 from tqdm import tqdm
@@ -10,7 +9,7 @@ from jmetal.core.observable import Observer
 from jmetal.core.problem import DynamicProblem
 from jmetal.core.quality_indicator import InvertedGenerationalDistance
 from jmetal.util.solution_list import print_function_values_to_file
-from jmetal.util.visualization import StreamingPlot, IStreamingPlot, Plot
+from jmetal.util.visualization import StreamingPlot, Plot
 
 S = TypeVar('S')
 
@@ -194,10 +193,6 @@ class VisualizerObserver(Observer):
     def update(self, *args, **kwargs):
         evaluations = kwargs['EVALUATIONS']
         solutions = kwargs['SOLUTIONS']
-        if kwargs.get("REFERENCE_POINTS", None) is not None:
-            print("dasdasddasfadfasfsf")
-            self.reference_point = kwargs["REFERENCE_POINTS"]
-            print(self.reference_point)
 
         if solutions:
             if self.figure is None:
@@ -207,33 +202,13 @@ class VisualizerObserver(Observer):
                 self.figure.plot(solutions)
 
             if (evaluations % self.display_frequency) == 0:
-                self.figure.update(solutions)
+                # Check if reference point has changed
+                reference_point = kwargs.get('REFERENCE_POINT', None)
+
+                if reference_point:
+                    self.reference_point = reference_point
+                    self.figure.update(solutions, reference_point)
+                else:
+                    self.figure.update(solutions)
+
                 self.figure.ax.set_title('Eval: {}'.format(evaluations), fontsize=13)
-
-
-class IVisualizerObserver(Observer):
-
-    def __init__(self,
-                 reference_front: List[S] = None,
-                 reference_point: List[float] = None,
-                 display_frequency: float = 1.0) -> None:
-        self.figure = None
-        self.display_frequency = display_frequency
-
-        self.reference_point = reference_point
-        self.reference_front = reference_front
-
-    def update(self, *args, **kwargs):
-        evaluations = kwargs['EVALUATIONS']
-        solutions = kwargs['SOLUTIONS']
-
-        if solutions:
-            if self.figure is None:
-                self.figure = IStreamingPlot(plot_title='Pareto front approximation',
-                                             reference_point=self.reference_point,
-                                             reference_front=self.reference_front)
-                self.figure.plot(solutions)
-
-            if (evaluations % self.display_frequency) == 0:
-                self.figure.update(solutions)
-
