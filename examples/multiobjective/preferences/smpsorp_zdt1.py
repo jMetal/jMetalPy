@@ -13,12 +13,12 @@ if __name__ == '__main__':
 
     swarm_size = 100
 
-    reference_points = [[0.8, 0.2]]
+    reference_point = [[0.8, 0.2]]
     archives_with_reference_points = []
 
-    for point in reference_points:
+    for point in reference_point:
         archives_with_reference_points.append(
-            CrowdingDistanceArchiveWithReferencePoint(int(swarm_size/len(reference_points)), point)
+            CrowdingDistanceArchiveWithReferencePoint(int(swarm_size / len(reference_point)), point)
         )
 
     max_evaluations = 25000
@@ -26,22 +26,22 @@ if __name__ == '__main__':
         problem=problem,
         swarm_size=swarm_size,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
-        reference_points=reference_points,
+        reference_points=reference_point,
         leaders=archives_with_reference_points,
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
-    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front, reference_point=reference_points))
+    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front, reference_point=reference_point))
 
     algorithm.run()
     front = algorithm.get_result()
 
     # Plot front
-    plot_front = Plot(plot_title='SMPSORP-ZDT1', reference_front=problem.reference_front, reference_point=reference_points, axis_labels=problem.obj_labels)
+    plot_front = Plot(plot_title='SMPSORP-ZDT1', reference_front=problem.reference_front, reference_point=algorithm.reference_points, axis_labels=problem.obj_labels)
     plot_front.plot(algorithm.get_result(), filename='SMPSORP-ZDT1')
 
     # Plot interactive front
-    plot_front = InteractivePlot(plot_title='SMPSORP-ZDT1', reference_front=problem.reference_front, reference_point=reference_points, axis_labels=problem.obj_labels)
+    plot_front = InteractivePlot(plot_title='SMPSORP-ZDT1', reference_front=problem.reference_front, reference_point=algorithm.reference_points, axis_labels=problem.obj_labels)
     plot_front.plot(front, filename='SMPSORP-ZDT1')
 
     # Save results to file

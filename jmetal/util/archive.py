@@ -156,8 +156,8 @@ class ArchiveWithReferencePoint(BoundedArchive[S]):
                 result = super(ArchiveWithReferencePoint, self).add(solution)
 
             if result and dominated_solution is not None and len(self.solution_list) > 1:
-                # if dominated_solution in self.solution_list:
-                self.solution_list.remove(dominated_solution)
+                if dominated_solution in self.solution_list:
+                    self.solution_list.remove(dominated_solution)
 
             if result and len(self.solution_list) > self.maximum_size:
                 self.compute_density_estimator()
@@ -171,6 +171,7 @@ class ArchiveWithReferencePoint(BoundedArchive[S]):
     def update_reference_point(self, new_reference_point) -> None:
         with self.lock:
             self.__reference_point = new_reference_point
+
             for solution in self.solution_list:
                 if self.__dominance_test(solution.objectives, self.__reference_point) == 0:
                     self.solution_list.remove(solution)

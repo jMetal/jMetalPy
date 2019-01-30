@@ -304,12 +304,8 @@ class SMPSORP(SMPSO):
             swarm_evaluator=swarm_evaluator,
             termination_criterion=termination_criterion)
         self.leaders = leaders
-        self.reference_points = []
-
-        for i, _ in enumerate(reference_points):
-            point = self.problem.create_solution()
-            point.objectives = reference_points[i]
-            self.reference_points.append(point)
+        self.reference_points = reference_points
+        self.lock = threading.Lock()
 
         thread = threading.Thread(target=change_reference_point, args=(self, ))
         thread.start()
@@ -364,17 +360,19 @@ class SMPSORP(SMPSO):
             leader.compute_density_estimator()
 
         observable_data = self.get_observable_data()
+        observable_data['REFERENCE_POINT'] = self.get_reference_point()
         self.observable.notify_all(**observable_data)
 
     def update_reference_point(self, new_reference_points: list):
-        self.reference_points = new_reference_points
+        with self.lock:
+            self.reference_points = new_reference_points
 
-        for index, archive in enumerate(self.leaders):
-            archive.update_reference_point(new_reference_points[index])
+            for index, archive in enumerate(self.leaders):
+                archive.update_reference_point(new_reference_points[index])
 
-        observable_data = self.get_observable_data()
-        observable_data['REFERENCE_POINT'] = self.reference_points
-        self.observable.notify_all(**observable_data)
+    def get_reference_point(self):
+        with self.lock:
+            return self.reference_points
 
     def get_result(self) -> List[FloatSolution]:
         result = []
