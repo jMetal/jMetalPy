@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
     reference_point = [0.5, 0.5]
 
-    max_evaluations = 5000
+    max_evaluations = 25000
     algorithm = NSGAII(
         problem=problem,
         population_size=100,
