@@ -4,12 +4,11 @@
   <br/>
 </p>
 
-# Python version of the jMetal framework
+# jMetalPy: Python version of the jMetal framework
 [![Build Status](https://img.shields.io/travis/jMetal/jMetalPy.svg?style=flat-square)](https://travis-ci.org/jMetal/jMetalPy)
 [![Read the Docs](https://img.shields.io/readthedocs/jmetalpy.svg?style=flat-square)](https://readthedocs.org/projects/jmetalpy/)
 [![PyPI License](https://img.shields.io/pypi/l/jMetalPy.svg?style=flat-square)]()
 [![PyPI Python version](https://img.shields.io/pypi/pyversions/jMetalPy.svg?style=flat-square)]()
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jMetal/jMetalPy/develop)
 
 ## Table of Contents
 - [Installation](#installation)
@@ -33,17 +32,17 @@ $ pip install jmetalpy
 Examples of configuring and running all the included algorithms are located [in the docs](https://jmetalpy.readthedocs.io/en/latest/examples.html).
 
 ## Features
-The current release of jMetalPy (v0.5.5) contains the following components:
+The current release of jMetalPy (v0.5.1) contains the following components:
 
-* Algorithms: random search, GA, EA, [NSGA-II](https://jmetalpy.readthedocs.io/en/latest/examples/ea.html#nsga-ii), [SMPSO](https://jmetalpy.readthedocs.io/en/latest/examples/pso.html#smpso), [SMPSO/RP](https://jmetalpy.readthedocs.io/en/latest/examples/pso.html#smpso-rp), [MOEA/D](https://jmetalpy.readthedocs.io/en/latest/examples/ea.html#moea-d) (and steady-state variants)
-* Benchmark problems:
-  * Singleobjective:  unconstrained (OneMax, Sphere, SubsetSum).
-  * Multiobjective: ZDT1-6, DTLZ1-2, LZ09, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2, SubsetSum), constrained (Srinivas, Tanaka).
+* Algorithms: random search, [NSGA-II](https://jmetalpy.readthedocs.io/en/latest/examples/ea.html#nsga-ii-with-plotting), [SMPSO](https://jmetalpy.readthedocs.io/en/latest/examples/pso.html#smpso-with-standard-settings), [SMPSO/RP](https://jmetalpy.readthedocs.io/en/latest/examples/pso.html#smpso-rp-with-standard-settings).
+* Benchmark problems: ZDT1-6, DTLZ1-2, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2), constrained (Srinivas, Tanaka).
 * Encodings: real, binary.
-* A full range of genetic operators.
-* Quality indicators: hypervolume.
-* [Experiment class for performing studies](https://jmetalpy.readthedocs.io/en/latest/examples/experiment.html).
-* Pareto front plotting for problems with two or more objectives (as scatter plot/parallel coordinates).
+* Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random).
+* Quality indicators: [hypervolume](https://jmetalpy.readthedocs.io/en/latest/api/jmetal.component.html#module-jmetal.component.quality_indicator).
+* Density estimator: crowding distance.
+* Laboratory: [Experiment class for performing studies](https://jmetalpy.readthedocs.io/en/latest/examples/experiment.html).
+* Graphics: Pareto front plotting for problems with two or more objectives (as scatter plot/parallel coordinates/chordplot).
+* Pairwise and Multiple hypothesis testing for statistical analysis, including several frequentist and Bayesian testing methods, critical distance plots and posterior diagrams.
 
 <p align="center">
   <br/>
@@ -52,6 +51,9 @@ The current release of jMetalPy (v0.5.5) contains the following components:
   <img src=docs/source/3D.gif width=600 alt="Scatter plot 3D">
   <br/>
   <img src=docs/source/p-c.gif width=600 alt="Parallel coordinates">
+  <br/>
+  <br/>
+  <img src=docs/source/chordplot.gif width=600 alt="Interactive chord plot">
   <br/>
 </p>
 
