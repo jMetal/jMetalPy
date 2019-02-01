@@ -6,7 +6,7 @@ from jmetal.util.solution_list import print_function_values_to_file, print_varia
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
-    problem = OneMax(number_of_bits=512)
+    problem = OneMax(number_of_bits=1024)
 
     max_evaluations = 10000
     algorithm = LocalSearch(
@@ -15,7 +15,7 @@ if __name__ == '__main__':
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
-    objectives_observer = PrintObjectivesObserver(frequency=1000)
+    objectives_observer = PrintObjectivesObserver(frequency=100)
     algorithm.observable.register(observer=objectives_observer)
 
     algorithm.run()
