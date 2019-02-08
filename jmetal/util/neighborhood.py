@@ -95,3 +95,7 @@ class WeightVectorNeighborhood(WeightNeighborhood):
             raise IndexError('Neighbor index out of range')
 
         return [solution_list[i] for i in neighbors_indexes]
+
+
+    def get_neighborhood(self):
+        return self.neighborhood

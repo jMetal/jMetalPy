@@ -1,4 +1,4 @@
-from jmetal.algorithm.multiobjective.moead import MOEAD
+from jmetal.algorithm.multiobjective.moead import MOEAD, MOEADv2
 from jmetal.operator import PolynomialMutation, DifferentialEvolutionCrossover
 from jmetal.problem import LZ09_F2
 from jmetal.util.aggregative_function import Tschebycheff
@@ -13,37 +13,24 @@ if __name__ == '__main__':
     problem.reference_front = read_solutions(filename='../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
     population_size = 300
-    max_evaluations = 175000
+    max_evaluations = 150000
 
-    algorithm = MOEAD(
+    algorithm = MOEADv2(
         problem=problem,
         population_size=population_size,
         crossover=DifferentialEvolutionCrossover(CR=1.0, F=0.5, K=0.5),
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         aggregative_function=Tschebycheff(dimension=problem.number_of_objectives),
-        neighbourhood=WeightVectorNeighborhood(population_size, 20, weights_path='../../resources/MOEAD_weights/'),
+        neighbor_size=20,
         neighbourhood_selection_probability=0.9,
         max_number_of_replaced_solutions=2,
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
+    a = 4
 
-    progress_bar = ProgressBarObserver(max=max_evaluations)
-    algorithm.observable.register(observer=progress_bar)
-    #algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front, display_frequency=500))
 
     algorithm.run()
     front = algorithm.get_result()
-
-    label = algorithm.get_name() + "." + problem.get_name()
-    algorithm_name = label
-
-    # Plot front
-    plot_front = Plot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels)
-    plot_front.plot(front, label=label, filename=algorithm_name)
-
-    # Plot interactive front
-    plot_front = InteractivePlot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels)
-    plot_front.plot(front, label=label, filename=algorithm_name)
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.' + label)
