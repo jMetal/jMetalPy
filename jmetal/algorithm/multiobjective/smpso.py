@@ -357,6 +357,7 @@ class SMPSORP(SMPSO):
         self.evaluations += self.swarm_size
 
         for leader in self.leaders:
+            leader.filter()
             leader.compute_density_estimator()
 
         observable_data = self.get_observable_data()

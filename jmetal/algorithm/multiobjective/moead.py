@@ -41,7 +41,7 @@ class MOEAD(GeneticAlgorithm):
             problem=problem,
             population_size=population_size,
             offspring_population_size=1,
-            mutation=PolynomialMutation(1.0/problem.number_of_variables, 20.0),
+            mutation=mutation,
             crossover=crossover,
             selection=NaryRandomSolutionSelection(2),
             population_evaluator=population_evaluator,

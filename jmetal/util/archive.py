@@ -2,9 +2,11 @@ import random
 from abc import ABC, abstractmethod
 from threading import Lock
 from typing import TypeVar, Generic, List
+import copy
 
 from jmetal.util.comparator import Comparator, DominanceComparator, SolutionAttributeComparator
 from jmetal.util.density_estimator import CrowdingDistance, DensityEstimator
+from jmetal.util.solution_list import print_function_values_to_file
 
 S = TypeVar('S')
 
@@ -164,6 +166,14 @@ class ArchiveWithReferencePoint(BoundedArchive[S]):
 
         return result
 
+    """ In case of having at least a solution which is non-dominated with the reference point, filter it
+    """
+    def filter(self):
+        if len(self.solution_list) > 1:
+            self.solution_list[:] = \
+                [sol for sol in self.solution_list
+                 if self.__dominance_test(sol.objectives, self.__reference_point) != 0]
+
     def get_reference_point(self) -> List[float]:
         with self.lock:
             return self.__reference_point
@@ -172,9 +182,15 @@ class ArchiveWithReferencePoint(BoundedArchive[S]):
         with self.lock:
             self.__reference_point = new_reference_point
 
-            for solution in self.solution_list:
-                if self.__dominance_test(solution.objectives, self.__reference_point) == 0:
-                    self.solution_list.remove(solution)
+            print("BEFORE: " + str(len(self.solution_list)))
+            first_solution = copy.deepcopy(self.solution_list[0])
+            self.filter()
+
+            if len(self.solution_list) == 0:
+                self.solution_list.append(first_solution)
+            print_function_values_to_file(self.solution_list, 'FUN.XX' )
+
+            print("AFTER: " + str(len(self.solution_list)))
 
     def __dominance_test(self, vector1: List[float], vector2: List[float]) -> int:
         best_is_one = 0
