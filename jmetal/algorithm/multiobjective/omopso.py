@@ -41,17 +41,14 @@ class OMOPSO(ParticleSwarmOptimization):
                  swarm_evaluator: Evaluator = store.default_evaluator):
         """ This class implements the OMOPSO algorithm as described in
 
-        * TODO: Update this reference
+        todo Update this reference
         * SMPSO: A new PSO-based metaheuristic for multi-objective optimization
-        * MCDM 2009. DOI: `<http://dx.doi.org/10.1109/MCDM.2009.4938830/>`_.
 
         The implementation of OMOPSO provided in jMetalPy follows the algorithm template described in the algorithm
         templates section of the documentation.
 
         :param problem: The problem to solve.
         :param swarm_size: Size of the swarm.
-        :param max_evaluations: Maximum number of evaluations/iterations.
-        :param mutation: Mutation operator (see :py:mod:`jmetal.operator.mutation`).
         :param leaders: Archive for leaders.
         """
         super(OMOPSO, self).__init__(
@@ -124,9 +121,8 @@ class OMOPSO(ParticleSwarmOptimization):
 
             for var in range(swarm[i].number_of_variables):
                 self.speed[i][var] = w * self.speed[i][var] \
-                                     + (c1 * r1 * (best_particle.variables[var] - swarm[i].variables[var]))\
+                                     + (c1 * r1 * (best_particle.variables[var] - swarm[i].variables[var])) \
                                      + (c2 * r2 * (best_global.variables[var] - swarm[i].variables[var]))
-
 
     def update_position(self, swarm: List[FloatSolution]) -> None:
         for i in range(self.swarm_size):
@@ -157,7 +153,7 @@ class OMOPSO(ParticleSwarmOptimization):
                 swarm[i].attributes['local_best'] = copy(swarm[i])
 
     def perturbation(self, swarm: List[FloatSolution]) -> None:
-        self.non_uniform_mutation.set_current_iteration(self.evaluations/self.swarm_size)
+        self.non_uniform_mutation.set_current_iteration(self.evaluations / self.swarm_size)
         for i in range(self.swarm_size):
             if (i % 3) == 0:
                 self.non_uniform_mutation.execute(swarm[i])
@@ -221,5 +217,3 @@ class OMOPSO(ParticleSwarmOptimization):
 
     def get_name(self) -> str:
         return 'OMOPSO'
-
-

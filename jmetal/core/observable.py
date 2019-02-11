@@ -57,4 +57,3 @@ class DefaultObservable(Observable):
     def notify_all(self, *args, **kwargs):
         for observer in self.observers:
             observer.update(*args, **kwargs)
-

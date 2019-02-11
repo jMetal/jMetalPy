@@ -53,12 +53,6 @@ class NSGAIII(NSGAII):
             population_generator=population_generator
         )
         self.dominance_comparator = dominance_comparator
-        """
-        self.population_size = choose(problem.number_of_objectives + divisions_outer - 1, divisions_outer) + \
-                               (0 if divisions_inner == 0 else choose(problem.number_of_objectives + divisions_inner - 1,
-                                                                      divisions_inner))
-        self.population_size = int(math.ceil(self.population_size / 4.0)) * 4
-        """
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
         """ Implements NSGA-III selection as described in

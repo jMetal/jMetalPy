@@ -64,7 +64,7 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
 
         return offspring_population
 
-    def replacement(self, population: List[S], offspring_population: List[FloatSolution]) -> List[FloatSolution]:
+    def replacement(self, population: List[S], offspring_population: List[FloatSolution]) -> List[List[FloatSolution]]:
         tmp_list = []
 
         for solution1, solution2 in zip(self.solutions, offspring_population):

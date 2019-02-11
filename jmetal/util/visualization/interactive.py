@@ -15,7 +15,10 @@ S = TypeVar('S')
 
 class InteractivePlot(Plot):
 
-    def __init__(self, plot_title: str, reference_front: List[S] = None, reference_point: list = None,
+    def __init__(self,
+                 plot_title: str = 'Pareto front approximation',
+                 reference_front: List[S] = None,
+                 reference_point: list = None,
                  axis_labels: list = None):
         super(InteractivePlot, self).__init__(plot_title, reference_front, reference_point, axis_labels)
         self.figure = None
@@ -26,6 +29,7 @@ class InteractivePlot(Plot):
         """ Plot a front of solutions (2D, 3D or parallel coordinates).
 
         :param front: List of solutions.
+        :param label: Front name.
         :param normalize: Normalize the input front between 0 and 1 (for problems with more than 3 objectives).
         :param filename: Output filename.
         """
@@ -140,12 +144,18 @@ class InteractivePlot(Plot):
                          **kwargs):
         dimension = points.shape[1]
 
+        # tweak points size for 3D plots
+        marker_size = 8
+        if dimension == 3:
+            marker_size = 4
+
+        # if indicated, perform normalization
         if normalize:
             points = (points - points.min()) / (points.max() - points.min())
 
         marker = dict(
             color='#236FA4',
-            size=8,
+            size=marker_size,
             symbol='circle',
             line=dict(
                 color='#236FA4',
@@ -184,7 +194,9 @@ class InteractivePlot(Plot):
                 )
 
             trace = go.Parcoords(
-                line=dict(color='blue'),
+                line=dict(
+                    color='#236FA4'
+                ),
                 dimensions=dimensions,
                 name=legend,
             )

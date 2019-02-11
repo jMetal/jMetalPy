@@ -8,8 +8,8 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.util.visualization import InteractivePlot, Plot
 
 if __name__ == '__main__':
-    problem = DTLZ1(number_of_objectives=3)
-    problem.reference_front = read_solutions(filename='../../resources/reference_front/DTLZ1.3D.pf')
+    problem = DTLZ1(number_of_objectives=5)
+    #problem.reference_front = read_solutions(filename='../../resources/reference_front/DTLZ1.3D.pf')
 
     algorithm = SMPSO(
         problem=problem,
@@ -25,21 +25,18 @@ if __name__ == '__main__':
     front = algorithm.get_result()
 
     # Plot front
-    plot_tile = algorithm.get_name() + "-" + problem.get_name() + "-" + str(problem.number_of_objectives)
+    label = '{}-{} with {} objectives'.format(algorithm.get_name(), problem.get_name(), problem.number_of_objectives)
 
-    plot_front = Plot(plot_title='SMPSO-' + problem.get_name(), reference_front=problem.reference_front)
-    plot_front.plot([algorithm.get_result(),algorithm.get_result()], filename=plot_tile + '.eps')
+    plot_front = Plot(plot_title='Pareto front approximation', reference_front=problem.reference_front, axis_labels=problem.obj_labels)
+    plot_front.plot(front, label=label, filename=label)
 
     # Plot interactive front
-    plot_front = InteractivePlot(plot_title=plot_tile, reference_front=problem.reference_front, axis_labels=problem.obj_labels)
-    plot_front.plot(front, filename=plot_tile)
-
-    plot_front = InteractivePlot(plot_title=plot_tile + '-norm', reference_front=problem.reference_front, axis_labels=problem.obj_labels)
-    plot_front.plot(front, normalize=True, filename=plot_tile + '-norm')
+    plot_front = InteractivePlot(plot_title='Pareto front approximation', reference_front=problem.reference_front, axis_labels=problem.obj_labels)
+    plot_front.plot(front, label=label, filename=label, normalize=True)
 
     # Save variables to file
-    print_function_values_to_file(front, 'FUN-' + plot_tile)
-    print_variables_to_file(front, 'VAR-' + plot_tile)
+    print_function_values_to_file(front, 'FUN-' + label)
+    print_variables_to_file(front, 'VAR-' + label)
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())

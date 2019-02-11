@@ -16,7 +16,7 @@ S = TypeVar('S')
 class Plot(ABC):
 
     def __init__(self,
-                 plot_title: str = 'jMetalPy',
+                 plot_title: str = 'Pareto front approximation',
                  reference_front: List[S] = None,
                  reference_point: list = None,
                  axis_labels: list = None):
@@ -49,7 +49,7 @@ class Plot(ABC):
         points = pd.DataFrame(list(solution.objectives for solution in solutions))
         return points, points.shape[1]
 
-    def plot(self, front, label=None, normalize: bool = False, filename: str = None, format: str = 'eps'):
+    def plot(self, front, label='', normalize: bool = False, filename: str = None, format: str = 'eps'):
         """ Plot any arbitrary number of fronts in 2D, 3D or p-coords.
 
         :param front: Pareto front or a list of them.
