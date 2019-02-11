@@ -1,6 +1,6 @@
 from jmetal.algorithm.multiobjective.moead import MOEAD
 from jmetal.operator import PolynomialMutation, DifferentialEvolutionCrossover
-from jmetal.problem import LZ09_F2, DTLZ1
+from jmetal.problem import LZ09_F2, DTLZ1, DTLZ2
 from jmetal.problem.multiobjective.lz09 import LZ09_F9, LZ09_F5, LZ09_F6
 from jmetal.util.aggregative_function import Tschebycheff
 from jmetal.util.neighborhood import WeightVectorNeighborhood
@@ -10,8 +10,8 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.util.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
-    problem = LZ09_F2()
-    problem.reference_front = read_solutions(filename='../../resources/reference_front/{}.pf'.format(problem.get_name()))
+    problem = DTLZ2()
+    problem.reference_front = read_solutions(filename='../../resources/reference_front/DTLZ2.3D.pf'.format(problem.get_name()))
 
     population_size = 300
     max_evaluations = 150000

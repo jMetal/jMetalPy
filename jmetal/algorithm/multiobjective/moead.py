@@ -29,6 +29,7 @@ class MOEAD(GeneticAlgorithm):
                  max_number_of_replaced_solutions: int=2,
                  neighbor_size: int=20,
                  termination_criterion: TerminationCriterion = StoppingByEvaluations(150000),
+                 weight_files_path: str = "../../resources/MOEAD_weights",
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator):
         """
@@ -49,7 +50,12 @@ class MOEAD(GeneticAlgorithm):
         )
         self.max_number_of_replaced_solutions = max_number_of_replaced_solutions
         self.fitness_function = aggregative_function
-        self.neighbourhood = WeightVectorNeighborhood(number_of_weight_vectors=population_size, neighborhood_size=neighbor_size)
+        self.neighbourhood = WeightVectorNeighborhood(
+            number_of_weight_vectors=population_size,
+            neighborhood_size=neighbor_size,
+            weight_vector_size=problem.number_of_objectives,
+            weights_path=weight_files_path
+        )
         self.neighbourhood_selection_probability = neighbourhood_selection_probability
         self.permutation = Permutation(population_size)
         self.current_subproblem: int = 0

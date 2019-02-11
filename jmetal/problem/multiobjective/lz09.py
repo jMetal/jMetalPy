@@ -128,7 +128,7 @@ class LZ09(FloatProblem):
     def __alpha_func(self, x: list, dim: int, type: int) -> list:
         """ Control the PF shape.
         """
-        alpha = [0.0] * 2
+        alpha = [0.0] * dim
 
         if dim == 2:
             if type == 21:
