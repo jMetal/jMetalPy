@@ -1,4 +1,4 @@
-Observers
+Observer entities
 ========================
 
 It is possible to attach any number of observers to any algorithm to retrieve information from each iteration.
@@ -13,16 +13,19 @@ A progress bar observer will print a `smart progress meter <https://github.com/t
 
 .. code-block:: python
 
-   algorithm = GenerationalGeneticAlgorithm(
-      problem=problem,
-      population_size=100,
-      max_evaluations=25000,
-      mutation=BitFlip(1.0/bits),
-      crossover=SP(0.9),
-      selection=BinaryTournamentSelection()
-   )
+   max_evaluations = 25000
 
-   progress_bar = ProgressBarObserver(step=100, maximum=25000)
+   algorithm = GeneticAlgorithm(
+        problem=problem,
+        population_size=100,
+        offspring_population_size=100,
+        mutation=BitFlipMutation(1.0 / problem.number_of_bits),
+        crossover=SPXCrossover(0.9),
+        selection=BinaryTournamentSelection(),
+        termination_criterion=StoppingByEvaluations(max=25000)
+    )
+
+   progress_bar = ProgressBarObserver(max=max_evaluations)
    algorithm.observable.register(progress_bar)
 
    algorithm.run()
@@ -31,4 +34,4 @@ A progress bar observer will print a `smart progress meter <https://github.com/t
 
    $ Progress:  50%|#####     | 12500/25000 [13:59<14:12, 14.66it/s]
 
-A full list of all available observers can be found at the :py:mod:`jmetal.component.observer` module.
+A full list of all available observers can be found at the :py:mod:`jmetal.util.observer` module.

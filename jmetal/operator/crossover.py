@@ -3,21 +3,21 @@ import random
 from typing import List
 
 from jmetal.core.operator import Crossover
-from jmetal.core.solution import Solution, FloatSolution, BinarySolution
+from jmetal.core.solution import Solution, FloatSolution, BinarySolution, PermutationSolution
 
 """
 .. module:: crossover
    :platform: Unix, Windows
    :synopsis: Module implementing crossover operators.
 
-.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
 
 class NullCrossover(Crossover[Solution, Solution]):
 
     def __init__(self):
-        super(NullCrossover, self).__init__(probability=0)
+        super(NullCrossover, self).__init__(probability=0.0)
 
     def execute(self, parents: List[Solution]) -> List[Solution]:
         if len(parents) != 2:
@@ -25,25 +25,130 @@ class NullCrossover(Crossover[Solution, Solution]):
 
         return parents
 
-    def get_number_of_parents(self):
+    def get_number_of_parents(self) -> int:
+        return 2
+
+    def get_number_of_children(self) -> int:
         return 2
 
     def get_name(self):
         return 'Null crossover'
 
 
-class SBX(Crossover[FloatSolution, FloatSolution]):
+class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
+
+    def __init__(self, probability: float):
+        super(PMXCrossover, self).__init__(probability=probability)
+
+    def execute(self, parents: List[PermutationSolution]) -> List[PermutationSolution]:
+        if len(parents) != 2:
+            raise Exception('The number of parents is not two: {}'.format(len(parents)))
+
+        offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
+        rand = random.random()
+
+        if rand <= self.probability:
+            for i in range(parents[0].number_of_variables):
+                size = min(len(offspring[0].variables[i]), len(offspring[1].variables[i]))
+                p1, p2 = [0] * size, [0] * size
+
+                # Initialize the position of each indices in the individuals
+                for j in range(size):
+                    p1[offspring[0].variables[i][j]] = j
+                    p2[offspring[1].variables[i][j]] = j
+
+                # Choose crossover points
+                cxpoint1 = random.randint(0, size)
+                cxpoint2 = random.randint(0, size - 1)
+
+                if cxpoint2 >= cxpoint1:
+                    cxpoint2 += 1
+                else:  # Swap the two cx points
+                    cxpoint1, cxpoint2 = cxpoint2, cxpoint1
+
+                # Apply crossover between cx points
+                for j in range(cxpoint1, cxpoint2):
+                    # Keep track of the selected values
+                    temp1 = offspring[0].variables[i][j]
+                    temp2 = offspring[1].variables[i][j]
+
+                    # Swap the matched value
+                    offspring[0].variables[i][j], offspring[0].variables[i][p1[temp2]] = temp2, temp1
+                    offspring[1].variables[i][j], offspring[1].variables[i][p2[temp1]] = temp1, temp2
+
+                    # Position bookkeeping
+                    p1[temp1], p1[temp2] = p1[temp2], p1[temp1]
+                    p2[temp1], p2[temp2] = p2[temp2], p2[temp1]
+
+                offspring[0].variables[i] = p1
+                offspring[1].variables[i] = p2
+
+        return offspring
+
+    def get_number_of_parents(self) -> int:
+        return 2
+
+    def get_number_of_children(self) -> int:
+        return 2
+
+    def get_name(self):
+        return 'Partially Matched crossover'
+
+
+class CXCrossover(Crossover[PermutationSolution, PermutationSolution]):
+
+    def __init__(self, probability: float):
+        super(CXCrossover, self).__init__(probability=probability)
+
+    def execute(self, parents: List[PermutationSolution]) -> List[PermutationSolution]:
+        if len(parents) != 2:
+            raise Exception('The number of parents is not two: {}'.format(len(parents)))
+
+        offspring = [copy.deepcopy(parents[1]), copy.deepcopy(parents[0])]
+        rand = random.random()
+
+        if rand <= self.probability:
+            for i in range(parents[0].number_of_variables):
+                idx = random.randint(0, len(parents[0].variables[i]) - 1)
+                curr_idx = idx
+                cycle = []
+
+                while True:
+                    cycle.append(curr_idx)
+                    curr_idx = parents[0].variables[i].index(parents[1].variables[i][curr_idx])
+
+                    if curr_idx == idx:
+                        break
+
+                for j in range(len(parents[0].variables[i])):
+                    if j in cycle:
+                        offspring[0].variables[i][j] = parents[0].variables[i][j]
+                        offspring[1].variables[i][j] = parents[0].variables[i][j]
+
+        return offspring
+
+    def get_number_of_parents(self) -> int:
+        return 2
+
+    def get_number_of_children(self) -> int:
+        return 2
+
+    def get_name(self):
+        return 'Cycle crossover'
+
+
+class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
     __EPS = 1.0e-14
 
     def __init__(self, probability: float, distribution_index: float = 20.0):
-        super(SBX, self).__init__(probability=probability)
+        super(SBXCrossover, self).__init__(probability=probability)
         self.distribution_index = distribution_index
 
     def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
         if len(parents) != 2:
             raise Exception('The number of parents is not two: {}'.format(len(parents)))
 
-        offspring = [copy.copy(parents[0]), copy.copy(parents[1])]
+        offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
         rand = random.random()
 
         if rand <= self.probability:
@@ -102,23 +207,26 @@ class SBX(Crossover[FloatSolution, FloatSolution]):
                     offspring[1].variables[i] = value_x2
         return offspring
 
-    def get_number_of_parents(self):
+    def get_number_of_parents(self) -> int:
         return 2
 
-    def get_name(self):
+    def get_number_of_children(self) -> int:
+        return 2
+
+    def get_name(self) -> str:
         return 'SBX crossover'
 
 
-class SP(Crossover[BinarySolution, BinarySolution]):
+class SPXCrossover(Crossover[BinarySolution, BinarySolution]):
 
     def __init__(self, probability: float):
-        super(SP, self).__init__(probability=probability)
+        super(SPXCrossover, self).__init__(probability=probability)
 
     def execute(self, parents: List[BinarySolution]) -> List[BinarySolution]:
         if len(parents) != 2:
             raise Exception('The number of parents is not two: {}'.format(len(parents)))
 
-        offspring = [copy.copy(parents[0]), copy.copy(parents[1])]
+        offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
         rand = random.random()
 
         if rand <= self.probability:
@@ -140,8 +248,8 @@ class SP(Crossover[BinarySolution, BinarySolution]):
             crossover_point_in_variable = len(parents[1].variables[variable_to_cut]) - diff
 
             # 5. Apply the crossover to the variable
-            bitset1 = parents[0].variables[variable_to_cut]
-            bitset2 = parents[1].variables[variable_to_cut]
+            bitset1 = copy.copy(parents[0].variables[variable_to_cut])
+            bitset2 = copy.copy(parents[1].variables[variable_to_cut])
 
             for i in range(crossover_point_in_variable, len(bitset1)):
                 swap = bitset1[i]
@@ -158,8 +266,62 @@ class SP(Crossover[BinarySolution, BinarySolution]):
 
         return offspring
 
-    def get_number_of_parents(self):
+    def get_number_of_parents(self) -> int:
         return 2
 
-    def get_name(self):
+    def get_number_of_children(self) -> int:
+        return 2
+
+    def get_name(self) -> str:
         return 'Single point crossover'
+
+
+class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
+    """ This operator receives two parameters: the current individual and an array of three parent individuals. The
+    best and rand variants depends on the third parent, according whether it represents the current of the "best"
+    individual or a random one. The implementation of both variants are the same, due to that the parent selection is
+    external to the crossover operator.
+    """
+
+    def __init__(self, CR: float, F: float, K: float):
+        super(DifferentialEvolutionCrossover, self).__init__(probability=1.0)
+        self.CR = CR
+        self.F = F
+        self.K = K
+
+        self.current_individual: FloatSolution = None
+
+    def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
+        """ Execute the differential evolution crossover ('best/1/bin' variant in jMetal).
+        """
+        if len(parents) != self.get_number_of_parents():
+            raise Exception('The number of parents is not {}: {}'.format(self.get_number_of_parents(), len(parents)))
+
+        child = copy.deepcopy(self.current_individual)
+
+        number_of_variables = parents[0].number_of_variables
+        rand = random.randint(0, number_of_variables - 1)
+
+        for i in range(number_of_variables):
+            if random.random() < self.CR or i == rand:
+                value = parents[2].variables[i] + self.F * (parents[0].variables[i] - parents[1].variables[i])
+
+                if value < child.lower_bound[i]:
+                    value = child.lower_bound[i]
+                if value > child.upper_bound[i]:
+                    value = child.upper_bound[i]
+            else:
+                value = child.variables[i]
+
+            child.variables[i] = value
+
+        return [child]
+
+    def get_number_of_parents(self) -> int:
+        return 3
+
+    def get_number_of_children(self) -> int:
+        return 1
+
+    def get_name(self) -> str:
+        return 'Differential Evolution crossover'

@@ -13,5 +13,6 @@ Getting started
    :caption: Further configuration:
 
    examples/observer
+   examples/problem
    examples/experiment
    examples/visualization

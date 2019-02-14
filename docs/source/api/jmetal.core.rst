@@ -11,6 +11,14 @@ Algorithm
     :undoc-members:
     :show-inheritance:
 
+Observable
+-----------------------------
+
+.. automodule:: jmetal.core.observable
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Operator
 ---------------------------
 
@@ -35,10 +43,11 @@ Solution
     :undoc-members:
     :show-inheritance:
 
-Observable
------------------------------
+Quality Indicator
+--------------------------------
 
-.. automodule:: jmetal.core.observable
+.. automodule:: jmetal.core.quality_indicator
     :members:
     :undoc-members:
     :show-inheritance:
+

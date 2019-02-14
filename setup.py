@@ -1,17 +1,13 @@
 from setuptools import find_packages
-
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup
 
 setup(
     name='jmetalpy',
-    version='0.5.1',
-    description='JMetalPy. Python version of the jMetal framework',
+    version='0.9.0',
+    description='Python version of the jMetal framework',
     author='Antonio J. Nebro',
     author_email='antonio@lcc.uma.es',
-    maintainer='Antonio J. Nebro, Antonio Benítez-Hidalgo',
+    maintainer='Antonio J. Nebro, Antonio Benitez-Hidalgo',
     maintainer_email='antonio@lcc.uma.es, antonio.b@uma.es',
     license='MIT',
     url='https://github.com/jMetal/jMetalPy',
@@ -26,13 +22,20 @@ setup(
     ],
     install_requires=[
         'tqdm',
-        'numpy',
-        'pandas',
-        'plotly',
-        'matplotlib==2.0.2',
+        'numpy==1.16.0',
+        'pandas==0.23.4',
+        'scipy==1.1.0',
+        'pyspark==2.4.0',
+        'ipython',
+        'holoviews==1.10.9',
+        'plotly==3.3.0',
+        'matplotlib==3.0.2',
+        'statsmodels==0.9.0',
+        'dask[complete]==1.0.0'
     ],
     tests_require=[
-        'mockito'
+        'mockito',
         'PyHamcrest',
+        'mock'
     ]
 )

@@ -1,7 +1,8 @@
+import random
 from math import sqrt, exp, pow, sin
 
-from jmetal.core.problem import FloatProblem
-from jmetal.core.solution import FloatSolution
+from jmetal.core.problem import FloatProblem, BinaryProblem
+from jmetal.core.solution import FloatSolution, BinarySolution
 
 """
 .. module:: constrained
@@ -15,8 +16,8 @@ from jmetal.core.solution import FloatSolution
 class Kursawe(FloatProblem):
     """ Class representing problem Kursawe. """
 
-    def __init__(self, number_of_variables: int=3, rf_path: str=None):
-        super(Kursawe, self).__init__(rf_path=rf_path)
+    def __init__(self, number_of_variables: int = 3):
+        super(Kursawe, self).__init__()
         self.number_of_objectives = 2
         self.number_of_variables = number_of_variables
         self.number_of_constraints = 0
@@ -50,8 +51,8 @@ class Kursawe(FloatProblem):
 
 class Fonseca(FloatProblem):
 
-    def __init__(self, rf_path: str=None):
-        super(Fonseca, self).__init__(rf_path=rf_path)
+    def __init__(self):
+        super(Fonseca, self).__init__()
         self.number_of_variables = 3
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -78,8 +79,8 @@ class Fonseca(FloatProblem):
 
 class Schaffer(FloatProblem):
 
-    def __init__(self, rf_path: str=None):
-        super(Schaffer, self).__init__(rf_path=rf_path)
+    def __init__(self):
+        super(Schaffer, self).__init__()
         self.number_of_variables = 1
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -107,8 +108,8 @@ class Schaffer(FloatProblem):
 
 class Viennet2(FloatProblem):
 
-    def __init__(self, rf_path: str=None):
-        super(Viennet2, self).__init__(rf_path=rf_path)
+    def __init__(self):
+        super(Viennet2, self).__init__()
         self.number_of_variables = 2
         self.number_of_objectives = 3
         self.number_of_constraints = 0
@@ -138,3 +139,90 @@ class Viennet2(FloatProblem):
 
     def get_name(self):
         return 'Viennet2'
+
+
+class SubsetSum(BinaryProblem):
+
+    def __init__(self, C: int, W: list):
+        """ The goal is to find a subset S of W whose elements sum is closest to (without exceeding) C.
+
+        :param C: Large integer.
+        :param W: Set of non-negative integers."""
+        super(SubsetSum, self).__init__()
+        self.C = C
+        self.W = W
+
+        self.number_of_bits = len(self.W)
+        self.number_of_objectives = 2
+        self.number_of_variables = 1
+        self.number_of_constraints = 0
+
+        self.obj_directions = [self.MAXIMIZE, self.MINIMIZE]
+        self.obj_labels = ['Sum', 'No. of Objects']
+
+    def evaluate(self, solution: BinarySolution) -> BinarySolution:
+        total_sum = 0.0
+        number_of_objects = 0
+
+        for index, bits in enumerate(solution.variables[0]):
+            if bits:
+                total_sum += self.W[index]
+                number_of_objects += 1
+
+        if total_sum > self.C:
+            total_sum = self.C - total_sum * 0.1
+
+            if total_sum < 0.0:
+                total_sum = 0.0
+
+        solution.objectives[0] = -1.0 * total_sum
+        solution.objectives[1] = number_of_objects
+
+        return solution
+
+    def create_solution(self) -> BinarySolution:
+        new_solution = BinarySolution(number_of_variables=self.number_of_variables,
+                                      number_of_objectives=self.number_of_objectives)
+        new_solution.variables[0] = \
+            [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
+
+        return new_solution
+
+    def get_name(self) -> str:
+        return 'Subset Sum'
+
+
+class OneZeroMax(BinaryProblem):
+
+    def __init__(self, number_of_bits: int = 256):
+        super(OneZeroMax, self).__init__()
+        self.number_of_bits = number_of_bits
+        self.number_of_objectives = 2
+        self.number_of_variables = 1
+        self.number_of_constraints = 0
+
+        self.obj_directions = [self.MINIMIZE]
+        self.obj_labels = ['Ones']
+
+    def evaluate(self, solution: BinarySolution) -> BinarySolution:
+        counter_of_ones = 0
+        counter_of_zeroes = 0
+        for bits in solution.variables[0]:
+            if bits:
+                counter_of_ones += 1
+            else:
+                counter_of_zeroes += 1
+
+        solution.objectives[0] = -1.0 * counter_of_ones
+        solution.objectives[1] = -1.0 * counter_of_zeroes
+
+        return solution
+
+    def create_solution(self) -> BinarySolution:
+        new_solution = BinarySolution(number_of_variables=self.number_of_variables, number_of_objectives=self.number_of_objectives)
+        new_solution.variables[0] = \
+            [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
+        return new_solution
+
+    def get_name(self) -> str:
+        return 'OneZeroMax'

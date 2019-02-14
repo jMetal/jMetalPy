@@ -32,16 +32,17 @@ $ pip install jmetalpy
 Examples of configuring and running all the included algorithms are located [in the docs](https://jmetalpy.readthedocs.io/en/latest/examples.html).
 
 ## Features
-The current release of jMetalPy (v0.5.1) contains the following components:
+The current release of jMetalPy (v0.9.0) contains the following components:
 
-* Algorithms: random search, [NSGA-II](https://jmetalpy.readthedocs.io/en/latest/examples/ea.html#nsga-ii-with-plotting), [SMPSO](https://jmetalpy.readthedocs.io/en/latest/examples/pso.html#smpso-with-standard-settings), [SMPSO/RP](https://jmetalpy.readthedocs.io/en/latest/examples/pso.html#smpso-rp-with-standard-settings).
-* Benchmark problems: ZDT1-6, DTLZ1-2, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2), constrained (Srinivas, Tanaka).
-* Encodings: real, binary.
+* Algorithms: local search, genetic algorithm, evolution strategy, simulated annealing, random search, NSGA-II, SMPSO, OMOPSO, MOEA/D, GDE3. Preference articulation-based algorithms; G-NSGA-II and SMPSO/RP; Dynamic versions of NSGA-II and SMPSO.
+* Parallel computing based on Apache Spark and Dask.
+* Benchmark problems: ZDT1-6, DTLZ1-2, FDA, LZ09, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2), constrained (Srinivas, Tanaka).
+* Encodings: real, binary, permutations.
 * Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random).
-* Quality indicators: [hypervolume](https://jmetalpy.readthedocs.io/en/latest/api/jmetal.component.html#module-jmetal.component.quality_indicator).
-* Density estimator: crowding distance.
-* Laboratory: [Experiment class for performing studies](https://jmetalpy.readthedocs.io/en/latest/examples/experiment.html).
-* Graphics: Pareto front plotting for problems with two or more objectives (as scatter plot/parallel coordinates).
+* Quality indicators: hypervolume, additive epsilon, GD, IGD.
+* [Pareto front plotting](https://jmetalpy.readthedocs.io/en/latest/examples/visualization.html) for problems with two or more objectives (as scatter plot/parallel coordinates/chordplot) in real-time, static or interactive.
+* [Experiment class](https://jmetalpy.readthedocs.io/en/latest/examples/experiment.html) for performing studies either alone or alongside jMetal.
+* Pairwise and multiple hypothesis testing for statistical analysis, including several frequentist and Bayesian testing methods, critical distance plots and posterior diagrams.
 
 <p align="center">
   <br/>
@@ -50,6 +51,9 @@ The current release of jMetalPy (v0.5.1) contains the following components:
   <img src=docs/source/3D.gif width=600 alt="Scatter plot 3D">
   <br/>
   <img src=docs/source/p-c.gif width=600 alt="Parallel coordinates">
+  <br/>
+  <br/>
+  <img src=docs/source/chordplot.gif width=400 alt="Interactive chord plot">
   <br/>
 </p>
 
