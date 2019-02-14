@@ -36,17 +36,17 @@ Via Github:
 
 Features
 ------------------------
-The current release of jMetalPy (v0.5.5) contains the following components:
+The current release of jMetalPy (v0.9.0) contains the following components:
 
-* Algorithms: random search, NSGA-II, SMPSO, SMPSO/RP.
-* Benchmark problems:
-  * Singleobjective:  unconstrained (OneMax, Sphere, SubsetSum).
-  * Multiobjective: ZDT1-6, DTLZ1-2, LZ09, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2, SubsetSum), constrained (Srinivas, Tanaka).
-* Encodings: real, binary.
-* A full range of genetic operators.
-* Quality indicators: hypervolume.
-* Experiment class for performing studies.
-* Pareto front plotting for problems with two or more objectives (as scatter plot/parallel coordinates).
+* Algorithms: local search, genetic algorithm, evolution strategy, simulated annealing, random search, NSGA-II, SMPSO, OMOPSO, MOEA/D, GDE3. Preference articulation-based algorithms; G-NSGA-II and SMPSO/RP; Dynamic versions of NSGA-II and SMPSO.
+* Parallel computing based on Apache Spark and Dask.
+* Benchmark problems: ZDT1-6, DTLZ1-2, FDA, LZ09, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2), constrained (Srinivas, Tanaka).
+* Encodings: real, binary, permutations.
+* Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random).
+* Quality indicators: hypervolume, additive epsilon, GD, IGD.
+* Pareto front plotting for problems with two or more objectives (as scatter plot/parallel coordinates/chordplot) in real-time, static or interactive.
+* Experiment class for performing studies either alone or alongside jMetal.
+* Pairwise and multiple hypothesis testing for statistical analysis, including several frequentist and Bayesian testing methods, critical distance plots and posterior diagrams.
 
 .. figure:: visualization.png
    :alt: Visualization

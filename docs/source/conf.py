@@ -32,7 +32,7 @@ copyright = '2018, Antonio J. Nebro'
 author = 'Antonio J. Nebro, Antonio Benítez-Hidalgo'
 
 # The short X.Y version
-version = '0.5.5'
+version = '0.9.0'
 # The full version, including alpha/beta/rc tags
 release = ''
 

@@ -1,7 +1,7 @@
 Examples of running EAs
 ========================
 
-NSGA-II
+NSGA-II with plotting
 ------------------------------------
 
 .. code-block:: python
