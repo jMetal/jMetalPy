@@ -14,7 +14,7 @@ from jmetal.util.solution_list import Evaluator, Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
-R = List[S]
+R = TypeVar('R')
 
 """
 .. module:: NSGA-II
