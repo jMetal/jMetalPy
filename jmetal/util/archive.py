@@ -80,7 +80,7 @@ class BoundedArchive(Archive[S]):
 
 class NonDominatedSolutionListArchive(Archive[S]):
 
-    def __init__(self, dominance_comparator = DominanceComparator()):
+    def __init__(self, dominance_comparator=DominanceComparator()):
         super(NonDominatedSolutionListArchive, self).__init__()
         self.comparator = dominance_comparator
 
@@ -166,31 +166,26 @@ class ArchiveWithReferencePoint(BoundedArchive[S]):
 
         return result
 
-    """ In case of having at least a solution which is non-dominated with the reference point, filter it
-    """
     def filter(self):
+        # In case of having at least a solution which is non-dominated with the reference point, filter it
         if len(self.solution_list) > 1:
             self.solution_list[:] = \
                 [sol for sol in self.solution_list
                  if self.__dominance_test(sol.objectives, self.__reference_point) != 0]
 
-    def get_reference_point(self) -> List[float]:
-        with self.lock:
-            return self.__reference_point
-
     def update_reference_point(self, new_reference_point) -> None:
         with self.lock:
             self.__reference_point = new_reference_point
 
-            print("BEFORE: " + str(len(self.solution_list)))
             first_solution = copy.deepcopy(self.solution_list[0])
             self.filter()
 
             if len(self.solution_list) == 0:
                 self.solution_list.append(first_solution)
-            print_function_values_to_file(self.solution_list, 'FUN.XX' )
 
-            print("AFTER: " + str(len(self.solution_list)))
+    def get_reference_point(self) -> List[float]:
+        with self.lock:
+            return self.__reference_point
 
     def __dominance_test(self, vector1: List[float], vector2: List[float]) -> int:
         best_is_one = 0
@@ -223,5 +218,3 @@ class CrowdingDistanceArchiveWithReferencePoint(ArchiveWithReferencePoint[S]):
             reference_point=reference_point,
             comparator=SolutionAttributeComparator("crowding_distance", lowest_is_best=False),
             density_estimator=CrowdingDistance())
-
-

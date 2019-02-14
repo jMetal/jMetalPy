@@ -1,21 +1,22 @@
-import random
 import copy
+import random
 from typing import TypeVar, List
 
 import numpy as np
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
-from jmetal.core.operator import Mutation, Crossover
+from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
-from jmetal.operator import DifferentialEvolutionCrossover, PolynomialMutation, NaryRandomSolutionSelection
+from jmetal.operator import DifferentialEvolutionCrossover, NaryRandomSolutionSelection
 from jmetal.util.aggregative_function import AggregativeFunction, Tschebycheff
-from jmetal.util.neighborhood import WeightNeighborhood, WeightVectorNeighborhood
+from jmetal.util.neighborhood import WeightVectorNeighborhood
 from jmetal.util.solution_list import Evaluator, Generator
 from jmetal.util.termination_criterion import TerminationCriterion, StoppingByEvaluations
 
 S = TypeVar('S')
 R = List[S]
+
 
 class MOEAD(GeneticAlgorithm):
 
@@ -23,13 +24,13 @@ class MOEAD(GeneticAlgorithm):
                  problem: Problem,
                  population_size: int,
                  mutation: Mutation,
-                 crossover: DifferentialEvolutionCrossover=DifferentialEvolutionCrossover(CR=1.0, F=0.5, K=0.5),
-                 aggregative_function: AggregativeFunction=Tschebycheff(2),
-                 neighbourhood_selection_probability: float=0.9,
-                 max_number_of_replaced_solutions: int=2,
-                 neighbor_size: int=20,
+                 crossover: DifferentialEvolutionCrossover,
+                 aggregative_function: AggregativeFunction,
+                 neighbourhood_selection_probability: float,
+                 max_number_of_replaced_solutions: int,
+                 neighbor_size: int,
+                 weight_files_path: str,
                  termination_criterion: TerminationCriterion = StoppingByEvaluations(150000),
-                 weight_files_path: str = "../../resources/MOEAD_weights",
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator):
         """
@@ -58,9 +59,8 @@ class MOEAD(GeneticAlgorithm):
         )
         self.neighbourhood_selection_probability = neighbourhood_selection_probability
         self.permutation = Permutation(population_size)
-        self.current_subproblem: int = 0
-        self.neighbor_type: str = ""
-        self.neighbor_size = neighbor_size
+        self.current_subproblem = 0
+        self.neighbor_type = None
 
     def init_progress(self) -> None:
         self.evaluations = self.population_size
@@ -80,7 +80,7 @@ class MOEAD(GeneticAlgorithm):
         self.current_subproblem = self.permutation.get_next_value()
         self.neighbor_type = self.choose_neighbor_type()
 
-        if self.neighbor_type == "NEIGHBOR":
+        if self.neighbor_type == 'NEIGHBOR':
             neighbors = self.neighbourhood.get_neighbors(self.current_subproblem, population)
             mating_population = self.selection_operator.execute(neighbors)
         else:
@@ -127,43 +127,37 @@ class MOEAD(GeneticAlgorithm):
         return population
 
     def generate_permutation_of_neighbors(self, subproblem_id):
-        size = self.source_of_neighbors_size(subproblem_id)
-        if self.neighbor_type == "NEIGHBOR":
+        if self.neighbor_type == 'NEIGHBOR':
             neighbors = self.neighbourhood.get_neighborhood()[subproblem_id]
             permuted_array = copy.deepcopy(neighbors.tolist())
         else:
-            permuted_array = Permutation(size).get_permutation()
-        return permuted_array
+            permuted_array = Permutation(self.population_size).get_permutation()
 
-    def source_of_neighbors_size(self, subproblem_id):
-        if self.neighbor_type == "NEIGHBOR":
-            #ns = self.neighbourhood.get_neighbors(subproblem_id, self.p)
-            return self.neighbor_size
-        else:
-            return self.population_size
+        return permuted_array
 
     def choose_neighbor_type(self):
         rnd = random.random()
 
         if rnd < self.neighbourhood_selection_probability:
-            neighbor_type = "NEIGHBOR"
+            neighbor_type = 'NEIGHBOR'
         else:
-            neighbor_type = "POPULATION"
+            neighbor_type = 'POPULATION'
 
         return neighbor_type
 
     def get_name(self):
-        return "MOEAD"
+        return 'MOEAD'
 
     def get_result(self):
         return self.solutions
 
-################
-class Permutation():
+
+class Permutation:
+
     def __init__(self, length: int):
+        self.counter = 0
         self.length = length
         self.permutation = np.random.permutation(length)
-        self.counter = 0
 
     def get_next_value(self):
         next = self.permutation[self.counter]

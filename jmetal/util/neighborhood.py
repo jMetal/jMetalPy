@@ -96,6 +96,5 @@ class WeightVectorNeighborhood(WeightNeighborhood):
 
         return [solution_list[i] for i in neighbors_indexes]
 
-
     def get_neighborhood(self):
         return self.neighborhood
