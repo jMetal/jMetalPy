@@ -31,7 +31,7 @@ class WeightedSum(AggregativeFunction):
         pass
 
 
-class Chebyshev(AggregativeFunction):
+class Tschebycheff(AggregativeFunction):
 
     def __init__(self, dimension: int):
         self.ideal_point = IdealPoint(dimension)

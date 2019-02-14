@@ -1,23 +1,32 @@
-from jmetal.algorithm.multiobjective.nsgaiii import NSGAIII
-from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
-from jmetal.problem import DTLZ1
-from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
-from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
+from jmetal.algorithm.multiobjective.moead import MOEAD
+from jmetal.operator import PolynomialMutation, DifferentialEvolutionCrossover
+from jmetal.problem import LZ09_F2, DTLZ1, DTLZ2
+from jmetal.problem.multiobjective.lz09 import LZ09_F9, LZ09_F5, LZ09_F6
+from jmetal.util.aggregative_function import Tschebycheff
+from jmetal.util.neighborhood import WeightVectorNeighborhood
+from jmetal.util.observer import ProgressBarObserver, VisualizerObserver, PlotFrontToFileObserver
 from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.util.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
-    problem = DTLZ1()
-    problem.reference_front = read_solutions(filename='../../resources/reference_front/DTLZ1.3D.pf')
+    problem = DTLZ2()
+    problem.reference_front = read_solutions(filename='../../resources/reference_front/DTLZ2.3D.pf'.format(problem.get_name()))
 
-    max_evaluations = 10000
-    algorithm = NSGAIII(
+    population_size = 300
+    max_evaluations = 150000
+
+    algorithm = MOEAD(
         problem=problem,
+        population_size=population_size,
+        crossover=DifferentialEvolutionCrossover(CR=1.0, F=0.5, K=0.5),
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
-        crossover=SBXCrossover(probability=1.0, distribution_index=20),
-        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
-        termination_criterion=StoppingByEvaluations(max=max_evaluations)
+        aggregative_function=Tschebycheff(dimension=problem.number_of_objectives),
+        neighbor_size=20,
+        neighbourhood_selection_probability=0.9,
+        max_number_of_replaced_solutions=2,
+        termination_criterion=StoppingByEvaluations(max=max_evaluations),
+        weight_files_path = "../../resources/MOEAD_weights"
     )
 
     progress_bar = ProgressBarObserver(max=max_evaluations)
