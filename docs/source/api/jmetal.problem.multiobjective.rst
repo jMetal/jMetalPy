@@ -9,18 +9,34 @@ Constrained
     :undoc-members:
     :show-inheritance:
 
-Unconstrained
---------------------------------------------------
-
-.. automodule:: jmetal.problem.multiobjective.unconstrained
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 DTLZ
 -----------------------------------------
 
 .. automodule:: jmetal.problem.multiobjective.dtlz
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+FDA
+-----------------------------------------
+
+.. automodule:: jmetal.problem.multiobjective.fda
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+LZ09
+-----------------------------------------
+
+.. automodule:: jmetal.problem.multiobjective.lz09
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Unconstrained
+--------------------------------------------------
+
+.. automodule:: jmetal.problem.multiobjective.unconstrained
     :members:
     :undoc-members:
     :show-inheritance:

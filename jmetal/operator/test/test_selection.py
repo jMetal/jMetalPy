@@ -4,8 +4,10 @@ from hamcrest import assert_that, any_of
 
 from jmetal.core.solution import Solution
 from jmetal.operator.selection import BinaryTournamentSelection, BestSolutionSelection, RandomSolutionSelection, \
-    NaryRandomSolutionSelection, RankingAndCrowdingDistanceSelection, BinaryTournament2Selection
-from jmetal.component.comparator import SolutionAttributeComparator, EqualSolutionsComparator
+    NaryRandomSolutionSelection, RankingAndCrowdingDistanceSelection, BinaryTournament2Selection, \
+    DifferentialEvolutionSelection, EnvironmentalSelection
+from jmetal.util.comparator import SolutionAttributeComparator, EqualSolutionsComparator
+from jmetal.util.point import ReferencePoint
 
 
 class BinaryTournamentTestCases(unittest.TestCase):
@@ -175,6 +177,60 @@ class RandomSolutionSelectionTestCases(unittest.TestCase):
         self.assertTrue(self.selection.execute(solution_list) in solution_list)
 
 
+class DifferentialEvolutionSelectionTestCases(unittest.TestCase):
+    def test_should_constructor_create_a_non_null_object(self):
+        selection = DifferentialEvolutionSelection[Solution]()
+        self.assertIsNotNone(selection)
+
+    def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_none(self):
+        selection = DifferentialEvolutionSelection[Solution]()
+        solution_list = None
+        with self.assertRaises(Exception):
+            selection.execute(solution_list)
+
+    def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_empty(self):
+        selection = DifferentialEvolutionSelection[Solution]()
+        solution_list = []
+        with self.assertRaises(Exception):
+            selection.execute(solution_list)
+
+    def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_smaller_than_required(self):
+        selection = DifferentialEvolutionSelection[Solution]()
+        solution_list = [Solution(1, 1), Solution(1, 1), Solution(1,1)]
+        with self.assertRaises(Exception):
+            selection.execute(solution_list)
+
+    def test_should_execute_return_three_solutions_if_the_list_of_solutions_larger_than_three(self):
+        selection = DifferentialEvolutionSelection[Solution]()
+        solution_list = [Solution(1, 1), Solution(1, 1), Solution(1,1), Solution(1,1)]
+
+        self.assertEqual(3, len(selection.execute(solution_list)))
+
+    def test_should_execute_exclude_the_indicated_solution_if_the_list_of_solutions_has_size_four(self):
+        selection = DifferentialEvolutionSelection[Solution]()
+        solution1 = Solution(2, 2)
+        solution1.variables = [1, 2]
+        solution2 = Solution(2, 2)
+        solution2.variables = [3, 4]
+        solution3 = Solution(2, 2)
+        solution3.variables = [5, 6]
+        solution4 = Solution(2, 2)
+        solution4.variables = [7, 8]
+        solution_list = [solution1, solution2, solution3, solution4]
+
+        selection.set_index_to_exclude(0)
+        selected_solutions = selection.execute(solution_list)
+
+        self.assertEqual(3, len(selected_solutions))
+        self.assertTrue(solution1 not in selected_solutions)
+
+        selection.set_index_to_exclude(3)
+        selected_solutions = selection.execute(solution_list)
+
+        self.assertEqual(3, len(selected_solutions))
+        self.assertTrue(solution4 not in selected_solutions)
+
+
 class NaryRandomSolutionSelectionTestCases(unittest.TestCase):
 
     def test_should_constructor_create_a_non_null_object(self):
@@ -328,6 +384,94 @@ class BinaryTournament2TestCases(unittest.TestCase):
         selection1 = operator.execute(solution_list)
 
         self.assertTrue(1, selection1.attributes["dominance_ranking"])
+
+
+class EnvironmentalTestCases(unittest.TestCase):
+
+    def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_none(self):
+        selection = EnvironmentalSelection(2, 100)
+
+        with self.assertRaises(Exception):
+            selection.execute(None)
+
+    def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_empty(self):
+        selection = EnvironmentalSelection(2, 100)
+
+        with self.assertRaises(Exception):
+            selection.execute([])
+
+    def test_should_find_an_ideal_point(self):
+        solution1 = Solution(3, 2)
+        solution1.objectives = [1.0, 0.1]
+
+        solution2 = Solution(3, 2)
+        solution2.objectives = [0.5, 2.0]
+
+        solutions = [solution1, solution2]
+        selection = EnvironmentalSelection(2, 100)
+
+        self.assertEqual([0.5, 0.1], selection.find_ideal_point(solutions))
+
+    def test_should_find_extreme_points(self):
+        solution1 = Solution(0, 2)
+        solution1.objectives = [2.0, 4.0]
+        solution1.attributes['normalized_objectives'] = [2.0, 4.0]
+
+        solution2 = Solution(0, 2)
+        solution2.objectives = [5.0, 3.0]
+        solution2.attributes['normalized_objectives'] = [5.0, 3.0]
+
+        solution3 = Solution(0, 2)
+        solution3.objectives = [6.0, 1.0]
+        solution3.attributes['normalized_objectives'] = [6.0, 1.0]
+
+        solutions = [solution1, solution2, solution3]
+        selection = EnvironmentalSelection(2, 100)
+
+        extreme_points = selection.find_extreme_points(solutions)
+
+        self.assertEqual([[6.0, 1.0], [2.0, 4.0]], [s.objectives for s in extreme_points])
+
+    def test_should_associate_solutions_to_reference_points(self):
+        solution1 = Solution(0, 2)
+        solution1.objectives = [2.0, 4.0]
+        solution1.attributes['normalized_objectives'] = [2.0, 4.0]
+
+        solution2 = Solution(0, 2)
+        solution2.objectives = [5.0, 3.0]
+        solution2.attributes['normalized_objectives'] = [5.0, 3.0]
+
+        solution3 = Solution(0, 2)
+        solution3.objectives = [6.0, 1.0]
+        solution3.attributes['normalized_objectives'] = [6.0, 1.0]
+
+        solutions = [solution1, solution2, solution3]
+        reference_points = [ReferencePoint([3.0, 5.0]), ReferencePoint([7.0, 2.0]), ReferencePoint([6.0, 4.0])]
+        selection = EnvironmentalSelection(2, 100)
+
+        selection.associate(solutions, reference_points)
+
+        self.assertEqual([1, 1, 1], [s.associations_count for s in reference_points])
+        self.assertEqual([2.0, 4.0], reference_points[0].associations[0].objectives)
+        self.assertEqual([6.0, 1.0], reference_points[1].associations[0].objectives)
+        self.assertEqual([5.0, 3.0], reference_points[2].associations[0].objectives)
+
+    def test_should_construct_a_valid_hyperplane(self):
+        solution1 = Solution(0, 2)
+        solution1.objectives = [2.0, 1.0]
+        solution1.attributes['normalized_objectives'] = [2.0, 1.0]
+
+        solution2 = Solution(0, 2)
+        solution2.objectives = [1.0, 2.0]
+        solution2.attributes['normalized_objectives'] = [1.0, 2.0]
+
+        solutions = [solution1, solution2]
+        selection = EnvironmentalSelection(2, 100)
+
+        extreme_points = selection.find_extreme_points(solutions)
+        intercepts = selection.construct_hyperplane(solutions, extreme_points)
+
+        self.assertEqual([2.9999999999999996, 3.0], intercepts)
 
 
 if __name__ == '__main__':

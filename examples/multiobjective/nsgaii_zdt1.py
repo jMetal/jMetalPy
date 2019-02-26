@@ -1,38 +1,47 @@
-from jmetal.algorithm import NSGAII
-from jmetal.problem import ZDT1
-from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
-from jmetal.component import ProgressBarObserver, RankingAndCrowdingDistanceComparator, VisualizerObserver
-from jmetal.util import FrontPlot, SolutionList
-
+from jmetal.algorithm.multiobjective.nsgaii import NSGAII
+from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
+from jmetal.problem import ZDT1, ZDT4
+from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, DominanceComparator
+from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
+from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
+from jmetal.util.termination_criterion import StoppingByEvaluations
+from jmetal.util.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
-    problem = ZDT1(rf_path='../../resources/reference_front/ZDT1.pf')
+    problem = ZDT1()
+    problem.reference_front = read_solutions(filename='../../resources/reference_front/ZDT1.pf')
 
+    max_evaluations = 25000
     algorithm = NSGAII(
         problem=problem,
         population_size=100,
-        max_evaluations=25000,
-        mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
-        crossover=SBX(probability=1.0, distribution_index=20),
-        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
+        offspring_population_size=100,
+        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
+        crossover=SBXCrossover(probability=1.0, distribution_index=20),
+        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
+        termination_criterion=StoppingByEvaluations(max=max_evaluations),
+        dominance_comparator=DominanceComparator()
     )
 
-    progress_bar = ProgressBarObserver(step=100, maximum=25000)
-    visualizer = VisualizerObserver()
-    algorithm.observable.register(observer=progress_bar)
-    algorithm.observable.register(observer=visualizer)
+    algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
+    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front))
 
     algorithm.run()
     front = algorithm.get_result()
 
-    # Plot frontier to file
-    pareto_front = FrontPlot(plot_title='NSGAII-ZDT1', axis_labels=problem.obj_labels)
-    pareto_front.plot(front, reference_front=problem.reference_front)
-    pareto_front.to_html(filename='NSGAII-ZDT1')
+    label = algorithm.get_name() + "." + problem.get_name()
+    algorithm_name = label
+    # Plot front
+    plot_front = Plot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels)
+    plot_front.plot(front, label=label, filename=algorithm_name)
 
-    # Save variables to file
-    SolutionList.print_function_values_to_file(front, 'FUN.NSGAII.ZDT1')
-    SolutionList.print_variables_to_file(front, 'VAR.NSGAII.ZDT1')
+    # Plot interactive front
+    plot_front = InteractivePlot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels)
+    plot_front.plot(front, label=label, filename=algorithm_name)
+
+    # Save results to file
+    print_function_values_to_file(front, 'FUN.' + label)
+    print_variables_to_file(front, 'VAR.'+ label)
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())

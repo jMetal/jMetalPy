@@ -7,12 +7,12 @@ from jmetal import problem
 
 __all__ = ['core', 'algorithm', 'operator', 'problem']
 
-logger = logging.getLogger('jMetalPy')
-logger.setLevel(logging.DEBUG)
+logger = logging.getLogger('jmetal')
+logger.setLevel(logging.INFO)
 
 # create a file handler
 file_handler = logging.FileHandler('jmetalpy.log', delay=True)
-file_handler.setLevel(logging.DEBUG)
+file_handler.setLevel(logging.INFO)
 stream_handler = logging.StreamHandler()
 
 # create a logging format

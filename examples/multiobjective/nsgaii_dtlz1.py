@@ -1,38 +1,49 @@
-from jmetal.algorithm import NSGAII
-from jmetal.problem import DTLZ1
-from jmetal.operator import SBX, Polynomial, BinaryTournamentSelection
-from jmetal.component import ProgressBarObserver, VisualizerObserver, RankingAndCrowdingDistanceComparator
-from jmetal.util import FrontPlot, SolutionList
+from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
+from jmetal.util.termination_criterion import StoppingByEvaluations
+from jmetal.util.visualization import Plot, InteractivePlot
+from numpy.polynomial import Polynomial
 
+from jmetal.algorithm.multiobjective.nsgaii import NSGAII
+from jmetal.operator import BinaryTournamentSelection, SBXCrossover, PolynomialMutation
+from jmetal.problem import DTLZ2
+from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, DominanceComparator
+from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 
 if __name__ == '__main__':
-    problem = DTLZ2(rf_path='../../resources/reference_front/DTLZ2.pf')
+    problem = DTLZ2()
+    problem.reference = '../../resources/reference_front/DTLZ2.3D.pf'
 
+    max_evaluations = 25000
     algorithm = NSGAII(
         problem=problem,
         population_size=100,
-        max_evaluations=50000,
-        mutation=Polynomial(probability=1.0 / problem.number_of_variables, distribution_index=20),
-        crossover=SBX(probability=1.0, distribution_index=20),
-        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
+        offspring_population_size=100,
+        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
+        crossover=SBXCrossover(probability=1.0, distribution_index=20),
+        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
+        termination_criterion=StoppingByEvaluations(max=max_evaluations),
+        dominance_comparator=DominanceComparator()
     )
 
-    progress_bar = ProgressBarObserver(step=100, maximum=50000)
-    visualizer = VisualizerObserver()
-    algorithm.observable.register(observer=progress_bar)
-    algorithm.observable.register(observer=visualizer)
+    algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
+    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front))
 
     algorithm.run()
     front = algorithm.get_result()
 
-    # Plot frontier to file
-    pareto_front = FrontPlot(plot_title='NSGAII-DTLZ1', axis_labels=problem.obj_labels)
-    pareto_front.plot(front, reference_front=problem.reference_front)
-    pareto_front.to_html(filename='NSGAII-DTLZ1')
+    label = algorithm.get_name() + "." + problem.get_name()
+    algorithm_name = label
+    # Plot front
+    plot_front = Plot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels)
+    plot_front.plot(front, label=label, filename=algorithm_name)
 
-    # Save variables to file
-    SolutionList.print_function_values_to_file(front, 'FUN.NSGAII.DTLZ1')
-    SolutionList.print_variables_to_file(front, 'VAR.NSGAII.DTLZ1')
+    # Plot interactive front
+    plot_front = InteractivePlot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels)
+    plot_front.plot(front, label=label, filename=algorithm_name)
+
+    # Save results to file
+    print_function_values_to_file(front, 'FUN.' + label)
+    print_variables_to_file(front, 'VAR.'+ label)
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())

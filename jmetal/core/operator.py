@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, List
 
 S = TypeVar('S')
@@ -9,15 +9,13 @@ R = TypeVar('R')
    :platform: Unix, Windows
    :synopsis: Templates for operators.
 
-.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
 
-class Operator(Generic[S, R]):
+class Operator(Generic[S, R], ABC):
     """ Class representing operator """
 
-    __metaclass__ = ABCMeta
-
     @abstractmethod
     def execute(self, source: S) -> R:
         pass
@@ -27,66 +25,44 @@ class Operator(Generic[S, R]):
         pass
 
 
-class Mutation(Operator[S, S]):
+def check_valid_probability_value(func):
+    def func_wrapper(self, probability: float):
+        if probability > 1.0:
+            raise Exception('The probability is greater than one: {}'.format(probability))
+        elif probability < 0.0:
+            raise Exception('The probability is lower than zero: {}'.format(probability))
+
+        res = func(self, probability)
+        return res
+    return func_wrapper
+
+
+class Mutation(Operator[S, S], ABC):
     """ Class representing mutation operator. """
 
-    __metaclass__ = ABCMeta
-
+    @check_valid_probability_value
     def __init__(self, probability: float):
-        if probability > 1.0:
-            raise Exception('The probability is greater than one: {}'.format(probability))
-        elif probability < 0.0:
-            raise Exception('The probability is lower than zero: {}'.format(probability))
-
         self.probability = probability
 
-    @abstractmethod
-    def execute(self, source: S) -> R:
-        pass
 
-    @abstractmethod
-    def get_name(self) -> str:
-        pass
-
-
-class Crossover(Operator[List[S], List[R]]):
+class Crossover(Operator[List[S], List[R]], ABC):
     """ Class representing crossover operator. """
 
-    __metaclass__ = ABCMeta
-
+    @check_valid_probability_value
     def __init__(self, probability: float):
-        if probability > 1.0:
-            raise Exception('The probability is greater than one: {}'.format(probability))
-        elif probability < 0.0:
-            raise Exception('The probability is lower than zero: {}'.format(probability))
-
         self.probability = probability
 
     @abstractmethod
-    def get_number_of_parents(self):
+    def get_number_of_parents(self) -> int:
         pass
 
     @abstractmethod
-    def execute(self, source: S) -> R:
-        pass
-
-    @abstractmethod
-    def get_name(self) -> str:
+    def get_number_of_children(self) -> int:
         pass
 
 
-class Selection(Operator[S, R]):
+class Selection(Operator[S, R], ABC):
     """ Class representing selection operator. """
 
-    __metaclass__ = ABCMeta
-
     def __init__(self):
-        pass
-
-    @abstractmethod
-    def execute(self, source: S) -> R:
-        pass
-
-    @abstractmethod
-    def get_name(self) -> str:
         pass

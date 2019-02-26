@@ -19,10 +19,9 @@ sys.path.insert(0, os.path.abspath('../..'))
 # http://blog.rtwilson.com/how-to-make-your-sphinx-documentation-compile-with-readthedocs-when-youre-using-numpy-and-scipy/
 import mock
 
-MOCK_MODULES = ['numpy', 'pandas',
-                'tqdm',
-                'plotly', 'plotly.offline',
-                'matplotlib', 'matplotlib.pyplot', 'mpl_toolkits', 'mpl_toolkits.mplot3d']
+MOCK_MODULES = ['numpy', 'pandas', 'scipy', 'scipy.spatial', 'scipy.stats', 'tqdm', 'pyspark',
+                'IPython.display', 'holoviews', 'holoviews.streams',
+                'plotly', 'plotly.offline']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 
@@ -30,10 +29,10 @@ for mod_name in MOCK_MODULES:
 
 project = 'jMetalPy'
 copyright = '2018, Antonio J. Nebro'
-author = 'Antonio J. Nebro'
+author = 'Antonio J. Nebro, Antonio Benítez-Hidalgo'
 
 # The short X.Y version
-version = '0.5.0'
+version = '0.9.0'
 # The full version, including alpha/beta/rc tags
 release = ''
 
@@ -49,6 +48,7 @@ release = ''
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.mathjax'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -161,7 +161,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'jMetalPy', 'jMetalPy Documentation',
-     author, 'jMetalPy', 'One line description of project.',
+     author, 'jMetalPy', 'Python version of the jMetal framework.',
      'Miscellaneous'),
 ]
 
