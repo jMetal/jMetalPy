@@ -237,7 +237,7 @@ class DistributedNSGAII(Algorithm[S, R]):
 
                     task_pool.add(new_task)
                 else:
-                    for future in task_pool.futures:
+                    for future in list(task_pool.futures):
                         future.cancel()
                     break
 
