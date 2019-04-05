@@ -1,6 +1,6 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
-from jmetal.problem import ZDT1, ZDT4
+from jmetal.problem import ZDT1
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, DominanceComparator
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
@@ -31,6 +31,7 @@ if __name__ == '__main__':
 
     label = algorithm.get_name() + "." + problem.get_name()
     algorithm_name = label
+
     # Plot front
     plot_front = Plot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels)
     plot_front.plot(front, label=label, filename=algorithm_name)
