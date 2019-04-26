@@ -4,6 +4,7 @@ from examples.multiobjective.parallel.zdt1_modified import ZDT1Modified
 from jmetal.algorithm.multiobjective.nsgaii import DistributedNSGAII
 from jmetal.operator import PolynomialMutation, SBXCrossover, BinaryTournamentSelection
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
     problem = ZDT1Modified()
@@ -13,7 +14,7 @@ if __name__ == '__main__':
     algorithm = DistributedNSGAII(
         problem=problem,
         population_size=10,
-        max_evaluations=100,
+        termination_criterion=StoppingByEvaluations(max=100),
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),

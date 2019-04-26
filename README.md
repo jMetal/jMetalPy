@@ -10,6 +10,8 @@
 [![PyPI License](https://img.shields.io/pypi/l/jMetalPy.svg?style=flat-square)]()
 [![PyPI Python version](https://img.shields.io/pypi/pyversions/jMetalPy.svg?style=flat-square)]()
 
+A preprint of the paper introducing JMetalPy is available at: https://arxiv.org/abs/1903.02915
+
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
