@@ -8,7 +8,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.util.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
-    problem = ZDT1()
+    problem = ZDT4()
     problem.reference_front = read_solutions(filename='../../resources/reference_front/ZDT1.pf')
 
     max_evaluations = 25000
