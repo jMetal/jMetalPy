@@ -65,6 +65,9 @@ def evaluate_solution(solution, problem):
 
 
 class DaskEvaluator(Evaluator[S]):
+    """
+    Evaluator using Dask
+    """
     def __init__(self, number_of_cores=cpu_count(), scheduler='processes'):
         self.scheduler = scheduler
         self.number_of_cores = number_of_cores
