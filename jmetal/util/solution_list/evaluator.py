@@ -68,12 +68,11 @@ class DaskEvaluator(Evaluator[S]):
     """
     Evaluator using Dask
     """
-    def __init__(self, number_of_cores=cpu_count(), scheduler='processes'):
+    def __init__(self, scheduler='processes'):
         self.scheduler = scheduler
-        self.number_of_cores = number_of_cores
 
     def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
-        with dask.config.set(scheduler=self.scheduler, pool=ThreadPool(self.number_of_cores)):
+        with dask.config.set(scheduler=self.scheduler):
             return list(dask.compute(*[
                 dask.delayed(evaluate_solution)(solution=solution, problem=problem) for solution in solution_list
             ]))
