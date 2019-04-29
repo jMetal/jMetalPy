@@ -237,6 +237,7 @@ class DistributedNSGAII(Algorithm[S, R]):
 
                     task_pool.add(new_task)
                 else:
+                    print("Computing time: " + str(time.time() - self.start_computing_time))
                     for future in task_pool.futures:
                         future.cancel()
                     break
