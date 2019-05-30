@@ -1,7 +1,7 @@
 Observer entities
 ========================
 
-It is possible to attach any number of observers to any algorithm to retrieve information from each iteration.
+It is possible to attach any number of observers to any algorithm to get information from each iteration.
 For example, a basic algorithm observer will print the number of evaluations, the objectives from the best individual in the population and the computing time:
 
 .. code-block:: python

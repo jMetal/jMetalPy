@@ -5,10 +5,9 @@ from jmetal.util.solution_list import SequentialEvaluator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 
-class _Store(object):
+class _Store:
 
     def __init__(self):
-        super(_Store, self).__init__()
         self.default_observable = DefaultObservable()
         self.default_evaluator = SequentialEvaluator()
         self.default_generator = RandomGenerator()
