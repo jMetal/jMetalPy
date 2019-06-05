@@ -4,12 +4,3 @@ install:
   - python setup.py -q install
   - pip install mockito PyHamcrest
 script: python -m unittest discover
-deploy:
-  provider: pypi
-  skip_cleanup: true
-  user: benhid
-  distributions: sdist bdist_wheel
-  password:
-    secure: pkZQushcLk4eEq06foPEesrrtzxJz907zrDHJghTR5/OLaJ3JrhASG7sa5s1xRwWjAYpf8GWgZsUbM6YGe+r7EASoQ4VdbGZEaTYJCS0AkBawqe7K0KjX2llkgXdHRerTRoFe50mrxA5atE2kVsmaP1ZD0oZ8HzBcTmQbFy7/ljWLnVsyCgczTFHiSfLAdL1MPy1emGAPz6BtMV18b8GLdwBl2KzKVDWi1PwE/l5eG01YoaPT8Eq+/Sy3ZRg8Nx+jdr6D+/1jVNb3SChy27B4kC1EmaCcSwnUg9cGhjziAf6wfEr48+7ZfhEKHTSsJbeRRoDMrAk8f68inuXp627LaUPOBXQsItNwNwRZGfP1LnvoZUbVbEEm2fT6viRLHR1P4LqJcka/6JVD3UgobTvv4sTTaIReeIRJtWe+ofHL2PA+nLi1oRuFcexKfohjyOhreYbJ0jp9O/hWyM5Lak1yEb1CWUuiNy69VMxwm0i00uSyoTZD0LNf/0BBjbFZ02TxHlkKj+LXzI8IiBhhNWY7nRVAJi/MVow14KKmmpk+Qo+dnv+sS7r1zhiEr01akdsLH+3+cfu7K9lJNkhSG2ayoBOe/lKxxOw4G3D+Nm/mNL+Pu38WlmulWdMwbPdHDKmuBzzA2ADsnDIb5BoPwFDvghTbYBA8Slaum35CW/2yzA=
-  on:
-    branch: master

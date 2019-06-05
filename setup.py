@@ -22,15 +22,15 @@ setup(
     ],
     install_requires=[
         'tqdm',
-        'numpy==1.16.0',
-        'pandas==0.23.4',
+        'numpy>=1.16.0',
+        'pandas>=0.23.4',
         'scipy==1.1.0',
-        'pyspark==2.4.0',
+        'pyspark>=2.4.0',
         'ipython',
-        'holoviews==1.10.9',
-        'plotly==3.3.0',
-        'matplotlib==3.0.2',
-        'statsmodels==0.9.0',
+        'holoviews>=1.10.9',
+        'plotly>=3.3.0',
+        'matplotlib>=3.0.2',
+        'statsmodels>=0.9.0',
         'dask[complete]==1.2.2'
     ],
     tests_require=[
