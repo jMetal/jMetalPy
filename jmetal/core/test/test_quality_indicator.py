@@ -72,7 +72,6 @@ class GenerationalDistanceTestCases(unittest.TestCase):
 
 
 class InvertedGenerationalDistanceTestCases(unittest.TestCase):
-
     pass
 
 
