@@ -1,8 +1,9 @@
-
 import random
+
 import numpy as np
-from jmetal.core.solution import BinarySolution
+
 from jmetal.core.problem import BinaryProblem
+from jmetal.core.solution import BinarySolution
 
 """
 .. module:: knapsack
@@ -20,7 +21,7 @@ class Knapsack(BinaryProblem):
                  profits: list = None, from_file: bool = False, filename: str = None):
         super(Knapsack, self).__init__()
 
-        if from_file is True:
+        if from_file:
             self.__read_from_file(filename)
         else:
             self.capacity = capacity
@@ -34,34 +35,36 @@ class Knapsack(BinaryProblem):
         self.number_of_constraints = 1
 
     def __read_from_file(self, filename: str):
-        """ This function reads a Knapsack Problem instance from a file
-            It expects the following format:
+        """
+        This function reads a Knapsack Problem instance from a file.
+        It expects the following format:
 
             num_of_items (dimension)
             capacity of the knapsack
             num_of_items-tuples of weight-profit
 
         :param filename: File which describes the instance.
-        :type filename: str. """
+        :type filename: str.
+        """
 
         if filename is None:
-            raise FileNotFoundError("Filename can not be None")
+            raise FileNotFoundError('Filename can not be None')
 
         with open(filename) as file:
-            data = [line.split()
-                    for line in file if len(line.split()) >= 1]
+            data = [line.split() for line in file if len(line.split()) >= 1]
 
             self.number_of_bits = int(data[0][0])
             self.capacity = float(data[1][0])
 
-            weights_and_profits = np.asfarray(
-                data[2:], dtype=np.float32)
+            weights_and_profits = np.asfarray(data[2:], dtype=np.float32)
+
             self.weights = weights_and_profits[:, 0]
             self.profits = weights_and_profits[:, 1]
 
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
         total_profits = 0.0
         total_weigths = 0.0
+
         for index, bits in enumerate(solution.variables[0]):
             if bits:
                 total_profits += self.profits[index]
@@ -84,4 +87,4 @@ class Knapsack(BinaryProblem):
         return new_solution
 
     def get_name(self):
-        return "Knapsack"
+        return 'Knapsack'
