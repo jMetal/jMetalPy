@@ -9,10 +9,10 @@ from jmetal.config import store
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
 from jmetal.operator import DifferentialEvolutionCrossover, NaryRandomSolutionSelection
-from jmetal.util.aggregative_function import AggregativeFunction, Tschebycheff
+from jmetal.util.aggregative_function import AggregativeFunction
 from jmetal.util.neighborhood import WeightVectorNeighborhood
 from jmetal.util.solution_list import Evaluator, Generator
-from jmetal.util.termination_criterion import TerminationCriterion, StoppingByEvaluations
+from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
 R = List[S]
@@ -30,7 +30,7 @@ class MOEAD(GeneticAlgorithm):
                  max_number_of_replaced_solutions: int,
                  neighbor_size: int,
                  weight_files_path: str,
-                 termination_criterion: TerminationCriterion = StoppingByEvaluations(150000),
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator):
         """

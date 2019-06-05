@@ -34,11 +34,12 @@ class NSGAII(GeneticAlgorithm[S, R]):
                  mutation: Mutation,
                  crossover: Crossover,
                  selection: Selection,
-                 termination_criterion: TerminationCriterion,
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator,
-                 dominance_comparator: Comparator = DominanceComparator()):
-        """  NSGA-II implementation as described in
+                 dominance_comparator: Comparator = store.default_comparator):
+        """
+        NSGA-II implementation as described in
 
         * K. Deb, A. Pratap, S. Agarwal and T. Meyarivan, "A fast and elitist
           multiobjective genetic algorithm: NSGA-II," in IEEE Transactions on Evolutionary Computation,
@@ -48,7 +49,7 @@ class NSGAII(GeneticAlgorithm[S, R]):
         family. The implementation of NSGA-II provided in jMetalPy follows the evolutionary
         algorithm template described in the algorithm module (:py:mod:`jmetal.core.algorithm`).
 
-        .. note:: A steady-state version of this algorithm can be run by setting the offspring size to 1 and the mating pool size to 2.
+        .. note:: A steady-state version of this algorithm can be run by setting the offspring size to 1.
 
         :param problem: The problem to solve.
         :param population_size: Size of the population.

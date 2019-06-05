@@ -1,6 +1,7 @@
 import time
 from typing import TypeVar, List
 
+from jmetal.config import store
 from jmetal.core.algorithm import Algorithm
 from jmetal.core.problem import Problem
 from jmetal.util.archive import NonDominatedSolutionListArchive
@@ -22,7 +23,7 @@ class RandomSearch(Algorithm[S, R]):
 
     def __init__(self,
                  problem: Problem[S],
-                 termination_criterion: TerminationCriterion):
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria):
         super().__init__()
         self.problem = problem
         self.termination_criterion = termination_criterion

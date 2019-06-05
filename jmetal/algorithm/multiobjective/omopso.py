@@ -36,7 +36,7 @@ class OMOPSO(ParticleSwarmOptimization):
                  non_uniform_mutation: NonUniformMutation,
                  leaders: Optional[BoundedArchive],
                  epsilon: float,
-                 termination_criterion: TerminationCriterion,
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  swarm_generator: Generator = store.default_generator,
                  swarm_evaluator: Evaluator = store.default_evaluator):
         """ This class implements the OMOPSO algorithm as described in

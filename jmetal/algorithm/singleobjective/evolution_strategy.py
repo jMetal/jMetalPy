@@ -1,11 +1,12 @@
 from copy import copy
 from typing import TypeVar, List
 
+from jmetal.config import store
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
-from jmetal.util.solution_list.evaluator import Evaluator, SequentialEvaluator
-from jmetal.util.solution_list.generator import Generator, RandomGenerator
+from jmetal.util.solution_list.evaluator import Evaluator
+from jmetal.util.solution_list.generator import Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -28,9 +29,9 @@ class EvolutionStrategy(EvolutionaryAlgorithm[S, R]):
                  lambda_: int,
                  elitist: bool,
                  mutation: Mutation,
-                 termination_criterion: TerminationCriterion,
-                 population_generator: Generator = RandomGenerator(),
-                 population_evaluator: Evaluator = SequentialEvaluator()):
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
+                 population_generator: Generator = store.default_generator,
+                 population_evaluator: Evaluator = store.default_evaluator):
         super(EvolutionStrategy, self).__init__(
             problem=problem,
             population_size=mu,

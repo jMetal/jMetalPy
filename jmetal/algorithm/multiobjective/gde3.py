@@ -22,11 +22,11 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
                  population_size: int,
                  cr: float,
                  f: float,
-                 termination_criterion: TerminationCriterion,
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  k: float = 0.5,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator,
-                 dominance_comparator: Comparator = DominanceComparator()):
+                 dominance_comparator: Comparator = store.default_comparator):
         super(GDE3, self).__init__(
             problem=problem,
             population_size=population_size,
