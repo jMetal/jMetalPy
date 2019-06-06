@@ -51,7 +51,6 @@ class Knapsack(BinaryProblem):
             raise FileNotFoundError('Filename can not be None')
 
         with open(filename) as file:
-            print(filename)
             lines = file.readlines()
             data = [line.split() for line in lines if len(line.split()) >= 1]
 
