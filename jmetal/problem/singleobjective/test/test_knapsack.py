@@ -38,12 +38,11 @@ class KnapsackTestCases(unittest.TestCase):
     def test_should_create_solution_from_file(self) -> None:
         filename = 'resources/Knapsack_instances/KnapsackInstance_50_0_0.kp'
 
-        data = "50\n13629\n\n     865 445\n395 324\n777 626\n912 656\n431 935\n42 210 \n266 990\n989 566\n524 489\n" \
+        data = "50\n13629\n865 445\n395 324\n777 626\n912 656\n431 935\n42 210 \n266 990\n989 566\n524 489\n" \
                "498 454\n415 887\n941 534\n803 267\n850 64 \n311 825\n992 941\n489 562\n367 938\n598 15 \n914 96 \n" \
                "930 737\n224 861\n517 409\n143 728\n289 845\n144 804\n774 685\n98 641 \n634 2  \n819 627\n257 506\n" \
                "932 848\n546 889\n723 342\n830 250\n617 748\n924 334\n151 721\n318 892\n102 65 \n748 196\n76 940 \n" \
                "921 582\n871 228\n701 245\n339 823\n484 991\n574 146\n104 823\n363 557"
-
         with mock.patch('jmetal.problem.singleobjective.knapsack.open', new=mock.mock_open(read_data=data)):
             problem = Knapsack(from_file=True, filename=filename)
             self.assertEqual(1, problem.number_of_variables)
