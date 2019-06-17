@@ -51,7 +51,8 @@ class Knapsack(BinaryProblem):
             raise FileNotFoundError('Filename can not be None')
 
         with open(filename) as file:
-            data = [line.split() for line in file if len(line.split()) >= 1]
+            lines = file.readlines()
+            data = [line.split() for line in lines if len(line.split()) >= 1]
 
             self.number_of_bits = int(data[0][0])
             self.capacity = float(data[1][0])
