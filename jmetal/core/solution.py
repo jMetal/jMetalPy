@@ -8,12 +8,14 @@ S = TypeVar('S')
 class Solution(Generic[S], ABC):
     """ Class representing solutions """
 
-    def __init__(self, number_of_variables: int, number_of_objectives: int):
-        self.number_of_objectives = number_of_objectives
+    def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int = 0):
         self.number_of_variables = number_of_variables
+        self.number_of_objectives = number_of_objectives
+        self.number_of_constrains = number_of_constraints
 
-        self.objectives = [0.0 for _ in range(self.number_of_objectives)]
         self.variables = [[] for _ in range(self.number_of_variables)]
+        self.objectives = [0.0 for _ in range(self.number_of_objectives)]
+        self.constraints = [0.0 for _ in range(self.number_of_constrains)]
         self.attributes = {}
 
     def __eq__(self, solution) -> bool:
@@ -24,16 +26,12 @@ class Solution(Generic[S], ABC):
     def __str__(self) -> str:
         return 'Solution(objectives={},variables={})'.format(self.objectives, self.variables)
 
-    def is_feasible(self) -> bool:
-        return (self.attributes.get('overall_constraint_violation') is None) or \
-               (self.attributes['overall_constraint_violation'] == 0)
-
 
 class BinarySolution(Solution[BitSet]):
     """ Class representing float solutions """
 
-    def __init__(self, number_of_variables: int, number_of_objectives: int):
-        super(BinarySolution, self).__init__(number_of_variables, number_of_objectives)
+    def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int = 0):
+        super(BinarySolution, self).__init__(number_of_variables, number_of_objectives, number_of_constraints)
 
     def __copy__(self):
         new_solution = BinarySolution(
@@ -63,9 +61,8 @@ class BinarySolution(Solution[BitSet]):
 class FloatSolution(Solution[float]):
     """ Class representing float solutions """
 
-    def __init__(self, number_of_variables: int, number_of_objectives: int,
-                 lower_bound: List[float], upper_bound: List[float]):
-        super(FloatSolution, self).__init__(number_of_variables, number_of_objectives)
+    def __init__(self, lower_bound: List[float], upper_bound: List[float], number_of_objectives: int, number_of_constraints: int = 0):
+        super(FloatSolution, self).__init__(len(lower_bound), number_of_objectives, number_of_constraints)
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
 
@@ -77,6 +74,7 @@ class FloatSolution(Solution[float]):
             self.upper_bound)
         new_solution.objectives = self.objectives[:]
         new_solution.variables = self.variables[:]
+        new_solution.constraints = self.constraints[:]
 
         new_solution.attributes = self.attributes.copy()
 
@@ -87,8 +85,8 @@ class IntegerSolution(Solution[int]):
     """ Class representing integer solutions """
 
     def __init__(self, number_of_variables: int, number_of_objectives: int,
-                 lower_bound: List[int], upper_bound: List[int]):
-        super(IntegerSolution, self).__init__(number_of_variables, number_of_objectives)
+                 lower_bound: List[int], upper_bound: List[int], number_of_constraints: int = 0):
+        super(IntegerSolution, self).__init__(number_of_variables, number_of_objectives, number_of_constraints)
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
 
@@ -109,8 +107,8 @@ class IntegerSolution(Solution[int]):
 class PermutationSolution(Solution):
     """ Class representing permutation solutions """
 
-    def __init__(self, number_of_variables: int, number_of_objectives: int):
-        super(PermutationSolution, self).__init__(number_of_variables, number_of_objectives)
+    def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int = 0):
+        super(PermutationSolution, self).__init__(number_of_variables, number_of_objectives, number_of_constraints)
 
     def __copy__(self):
         new_solution = PermutationSolution(

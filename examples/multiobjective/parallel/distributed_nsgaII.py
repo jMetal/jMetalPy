@@ -10,7 +10,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 if __name__ == '__main__':
     problem = ZDT1Modified()
 
-    client = Client(LocalCluster(n_workers=8))
+    client = Client(LocalCluster(n_workers=24))
 
     algorithm = DistributedNSGAII(
         problem=problem,
