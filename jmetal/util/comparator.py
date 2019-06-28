@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from typing import TypeVar, Generic
 
 from jmetal.core.solution import Solution
+from jmetal.util.constraint_handling import overall_constraint_violation_degree
 
 S = TypeVar('S')
 
@@ -95,10 +96,31 @@ class RankingAndCrowdingDistanceComparator(Comparator):
         return result
 
 
+class OverallConstraintViolationComparator(Comparator):
+
+    def compare(self, solution1: Solution, solution2: Solution) -> int:
+        violation_degree_solution_1 = overall_constraint_violation_degree(solution1)
+        violation_degree_solution_2 = overall_constraint_violation_degree(solution2)
+        if violation_degree_solution_1 < 0 and violation_degree_solution_2 < 0:
+            if violation_degree_solution_1 > violation_degree_solution_2:
+                result = -1
+            elif violation_degree_solution_2 > violation_degree_solution_1:
+                result = 1
+            else:
+                result = 0
+        elif violation_degree_solution_1 == 0 and violation_degree_solution_2 < 0:
+            result = -1
+        elif violation_degree_solution_2 == 0 and violation_degree_solution_1 < 0:
+            result = 1
+        else:
+            result = 0
+
+        return result
+
+
 class DominanceComparator(Comparator):
 
-    def __init__(self,
-                 constraint_comparator = SolutionAttributeComparator('overall_constraint_violation', False)):
+    def __init__(self, constraint_comparator=OverallConstraintViolationComparator()):
         self.constraint_comparator = constraint_comparator
 
     def compare(self, solution1: Solution, solution2: Solution) -> int:
@@ -107,10 +129,7 @@ class DominanceComparator(Comparator):
         elif solution2 is None:
             raise Exception("The solution2 is None")
 
-        result = 0
-
-        if solution1.attributes.get(self.constraint_comparator.key) is not None:
-            result = self.constraint_comparator.compare(solution1, solution2)
+        result = self.constraint_comparator.compare(solution1, solution2)
         if result == 0:
             result = self.__dominance_test(solution1, solution2)
 
