@@ -12,10 +12,8 @@ if __name__ == '__main__':
     def f1(x: [float]):
         return x[0] * x[0]
 
-
     def f2(x: [float]):
         return (x[0] - 2) * (x[0] - 2)
-
 
     problem = OnTheFlyFloatProblem()
     problem \

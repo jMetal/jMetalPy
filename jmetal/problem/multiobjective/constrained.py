@@ -42,24 +42,11 @@ class Srinivas(FloatProblem):
         return solution
 
     def __evaluate_constraints(self, solution: FloatSolution) -> None:
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
-
         x1 = solution.variables[0]
         x2 = solution.variables[1]
 
-        constraints[0] = 1.0 - (x1 * x1 + x2 * x2) / 225.0
-        constraints[1] = (3.0 * x2 - x1) / 10.0 - 1.0
-
-        overall_constraint_violation = 0.0
-        number_of_violated_constraints = 0.0
-
-        for constrain in constraints:
-            if constrain < 0.0:
-                overall_constraint_violation += constrain
-                number_of_violated_constraints += 1
-
-        solution.attributes['overall_constraint_violation'] = overall_constraint_violation
-        solution.attributes['number_of_violated_constraints'] = number_of_violated_constraints
+        solution.constraints[0] = 1.0 - (x1 * x1 + x2 * x2) / 225.0
+        solution.constraints[1] = (3.0 * x2 - x1) / 10.0 - 1.0
 
     def get_name(self):
         return 'Srinivas'

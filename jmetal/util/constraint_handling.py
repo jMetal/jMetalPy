@@ -34,6 +34,6 @@ def feasibility_ratio(solutions: [Solution]):
     :param solutions:
     :return:
     """
-    if (len(solutions) == 0):
+    if len(solutions) == 0:
         raise Exception("The solution list is empty")
     return sum(1 for solution in solutions if is_feasible(solution)) / len(solutions)
