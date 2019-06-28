@@ -61,17 +61,18 @@ class BinarySolution(Solution[BitSet]):
 class FloatSolution(Solution[float]):
     """ Class representing float solutions """
 
-    def __init__(self, lower_bound: List[float], upper_bound: List[float], number_of_objectives: int, number_of_constraints: int = 0):
+    def __init__(self, lower_bound: List[float], upper_bound: List[float], number_of_objectives: int,
+                 number_of_constraints: int = 0):
         super(FloatSolution, self).__init__(len(lower_bound), number_of_objectives, number_of_constraints)
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
 
     def __copy__(self):
         new_solution = FloatSolution(
-            self.number_of_variables,
-            self.number_of_objectives,
             self.lower_bound,
-            self.upper_bound)
+            self.upper_bound,
+            self.number_of_objectives,
+            self.number_of_constrains)
         new_solution.objectives = self.objectives[:]
         new_solution.variables = self.variables[:]
         new_solution.constraints = self.constraints[:]
@@ -84,20 +85,21 @@ class FloatSolution(Solution[float]):
 class IntegerSolution(Solution[int]):
     """ Class representing integer solutions """
 
-    def __init__(self, number_of_variables: int, number_of_objectives: int,
-                 lower_bound: List[int], upper_bound: List[int], number_of_constraints: int = 0):
-        super(IntegerSolution, self).__init__(number_of_variables, number_of_objectives, number_of_constraints)
+    def __init__(self, lower_bound: List[int], upper_bound: List[int], number_of_objectives: int,
+                  number_of_constraints: int = 0):
+        super(IntegerSolution, self).__init__(len(lower_bound), number_of_objectives, number_of_constraints)
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
 
     def __copy__(self):
-        new_solution = FloatSolution(
-            self.number_of_variables,
-            self.number_of_objectives,
+        new_solution = IntegerSolution(
             self.lower_bound,
-            self.upper_bound)
+            self.upper_bound,
+            self.number_of_objectives,
+            self.number_of_constrains)
         new_solution.objectives = self.objectives[:]
         new_solution.variables = self.variables[:]
+        new_solution.constraints = self.constraints[:]
 
         new_solution.attributes = self.attributes.copy()
 

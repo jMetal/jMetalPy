@@ -2,6 +2,7 @@ import copy
 import unittest
 
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, Solution
+from jmetal.util.constraint_handling import is_feasible
 
 
 class SolutionTestCase(unittest.TestCase):
@@ -13,17 +14,6 @@ class SolutionTestCase(unittest.TestCase):
         self.assertEqual(0, len(solution.attributes))
         self.assertEqual(2, len(solution.variables))
         self.assertEqual(3, len(solution.objectives))
-
-    def test_should_default_constructor_create_a_feasible_solution(self) -> None:
-        solution = Solution(2, 2)
-
-        self.assertTrue(solution.is_feasible())
-
-    def test_should_a_solution_with_zero_violated_constraints_be_feasible(self) -> None:
-        solution = Solution(2, 2)
-        solution.attributes["overall_constraint_violation"] = 0
-
-        self.assertTrue(solution.is_feasible())
 
 
 class BinarySolutionTestCase(unittest.TestCase):
@@ -58,11 +48,11 @@ class BinarySolutionTestCase(unittest.TestCase):
 class FloatSolutionTestCase(unittest.TestCase):
 
     def test_should_constructor_create_a_non_null_object(self) -> None:
-        solution = FloatSolution(3, 2, [], [])
+        solution = FloatSolution([], [], 2)
         self.assertIsNotNone(solution)
 
     def test_should_default_constructor_create_a_valid_solution(self) -> None:
-        solution = FloatSolution(2, 3, [0.0, 0.5], [1.0, 2.0])
+        solution = FloatSolution([0.0, 0.5], [1.0, 2.0], 3)
         self.assertEqual(2, solution.number_of_variables)
         self.assertEqual(3, solution.number_of_objectives)
         self.assertEqual(2, len(solution.variables))
@@ -71,9 +61,10 @@ class FloatSolutionTestCase(unittest.TestCase):
         self.assertEqual([1.0, 2.0], solution.upper_bound)
 
     def test_should_copy_work_properly(self) -> None:
-        solution = FloatSolution(2, 3, [0.0, 0.5], [1.0, 2.0])
+        solution = FloatSolution([0.0, 3.5], [1.0, 5.0], 3, 2)
         solution.variables = [1.24, 2.66]
         solution.objectives = [0.16, -2.34, 9.25]
+        solution.constraints = [-1.2, -0.25]
         solution.attributes["attr"] = "value"
 
         new_solution = copy.copy(solution)
@@ -84,6 +75,7 @@ class FloatSolutionTestCase(unittest.TestCase):
         self.assertEqual(solution.objectives, new_solution.objectives)
         self.assertEqual(solution.lower_bound, new_solution.lower_bound)
         self.assertEqual(solution.upper_bound, new_solution.upper_bound)
+        self.assertEqual(solution.constraints, new_solution.constraints)
         self.assertIs(solution.lower_bound, solution.lower_bound)
         self.assertIs(solution.upper_bound, solution.upper_bound)
         self.assertEqual(solution.attributes, new_solution.attributes)
@@ -92,11 +84,11 @@ class FloatSolutionTestCase(unittest.TestCase):
 class IntegerSolutionTestCase(unittest.TestCase):
 
     def test_should_constructor_create_a_non_null_object(self) -> None:
-        solution = IntegerSolution(3, 2, [], [])
+        solution = IntegerSolution([], [], 2)
         self.assertIsNotNone(solution)
 
     def test_should_default_constructor_create_a_valid_solution(self) -> None:
-        solution = IntegerSolution(2, 3, [0, 5], [1, 2])
+        solution = IntegerSolution([0, 5], [1, 2], 3)
         self.assertEqual(2, solution.number_of_variables)
         self.assertEqual(3, solution.number_of_objectives)
         self.assertEqual(2, len(solution.variables))
@@ -105,9 +97,10 @@ class IntegerSolutionTestCase(unittest.TestCase):
         self.assertEqual([1, 2], solution.upper_bound)
 
     def test_should_copy_work_properly(self) -> None:
-        solution = IntegerSolution(2, 3, [0, 5], [1, 2])
+        solution = IntegerSolution([0, 5], [1, 2], 3, 1)
         solution.variables = [1, 2]
         solution.objectives = [0.16, -2.34, 9.25]
+        solution.constraints = [-5]
         solution.attributes["attr"] = "value"
 
         new_solution = copy.copy(solution)
@@ -118,6 +111,7 @@ class IntegerSolutionTestCase(unittest.TestCase):
         self.assertEqual(solution.objectives, new_solution.objectives)
         self.assertEqual(solution.lower_bound, new_solution.lower_bound)
         self.assertEqual(solution.upper_bound, new_solution.upper_bound)
+        self.assertEqual(solution.constraints, new_solution.constraints)
         self.assertIs(solution.lower_bound, solution.lower_bound)
         self.assertIs(solution.upper_bound, solution.upper_bound)
         self.assertEqual(solution.attributes, new_solution.attributes)
