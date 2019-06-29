@@ -16,7 +16,7 @@ def number_of_violated_constraints(solution: Solution) -> int:
     :param solution:
     :return:
     """
-    return sum([1 for _ in solution.constraints if _ != 0])
+    return sum([1 for _ in solution.constraints if _ < 0])
 
 
 def overall_constraint_violation_degree(solution: Solution) -> float:
@@ -25,7 +25,15 @@ def overall_constraint_violation_degree(solution: Solution) -> float:
     :param solution:
     :return:
     """
-    return sum([value for value in solution.constraints if value != 0])
+    return sum([value for value in solution.constraints if value < 0])
+
+
+def set_overall_constraint_violation_degree(solution: Solution) -> None:
+    solution.attributes["overall_constraint_violation"] = overall_constraint_violation_degree(solution)
+
+
+def get_overall_constraint_violation_degree(solution: Solution) -> float:
+    return solution.attributes["overall_constraint_violation"]
 
 
 def feasibility_ratio(solutions: [Solution]):

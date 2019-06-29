@@ -1,4 +1,6 @@
-from jmetal.component import ProgressBarObserver, CrowdingDistanceArchive, VisualizerObserver
+from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
+
+from jmetal.util.archive import CrowdingDistanceArchive
 
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.core.problem import OnTheFlyFloatProblem

@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from typing import TypeVar, Generic
 
 from jmetal.core.solution import Solution
-from jmetal.util.constraint_handling import overall_constraint_violation_degree
+from jmetal.util.constraint_handling import overall_constraint_violation_degree, get_overall_constraint_violation_degree
 
 S = TypeVar('S')
 
@@ -99,8 +99,8 @@ class RankingAndCrowdingDistanceComparator(Comparator):
 class OverallConstraintViolationComparator(Comparator):
 
     def compare(self, solution1: Solution, solution2: Solution) -> int:
-        violation_degree_solution_1 = overall_constraint_violation_degree(solution1)
-        violation_degree_solution_2 = overall_constraint_violation_degree(solution2)
+        violation_degree_solution_1 = get_overall_constraint_violation_degree(solution1)
+        violation_degree_solution_2 = get_overall_constraint_violation_degree(solution2)
         if violation_degree_solution_1 < 0 and violation_degree_solution_2 < 0:
             if violation_degree_solution_1 > violation_degree_solution_2:
                 result = -1
