@@ -24,7 +24,7 @@ class Solution(Generic[S], ABC):
         return False
 
     def __str__(self) -> str:
-        return 'Solution(objectives={},variables={})'.format(self.objectives, self.variables)
+        return 'Solution(variables={},objectives={},constraints={})'.format(self.variables, self.objectives, self.constraints)
 
 
 class BinarySolution(Solution[BitSet]):
