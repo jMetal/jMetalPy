@@ -1,7 +1,6 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.operator import BinaryTournamentSelection, BitFlipMutation, SPXCrossover
+from jmetal.operator import BitFlipMutation, SPXCrossover
 from jmetal.problem.multiobjective.unconstrained import OneZeroMax
-from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, DominanceComparator
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
@@ -17,9 +16,7 @@ if __name__ == '__main__':
         offspring_population_size=100,
         mutation=BitFlipMutation(probability=1.0 / binary_string_length),
         crossover=SPXCrossover(probability=1.0),
-        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
-        termination_criterion=StoppingByEvaluations(max=max_evaluations),
-        dominance_comparator=DominanceComparator()
+        termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
     algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))

@@ -8,8 +8,8 @@ from jmetal.config import store
 from jmetal.core.algorithm import DynamicAlgorithm, Algorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem, DynamicProblem
-from jmetal.operator import RankingAndCrowdingDistanceSelection
-from jmetal.util.comparator import DominanceComparator, Comparator
+from jmetal.operator import RankingAndCrowdingDistanceSelection, BinaryTournamentSelection
+from jmetal.util.comparator import DominanceComparator, Comparator, RankingAndCrowdingDistanceComparator
 from jmetal.util.solution_list import Evaluator, Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
@@ -33,7 +33,6 @@ class NSGAII(GeneticAlgorithm[S, R]):
                  offspring_population_size: int,
                  mutation: Mutation,
                  crossover: Crossover,
-                 selection: Selection,
                  termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator,
@@ -57,6 +56,8 @@ class NSGAII(GeneticAlgorithm[S, R]):
         :param crossover: Crossover operator (see :py:mod:`jmetal.operator.crossover`).
         :param selection: Selection operator (see :py:mod:`jmetal.operator.selection`).
         """
+        selection = BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
+
         super(NSGAII, self).__init__(
             problem=problem,
             population_size=population_size,
@@ -99,7 +100,6 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
                  offspring_population_size: int,
                  mutation: Mutation,
                  crossover: Crossover,
-                 selection: Selection,
                  termination_criterion: TerminationCriterion,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator,
@@ -110,7 +110,6 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
             offspring_population_size=offspring_population_size,
             mutation=mutation,
             crossover=crossover,
-            selection=selection,
             population_evaluator=population_evaluator,
             population_generator=population_generator,
             termination_criterion=termination_criterion,

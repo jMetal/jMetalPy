@@ -9,8 +9,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
     problem = ZDT1Modified()
-    problem.reference_front = read_solutions(
-        filename='../../resources/reference_front/{}.pf'.format(problem.get_name()))
+    problem.reference_front = read_solutions(filename='../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
     max_evaluations = 100
     algorithm = SMPSO(
