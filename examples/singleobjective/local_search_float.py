@@ -1,21 +1,21 @@
 from jmetal.algorithm.singleobjective.local_search import LocalSearch
 from jmetal.operator import PolynomialMutation
-from jmetal.problem.singleobjective.unconstrained import Rastrigin
+from jmetal.problem.singleobjective.unconstrained import Rastrigin, Sphere
 from jmetal.util.observer import PrintObjectivesObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
-    problem = Rastrigin(10)
+    problem = Sphere(10)
 
-    max_evaluations = 100000
+    max_evaluations = 1000000
     algorithm = LocalSearch(
         problem=problem,
         mutation=PolynomialMutation(1.0 / problem.number_of_variables, 20.0),
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
-    objectives_observer = PrintObjectivesObserver(frequency=1000)
+    objectives_observer = PrintObjectivesObserver(frequency=10000)
     algorithm.observable.register(observer=objectives_observer)
 
     algorithm.run()

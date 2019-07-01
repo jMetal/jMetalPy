@@ -20,7 +20,7 @@ if __name__ == '__main__':
     problem = ZDT2()
     problem.reference_front = read_solutions(filename='../../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
-    reference_point = [0.8, 0.5]
+    reference_point = [0.2, 0.5]
 
     max_evaluations = 25000
     algorithm = NSGAII(

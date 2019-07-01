@@ -8,7 +8,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 if __name__ == '__main__':
     problem = Rastrigin(10)
 
-    max_evaluations = 50000
+    max_evaluations = 250000
     algorithm = SimulatedAnnealing(
         problem=problem,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20.0),

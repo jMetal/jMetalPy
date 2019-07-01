@@ -5,12 +5,12 @@ from jmetal.util.observer import PrintObjectivesObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
-    problem = OneMax(number_of_bits=512)
+    problem = OneMax(number_of_bits=1024)
 
     algorithm = GeneticAlgorithm(
         problem=problem,
-        population_size=40,
-        offspring_population_size=40,
+        population_size=100,
+        offspring_population_size=100,
         mutation=BitFlipMutation(1.0 / problem.number_of_bits),
         crossover=SPXCrossover(1.0),
         selection=BinaryTournamentSelection(),

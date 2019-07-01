@@ -1,6 +1,6 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
-from jmetal.problem import ZDT1, ZDT4
+from jmetal.problem import ZDT1, ZDT4, ZDT3, LZ09_F2
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, DominanceComparator
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
@@ -8,10 +8,10 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.util.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
-    problem = ZDT1()
+    problem = LZ09_F2()
     problem.reference_front = read_solutions(filename='../../resources/reference_front/ZDT1.pf')
 
-    max_evaluations = 25000
+    max_evaluations = 150000
     algorithm = NSGAII(
         problem=problem,
         population_size=100,
