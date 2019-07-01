@@ -18,18 +18,20 @@
 
 ## Installation
 To download jMetalPy just clone the Git repository hosted in GitHub:
-```bash
-$ git clone https://github.com/jMetal/jMetalPy.git
-$ python setup.py install
+
+```console
+git clone https://github.com/jMetal/jMetalPy.git
+python setup.py install
 ```
 
 Alternatively, you can install it with `pip`:
-```bash
-$ pip install jmetalpy
+
+```console
+pip install jmetalpy
 ```
 
 ## Usage
-Examples of configuring and running all the included algorithms are located [in the docs](https://jmetalpy.readthedocs.io/en/latest/examples.html).
+Examples of configuring and running all the included algorithms are located [in the `examples` folder](examples).
 
 ## Features
 The current release of jMetalPy (v1.0.5) contains the following components:

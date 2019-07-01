@@ -2,10 +2,9 @@ import unittest
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.algorithm.multiobjective.smpso import SMPSO
-from jmetal.operator import PolynomialMutation, SBXCrossover, BinaryTournamentSelection
+from jmetal.operator import PolynomialMutation, SBXCrossover
 from jmetal.problem import ZDT1
 from jmetal.util.archive import CrowdingDistanceArchive
-from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 
@@ -27,7 +26,6 @@ class RunningAlgorithmsTestCases(unittest.TestCase):
             offspring_population_size=self.offspring_size,
             mutation=self.mutation,
             crossover=self.crossover,
-            selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
             termination_criterion=StoppingByEvaluations(max=1000)
         ).run()
 
