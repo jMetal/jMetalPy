@@ -214,6 +214,94 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
         return 'Ranking and crowding distance selection'
 
 
+class RankingAndFitnessSelection(Selection[List[S], List[S]]):
+
+    def __init__(self,
+                 max_population_size: int, reference_point: S, dominance_comparator: Comparator = DominanceComparator()):
+        super(RankingAndFitnessSelection, self).__init__()
+        self.max_population_size = max_population_size
+        self.dominance_comparator = dominance_comparator
+        self.reference_point = reference_point
+
+    def hypesub(self, l, A, actDim, bounds, pvec, alpha, k):
+        h = [0 for _ in range(l)]
+        Adim = [a[actDim - 1] for a in A]
+        indices_sort = sorted(range(len(Adim)), key=Adim.__getitem__)
+        S = [A[j] for j in indices_sort]
+        pvec = [pvec[j] for j in indices_sort]
+
+        for i in range(1, len(S) + 1):
+            if i < len(S):
+                extrusion = S[i][actDim - 1] - S[i - 1][actDim - 1]
+            else:
+                extrusion = bounds[actDim - 1] - S[i - 1][actDim - 1]
+
+            if actDim == 1:
+                if i > k:
+                    break
+                if all(alpha) >= 0:
+                    for p in pvec[0:i]:
+                        h[p] = h[p] + extrusion * alpha[i - 1]
+            else:
+                if extrusion > 0:
+                    h = [h[j] + extrusion * self.hypesub(l, S[0:i], actDim - 1, bounds, pvec[0:i], alpha, k)[j] for j in
+                         range(l)]
+
+        return h
+
+    def compute_hypervol_fitness_values(self, population: List[S], reference_point: S, k: int):
+        points = [ind.objectives for ind in population]
+        bounds = reference_point.objectives
+        population_size = len(points)
+
+        if k < 0:
+            k = population_size
+
+        actDim = len(bounds)
+        pvec = range(population_size)
+        alpha = []
+
+        for i in range(1, k + 1):
+            alpha.append(np.prod([float(k - j) / (population_size - j) for j in range(1, i)]) / i)
+
+        f = self.hypesub(population_size, points, actDim, bounds, pvec, alpha, k)
+
+        for i in range(len(population)):
+            population[i].attributes['fitness'] = f[i]
+
+        return population
+
+    def execute(self, front: List[S]) -> List[S]:
+        if front is None:
+            raise Exception('The front is null')
+        elif len(front) == 0:
+            raise Exception('The front is empty')
+
+        ranking = FastNonDominatedRanking(self.dominance_comparator)
+        ranking.compute_ranking(front)
+
+        ranking_index = 0
+        new_solution_list = []
+
+        while len(new_solution_list) < self.max_population_size:
+            if len(ranking.get_subfront(ranking_index)) < self.max_population_size - len(new_solution_list):
+                subfront = ranking.get_subfront(ranking_index)
+                new_solution_list = new_solution_list + subfront
+                ranking_index += 1
+            else:
+                subfront = ranking.get_subfront(ranking_index)
+                parameter_K = len(subfront) - (self.max_population_size - len(new_solution_list))
+                while parameter_K > 0:
+                    subfront = self.compute_hypervol_fitness_values(subfront, self.reference_point, parameter_K)
+                    subfront = sorted(subfront, key=lambda x: x.attributes['fitness'], reverse=True)
+                    subfront = subfront[:-1]
+                    parameter_K = parameter_K - 1
+                new_solution_list = new_solution_list + subfront
+        return new_solution_list
+
+    def get_name(self) -> str:
+        return 'Ranking and fitness selection'
+
 class BinaryTournament2Selection(Selection[List[S], S]):
 
     def __init__(self, comparator_list: List[Comparator]):
