@@ -2,6 +2,7 @@ from math import pi, cos, atan
 
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
+from jmetal.util.constraint_handling import set_overall_constraint_violation_degree
 
 """
 .. module:: constrained
@@ -42,24 +43,13 @@ class Srinivas(FloatProblem):
         return solution
 
     def __evaluate_constraints(self, solution: FloatSolution) -> None:
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
-
         x1 = solution.variables[0]
         x2 = solution.variables[1]
 
-        constraints[0] = 1.0 - (x1 * x1 + x2 * x2) / 225.0
-        constraints[1] = (3.0 * x2 - x1) / 10.0 - 1.0
+        solution.constraints[0] = 1.0 - (x1 * x1 + x2 * x2) / 225.0
+        solution.constraints[1] = (3.0 * x2 - x1) / 10.0 - 1.0
 
-        overall_constraint_violation = 0.0
-        number_of_violated_constraints = 0.0
-
-        for constrain in constraints:
-            if constrain < 0.0:
-                overall_constraint_violation += constrain
-                number_of_violated_constraints += 1
-
-        solution.attributes['overall_constraint_violation'] = overall_constraint_violation
-        solution.attributes['number_of_violated_constraints'] = number_of_violated_constraints
+        set_overall_constraint_violation_degree(solution)
 
     def get_name(self):
         return 'Srinivas'
@@ -103,13 +93,8 @@ class Tanaka(FloatProblem):
         overall_constraint_violation = 0.0
         number_of_violated_constraints = 0.0
 
-        for constrain in constraints:
-            if constrain < 0.0:
-                overall_constraint_violation += constrain
-                number_of_violated_constraints += 1
+        set_overall_constraint_violation_degree(solution)
 
-        solution.attributes['overall_constraint_violation'] = overall_constraint_violation
-        solution.attributes['number_of_violated_constraints'] = number_of_violated_constraints
 
     def get_name(self):
         return 'Tanaka'
@@ -159,16 +144,7 @@ class Osyczka2(FloatProblem):
         constraints[4] = (4.0 - (x[2] - 3.0) * (x[2] - 3.0) - x[3]) / 4.0
         constraints[5] = ((x[4] - 3.0) * (x[4] - 3.0) + x[5] - 4.0) / 4.0
 
-        overall_constraint_violation = 0.0
-        number_of_violated_constraints = 0.0
-
-        for constrain in constraints:
-            if constrain < 0.0:
-                overall_constraint_violation += constrain
-                number_of_violated_constraints += 1
-
-        solution.attributes['overall_constraint_violation'] = overall_constraint_violation
-        solution.attributes['number_of_violated_constraints'] = number_of_violated_constraints
+        set_overall_constraint_violation_degree(solution)
 
     def get_name(self):
         return 'Osyczka2'
@@ -208,16 +184,8 @@ class Binh2(FloatProblem):
         constraints[0] = -1.0 * (x[0] - 5) * (x[0] - 5) - x[1] * x[1] + 25.0
         constraints[1] = (x[0] - 8) * (x[0] - 8) + (x[1] + 3) * (x[1] + 3) - 7.7
 
-        overall_constraint_violation = 0.0
-        number_of_violated_constraints = 0.0
+        set_overall_constraint_violation_degree(solution)
 
-        for constrain in constraints:
-            if constrain < 0.0:
-                overall_constraint_violation += constrain
-                number_of_violated_constraints += 1
-
-        solution.attributes['overall_constraint_violation'] = overall_constraint_violation
-        solution.attributes['number_of_violated_constraints'] = number_of_violated_constraints
 
     def get_name(self):
         return 'Binh2'

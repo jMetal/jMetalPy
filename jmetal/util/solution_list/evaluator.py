@@ -1,6 +1,7 @@
 import functools
 from abc import ABC, abstractmethod
 from multiprocessing.pool import ThreadPool, Pool
+from multiprocessing import cpu_count
 from typing import TypeVar, List, Generic
 
 import dask
@@ -64,6 +65,9 @@ def evaluate_solution(solution, problem):
 
 
 class DaskEvaluator(Evaluator[S]):
+    """
+    Evaluator using Dask
+    """
     def __init__(self, scheduler='processes'):
         self.scheduler = scheduler
 

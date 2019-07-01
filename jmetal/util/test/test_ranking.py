@@ -108,6 +108,57 @@ class FastNonDominatedRankingTestCases(unittest.TestCase):
         self.assertEqual(solution4, ranking[1][0])
         self.assertEqual(solution5, ranking[1][1])
 
+    def test_should_compute_ranking_work_properly_with_constraints_case1(self):
+        """ The list contains two solutions and one is infeasible
+        """
+        solution = Solution(2, 2, 1)
+        solution.objectives = [2, 3]
+        solution.constraints[0] = -1
+        solution2 = Solution(2, 2, 1)
+        solution2.objectives = [3, 6]
+        solution2.constraints[0] = 0
+        solution_list = [solution, solution2]
+
+        ranking = self.ranking.compute_ranking(solution_list)
+
+        self.assertEqual(2, self.ranking.get_number_of_subfronts())
+        self.assertEqual(solution2, ranking[0][0])
+        self.assertEqual(solution, ranking[1][0])
+
+    def test_should_compute_ranking_work_properly_with_constraints_case2(self):
+        """ The list contains two solutions and both are infeasible with different violation degree
+        """
+        solution = Solution(2, 2, 1)
+        solution.objectives = [2, 3]
+        solution.constraints[0] = -1
+        solution2 = Solution(2, 2, 1)
+        solution2.objectives = [3, 6]
+        solution2.constraints[0] = -2
+        solution_list = [solution, solution2]
+
+        ranking = self.ranking.compute_ranking(solution_list)
+
+        self.assertEqual(2, self.ranking.get_number_of_subfronts())
+        self.assertEqual(solution, ranking[0][0])
+        self.assertEqual(solution2, ranking[1][0])
+
+    def test_should_compute_ranking_work_properly_with_constraints_case3(self):
+        """ The list contains two solutions and both are infeasible with equal violation degree
+        """
+        solution = Solution(2, 2, 1)
+        solution.objectives = [2, 3]
+        solution.constraints[0] = -1
+        solution2 = Solution(2, 2, 1)
+        solution2.objectives = [3, 6]
+        solution2.constraints[0] = -1
+        solution_list = [solution, solution2]
+
+        ranking = self.ranking.compute_ranking(solution_list)
+
+        self.assertEqual(2, self.ranking.get_number_of_subfronts())
+        self.assertEqual(solution, ranking[0][0])
+        self.assertEqual(solution2, ranking[1][0])
+
 
 if __name__ == "__main__":
     unittest.main()

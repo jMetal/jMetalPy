@@ -1,29 +1,28 @@
-from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
-from jmetal.problem import ZDT1, ZDT4, ZDT3, LZ09_F2
-from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, DominanceComparator
+from jmetal.algorithm.multiobjective.smpso import SMPSO
+from jmetal.operator import PolynomialMutation
+from jmetal.problem import ZDT4, Srinivas, Tanaka
+from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
-from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
+from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
+from jmetal.util.solution_list import read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.util.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
-    problem = ZDT1()
-    problem.reference_front = read_solutions(filename='../../resources/reference_front/ZDT1.pf')
+    problem = Srinivas()
+    problem.reference_front = read_solutions(filename='../../resources/reference_front/Srinivas.pf')
 
-    max_evaluations = 150000
-    algorithm = NSGAII(
+    max_evaluations = 25000
+    algorithm = SMPSO(
         problem=problem,
-        population_size=100,
-        offspring_population_size=100,
+        swarm_size=100,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
-        crossover=SBXCrossover(probability=1.0, distribution_index=20),
-        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
-        termination_criterion=StoppingByEvaluations(max=max_evaluations),
-        dominance_comparator=DominanceComparator()
+        leaders=CrowdingDistanceArchive(100),
+        termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
-    algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
+    progress_bar = ProgressBarObserver(max=max_evaluations)
+    algorithm.observable.register(observer=progress_bar)
     algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front))
 
     algorithm.run()

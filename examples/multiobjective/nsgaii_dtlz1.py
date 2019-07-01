@@ -1,17 +1,19 @@
-from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
-from jmetal.problem import ZDT1, ZDT4, ZDT3, LZ09_F2
-from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, DominanceComparator
-from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
-from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
+from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.util.visualization import Plot, InteractivePlot
+from numpy.polynomial import Polynomial
+
+from jmetal.algorithm.multiobjective.nsgaii import NSGAII
+from jmetal.operator import BinaryTournamentSelection, SBXCrossover, PolynomialMutation
+from jmetal.problem import DTLZ2
+from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, DominanceComparator
+from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 
 if __name__ == '__main__':
-    problem = ZDT1()
-    problem.reference_front = read_solutions(filename='../../resources/reference_front/ZDT1.pf')
+    problem = DTLZ2()
+    problem.reference = '../../resources/reference_front/DTLZ2.3D.pf'
 
-    max_evaluations = 150000
+    max_evaluations = 25000
     algorithm = NSGAII(
         problem=problem,
         population_size=100,

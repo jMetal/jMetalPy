@@ -29,8 +29,8 @@ if __name__ == '__main__':
     front = algorithm.get_result()
 
     # Save results to file
-    print_function_values_to_file(front, 'FUN.'+ algorithm.get_name()+"-"+problem.get_name())
-    print_variables_to_file(front, 'VAR.' + algorithm.get_name()+"-"+problem.get_name())
+    print_function_values_to_file(front, 'FUN.' + algorithm.get_name() + "-" + problem.get_name())
+    print_variables_to_file(front, 'VAR.' + algorithm.get_name() + "-" + problem.get_name())
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())

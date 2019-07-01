@@ -78,10 +78,10 @@ class FloatProblem(Problem[FloatSolution], ABC):
 
     def create_solution(self) -> FloatSolution:
         new_solution = FloatSolution(
-            self.number_of_variables,
-            self.number_of_objectives,
             self.lower_bound,
-            self.upper_bound)
+            self.upper_bound,
+            self.number_of_objectives,
+            self.number_of_constraints)
         new_solution.variables = \
             [random.uniform(self.lower_bound[i]*1.0, self.upper_bound[i]*1.0) for i in range(self.number_of_variables)]
 
@@ -98,10 +98,10 @@ class IntegerProblem(Problem[IntegerSolution], ABC):
 
     def create_solution(self) -> IntegerSolution:
         new_solution = IntegerSolution(
-            self.number_of_variables,
-            self.number_of_objectives,
             self.lower_bound,
-            self.upper_bound)
+            self.upper_bound,
+            self.number_of_objectives,
+            self.number_of_constraints)
 
         new_solution.variables = \
             [int(random.uniform(self.lower_bound[i]*1.0, self.upper_bound[i]*1.0))

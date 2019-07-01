@@ -361,3 +361,4 @@ class MultiList:
             node.next[i].prev[i] = node
             if bounds[i] > node.cargo[i]:
                 bounds[i] = node.cargo[i]
+
