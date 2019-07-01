@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='jmetalpy',
-    version='0.9.0',
+    version='1.0.5',
     description='Python version of the jMetal framework',
     author='Antonio J. Nebro',
     author_email='antonio@lcc.uma.es',
