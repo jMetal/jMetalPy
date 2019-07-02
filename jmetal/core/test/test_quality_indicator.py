@@ -36,6 +36,7 @@ class HyperVolumeTestCases(unittest.TestCase):
 
         hv = HyperVolume(reference_point)
         value = hv.compute(problem.reference_front)
+        print(value)
 
         self.assertAlmostEqual(0.666, value, delta=0.001)
 
