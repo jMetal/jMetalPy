@@ -1,10 +1,10 @@
 import random
 import threading
 from copy import copy
-from math import sqrt
 from typing import TypeVar, List, Optional
 
 import numpy
+from math import sqrt
 
 from jmetal.config import store
 from jmetal.core.algorithm import ParticleSwarmOptimization, DynamicAlgorithm

@@ -1,7 +1,6 @@
 import functools
 from abc import ABC, abstractmethod
 from multiprocessing.pool import ThreadPool, Pool
-from multiprocessing import cpu_count
 from typing import TypeVar, List, Generic
 
 import dask

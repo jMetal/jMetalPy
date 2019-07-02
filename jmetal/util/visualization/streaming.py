@@ -2,7 +2,6 @@ import logging
 from typing import TypeVar, List
 
 import matplotlib
-
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 

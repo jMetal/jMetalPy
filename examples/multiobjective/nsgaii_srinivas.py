@@ -1,6 +1,6 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
-from jmetal.problem import ZDT1, ZDT4, Srinivas
+from jmetal.problem import Srinivas
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, DominanceComparator
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file

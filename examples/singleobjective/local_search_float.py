@@ -1,6 +1,6 @@
 from jmetal.algorithm.singleobjective.local_search import LocalSearch
 from jmetal.operator import PolynomialMutation
-from jmetal.problem.singleobjective.unconstrained import Rastrigin, Sphere
+from jmetal.problem.singleobjective.unconstrained import Sphere
 from jmetal.util.observer import PrintObjectivesObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations

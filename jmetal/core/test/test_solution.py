@@ -2,7 +2,6 @@ import copy
 import unittest
 
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, Solution
-from jmetal.util.constraint_handling import is_feasible
 
 
 class SolutionTestCase(unittest.TestCase):

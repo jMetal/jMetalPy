@@ -3,7 +3,7 @@ from jmetal.operator import PolynomialMutation
 from jmetal.problem import DTLZ1
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.observer import ProgressBarObserver
-from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_solutions
+from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.util.visualization import InteractivePlot, Plot
 

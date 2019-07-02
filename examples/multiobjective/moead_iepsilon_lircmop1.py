@@ -1,8 +1,6 @@
-from jmetal.problem.multiobjective.lircmop import LIRCMOP1, LIRCMOP2
-
-from jmetal.algorithm.multiobjective.moead import MOEAD, MOEADIEpsilon
+from jmetal.algorithm.multiobjective.moead import MOEADIEpsilon
 from jmetal.operator import PolynomialMutation, DifferentialEvolutionCrossover
-from jmetal.problem import LZ09_F2, Srinivas
+from jmetal.problem.multiobjective.lircmop import LIRCMOP2
 from jmetal.util.aggregative_function import Tschebycheff
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file

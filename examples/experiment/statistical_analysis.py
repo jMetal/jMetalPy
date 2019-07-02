@@ -1,7 +1,6 @@
 from jmetal.util.laboratory import generate_boxplot, generate_latex_tables, compute_mean_indicator, compute_wilcoxon
-from jmetal.util.statistical_test.bayesian import bayesian_sign_test, bayesian_signed_rank_test
 from jmetal.util.statistical_test.functions import *
-from jmetal.util.visualization import CDplot, plot_posterior
+from jmetal.util.visualization import CDplot
 
 if __name__ == '__main__':
     # Generate Median & IQR tables

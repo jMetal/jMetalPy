@@ -2,7 +2,7 @@ from jmetal.algorithm.multiobjective.smpso import SMPSORP
 from jmetal.operator import PolynomialMutation
 from jmetal.problem import ZDT1
 from jmetal.util.archive import CrowdingDistanceArchiveWithReferencePoint
-from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
+from jmetal.util.observer import VisualizerObserver
 from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.util.visualization import InteractivePlot, Plot

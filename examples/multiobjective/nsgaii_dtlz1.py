@@ -1,13 +1,11 @@
-from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
-from jmetal.util.termination_criterion import StoppingByEvaluations
-from jmetal.util.visualization import Plot, InteractivePlot
-from numpy.polynomial import Polynomial
-
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import BinaryTournamentSelection, SBXCrossover, PolynomialMutation
 from jmetal.problem import DTLZ2
 from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, DominanceComparator
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
+from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
+from jmetal.util.termination_criterion import StoppingByEvaluations
+from jmetal.util.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
     problem = DTLZ2()

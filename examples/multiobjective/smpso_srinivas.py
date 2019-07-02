@@ -1,7 +1,6 @@
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.operator import PolynomialMutation
-from jmetal.problem import ZDT4, Srinivas, Tanaka
-from jmetal.problem.multiobjective.lircmop import LIRCMOP1
+from jmetal.problem import Srinivas
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
