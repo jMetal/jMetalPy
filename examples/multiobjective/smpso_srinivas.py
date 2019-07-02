@@ -1,6 +1,7 @@
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.operator import PolynomialMutation
 from jmetal.problem import ZDT4, Srinivas, Tanaka
+from jmetal.problem.multiobjective.lircmop import LIRCMOP1
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
@@ -9,8 +10,8 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.util.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
-    problem = Srinivas()
-    problem.reference_front = read_solutions(filename='../../resources/reference_front/Srinivas.pf')
+    problem = LIRCMOP1()
+    problem.reference_front = read_solutions(filename='../../resources/reference_front/LIBCMOP1.pf')
 
     max_evaluations = 25000
     algorithm = SMPSO(

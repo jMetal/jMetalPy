@@ -1,4 +1,4 @@
-from math import sin, pi
+from math import sin, pi, cos
 
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
@@ -11,7 +11,7 @@ class LIRCMOP1(FloatProblem):
     https://doi.org/10.1007/s00500-019-03794-x
  */ """
 
-    def __init__(self, number_of_variables: int = 2):
+    def __init__(self, number_of_variables: int = 30):
         super(LIRCMOP1, self).__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
@@ -23,42 +23,54 @@ class LIRCMOP1(FloatProblem):
         self.lower_bound = [0.0 for _ in range(self.number_of_variables)]
         self.upper_bound = [1.0 for _ in range(self.number_of_variables)]
 
-        FloatSolution.lower_bound = self.lower_bound
-        FloatSolution.upper_bound = self.upper_bound
+        #FloatSolution.lower_bound = self.lower_bound
+        #FloatSolution.upper_bound = self.upper_bound
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
 
-        solution.objectives[0] = x[0] + self._g1(x)
-        solution.objectives[1] = 1 - x[0]*x[0] + self._g2(x) ;
+        solution.objectives[0] = x[0] + self.g1(x)
+        solution.objectives[1] = 1 - x[0]*x[0] + self.g2(x)
 
-        self.__evaluate_constraints(solution)
+        self.evaluate_constraints(solution)
 
         return solution
 
-    def __evaluate_constraints(self, solution: FloatSolution) -> None:
-        x: [float] = solution.variables
+    def evaluate_constraints(self, solution: FloatSolution) -> None:
+        x = solution.variables
+        constraints = [0.0 for _ in range(self.number_of_constraints)]
+
         a = 0.51
         b = 0.5
-        solution.constraints[0] = (a - self._g1(x)) * (self._g1(x) - b)
-        solution.constraints[1] = (a - self._g2(x)) * (self._g2(x) - b)
+
+        constraints[0] = (a - self.g1(x)) * (self.g1(x) - b)
+        constraints[1] = (a - self.g2(x)) * (self.g2(x) - b)
+
+        solution.constraints = constraints
 
         set_overall_constraint_violation_degree(solution)
 
-    def _g1(self, x: [float]) -> float:
+    def g1(self, x: [float]) -> float:
         result = 0
         for i in range(2, self.number_of_variables, 2):
             result += pow(x[i] - sin(0.5 * pi * x[0]), 2.0)
 
         return result
 
-    def _g2(self, x: [float]) -> float:
+    def g2(self, x: [float]) -> float:
         result = 0
-        for i in range(1, self.number_of_variables - 12, 2):
-            result += pow(x[i] - sin(0.5 * pi * x[0]), 2.0)
+        for i in range(1, self.number_of_variables - 1, 2):
+            result += pow(x[i] - cos(0.5 * pi * x[0]), 2.0)
 
         return result
 
     def get_name(self):
         return 'LIR-CMOP1'
 
+
+problem = LIRCMOP1(3)
+solution = problem.create_solution()
+solution.variables=[0.5, 0.1, 0.2]
+problem.evaluate(solution)
+print(solution)
+print(solution.attributes)

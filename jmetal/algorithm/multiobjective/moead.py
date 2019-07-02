@@ -1,8 +1,10 @@
 import copy
 import random
+from math import ceil
 from typing import TypeVar, List
 
 import numpy as np
+from jmetal.util.constraint_handling import get_overall_constraint_violation_degree, feasibility_ratio
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
@@ -152,6 +154,110 @@ class MOEAD(GeneticAlgorithm):
         return self.solutions
 
 
+class MOEADIEpsilon(MOEAD):
+    def __init__(self,
+                 problem: Problem,
+                 population_size: int,
+                 mutation: Mutation,
+                 crossover: DifferentialEvolutionCrossover,
+                 aggregative_function: AggregativeFunction,
+                 neighbourhood_selection_probability: float,
+                 max_number_of_replaced_solutions: int,
+                 neighbor_size: int,
+                 weight_files_path: str,
+                 termination_criterion: TerminationCriterion = StoppingByEvaluations(300000),
+                 population_generator: Generator = store.default_generator,
+                 population_evaluator: Evaluator = store.default_evaluator):
+        """
+        :param max_number_of_replaced_solutions: (eta in Zhang & Li paper).
+        :param neighbourhood_selection_probability: Probability of mating with a solution in the neighborhood rather
+               than the entire population (Delta in Zhang & Li paper).
+        """
+        super(MOEADIEpsilon, self).__init__(
+            problem=problem,
+            population_size=population_size,
+            mutation=mutation,
+            crossover=crossover,
+            aggregative_function=aggregative_function,
+            neighbourhood_selection_probability=neighbourhood_selection_probability,
+            max_number_of_replaced_solutions=max_number_of_replaced_solutions,
+            neighbor_size=neighbor_size,
+            weight_files_path=weight_files_path,
+            population_evaluator=population_evaluator,
+            population_generator=population_generator,
+            termination_criterion=termination_criterion
+        )
+        self.constraints = []
+        self.epsilon_k = 0
+        self.phi_max = -1e30
+        self.epsilon_zero = 0
+        self.tc = 800
+        self.tao = 0.05
+        self.rk = 0
+        self.generation_counter = 0
+
+    def init_progress(self) -> None:
+        super().init_progress()
+
+        # for i in range(self.population_size):
+        #    self.constraints[i] = get_overall_constraint_violation_degree(self.permutation[i])
+        self.constraints = [get_overall_constraint_violation_degree(self.solutions[i])
+                            for i in range(0, self.population_size)]
+
+        sorted(self.constraints)
+        self.epsilon_zero = abs(self.constraints[int(ceil(0.5 * self.population_size))])
+
+        if self.phi_max < abs(self.constraints[0]):
+            self.phi_max = abs(self.constraints[0])
+
+        self.rk = feasibility_ratio(self.solutions)
+        self.epsilon_k = self.epsilon_zero
+
+    def update_progress(self) -> None:
+        super().update_progress()
+
+        if self.generation_counter >= self.tc:
+            self.epsilon_k = 0
+        else:
+            if self.rk < 0.95:
+                self.epsilon_k = (1 - self.tao) * self.epsilon_k
+            else:
+                self.epsilon_k = self.phi_max * (1 + self.tao)
+
+    def update_current_subproblem_neighborhood(self, new_solution, population):
+        if self.phi_max < get_overall_constraint_violation_degree(new_solution):
+            self.phi_max = get_overall_constraint_violation_degree(new_solution)
+
+        permuted_neighbors_indexes = self.generate_permutation_of_neighbors(self.current_subproblem)
+        replacements = 0
+
+        for i in range(len(permuted_neighbors_indexes)):
+            k = permuted_neighbors_indexes[i]
+
+            f1 = self.fitness_function.compute(population[k].objectives, self.neighbourhood.weight_vectors[k])
+            f2 = self.fitness_function.compute(new_solution.objectives, self.neighbourhood.weight_vectors[k])
+
+            cons1 = abs(get_overall_constraint_violation_degree(self.solutions[k]))
+            cons2 = abs(get_overall_constraint_violation_degree(new_solution))
+
+            if cons1 < self.epsilon_k and cons2 <= self.epsilon_k:
+                if f2 < f1:
+                    population[k] = copy.deepcopy(new_solution)
+                    replacements += 1
+            elif cons1 == cons2:
+                if f2 < f1:
+                    population[k] = copy.deepcopy(new_solution)
+                    replacements += 1
+            elif cons2 < cons1:
+                population[k] = copy.deepcopy(new_solution)
+                replacements += 1
+
+            if replacements >= self.max_number_of_replaced_solutions:
+                break
+
+        return population
+
+
 class Permutation:
 
     def __init__(self, length: int):
@@ -160,14 +266,14 @@ class Permutation:
         self.permutation = np.random.permutation(length)
 
     def get_next_value(self):
-        next = self.permutation[self.counter]
+        next_value = self.permutation[self.counter]
         self.counter += 1
 
         if self.counter == self.length:
             self.permutation = np.random.permutation(self.length)
             self.counter = 0
 
-        return next
+        return next_value
 
     def get_permutation(self):
         return self.permutation.tolist()

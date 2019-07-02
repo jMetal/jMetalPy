@@ -70,8 +70,6 @@ class Tanaka(FloatProblem):
         self.lower_bound = [10e-5 for _ in range(self.number_of_variables)]
         self.upper_bound = [pi for _ in range(self.number_of_variables)]
 
-        FloatSolution.lower_bound = self.lower_bound
-        FloatSolution.upper_bound = self.upper_bound
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         solution.objectives[0] = solution.variables[0]
@@ -90,8 +88,7 @@ class Tanaka(FloatProblem):
         constraints[0] = (x1 * x1 + x2 * x2 - 1.0 - 0.1 * cos(16.0 * atan(x1 / x2)))
         constraints[1] = -2.0 * ((x1 - 0.5) * (x1 - 0.5) + (x2 - 0.5) * (x2 - 0.5) - 0.5)
 
-        overall_constraint_violation = 0.0
-        number_of_violated_constraints = 0.0
+        solution.constraints = constraints
 
         set_overall_constraint_violation_degree(solution)
 
@@ -143,6 +140,8 @@ class Osyczka2(FloatProblem):
         constraints[3] = (2.0 - x[0] + 3.0 * x[1]) / 2.0
         constraints[4] = (4.0 - (x[2] - 3.0) * (x[2] - 3.0) - x[3]) / 4.0
         constraints[5] = ((x[4] - 3.0) * (x[4] - 3.0) + x[5] - 4.0) / 4.0
+
+        solution.constraints = constraints
 
         set_overall_constraint_violation_degree(solution)
 

@@ -25,7 +25,7 @@ setup(
         'numpy==1.16.0',
         'pandas==0.23.4',
         'scipy==1.1.0',
-        'pyspark==2.4.0',
+        'pyspark==2.4.3',
         'ipython',
         'holoviews==1.10.9',
         'plotly==3.3.0',
