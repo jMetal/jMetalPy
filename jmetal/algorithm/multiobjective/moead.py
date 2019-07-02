@@ -4,7 +4,8 @@ from math import ceil
 from typing import TypeVar, List
 
 import numpy as np
-from jmetal.util.constraint_handling import get_overall_constraint_violation_degree, feasibility_ratio
+from jmetal.util.constraint_handling import feasibility_ratio, \
+    overall_constraint_violation_degree
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
@@ -201,11 +202,11 @@ class MOEADIEpsilon(MOEAD):
 
         # for i in range(self.population_size):
         #    self.constraints[i] = get_overall_constraint_violation_degree(self.permutation[i])
-        self.constraints = [get_overall_constraint_violation_degree(self.solutions[i])
+        self.constraints = [overall_constraint_violation_degree(self.solutions[i])
                             for i in range(0, self.population_size)]
 
         sorted(self.constraints)
-        self.epsilon_zero = abs(self.constraints[int(ceil(0.5 * self.population_size))])
+        self.epsilon_zero = abs(self.constraints[int(ceil(0.05 * self.population_size))])
 
         if self.phi_max < abs(self.constraints[0]):
             self.phi_max = abs(self.constraints[0])
@@ -216,17 +217,20 @@ class MOEADIEpsilon(MOEAD):
     def update_progress(self) -> None:
         super().update_progress()
 
-        if self.generation_counter >= self.tc:
-            self.epsilon_k = 0
-        else:
-            if self.rk < 0.95:
-                self.epsilon_k = (1 - self.tao) * self.epsilon_k
+        if self.evaluations % self.population_size == 0:
+            self.generation_counter += 1
+            self.rk = feasibility_ratio(self.solutions)
+            if self.generation_counter >= self.tc:
+                self.epsilon_k = 0
             else:
-                self.epsilon_k = self.phi_max * (1 + self.tao)
+                if self.rk < 0.95:
+                    self.epsilon_k = (1 - self.tao) * self.epsilon_k
+                else:
+                    self.epsilon_k = self.phi_max * (1 + self.tao)
 
     def update_current_subproblem_neighborhood(self, new_solution, population):
-        if self.phi_max < get_overall_constraint_violation_degree(new_solution):
-            self.phi_max = get_overall_constraint_violation_degree(new_solution)
+        if self.phi_max < overall_constraint_violation_degree(new_solution):
+            self.phi_max = overall_constraint_violation_degree(new_solution)
 
         permuted_neighbors_indexes = self.generate_permutation_of_neighbors(self.current_subproblem)
         replacements = 0
@@ -237,8 +241,8 @@ class MOEADIEpsilon(MOEAD):
             f1 = self.fitness_function.compute(population[k].objectives, self.neighbourhood.weight_vectors[k])
             f2 = self.fitness_function.compute(new_solution.objectives, self.neighbourhood.weight_vectors[k])
 
-            cons1 = abs(get_overall_constraint_violation_degree(self.solutions[k]))
-            cons2 = abs(get_overall_constraint_violation_degree(new_solution))
+            cons1 = abs(overall_constraint_violation_degree(self.solutions[k]))
+            cons2 = abs(overall_constraint_violation_degree(new_solution))
 
             if cons1 < self.epsilon_k and cons2 <= self.epsilon_k:
                 if f2 < f1:

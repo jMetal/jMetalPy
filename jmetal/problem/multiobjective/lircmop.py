@@ -1,8 +1,7 @@
-from math import sin, pi, cos
+from math import sin, pi, cos, sqrt
 
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
-from jmetal.util.constraint_handling import set_overall_constraint_violation_degree
 
 
 class LIRCMOP1(FloatProblem):
@@ -48,7 +47,7 @@ class LIRCMOP1(FloatProblem):
 
         solution.constraints = constraints
 
-        set_overall_constraint_violation_degree(solution)
+        #set_overall_constraint_violation_degree(solution)
 
     def g1(self, x: [float]) -> float:
         result = 0
@@ -68,9 +67,24 @@ class LIRCMOP1(FloatProblem):
         return 'LIR-CMOP1'
 
 
-problem = LIRCMOP1(3)
-solution = problem.create_solution()
-solution.variables=[0.5, 0.1, 0.2]
-problem.evaluate(solution)
-print(solution)
-print(solution.attributes)
+class LIRCMOP2(LIRCMOP1):
+    """ Class representing problem LIR-CMOP1, defined in: An Improved epsilon-constrained Method in MOEA/D
+    for CMOPs with Large Infeasible Regions. Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019).
+    https://doi.org/10.1007/s00500-019-03794-x
+ */ """
+
+    def __init__(self, number_of_variables: int = 30):
+        super(LIRCMOP2, self).__init__(number_of_variables)
+
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
+        x = solution.variables
+
+        solution.objectives[0] = x[0] + self.g1(x)
+        solution.objectives[1] = 1 - sqrt(x[0]) + self.g2(x)
+
+        self.evaluate_constraints(solution)
+
+        return solution
+
+    def get_name(self):
+        return 'LIR-CMOP2'

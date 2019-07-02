@@ -2,7 +2,6 @@ from math import pi, cos, atan
 
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
-from jmetal.util.constraint_handling import set_overall_constraint_violation_degree
 
 """
 .. module:: constrained
@@ -28,9 +27,6 @@ class Srinivas(FloatProblem):
         self.lower_bound = [-20.0 for _ in range(self.number_of_variables)]
         self.upper_bound = [20.0 for _ in range(self.number_of_variables)]
 
-        FloatSolution.lower_bound = self.lower_bound
-        FloatSolution.upper_bound = self.upper_bound
-
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x1 = solution.variables[0]
         x2 = solution.variables[1]
@@ -49,7 +45,7 @@ class Srinivas(FloatProblem):
         solution.constraints[0] = 1.0 - (x1 * x1 + x2 * x2) / 225.0
         solution.constraints[1] = (3.0 * x2 - x1) / 10.0 - 1.0
 
-        set_overall_constraint_violation_degree(solution)
+        #set_overall_constraint_violation_degree(solution)
 
     def get_name(self):
         return 'Srinivas'
@@ -90,7 +86,7 @@ class Tanaka(FloatProblem):
 
         solution.constraints = constraints
 
-        set_overall_constraint_violation_degree(solution)
+        #set_overall_constraint_violation_degree(solution)
 
 
     def get_name(self):
@@ -143,7 +139,7 @@ class Osyczka2(FloatProblem):
 
         solution.constraints = constraints
 
-        set_overall_constraint_violation_degree(solution)
+        #set_overall_constraint_violation_degree(solution)
 
     def get_name(self):
         return 'Osyczka2'
@@ -183,7 +179,7 @@ class Binh2(FloatProblem):
         constraints[0] = -1.0 * (x[0] - 5) * (x[0] - 5) - x[1] * x[1] + 25.0
         constraints[1] = (x[0] - 8) * (x[0] - 8) + (x[1] + 3) * (x[1] + 3) - 7.7
 
-        set_overall_constraint_violation_degree(solution)
+        #set_overall_constraint_violation_degree(solution)
 
 
     def get_name(self):

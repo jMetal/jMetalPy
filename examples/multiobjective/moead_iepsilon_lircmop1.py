@@ -1,4 +1,4 @@
-from jmetal.problem.multiobjective.lircmop import LIRCMOP1
+from jmetal.problem.multiobjective.lircmop import LIRCMOP1, LIRCMOP2
 
 from jmetal.algorithm.multiobjective.moead import MOEAD, MOEADIEpsilon
 from jmetal.operator import PolynomialMutation, DifferentialEvolutionCrossover
@@ -10,15 +10,14 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.util.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
-    #problem = LIRCMOP1()
-    problem = Srinivas()
-    problem.reference_front = read_solutions(filename='../../resources/reference_front/Srinivas.pf'.format(problem.get_name()))
+    problem = LIRCMOP2()
+    problem.reference_front = read_solutions(filename='../../resources/reference_front/LIRCMOP2.pf'.format(problem.get_name()))
 
-    max_evaluations = 25000
+    max_evaluations = 300000
 
     algorithm = MOEADIEpsilon(
         problem=problem,
-        population_size=50,
+        population_size=300,
         crossover=DifferentialEvolutionCrossover(CR=1.0, F=0.5, K=0.5),
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         aggregative_function=Tschebycheff(dimension=problem.number_of_objectives),
