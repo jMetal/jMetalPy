@@ -14,11 +14,11 @@ if __name__ == '__main__':
     problem = Srinivas()
     problem.reference_front = read_solutions(filename='../../resources/reference_front/Srinivas.pf'.format(problem.get_name()))
 
-    max_evaluations = 150000
+    max_evaluations = 25000
 
     algorithm = MOEADIEpsilon(
         problem=problem,
-        population_size=300,
+        population_size=50,
         crossover=DifferentialEvolutionCrossover(CR=1.0, F=0.5, K=0.5),
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         aggregative_function=Tschebycheff(dimension=problem.number_of_objectives),
