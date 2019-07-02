@@ -80,7 +80,7 @@ class ConstraintHandlingTestCases(unittest.TestCase):
         solution2.constraints[0] = 0
         solution2.constraints[1] = 0
 
-        self.assertEqual(0, feasibility_ratio([solution1, solution2]))
+        self.assertEqual(1.0, feasibility_ratio([solution1, solution2]))
 
     def test_should_feasibility_ratio_return_the_right_percentage_of_feasible_solutions(self) -> None:
         solution1 = Solution(2, 2, 1)
@@ -91,6 +91,7 @@ class ConstraintHandlingTestCases(unittest.TestCase):
         solution3.constraints[0] = -2
 
         self.assertEqual(1/3, feasibility_ratio([solution1, solution2, solution3]))
+
 
 if __name__ == '__main__':
     unittest.main()
