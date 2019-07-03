@@ -22,9 +22,6 @@ class LIRCMOP1(FloatProblem):
         self.lower_bound = [0.0 for _ in range(self.number_of_variables)]
         self.upper_bound = [1.0 for _ in range(self.number_of_variables)]
 
-        #FloatSolution.lower_bound = self.lower_bound
-        #FloatSolution.upper_bound = self.upper_bound
-
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
 
@@ -47,8 +44,6 @@ class LIRCMOP1(FloatProblem):
 
         solution.constraints = constraints
 
-        #set_overall_constraint_violation_degree(solution)
-
     def g1(self, x: [float]) -> float:
         result = 0
         for i in range(2, self.number_of_variables, 2):
@@ -68,7 +63,7 @@ class LIRCMOP1(FloatProblem):
 
 
 class LIRCMOP2(LIRCMOP1):
-    """ Class representing problem LIR-CMOP1, defined in: An Improved epsilon-constrained Method in MOEA/D
+    """ Class representing problem LIR-CMOP2, defined in: An Improved epsilon-constrained Method in MOEA/D
     for CMOPs with Large Infeasible Regions. Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019).
     https://doi.org/10.1007/s00500-019-03794-x
  */ """

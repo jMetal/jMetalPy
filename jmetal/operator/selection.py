@@ -302,6 +302,7 @@ class RankingAndFitnessSelection(Selection[List[S], List[S]]):
     def get_name(self) -> str:
         return 'Ranking and fitness selection'
 
+
 class BinaryTournament2Selection(Selection[List[S], S]):
 
     def __init__(self, comparator_list: List[Comparator]):

@@ -276,14 +276,27 @@ class MOEADIEpsilon(MOEAD):
 
         if len(feasible_solutions) > 0:
             feasible_solutions = feasible_solutions + self.archive
-            best_solutions =  RankingAndCrowdingDistanceSelection(
-                self.population_size).execute(feasible_solutions)
+            ranking = FastNonDominatedRanking()
+            ranking.compute_ranking(feasible_solutions)
 
-            archive = []
+            first_rank_solutions = ranking.get_subfront(0)
+            if len(first_rank_solutions) <= self.population_size:
+                self.archive = []
+                for solution in first_rank_solutions:
+                    self.archive.append(copy.deepcopy(solution))
+            else:
+                crowding_distance = CrowdingDistance()
+                while len(first_rank_solutions) > self.population_size:
+                    crowding_distance.compute_density_estimator(first_rank_solutions)
+                    first_rank_solutions = sorted(first_rank_solutions, key=lambda x: x.attributes['crowding_distance'], reverse=True)
+                    first_rank_solutions.pop()
 
-            for solution in best_solutions:
-                if solution.attributes['dominance_ranking'] == 0:
-                    archive.append(copy.deepcopy(solution))
+                self.archive = []
+                for solution in first_rank_solutions:
+                    self.archive.append(copy.deepcopy(solution))
+
+    def get_result(self):
+        return self.archive
 
 
 class Permutation:
