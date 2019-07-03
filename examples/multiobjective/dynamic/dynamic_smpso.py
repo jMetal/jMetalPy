@@ -1,12 +1,10 @@
+from jmetal.util.observer import PlotFrontToFileObserver, WriteFrontToFileObserver
+
 from jmetal.algorithm.multiobjective.smpso import DynamicSMPSO
 from jmetal.operator import PolynomialMutation
 from jmetal.problem.multiobjective.fda import FDA2
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.observable import TimeCounter
-<<<<<<< HEAD
-from jmetal.util.observer import PlotDynamicFrontToFileObserver
-=======
->>>>>>> 52e0b172f0c6d651ba08b961a90a382f0a4b8e0f
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
@@ -25,9 +23,7 @@ if __name__ == '__main__':
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
-<<<<<<< HEAD
-    algorithm.observable.register(observer=PlotDynamicFrontToFileObserver('dynamic_front'))
+    algorithm.observable.register(observer=PlotFrontToFileObserver('dynamic_front_vis'))
+    algorithm.observable.register(observer=WriteFrontToFileObserver('dynamic_front'))
 
-=======
->>>>>>> 52e0b172f0c6d651ba08b961a90a382f0a4b8e0f
     algorithm.run()

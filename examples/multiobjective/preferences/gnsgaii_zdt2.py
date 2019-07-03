@@ -20,11 +20,7 @@ if __name__ == '__main__':
     problem = ZDT2()
     problem.reference_front = read_solutions(filename='../../../resources/reference_front/{}.pf'.format(problem.get_name()))
 
-<<<<<<< HEAD
     reference_point = [0.2, 0.5]
-=======
-    reference_point = [0.8, 0.5]
->>>>>>> 52e0b172f0c6d651ba08b961a90a382f0a4b8e0f
 
     max_evaluations = 25000
     algorithm = NSGAII(
@@ -33,10 +29,6 @@ if __name__ == '__main__':
         offspring_population_size=100,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
-<<<<<<< HEAD
-        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
-=======
->>>>>>> 52e0b172f0c6d651ba08b961a90a382f0a4b8e0f
         dominance_comparator=GDominanceComparator(reference_point),
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )

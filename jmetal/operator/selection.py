@@ -190,8 +190,6 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
         elif len(front) == 0:
             raise Exception('The front is empty')
 
-        print("<dasdasdfasfasfasfasfsdf")
-
         ranking = FastNonDominatedRanking(self.dominance_comparator)
         crowding_distance = CrowdingDistance()
         ranking.compute_ranking(front)

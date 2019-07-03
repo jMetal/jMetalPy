@@ -2,11 +2,8 @@ from jmetal.algorithm.multiobjective.smpso import SMPSORP
 from jmetal.operator import PolynomialMutation
 from jmetal.problem import ZDT1
 from jmetal.util.archive import CrowdingDistanceArchiveWithReferencePoint
-<<<<<<< HEAD
-from jmetal.util.observer import VisualizerObserver
-=======
+
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
->>>>>>> 52e0b172f0c6d651ba08b961a90a382f0a4b8e0f
 from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.util.visualization import InteractivePlot, Plot
@@ -17,11 +14,7 @@ if __name__ == '__main__':
 
     swarm_size = 100
 
-<<<<<<< HEAD
-    reference_point = [[0.1, 0.8]]
-=======
-    reference_point = [[0.1, 0.8],[0.8, 0.2]]
->>>>>>> 52e0b172f0c6d651ba08b961a90a382f0a4b8e0f
+    reference_point = [[0.1, 0.8],[0.6, 0.1]]
     archives_with_reference_points = []
 
     for point in reference_point:
