@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from typing import TypeVar, Generic
 
 import math
-
 from jmetal.core.solution import Solution
 from jmetal.util.constraint_handling import overall_constraint_violation_degree
 
