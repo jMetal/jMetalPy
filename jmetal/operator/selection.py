@@ -190,6 +190,8 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
         elif len(front) == 0:
             raise Exception('The front is empty')
 
+        print("<dasdasdfasfasfasfasfsdf")
+
         ranking = FastNonDominatedRanking(self.dominance_comparator)
         crowding_distance = CrowdingDistance()
         ranking.compute_ranking(front)
@@ -198,7 +200,7 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
         new_solution_list = []
 
         while len(new_solution_list) < self.max_population_size:
-            if len(ranking.get_subfront(ranking_index)) < self.max_population_size - len(new_solution_list):
+            if len(ranking.get_subfront(ranking_index)) < (self.max_population_size - len(new_solution_list)):
                 new_solution_list = new_solution_list + ranking.get_subfront(ranking_index)
                 ranking_index += 1
             else:

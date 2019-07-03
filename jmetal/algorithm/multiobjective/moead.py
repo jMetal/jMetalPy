@@ -5,14 +5,19 @@ from typing import TypeVar, List
 import numpy as np
 from math import ceil
 
+from jmetal.util.density_estimator import CrowdingDistance
+
+from jmetal.util.ranking import FastNonDominatedRanking
+
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
-from jmetal.operator import DifferentialEvolutionCrossover, NaryRandomSolutionSelection
+from jmetal.operator import DifferentialEvolutionCrossover, NaryRandomSolutionSelection, \
+    RankingAndCrowdingDistanceSelection
 from jmetal.util.aggregative_function import AggregativeFunction
 from jmetal.util.constraint_handling import feasibility_ratio, \
-    overall_constraint_violation_degree
+    overall_constraint_violation_degree, is_feasible
 from jmetal.util.neighborhood import WeightVectorNeighborhood
 from jmetal.util.solution_list import Evaluator, Generator
 from jmetal.util.termination_criterion import TerminationCriterion, StoppingByEvaluations
@@ -196,6 +201,7 @@ class MOEADIEpsilon(MOEAD):
         self.tao = 0.05
         self.rk = 0
         self.generation_counter = 0
+        self.archive = []
 
     def init_progress(self) -> None:
         super().init_progress()
@@ -218,6 +224,7 @@ class MOEADIEpsilon(MOEAD):
         super().update_progress()
 
         if self.evaluations % self.population_size == 0:
+            self.update_external_archive()
             self.generation_counter += 1
             self.rk = feasibility_ratio(self.solutions)
             if self.generation_counter >= self.tc:
@@ -260,6 +267,23 @@ class MOEADIEpsilon(MOEAD):
                 break
 
         return population
+
+    def update_external_archive(self):
+        feasible_solutions = []
+        for solution in self.solutions:
+            if is_feasible(solution):
+                feasible_solutions.append(copy.deepcopy(solution))
+
+        if len(feasible_solutions) > 0:
+            feasible_solutions = feasible_solutions + self.archive
+            best_solutions =  RankingAndCrowdingDistanceSelection(
+                self.population_size).execute(feasible_solutions)
+
+            archive = []
+
+            for solution in best_solutions:
+                if solution.attributes['dominance_ranking'] == 0:
+                    archive.append(copy.deepcopy(solution))
 
 
 class Permutation:
