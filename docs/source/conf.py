@@ -28,7 +28,7 @@ for mod_name in MOCK_MODULES:
 # -- Project information -----------------------------------------------------
 
 project = 'jMetalPy'
-copyright = '2018, Antonio J. Nebro'
+copyright = '2019, Antonio J. Nebro'
 author = 'Antonio J. Nebro, Antonio Benítez-Hidalgo'
 
 # The short X.Y version

@@ -1,3 +1,4 @@
+from jmetal.util.comparator import DominanceComparator
 from jmetal.core.observable import DefaultObservable
 from jmetal.operator import PolynomialMutation, BitFlipMutation
 from jmetal.util.solution_list import RandomGenerator
@@ -5,15 +6,30 @@ from jmetal.util.solution_list import SequentialEvaluator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 
-class _Store(object):
+class _Store:
+    @property
+    def default_observable(self):
+        return DefaultObservable()
 
-    def __init__(self):
-        super(_Store, self).__init__()
-        self.default_observable = DefaultObservable()
-        self.default_evaluator = SequentialEvaluator()
-        self.default_generator = RandomGenerator()
-        self.default_termination_criteria = StoppingByEvaluations(max=25000)
-        self.default_mutation = {
+    @property
+    def default_evaluator(self):
+        return SequentialEvaluator()
+
+    @property
+    def default_generator(self):
+        return RandomGenerator()
+
+    @property
+    def default_termination_criteria(self):
+        return StoppingByEvaluations(max=25000)
+
+    @property
+    def default_comparator(self):
+        return DominanceComparator()
+
+    @property
+    def default_mutation(self):
+        return {
             'real': PolynomialMutation(probability=0.15, distribution_index=20),
             'binary': BitFlipMutation(0.15)
         }

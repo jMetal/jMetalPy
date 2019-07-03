@@ -12,7 +12,6 @@ class Solution(Generic[S], ABC):
         self.number_of_variables = number_of_variables
         self.number_of_objectives = number_of_objectives
         self.number_of_constrains = number_of_constraints
-
         self.variables = [[] for _ in range(self.number_of_variables)]
         self.objectives = [0.0 for _ in range(self.number_of_objectives)]
         self.constraints = [0.0 for _ in range(self.number_of_constrains)]
@@ -76,6 +75,8 @@ class FloatSolution(Solution[float]):
         new_solution.objectives = self.objectives[:]
         new_solution.variables = self.variables[:]
         new_solution.constraints = self.constraints[:]
+
+        new_solution.attributes = self.attributes.copy()
 
         new_solution.attributes = self.attributes.copy()
 

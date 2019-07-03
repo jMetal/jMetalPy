@@ -1,11 +1,12 @@
-import copy
 import random
 from abc import ABC, abstractmethod
 from threading import Lock
 from typing import TypeVar, Generic, List
+import copy
 
 from jmetal.util.comparator import Comparator, DominanceComparator, SolutionAttributeComparator
 from jmetal.util.density_estimator import CrowdingDistance, DensityEstimator
+
 
 S = TypeVar('S')
 

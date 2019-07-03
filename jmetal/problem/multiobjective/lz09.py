@@ -1,7 +1,6 @@
 from abc import ABCMeta
 
 import math
-
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 

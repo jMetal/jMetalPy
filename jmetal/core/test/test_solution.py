@@ -13,6 +13,20 @@ class SolutionTestCase(unittest.TestCase):
         self.assertEqual(0, len(solution.attributes))
         self.assertEqual(2, len(solution.variables))
         self.assertEqual(3, len(solution.objectives))
+<<<<<<< HEAD
+=======
+
+    def test_should_default_constructor_create_a_feasible_solution(self) -> None:
+        solution = Solution(2, 2)
+
+        self.assertTrue(solution.is_feasible())
+
+    def test_should_a_solution_with_zero_violated_constraints_be_feasible(self) -> None:
+        solution = Solution(2, 2)
+        solution.attributes["overall_constraint_violation"] = 0
+
+        self.assertTrue(solution.is_feasible())
+>>>>>>> 52e0b172f0c6d651ba08b961a90a382f0a4b8e0f
 
 
 class BinarySolutionTestCase(unittest.TestCase):
@@ -47,11 +61,19 @@ class BinarySolutionTestCase(unittest.TestCase):
 class FloatSolutionTestCase(unittest.TestCase):
 
     def test_should_constructor_create_a_non_null_object(self) -> None:
+<<<<<<< HEAD
         solution = FloatSolution([], [], 2)
         self.assertIsNotNone(solution)
 
     def test_should_default_constructor_create_a_valid_solution(self) -> None:
         solution = FloatSolution([0.0, 0.5], [1.0, 2.0], 3)
+=======
+        solution = FloatSolution(3, 2, [], [])
+        self.assertIsNotNone(solution)
+
+    def test_should_default_constructor_create_a_valid_solution(self) -> None:
+        solution = FloatSolution(2, 3, [0.0, 0.5], [1.0, 2.0])
+>>>>>>> 52e0b172f0c6d651ba08b961a90a382f0a4b8e0f
         self.assertEqual(2, solution.number_of_variables)
         self.assertEqual(3, solution.number_of_objectives)
         self.assertEqual(2, len(solution.variables))
@@ -60,7 +82,11 @@ class FloatSolutionTestCase(unittest.TestCase):
         self.assertEqual([1.0, 2.0], solution.upper_bound)
 
     def test_should_copy_work_properly(self) -> None:
+<<<<<<< HEAD
         solution = FloatSolution([0.0, 3.5], [1.0, 5.0], 3, 2)
+=======
+        solution = FloatSolution(2, 3, [0.0, 0.5], [1.0, 2.0])
+>>>>>>> 52e0b172f0c6d651ba08b961a90a382f0a4b8e0f
         solution.variables = [1.24, 2.66]
         solution.objectives = [0.16, -2.34, 9.25]
         solution.constraints = [-1.2, -0.25]
@@ -83,11 +109,19 @@ class FloatSolutionTestCase(unittest.TestCase):
 class IntegerSolutionTestCase(unittest.TestCase):
 
     def test_should_constructor_create_a_non_null_object(self) -> None:
+<<<<<<< HEAD
         solution = IntegerSolution([], [], 2)
         self.assertIsNotNone(solution)
 
     def test_should_default_constructor_create_a_valid_solution(self) -> None:
         solution = IntegerSolution([0, 5], [1, 2], 3)
+=======
+        solution = IntegerSolution(3, 2, [], [])
+        self.assertIsNotNone(solution)
+
+    def test_should_default_constructor_create_a_valid_solution(self) -> None:
+        solution = IntegerSolution(2, 3, [0, 5], [1, 2])
+>>>>>>> 52e0b172f0c6d651ba08b961a90a382f0a4b8e0f
         self.assertEqual(2, solution.number_of_variables)
         self.assertEqual(3, solution.number_of_objectives)
         self.assertEqual(2, len(solution.variables))
@@ -96,7 +130,11 @@ class IntegerSolutionTestCase(unittest.TestCase):
         self.assertEqual([1, 2], solution.upper_bound)
 
     def test_should_copy_work_properly(self) -> None:
+<<<<<<< HEAD
         solution = IntegerSolution([0, 5], [1, 2], 3, 1)
+=======
+        solution = IntegerSolution(2, 3, [0, 5], [1, 2])
+>>>>>>> 52e0b172f0c6d651ba08b961a90a382f0a4b8e0f
         solution.variables = [1, 2]
         solution.objectives = [0.16, -2.34, 9.25]
         solution.constraints = [-5]

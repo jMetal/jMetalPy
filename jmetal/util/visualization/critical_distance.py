@@ -8,11 +8,8 @@ from jmetal.util.statistical_test.functions import ranks
 
 def NemenyiCD(alpha: float, num_alg, num_dataset):
     """ Computes Nemenyi's critical difference:
-
     * CD = q_alpha * sqrt(num_alg*(num_alg + 1)/(6*num_prob))
-
     where q_alpha is the critical value, of the Studentized range statistic divided by sqrt(2).
-
     :param alpha: {0.1, 0.999}. Significance level.
     :param num_alg: number of tested algorithms.
     :param num_dataset: Number of problems/datasets where the algorithms have been tested.
@@ -27,11 +24,9 @@ def NemenyiCD(alpha: float, num_alg, num_dataset):
     return cd
 
 
-def CDplot(results, alpha: float = 0.05, higherIsBetter = False, alg_names: list = None):
+def CDplot(results, alpha: float = 0.05, higher_is_better: bool=False, alg_names: list = None, output_filename: str = 'cdplot.eps'):
     """ CDgraph plots the critical difference graph show in Janez Demsar's 2006 work:
-
     * Statistical Comparisons of Classifiers over Multiple Data Sets.
-
     :param results: A 2-D array containing results from each algorithm. Each row of 'results' represents an algorithm, and each column a dataset.
     :param alpha: {0.1, 0.999}. Significace level for the critical difference.
     :param alg_names: Names of the tested algorithms.
@@ -78,7 +73,7 @@ def CDplot(results, alpha: float = 0.05, higherIsBetter = False, alg_names: list
 
     # Compute ranks. (ranks[i][j] rank of the i-th algorithm on the j-th problem.)
 
-    rranks = ranks(results.T, descending=higherIsBetter)
+    rranks = ranks(results.T, descending=higher_is_better)
 
     # Compute for each algorithm the ranking averages.
     avranks = np.transpose(np.mean(rranks, axis=0))
@@ -95,7 +90,7 @@ def CDplot(results, alpha: float = 0.05, higherIsBetter = False, alg_names: list
     highest = np.ceil(np.max(avranks)).astype(np.uint8)  # highest shown rank
     lowest = np.floor(np.min(avranks)).astype(np.uint8)  # lowest shown rank
     width = 6  # default figure width (in inches)
-    height = (0.375 * (rows + 1))  # figure height
+    height = (0.575 * (rows + 1))  # figure height
 
     """
                         FIGURE
@@ -209,5 +204,5 @@ def CDplot(results, alpha: float = 0.05, higherIsBetter = False, alg_names: list
                                             lowest - 0.025) / (highest - lowest),
                       xmax=sleft + lline * (right_lines[i, 1] - lowest + 0.025) / (highest - lowest), linewidth=2)
 
-    plt.savefig('CDplot.png', bbox_inches='tight')
+    plt.savefig(output_filename, bbox_inches='tight')
     plt.show()

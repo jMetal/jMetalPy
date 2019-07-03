@@ -6,7 +6,11 @@ from jmetal.util.solution_list import print_function_values_to_file, print_varia
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     problem = OneMax(number_of_bits=1024)
+=======
+    problem = OneMax(number_of_bits=512)
+>>>>>>> 52e0b172f0c6d651ba08b961a90a382f0a4b8e0f
 
     max_evaluations = 20000
     algorithm = SimulatedAnnealing(

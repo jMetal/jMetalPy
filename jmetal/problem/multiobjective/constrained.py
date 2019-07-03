@@ -45,8 +45,6 @@ class Srinivas(FloatProblem):
         solution.constraints[0] = 1.0 - (x1 * x1 + x2 * x2) / 225.0
         solution.constraints[1] = (3.0 * x2 - x1) / 10.0 - 1.0
 
-        #set_overall_constraint_violation_degree(solution)
-
     def get_name(self):
         return 'Srinivas'
 
@@ -139,8 +137,6 @@ class Osyczka2(FloatProblem):
 
         solution.constraints = constraints
 
-        #set_overall_constraint_violation_degree(solution)
-
     def get_name(self):
         return 'Osyczka2'
 
@@ -178,9 +174,6 @@ class Binh2(FloatProblem):
         x = solution.variables
         constraints[0] = -1.0 * (x[0] - 5) * (x[0] - 5) - x[1] * x[1] + 25.0
         constraints[1] = (x[0] - 8) * (x[0] - 8) + (x[1] + 3) * (x[1] + 3) - 7.7
-
-        #set_overall_constraint_violation_degree(solution)
-
 
     def get_name(self):
         return 'Binh2'

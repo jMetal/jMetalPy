@@ -21,7 +21,8 @@ if __name__ == '__main__':
         swarm_size=swarm_size,
         epsilon=0.0075,
         uniform_mutation=UniformMutation(probability=mutation_probability, perturbation=0.5),
-        non_uniform_mutation=NonUniformMutation(mutation_probability, perturbation=0.5, max_iterations = max_evaluations/swarm_size),
+        non_uniform_mutation=NonUniformMutation(mutation_probability, perturbation=0.5,
+                                                max_iterations=int(max_evaluations / swarm_size)),
         leaders=CrowdingDistanceArchive(100),
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
@@ -35,7 +36,7 @@ if __name__ == '__main__':
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.' + algorithm.get_name() + "." + problem.get_name())
-    print_variables_to_file(front, 'VAR.'+ algorithm.get_name() + "." + problem.get_name())
+    print_variables_to_file(front, 'VAR.' + algorithm.get_name() + "." + problem.get_name())
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())

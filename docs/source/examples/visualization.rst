@@ -40,7 +40,11 @@ Interactive plots
      plot_front = InteractivePlot(plot_title='Pareto front approximation')
      plot_front.plot(front, label='NSGAII-ZDT1', filename='NSGAII-ZDT1-interactive')
 
+<<<<<<< HEAD
 .. raw:: html
+=======
+  .. raw:: html
+>>>>>>> 52e0b172f0c6d651ba08b961a90a382f0a4b8e0f
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script>

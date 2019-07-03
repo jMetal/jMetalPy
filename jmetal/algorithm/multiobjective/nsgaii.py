@@ -8,8 +8,8 @@ from jmetal.config import store
 from jmetal.core.algorithm import DynamicAlgorithm, Algorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem, DynamicProblem
-from jmetal.operator import RankingAndCrowdingDistanceSelection
-from jmetal.util.comparator import DominanceComparator, Comparator
+from jmetal.operator import RankingAndCrowdingDistanceSelection, BinaryTournamentSelection
+from jmetal.util.comparator import DominanceComparator, Comparator, RankingAndCrowdingDistanceComparator
 from jmetal.util.solution_list import Evaluator, Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
@@ -33,12 +33,12 @@ class NSGAII(GeneticAlgorithm[S, R]):
                  offspring_population_size: int,
                  mutation: Mutation,
                  crossover: Crossover,
-                 selection: Selection,
-                 termination_criterion: TerminationCriterion,
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator,
-                 dominance_comparator: Comparator = DominanceComparator()):
-        """  NSGA-II implementation as described in
+                 dominance_comparator: Comparator = store.default_comparator):
+        """
+        NSGA-II implementation as described in
 
         * K. Deb, A. Pratap, S. Agarwal and T. Meyarivan, "A fast and elitist
           multiobjective genetic algorithm: NSGA-II," in IEEE Transactions on Evolutionary Computation,
@@ -48,7 +48,7 @@ class NSGAII(GeneticAlgorithm[S, R]):
         family. The implementation of NSGA-II provided in jMetalPy follows the evolutionary
         algorithm template described in the algorithm module (:py:mod:`jmetal.core.algorithm`).
 
-        .. note:: A steady-state version of this algorithm can be run by setting the offspring size to 1 and the mating pool size to 2.
+        .. note:: A steady-state version of this algorithm can be run by setting the offspring size to 1.
 
         :param problem: The problem to solve.
         :param population_size: Size of the population.
@@ -56,6 +56,8 @@ class NSGAII(GeneticAlgorithm[S, R]):
         :param crossover: Crossover operator (see :py:mod:`jmetal.operator.crossover`).
         :param selection: Selection operator (see :py:mod:`jmetal.operator.selection`).
         """
+        selection = BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
+
         super(NSGAII, self).__init__(
             problem=problem,
             population_size=population_size,
@@ -98,7 +100,6 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
                  offspring_population_size: int,
                  mutation: Mutation,
                  crossover: Crossover,
-                 selection: Selection,
                  termination_criterion: TerminationCriterion,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator,
@@ -109,7 +110,6 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
             offspring_population_size=offspring_population_size,
             mutation=mutation,
             crossover=crossover,
-            selection=selection,
             population_evaluator=population_evaluator,
             population_generator=population_generator,
             termination_criterion=termination_criterion,
@@ -237,8 +237,7 @@ class DistributedNSGAII(Algorithm[S, R]):
 
                     task_pool.add(new_task)
                 else:
-                    print("Computing time: " + str(time.time() - self.start_computing_time))
-                    for future in task_pool.futures:
+                    for future in list(task_pool.futures):
                         future.cancel()
                     break
 

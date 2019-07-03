@@ -8,7 +8,6 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
     # Defining problem Srinivas on the fly
-
     def f1(x: [float]):
         return 2.0 + (x[0] - 2.0) * (x[0] - 2.0) + (x[1] - 1.0) * (x[1] - 1.0)
 

@@ -30,8 +30,6 @@ class DummyCrossover(Crossover[Solution, Solution]):
         return ""
 
 
-
-
 class OperatorTestCase(unittest.TestCase):
 
     def test_should_mutation_constructor_raises_an_exception_is_probability_is_negative(self) -> None:

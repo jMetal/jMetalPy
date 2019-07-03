@@ -3,16 +3,15 @@ import pandas as pd
 from matplotlib import pyplot as plt
 
 
-def plot_posterior(sample, higherIsBetter=False, minPointsPerHexbin=2, alg_names: list = None):
+def plot_posterior(sample, higher_is_better: bool = False, min_points_per_hexbin: int = 2, alg_names: list = None,
+                   output_filename: str = 'posterior.eps'):
     """
     Plots the sample from posterior distribution of a Bayesian statistical test.
-
     Parameters:
     -----------
     data: An (n x 3) array or DataFrame contaning the probabilities.
     alg_names: array of strings. Default np.array(['Alg1', 'Alg2'])
         Names of the algorithms under evaluation
-
     Return:
     -------
     Figure
@@ -46,8 +45,8 @@ def plot_posterior(sample, higherIsBetter=False, minPointsPerHexbin=2, alg_names
 
     # plot text
 
-    if higherIsBetter == False:
-        if alg_names == None:
+    if not higher_is_better:
+        if not alg_names:
             ax.text(x=0.5, y=1.4 / np.sqrt(3) + 0.005,
                     s='P(rope)', ha='center', va='bottom')
             ax.text(x=0.15, y=0.175 / np.sqrt(3) - 0.005,
@@ -62,7 +61,7 @@ def plot_posterior(sample, higherIsBetter=False, minPointsPerHexbin=2, alg_names
             ax.text(x=0.85, y=0.175 / np.sqrt(3) - 0.005,
                     s='P(' + alg_names[1] + ')', ha='left', va='top')
     else:
-        if alg_names == None:
+        if not alg_names:
             ax.text(x=0.5, y=1.4 / np.sqrt(3) + 0.005,
                     s='P(rope)', ha='center', va='bottom')
             ax.text(x=0.15, y=0.175 / np.sqrt(3) - 0.005,
@@ -83,7 +82,7 @@ def plot_posterior(sample, higherIsBetter=False, minPointsPerHexbin=2, alg_names
         sample2d[p, :] = transform(sample[p, :])
 
     # Plot projected points
-    ax.hexbin(sample2d[:, 0], sample2d[:, 1], mincnt=minPointsPerHexbin, cmap=plt.cm.plasma)
+    ax.hexbin(sample2d[:, 0], sample2d[:, 1], mincnt=min_points_per_hexbin, cmap=plt.cm.plasma)
 
     # Plot triangle
 
@@ -109,4 +108,5 @@ def plot_posterior(sample, higherIsBetter=False, minPointsPerHexbin=2, alg_names
     ax.plot([0.5, 0.7], [0.6 / np.sqrt(3), 0.8 / np.sqrt(3)],
             linewidth=3.0, color='gray')
 
+    plt.savefig(output_filename, bbox_inches='tight')
     plt.show()

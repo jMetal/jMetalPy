@@ -12,13 +12,13 @@ class ConstraintHandlingTestCases(unittest.TestCase):
 
         self.assertEqual(True, is_feasible(solution))
 
-    def test_should_is_feasible_return_true_if_the_solution_has_is_feasible(self) -> None:
+    def test_should_is_feasible_return_true_if_the_solution_has_constraints_and_is_feasible(self) -> None:
         solution = Solution(number_of_variables=2, number_of_objectives=2, number_of_constraints=1)
         solution.constraints[0] = 0
 
         self.assertEqual(True, is_feasible(solution))
 
-    def test_should_is_feasible_return_true_if_the_solution_has_is_not_feasible(self) -> None:
+    def test_should_is_feasible_return_false_if_the_solution_has_is_not_feasible(self) -> None:
         solution = Solution(number_of_variables=2, number_of_objectives=2, number_of_constraints=1)
         solution.constraints[0] = -1
 

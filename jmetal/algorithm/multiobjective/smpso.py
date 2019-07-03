@@ -1,6 +1,7 @@
 import random
 import threading
 from copy import copy
+from math import sqrt
 from typing import TypeVar, List, Optional
 
 import numpy
@@ -34,7 +35,7 @@ class SMPSO(ParticleSwarmOptimization):
                  swarm_size: int,
                  mutation: Mutation,
                  leaders: Optional[BoundedArchive],
-                 termination_criterion: TerminationCriterion,
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  swarm_generator: Generator = store.default_generator,
                  swarm_evaluator: Evaluator = store.default_evaluator):
         """ This class implements the SMPSO algorithm as described in
@@ -56,10 +57,8 @@ class SMPSO(ParticleSwarmOptimization):
             swarm_size=swarm_size)
         self.swarm_generator = swarm_generator
         self.swarm_evaluator = swarm_evaluator
-
         self.termination_criterion = termination_criterion
         self.observable.register(termination_criterion)
-
         self.mutation_operator = mutation
         self.leaders = leaders
 

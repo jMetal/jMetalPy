@@ -12,7 +12,10 @@ class ZDT1Modified(FloatProblem):
 
     def __init__(self, number_of_variables: int=30):
         """ :param number_of_variables: Number of decision variables of the problem.
+<<<<<<< HEAD
         :param rf_path: Path to the reference front file (if any). Default to None.
+=======
+>>>>>>> 52e0b172f0c6d651ba08b961a90a382f0a4b8e0f
         """
         super(ZDT1Modified, self).__init__()
         self.number_of_variables = number_of_variables
@@ -52,4 +55,8 @@ class ZDT1Modified(FloatProblem):
         return 1.0 - sqrt(f / g)
 
     def get_name(self):
+<<<<<<< HEAD
         return 'ZDT11'
+=======
+        return 'ZDT11'
+>>>>>>> 52e0b172f0c6d651ba08b961a90a382f0a4b8e0f

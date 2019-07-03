@@ -11,15 +11,16 @@ if __name__ == '__main__':
     problem = DTLZ1(number_of_objectives=5)
     #problem.reference_front = read_solutions(filename='../../resources/reference_front/DTLZ1.3D.pf')
 
+    max_evaluations = 25000
     algorithm = SMPSO(
         problem=problem,
         swarm_size=100,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         leaders=CrowdingDistanceArchive(100),
-        termination_criterion=StoppingByEvaluations(max=25000)
+        termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
-    algorithm.observable.register(observer=ProgressBarObserver(max=25000))
+    algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
 
     algorithm.run()
     front = algorithm.get_result()
@@ -27,11 +28,13 @@ if __name__ == '__main__':
     # Plot front
     label = '{}-{} with {} objectives'.format(algorithm.get_name(), problem.get_name(), problem.number_of_objectives)
 
-    plot_front = Plot(plot_title='Pareto front approximation', reference_front=problem.reference_front, axis_labels=problem.obj_labels)
+    plot_front = Plot(plot_title='Pareto front approximation', reference_front=problem.reference_front,
+                      axis_labels=problem.obj_labels)
     plot_front.plot(front, label=label, filename=label)
 
     # Plot interactive front
-    plot_front = InteractivePlot(plot_title='Pareto front approximation', reference_front=problem.reference_front, axis_labels=problem.obj_labels)
+    plot_front = InteractivePlot(plot_title='Pareto front approximation', reference_front=problem.reference_front,
+                                 axis_labels=problem.obj_labels)
     plot_front.plot(front, label=label, filename=label, normalize=True)
 
     # Save variables to file
