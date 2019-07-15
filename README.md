@@ -5,7 +5,7 @@
 </p>
 
 # jMetalPy: Python version of the jMetal framework
-[![Build Status](https://img.shields.io/travis/jMetal/jMetalPy.svg?style=flat-square)](https://travis-ci.org/jMetal/jMetalPy)
+[![Build Status](https://img.shields.io/travis/jMetal/jMetalPy/master.svg?style=flat-square)](https://travis-ci.org/jMetal/jMetalPy)
 [![Read the Docs](https://img.shields.io/readthedocs/jmetalpy.svg?style=flat-square)](https://readthedocs.org/projects/jmetalpy/)
 [![PyPI License](https://img.shields.io/pypi/l/jMetalPy.svg?style=flat-square)]()
 [![PyPI Python version](https://img.shields.io/pypi/pyversions/jMetalPy.svg?style=flat-square)]()
@@ -31,7 +31,7 @@ $ pip install jmetalpy
 ```
 
 ## Usage
-Examples of configuring and running all the included algorithms are located [in the docs](https://jmetalpy.readthedocs.io/en/latest/examples.html).
+Examples of configuring and running all the included algorithms are located [in the `examples` folder](examples).
 
 ## Features
 The current release of jMetalPy (v0.9.0) contains the following components:
