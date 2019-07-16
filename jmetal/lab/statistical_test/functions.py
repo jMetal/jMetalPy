@@ -1,6 +1,6 @@
 from scipy.stats import chi2, f, binom, norm
 
-from jmetal.analysis.statistical_test.apv_procedures import *
+from jmetal.lab.statistical_test.apv_procedures import *
 
 
 def ranks(data: np.array, descending=False):

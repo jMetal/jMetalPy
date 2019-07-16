@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 
 
 def plot_posterior(sample, higher_is_better: bool = False, min_points_per_hexbin: int = 2, alg_names: list = None,
-                   output_filename: str = 'posterior.eps'):
+                   filename: str = 'posterior.eps'):
     """
     Plots the sample from posterior distribution of a Bayesian statistical test.
     Parameters:
@@ -108,5 +108,7 @@ def plot_posterior(sample, higher_is_better: bool = False, min_points_per_hexbin
     ax.plot([0.5, 0.7], [0.6 / np.sqrt(3), 0.8 / np.sqrt(3)],
             linewidth=3.0, color='gray')
 
-    plt.savefig(output_filename, bbox_inches='tight')
+    if filename:
+        plt.savefig(filename, bbox_inches='tight')
+
     plt.show()

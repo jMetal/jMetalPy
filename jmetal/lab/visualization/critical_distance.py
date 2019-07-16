@@ -3,7 +3,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from statsmodels.stats.libqsturng import qsturng
 
-from jmetal.analysis.statistical_test.functions import ranks
+from jmetal.lab.statistical_test.functions import ranks
 
 
 def NemenyiCD(alpha: float, num_alg, num_dataset):
@@ -28,7 +28,7 @@ def CDplot(results, alpha: float = 0.05, higher_is_better: bool=False, alg_names
     """ CDgraph plots the critical difference graph show in Janez Demsar's 2006 work:
     * Statistical Comparisons of Classifiers over Multiple Data Sets.
     :param results: A 2-D array containing results from each algorithm. Each row of 'results' represents an algorithm, and each column a dataset.
-    :param alpha: {0.1, 0.999}. Significace level for the critical difference.
+    :param alpha: {0.1, 0.999}. Significance level for the critical difference.
     :param alg_names: Names of the tested algorithms.
     """
 

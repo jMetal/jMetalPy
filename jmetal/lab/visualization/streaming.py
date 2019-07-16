@@ -2,11 +2,10 @@ import logging
 from typing import TypeVar, List
 
 import matplotlib
-
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-from jmetal.analysis.visualization.plotting import Plot
+from jmetal.lab.visualization.plotting import Plot
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -25,10 +24,16 @@ S = TypeVar('S')
 class StreamingPlot:
 
     def __init__(self,
-                 plot_title: str,
+                 plot_title: str = 'Pareto front approximation',
                  reference_front: List[S] = None,
                  reference_point: list = None,
                  axis_labels: list = None):
+        """
+        :param plot_title: Title of the graph.
+        :param axis_labels: List of axis labels.
+        :param reference_point: Reference point (e.g., [0.4, 1.2]).
+        :param reference_front: Reference Pareto front (if any) as solutions.
+        """
         self.plot_title = plot_title
         self.axis_labels = axis_labels
 

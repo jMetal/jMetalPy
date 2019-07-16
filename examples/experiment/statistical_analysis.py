@@ -1,7 +1,7 @@
-from jmetal.util.laboratory import generate_boxplot, generate_latex_tables, compute_mean_indicator, compute_wilcoxon
-from jmetal.util.statistical_test.bayesian import bayesian_sign_test, bayesian_signed_rank_test
-from jmetal.util.statistical_test.functions import *
-from jmetal.util.visualization import CDplot, plot_posterior
+from jmetal.lab.experiment import generate_boxplot, generate_latex_tables, compute_mean_indicator, compute_wilcoxon
+from jmetal.lab.statistical_test.bayesian import *
+from jmetal.lab.statistical_test.functions import *
+from jmetal.lab.visualization import CDplot, plot_posterior
 
 if __name__ == '__main__':
     # Generate Median & IQR tables
@@ -13,7 +13,7 @@ if __name__ == '__main__':
     # Wilcoxon
     compute_wilcoxon(filename='QualityIndicatorSummary.csv')
 
-    # Statistical analysis
+    # Statistical lab
 
     avg = compute_mean_indicator(filename='QualityIndicatorSummary.csv', indicator_name='HV')
     print(avg)

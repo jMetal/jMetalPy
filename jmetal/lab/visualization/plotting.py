@@ -1,10 +1,8 @@
 import logging
-from abc import ABC
 from typing import TypeVar, List, Tuple
 
 import numpy as np
 import pandas as pd
-from matplotlib import animation
 from matplotlib import pyplot as plt
 from pandas import plotting
 
@@ -13,7 +11,7 @@ LOGGER = logging.getLogger('jmetal')
 S = TypeVar('S')
 
 
-class Plot(ABC):
+class Plot:
 
     def __init__(self,
                  plot_title: str = 'Pareto front approximation',
@@ -115,9 +113,8 @@ class Plot(ABC):
 
         if filename:
             plt.savefig(filename + '.' + format, format=format, dpi=200)
-        else:
-            plt.show()
 
+        plt.show()
         plt.close(fig)
 
     def three_dim(self, fronts: List[list], labels: List[str] = None, filename: str = None, format: str = 'eps'):
@@ -155,21 +152,9 @@ class Plot(ABC):
             ax.locator_params(nbins=4)
 
         if filename:
-            if format == 'gif':
-                def animate(i):
-                    ax.view_init(elev=10., azim=i)
-                    return fig,
+            plt.savefig(filename + '.' + format, format=format, dpi=1000)
 
-                anim = animation.FuncAnimation(fig, animate, frames=20, interval=1, blit=True, repeat=False)
-
-                LOGGER.info('Generating GIF (this may take some time...)')
-                anim.save(filename + '.gif', writer=animation.PillowWriter(fps=24))
-                LOGGER.info('Done')
-            else:
-                plt.savefig(filename + '.' + format, format=format, dpi=1000)
-        else:
-            plt.show()
-
+        plt.show()
         plt.close(fig)
 
     def pcoords(self, fronts: list, normalize: bool = False, filename: str = None, format: str = 'eps'):
@@ -198,7 +183,6 @@ class Plot(ABC):
 
         if filename:
             plt.savefig(filename + '.' + format, format=format, dpi=1000)
-        else:
-            plt.show()
 
+        plt.show()
         plt.close(fig)

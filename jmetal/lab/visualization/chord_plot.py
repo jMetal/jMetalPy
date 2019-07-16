@@ -14,27 +14,27 @@ def polar_to_cartesian(r, theta):
     return np.array([r * np.cos(theta), r * np.sin(theta)])
 
 
-def draw_sector(startAngle=0, endAngle=60, radius=1.0, width=0.2, lw=2, ls='-', ax=None, fc=(1, 0, 0), ec=(0, 0, 0),
+def draw_sector(start_angle=0, end_angle=60, radius=1.0, width=0.2, lw=2, ls='-', ax=None, fc=(1, 0, 0), ec=(0, 0, 0),
                 z_order=1):
-    if startAngle > endAngle:
-        startAngle, endAngle = endAngle, startAngle
-    startAngle *= np.pi / 180.
-    endAngle *= np.pi / 180.
+    if start_angle > end_angle:
+        start_angle, end_angle = end_angle, start_angle
+    start_angle *= np.pi / 180.
+    end_angle *= np.pi / 180.
 
     # https://stackoverflow.com/questions/1734745/how-to-create-circle-with-b%C3%A9zier-curves
-    opt = 4. / 3. * np.tan((endAngle - startAngle) / 4.) * radius
+    opt = 4. / 3. * np.tan((end_angle - start_angle) / 4.) * radius
     inner = radius * (1 - width)
 
-    vertsPath = [polar_to_cartesian(radius, startAngle),
-                 polar_to_cartesian(radius, startAngle) + polar_to_cartesian(opt, startAngle + 0.5 * np.pi),
-                 polar_to_cartesian(radius, endAngle) + polar_to_cartesian(opt, endAngle - 0.5 * np.pi),
-                 polar_to_cartesian(radius, endAngle),
-                 polar_to_cartesian(inner, endAngle),
-                 polar_to_cartesian(inner, endAngle) + polar_to_cartesian(opt * (1 - width), endAngle - 0.5 * np.pi),
-                 polar_to_cartesian(inner, startAngle) + polar_to_cartesian(opt * (1 - width),
-                                                                            startAngle + 0.5 * np.pi),
-                 polar_to_cartesian(inner, startAngle),
-                 polar_to_cartesian(radius, startAngle)]
+    vertsPath = [polar_to_cartesian(radius, start_angle),
+                 polar_to_cartesian(radius, start_angle) + polar_to_cartesian(opt, start_angle + 0.5 * np.pi),
+                 polar_to_cartesian(radius, end_angle) + polar_to_cartesian(opt, end_angle - 0.5 * np.pi),
+                 polar_to_cartesian(radius, end_angle),
+                 polar_to_cartesian(inner, end_angle),
+                 polar_to_cartesian(inner, end_angle) + polar_to_cartesian(opt * (1 - width), end_angle - 0.5 * np.pi),
+                 polar_to_cartesian(inner, start_angle) + polar_to_cartesian(opt * (1 - width),
+                                                                             start_angle + 0.5 * np.pi),
+                 polar_to_cartesian(inner, start_angle),
+                 polar_to_cartesian(radius, start_angle)]
 
     codesPaths = [Path.MOVETO, Path.CURVE4, Path.CURVE4, Path.CURVE4, Path.LINETO, Path.CURVE4, Path.CURVE4,
                   Path.CURVE4, Path.CLOSEPOLY]
@@ -42,38 +42,38 @@ def draw_sector(startAngle=0, endAngle=60, radius=1.0, width=0.2, lw=2, ls='-', 
     if ax is None:
         return vertsPath, codesPaths
     else:
-        path = path.Path(vertsPath, codesPaths)
+        path = Path(vertsPath, codesPaths)
         patch = patches.PathPatch(path, facecolor=fc, edgecolor=ec, lw=lw, linestyle=ls, zorder=z_order)
         ax.add_patch(patch)
         return (patch)
 
 
-def draw_chord(startAngle1=0, endAngle1=60, startAngle2=180, endAngle2=240, radius=1.0, chordwidth=0.7, ax=None,
+def draw_chord(start_angle1=0, end_angle1=60, start_angle2=180, end_angle2=240, radius=1.0, chord_width=0.7, ax=None,
                color=(1, 0, 0), z_order=1):
-    if startAngle1 > endAngle1:
-        startAngle1, endAngle1 = endAngle1, startAngle1
-    if startAngle2 > endAngle2:
-        startAngle2, endAngle2 = endAngle2, startAngle2
-    startAngle1 *= np.pi / 180.
-    endAngle1 *= np.pi / 180.
-    startAngle2 *= np.pi / 180.
-    endAngle2 *= np.pi / 180.
+    if start_angle1 > end_angle1:
+        start_angle1, end_angle1 = end_angle1, start_angle1
+    if start_angle2 > end_angle2:
+        start_angle2, end_angle2 = end_angle2, start_angle2
+    start_angle1 *= np.pi / 180.
+    end_angle1 *= np.pi / 180.
+    start_angle2 *= np.pi / 180.
+    end_angle2 *= np.pi / 180.
 
-    optAngle1 = 4. / 3. * np.tan((endAngle1 - startAngle1) / 4.) * radius
-    optAngle2 = 4. / 3. * np.tan((endAngle2 - startAngle2) / 4.) * radius
-    rchord = radius * (1 - chordwidth)
+    optAngle1 = 4. / 3. * np.tan((end_angle1 - start_angle1) / 4.) * radius
+    optAngle2 = 4. / 3. * np.tan((end_angle2 - start_angle2) / 4.) * radius
+    rchord = radius * (1 - chord_width)
 
-    vertsPath = [polar_to_cartesian(radius, startAngle1),
-                 polar_to_cartesian(radius, startAngle1) + polar_to_cartesian(optAngle1, startAngle1 + 0.5 * np.pi),
-                 polar_to_cartesian(radius, endAngle1) + polar_to_cartesian(optAngle1, endAngle1 - 0.5 * np.pi),
-                 polar_to_cartesian(radius, endAngle1),
-                 polar_to_cartesian(rchord, endAngle1), polar_to_cartesian(rchord, startAngle2),
-                 polar_to_cartesian(radius, startAngle2),
-                 polar_to_cartesian(radius, startAngle2) + polar_to_cartesian(optAngle2, startAngle2 + 0.5 * np.pi),
-                 polar_to_cartesian(radius, endAngle2) + polar_to_cartesian(optAngle2, endAngle2 - 0.5 * np.pi),
-                 polar_to_cartesian(radius, endAngle2),
-                 polar_to_cartesian(rchord, endAngle2), polar_to_cartesian(rchord, startAngle1),
-                 polar_to_cartesian(radius, startAngle1)]
+    vertsPath = [polar_to_cartesian(radius, start_angle1),
+                 polar_to_cartesian(radius, start_angle1) + polar_to_cartesian(optAngle1, start_angle1 + 0.5 * np.pi),
+                 polar_to_cartesian(radius, end_angle1) + polar_to_cartesian(optAngle1, end_angle1 - 0.5 * np.pi),
+                 polar_to_cartesian(radius, end_angle1),
+                 polar_to_cartesian(rchord, end_angle1), polar_to_cartesian(rchord, start_angle2),
+                 polar_to_cartesian(radius, start_angle2),
+                 polar_to_cartesian(radius, start_angle2) + polar_to_cartesian(optAngle2, start_angle2 + 0.5 * np.pi),
+                 polar_to_cartesian(radius, end_angle2) + polar_to_cartesian(optAngle2, end_angle2 - 0.5 * np.pi),
+                 polar_to_cartesian(radius, end_angle2),
+                 polar_to_cartesian(rchord, end_angle2), polar_to_cartesian(rchord, start_angle1),
+                 polar_to_cartesian(radius, start_angle1)]
 
     codesPath = [Path.MOVETO, Path.CURVE4, Path.CURVE4, Path.CURVE4, Path.CURVE4, Path.CURVE4, Path.CURVE4,
                  Path.CURVE4, Path.CURVE4, Path.CURVE4, Path.CURVE4, Path.CURVE4, Path.CURVE4]
@@ -87,31 +87,32 @@ def draw_chord(startAngle1=0, endAngle1=60, startAngle2=180, endAngle2=240, radi
         return (patch)
 
 
-def hover_over_bin(event, handleTickers, handlePlots, colors, fig):
-    flagFound = False
-    for iobj in range(len(handleTickers)):
-        for ibin in range(len(handleTickers[iobj])):
+def hover_over_bin(event, handle_tickers, handle_plots, colors, fig):
+    is_found = False
+
+    for iobj in range(len(handle_tickers)):
+        for ibin in range(len(handle_tickers[iobj])):
             cont = False
-            if flagFound == False:
-                cont, ind = handleTickers[iobj][ibin].contains(event)
-                if cont == True:
-                    flagFound = True
+            if not is_found:
+                cont, ind = handle_tickers[iobj][ibin].contains(event)
+                if cont:
+                    is_found = True
             if cont:
-                plt.setp(handleTickers[iobj][ibin], facecolor=colors[iobj])
-                [h.set_visible(True) for h in handlePlots[iobj][ibin]]
-                flagFound = True
+                plt.setp(handle_tickers[iobj][ibin], facecolor=colors[iobj])
+                [h.set_visible(True) for h in handle_plots[iobj][ibin]]
+                is_found = True
                 fig.canvas.draw_idle()
             else:
-                plt.setp(handleTickers[iobj][ibin], facecolor=(1, 1, 1))
-                for h in handlePlots[iobj][ibin]:
+                plt.setp(handle_tickers[iobj][ibin], facecolor=(1, 1, 1))
+                for h in handle_plots[iobj][ibin]:
                     h.set_visible(False)
                 fig.canvas.draw_idle()
 
 
-def chord_diagram(solutions: List[FloatSolution], nbins='auto', ax=None, labelsObj=None,
-                  propLabels=dict(fontsize=13, ha='center', va='center'), pad=6):
-    pointsMatrix = np.array([s.objectives for s in solutions])
-    (NPOINTS, NOBJ) = np.shape(pointsMatrix)
+def chord_diagram(solutions: List[FloatSolution], nbins='auto', ax=None, obj_labels=None,
+                  prop_labels=dict(fontsize=13, ha='center', va='center'), pad=6):
+    points_matrix = np.array([s.objectives for s in solutions])
+    (NPOINTS, NOBJ) = np.shape(points_matrix)
 
     HSV_tuples = [(x * 1.0 / NOBJ, 0.5, 0.5) for x in range(NOBJ)]
     colors = list(map(lambda x: colorsys.hsv_to_rgb(*x), HSV_tuples))
@@ -125,71 +126,72 @@ def chord_diagram(solutions: List[FloatSolution], nbins='auto', ax=None, labelsO
     ax.axis('off')
 
     y = np.array([1. / NOBJ] * NOBJ) * (360 - pad * NOBJ)
-    sectorAngles = []
-    labelsPosandRos = []
+    sector_angles = []
+    labels_pos_and_ros = []
 
-    startAngle = 0
+    start_angle = 0
     for i in range(NOBJ):
-        endAngle = startAngle + y[i]
-        sectorAngles.append((startAngle, endAngle))
-        angleDiff = 0.5 * (startAngle + endAngle)
-        if -30 <= angleDiff <= 210:
-            angleDiff -= 90
+        end_angle = start_angle + y[i]
+        sector_angles.append((start_angle, end_angle))
+        angle_diff = 0.5 * (start_angle + end_angle)
+        if -30 <= angle_diff <= 210:
+            angle_diff -= 90
         else:
-            angleDiff -= 270
-        angleText = startAngle - 2.5
+            angle_diff -= 270
+        angleText = start_angle - 2.5
         if -30 <= angleText <= 210:
             angleText -= 90
         else:
             angleText -= 270
 
-        labelsPosandRos.append(
-            tuple(polar_to_cartesian(1.0, 0.5 * (startAngle + endAngle) * np.pi / 180.)) + (angleDiff,) +
-            tuple(polar_to_cartesian(0.725, (startAngle - 2.5) * np.pi / 180.)) + (angleText,) +
-            tuple(polar_to_cartesian(0.85, (startAngle - 2.5) * np.pi / 180.)) + (angleText,))
-        startAngle = endAngle + pad
+        labels_pos_and_ros.append(
+            tuple(polar_to_cartesian(1.0, 0.5 * (start_angle + end_angle) * np.pi / 180.)) + (angle_diff,) +
+            tuple(polar_to_cartesian(0.725, (start_angle - 2.5) * np.pi / 180.)) + (angleText,) +
+            tuple(polar_to_cartesian(0.85, (start_angle - 2.5) * np.pi / 180.)) + (angleText,))
+        start_angle = end_angle + pad
 
-    arcPoints = []
-    for point in pointsMatrix:
-        arcPoints.append([])
+    arc_points = []
+    for point in points_matrix:
+        arc_points.append([])
         idim = 0
-        for dim in point:
-            anglePoint = sectorAngles[idim][0] + (sectorAngles[idim][1] - sectorAngles[idim][0]) * point[idim]
-            arcPoints[-1].append((anglePoint, anglePoint))
+
+        for _ in point:
+            anglePoint = sector_angles[idim][0] + (sector_angles[idim][1] - sector_angles[idim][0]) * point[idim]
+            arc_points[-1].append((anglePoint, anglePoint))
             idim = idim + 1
 
-    maxHistValues = []
-    handleTickers = []
-    handlePlots = []
+    max_hist_values = []
+    handle_tickers = []
+    handle_plots = []
 
     for iobj in tqdm(range(NOBJ), ascii=True, desc='Chord diagram'):
-
-        draw_sector(startAngle=sectorAngles[iobj][0], endAngle=sectorAngles[iobj][1], radius=0.925, width=0.225, ax=ax,
+        draw_sector(start_angle=sector_angles[iobj][0], end_angle=sector_angles[iobj][1], radius=0.925, width=0.225,
+                    ax=ax,
                     fc=(1, 1, 1, 0.0), ec=(0, 0, 0), lw=2, z_order=10)
-        draw_sector(startAngle=sectorAngles[iobj][0], endAngle=sectorAngles[iobj][1], radius=0.925, width=0.05, ax=ax,
+        draw_sector(start_angle=sector_angles[iobj][0], end_angle=sector_angles[iobj][1], radius=0.925, width=0.05, ax=ax,
                     fc=colors[iobj], ec=(0, 0, 0), lw=2, z_order=10)
-        draw_sector(startAngle=sectorAngles[iobj][0], endAngle=sectorAngles[iobj][1], radius=0.7 + 0.15, width=0.0,
+        draw_sector(start_angle=sector_angles[iobj][0], end_angle=sector_angles[iobj][1], radius=0.7 + 0.15, width=0.0,
                     ax=ax, fc=colors[iobj], ec=colors[iobj], lw=2, ls=':', z_order=5)
 
-        histValues, binsDim = np.histogram(pointsMatrix[:, iobj], bins=nbins)
+        histValues, binsDim = np.histogram(points_matrix[:, iobj], bins=nbins)
         relativeHeightBinPre = 0.025
-        maxHistValues.append(max(histValues))
-        handleTickers.append([])
-        handlePlots.append([])
+        max_hist_values.append(max(histValues))
+        handle_tickers.append([])
+        handle_plots.append([])
 
         for indexBin in range(len(histValues)):
 
-            startAngleBin = sectorAngles[iobj][0] + (sectorAngles[iobj][1] - sectorAngles[iobj][0]) * binsDim[indexBin]
-            endAngleBin = sectorAngles[iobj][0] + (sectorAngles[iobj][1] - sectorAngles[iobj][0]) * binsDim[
+            startAngleBin = sector_angles[iobj][0] + (sector_angles[iobj][1] - sector_angles[iobj][0]) * binsDim[indexBin]
+            endAngleBin = sector_angles[iobj][0] + (sector_angles[iobj][1] - sector_angles[iobj][0]) * binsDim[
                 indexBin + 1]
             relativeHeightBin = 0.15 * histValues[indexBin] / max(histValues)
-            handleTickers[-1].append(
-                draw_sector(startAngle=startAngleBin, endAngle=endAngleBin, radius=0.69, width=0.08, ax=ax, lw=1,
+            handle_tickers[-1].append(
+                draw_sector(start_angle=startAngleBin, end_angle=endAngleBin, radius=0.69, width=0.08, ax=ax, lw=1,
                             fc=(1, 1, 1), ec=(0, 0, 0)))
-            handlePlots[-1].append([])
+            handle_plots[-1].append([])
 
             if histValues[indexBin] > 0:
-                draw_sector(startAngle=startAngleBin, endAngle=endAngleBin, radius=0.7 + relativeHeightBin, width=0,
+                draw_sector(start_angle=startAngleBin, end_angle=endAngleBin, radius=0.7 + relativeHeightBin, width=0,
                             ax=ax, lw=1, fc=colors[iobj], ec=colors[iobj])
                 plotPoint1 = polar_to_cartesian(0.7 + relativeHeightBinPre, startAngleBin * np.pi / 180.)
                 plotPoint2 = polar_to_cartesian(0.7 + relativeHeightBin, startAngleBin * np.pi / 180.)
@@ -205,42 +207,42 @@ def chord_diagram(solutions: List[FloatSolution], nbins='auto', ax=None, labelsO
                 plotPoint2 = polar_to_cartesian(0.725, endAngleBin * np.pi / 180.)
                 plt.plot([plotPoint1[0], plotPoint2[0]], [plotPoint1[1], plotPoint2[1]], c=colors[iobj], lw=1)
 
-            for ipoint in range(len(pointsMatrix)):
-                plotPoint1 = polar_to_cartesian(0.6, arcPoints[ipoint][iobj][0] * np.pi / 180.)
-                plotPoint2 = polar_to_cartesian(0.6, arcPoints[ipoint][iobj][0] * np.pi / 180.)
+            for ipoint in range(len(points_matrix)):
+                plotPoint1 = polar_to_cartesian(0.6, arc_points[ipoint][iobj][0] * np.pi / 180.)
+                plotPoint2 = polar_to_cartesian(0.6, arc_points[ipoint][iobj][0] * np.pi / 180.)
                 plt.plot([plotPoint1[0], plotPoint2[0]], [plotPoint1[1], plotPoint2[1]], marker='o', markersize=3,
                          c=colors[iobj], lw=2)
 
-                if binsDim[indexBin] < pointsMatrix[ipoint, iobj] <= binsDim[
+                if binsDim[indexBin] < points_matrix[ipoint, iobj] <= binsDim[
                     indexBin + 1]:
                     for jdim in range(NOBJ):
                         if jdim >= 1:
-                            handlePlots[iobj][indexBin].append(
-                                draw_chord(arcPoints[ipoint][jdim - 1][0], arcPoints[ipoint][jdim - 1][1],
-                                           arcPoints[ipoint][jdim][0], arcPoints[ipoint][jdim][1], radius=0.55,
-                                           color=colors[iobj], chordwidth=1, ax=ax))
-                            handlePlots[iobj][indexBin][-1].set_visible(False)
-                    handlePlots[iobj][indexBin].append(
-                        draw_chord(arcPoints[ipoint][-1][0], arcPoints[ipoint][-1][1], arcPoints[ipoint][0][0],
-                                   arcPoints[ipoint][0][1], radius=0.55, color=colors[iobj], chordwidth=1, ax=ax))
-                    handlePlots[iobj][indexBin][-1].set_visible(False)
+                            handle_plots[iobj][indexBin].append(
+                                draw_chord(arc_points[ipoint][jdim - 1][0], arc_points[ipoint][jdim - 1][1],
+                                           arc_points[ipoint][jdim][0], arc_points[ipoint][jdim][1], radius=0.55,
+                                           color=colors[iobj], chord_width=1, ax=ax))
+                            handle_plots[iobj][indexBin][-1].set_visible(False)
+                    handle_plots[iobj][indexBin].append(
+                        draw_chord(arc_points[ipoint][-1][0], arc_points[ipoint][-1][1], arc_points[ipoint][0][0],
+                                   arc_points[ipoint][0][1], radius=0.55, color=colors[iobj], chord_width=1, ax=ax))
+                    handle_plots[iobj][indexBin][-1].set_visible(False)
 
-    if labelsObj is None:
-        labelsObj = ['$f_{' + str(i) + '}(\mathbf{x})$' for i in range(NOBJ)]
+    if obj_labels is None:
+        obj_labels = ['$f_{' + str(i) + '}(\mathbf{x})$' for i in range(NOBJ)]
 
-    propLegendBins = dict(fontsize=9, ha='center', va='center')
+    prop_legend_bins = dict(fontsize=9, ha='center', va='center')
 
     for i in range(NOBJ):
-        p0, p1 = polar_to_cartesian(0.975, sectorAngles[i][0] * np.pi / 180.)
-        ax.text(p0, p1, '0', **propLegendBins)
-        p0, p1 = polar_to_cartesian(0.975, sectorAngles[i][1] * np.pi / 180.)
-        ax.text(p0, p1, '1', **propLegendBins)
-        ax.text(labelsPosandRos[i][0], labelsPosandRos[i][1], labelsObj[i], rotation=labelsPosandRos[i][2],
-                **propLabels)
-        ax.text(labelsPosandRos[i][3], labelsPosandRos[i][4], '0', **propLegendBins, color=colors[i])
-        ax.text(labelsPosandRos[i][6], labelsPosandRos[i][7], str(maxHistValues[i]), **propLegendBins, color=colors[i])
+        p0, p1 = polar_to_cartesian(0.975, sector_angles[i][0] * np.pi / 180.)
+        ax.text(p0, p1, '0', **prop_legend_bins)
+        p0, p1 = polar_to_cartesian(0.975, sector_angles[i][1] * np.pi / 180.)
+        ax.text(p0, p1, '1', **prop_legend_bins)
+        ax.text(labels_pos_and_ros[i][0], labels_pos_and_ros[i][1], obj_labels[i], rotation=labels_pos_and_ros[i][2],
+                **prop_labels)
+        ax.text(labels_pos_and_ros[i][3], labels_pos_and_ros[i][4], '0', **prop_legend_bins, color=colors[i])
+        ax.text(labels_pos_and_ros[i][6], labels_pos_and_ros[i][7], str(max_hist_values[i]), **prop_legend_bins, color=colors[i])
 
     plt.axis([-1.2, 1.2, -1.2, 1.2])
     fig.canvas.mpl_connect("motion_notify_event",
-                           lambda event: hover_over_bin(event, handleTickers, handlePlots, colors, fig))
+                           lambda event: hover_over_bin(event, handle_tickers, handle_plots, colors, fig))
     plt.show()

@@ -6,7 +6,7 @@ from plotly import graph_objs as go
 from plotly import io as pio
 from plotly import offline
 
-from jmetal.analysis.visualization.plotting import Plot
+from jmetal.lab.visualization.plotting import Plot
 
 LOGGER = logging.getLogger('jmetal')
 
