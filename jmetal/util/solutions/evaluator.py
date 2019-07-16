@@ -33,7 +33,7 @@ class SequentialEvaluator(Evaluator[S]):
 
 class MapEvaluator(Evaluator[S]):
 
-    def __init__(self, processes=None):
+    def __init__(self, processes: int = None):
         self.pool = ThreadPool(processes)
 
     def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
@@ -43,8 +43,8 @@ class MapEvaluator(Evaluator[S]):
 
 
 class SparkEvaluator(Evaluator[S]):
-    def __init__(self):
-        self.spark_conf = SparkConf().setAppName("jMetalPy").setMaster("local[8]")
+    def __init__(self, processes: int = 8):
+        self.spark_conf = SparkConf().setAppName("jMetalPy").setMaster(f"local[{processes}]")
         self.spark_context = SparkContext(conf=self.spark_conf)
 
         logger = self.spark_context._jvm.org.apache.log4j
@@ -64,9 +64,6 @@ def evaluate_solution(solution, problem):
 
 
 class DaskEvaluator(Evaluator[S]):
-    """
-    Evaluator using Dask
-    """
     def __init__(self, scheduler='processes'):
         self.scheduler = scheduler
 

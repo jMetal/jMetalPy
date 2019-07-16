@@ -2,13 +2,13 @@ from typing import TypeVar, List
 
 from jmetal.config import store
 from jmetal.core.algorithm import EvolutionaryAlgorithm, DynamicAlgorithm
-from jmetal.core.problem import Problem
+from jmetal.core.problem import Problem, DynamicProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.operator import DifferentialEvolutionCrossover, RankingAndCrowdingDistanceSelection
 from jmetal.operator.selection import DifferentialEvolutionSelection
 from jmetal.util.archive import NonDominatedSolutionListArchive
 from jmetal.util.comparator import Comparator, DominanceComparator
-from jmetal.util.solution_list import Evaluator, Generator, print_function_values_to_file
+from jmetal.util.solutions import Evaluator, Generator, print_function_values_to_file
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -46,7 +46,7 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
 
         for i in range(self.population_size):
             self.selection_operator.set_index_to_exclude(i)
-            selected_solutions: List[FloatSolution] = self.selection_operator.execute(self.solutions)
+            selected_solutions = self.selection_operator.execute(self.solutions)
             mating_pool = mating_pool + selected_solutions
 
         return mating_pool
@@ -105,8 +105,9 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
 
 
 class DynamicGDE3(GDE3, DynamicAlgorithm):
+
     def __init__(self,
-                 problem: Problem,
+                 problem: DynamicProblem,
                  population_size: int,
                  cr: float,
                  f: float,
@@ -143,4 +144,3 @@ class DynamicGDE3(GDE3, DynamicAlgorithm):
             self.init_progress()
 
             self.completed_iterations += 1
-            print_function_values_to_file(self.solutions, 'FUN.DynamicGDE3.' + str(self.completed_iterations))

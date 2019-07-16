@@ -1,16 +1,17 @@
 import time
 from typing import TypeVar, List
 
+import dask
 from distributed import as_completed, Client
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
 from jmetal.core.algorithm import DynamicAlgorithm, Algorithm
-from jmetal.core.operator import Mutation, Crossover, Selection
+from jmetal.core.operator import Mutation, Crossover
 from jmetal.core.problem import Problem, DynamicProblem
 from jmetal.operator import RankingAndCrowdingDistanceSelection, BinaryTournamentSelection
 from jmetal.util.comparator import DominanceComparator, Comparator, RankingAndCrowdingDistanceComparator
-from jmetal.util.solution_list import Evaluator, Generator
+from jmetal.util.solutions import Evaluator, Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -146,11 +147,10 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
 class DistributedNSGAII(Algorithm[S, R]):
 
     def __init__(self,
-                 problem: Problem[S],
+                 problem: Problem,
                  population_size: int,
-                 mutation: Mutation[S],
-                 crossover: Crossover[S, S],
-                 selection: Selection[List[S], S],
+                 mutation: Mutation,
+                 crossover: Crossover,
                  termination_criterion: TerminationCriterion,
                  number_of_cores: int,
                  client: Client):
@@ -159,7 +159,7 @@ class DistributedNSGAII(Algorithm[S, R]):
         self.population_size = population_size
         self.mutation_operator = mutation
         self.crossover_operator = crossover
-        self.selection_operator = selection
+        self.selection_operator = BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
 
         self.termination_criterion = termination_criterion
         self.observable.register(termination_criterion)
@@ -171,14 +171,17 @@ class DistributedNSGAII(Algorithm[S, R]):
         return [self.problem.create_solution() for _ in range(self.number_of_cores)]
 
     def evaluate(self, solutions: List[S]) -> List[S]:
-        return [self.client.submit(self.problem.evaluate, solution) for solution in solutions]
+        return self.client.map(self.problem.evaluate, solutions)
 
     def stopping_condition_is_met(self) -> bool:
         return self.termination_criterion.is_met
 
     def get_observable_data(self) -> dict:
         ctime = time.time() - self.start_computing_time
-        return {'PROBLEM': self.problem, 'EVALUATIONS': self.evaluations, 'SOLUTIONS': self.get_result(),
+
+        return {'PROBLEM': self.problem,
+                'EVALUATIONS': self.evaluations,
+                'SOLUTIONS': self.get_result(),
                 'COMPUTING_TIME': ctime}
 
     def init_progress(self) -> None:
@@ -198,56 +201,76 @@ class DistributedNSGAII(Algorithm[S, R]):
         """ Execute the algorithm. """
         self.start_computing_time = time.time()
 
-        population_to_evaluate = self.create_initial_solutions()
-        task_pool = as_completed(self.evaluate(population_to_evaluate))
+        create_solution = dask.delayed(self.problem.create_solution)
+        evaluate_solution = dask.delayed(self.problem.evaluate)
+
+        task_pool = as_completed([], with_results=True)
+
+        for _ in range(self.number_of_cores):
+            new_solution = create_solution()
+            new_evaluated_solution = evaluate_solution(new_solution)
+            future = self.client.compute(new_evaluated_solution)
+
+            task_pool.add(future)
+
+        batches = task_pool.batches()
+
+        auxiliar_population = []
+        while len(auxiliar_population) < self.population_size:
+            batch = next(batches)
+            for _, received_solution in batch:
+                auxiliar_population.append(received_solution)
+
+                if len(auxiliar_population) < self.population_size:
+                    break
+
+            # submit as many new tasks as we collected
+            for _ in batch:
+                new_solution = create_solution()
+                new_evaluated_solution = evaluate_solution(new_solution)
+                future = self.client.compute(new_evaluated_solution)
+
+                task_pool.add(future)
 
         self.init_progress()
 
-        auxiliar_population = []
-        for future in task_pool:
-            # The initial population is not full
-            if len(auxiliar_population) < self.population_size:
-                received_solution = future.result()
-                auxiliar_population.append(received_solution)
+        # perform an algorithm step to create a new solution to be evaluated
+        while not self.stopping_condition_is_met():
+            batch = next(batches)
 
-                new_task = self.client.submit(self.problem.evaluate, self.problem.create_solution())
+            for _, received_solution in batch:
+                offspring_population = [received_solution]
+
+                # replacement
+                join_population = auxiliar_population + offspring_population
+                auxiliar_population = RankingAndCrowdingDistanceSelection(self.population_size).execute(
+                    join_population)
+
+                # selection
+                mating_population = []
+                for _ in range(2):
+                    solution = self.selection_operator.execute(auxiliar_population)
+                    mating_population.append(solution)
+
+                # Reproduction and evaluation
+                new_task = self.client.submit(reproduction, mating_population, self.problem,
+                                              self.crossover_operator, self.mutation_operator)
                 task_pool.add(new_task)
-            # Perform an algorithm step to create a new solution to be evaluated
-            else:
-                offspring_population = []
 
-                if not self.stopping_condition_is_met():
-                    offspring_population.append(future.result())
-
-                    # Replacement
-                    join_population = auxiliar_population + offspring_population
-                    auxiliar_population = RankingAndCrowdingDistanceSelection(self.population_size).execute(
-                        join_population)
-
-                    # Selection
-                    mating_population = []
-
-                    for _ in range(2):
-                        solution = self.selection_operator.execute(population_to_evaluate)
-                        mating_population.append(solution)
-
-                    # Reproduction and evaluation
-                    new_task = self.client.submit(reproduction, mating_population, self.problem,
-                                                  self.crossover_operator, self.mutation_operator)
-
-                    task_pool.add(new_task)
-                else:
-                    for future in list(task_pool.futures):
-                        future.cancel()
-                    break
-
+                # update progress
                 self.evaluations += 1
                 self.solutions = auxiliar_population
 
                 self.update_progress()
 
+                if self.stopping_condition_is_met():
+                    break
+
         self.total_computing_time = time.time() - self.start_computing_time
-        self.solutions = auxiliar_population
+
+        # at this point, computation is done
+        for future, _ in task_pool:
+            future.cancel()
 
     def get_result(self) -> R:
         return self.solutions

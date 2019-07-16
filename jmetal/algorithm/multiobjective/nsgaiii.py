@@ -2,12 +2,12 @@ from typing import TypeVar, List
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.config import store
-from jmetal.core.operator import Mutation, Crossover, Selection
+from jmetal.core.operator import Mutation, Crossover
 from jmetal.core.problem import Problem
 from jmetal.operator.selection import EnvironmentalSelection
 from jmetal.util.comparator import DominanceComparator, Comparator
 from jmetal.util.ranking import FastNonDominatedRanking
-from jmetal.util.solution_list import Evaluator, Generator
+from jmetal.util.solutions import Evaluator, Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -28,18 +28,15 @@ class NSGAIII(NSGAII):
                  problem: Problem,
                  mutation: Mutation,
                  crossover: Crossover,
-                 selection: Selection,
                  termination_criterion: TerminationCriterion,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator,
                  dominance_comparator: Comparator = DominanceComparator()):
-        """  NSGA-III implementation.
+        """  NSGA-III implementation based on
 
         :param problem: The problem to solve.
-        :param population_size: Size of the population.
         :param mutation: Mutation operator (see :py:mod:`jmetal.operator.mutation`).
         :param crossover: Crossover operator (see :py:mod:`jmetal.operator.crossover`).
-        :param selection: Selection operator (see :py:mod:`jmetal.operator.selection`).
         """
         super(NSGAIII, self).__init__(
             problem=problem,
@@ -47,7 +44,6 @@ class NSGAIII(NSGAII):
             offspring_population_size=92,
             mutation=mutation,
             crossover=crossover,
-            selection=selection,
             termination_criterion=termination_criterion,
             population_evaluator=population_evaluator,
             population_generator=population_generator

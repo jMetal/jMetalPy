@@ -2,7 +2,7 @@ from examples.multiobjective.parallel.zdt1_modified import ZDT1Modified
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import SBXCrossover, PolynomialMutation
 from jmetal.util.observer import ProgressBarObserver
-from jmetal.util.solution_list.evaluator import SparkEvaluator
+from jmetal.util.solutions.evaluator import SparkEvaluator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':

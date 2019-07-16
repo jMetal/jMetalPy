@@ -8,7 +8,7 @@ from jmetal.core.solution import FloatSolution
 LOGGER = logging.getLogger('jmetal')
 
 """
-.. module:: solution_list
+.. module:: solutions
    :platform: Unix, Windows
    :synopsis: Utils to print solutions.
 

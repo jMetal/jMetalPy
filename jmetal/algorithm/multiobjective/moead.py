@@ -1,25 +1,22 @@
 import copy
 import random
+from math import ceil
 from typing import TypeVar, List
 
 import numpy as np
-from math import ceil
-
-from jmetal.util.density_estimator import CrowdingDistance
-
-from jmetal.util.ranking import FastNonDominatedRanking
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
-from jmetal.operator import DifferentialEvolutionCrossover, NaryRandomSolutionSelection, \
-    RankingAndCrowdingDistanceSelection
+from jmetal.operator import DifferentialEvolutionCrossover, NaryRandomSolutionSelection
 from jmetal.util.aggregative_function import AggregativeFunction
 from jmetal.util.constraint_handling import feasibility_ratio, \
     overall_constraint_violation_degree, is_feasible
+from jmetal.util.density_estimator import CrowdingDistance
 from jmetal.util.neighborhood import WeightVectorNeighborhood
-from jmetal.util.solution_list import Evaluator, Generator
+from jmetal.util.ranking import FastNonDominatedRanking
+from jmetal.util.solutions import Evaluator, Generator
 from jmetal.util.termination_criterion import TerminationCriterion, StoppingByEvaluations
 
 S = TypeVar('S')

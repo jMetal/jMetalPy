@@ -3,7 +3,7 @@ from jmetal.core.solution import FloatSolution
 from jmetal.operator import SBXCrossover, PolynomialMutation
 from jmetal.problem import ZDT1
 from jmetal.util.observer import VisualizerObserver
-from jmetal.util.solution_list import read_solutions
+from jmetal.util.solutions import read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':

@@ -14,9 +14,6 @@ class Comparator(Generic[S], ABC):
     def compare(self, solution1: S, solution2: S) -> int:
         pass
 
-    def get_name(self) -> str:
-        return self.__class__.__name__
-
 
 class EqualSolutionsComparator(Comparator):
 

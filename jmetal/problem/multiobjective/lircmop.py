@@ -5,10 +5,11 @@ from jmetal.core.solution import FloatSolution
 
 
 class LIRCMOP1(FloatProblem):
-    """ Class representing problem LIR-CMOP1, defined in: An Improved epsilon-constrained Method in MOEA/D
-    for CMOPs with Large Infeasible Regions. Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019).
-    https://doi.org/10.1007/s00500-019-03794-x
- */ """
+    """ Class representing problem LIR-CMOP1, defined in:
+
+    * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
+      Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x
+    """
 
     def __init__(self, number_of_variables: int = 30):
         super(LIRCMOP1, self).__init__()
@@ -63,10 +64,11 @@ class LIRCMOP1(FloatProblem):
 
 
 class LIRCMOP2(LIRCMOP1):
-    """ Class representing problem LIR-CMOP2, defined in: An Improved epsilon-constrained Method in MOEA/D
-    for CMOPs with Large Infeasible Regions. Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019).
-    https://doi.org/10.1007/s00500-019-03794-x
- */ """
+    """ Class representing problem LIR-CMOP1, defined in:
+
+    * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
+      Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x
+    """
 
     def __init__(self, number_of_variables: int = 30):
         super(LIRCMOP2, self).__init__(number_of_variables)

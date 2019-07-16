@@ -18,8 +18,8 @@ if __name__ == '__main__':
     algorithm.run()
     result = algorithm.get_result()
 
-    print('Algorithm: {}'.format(algorithm.get_name()))
-    print('Problem: {}'.format(problem.get_name()))
-    print('Solution: {}'.format(result.variables))
-    print('Fitness: {}'.format(result.objectives[0]))
-    print('Computing time: {}'.format(algorithm.total_computing_time))
+    print('Algorithm: ' + algorithm.get_name())
+    print('Problem: ' + problem.get_name())
+    print('Solution: ' + str(result.variables[0]))
+    print('Fitness:  ' + str(result.objectives[0]))
+    print('Computing time: ' + str(algorithm.total_computing_time))

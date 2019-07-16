@@ -1,20 +1,12 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
+from jmetal.operator import SBXCrossover, PolynomialMutation
 from jmetal.problem import ZDT2
-from jmetal.util.comparator import GDominanceComparator, RankingAndCrowdingDistanceComparator
+from jmetal.util.comparator import GDominanceComparator
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
-from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_solutions
+from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file, read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
-from jmetal.util.visualization import Plot, InteractivePlot
+from jmetal.lab.visualization import Plot, InteractivePlot
 
-"""
-.. module:: GNSGA-II
-   :platform: Unix, Windows
-   :synopsis: GNSGA-II (Non-dominance Sorting Genetic Algorithm II with preference articulation
-   based on a reference point).
-
-.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
-"""
 
 if __name__ == '__main__':
     problem = ZDT2()

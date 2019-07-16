@@ -1,7 +1,7 @@
 from examples.multiobjective.parallel.zdt1_modified import ZDT1Modified
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import SBXCrossover, PolynomialMutation
-from jmetal.util.solution_list.evaluator import DaskEvaluator
+from jmetal.util.solutions.evaluator import DaskEvaluator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':

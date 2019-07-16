@@ -1,6 +1,6 @@
 from examples.multiobjective.parallel.zdt1_modified import ZDT1Modified
 from jmetal.algorithm.multiobjective.gde3 import GDE3
-from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, \
+from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file, \
     SparkEvaluator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 

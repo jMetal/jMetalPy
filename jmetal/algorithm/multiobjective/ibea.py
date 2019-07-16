@@ -10,7 +10,7 @@ from jmetal.core.quality_indicator import EpsilonIndicator
 from jmetal.operator import BinaryTournamentSelection
 from jmetal.util.comparator import DominanceComparator, Comparator
 from jmetal.util.comparator import SolutionAttributeComparator
-from jmetal.util.solution_list import Evaluator, Generator
+from jmetal.util.solutions import Evaluator, Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')

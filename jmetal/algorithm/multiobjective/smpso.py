@@ -5,7 +5,6 @@ from math import sqrt
 from typing import TypeVar, List, Optional
 
 import numpy
-from math import sqrt
 
 from jmetal.config import store
 from jmetal.core.algorithm import ParticleSwarmOptimization, DynamicAlgorithm
@@ -14,7 +13,7 @@ from jmetal.core.problem import FloatProblem, DynamicProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.util.archive import BoundedArchive, ArchiveWithReferencePoint
 from jmetal.util.comparator import DominanceComparator
-from jmetal.util.solution_list import Evaluator, Generator, print_function_values_to_file
+from jmetal.util.solutions import Evaluator, Generator, print_function_values_to_file
 from jmetal.util.termination_criterion import TerminationCriterion
 
 R = TypeVar('R')
@@ -389,16 +388,12 @@ class SMPSORP(SMPSO):
 
 def change_reference_point(algorithm: SMPSORP):
     """ Auxiliar function to read new reference points from the keyboard for the SMPSO/RP algorithm
-    :param algorithm:
-    :return:
     """
     number_of_reference_points = len(algorithm.reference_points)
     number_of_objectives = algorithm.problem.number_of_objectives
 
     while True:
-        print("Enter " + str(number_of_reference_points) +
-              " points of dimension " + str(number_of_objectives) + ": ")
-
+        print(f'Enter {number_of_reference_points}-points of dimension {number_of_objectives}: ')
         read = [float(x) for x in input().split()]
 
         # Update reference points

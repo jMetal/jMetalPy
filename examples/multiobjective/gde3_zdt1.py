@@ -1,7 +1,8 @@
 from jmetal.algorithm.multiobjective.gde3 import GDE3
+from jmetal.lab.visualization import Plot, InteractivePlot
 from jmetal.problem import ZDT1
 from jmetal.util.observer import VisualizerObserver
-from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
+from jmetal.util.solutions import read_solutions, print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByKeyboard
 
 if __name__ == '__main__':
@@ -21,9 +22,17 @@ if __name__ == '__main__':
     algorithm.run()
     front = algorithm.get_result()
 
+    # Plot front
+    plot_front = Plot(plot_title='Pareto front approximation', reference_front=problem.reference_front, axis_labels=problem.obj_labels)
+    plot_front.plot(front, label=algorithm.label, filename=algorithm.get_name())
+
+    # Plot interactive front
+    plot_front = InteractivePlot(plot_title='Pareto front approximation', reference_front=problem.reference_front, axis_labels=problem.obj_labels)
+    plot_front.plot(front, label=algorithm.label, filename=algorithm.get_name())
+
     # Save results to file
-    print_function_values_to_file(front, 'FUN.' + algorithm.get_name() + "." + problem.get_name())
-    print_variables_to_file(front, 'VAR.' + algorithm.get_name() + "." + problem.get_name())
+    print_function_values_to_file(front, 'FUN.' + algorithm.label)
+    print_variables_to_file(front, 'VAR.'+ algorithm.label)
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())

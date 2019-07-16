@@ -3,7 +3,7 @@ import random
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar, List
 
-from jmetal.core.observable import Observer
+from jmetal.core.observer import Observer
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, PermutationSolution
 
 LOGGER = logging.getLogger('jmetal')

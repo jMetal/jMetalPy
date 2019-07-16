@@ -4,8 +4,7 @@ from jmetal.problem.singleobjective.knapsack import Knapsack
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
-    problem = Knapsack(from_file=True,
-                       filename="./resources/Knapsack_instances/KnapsackInstance_50_0_0.kp")
+    problem = Knapsack(from_file=True, filename='./resources/Knapsack_instances/KnapsackInstance_50_0_0.kp')
 
     algorithm = GeneticAlgorithm(
         problem=problem,

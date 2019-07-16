@@ -1,6 +1,6 @@
 import unittest
 
-from jmetal.core.observable import Observer
+from jmetal.core.observer import Observer
 from jmetal.util.observable import DefaultObservable
 
 
