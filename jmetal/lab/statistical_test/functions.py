@@ -1,9 +1,6 @@
-import numpy as np
-import pandas as pd
 from scipy.stats import chi2, f, binom, norm
 
-from jmetal.util.statistical_test.apv_procedures import bonferroni_dunn, holm, hochberg, holland, finner, li, shaffer, \
-    nemenyi
+from jmetal.analysis.statistical_test.apv_procedures import *
 
 
 def ranks(data: np.array, descending=False):

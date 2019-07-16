@@ -3,7 +3,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from statsmodels.stats.libqsturng import qsturng
 
-from jmetal.util.statistical_test.functions import ranks
+from jmetal.analysis.statistical_test.functions import ranks
 
 
 def NemenyiCD(alpha: float, num_alg, num_dataset):

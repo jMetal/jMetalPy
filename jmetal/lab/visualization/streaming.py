@@ -6,7 +6,7 @@ import matplotlib
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-from jmetal.util.visualization.plotting import Plot
+from jmetal.analysis.visualization.plotting import Plot
 
 LOGGER = logging.getLogger('jmetal')
 

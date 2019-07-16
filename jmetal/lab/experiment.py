@@ -13,7 +13,7 @@ from scipy.stats import mannwhitneyu
 
 from jmetal.core.algorithm import Algorithm
 from jmetal.core.quality_indicator import QualityIndicator
-from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file, read_solutions
+from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file, read_solutions
 
 LOGGER = logging.getLogger('jmetal')
 
