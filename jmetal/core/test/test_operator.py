@@ -9,6 +9,7 @@ R = TypeVar('R')
 
 
 class DummyMutation(Mutation[Solution]):
+
     def __init__(self, probability: float):
         super(DummyMutation, self).__init__(probability=probability)
 
@@ -20,8 +21,9 @@ class DummyMutation(Mutation[Solution]):
 
 
 class DummyCrossover(Crossover[Solution, Solution]):
+
     def __init__(self, probability: float):
-        super(DummyMutation, self).__init__(probability=probability)
+        super(DummyCrossover, self).__init__(probability=probability)
 
     def execute(self, source: Solution) -> Solution:
         return None

@@ -24,11 +24,6 @@ class WeightVectorNeighborhoodTestCases(unittest.TestCase):
         self.assertEqual(1.0, neighborhood.weight_vectors[99][0])
         self.assertEqual(0.0, neighborhood.weight_vectors[99][1])
 
-<<<<<<< HEAD
-        print(neighborhood.neighborhood[0])
-        print(neighborhood.neighborhood[69])
-=======
->>>>>>> 52e0b172f0c6d651ba08b961a90a382f0a4b8e0f
         self.assertTrue(numpy.array_equal(numpy.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]),
                          neighborhood.neighborhood[0]))
         self.assertTrue(numpy.array_equal(numpy.array([69, 70, 68, 71, 67, 72, 66, 73, 65, 64, 74, 75, 63, 76, 62, 77, 61, 78, 60, 79]),

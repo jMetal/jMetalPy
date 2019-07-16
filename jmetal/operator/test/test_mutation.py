@@ -136,7 +136,7 @@ class UniformMutationTestCases(unittest.TestCase):
 
     def test_should_the_solution_change_if_the_probability_is_one(self):
         operator = UniformMutation(1.0, 3.0)
-        solution = FloatSolution(3, 1, [-5, -5, -5], [5, 5, 5])
+        solution = FloatSolution([-5, -5, -5], [5, 5, 5], 1)
         solution.variables = [1.0, 2.0, 3.0]
 
         mutated_solution = operator.execute(solution)
