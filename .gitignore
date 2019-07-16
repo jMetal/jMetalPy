@@ -115,3 +115,7 @@ dask-worker-space
 
 # osx
 .DS_Store
+
+# R
+.RData
+.Rhistory
