@@ -1,7 +1,7 @@
 import unittest
 
 from jmetal.core.solution import Solution
-from jmetal.util.ranking import FastNonDominatedRanking
+from jmetal.util.ranking import FastNonDominatedRanking, StrengthRanking
 
 
 class FastNonDominatedRankingTestCases(unittest.TestCase):
@@ -158,6 +158,13 @@ class FastNonDominatedRankingTestCases(unittest.TestCase):
         self.assertEqual(2, self.ranking.get_number_of_subfronts())
         self.assertEqual(solution, ranking[0][0])
         self.assertEqual(solution2, ranking[1][0])
+
+
+class StrengthRankingTestCases(unittest.TestCase):
+
+    def setUp(self):
+        self.ranking = StrengthRanking()
+
 
 
 if __name__ == "__main__":
