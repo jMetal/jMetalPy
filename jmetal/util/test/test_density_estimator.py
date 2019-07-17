@@ -1,7 +1,8 @@
 import unittest
+from math import sqrt
 
 from jmetal.core.solution import Solution
-from jmetal.util.density_estimator import CrowdingDistance
+from jmetal.util.density_estimator import CrowdingDistance, KNearestNeighborDensityEstimator
 
 
 class CrowdingDistanceTestCases(unittest.TestCase):
@@ -85,6 +86,43 @@ class CrowdingDistanceTestCases(unittest.TestCase):
         self.assertEqual(float("inf"), value_from_solution1)
         self.assertEqual(float("inf"), value_from_solution2)
         self.assertGreater(value_from_solution3, value_from_solution4)
+
+
+
+class KNearestNeighborDensityEstimatorTest(unittest.TestCase):
+
+    def setUp(self):
+        self.knn = KNearestNeighborDensityEstimator()
+
+    def test_should_the_density_estimator_compute_the_rigth_distances_case1(self):
+        """
+         5 1
+         4   2
+         3     3
+         2
+         1         4
+         0 1 2 3 4 5
+        """
+        solution1 = Solution(2, 2)
+        solution1.objectives = [1, 5]
+        solution2 = Solution(2, 2)
+        solution2.objectives = [2, 4]
+        solution3 = Solution(2, 2)
+        solution3.objectives = [3, 3]
+        solution4 = Solution(2, 2)
+        solution4.objectives = [5, 1]
+
+        solution_list = [solution1, solution2, solution3, solution4]
+
+        knn = KNearestNeighborDensityEstimator()
+        knn.compute_density_estimator(solution_list)
+
+        self.knn.compute_density_estimator(solution_list)
+
+        self.assertEqual(sqrt(2), solution1.attributes['knn_density'])
+        self.assertEqual(sqrt(2), solution2.attributes['knn_density'])
+        self.assertEqual(sqrt(2), solution3.attributes['knn_density'])
+        self.assertEqual(sqrt(2*2+2*2), solution4.attributes['knn_density'])
 
 
 if __name__ == "__main__":

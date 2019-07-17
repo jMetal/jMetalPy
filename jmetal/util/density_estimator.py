@@ -1,6 +1,11 @@
 import logging
+import numpy
 from abc import ABC, abstractmethod
 from typing import TypeVar, List
+
+from jmetal.core.solution import Solution
+from scipy.spatial import distance_matrix
+from scipy.spatial.distance import euclidean
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -69,9 +74,45 @@ class CrowdingDistance(DensityEstimator[List[S]]):
 
                 # Check if minimum and maximum are the same (in which case do nothing)
                 if objective_maxn - objective_minn == 0:
-                    pass ; #LOGGER.warning('Minimum and maximum are the same!')
+                    pass;  # LOGGER.warning('Minimum and maximum are the same!')
                 else:
                     distance = distance / (objective_maxn - objective_minn)
 
                 distance += front[j].attributes['crowding_distance']
                 front[j].attributes['crowding_distance'] = distance
+
+
+class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
+    """This class implements a density estimator based on the distance to the k-th nearest solution.
+    """
+
+    def __init__(self, k=1):
+        self.k = k
+        self.distance_matrix = []
+
+    def compute_density_estimator(self, solutions: List[S]):
+        solutions_size = len(solutions)
+        if solutions_size <= self.k:
+            return
+
+        points = []
+        for i in range(solutions_size):
+            points.append(solutions[i].objectives)
+
+        # Compute distance matrix
+        self.distance_matrix = numpy.zeros(shape=(solutions_size, solutions_size))
+        for i in range(solutions_size):
+            for j in range(solutions_size):
+                self.distance_matrix[i, j] = self.distance_matrix[j, i] = euclidean(solutions[i].objectives,
+                                                                                    solutions[j].objectives)
+
+        print(self.distance_matrix)
+
+        for i in range(solutions_size):
+            distances = []
+            for j in range(solutions_size):
+                distances.append(self.distance_matrix[i, j])
+            distances.sort()
+            solutions[i].attributes['knn_density'] = distances[self.k]
+
+

@@ -38,7 +38,8 @@ setup(
         'matplotlib>=3.0.2',
         'statsmodels>=0.9.0',
         'dask[complete]==1.2.2',
-        'distributed==1.28.1'
+        'distributed==1.28.1',
+        'scipy'
     ],
     tests_require=[
         'mockito',
