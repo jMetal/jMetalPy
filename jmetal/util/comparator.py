@@ -80,6 +80,22 @@ class SolutionAttributeComparator(Comparator):
         return result
 
 
+class MultiComparator(Comparator):
+    """This comparator takes a list of comparators and check all of them iteratively until a
+       value != 0 is obtained or the list becomes empty
+    """
+    def __init__(self, comparator_list:[Comparator]):
+        self.comparator_list:[Comparator] = comparator_list
+
+    def compare(self, solution1: Solution, solution2: Solution) -> int:
+        for comparator in self.comparator_list:
+            flag = comparator.compare(solution1, solution2)
+            if flag != 0:
+                return flag
+
+        return 0
+
+
 class RankingAndCrowdingDistanceComparator(Comparator):
 
     def compare(self, solution1: Solution, solution2: Solution) -> int:

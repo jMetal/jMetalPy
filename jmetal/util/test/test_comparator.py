@@ -1,8 +1,10 @@
 import unittest
 
+from mockito import mock, when, verify, never
+
 from jmetal.core.solution import Solution
 from jmetal.util.comparator import DominanceComparator, SolutionAttributeComparator, \
-    RankingAndCrowdingDistanceComparator, Comparator, OverallConstraintViolationComparator
+    RankingAndCrowdingDistanceComparator, Comparator, OverallConstraintViolationComparator, MultiComparator
 
 
 class OverallConstraintViolationComparatorTestCases(unittest.TestCase):
@@ -301,6 +303,73 @@ class RankingAndCrowdingComparatorTestCases(unittest.TestCase):
         solution2.attributes["crowding_distance"] = 2.0
 
         self.assertEqual(0, self.comparator.compare(solution1, solution2))
+
+
+class MultiComparatorTestCases(unittest.TestCase):
+
+    def test_should_compare_return_zero_if_the_comparator_list_is_empty(self):
+        solution1 = Solution(2, 2)
+        solution2 = Solution(2, 2)
+
+        multi_comparator = MultiComparator([])
+        self.assertEqual(0, multi_comparator.compare(solution1, solution2))
+
+    def test_should_compare_work_properly_case_1(self):
+        """ Case 1: a comparator returning 0.
+        """
+        solution1 = Solution(2, 2)
+        solution2 = Solution(2, 2)
+
+        mocked_comparator: Comparator = mock()
+        when(mocked_comparator).compare(solution1, solution2).thenReturn(0)
+
+        comparator_list = [mocked_comparator]
+
+        multi_comparator = MultiComparator(comparator_list)
+        self.assertEqual(0, multi_comparator.compare(solution1, solution2))
+
+        verify(mocked_comparator, times=1).compare(solution1, solution2)
+
+    def test_should_compare_work_properly_case_2(self):
+        """ Case 2: two comparators; the first returns 1 and the second one returns 0.
+            Expected result: 1
+        """
+        solution1 = Solution(2, 2)
+        solution2 = Solution(2, 2)
+
+        mocked_comparator1: Comparator = mock()
+        when(mocked_comparator1).compare(solution1, solution2).thenReturn(1)
+        mocked_comparator2: Comparator = mock()
+        when(mocked_comparator2).compare(solution1, solution2).thenReturn(0)
+
+        comparator_list = [mocked_comparator1, mocked_comparator2]
+
+        multi_comparator = MultiComparator(comparator_list)
+        self.assertEqual(1, multi_comparator.compare(solution1, solution2))
+
+        verify(mocked_comparator1, times=1).compare(solution1, solution2)
+        verify(mocked_comparator2, never).compare(solution1, solution2)
+
+
+    def test_should_compare_work_properly_case_3(self):
+        """ Case 2: two comparators; the first returns 0 and the second one returns -1.
+            Expected result: -1
+        """
+        solution1 = Solution(2, 2)
+        solution2 = Solution(2, 2)
+
+        mocked_comparator1: Comparator = mock()
+        when(mocked_comparator1).compare(solution1, solution2).thenReturn(0)
+        mocked_comparator2: Comparator = mock()
+        when(mocked_comparator2).compare(solution1, solution2).thenReturn(-1)
+
+        comparator_list = [mocked_comparator1, mocked_comparator2]
+
+        multi_comparator = MultiComparator(comparator_list)
+        self.assertEqual(-1, multi_comparator.compare(solution1, solution2))
+
+        verify(mocked_comparator1, times=1).compare(solution1, solution2)
+        verify(mocked_comparator2, times=1).compare(solution1, solution2)
 
 
 if __name__ == '__main__':
