@@ -114,9 +114,6 @@ class KNearestNeighborDensityEstimatorTest(unittest.TestCase):
 
         solution_list = [solution1, solution2, solution3, solution4]
 
-        knn = KNearestNeighborDensityEstimator()
-        knn.compute_density_estimator(solution_list)
-
         self.knn.compute_density_estimator(solution_list)
 
         self.assertEqual(sqrt(2), solution1.attributes['knn_density'])
@@ -124,6 +121,40 @@ class KNearestNeighborDensityEstimatorTest(unittest.TestCase):
         self.assertEqual(sqrt(2), solution3.attributes['knn_density'])
         self.assertEqual(sqrt(2*2+2*2), solution4.attributes['knn_density'])
 
+        self.knn.sort(solution_list)
+
+    def test_should_the_density_estimator_sort_the_solution_list(self):
+        """
+         5 1
+         4   2
+         3     3
+         2     5
+         1         4
+         0 1 2 3 4 5
+
+         List: 1,2,3,4,5
+         Expected result: 4, 1, 2, 5, 3
+        """
+        solution1 = Solution(2, 2)
+        solution1.objectives = [1, 5]
+        solution2 = Solution(2, 2)
+        solution2.objectives = [2, 4]
+        solution3 = Solution(2, 2)
+        solution3.objectives = [3, 3]
+        solution4 = Solution(2, 2)
+        solution4.objectives = [5, 1]
+        solution5 = Solution(2, 2)
+        solution5.objectives = [3, 2]
+
+        solution_list = [solution1, solution2, solution3, solution4, solution5]
+
+        self.knn.compute_density_estimator(solution_list)
+        self.knn.sort(solution_list)
+
+        self.assertEqual(solution_list[0], solution4)
+        self.assertEqual(solution_list[1], solution1)
+        self.assertEqual(solution_list[2], solution2)
+        self.assertEqual(solution_list[3], solution5)
 
 if __name__ == "__main__":
     unittest.main()

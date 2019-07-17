@@ -2,6 +2,7 @@ import logging
 import numpy
 from abc import ABC, abstractmethod
 from typing import TypeVar, List
+from functools import cmp_to_key
 
 from jmetal.core.solution import Solution
 from scipy.spatial import distance_matrix
@@ -105,14 +106,39 @@ class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
             for j in range(solutions_size):
                 self.distance_matrix[i, j] = self.distance_matrix[j, i] = euclidean(solutions[i].objectives,
                                                                                     solutions[j].objectives)
-
-        print(self.distance_matrix)
-
         for i in range(solutions_size):
             distances = []
             for j in range(solutions_size):
                 distances.append(self.distance_matrix[i, j])
             distances.sort()
             solutions[i].attributes['knn_density'] = distances[self.k]
+
+    def sort(self, solutions:List[S]) -> List[S]:
+        def compare(solution1, solution2):
+            distances1 = solution1.attributes["distances_"]
+            distances2 = solution2.attributes["distances_"]
+
+            tmp_k = self.k
+            if distances1[tmp_k] > distances2[tmp_k]:
+                return -1
+            elif distances1[tmp_k] < distances2[tmp_k]:
+                return 1
+            else:
+                while tmp_k < (len(distances1) - 1):
+                    tmp_k += 1
+                    if distances1[tmp_k] > distances2[tmp_k]:
+                        return -1
+                    elif distances1[tmp_k] < distances2[tmp_k]:
+                        return 1
+            return 0
+
+        for i in range(len(solutions)):
+            distances = []
+            for j in range(len(solutions)):
+                distances.append(self.distance_matrix[i, j])
+            sorted(distances)
+            solutions[i].attributes["distances_"] = distances
+
+        solutions.sort(key=cmp_to_key(compare))
 
 
