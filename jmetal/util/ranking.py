@@ -113,28 +113,27 @@ class StrengthRanking(Ranking[List[S]]):
         for i in range(len(solutions)):
             for j in range(len(solutions)):
                 if self.comparator.compare(solutions[i], solutions[j]) < 0:
-                    strength[i] += 1.0
+                    strength[i] += 1
 
         # Calculate the raw fitness:
         # rawFitness(i) = |{sum strength(j) | j <- SolutionSet and j dominate i}|
         for i in range(len(solutions)):
             for j in range(len(solutions)):
                 if self.comparator.compare(solutions[i], solutions[j]) == 1:
-                    strength[i] += strength[j]
+                    raw_fitness[i] += strength[j]
 
-        max_fitness_value = 0
+        max_fitness_value:int = 0
         for i in range(len(solutions)):
             solutions[i].attributes['strength_ranking'] = raw_fitness[i]
             if raw_fitness[i] > max_fitness_value:
                 max_fitness_value = raw_fitness[i]
 
         # Initialize the ranked sublists. In the worst case will be max_fitness_value + 1 different sublists
-        for i in range(max_fitness_value+1):
-            self.ranked_sublists.append([])
+        self.ranked_sublists = [[] for _ in range(max_fitness_value + 1)]
 
         # Assign each solution to its corresponding front
         for solution in solutions:
-            self.ranked_sublists[solution.attribute['strength_ranking']].append(solution)
+            self.ranked_sublists[int(solution.attributes['strength_ranking'])].append(solution)
 
         # Remove empty fronts
         counter = 0

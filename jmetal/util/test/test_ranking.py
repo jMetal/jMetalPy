@@ -1,7 +1,7 @@
 import unittest
 
 from jmetal.core.solution import Solution
-from jmetal.util.ranking import FastNonDominatedRanking, StrengthRanking
+from jmetal.util.ranking import FastNonDominatedRanking, StrengthRanking, Ranking
 
 
 class FastNonDominatedRankingTestCases(unittest.TestCase):
@@ -163,9 +163,77 @@ class FastNonDominatedRankingTestCases(unittest.TestCase):
 class StrengthRankingTestCases(unittest.TestCase):
 
     def setUp(self):
-        self.ranking = StrengthRanking()
+        self.ranking:Ranking = StrengthRanking()
 
+    def test_should_ranking_assing_zero_to_all_the_solutions_if_they_are_nondominated(self):
+        """
+          5 1
+          4   2
+          3     3
+          2
+          1         4
+          0 1 2 3 4 5
 
+          Points 1, 2, 3 and 4 are nondominated
+        """
+        solution1 = Solution(2, 2)
+        solution1.objectives = [1, 5]
+        solution2 = Solution(2, 2)
+        solution2.objectives = [2, 4]
+        solution3 = Solution(2, 2)
+        solution3.objectives = [3, 3]
+        solution4 = Solution(2, 2)
+        solution4.objectives = [5, 1]
+
+        solution_list = [solution1, solution2, solution3, solution4]
+
+        ranking = self.ranking.compute_ranking(solution_list)
+
+        self.assertEqual(1, self.ranking.get_number_of_subfronts())
+        self.assertTrue(solution1 in ranking[0])
+        self.assertTrue(solution2 in ranking[0])
+        self.assertTrue(solution3 in ranking[0])
+        self.assertTrue(solution4 in ranking[0])
+
+    def test_should_ranking_work_properly(self):
+        """
+          5 1
+          4   2
+          3     3
+          2     5
+          1         4
+          0 1 2 3 4 5
+
+          Solutions: 1, 2, 3, 4, 5
+          Expected result: two ranks (rank 0: 1, 2, 5, 4; rank 1: 3)
+        """
+
+        solution1 = Solution(2, 2)
+        solution1.objectives = [1, 5]
+        solution2 = Solution(2, 2)
+        solution2.objectives = [2, 4]
+        solution3 = Solution(2, 2)
+        solution3.objectives = [3, 3]
+        solution4 = Solution(2, 2)
+        solution4.objectives = [5, 1]
+        solution5 = Solution(2, 2)
+        solution5.objectives = [3, 2]
+
+        solution_list = [solution1, solution2, solution3, solution4, solution5]
+
+        ranking = self.ranking.compute_ranking(solution_list)
+
+        self.assertEqual(2, self.ranking.get_number_of_subfronts())
+        self.assertTrue(solution1 in self.ranking.get_subfront(0))
+        self.assertTrue(solution2 in self.ranking.get_subfront(0))
+        self.assertTrue(solution3 in self.ranking.get_subfront(1))
+        self.assertTrue(solution4 in self.ranking.get_subfront(0))
+        self.assertTrue(solution5 in self.ranking.get_subfront(0))
+        self.assertEqual(0, solution1.attributes['strength_ranking'])
+        self.assertEqual(0, solution2.attributes['strength_ranking'])
+        self.assertEqual(1, solution3.attributes['strength_ranking'])
+        self.assertEqual(0, solution4.attributes['strength_ranking'])
+        self.assertEqual(0, solution5.attributes['strength_ranking'])
 
 if __name__ == "__main__":
     unittest.main()
