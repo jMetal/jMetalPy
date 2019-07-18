@@ -56,8 +56,8 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         return [self.population_generator.new(self.problem)
                 for _ in range(self.population_size)]
 
-    def evaluate(self, solution_list: List[S]):
-        return self.population_evaluator.evaluate(solution_list, self.problem)
+    def evaluate(self, population: List[S]):
+        return self.population_evaluator.evaluate(population, self.problem)
 
     def stopping_condition_is_met(self) -> bool:
         return self.termination_criterion.is_met
