@@ -350,7 +350,6 @@ class MultiComparatorTestCases(unittest.TestCase):
         verify(mocked_comparator1, times=1).compare(solution1, solution2)
         verify(mocked_comparator2, never).compare(solution1, solution2)
 
-
     def test_should_compare_work_properly_case_3(self):
         """ Case 2: two comparators; the first returns 0 and the second one returns -1.
             Expected result: -1

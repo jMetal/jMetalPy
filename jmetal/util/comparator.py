@@ -109,8 +109,20 @@ class RankingAndCrowdingDistanceComparator(Comparator):
         return result
 
 
-class OverallConstraintViolationComparator(Comparator):
+class StrengthAndKNNDistanceComparator(Comparator):
 
+    def compare(self, solution1: Solution, solution2: Solution) -> int:
+        result = \
+            SolutionAttributeComparator('dominance_ranking').compare(solution1, solution2)
+
+        if result is 0:
+            result = \
+                SolutionAttributeComparator("knn_density", lowest_is_best=False).compare(solution1, solution2)
+
+        return result
+
+
+class OverallConstraintViolationComparator(Comparator):
     def compare(self, solution1: Solution, solution2: Solution) -> int:
         violation_degree_solution_1 = overall_constraint_violation_degree(solution1)
         violation_degree_solution_2 = overall_constraint_violation_degree(solution2)

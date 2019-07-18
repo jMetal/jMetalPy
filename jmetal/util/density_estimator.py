@@ -8,6 +8,8 @@ from jmetal.core.solution import Solution
 from scipy.spatial import distance_matrix
 from scipy.spatial.distance import euclidean
 
+from jmetal.util.comparator import SolutionAttributeComparator
+
 LOGGER = logging.getLogger('jmetal')
 
 S = TypeVar('S')
@@ -17,7 +19,7 @@ S = TypeVar('S')
    :platform: Unix, Windows
    :synopsis: Crowding distance implementation.
 
-.. moduleauthor:: Álvaro Gómez Jáuregui <alvarogj@lcc.uma.es>
+.. moduleauthor:: Antonio J. Nebro <ajnebro@uma.es>
 """
 
 
@@ -29,10 +31,13 @@ class DensityEstimator(List[S], ABC):
     def compute_density_estimator(self, solution_list: List[S]) -> float:
         pass
 
+    @abstractmethod
+    def sort(self, solution_list: List[S]) -> List[S]:
+        pass
+
 
 class CrowdingDistance(DensityEstimator[List[S]]):
-    """This class implements a DensityEstimator based on the crowding distance.
-    In consequence, the main method of this class is :func:`compute_density_estimator`.
+    """This class implements a DensityEstimator based on the crowding distance of algorithm NSGA-II.
     """
 
     def compute_density_estimator(self, front: List[S]):
@@ -82,6 +87,10 @@ class CrowdingDistance(DensityEstimator[List[S]]):
                 distance += front[j].attributes['crowding_distance']
                 front[j].attributes['crowding_distance'] = distance
 
+    def sort(self, solutions:List[S]) -> List[S]:
+        comparator = SolutionAttributeComparator("crowding_distance", lowest_is_best=False)
+        solutions.sort(key=cmp_to_key(comparator.compare))
+
 
 class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
     """This class implements a density estimator based on the distance to the k-th nearest solution.
@@ -106,6 +115,7 @@ class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
             for j in range(solutions_size):
                 self.distance_matrix[i, j] = self.distance_matrix[j, i] = euclidean(solutions[i].objectives,
                                                                                     solutions[j].objectives)
+        # Gets the k-nearest distance of all the solutions
         for i in range(solutions_size):
             distances = []
             for j in range(solutions_size):
@@ -136,7 +146,7 @@ class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
             distances = []
             for j in range(len(solutions)):
                 distances.append(self.distance_matrix[i, j])
-            sorted(distances)
+            distances.sort()
             solutions[i].attributes["distances_"] = distances
 
         solutions.sort(key=cmp_to_key(compare))
