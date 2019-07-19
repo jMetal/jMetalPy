@@ -8,7 +8,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
     problem = DTLZ1()
-    problem.reference_front = read_solutions(filename='../../resources/reference_front/DTLZ1.3D.pf')
+    problem.reference_front = read_solutions(filename='resources/reference_front/DTLZ1.3D.pf')
 
     max_evaluations = 25000
 

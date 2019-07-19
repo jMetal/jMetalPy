@@ -7,7 +7,7 @@ from jmetal.core.problem import Problem
 from jmetal.operator import BinaryTournamentSelection
 from jmetal.util.density_estimator import KNearestNeighborDensityEstimator
 from jmetal.util.ranking import StrengthRanking
-from jmetal.util.replacement import RankingAndDensityEstimatorReplacement
+from jmetal.util.replacement import RankingAndDensityEstimatorReplacement, RemovalPolicyType
 from jmetal.util.solutions import Evaluator, Generator
 from jmetal.util.solutions.comparator import Comparator, StrengthAndKNNDistanceComparator, \
     SolutionAttributeComparator, MultiComparator
@@ -45,7 +45,7 @@ class SPEA2(GeneticAlgorithm[S, R]):
         """
         multi_comparator = MultiComparator([SolutionAttributeComparator('strength_ranking'),
                                             SolutionAttributeComparator("knn_density", lowest_is_best=False)])
-        selection = BinaryTournamentSelection(comparator=StrengthAndKNNDistanceComparator())
+        selection = BinaryTournamentSelection(comparator=multi_comparator)
 
         super(SPEA2, self).__init__(
             problem=problem,
@@ -71,7 +71,7 @@ class SPEA2(GeneticAlgorithm[S, R]):
         ranking = StrengthRanking()
         density_estimator = KNearestNeighborDensityEstimator()
 
-        r = RankingAndDensityEstimatorReplacement(ranking, density_estimator)
+        r = RankingAndDensityEstimatorReplacement(ranking, density_estimator, RemovalPolicyType.SEQUENTIAL)
         solutions = r.replace(population, offspring_population)
 
         return solutions

@@ -3,6 +3,9 @@ from typing import TypeVar, List
 
 import dask
 from distributed import as_completed, Client
+from jmetal.util.ranking import FastNonDominatedRanking
+
+from jmetal.util.density_estimator import CrowdingDistance
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
@@ -10,8 +13,10 @@ from jmetal.core.algorithm import DynamicAlgorithm, Algorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem, DynamicProblem
 from jmetal.operator import RankingAndCrowdingDistanceSelection, BinaryTournamentSelection
+from jmetal.util.replacement import RankingAndDensityEstimatorReplacement, RemovalPolicyType
 from jmetal.util.solutions import Evaluator, Generator
-from jmetal.util.solutions.comparator import DominanceComparator, Comparator, RankingAndCrowdingDistanceComparator
+from jmetal.util.solutions.comparator import DominanceComparator, Comparator, RankingAndCrowdingDistanceComparator, \
+    MultiComparator, SolutionAttributeComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -34,7 +39,10 @@ class NSGAII(GeneticAlgorithm[S, R]):
                  offspring_population_size: int,
                  mutation: Mutation,
                  crossover: Crossover,
-                 selection: Selection = BinaryTournamentSelection(RankingAndCrowdingDistanceComparator()),
+                 selection: Selection = BinaryTournamentSelection(
+                     MultiComparator([SolutionAttributeComparator('dominance_ranking'),
+                                      SolutionAttributeComparator("crowding_distance", lowest_is_best=False)])),
+                 # selection: Selection = BinaryTournamentSelection(RankingAndCrowdingDistanceComparator()),
                  termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator,
@@ -79,11 +87,13 @@ class NSGAII(GeneticAlgorithm[S, R]):
         :param offspring_population: Offspring population.
         :return: New population after ranking and crowding distance selection is applied.
         """
-        join_population = population + offspring_population
+        ranking = FastNonDominatedRanking()
+        density_estimator = CrowdingDistance()
 
-        return RankingAndCrowdingDistanceSelection(
-            self.population_size, dominance_comparator=self.dominance_comparator
-        ).execute(join_population)
+        r = RankingAndDensityEstimatorReplacement(ranking, density_estimator, RemovalPolicyType.ONE_SHOT)
+        solutions = r.replace(population, offspring_population)
+
+        return solutions
 
     def get_result(self) -> R:
         return self.solutions
