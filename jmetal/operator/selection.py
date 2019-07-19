@@ -4,7 +4,7 @@ from typing import List, TypeVar
 import numpy as np
 
 from jmetal.core.operator import Selection
-from jmetal.util.comparator import Comparator, DominanceComparator
+from jmetal.util.solutions.comparator import Comparator, DominanceComparator
 from jmetal.util.density_estimator import CrowdingDistance
 from jmetal.util.ranking import FastNonDominatedRanking
 

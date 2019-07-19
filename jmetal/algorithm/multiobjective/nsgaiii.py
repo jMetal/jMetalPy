@@ -7,11 +7,12 @@ from scipy import special
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.config import store
-from jmetal.core.operator import Mutation, Crossover
+from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
-from jmetal.util.comparator import DominanceComparator, Comparator
+from jmetal.operator import BinaryTournamentSelection
 from jmetal.util.ranking import FastNonDominatedRanking
 from jmetal.util.solutions import Evaluator, Generator
+from jmetal.util.solutions.comparator import Comparator, RankingAndCrowdingDistanceComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -233,11 +234,12 @@ class NSGAIII(NSGAII):
                  problem: Problem,
                  mutation: Mutation,
                  crossover: Crossover,
-                 termination_criterion: TerminationCriterion,
                  population_size: int = None,
+                 selection: Selection = BinaryTournamentSelection(RankingAndCrowdingDistanceComparator()),
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator,
-                 dominance_comparator: Comparator = DominanceComparator()):
+                 dominance_comparator: Comparator = store.default_comparator):
         self.reference_directions = reference_directions.compute()
 
         if not population_size:

@@ -1,8 +1,8 @@
-from jmetal.util.observable import DefaultObservable
 from jmetal.operator import PolynomialMutation, BitFlipMutation
-from jmetal.util.comparator import DominanceComparator
+from jmetal.util.observable import DefaultObservable
 from jmetal.util.solutions import RandomGenerator
 from jmetal.util.solutions import SequentialEvaluator
+from jmetal.util.solutions.comparator import DominanceComparator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 

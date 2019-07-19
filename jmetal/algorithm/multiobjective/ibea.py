@@ -8,9 +8,8 @@ from jmetal.core.operator import Mutation, Crossover
 from jmetal.core.problem import Problem
 from jmetal.core.quality_indicator import EpsilonIndicator
 from jmetal.operator import BinaryTournamentSelection
-from jmetal.util.comparator import DominanceComparator, Comparator
-from jmetal.util.comparator import SolutionAttributeComparator
 from jmetal.util.solutions import Evaluator, Generator
+from jmetal.util.solutions.comparator import SolutionAttributeComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -26,11 +25,9 @@ class IBEA(GeneticAlgorithm[S, R]):
                  mutation: Mutation,
                  crossover: Crossover,
                  kappa: float,
-                 termination_criterion: TerminationCriterion,
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  population_generator: Generator = store.default_generator,
-                 population_evaluator: Evaluator = store.default_evaluator,
-                 dominance_comparator: Comparator = DominanceComparator()):
-
+                 population_evaluator: Evaluator = store.default_evaluator):
         """  Epsilon IBEA implementation as described in
 
         * Zitzler, Eckart, and Simon Künzli. "Indicator-based selection in multiobjective search."

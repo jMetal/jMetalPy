@@ -35,7 +35,7 @@ class MOEAD(GeneticAlgorithm):
                  max_number_of_replaced_solutions: int,
                  neighbor_size: int,
                  weight_files_path: str,
-                 termination_criterion: TerminationCriterion = StoppingByEvaluations(150000),
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator):
         """

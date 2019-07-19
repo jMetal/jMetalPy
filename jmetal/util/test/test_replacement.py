@@ -1,10 +1,6 @@
 import unittest
 
-from mockito import mock, when, verify, never
-
 from jmetal.core.solution import Solution
-from jmetal.util.comparator import DominanceComparator, SolutionAttributeComparator, \
-    RankingAndCrowdingDistanceComparator, Comparator, OverallConstraintViolationComparator, MultiComparator
 from jmetal.util.density_estimator import KNearestNeighborDensityEstimator
 from jmetal.util.ranking import StrengthRanking, FastNonDominatedRanking
 from jmetal.util.replacement import RankingAndDensityEstimatorReplacement
@@ -39,10 +35,10 @@ class RankingAndDensityEstimatorReplacementTestCases(unittest.TestCase):
         result_list = replacement.replace(solution_list, [])
 
         self.assertEqual(4, len(result_list))
-        self.assertEqual(0, solution1.attributes["strength_ranking"])
-        self.assertEqual(0, solution2.attributes["strength_ranking"])
-        self.assertEqual(0, solution3.attributes["strength_ranking"])
-        self.assertEqual(0, solution4.attributes["strength_ranking"])
+        self.assertEqual(0, solution1.attributes['strength_ranking'])
+        self.assertEqual(0, solution2.attributes['strength_ranking'])
+        self.assertEqual(0, solution3.attributes['strength_ranking'])
+        self.assertEqual(0, solution4.attributes['strength_ranking'])
 
     def test_should_replacement_return_the_right_value_case1(self):
         """
@@ -111,11 +107,11 @@ class RankingAndDensityEstimatorReplacementTestCases(unittest.TestCase):
         offspring_list = [solution3, solution5]
         result_list = replacement.replace(solution_list, offspring_list)
 
-        self.assertEqual(0, solution1.attributes["strength_ranking"])
-        self.assertEqual(0, solution2.attributes["strength_ranking"])
-        self.assertEqual(1, solution3.attributes["strength_ranking"])
-        self.assertEqual(0, solution4.attributes["strength_ranking"])
-        self.assertEqual(0, solution5.attributes["strength_ranking"])
+        self.assertEqual(0, solution1.attributes['strength_ranking'])
+        self.assertEqual(0, solution2.attributes['strength_ranking'])
+        self.assertEqual(1, solution3.attributes['strength_ranking'])
+        self.assertEqual(0, solution4.attributes['strength_ranking'])
+        self.assertEqual(0, solution5.attributes['strength_ranking'])
 
         self.assertEqual(3, len(result_list))
         self.assertTrue(solution1 in result_list)
@@ -167,9 +163,9 @@ class RankingAndDensityEstimatorReplacementTestCases(unittest.TestCase):
         self.assertEqual(10,len(result_list))
 
         for solution in result_list[0:4]:
-            self.assertEqual(0, solution.attributes["dominance_ranking"])
+            self.assertEqual(0, solution.attributes['dominance_ranking'])
         for solution in result_list[5:9]:
-            self.assertEqual(1, solution.attributes["dominance_ranking"])
+            self.assertEqual(1, solution.attributes['dominance_ranking'])
 
 
 

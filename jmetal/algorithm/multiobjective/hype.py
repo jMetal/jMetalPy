@@ -1,16 +1,15 @@
 from typing import TypeVar, List
 
-from jmetal.core.solution import Solution
-
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
 from jmetal.core.operator import Mutation, Crossover
 from jmetal.core.problem import Problem
+from jmetal.core.solution import Solution
 from jmetal.operator import BinaryTournamentSelection
 from jmetal.operator.selection import RankingAndFitnessSelection
-from jmetal.util.comparator import DominanceComparator, Comparator
-from jmetal.util.comparator import SolutionAttributeComparator
 from jmetal.util.solutions import Evaluator, Generator
+from jmetal.util.solutions.comparator import Comparator
+from jmetal.util.solutions.comparator import SolutionAttributeComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -26,10 +25,10 @@ class HYPE(GeneticAlgorithm[S, R]):
                  offspring_population_size: int,
                  mutation: Mutation,
                  crossover: Crossover,
-                 termination_criterion: TerminationCriterion,
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator,
-                 dominance_comparator: Comparator = DominanceComparator()):
+                 dominance_comparator: Comparator = store.default_comparator):
         """ This is an implementation of the Hypervolume Estimation Algorithm for Multi-objective Optimization
         proposed in:
 

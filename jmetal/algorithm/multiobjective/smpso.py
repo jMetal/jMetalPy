@@ -12,8 +12,8 @@ from jmetal.core.operator import Mutation
 from jmetal.core.problem import FloatProblem, DynamicProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.util.archive import BoundedArchive, ArchiveWithReferencePoint
-from jmetal.util.comparator import DominanceComparator
-from jmetal.util.solutions import Evaluator, Generator, print_function_values_to_file
+from jmetal.util.solutions import Evaluator, Generator
+from jmetal.util.solutions.comparator import DominanceComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 R = TypeVar('R')
@@ -224,7 +224,7 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
                  swarm_size: int,
                  mutation: Mutation,
                  leaders: BoundedArchive,
-                 termination_criterion: TerminationCriterion,
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  swarm_generator: Generator = store.default_generator,
                  swarm_evaluator: Evaluator = store.default_evaluator):
         super(DynamicSMPSO, self).__init__(
@@ -265,9 +265,6 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
             observable_data = self.get_observable_data()
             observable_data['termination_criterion_is_met'] = True
             self.observable.notify_all(**observable_data)
-
-            print_function_values_to_file(self.leaders.solution_list,
-                                          'FUN.DynamicSMPSO.' + str(self.completed_iterations))
 
             self.restart()
             self.init_progress()

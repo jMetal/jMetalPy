@@ -221,7 +221,7 @@ class StrengthRankingTestCases(unittest.TestCase):
 
         solution_list = [solution1, solution2, solution3, solution4, solution5]
 
-        ranking = self.ranking.compute_ranking(solution_list)
+        self.ranking.compute_ranking(solution_list)
 
         self.assertEqual(2, self.ranking.get_number_of_subfronts())
         self.assertTrue(solution1 in self.ranking.get_subfront(0))
@@ -234,6 +234,7 @@ class StrengthRankingTestCases(unittest.TestCase):
         self.assertEqual(1, solution3.attributes['strength_ranking'])
         self.assertEqual(0, solution4.attributes['strength_ranking'])
         self.assertEqual(0, solution5.attributes['strength_ranking'])
+
 
 if __name__ == "__main__":
     unittest.main()

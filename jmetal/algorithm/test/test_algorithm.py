@@ -2,6 +2,7 @@ import unittest
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.algorithm.multiobjective.smpso import SMPSO
+from jmetal.core.quality_indicator import HyperVolume
 from jmetal.operator import PolynomialMutation, SBXCrossover
 from jmetal.problem import ZDT1
 from jmetal.util.archive import CrowdingDistanceArchive
@@ -37,6 +38,31 @@ class RunningAlgorithmsTestCases(unittest.TestCase):
             leaders=CrowdingDistanceArchive(100),
             termination_criterion=StoppingByEvaluations(max=1000)
         ).run()
+
+
+class IntegrationTestCases(unittest.TestCase):
+
+    def test_should_NSGAII_work_when_solving_problem_ZDT1_with_standard_settings(self):
+        problem = ZDT1()
+
+        max_evaluations = 25000
+
+        algorithm = NSGAII(
+            problem=problem,
+            population_size=100,
+            offspring_population_size=100,
+            mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
+            crossover=SBXCrossover(probability=1.0, distribution_index=20),
+            termination_criterion=StoppingByEvaluations(max=max_evaluations)
+        )
+
+        algorithm.run()
+        front = algorithm.get_result()
+
+        hv = HyperVolume(reference_point=[1, 1])
+        value = hv.compute(front)
+
+        self.assertTrue(value >= 0.65)
 
 
 if __name__ == '__main__':

@@ -1,4 +1,4 @@
-from .critical_distance import CDplot
+from jmetal.lab.statistical_test.critical_distance import CDplot
 from .interactive import InteractivePlot
 from .plotting import Plot
 from .posterior import plot_posterior

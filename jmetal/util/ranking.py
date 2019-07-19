@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar, List
 
-from jmetal.util.comparator import DominanceComparator
+from jmetal.util.solutions.comparator import DominanceComparator, Comparator
 
 S = TypeVar('S')
 
@@ -14,8 +14,11 @@ class Ranking(List[S], ABC):
         self.ranked_sublists = []
 
     @abstractmethod
-    def compute_ranking(self, solutions: List[S], k: int):
+    def compute_ranking(self, solutions: List[S], k: int = None):
         pass
+
+    def get_nondominated(self):
+        return self.ranked_sublists[0]
 
     def get_subfront(self, rank: int):
         if rank >= len(self.ranked_sublists):
@@ -29,7 +32,7 @@ class Ranking(List[S], ABC):
 class FastNonDominatedRanking(Ranking[List[S]]):
     """ Class implementing the non-dominated ranking of NSGA-II proposed by Deb et al., see [Deb2002]_ """
 
-    def __init__(self, comparator=DominanceComparator()):
+    def __init__(self, comparator: Comparator = DominanceComparator()):
         super(FastNonDominatedRanking, self).__init__()
         self.comparator = comparator
 
@@ -95,9 +98,9 @@ class FastNonDominatedRanking(Ranking[List[S]]):
 
 
 class StrengthRanking(Ranking[List[S]]):
-    """ Class implementing a ranking scheme based on the strength ranking used in SPEA2 """
+    """ Class implementing a ranking scheme based on the strength ranking used in SPEA2. """
 
-    def __init__(self, comparator=DominanceComparator()):
+    def __init__(self, comparator: Comparator = DominanceComparator()):
         super(StrengthRanking, self).__init__()
         self.comparator = comparator
 
@@ -107,8 +110,8 @@ class StrengthRanking(Ranking[List[S]]):
         :param solutions: Solution list.
         :param k: Number of individuals.
         """
-        strength:[int] = [0 for _ in range(len(solutions))]
-        raw_fitness:[int] = [0 for _ in range(len(solutions))]
+        strength: [int] = [0 for _ in range(len(solutions))]
+        raw_fitness: [int] = [0 for _ in range(len(solutions))]
 
         # strength(i) = | {j | j < - SolutionSet and i dominate j} |
         for i in range(len(solutions)):
@@ -123,7 +126,7 @@ class StrengthRanking(Ranking[List[S]]):
                 if self.comparator.compare(solutions[i], solutions[j]) == 1:
                     raw_fitness[i] += strength[j]
 
-        max_fitness_value:int = 0
+        max_fitness_value: int = 0
         for i in range(len(solutions)):
             solutions[i].attributes['strength_ranking'] = raw_fitness[i]
             if raw_fitness[i] > max_fitness_value:
@@ -142,6 +145,6 @@ class StrengthRanking(Ranking[List[S]]):
             if len(self.ranked_sublists[counter]) == 0:
                 del self.ranked_sublists[counter]
             else:
-                counter +=1
+                counter += 1
 
         return self.ranked_sublists

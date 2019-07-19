@@ -4,11 +4,9 @@ from abc import ABC, abstractmethod
 from typing import TypeVar, List
 from functools import cmp_to_key
 
-from jmetal.core.solution import Solution
-from scipy.spatial import distance_matrix
 from scipy.spatial.distance import euclidean
 
-from jmetal.util.comparator import SolutionAttributeComparator
+from jmetal.util.solutions.comparator import SolutionAttributeComparator
 
 LOGGER = logging.getLogger('jmetal')
 
