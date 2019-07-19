@@ -75,12 +75,6 @@ class MOEAD(GeneticAlgorithm):
         observable_data = self.get_observable_data()
         self.observable.notify_all(**observable_data)
 
-    def update_progress(self) -> None:
-        self.evaluations += self.offspring_population_size
-
-        observable_data = self.get_observable_data()
-        self.observable.notify_all(**observable_data)
-
     def selection(self, population: List[S]):
         self.current_subproblem = self.permutation.get_next_value()
         self.neighbor_type = self.choose_neighbor_type()

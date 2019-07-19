@@ -9,7 +9,7 @@ from jmetal.lab.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
     problem = LIRCMOP2()
-    problem.reference_front = read_solutions(filename='../../resources/reference_front/LIRCMOP2.pf'.format(problem.get_name()))
+    problem.reference_front = read_solutions(filename='resources/reference_front/LIRCMOP2.pf'.format(problem.get_name()))
 
     max_evaluations = 300000
 

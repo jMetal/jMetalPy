@@ -19,7 +19,14 @@ R = TypeVar('R')
 """
 .. module:: SPEA2
    :platform: Unix, Windows
-   :synopsis: SPEA2  implementation. Note that we do not follow the structure of the original SPEA2 code
+   :synopsis: SPEA2  implementation. Note that we do not follow the structure of the original SPEA2 code. We consider
+   SPEA2 as a genetic algorithm with binary tournament selection, with a comparator based on the strength fitness and 
+   the KNN distance, and a sequential replacement strategy based in iteratively (sequentially) 
+   removing the worst solution of the population + offspring population. The worst solutions is selected again 
+   considering the strength fitness and KNN distance. Note that the implementation is exactly the same of NSGA-II, 
+   but using the fast nondominated sorting and the crowding distance density estimator, and the replacement follows a 
+   one-shot scheme (once the solutions are ordered, the best ones are selected without recomputing the ranking and
+   density estimator).
 
 .. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
 """
