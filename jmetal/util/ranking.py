@@ -88,9 +88,10 @@ class FastNonDominatedRanking(Ranking[List[S]]):
             for i, front in enumerate(self.ranked_sublists):
                 count += len(front)
                 if count >= k:
-                    return self.ranked_sublists[:i + 1]
-        else:
-            return self.ranked_sublists
+                    self.ranked_sublists = self.ranked_sublists[:i + 1]
+                    break
+
+        return self.ranked_sublists
 
 
 class StrengthRanking(Ranking[List[S]]):

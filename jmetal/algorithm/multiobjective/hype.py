@@ -68,10 +68,10 @@ class HYPE(GeneticAlgorithm[S, R]):
             population_generator=population_generator
         )
 
-    def evaluate(self, solution_list: List[S]):
-        population = self.population_evaluator.evaluate(solution_list, self.problem)
+    def evaluate(self, population: List[S]):
+        population = self.population_evaluator.evaluate(population, self.problem)
         population = self.ranking_fitness.compute_hypervol_fitness_values(population, self.reference_point,
-                                                                          len(solution_list))
+                                                                          len(population))
         return population
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
