@@ -180,7 +180,7 @@ class MOEAD_DRA(MOEAD):
         for solution in self.solutions:
             self.fitness_function.update(solution.objectives)
 
-        self.order = self._tour_selection(10)
+        self.order = self.__tour_selection(10)
         self.current_order_index = 0
 
         observable_data = self.get_observable_data()
@@ -191,12 +191,12 @@ class MOEAD_DRA(MOEAD):
 
         self.current_order_index += 1
         if self.current_order_index == (len(self.order)):
-            self.order = self._tour_selection(10)
+            self.order = self.__tour_selection(10)
             self.current_order_index = 0
 
         self.generation_counter += 1
         if self.generation_counter % 30 == 0:
-            self._utility_function()
+            self.__utility_function()
 
     def selection(self, population: List[S]):
         self.current_subproblem = self.order[self.current_order_index]
@@ -218,7 +218,7 @@ class MOEAD_DRA(MOEAD):
     def get_name(self):
         return 'MOEAD-DRA'
 
-    def _utility_function(self):
+    def __utility_function(self):
         for i in range(len(self.solutions)):
             f1 = self.fitness_function.compute(self.solutions[i].objectives, self.neighbourhood.weight_vectors[i])
             f2 = self.fitness_function.compute(self.saved_values[i].objectives, self.neighbourhood.weight_vectors[i])
@@ -231,7 +231,7 @@ class MOEAD_DRA(MOEAD):
 
             self.saved_values[i] = copy.copy(self.solutions[i])
 
-    def _tour_selection(self, depth):
+    def __tour_selection(self, depth):
         selected = [i for i in range(self.problem.number_of_objectives)]
         candidate = [i for i in range(self.problem.number_of_objectives, self.population_size)]
 

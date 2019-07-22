@@ -1,3 +1,5 @@
+from jmetal.problem.multiobjective.lz09 import LZ09_F7, LZ09_F5
+
 from jmetal.algorithm.multiobjective.moead import MOEAD
 from jmetal.operator import PolynomialMutation, DifferentialEvolutionCrossover
 from jmetal.problem import LZ09_F2

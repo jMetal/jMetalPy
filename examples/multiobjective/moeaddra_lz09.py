@@ -1,4 +1,4 @@
-from jmetal.problem.multiobjective.lz09 import LZ09_F4
+from jmetal.problem.multiobjective.lz09 import LZ09_F4, LZ09_F8, LZ09_F7, LZ09_F9
 
 from jmetal.algorithm.multiobjective.moead import MOEAD, MOEAD_DRA
 from jmetal.operator import PolynomialMutation, DifferentialEvolutionCrossover
@@ -11,7 +11,7 @@ from jmetal.lab.visualization import Plot, InteractivePlot
 
 
 if __name__ == '__main__':
-    problem = LZ09_F4()
+    problem = LZ09_F2()
     problem.reference_front = read_solutions(filename='resources/reference_front/{}.pf'.format(problem.get_name()))
 
     max_evaluations = 150000
