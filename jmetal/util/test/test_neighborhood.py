@@ -3,7 +3,8 @@ import unittest
 import numpy
 
 from jmetal.core.solution import Solution
-from jmetal.util.neighborhood import WeightVectorNeighborhood
+from jmetal.util.ckecking import NoneParameterException, InvalidConditionException
+from jmetal.util.neighborhood import WeightVectorNeighborhood, TwoDimensionalMesh
 
 
 class WeightVectorNeighborhoodTestCases(unittest.TestCase):
@@ -45,6 +46,52 @@ class WeightVectorNeighborhoodTestCases(unittest.TestCase):
         self.assertEqual(neighborhood_size, len(neighbors))
         self.assertTrue(solution_list[69] == neighbors[0])
         self.assertTrue(solution_list[79] == neighbors[19])
+
+
+class TwoDimensionalMeshTestCases(unittest.TestCase):
+    def test_should_get_neighbors_throw_an_exception_if_the_solution_list_is_none(self):
+        """
+        Topology:
+        north = -1,  0
+        south =  1,  0
+        east  =  0,  1
+        west  =  0, -1
+        :return:
+        """
+        neighborhood = TwoDimensionalMesh(3, 3, [[-1, 0], [1, 0], [0, 1], [0, -1]])
+        with self.assertRaises(NoneParameterException):
+            neighborhood.get_neighbors(0, None)
+
+    def test_should_get_neighbors_throw_an_exception_if_the_solution_list_is_empty(self):
+        """
+        Topology:
+        north = -1,  0
+        south =  1,  0
+        east  =  0,  1
+        west  =  0, -1
+        :return:
+        """
+        neighborhood = TwoDimensionalMesh(3, 3, [[-1, 0], [1, 0], [0, 1], [0, -1]])
+        with self.assertRaises(InvalidConditionException()):
+            neighborhood.get_neighbors(0, [])
+
+    def test_should_get_neighbors_return_four_neighbors_case1(self):
+        """
+        Case 1
+           Solution list:
+            0 1 2
+            3 4 5
+            6 7 8
+
+            The solution location is 4, so the neighborhood is 1, 3, 5, 7
+        """
+        rows = 3
+        columns = 3
+        solution_list = [Solution(2, 2) for _ in range(rows * columns)]
+        neighborhood = TwoDimensionalMesh(rows, columns, [[-1, 0], [1, 0], [0, 1], [0, -1]])
+
+        result = neighborhood.get_neighbors(4, solution_list)
+        self.assertEqual(4, len(result))
 
 
 if __name__ == '__main__':
