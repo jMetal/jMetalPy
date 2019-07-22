@@ -63,7 +63,7 @@ class MOEAD(GeneticAlgorithm):
             weights_path=weight_files_path
         )
         self.neighbourhood_selection_probability = neighbourhood_selection_probability
-        self.permutation = Permutation(population_size)
+        self.permutation = None
         self.current_subproblem = 0
         self.neighbor_type = None
 
@@ -71,6 +71,8 @@ class MOEAD(GeneticAlgorithm):
         self.evaluations = self.population_size
         for solution in self.solutions:
             self.fitness_function.update(solution.objectives)
+
+        self.permutation = Permutation(self.population_size)
 
         observable_data = self.get_observable_data()
         self.observable.notify_all(**observable_data)
@@ -150,40 +152,88 @@ class MOEAD(GeneticAlgorithm):
     def get_result(self):
         return self.solutions
 
+
 class MOEAD_DRA(MOEAD):
-    def __init__(self, problem, population_size, mutation, crossover, aggregative_function, neighbourhood_selection_probability, max_number_of_replaced_solutions, neighbor_size, weight_files_path, termination_criterion=store.default_termination_criteria, population_generator=store.default_generator, population_evaluator=store.default_evaluator):
-        return super(MOEAD_DRA, self).__init__(problem, population_size, mutation, crossover, aggregative_function, neighbourhood_selection_probability, max_number_of_replaced_solutions, neighbor_size, weight_files_path, termination_criterion=termination_criterion, population_generator=population_generator, population_evaluator=population_evaluator)
+    def __init__(self, problem, population_size, mutation, crossover, aggregative_function,
+                 neighbourhood_selection_probability, max_number_of_replaced_solutions, neighbor_size,
+                 weight_files_path, termination_criterion=store.default_termination_criteria,
+                 population_generator=store.default_generator, population_evaluator=store.default_evaluator):
+        super(MOEAD_DRA, self).__init__(problem, population_size, mutation, crossover, aggregative_function,
+                                               neighbourhood_selection_probability, max_number_of_replaced_solutions,
+                                               neighbor_size, weight_files_path,
+                                               termination_criterion=termination_criterion,
+                                               population_generator=population_generator,
+                                               population_evaluator=population_evaluator)
 
         self.saved_values = []
         self.utility = [1.0 for _ in range(population_size)]
         self.frequency = [0.0 for _ in range(population_size)]
         self.generation_counter = 0
+        self.order = []
+        self.current_order_index = 0
 
     def init_progress(self):
-        super.init_progress()
+        super().init_progress()
         self.saved_values = [copy.copy(solution) for solution in self.solutions]
 
+        self.evaluations = self.population_size
+        for solution in self.solutions:
+            self.fitness_function.update(solution.objectives)
+
+        self.order = self._tour_selection(10)
+        self.current_order_index = 0
+
+        observable_data = self.get_observable_data()
+        self.observable.notify_all(**observable_data)
+
     def update_progress(self):
-        super.update_progress()
+        super().update_progress()
+
+        self.current_order_index += 1
+        if self.current_order_index == (len(self.order)):
+            self.order = self._tour_selection(10)
+            self.current_order_index = 0
+
+        self.generation_counter += 1
         if self.generation_counter % 30 == 0:
             self._utility_function()
 
+    def selection(self, population: List[S]):
+        self.current_subproblem = self.order[self.current_order_index]
+        self.current_order_index += 1
+        self.frequency[self.current_subproblem] += 1
+
+        self.neighbor_type = self.choose_neighbor_type()
+
+        if self.neighbor_type == 'NEIGHBOR':
+            neighbors = self.neighbourhood.get_neighbors(self.current_subproblem, population)
+            mating_population = self.selection_operator.execute(neighbors)
+        else:
+            mating_population = self.selection_operator.execute(population)
+
+        mating_population.append(population[self.current_subproblem])
+
+        return mating_population
+
+    def get_name(self):
+        return 'MOEAD-DRA'
+
     def _utility_function(self):
         for i in range(len(self.solutions)):
-            f1 = self.fitness_function(self.solutions[i].objectives, self.neighbourhood.weight_vectors[i])
-            f2 = self.fitness_function(self.saved_values[i], self.neighbourhood.weight_vectors[i])
+            f1 = self.fitness_function.compute(self.solutions[i].objectives, self.neighbourhood.weight_vectors[i])
+            f2 = self.fitness_function.compute(self.saved_values[i].objectives, self.neighbourhood.weight_vectors[i])
             delta = f2 - f1
             if delta > 0.001:
                 self.utility[i] = 1.0
             else:
                 utility_value = (0.95 + (0.05 * delta / 0.001)) * self.utility[i]
                 self.utility[i] = utility_value if utility_value < 1.0 else 1.0
-        
+
             self.saved_values[i] = copy.copy(self.solutions[i])
 
-    def _tour_selection(self):
-        selected = [i for i in range(self.problem.get_number_of_objectives())]
-        candidate = [i for i in range(self.problem.get_number_of_objectives(),self.population_size)]
+    def _tour_selection(self, depth):
+        selected = [i for i in range(self.problem.number_of_objectives)]
+        candidate = [i for i in range(self.problem.number_of_objectives, self.population_size)]
 
         while len(selected) < int(self.population_size / 5.0):
             best_idd = int(random.random() * len(candidate))
@@ -195,10 +245,10 @@ class MOEAD_DRA(MOEAD):
                     best_idd = i2
                     best_sub = s2
             selected.append(best_sub)
-            candidate.remove(best_idd)
+            del candidate[best_idd]
 
         return selected
-            
+
 
 class MOEADIEpsilon(MOEAD):
     def __init__(self,
@@ -328,7 +378,8 @@ class MOEADIEpsilon(MOEAD):
                 crowding_distance = CrowdingDistance()
                 while len(first_rank_solutions) > self.population_size:
                     crowding_distance.compute_density_estimator(first_rank_solutions)
-                    first_rank_solutions = sorted(first_rank_solutions, key=lambda x: x.attributes['crowding_distance'], reverse=True)
+                    first_rank_solutions = sorted(first_rank_solutions, key=lambda x: x.attributes['crowding_distance'],
+                                                  reverse=True)
                     first_rank_solutions.pop()
 
                 self.archive = []
