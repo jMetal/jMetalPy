@@ -150,6 +150,55 @@ class MOEAD(GeneticAlgorithm):
     def get_result(self):
         return self.solutions
 
+class MOEAD_DRA(MOEAD):
+    def __init__(self, problem, population_size, mutation, crossover, aggregative_function, neighbourhood_selection_probability, max_number_of_replaced_solutions, neighbor_size, weight_files_path, termination_criterion=store.default_termination_criteria, population_generator=store.default_generator, population_evaluator=store.default_evaluator):
+        return super(MOEAD_DRA, self).__init__(problem, population_size, mutation, crossover, aggregative_function, neighbourhood_selection_probability, max_number_of_replaced_solutions, neighbor_size, weight_files_path, termination_criterion=termination_criterion, population_generator=population_generator, population_evaluator=population_evaluator)
+
+        self.saved_values = []
+        self.utility = [1.0 for _ in range(population_size)]
+        self.frequency = [0.0 for _ in range(population_size)]
+        self.generation_counter = 0
+
+    def init_progress(self):
+        super.init_progress()
+        self.saved_values = [copy.copy(solution) for solution in self.solutions]
+
+    def update_progress(self):
+        super.update_progress()
+        if self.generation_counter % 30 == 0:
+            self._utility_function()
+
+    def _utility_function(self):
+        for i in range(len(self.solutions)):
+            f1 = self.fitness_function(self.solutions[i].objectives, self.neighbourhood.weight_vectors[i])
+            f2 = self.fitness_function(self.saved_values[i], self.neighbourhood.weight_vectors[i])
+            delta = f2 - f1
+            if delta > 0.001:
+                self.utility[i] = 1.0
+            else:
+                utility_value = (0.95 + (0.05 * delta / 0.001)) * self.utility[i]
+                self.utility[i] = utility_value if utility_value < 1.0 else 1.0
+        
+            self.saved_values[i] = copy.copy(self.solutions[i])
+
+    def _tour_selection(self):
+        selected = [i for i in range(self.problem.get_number_of_objectives())]
+        candidate = [i for i in range(self.problem.get_number_of_objectives(),self.population_size)]
+
+        while len(selected) < int(self.population_size / 5.0):
+            best_idd = int(random.random() * len(candidate))
+            best_sub = candidate[best_idd]
+            for i in range(1, depth):
+                i2 = int(random.random() * len(candidate))
+                s2 = candidate[i2]
+                if self.utility[s2] > self.utility[best_sub]:
+                    best_idd = i2
+                    best_sub = s2
+            selected.append(best_sub)
+            candidate.remove(best_idd)
+
+        return selected
+            
 
 class MOEADIEpsilon(MOEAD):
     def __init__(self,
