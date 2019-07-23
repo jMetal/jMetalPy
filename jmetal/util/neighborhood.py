@@ -201,5 +201,5 @@ class L5(TwoDimensionalMesh):
         west  =  0, -1
     """
     def __init__(self, rows:int, columns:int):
-        super(L5, rows, columns, [[-1, 0], [1, 0], [0, 1], [0, -1]])
+        super(L5, self).__init__(rows, columns, [[-1, 0], [1, 0], [0, 1], [0, -1]])
 

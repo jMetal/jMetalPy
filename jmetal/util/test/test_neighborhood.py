@@ -4,7 +4,7 @@ import numpy
 
 from jmetal.core.solution import Solution
 from jmetal.util.ckecking import NoneParameterException, InvalidConditionException
-from jmetal.util.neighborhood import WeightVectorNeighborhood, TwoDimensionalMesh
+from jmetal.util.neighborhood import WeightVectorNeighborhood, TwoDimensionalMesh, L5
 
 
 class WeightVectorNeighborhoodTestCases(unittest.TestCase):
@@ -204,6 +204,76 @@ class TwoDimensionalMeshTestCases(unittest.TestCase):
         self.assertTrue(solution_list[3] in result)
         self.assertTrue(solution_list[2] in result)
 
+
+class L5TestCases(unittest.TestCase):
+    def test_should_get_neighbors_return_four_neighbors_case1(self):
+        rows = 1
+        columns = 1
+        solution_list = [Solution(i, 2) for i in range(rows * columns)]
+        neighborhood = L5(rows, columns)
+
+        result = neighborhood.get_neighbors(0, solution_list)
+        self.assertEqual(4, len(result))
+
+    def test_should_get_neighbors_return_four_neighbors_case2(self):
+        """
+        Solution list: 0, 1
+        Solution location: 0; the neighborhood is: 0, 1
+        """
+        rows = 1
+        columns = 2
+        solution_list = []
+        for i in range(rows * columns):
+            solution = Solution(i, 2)
+            solution.variables = [i, i+1]
+            solution_list.append(solution)
+        neighborhood = L5(rows, columns)
+
+        result = neighborhood.get_neighbors(0, solution_list)
+        self.assertEqual(4, len(result))
+        self.assertTrue(solution_list[0] in result)
+        self.assertTrue(solution_list[1] in result)
+        self.assertEqual(2, result.count(solution_list[0]))
+        self.assertEqual(2, result.count(solution_list[1]))
+
+    def test_should_get_neighbors_return_four_neighbors_case3(self):
+        """
+        Solution list: 0, 1
+        Solution location: 1; the neighborhood is: 0, 1
+        """
+        rows = 1
+        columns = 2
+        solution_list = [Solution(i, 2) for i in range(rows * columns)]
+        neighborhood = L5(rows, columns)
+
+        result = neighborhood.get_neighbors(1, solution_list)
+        self.assertEqual(4, len(result))
+        self.assertTrue(solution_list[0] in result)
+        self.assertTrue(solution_list[1] in result)
+        self.assertEqual(2, result.count(solution_list[0]))
+        self.assertEqual(2, result.count(solution_list[1]))
+
+    def test_should_get_neighbors_return_four_neighbors_case4(self):
+        """
+        Solution list:
+            0 1
+            2 3
+        Solution location: 0; the neighborhood is: 1, 2
+        """
+        rows = 2
+        columns = 2
+        solution_list = [Solution(i, 2) for i in range(rows * columns)]
+        neighborhood = L5(rows, columns)
+
+        result = neighborhood.get_neighbors(0, solution_list)
+        self.assertEqual(4, len(result))
+        self.assertTrue(solution_list[1] in result)
+        self.assertTrue(solution_list[2] in result)
+        self.assertTrue(solution_list[3] not in result)
+        self.assertTrue(solution_list[0] not in result)
+
+        self.assertEqual(2, result.count(solution_list[1]))
+        self.assertEqual(2, result.count(solution_list[2]))
 
 if __name__ == '__main__':
     unittest.main()

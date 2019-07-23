@@ -142,6 +142,7 @@ class MOCell(GeneticAlgorithm[S, R]):
         if worst_solution.attributes["location"] == -1:
             self.archive.add(new_individual)
         else:
+            pass
             
 
         return population
