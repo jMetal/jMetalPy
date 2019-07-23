@@ -9,7 +9,6 @@ from jmetal.util.solutions import read_solutions, print_function_values_to_file,
 from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.lab.visualization import Plot, InteractivePlot
 
-
 if __name__ == '__main__':
     problem = LZ09_F2()
     problem.reference_front = read_solutions(filename='resources/reference_front/{}.pf'.format(problem.get_name()))
