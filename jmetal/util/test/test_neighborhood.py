@@ -69,13 +69,34 @@ class TwoDimensionalMeshTestCases(unittest.TestCase):
         south =  1,  0
         east  =  0,  1
         west  =  0, -1
-        :return:
         """
         neighborhood = TwoDimensionalMesh(3, 3, [[-1, 0], [1, 0], [0, 1], [0, -1]])
-        with self.assertRaises(InvalidConditionException()):
+        with self.assertRaises(InvalidConditionException):
             neighborhood.get_neighbors(0, [])
 
     def test_should_get_neighbors_return_four_neighbors_case1(self):
+        """
+        Case 1
+           Solution list:
+            0 1 2
+            3 4 5
+            6 7 8
+
+            The solution location is 1, so the neighborhood is 7, 0, 2, 4
+        """
+        rows = 3
+        columns = 3
+        solution_list = [Solution(i, 2) for i in range(rows * columns)]
+        neighborhood = TwoDimensionalMesh(rows, columns, [[-1, 0], [1, 0], [0, 1], [0, -1]])
+
+        result = neighborhood.get_neighbors(1, solution_list)
+        self.assertEqual(4, len(result))
+        self.assertTrue(solution_list[7] in result)
+        self.assertTrue(solution_list[0] in result)
+        self.assertTrue(solution_list[2] in result)
+        self.assertTrue(solution_list[4] in result)
+
+    def test_should_get_neighbors_return_four_neighbors_case2(self):
         """
         Case 1
            Solution list:
@@ -87,11 +108,101 @@ class TwoDimensionalMeshTestCases(unittest.TestCase):
         """
         rows = 3
         columns = 3
-        solution_list = [Solution(2, 2) for _ in range(rows * columns)]
+        solution_list = [Solution(i, 2) for i in range(rows * columns)]
         neighborhood = TwoDimensionalMesh(rows, columns, [[-1, 0], [1, 0], [0, 1], [0, -1]])
 
         result = neighborhood.get_neighbors(4, solution_list)
         self.assertEqual(4, len(result))
+        self.assertTrue(solution_list[1] in result)
+        self.assertTrue(solution_list[3] in result)
+        self.assertTrue(solution_list[5] in result)
+        self.assertTrue(solution_list[7] in result)
+
+    def test_should_get_neighbors_return_four_neighbors_case3(self):
+        """
+        Case 1
+           Solution list:
+            0 1 2
+            3 4 5
+            6 7 8
+
+            The solution location is 0, so the neighborhood is 1, 3, 2, 6
+        """
+        rows = 3
+        columns = 3
+        solution_list = [Solution(i, 2) for i in range(rows * columns)]
+        neighborhood = TwoDimensionalMesh(rows, columns, [[-1, 0], [1, 0], [0, 1], [0, -1]])
+
+        result = neighborhood.get_neighbors(0, solution_list)
+        self.assertEqual(4, len(result))
+        self.assertTrue(solution_list[1] in result)
+        self.assertTrue(solution_list[3] in result)
+        self.assertTrue(solution_list[2] in result)
+        self.assertTrue(solution_list[6] in result)
+
+    def test_should_get_neighbors_return_four_neighbors_case4(self):
+        """
+        Case 1
+           Solution list:
+            0 1 2
+            3 4 5
+            6 7 8
+
+            The solution location is 2, so the neighborhood is 1, 5, 8, 0
+        """
+        rows = 3
+        columns = 3
+        solution_list = [Solution(i, 2) for i in range(rows * columns)]
+        neighborhood = TwoDimensionalMesh(rows, columns, [[-1, 0], [1, 0], [0, 1], [0, -1]])
+
+        result = neighborhood.get_neighbors(2, solution_list)
+        self.assertEqual(4, len(result))
+        self.assertTrue(solution_list[1] in result)
+        self.assertTrue(solution_list[5] in result)
+        self.assertTrue(solution_list[8] in result)
+        self.assertTrue(solution_list[0] in result)
+
+    def test_should_get_neighbors_return_four_neighbors_case5(self):
+        """
+        Case 1
+           Solution list:
+            0 1 2
+            3 4 5
+            6 7 8
+
+            The solution location is 8, so the neighborhood is 2, 5, 6, 7
+        """
+        rows = 3
+        columns = 3
+        solution_list = [Solution(i, 2) for i in range(rows * columns)]
+        neighborhood = TwoDimensionalMesh(rows, columns, [[-1, 0], [1, 0], [0, 1], [0, -1]])
+
+        result = neighborhood.get_neighbors(8, solution_list)
+        self.assertEqual(4, len(result))
+        self.assertTrue(solution_list[2] in result)
+        self.assertTrue(solution_list[5] in result)
+        self.assertTrue(solution_list[6] in result)
+        self.assertTrue(solution_list[7] in result)
+
+    def test_should_get_neighbors_return_four_neighbors_case6(self):
+        """
+        Case 1
+           Solution list:
+            0 1 2
+            3 4 5
+
+            The solution location is 0, so the neighborhood is 1, 3, 3, 2
+        """
+        rows = 2
+        columns = 3
+        solution_list = [Solution(i, 2) for i in range(rows * columns)]
+        neighborhood = TwoDimensionalMesh(rows, columns, [[-1, 0], [1, 0], [0, 1], [0, -1]])
+
+        result = neighborhood.get_neighbors(0, solution_list)
+        self.assertEqual(4, len(result))
+        self.assertTrue(solution_list[1] in result)
+        self.assertTrue(solution_list[3] in result)
+        self.assertTrue(solution_list[2] in result)
 
 
 if __name__ == '__main__':

@@ -180,6 +180,10 @@ class TwoDimensionalMesh:
             index = self.__get_neighbor(solution_index, neighbor=neighbor)
             neighbors.append(solution_list[index])
 
+        print(type(neighbors))
+        print(neighbors)
+        return neighbors
+
     def get_neighbors(self, index: int, solution_list: List[Solution]) -> List[Solution]:
         Check.is_not_null(solution_list)
         Check.that(len(solution_list) != 0, "The list of solutions is empty")
@@ -198,3 +202,4 @@ class L5(TwoDimensionalMesh):
     """
     def __init__(self, rows:int, columns:int):
         super(L5, rows, columns, [[-1, 0], [1, 0], [0, 1], [0, -1]])
+
