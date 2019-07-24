@@ -49,7 +49,8 @@ class WeightVectorNeighborhood(WeightNeighborhood):
                  neighborhood_size: int,
                  weight_vector_size: int = 2,
                  weights_path: str = None):
-        super(WeightVectorNeighborhood, self).__init__(number_of_weight_vectors, neighborhood_size, weight_vector_size, weights_path)
+        super(WeightVectorNeighborhood, self).__init__(number_of_weight_vectors, neighborhood_size, weight_vector_size,
+                                                       weights_path)
         self.__initialize_uniform_weight(weight_vector_size, number_of_weight_vectors)
         self.__initialize_neighborhood()
 
@@ -101,10 +102,11 @@ class WeightVectorNeighborhood(WeightNeighborhood):
         return self.neighborhood
 
 
-class TwoDimensionalMesh:
+class TwoDimensionalMesh(Neighborhood):
     """Class defining a bi-mensional mesh
     """
-    def __init__(self, rows: int, columns: int, neighborhood:[[]]):
+
+    def __init__(self, rows: int, columns: int, neighborhood: [[]]):
         self.rows = rows
         self.columns = columns
         self.neighborhood = neighborhood
@@ -135,7 +137,7 @@ class TwoDimensionalMesh:
         :param index:
         :return:
         """
-        return index//self.columns
+        return index // self.columns
 
     def __get_column(self, index: int) -> int:
         """
@@ -145,7 +147,7 @@ class TwoDimensionalMesh:
         """
         return index % self.columns
 
-    def __get_neighbor(self, index: int, neighbor:[]) -> int:
+    def __get_neighbor(self, index: int, neighbor: []) -> int:
         """
         Returns the neighbor of the index
         :param index:
@@ -166,7 +168,7 @@ class TwoDimensionalMesh:
 
         return self.mesh[r][c]
 
-    def __find_neighbors(self, solution_list: [], solution_index: int, neighborhood:[[]]):
+    def __find_neighbors(self, solution_list: [], solution_index: int, neighborhood: [[]]):
         """
         Returns a list containing the neighbors of a given solution belongin to a solution list
         :param solution_list:
@@ -180,8 +182,6 @@ class TwoDimensionalMesh:
             index = self.__get_neighbor(solution_index, neighbor=neighbor)
             neighbors.append(solution_list[index])
 
-        print(type(neighbors))
-        print(neighbors)
         return neighbors
 
     def get_neighbors(self, index: int, solution_list: List[Solution]) -> List[Solution]:
@@ -191,15 +191,45 @@ class TwoDimensionalMesh:
         return self.__find_neighbors(solution_list, index, self.neighborhood)
 
 
+class C9(TwoDimensionalMesh):
+    """Class defining an C9 neighborhood of a solution belonging to a list of solutions which is
+       structured as a bi-dimensional mesh. The neighbors are those solutions that are in 1-hop distance
+
+       Shape:
+               * * *
+               * o *
+               * * *
+
+       Topology:
+                north      = {-1,  0}
+                south      = { 1 , 0}
+                east       = { 0 , 1}
+                west       = { 0 ,-1}
+                north_east = {-1,  1}
+                north_west = {-1, -1}
+                south_east = { 1 , 1}
+                south_west = { 1 ,-1}
+
+    """
+
+    def __init__(self, rows: int, columns: int):
+        super(C9, self).__init__(rows, columns, [[-1, 0], [1, 0], [0, 1], [0, -1], [-1, 1], [-1, -1], [1, 1], [1, -1]])
+
+
 class L5(TwoDimensionalMesh):
     """
     L5 neighborhood.
+    Shape:
+            *
+          * o *
+            *
+
     Topology:
         north = -1,  0
         south =  1,  0
         east  =  0,  1
         west  =  0, -1
     """
-    def __init__(self, rows:int, columns:int):
-        super(L5, self).__init__(rows, columns, [[-1, 0], [1, 0], [0, 1], [0, -1]])
 
+    def __init__(self, rows: int, columns: int):
+        super(L5, self).__init__(rows, columns, [[-1, 0], [1, 0], [0, 1], [0, -1]])
