@@ -6,7 +6,7 @@ from functools import cmp_to_key
 
 from scipy.spatial.distance import euclidean
 
-from jmetal.util.solutions.comparator import SolutionAttributeComparator
+from jmetal.util.solutions.comparator import SolutionAttributeComparator, Comparator
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -33,11 +33,14 @@ class DensityEstimator(List[S], ABC):
     def sort(self, solution_list: List[S]) -> List[S]:
         pass
 
+    @classmethod
+    def get_comparator(cls) -> Comparator:
+        pass
+
 
 class CrowdingDistance(DensityEstimator[List[S]]):
     """This class implements a DensityEstimator based on the crowding distance of algorithm NSGA-II.
     """
-
     def compute_density_estimator(self, front: List[S]):
         """This function performs the computation of the crowding density estimation over the solution list.
 
@@ -86,8 +89,11 @@ class CrowdingDistance(DensityEstimator[List[S]]):
                 front[j].attributes['crowding_distance'] = distance
 
     def sort(self, solutions:List[S]) -> List[S]:
-        comparator = SolutionAttributeComparator("crowding_distance", lowest_is_best=False)
-        solutions.sort(key=cmp_to_key(comparator.compare))
+        solutions.sort(key=cmp_to_key(self.get_comparator().compare))
+
+    @classmethod
+    def get_comparator(cls) -> Comparator:
+        return SolutionAttributeComparator("crowding_distance", lowest_is_best=False)
 
 
 class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
@@ -149,4 +155,27 @@ class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
 
         solutions.sort(key=cmp_to_key(compare))
 
+        @classmethod
+        def get_comparator(cls) -> Comparator:
+            def compare(solution1, solution2):
+                distances1 = solution1.attributes["distances_"]
+                distances2 = solution2.attributes["distances_"]
 
+                tmp_k = self.k
+                if distances1[tmp_k] > distances2[tmp_k]:
+                    return -1
+                elif distances1[tmp_k] < distances2[tmp_k]:
+                    return 1
+                else:
+                    while tmp_k < (len(distances1) - 1):
+                        tmp_k += 1
+                        if distances1[tmp_k] > distances2[tmp_k]:
+                            return -1
+                        elif distances1[tmp_k] < distances2[tmp_k]:
+                            return 1
+                return 0
+            return compare
+
+    @classmethod
+    def get_comparator(cls) -> Comparator:
+        return SolutionAttributeComparator("knn_density", lowest_is_best=False)

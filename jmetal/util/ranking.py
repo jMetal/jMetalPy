@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar, List
 
-from jmetal.util.solutions.comparator import DominanceComparator, Comparator
+from jmetal.util.solutions.comparator import DominanceComparator, Comparator, SolutionAttributeComparator
 
 S = TypeVar('S')
 
@@ -27,6 +27,10 @@ class Ranking(List[S], ABC):
 
     def get_number_of_subfronts(self):
         return len(self.ranked_sublists)
+
+    @classmethod
+    def get_comparator(cls) -> Comparator:
+        pass
 
 
 class FastNonDominatedRanking(Ranking[List[S]]):
@@ -96,6 +100,10 @@ class FastNonDominatedRanking(Ranking[List[S]]):
 
         return self.ranked_sublists
 
+    @classmethod
+    def get_comparator(cls) -> Comparator:
+        return SolutionAttributeComparator('dominance_ranking')
+
 
 class StrengthRanking(Ranking[List[S]]):
     """ Class implementing a ranking scheme based on the strength ranking used in SPEA2. """
@@ -148,3 +156,7 @@ class StrengthRanking(Ranking[List[S]]):
                 counter += 1
 
         return self.ranked_sublists
+
+    @classmethod
+    def get_comparator(cls) -> Comparator:
+        return SolutionAttributeComparator('strength_ranking')
