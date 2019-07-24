@@ -46,8 +46,8 @@ class MOCell(GeneticAlgorithm[S, R]):
                  mutation: Mutation,
                  crossover: Crossover,
                  selection: Selection = BinaryTournamentSelection(
-                     MultiComparator([SolutionAttributeComparator('dominance_ranking'),
-                                      SolutionAttributeComparator("crowding_distance", lowest_is_best=False)])),
+                     MultiComparator([FastNonDominatedRanking.get_comparator(),
+                                    CrowdingDistance.get_comparator()])),
                  termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator,
@@ -77,8 +77,8 @@ class MOCell(GeneticAlgorithm[S, R]):
         self.archive = archive
         self.current_individual = 0
         self.current_neighbors = []
-        self.comparator = MultiComparator([SolutionAttributeComparator('dominance_ranking'),
-                                      SolutionAttributeComparator("crowding_distance", lowest_is_best=False)])
+        self.comparator = MultiComparator([FastNonDominatedRanking.get_comparator(),
+                                           CrowdingDistance.get_comparator()])
 
     def init_progress(self) -> None:
         super().init_progress()
@@ -87,7 +87,7 @@ class MOCell(GeneticAlgorithm[S, R]):
 
     def update_progress(self) -> None:
         super().update_progress()
-        self.current_individual = (self.current_individual+1) % self.population_size
+        self.current_individual = (self.current_individual + 1) % self.population_size
 
     def selection(self, population: List[S]):
         parents = []
@@ -114,39 +114,30 @@ class MOCell(GeneticAlgorithm[S, R]):
         return [offspring_population[0]]
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
-        result = self.dominance_comparator.compare(self.solutions[self.current_individual], offspring_population[0])
+        result = self.dominance_comparator.compare(population[self.current_individual], offspring_population[0])
 
-        if result == 1: # the offspring individual dominates the current one
+        if result == 1:  # the offspring individual dominates the current one
             population[self.current_individual] = offspring_population[0]
-            self.archive.add(copy.copy(offspring_population[0]))
-        elif result == 0: # the offspring and current individuals are non-dominated
+            self.archive.add(offspring_population[0])
+        elif result == 0:  # the offspring and current individuals are non-dominated
             new_individual = offspring_population[0]
-            if random.random() < 0.5:
-                self.archive.add(new_individual)
-            else:
+
+            self.current_neighbors.append(new_individual)
+
+            ranking: Ranking = FastNonDominatedRanking()
+            ranking.compute_ranking(self.current_neighbors)
+
+            density_estimator: DensityEstimator = CrowdingDistance()
+            for i in range(ranking.get_number_of_subfronts()):
+                density_estimator.compute_density_estimator(ranking.get_subfront(i))
+
+            self.current_neighbors.sort(key=cmp_to_key(self.comparator.compare))
+            worst_solution = self.current_neighbors[-1]
+
+            self.archive.add(new_individual)
+            if worst_solution != new_individual:
                 population[self.current_individual] = new_individual
-                self.archive.add(new_individual)
-
-                """
-                self.current_neighbors.append(new_individual)
-                new_individual.attributes["location"] = -1
-                result_list = population[:]
-
-                ranking: Ranking = FastNonDominatedRanking()
-                ranking.compute_ranking(self.current_neighbors)
-
-                density_estimator: DensityEstimator = CrowdingDistance()
-                for i in range(ranking.get_number_of_subfronts()):
-                    density_estimator.compute_density_estimator(ranking.get_subfront(i))
-
-                self.current_neighbors.sort(key=cmp_to_key(self.comparator.compare))
-                worst_solution = self.current_neighbors[-1]
-
-                if worst_solution.attributes["location"] == -1:
-                    self.archive.add(new_individual)
-                else:
-                    pass
-                """
+                #self.current_neighbors[-1] = new_individual
 
         return population
 
@@ -155,7 +146,6 @@ class MOCell(GeneticAlgorithm[S, R]):
 
     def get_name(self) -> str:
         return 'MOCell'
-
 
     """
     def __insert_new_individual_when_it_dominates_the_current_one(self, population, offspring_population):

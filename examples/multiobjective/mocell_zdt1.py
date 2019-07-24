@@ -3,7 +3,7 @@ from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.algorithm.multiobjective.mocell import MOCell
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import SBXCrossover, PolynomialMutation
-from jmetal.problem import ZDT1, ZDT4
+from jmetal.problem import ZDT1, ZDT4, ZDT2
 from jmetal.util.neighborhood import L5, C9
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solutions import read_solutions, print_function_values_to_file, print_variables_to_file
@@ -11,7 +11,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.lab.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
-    problem = ZDT1()
+    problem = ZDT4()
     problem.reference_front = read_solutions(filename='resources/reference_front/ZDT1.pf')
 
     max_evaluations = 25000
