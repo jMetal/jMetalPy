@@ -40,8 +40,8 @@ class NSGAII(GeneticAlgorithm[S, R]):
                  mutation: Mutation,
                  crossover: Crossover,
                  selection: Selection = BinaryTournamentSelection(
-                     MultiComparator([SolutionAttributeComparator('dominance_ranking'),
-                                      SolutionAttributeComparator("crowding_distance", lowest_is_best=False)])),
+                     MultiComparator([FastNonDominatedRanking.get_comparator(),
+                                      CrowdingDistance.get_comparator()])),
                  # selection: Selection = BinaryTournamentSelection(RankingAndCrowdingDistanceComparator()),
                  termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  population_generator: Generator = store.default_generator,

@@ -50,8 +50,8 @@ class SPEA2(GeneticAlgorithm[S, R]):
         :param mutation: Mutation operator (see :py:mod:`jmetal.operator.mutation`).
         :param crossover: Crossover operator (see :py:mod:`jmetal.operator.crossover`).
         """
-        multi_comparator = MultiComparator([SolutionAttributeComparator('strength_ranking'),
-                                            SolutionAttributeComparator("knn_density", lowest_is_best=False)])
+        multi_comparator = MultiComparator([StrengthRanking.get_comparator(),
+                                            KNearestNeighborDensityEstimator.get_comparator()])
         selection = BinaryTournamentSelection(comparator=multi_comparator)
 
         super(SPEA2, self).__init__(

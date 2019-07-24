@@ -10,14 +10,14 @@ from jmetal.lab.visualization import Plot, InteractivePlot
 import random
 
 if __name__ == '__main__':
-    problem = DTLZ2()
-    problem.reference_front = read_solutions(filename='resources/reference_front/DTLZ2.3D.pf')
+    problem = ZDT1()
+    problem.reference_front = read_solutions(filename='resources/reference_front/ZDT1.pf')
 
     max_evaluations = 20000
     algorithm = SPEA2(
         problem=problem,
-        population_size=20,
-        offspring_population_size=20,
+        population_size=40,
+        offspring_population_size=40,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
