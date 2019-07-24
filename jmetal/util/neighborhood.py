@@ -103,7 +103,8 @@ class WeightVectorNeighborhood(WeightNeighborhood):
 
 
 class TwoDimensionalMesh(Neighborhood):
-    """Class defining a bi-mensional mesh
+    """
+    Class defining a bi-mensional mesh.
     """
 
     def __init__(self, rows: int, columns: int, neighborhood: [[]]):
@@ -192,24 +193,24 @@ class TwoDimensionalMesh(Neighborhood):
 
 
 class C9(TwoDimensionalMesh):
-    """Class defining an C9 neighborhood of a solution belonging to a list of solutions which is
-       structured as a bi-dimensional mesh. The neighbors are those solutions that are in 1-hop distance
+    """
+    Class defining an C9 neighborhood of a solution belonging to a list of solutions which is
+    structured as a bi-dimensional mesh. The neighbors are those solutions that are in 1-hop distance
 
-       Shape:
-               * * *
-               * o *
-               * * *
+   Shape:
+           * * *
+           * o *
+           * * *
 
-       Topology:
-                north      = {-1,  0}
-                south      = { 1 , 0}
-                east       = { 0 , 1}
-                west       = { 0 ,-1}
-                north_east = {-1,  1}
-                north_west = {-1, -1}
-                south_east = { 1 , 1}
-                south_west = { 1 ,-1}
-
+   Topology:
+            north      = {-1,  0}
+            south      = { 1 , 0}
+            east       = { 0 , 1}
+            west       = { 0 ,-1}
+            north_east = {-1,  1}
+            north_west = {-1, -1}
+            south_east = { 1 , 1}
+            south_west = { 1 ,-1}
     """
 
     def __init__(self, rows: int, columns: int):

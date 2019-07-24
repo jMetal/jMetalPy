@@ -81,9 +81,11 @@ class SolutionAttributeComparator(Comparator):
 
 
 class MultiComparator(Comparator):
-    """This comparator takes a list of comparators and check all of them iteratively until a
-       value != 0 is obtained or the list becomes empty
     """
+    This comparator takes a list of comparators and check all of them iteratively until a
+    value != 0 is obtained or the list becomes empty
+    """
+
     def __init__(self, comparator_list:[Comparator]):
         self.comparator_list:[Comparator] = comparator_list
 

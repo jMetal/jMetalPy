@@ -2,7 +2,7 @@ from jmetal.algorithm.multiobjective.nsgaiii import NSGAIII, UniformReferenceDir
 from jmetal.lab.visualization import Plot
 from jmetal.operator import SBXCrossover, PolynomialMutation
 from jmetal.problem import DTLZ1
-from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
+from jmetal.util.observer import ProgressBarObserver
 from jmetal.util.solutions import read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
@@ -22,7 +22,6 @@ if __name__ == '__main__':
     )
 
     algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
-    algorithm.observable.register(observer=VisualizerObserver())
 
     algorithm.run()
     front = algorithm.get_result()

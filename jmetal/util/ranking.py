@@ -113,7 +113,8 @@ class StrengthRanking(Ranking[List[S]]):
         self.comparator = comparator
 
     def compute_ranking(self, solutions: List[S], k: int = None):
-        """ Compute ranking of solutions.
+        """
+        Compute ranking of solutions.
 
         :param solutions: Solution list.
         :param k: Number of individuals.

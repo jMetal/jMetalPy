@@ -10,9 +10,10 @@ from jmetal.config import store
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
 from jmetal.operator import BinaryTournamentSelection
+from jmetal.util.density_estimator import CrowdingDistance
 from jmetal.util.ranking import FastNonDominatedRanking
 from jmetal.util.solutions import Evaluator, Generator
-from jmetal.util.solutions.comparator import Comparator, RankingAndCrowdingDistanceComparator
+from jmetal.util.solutions.comparator import Comparator, MultiComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -235,7 +236,9 @@ class NSGAIII(NSGAII):
                  mutation: Mutation,
                  crossover: Crossover,
                  population_size: int = None,
-                 selection: Selection = BinaryTournamentSelection(RankingAndCrowdingDistanceComparator()),
+                 selection: Selection = BinaryTournamentSelection(
+                     MultiComparator([FastNonDominatedRanking.get_comparator(),
+                                      CrowdingDistance.get_comparator()])),
                  termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator,
@@ -253,6 +256,7 @@ class NSGAIII(NSGAII):
             offspring_population_size=population_size,
             mutation=mutation,
             crossover=crossover,
+            selection=selection,
             termination_criterion=termination_criterion,
             population_evaluator=population_evaluator,
             population_generator=population_generator,

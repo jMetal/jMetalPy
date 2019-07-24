@@ -1,29 +1,19 @@
-import time
+import copy
 from functools import cmp_to_key
 from typing import TypeVar, List
 
-import dask
-from distributed import as_completed, Client
-
-from jmetal.util.archive import BoundedArchive
-from jmetal.util.neighborhood import Neighborhood
-from jmetal.util.ranking import FastNonDominatedRanking, Ranking
-
-from jmetal.util.density_estimator import CrowdingDistance, DensityEstimator
-
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
-from jmetal.core.algorithm import DynamicAlgorithm, Algorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
-from jmetal.core.problem import Problem, DynamicProblem
-from jmetal.operator import RankingAndCrowdingDistanceSelection, BinaryTournamentSelection
-from jmetal.util.replacement import RankingAndDensityEstimatorReplacement, RemovalPolicyType
+from jmetal.core.problem import Problem
+from jmetal.operator import BinaryTournamentSelection
+from jmetal.util.archive import BoundedArchive
+from jmetal.util.density_estimator import CrowdingDistance, DensityEstimator
+from jmetal.util.neighborhood import Neighborhood
+from jmetal.util.ranking import FastNonDominatedRanking, Ranking
 from jmetal.util.solutions import Evaluator, Generator
-from jmetal.util.solutions.comparator import DominanceComparator, Comparator, RankingAndCrowdingDistanceComparator, \
-    MultiComparator, SolutionAttributeComparator
+from jmetal.util.solutions.comparator import Comparator, MultiComparator
 from jmetal.util.termination_criterion import TerminationCriterion
-import copy
-import random
 
 S = TypeVar('S')
 R = TypeVar('R')
@@ -53,7 +43,7 @@ class MOCell(GeneticAlgorithm[S, R]):
                  population_evaluator: Evaluator = store.default_evaluator,
                  dominance_comparator: Comparator = store.default_comparator):
         """
-        MOCEll implementation as described in
+        MOCEll implementation as described in:
 
         :param problem: The problem to solve.
         :param population_size: Size of the population.
@@ -77,6 +67,7 @@ class MOCell(GeneticAlgorithm[S, R]):
         self.archive = archive
         self.current_individual = 0
         self.current_neighbors = []
+
         self.comparator = MultiComparator([FastNonDominatedRanking.get_comparator(),
                                            CrowdingDistance.get_comparator()])
 
@@ -91,6 +82,7 @@ class MOCell(GeneticAlgorithm[S, R]):
 
     def selection(self, population: List[S]):
         parents = []
+
         self.current_neighbors = self.neighborhood.get_neighbors(self.current_individual, population)
         self.current_neighbors.append(self.solutions[self.current_individual])
 
@@ -137,7 +129,6 @@ class MOCell(GeneticAlgorithm[S, R]):
             self.archive.add(new_individual)
             if worst_solution != new_individual:
                 population[self.current_individual] = new_individual
-                #self.current_neighbors[-1] = new_individual
 
         return population
 
@@ -146,11 +137,3 @@ class MOCell(GeneticAlgorithm[S, R]):
 
     def get_name(self) -> str:
         return 'MOCell'
-
-    """
-    def __insert_new_individual_when_it_dominates_the_current_one(self, population, offspring_population):
-        self.archive.add(offspring_population[0])
-        result_list = population[:]
-        location_of_current_individual = 
-        result_list.
-    """

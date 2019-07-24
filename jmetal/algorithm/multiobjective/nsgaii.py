@@ -3,9 +3,6 @@ from typing import TypeVar, List
 
 import dask
 from distributed import as_completed, Client
-from jmetal.util.ranking import FastNonDominatedRanking
-
-from jmetal.util.density_estimator import CrowdingDistance
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
@@ -13,10 +10,12 @@ from jmetal.core.algorithm import DynamicAlgorithm, Algorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem, DynamicProblem
 from jmetal.operator import RankingAndCrowdingDistanceSelection, BinaryTournamentSelection
+from jmetal.util.density_estimator import CrowdingDistance
+from jmetal.util.ranking import FastNonDominatedRanking
 from jmetal.util.replacement import RankingAndDensityEstimatorReplacement, RemovalPolicyType
 from jmetal.util.solutions import Evaluator, Generator
 from jmetal.util.solutions.comparator import DominanceComparator, Comparator, RankingAndCrowdingDistanceComparator, \
-    MultiComparator, SolutionAttributeComparator
+    MultiComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -42,7 +41,6 @@ class NSGAII(GeneticAlgorithm[S, R]):
                  selection: Selection = BinaryTournamentSelection(
                      MultiComparator([FastNonDominatedRanking.get_comparator(),
                                       CrowdingDistance.get_comparator()])),
-                 # selection: Selection = BinaryTournamentSelection(RankingAndCrowdingDistanceComparator()),
                  termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator,
@@ -110,7 +108,9 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
                  offspring_population_size: int,
                  mutation: Mutation,
                  crossover: Crossover,
-                 selection: Selection = BinaryTournamentSelection(RankingAndCrowdingDistanceComparator()),
+                 selection: Selection = BinaryTournamentSelection(
+                     MultiComparator([FastNonDominatedRanking.get_comparator(),
+                                      CrowdingDistance.get_comparator()])),
                  termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator,
@@ -121,6 +121,7 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
             offspring_population_size=offspring_population_size,
             mutation=mutation,
             crossover=crossover,
+            selection=selection,
             population_evaluator=population_evaluator,
             population_generator=population_generator,
             termination_criterion=termination_criterion,
