@@ -155,27 +155,6 @@ class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
 
         solutions.sort(key=cmp_to_key(compare))
 
-        @classmethod
-        def get_comparator(cls) -> Comparator:
-            def compare(solution1, solution2):
-                distances1 = solution1.attributes["distances_"]
-                distances2 = solution2.attributes["distances_"]
-
-                tmp_k = self.k
-                if distances1[tmp_k] > distances2[tmp_k]:
-                    return -1
-                elif distances1[tmp_k] < distances2[tmp_k]:
-                    return 1
-                else:
-                    while tmp_k < (len(distances1) - 1):
-                        tmp_k += 1
-                        if distances1[tmp_k] > distances2[tmp_k]:
-                            return -1
-                        elif distances1[tmp_k] < distances2[tmp_k]:
-                            return 1
-                return 0
-            return compare
-
     @classmethod
     def get_comparator(cls) -> Comparator:
         return SolutionAttributeComparator("knn_density", lowest_is_best=False)

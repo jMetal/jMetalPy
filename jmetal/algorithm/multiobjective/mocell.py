@@ -47,7 +47,7 @@ class MOCell(GeneticAlgorithm[S, R]):
                  crossover: Crossover,
                  selection: Selection = BinaryTournamentSelection(
                      MultiComparator([FastNonDominatedRanking.get_comparator(),
-                                    CrowdingDistance.get_comparator()])),
+                                      CrowdingDistance.get_comparator()])),
                  termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator,
