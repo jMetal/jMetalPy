@@ -1,9 +1,9 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
+from jmetal.operator import SBXCrossover, PolynomialMutation
 from jmetal.problem.singleobjective.unconstrained import Rastrigin
-from jmetal.util.comparator import RankingAndCrowdingDistanceComparator, DominanceComparator
+from jmetal.util.solutions.comparator import DominanceComparator
 from jmetal.util.observer import PrintObjectivesObserver
-from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
+from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
@@ -16,7 +16,6 @@ if __name__ == '__main__':
         offspring_population_size=100,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20.0),
         crossover=SBXCrossover(probability=0.9, distribution_index=20.0),
-        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
         termination_criterion=StoppingByEvaluations(max=max_evaluations),
         dominance_comparator=DominanceComparator()
     )

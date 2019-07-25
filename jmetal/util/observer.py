@@ -5,11 +5,11 @@ from typing import List, TypeVar
 
 from tqdm import tqdm
 
-from jmetal.core.observable import Observer
+from jmetal.core.observer import Observer
 from jmetal.core.problem import DynamicProblem
 from jmetal.core.quality_indicator import InvertedGenerationalDistance
-from jmetal.util.solution_list import print_function_values_to_file
-from jmetal.util.visualization import StreamingPlot, Plot
+from jmetal.util.solutions import print_function_values_to_file
+from jmetal.lab.visualization import StreamingPlot, Plot
 
 S = TypeVar('S')
 
@@ -196,13 +196,12 @@ class VisualizerObserver(Observer):
 
         if solutions:
             if self.figure is None:
-                self.figure = StreamingPlot(plot_title='Pareto front approximation',
-                                            reference_point=self.reference_point,
+                self.figure = StreamingPlot(reference_point=self.reference_point,
                                             reference_front=self.reference_front)
                 self.figure.plot(solutions)
 
             if (evaluations % self.display_frequency) == 0:
-                # Check if reference point has changed
+                # check if reference point has changed
                 reference_point = kwargs.get('REFERENCE_POINT', None)
 
                 if reference_point:

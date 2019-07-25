@@ -1,14 +1,13 @@
-from jmetal.component import ProgressBarObserver, CrowdingDistanceArchive, VisualizerObserver
-
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.core.problem import OnTheFlyFloatProblem
 from jmetal.operator import PolynomialMutation
-from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
+from jmetal.util.archive import CrowdingDistanceArchive
+from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
+from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
     # Defining problem Srinivas on the fly
-
     def f1(x: [float]):
         return 2.0 + (x[0] - 2.0) * (x[0] - 2.0) + (x[1] - 1.0) * (x[1] - 1.0)
 

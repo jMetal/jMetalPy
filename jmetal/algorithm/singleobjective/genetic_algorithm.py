@@ -1,10 +1,11 @@
 from typing import TypeVar, List
 
+from jmetal.config import store
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
-from jmetal.util.solution_list.evaluator import Evaluator, SequentialEvaluator
-from jmetal.util.solution_list.generator import Generator, RandomGenerator
+from jmetal.util.solutions.evaluator import Evaluator
+from jmetal.util.solutions.generator import Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -14,7 +15,6 @@ R = TypeVar('R')
 .. module:: genetic_algorithm
    :platform: Unix, Windows
    :synopsis: Implementation of Genetic Algorithms.
-
 .. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
@@ -22,15 +22,15 @@ R = TypeVar('R')
 class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
 
     def __init__(self,
-                 problem: Problem[S],
+                 problem: Problem,
                  population_size: int,
                  offspring_population_size: int,
                  mutation: Mutation,
                  crossover: Crossover,
                  selection: Selection,
-                 termination_criterion: TerminationCriterion,
-                 population_generator: Generator = RandomGenerator(),
-                 population_evaluator: Evaluator = SequentialEvaluator()):
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
+                 population_generator: Generator = store.default_generator,
+                 population_evaluator: Evaluator = store.default_evaluator):
         super(GeneticAlgorithm, self).__init__(
             problem=problem,
             population_size=population_size,
@@ -56,8 +56,8 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         return [self.population_generator.new(self.problem)
                 for _ in range(self.population_size)]
 
-    def evaluate(self, solution_list: List[S]):
-        return self.population_evaluator.evaluate(solution_list, self.problem)
+    def evaluate(self, population: List[S]):
+        return self.population_evaluator.evaluate(population, self.problem)
 
     def stopping_condition_is_met(self) -> bool:
         return self.termination_criterion.is_met

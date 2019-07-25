@@ -4,9 +4,9 @@ from threading import Lock
 from typing import TypeVar, Generic, List
 import copy
 
-from jmetal.util.comparator import Comparator, DominanceComparator, SolutionAttributeComparator
+from jmetal.util.solutions.comparator import Comparator, DominanceComparator, SolutionAttributeComparator
 from jmetal.util.density_estimator import CrowdingDistance, DensityEstimator
-from jmetal.util.solution_list import print_function_values_to_file
+
 
 S = TypeVar('S')
 

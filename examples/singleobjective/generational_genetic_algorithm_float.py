@@ -14,7 +14,7 @@ if __name__ == '__main__':
         mutation=PolynomialMutation(1.0 / problem.number_of_variables, 20.0),
         crossover=SBXCrossover(0.9, 20.0),
         selection=BinaryTournamentSelection(),
-        termination_criterion=StoppingByEvaluations(max=50000)
+        termination_criterion=StoppingByEvaluations(max=500000)
     )
 
     algorithm.observable.register(observer=PrintObjectivesObserver(1000))

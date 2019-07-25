@@ -27,9 +27,6 @@ class Srinivas(FloatProblem):
         self.lower_bound = [-20.0 for _ in range(self.number_of_variables)]
         self.upper_bound = [20.0 for _ in range(self.number_of_variables)]
 
-        FloatSolution.lower_bound = self.lower_bound
-        FloatSolution.upper_bound = self.upper_bound
-
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x1 = solution.variables[0]
         x2 = solution.variables[1]
@@ -42,24 +39,11 @@ class Srinivas(FloatProblem):
         return solution
 
     def __evaluate_constraints(self, solution: FloatSolution) -> None:
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
-
         x1 = solution.variables[0]
         x2 = solution.variables[1]
 
-        constraints[0] = 1.0 - (x1 * x1 + x2 * x2) / 225.0
-        constraints[1] = (3.0 * x2 - x1) / 10.0 - 1.0
-
-        overall_constraint_violation = 0.0
-        number_of_violated_constraints = 0.0
-
-        for constrain in constraints:
-            if constrain < 0.0:
-                overall_constraint_violation += constrain
-                number_of_violated_constraints += 1
-
-        solution.attributes['overall_constraint_violation'] = overall_constraint_violation
-        solution.attributes['number_of_violated_constraints'] = number_of_violated_constraints
+        solution.constraints[0] = 1.0 - (x1 * x1 + x2 * x2) / 225.0
+        solution.constraints[1] = (3.0 * x2 - x1) / 10.0 - 1.0
 
     def get_name(self):
         return 'Srinivas'
@@ -80,8 +64,6 @@ class Tanaka(FloatProblem):
         self.lower_bound = [10e-5 for _ in range(self.number_of_variables)]
         self.upper_bound = [pi for _ in range(self.number_of_variables)]
 
-        FloatSolution.lower_bound = self.lower_bound
-        FloatSolution.upper_bound = self.upper_bound
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         solution.objectives[0] = solution.variables[0]
@@ -100,16 +82,10 @@ class Tanaka(FloatProblem):
         constraints[0] = (x1 * x1 + x2 * x2 - 1.0 - 0.1 * cos(16.0 * atan(x1 / x2)))
         constraints[1] = -2.0 * ((x1 - 0.5) * (x1 - 0.5) + (x2 - 0.5) * (x2 - 0.5) - 0.5)
 
-        overall_constraint_violation = 0.0
-        number_of_violated_constraints = 0.0
+        solution.constraints = constraints
 
-        for constrain in constraints:
-            if constrain < 0.0:
-                overall_constraint_violation += constrain
-                number_of_violated_constraints += 1
+        #set_overall_constraint_violation_degree(solution)
 
-        solution.attributes['overall_constraint_violation'] = overall_constraint_violation
-        solution.attributes['number_of_violated_constraints'] = number_of_violated_constraints
 
     def get_name(self):
         return 'Tanaka'
@@ -159,16 +135,7 @@ class Osyczka2(FloatProblem):
         constraints[4] = (4.0 - (x[2] - 3.0) * (x[2] - 3.0) - x[3]) / 4.0
         constraints[5] = ((x[4] - 3.0) * (x[4] - 3.0) + x[5] - 4.0) / 4.0
 
-        overall_constraint_violation = 0.0
-        number_of_violated_constraints = 0.0
-
-        for constrain in constraints:
-            if constrain < 0.0:
-                overall_constraint_violation += constrain
-                number_of_violated_constraints += 1
-
-        solution.attributes['overall_constraint_violation'] = overall_constraint_violation
-        solution.attributes['number_of_violated_constraints'] = number_of_violated_constraints
+        solution.constraints = constraints
 
     def get_name(self):
         return 'Osyczka2'
@@ -207,17 +174,6 @@ class Binh2(FloatProblem):
         x = solution.variables
         constraints[0] = -1.0 * (x[0] - 5) * (x[0] - 5) - x[1] * x[1] + 25.0
         constraints[1] = (x[0] - 8) * (x[0] - 8) + (x[1] + 3) * (x[1] + 3) - 7.7
-
-        overall_constraint_violation = 0.0
-        number_of_violated_constraints = 0.0
-
-        for constrain in constraints:
-            if constrain < 0.0:
-                overall_constraint_violation += constrain
-                number_of_violated_constraints += 1
-
-        solution.attributes['overall_constraint_violation'] = overall_constraint_violation
-        solution.attributes['number_of_violated_constraints'] = number_of_violated_constraints
 
     def get_name(self):
         return 'Binh2'

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar, List
 
-from jmetal.util.comparator import DominanceComparator
+from jmetal.util.solutions.comparator import DominanceComparator, Comparator, SolutionAttributeComparator
 
 S = TypeVar('S')
 
@@ -14,8 +14,11 @@ class Ranking(List[S], ABC):
         self.ranked_sublists = []
 
     @abstractmethod
-    def compute_ranking(self, solutions: List[S], k: int):
+    def compute_ranking(self, solutions: List[S], k: int = None):
         pass
+
+    def get_nondominated(self):
+        return self.ranked_sublists[0]
 
     def get_subfront(self, rank: int):
         if rank >= len(self.ranked_sublists):
@@ -25,11 +28,15 @@ class Ranking(List[S], ABC):
     def get_number_of_subfronts(self):
         return len(self.ranked_sublists)
 
+    @classmethod
+    def get_comparator(cls) -> Comparator:
+        pass
+
 
 class FastNonDominatedRanking(Ranking[List[S]]):
     """ Class implementing the non-dominated ranking of NSGA-II proposed by Deb et al., see [Deb2002]_ """
 
-    def __init__(self, comparator=DominanceComparator()):
+    def __init__(self, comparator: Comparator = DominanceComparator()):
         super(FastNonDominatedRanking, self).__init__()
         self.comparator = comparator
 
@@ -88,17 +95,69 @@ class FastNonDominatedRanking(Ranking[List[S]]):
             for i, front in enumerate(self.ranked_sublists):
                 count += len(front)
                 if count >= k:
-                    return self.ranked_sublists[:i + 1]
-        else:
-            return self.ranked_sublists
+                    self.ranked_sublists = self.ranked_sublists[:i + 1]
+                    break
 
-
-class EfficientNonDominatedRanking(Ranking[List[S]]):
-    """ Class implementing the EDS (efficient non-dominated sorting) algorithm. """
-
-    def __init__(self):
-        super(EfficientNonDominatedRanking, self).__init__()
-
-    def compute_ranking(self, solutions: List[S], k: int):
-        # todo :)
         return self.ranked_sublists
+
+    @classmethod
+    def get_comparator(cls) -> Comparator:
+        return SolutionAttributeComparator('dominance_ranking')
+
+
+class StrengthRanking(Ranking[List[S]]):
+    """ Class implementing a ranking scheme based on the strength ranking used in SPEA2. """
+
+    def __init__(self, comparator: Comparator = DominanceComparator()):
+        super(StrengthRanking, self).__init__()
+        self.comparator = comparator
+
+    def compute_ranking(self, solutions: List[S], k: int = None):
+        """
+        Compute ranking of solutions.
+
+        :param solutions: Solution list.
+        :param k: Number of individuals.
+        """
+        strength: [int] = [0 for _ in range(len(solutions))]
+        raw_fitness: [int] = [0 for _ in range(len(solutions))]
+
+        # strength(i) = | {j | j < - SolutionSet and i dominate j} |
+        for i in range(len(solutions)):
+            for j in range(len(solutions)):
+                if self.comparator.compare(solutions[i], solutions[j]) < 0:
+                    strength[i] += 1
+
+        # Calculate the raw fitness:
+        # rawFitness(i) = |{sum strength(j) | j <- SolutionSet and j dominate i}|
+        for i in range(len(solutions)):
+            for j in range(len(solutions)):
+                if self.comparator.compare(solutions[i], solutions[j]) == 1:
+                    raw_fitness[i] += strength[j]
+
+        max_fitness_value: int = 0
+        for i in range(len(solutions)):
+            solutions[i].attributes['strength_ranking'] = raw_fitness[i]
+            if raw_fitness[i] > max_fitness_value:
+                max_fitness_value = raw_fitness[i]
+
+        # Initialize the ranked sublists. In the worst case will be max_fitness_value + 1 different sublists
+        self.ranked_sublists = [[] for _ in range(max_fitness_value + 1)]
+
+        # Assign each solution to its corresponding front
+        for solution in solutions:
+            self.ranked_sublists[int(solution.attributes['strength_ranking'])].append(solution)
+
+        # Remove empty fronts
+        counter = 0
+        while counter < len(self.ranked_sublists):
+            if len(self.ranked_sublists[counter]) == 0:
+                del self.ranked_sublists[counter]
+            else:
+                counter += 1
+
+        return self.ranked_sublists
+
+    @classmethod
+    def get_comparator(cls) -> Comparator:
+        return SolutionAttributeComparator('strength_ranking')

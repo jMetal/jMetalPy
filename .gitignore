@@ -110,4 +110,12 @@ ENV/
 dask-worker-space
 
 # Plotly
+
 *.html
+
+# osx
+.DS_Store
+
+# R
+.RData
+.Rhistory

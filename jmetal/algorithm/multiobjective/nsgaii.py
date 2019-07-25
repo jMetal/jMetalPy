@@ -1,6 +1,7 @@
 import time
 from typing import TypeVar, List
 
+import dask
 from distributed import as_completed, Client
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
@@ -8,9 +9,13 @@ from jmetal.config import store
 from jmetal.core.algorithm import DynamicAlgorithm, Algorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem, DynamicProblem
-from jmetal.operator import RankingAndCrowdingDistanceSelection
-from jmetal.util.comparator import DominanceComparator, Comparator
-from jmetal.util.solution_list import Evaluator, Generator
+from jmetal.operator import RankingAndCrowdingDistanceSelection, BinaryTournamentSelection
+from jmetal.util.density_estimator import CrowdingDistance
+from jmetal.util.ranking import FastNonDominatedRanking
+from jmetal.util.replacement import RankingAndDensityEstimatorReplacement, RemovalPolicyType
+from jmetal.util.solutions import Evaluator, Generator
+from jmetal.util.solutions.comparator import DominanceComparator, Comparator, RankingAndCrowdingDistanceComparator, \
+    MultiComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -33,12 +38,15 @@ class NSGAII(GeneticAlgorithm[S, R]):
                  offspring_population_size: int,
                  mutation: Mutation,
                  crossover: Crossover,
-                 selection: Selection,
-                 termination_criterion: TerminationCriterion,
+                 selection: Selection = BinaryTournamentSelection(
+                     MultiComparator([FastNonDominatedRanking.get_comparator(),
+                                      CrowdingDistance.get_comparator()])),
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator,
-                 dominance_comparator: Comparator = DominanceComparator()):
-        """  NSGA-II implementation as described in
+                 dominance_comparator: Comparator = store.default_comparator):
+        """
+        NSGA-II implementation as described in
 
         * K. Deb, A. Pratap, S. Agarwal and T. Meyarivan, "A fast and elitist
           multiobjective genetic algorithm: NSGA-II," in IEEE Transactions on Evolutionary Computation,
@@ -48,7 +56,7 @@ class NSGAII(GeneticAlgorithm[S, R]):
         family. The implementation of NSGA-II provided in jMetalPy follows the evolutionary
         algorithm template described in the algorithm module (:py:mod:`jmetal.core.algorithm`).
 
-        .. note:: A steady-state version of this algorithm can be run by setting the offspring size to 1 and the mating pool size to 2.
+        .. note:: A steady-state version of this algorithm can be run by setting the offspring size to 1.
 
         :param problem: The problem to solve.
         :param population_size: Size of the population.
@@ -77,11 +85,13 @@ class NSGAII(GeneticAlgorithm[S, R]):
         :param offspring_population: Offspring population.
         :return: New population after ranking and crowding distance selection is applied.
         """
-        join_population = population + offspring_population
+        ranking = FastNonDominatedRanking()
+        density_estimator = CrowdingDistance()
 
-        return RankingAndCrowdingDistanceSelection(
-            self.population_size, dominance_comparator=self.dominance_comparator
-        ).execute(join_population)
+        r = RankingAndDensityEstimatorReplacement(ranking, density_estimator, RemovalPolicyType.ONE_SHOT)
+        solutions = r.replace(population, offspring_population)
+
+        return solutions
 
     def get_result(self) -> R:
         return self.solutions
@@ -98,8 +108,10 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
                  offspring_population_size: int,
                  mutation: Mutation,
                  crossover: Crossover,
-                 selection: Selection,
-                 termination_criterion: TerminationCriterion,
+                 selection: Selection = BinaryTournamentSelection(
+                     MultiComparator([FastNonDominatedRanking.get_comparator(),
+                                      CrowdingDistance.get_comparator()])),
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  population_generator: Generator = store.default_generator,
                  population_evaluator: Evaluator = store.default_evaluator,
                  dominance_comparator: DominanceComparator = DominanceComparator()):
@@ -146,14 +158,14 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
 class DistributedNSGAII(Algorithm[S, R]):
 
     def __init__(self,
-                 problem: Problem[S],
+                 problem: Problem,
                  population_size: int,
-                 mutation: Mutation[S],
-                 crossover: Crossover[S, S],
-                 selection: Selection[List[S], S],
-                 termination_criterion: TerminationCriterion,
+                 mutation: Mutation,
+                 crossover: Crossover,
                  number_of_cores: int,
-                 client: Client):
+                 client: Client,
+                 selection: Selection = BinaryTournamentSelection(RankingAndCrowdingDistanceComparator()),
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria):
         super(DistributedNSGAII, self).__init__()
         self.problem = problem
         self.population_size = population_size
@@ -171,14 +183,17 @@ class DistributedNSGAII(Algorithm[S, R]):
         return [self.problem.create_solution() for _ in range(self.number_of_cores)]
 
     def evaluate(self, solutions: List[S]) -> List[S]:
-        return [self.client.submit(self.problem.evaluate, solution) for solution in solutions]
+        return self.client.map(self.problem.evaluate, solutions)
 
     def stopping_condition_is_met(self) -> bool:
         return self.termination_criterion.is_met
 
     def get_observable_data(self) -> dict:
         ctime = time.time() - self.start_computing_time
-        return {'PROBLEM': self.problem, 'EVALUATIONS': self.evaluations, 'SOLUTIONS': self.get_result(),
+
+        return {'PROBLEM': self.problem,
+                'EVALUATIONS': self.evaluations,
+                'SOLUTIONS': self.get_result(),
                 'COMPUTING_TIME': ctime}
 
     def init_progress(self) -> None:
@@ -198,57 +213,76 @@ class DistributedNSGAII(Algorithm[S, R]):
         """ Execute the algorithm. """
         self.start_computing_time = time.time()
 
-        population_to_evaluate = self.create_initial_solutions()
-        task_pool = as_completed(self.evaluate(population_to_evaluate))
+        create_solution = dask.delayed(self.problem.create_solution)
+        evaluate_solution = dask.delayed(self.problem.evaluate)
+
+        task_pool = as_completed([], with_results=True)
+
+        for _ in range(self.number_of_cores):
+            new_solution = create_solution()
+            new_evaluated_solution = evaluate_solution(new_solution)
+            future = self.client.compute(new_evaluated_solution)
+
+            task_pool.add(future)
+
+        batches = task_pool.batches()
+
+        auxiliar_population = []
+        while len(auxiliar_population) < self.population_size:
+            batch = next(batches)
+            for _, received_solution in batch:
+                auxiliar_population.append(received_solution)
+
+                if len(auxiliar_population) < self.population_size:
+                    break
+
+            # submit as many new tasks as we collected
+            for _ in batch:
+                new_solution = create_solution()
+                new_evaluated_solution = evaluate_solution(new_solution)
+                future = self.client.compute(new_evaluated_solution)
+
+                task_pool.add(future)
 
         self.init_progress()
 
-        auxiliar_population = []
-        for future in task_pool:
-            # The initial population is not full
-            if len(auxiliar_population) < self.population_size:
-                received_solution = future.result()
-                auxiliar_population.append(received_solution)
+        # perform an algorithm step to create a new solution to be evaluated
+        while not self.stopping_condition_is_met():
+            batch = next(batches)
 
-                new_task = self.client.submit(self.problem.evaluate, self.problem.create_solution())
+            for _, received_solution in batch:
+                offspring_population = [received_solution]
+
+                # replacement
+                join_population = auxiliar_population + offspring_population
+                auxiliar_population = RankingAndCrowdingDistanceSelection(self.population_size).execute(
+                    join_population)
+
+                # selection
+                mating_population = []
+                for _ in range(2):
+                    solution = self.selection_operator.execute(auxiliar_population)
+                    mating_population.append(solution)
+
+                # Reproduction and evaluation
+                new_task = self.client.submit(reproduction, mating_population, self.problem,
+                                              self.crossover_operator, self.mutation_operator)
                 task_pool.add(new_task)
-            # Perform an algorithm step to create a new solution to be evaluated
-            else:
-                offspring_population = []
 
-                if not self.stopping_condition_is_met():
-                    offspring_population.append(future.result())
-
-                    # Replacement
-                    join_population = auxiliar_population + offspring_population
-                    auxiliar_population = RankingAndCrowdingDistanceSelection(self.population_size).execute(
-                        join_population)
-
-                    # Selection
-                    mating_population = []
-
-                    for _ in range(2):
-                        solution = self.selection_operator.execute(population_to_evaluate)
-                        mating_population.append(solution)
-
-                    # Reproduction and evaluation
-                    new_task = self.client.submit(reproduction, mating_population, self.problem,
-                                                  self.crossover_operator, self.mutation_operator)
-
-                    task_pool.add(new_task)
-                else:
-                    print("Computing time: " + str(time.time() - self.start_computing_time))
-                    for future in task_pool.futures:
-                        future.cancel()
-                    break
-
+                # update progress
                 self.evaluations += 1
                 self.solutions = auxiliar_population
 
                 self.update_progress()
 
+                if self.stopping_condition_is_met():
+                    break
+
         self.total_computing_time = time.time() - self.start_computing_time
-        self.solutions = auxiliar_population
+
+        # at this point, computation is done
+        for future, _ in task_pool:
+            future.cancel()
 
     def get_result(self) -> R:
         return self.solutions

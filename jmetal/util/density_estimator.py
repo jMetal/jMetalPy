@@ -1,6 +1,12 @@
 import logging
+import numpy
 from abc import ABC, abstractmethod
 from typing import TypeVar, List
+from functools import cmp_to_key
+
+from scipy.spatial.distance import euclidean
+
+from jmetal.util.solutions.comparator import SolutionAttributeComparator, Comparator
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -11,7 +17,7 @@ S = TypeVar('S')
    :platform: Unix, Windows
    :synopsis: Crowding distance implementation.
 
-.. moduleauthor:: Álvaro Gómez Jáuregui <alvarogj@lcc.uma.es>
+.. moduleauthor:: Antonio J. Nebro <ajnebro@uma.es>
 """
 
 
@@ -23,12 +29,18 @@ class DensityEstimator(List[S], ABC):
     def compute_density_estimator(self, solution_list: List[S]) -> float:
         pass
 
+    @abstractmethod
+    def sort(self, solution_list: List[S]) -> List[S]:
+        pass
+
+    @classmethod
+    def get_comparator(cls) -> Comparator:
+        pass
+
 
 class CrowdingDistance(DensityEstimator[List[S]]):
-    """This class implements a DensityEstimator based on the crowding distance.
-    In consequence, the main method of this class is :func:`compute_density_estimator`.
+    """This class implements a DensityEstimator based on the crowding distance of algorithm NSGA-II.
     """
-
     def compute_density_estimator(self, front: List[S]):
         """This function performs the computation of the crowding density estimation over the solution list.
 
@@ -69,9 +81,80 @@ class CrowdingDistance(DensityEstimator[List[S]]):
 
                 # Check if minimum and maximum are the same (in which case do nothing)
                 if objective_maxn - objective_minn == 0:
-                    pass ; #LOGGER.warning('Minimum and maximum are the same!')
+                    pass;  # LOGGER.warning('Minimum and maximum are the same!')
                 else:
                     distance = distance / (objective_maxn - objective_minn)
 
                 distance += front[j].attributes['crowding_distance']
                 front[j].attributes['crowding_distance'] = distance
+
+    def sort(self, solutions:List[S]) -> List[S]:
+        solutions.sort(key=cmp_to_key(self.get_comparator().compare))
+
+    @classmethod
+    def get_comparator(cls) -> Comparator:
+        return SolutionAttributeComparator("crowding_distance", lowest_is_best=False)
+
+
+class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
+    """This class implements a density estimator based on the distance to the k-th nearest solution.
+    """
+
+    def __init__(self, k=1):
+        self.k = k
+        self.distance_matrix = []
+
+    def compute_density_estimator(self, solutions: List[S]):
+        solutions_size = len(solutions)
+        if solutions_size <= self.k:
+            return
+
+        points = []
+        for i in range(solutions_size):
+            points.append(solutions[i].objectives)
+
+        # Compute distance matrix
+        self.distance_matrix = numpy.zeros(shape=(solutions_size, solutions_size))
+        for i in range(solutions_size):
+            for j in range(solutions_size):
+                self.distance_matrix[i, j] = self.distance_matrix[j, i] = euclidean(solutions[i].objectives,
+                                                                                    solutions[j].objectives)
+        # Gets the k-nearest distance of all the solutions
+        for i in range(solutions_size):
+            distances = []
+            for j in range(solutions_size):
+                distances.append(self.distance_matrix[i, j])
+            distances.sort()
+            solutions[i].attributes['knn_density'] = distances[self.k]
+
+    def sort(self, solutions:List[S]) -> List[S]:
+        def compare(solution1, solution2):
+            distances1 = solution1.attributes["distances_"]
+            distances2 = solution2.attributes["distances_"]
+
+            tmp_k = self.k
+            if distances1[tmp_k] > distances2[tmp_k]:
+                return -1
+            elif distances1[tmp_k] < distances2[tmp_k]:
+                return 1
+            else:
+                while tmp_k < (len(distances1) - 1):
+                    tmp_k += 1
+                    if distances1[tmp_k] > distances2[tmp_k]:
+                        return -1
+                    elif distances1[tmp_k] < distances2[tmp_k]:
+                        return 1
+            return 0
+
+        for i in range(len(solutions)):
+            distances = []
+            for j in range(len(solutions)):
+                distances.append(self.distance_matrix[i, j])
+            distances.sort()
+            solutions[i].attributes["distances_"] = distances
+
+        solutions.sort(key=cmp_to_key(compare))
+
+    @classmethod
+    def get_comparator(cls) -> Comparator:
+        return SolutionAttributeComparator("knn_density", lowest_is_best=False)

@@ -1,8 +1,8 @@
 from jmetal.algorithm.multiobjective.gde3 import GDE3
 from jmetal.problem import ZDT2
-from jmetal.util.comparator import GDominanceComparator
+from jmetal.util.solutions.comparator import GDominanceComparator
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
-from jmetal.util.solution_list import read_solutions, print_function_values_to_file, print_variables_to_file
+from jmetal.util.solutions import read_solutions, print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
@@ -20,8 +20,7 @@ if __name__ == '__main__':
         dominance_comparator=GDominanceComparator([0.5, 0.5])
     )
 
-    progress_bar = ProgressBarObserver(max=max_evaluations)
-    algorithm.observable.register(observer=progress_bar)
+    algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
     algorithm.observable.register(observer=VisualizerObserver(reference_point=([0.5, 0.5])))
 
     algorithm.run()

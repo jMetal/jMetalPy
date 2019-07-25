@@ -1,7 +1,7 @@
 import unittest
 
 from jmetal.core.solution import Solution
-from jmetal.util.ranking import FastNonDominatedRanking
+from jmetal.util.ranking import FastNonDominatedRanking, StrengthRanking, Ranking
 
 
 class FastNonDominatedRankingTestCases(unittest.TestCase):
@@ -107,6 +107,133 @@ class FastNonDominatedRankingTestCases(unittest.TestCase):
         self.assertEqual(solution3, ranking[0][2])
         self.assertEqual(solution4, ranking[1][0])
         self.assertEqual(solution5, ranking[1][1])
+
+    def test_should_compute_ranking_work_properly_with_constraints_case1(self):
+        """ The list contains two solutions and one is infeasible
+        """
+        solution = Solution(2, 2, 1)
+        solution.objectives = [2, 3]
+        solution.constraints[0] = -1
+        solution2 = Solution(2, 2, 1)
+        solution2.objectives = [3, 6]
+        solution2.constraints[0] = 0
+        solution_list = [solution, solution2]
+
+        ranking = self.ranking.compute_ranking(solution_list)
+
+        self.assertEqual(2, self.ranking.get_number_of_subfronts())
+        self.assertEqual(solution2, ranking[0][0])
+        self.assertEqual(solution, ranking[1][0])
+
+    def test_should_compute_ranking_work_properly_with_constraints_case2(self):
+        """ The list contains two solutions and both are infeasible with different violation degree
+        """
+        solution = Solution(2, 2, 1)
+        solution.objectives = [2, 3]
+        solution.constraints[0] = -1
+        solution2 = Solution(2, 2, 1)
+        solution2.objectives = [3, 6]
+        solution2.constraints[0] = -2
+        solution_list = [solution, solution2]
+
+        ranking = self.ranking.compute_ranking(solution_list)
+
+        self.assertEqual(2, self.ranking.get_number_of_subfronts())
+        self.assertEqual(solution, ranking[0][0])
+        self.assertEqual(solution2, ranking[1][0])
+
+    def test_should_compute_ranking_work_properly_with_constraints_case3(self):
+        """ The list contains two solutions and both are infeasible with equal violation degree
+        """
+        solution = Solution(2, 2, 1)
+        solution.objectives = [2, 3]
+        solution.constraints[0] = -1
+        solution2 = Solution(2, 2, 1)
+        solution2.objectives = [3, 6]
+        solution2.constraints[0] = -1
+        solution_list = [solution, solution2]
+
+        ranking = self.ranking.compute_ranking(solution_list)
+
+        self.assertEqual(2, self.ranking.get_number_of_subfronts())
+        self.assertEqual(solution, ranking[0][0])
+        self.assertEqual(solution2, ranking[1][0])
+
+
+class StrengthRankingTestCases(unittest.TestCase):
+
+    def setUp(self):
+        self.ranking:Ranking = StrengthRanking()
+
+    def test_should_ranking_assing_zero_to_all_the_solutions_if_they_are_nondominated(self):
+        """
+          5 1
+          4   2
+          3     3
+          2
+          1         4
+          0 1 2 3 4 5
+
+          Points 1, 2, 3 and 4 are nondominated
+        """
+        solution1 = Solution(2, 2)
+        solution1.objectives = [1, 5]
+        solution2 = Solution(2, 2)
+        solution2.objectives = [2, 4]
+        solution3 = Solution(2, 2)
+        solution3.objectives = [3, 3]
+        solution4 = Solution(2, 2)
+        solution4.objectives = [5, 1]
+
+        solution_list = [solution1, solution2, solution3, solution4]
+
+        ranking = self.ranking.compute_ranking(solution_list)
+
+        self.assertEqual(1, self.ranking.get_number_of_subfronts())
+        self.assertTrue(solution1 in ranking[0])
+        self.assertTrue(solution2 in ranking[0])
+        self.assertTrue(solution3 in ranking[0])
+        self.assertTrue(solution4 in ranking[0])
+
+    def test_should_ranking_work_properly(self):
+        """
+          5 1
+          4   2
+          3     3
+          2     5
+          1         4
+          0 1 2 3 4 5
+
+          Solutions: 1, 2, 3, 4, 5
+          Expected result: two ranks (rank 0: 1, 2, 5, 4; rank 1: 3)
+        """
+
+        solution1 = Solution(2, 2)
+        solution1.objectives = [1, 5]
+        solution2 = Solution(2, 2)
+        solution2.objectives = [2, 4]
+        solution3 = Solution(2, 2)
+        solution3.objectives = [3, 3]
+        solution4 = Solution(2, 2)
+        solution4.objectives = [5, 1]
+        solution5 = Solution(2, 2)
+        solution5.objectives = [3, 2]
+
+        solution_list = [solution1, solution2, solution3, solution4, solution5]
+
+        self.ranking.compute_ranking(solution_list)
+
+        self.assertEqual(2, self.ranking.get_number_of_subfronts())
+        self.assertTrue(solution1 in self.ranking.get_subfront(0))
+        self.assertTrue(solution2 in self.ranking.get_subfront(0))
+        self.assertTrue(solution3 in self.ranking.get_subfront(1))
+        self.assertTrue(solution4 in self.ranking.get_subfront(0))
+        self.assertTrue(solution5 in self.ranking.get_subfront(0))
+        self.assertEqual(0, solution1.attributes['strength_ranking'])
+        self.assertEqual(0, solution2.attributes['strength_ranking'])
+        self.assertEqual(1, solution3.attributes['strength_ranking'])
+        self.assertEqual(0, solution4.attributes['strength_ranking'])
+        self.assertEqual(0, solution5.attributes['strength_ranking'])
 
 
 if __name__ == "__main__":

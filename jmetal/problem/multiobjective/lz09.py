@@ -1,6 +1,6 @@
-import math
 from abc import ABCMeta
 
+import math
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 
@@ -184,7 +184,7 @@ class LZ09(FloatProblem):
             for i in range(dim):
                 xx = 2 * x[i]
                 sum += (xx * xx - math.cos(4 * math.pi * xx) + 1)
-            beta = 2.0 * beta / dim
+            beta = 2.0 * sum / dim
         if type == 4:
             sum, prod, xx = 0, 1, 0
             for i in range(dim):

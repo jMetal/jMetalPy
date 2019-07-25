@@ -129,8 +129,10 @@ class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
         pass
 
     def get_observable_data(self) -> dict:
-        ctime = time.time() - self.start_computing_time
-        return {'PROBLEM': self.problem, 'EVALUATIONS': self.evaluations, 'SOLUTIONS': self.get_result(), 'COMPUTING_TIME': ctime}
+        return {'PROBLEM': self.problem,
+                'EVALUATIONS': self.evaluations,
+                'SOLUTIONS': self.get_result(),
+                'COMPUTING_TIME': time.time() - self.start_computing_time}
 
     def init_progress(self) -> None:
         self.evaluations = self.population_size
@@ -150,6 +152,10 @@ class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
 
         observable_data = self.get_observable_data()
         self.observable.notify_all(**observable_data)
+
+    @property
+    def label(self) -> str:
+        return f'{self.get_name()}.{self.problem.get_name()}'
 
 
 class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], ABC):
@@ -194,8 +200,10 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], A
         pass
 
     def get_observable_data(self) -> dict:
-        ctime = time.time() - self.start_computing_time
-        return {'PROBLEM': self.problem, 'EVALUATIONS': self.evaluations, 'SOLUTIONS': self.get_result(), 'COMPUTING_TIME': ctime}
+        return {'PROBLEM': self.problem,
+                'EVALUATIONS': self.evaluations,
+                'SOLUTIONS': self.get_result(),
+                'COMPUTING_TIME': time.time() - self.start_computing_time}
 
     def init_progress(self) -> None:
         self.evaluations = self.swarm_size
@@ -220,3 +228,7 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], A
 
         observable_data = self.get_observable_data()
         self.observable.notify_all(**observable_data)
+
+    @property
+    def label(self) -> str:
+        return f'{self.get_name()}.{self.problem.get_name()}'

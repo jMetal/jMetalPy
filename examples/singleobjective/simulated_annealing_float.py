@@ -2,13 +2,14 @@ from jmetal.algorithm.singleobjective.simulated_annealing import SimulatedAnneal
 from jmetal.operator import PolynomialMutation
 from jmetal.problem.singleobjective.unconstrained import Rastrigin
 from jmetal.util.observer import PrintObjectivesObserver
-from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
+from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
     problem = Rastrigin(10)
 
-    max_evaluations = 50000
+    max_evaluations = 250000
+
     algorithm = SimulatedAnnealing(
         problem=problem,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20.0),

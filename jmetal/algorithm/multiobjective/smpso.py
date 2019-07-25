@@ -12,8 +12,8 @@ from jmetal.core.operator import Mutation
 from jmetal.core.problem import FloatProblem, DynamicProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.util.archive import BoundedArchive, ArchiveWithReferencePoint
-from jmetal.util.comparator import DominanceComparator
-from jmetal.util.solution_list import Evaluator, Generator, print_function_values_to_file
+from jmetal.util.solutions import Evaluator, Generator
+from jmetal.util.solutions.comparator import DominanceComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 R = TypeVar('R')
@@ -34,7 +34,7 @@ class SMPSO(ParticleSwarmOptimization):
                  swarm_size: int,
                  mutation: Mutation,
                  leaders: Optional[BoundedArchive],
-                 termination_criterion: TerminationCriterion,
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  swarm_generator: Generator = store.default_generator,
                  swarm_evaluator: Evaluator = store.default_evaluator):
         """ This class implements the SMPSO algorithm as described in
@@ -56,10 +56,8 @@ class SMPSO(ParticleSwarmOptimization):
             swarm_size=swarm_size)
         self.swarm_generator = swarm_generator
         self.swarm_evaluator = swarm_evaluator
-
         self.termination_criterion = termination_criterion
         self.observable.register(termination_criterion)
-
         self.mutation_operator = mutation
         self.leaders = leaders
 
@@ -226,7 +224,7 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
                  swarm_size: int,
                  mutation: Mutation,
                  leaders: BoundedArchive,
-                 termination_criterion: TerminationCriterion,
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  swarm_generator: Generator = store.default_generator,
                  swarm_evaluator: Evaluator = store.default_evaluator):
         super(DynamicSMPSO, self).__init__(
@@ -267,9 +265,6 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
             observable_data = self.get_observable_data()
             observable_data['termination_criterion_is_met'] = True
             self.observable.notify_all(**observable_data)
-
-            print_function_values_to_file(self.leaders.solution_list,
-                                          'FUN.DynamicSMPSO.' + str(self.completed_iterations))
 
             self.restart()
             self.init_progress()
@@ -390,16 +385,12 @@ class SMPSORP(SMPSO):
 
 def change_reference_point(algorithm: SMPSORP):
     """ Auxiliar function to read new reference points from the keyboard for the SMPSO/RP algorithm
-    :param algorithm:
-    :return:
     """
     number_of_reference_points = len(algorithm.reference_points)
     number_of_objectives = algorithm.problem.number_of_objectives
 
     while True:
-        print("Enter " + str(number_of_reference_points) +
-              " points of dimension " + str(number_of_objectives) + ": ")
-
+        print(f'Enter {number_of_reference_points}-points of dimension {number_of_objectives}: ')
         read = [float(x) for x in input().split()]
 
         # Update reference points

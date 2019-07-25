@@ -3,7 +3,7 @@ import random
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar, List
 
-from jmetal.core.observable import Observer
+from jmetal.core.observer import Observer
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, PermutationSolution
 
 LOGGER = logging.getLogger('jmetal')
@@ -78,10 +78,10 @@ class FloatProblem(Problem[FloatSolution], ABC):
 
     def create_solution(self) -> FloatSolution:
         new_solution = FloatSolution(
-            self.number_of_variables,
-            self.number_of_objectives,
             self.lower_bound,
-            self.upper_bound)
+            self.upper_bound,
+            self.number_of_objectives,
+            self.number_of_constraints)
         new_solution.variables = \
             [random.uniform(self.lower_bound[i]*1.0, self.upper_bound[i]*1.0) for i in range(self.number_of_variables)]
 
@@ -98,11 +98,10 @@ class IntegerProblem(Problem[IntegerSolution], ABC):
 
     def create_solution(self) -> IntegerSolution:
         new_solution = IntegerSolution(
-            self.number_of_variables,
-            self.number_of_objectives,
             self.lower_bound,
-            self.upper_bound)
-
+            self.upper_bound,
+            self.number_of_objectives,
+            self.number_of_constraints)
         new_solution.variables = \
             [int(random.uniform(self.lower_bound[i]*1.0, self.upper_bound[i]*1.0))
              for i in range(self.number_of_variables)]
@@ -181,18 +180,8 @@ class OnTheFlyFloatProblem(FloatProblem):
         for i in range(self.number_of_objectives):
             solution.objectives[i] = self.functions[i](solution.variables)
 
-        if self.number_of_constraints > 0:
-            overall_constraint_violation = 0.0
-            number_of_violated_constraints = 0.0
-
-            for constrain in self.constraints:
-                violation_degree = constrain(solution.variables)
-                if violation_degree < 0.0:
-                    overall_constraint_violation += violation_degree
-                    number_of_violated_constraints += 1
-
-            solution.attributes['overall_constraint_violation'] = overall_constraint_violation
-            solution.attributes['number_of_violated_constraints'] = number_of_violated_constraints
+        for i in range(self.number_of_constraints):
+            solution.constraints[i] = self.constraints[i](solution.variables)
 
     def get_name(self) -> str:
         return self.name

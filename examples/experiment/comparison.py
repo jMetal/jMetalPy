@@ -2,11 +2,10 @@ from jmetal.algorithm.multiobjective.gde3 import GDE3
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.core.quality_indicator import *
-from jmetal.operator import BinaryTournamentSelection, PolynomialMutation, SBXCrossover
+from jmetal.lab.experiment import Experiment, Job, generate_summary_from_experiment
+from jmetal.operator import PolynomialMutation, SBXCrossover
 from jmetal.problem import ZDT1, ZDT2, ZDT3
 from jmetal.util.archive import CrowdingDistanceArchive
-from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
-from jmetal.util.laboratory import Experiment, Job, generate_summary_from_experiment
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 
@@ -25,7 +24,6 @@ def configure_experiment(problems: dict, n_run: int):
                         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables,
                                                     distribution_index=20),
                         crossover=SBXCrossover(probability=1.0, distribution_index=20),
-                        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
                         termination_criterion=StoppingByEvaluations(max=max_evaluations)
                     ),
                     algorithm_tag='NSGAII',

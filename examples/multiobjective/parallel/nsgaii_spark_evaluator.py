@@ -1,9 +1,8 @@
 from examples.multiobjective.parallel.zdt1_modified import ZDT1Modified
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.operator import SBXCrossover, PolynomialMutation, BinaryTournamentSelection
-from jmetal.util.comparator import RankingAndCrowdingDistanceComparator
+from jmetal.operator import SBXCrossover, PolynomialMutation
 from jmetal.util.observer import ProgressBarObserver
-from jmetal.util.solution_list.evaluator import SparkEvaluator
+from jmetal.util.solutions.evaluator import SparkEvaluator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
@@ -12,13 +11,12 @@ if __name__ == '__main__':
     max_evaluations = 100
 
     algorithm = NSGAII(
-        population_evaluator=SparkEvaluator(),
         problem=problem,
         population_size=10,
         offspring_population_size=10,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
-        selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator()),
+        population_evaluator=SparkEvaluator(),
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
