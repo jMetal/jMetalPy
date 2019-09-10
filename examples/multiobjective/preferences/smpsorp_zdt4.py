@@ -1,6 +1,6 @@
 from jmetal.algorithm.multiobjective.smpso import SMPSORP
 from jmetal.operator import PolynomialMutation
-from jmetal.problem import ZDT1
+from jmetal.problem import ZDT1, ZDT4
 from jmetal.util.archive import CrowdingDistanceArchiveWithReferencePoint
 
 from jmetal.util.observer import VisualizerObserver
@@ -9,8 +9,8 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 from jmetal.lab.visualization import InteractivePlot, Plot
 
 if __name__ == '__main__':
-    problem = ZDT1()
-    problem.reference_front = read_solutions(filename='../../../resources/reference_front/ZDT1.pf')
+    problem = ZDT4()
+    problem.reference_front = read_solutions(filename='resources/reference_front/ZDT4.pf')
 
     swarm_size = 100
 

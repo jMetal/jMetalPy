@@ -10,7 +10,7 @@ from jmetal.lab.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
     problem = ZDT2()
-    problem.reference_front = read_solutions(filename='../../../resources/reference_front/{}.pf'.format(problem.get_name()))
+    problem.reference_front = read_solutions(filename='resources/reference_front/{}.pf'.format(problem.get_name()))
 
     reference_point = [0.2, 0.5]
 
@@ -33,11 +33,11 @@ if __name__ == '__main__':
 
     # Plot front
     plot_front = Plot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels, reference_point=reference_point, reference_front=problem.reference_front)
-    plot_front.plot(front, label='gNSGAII-ZDT1', filename='gNSGAII-ZDT1')
+    plot_front.plot(front, label='gNSGAII-ZDT2', filename='gNSGAII-ZDT2')
 
     # Plot interactive front
     plot_front = InteractivePlot(plot_title='Pareto front approximation', axis_labels=problem.obj_labels, reference_point=reference_point, reference_front=problem.reference_front)
-    plot_front.plot(front, label='gNSGAII-ZDT1', filename='gNSGAII-ZDT1')
+    plot_front.plot(front, label='gNSGAII-ZDT2', filename='gNSGAII-ZDT2')
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.' + algorithm.get_name() + "." + problem.get_name())
