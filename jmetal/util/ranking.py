@@ -8,10 +8,11 @@ S = TypeVar('S')
 
 class Ranking(List[S], ABC):
 
-    def __init__(self):
+    def __init__(self, comparator: Comparator = DominanceComparator()):
         super(Ranking, self).__init__()
         self.number_of_comparisons = 0
         self.ranked_sublists = []
+        self.comparator = comparator
 
     @abstractmethod
     def compute_ranking(self, solutions: List[S], k: int = None):
@@ -37,8 +38,7 @@ class FastNonDominatedRanking(Ranking[List[S]]):
     """ Class implementing the non-dominated ranking of NSGA-II proposed by Deb et al., see [Deb2002]_ """
 
     def __init__(self, comparator: Comparator = DominanceComparator()):
-        super(FastNonDominatedRanking, self).__init__()
-        self.comparator = comparator
+        super(FastNonDominatedRanking, self).__init__(comparator)
 
     def compute_ranking(self, solutions: List[S], k: int = None):
         """ Compute ranking of solutions.
@@ -109,8 +109,7 @@ class StrengthRanking(Ranking[List[S]]):
     """ Class implementing a ranking scheme based on the strength ranking used in SPEA2. """
 
     def __init__(self, comparator: Comparator = DominanceComparator()):
-        super(StrengthRanking, self).__init__()
-        self.comparator = comparator
+        super(StrengthRanking, self).__init__(comparator)
 
     def compute_ranking(self, solutions: List[S], k: int = None):
         """
