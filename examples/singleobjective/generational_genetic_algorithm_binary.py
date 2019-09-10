@@ -1,8 +1,5 @@
-from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
-from jmetal.operator import SPXCrossover, BitFlipMutation, BinaryTournamentSelection
 from jmetal.problem import OneMax
 from jmetal.util.observer import PrintObjectivesObserver
-from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
 <<<<<<< HEAD

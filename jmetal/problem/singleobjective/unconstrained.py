@@ -1,8 +1,6 @@
 import math
 import random
 
-import math
-
 from jmetal.core.problem import BinaryProblem, FloatProblem
 from jmetal.core.solution import BinarySolution, FloatSolution
 

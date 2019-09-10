@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
+from math import sqrt, pow, sin, pi, floor, cos
 
 import numpy
-from math import sqrt, pow, sin, pi, floor, cos
 
 from jmetal.core.problem import FloatProblem, DynamicProblem
 from jmetal.core.solution import FloatSolution

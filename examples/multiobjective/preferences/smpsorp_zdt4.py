@@ -1,12 +1,11 @@
 from jmetal.algorithm.multiobjective.smpso import SMPSORP
+from jmetal.lab.visualization import InteractivePlot, Plot
 from jmetal.operator import PolynomialMutation
-from jmetal.problem import ZDT1, ZDT4
+from jmetal.problem import ZDT4
 from jmetal.util.archive import CrowdingDistanceArchiveWithReferencePoint
-
 from jmetal.util.observer import VisualizerObserver
 from jmetal.util.solutions import read_solutions, print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
-from jmetal.lab.visualization import InteractivePlot, Plot
 
 if __name__ == '__main__':
     problem = ZDT4()
