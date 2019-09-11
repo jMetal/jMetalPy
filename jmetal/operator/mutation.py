@@ -211,22 +211,20 @@ class NonUniformMutation(Mutation[FloatSolution]):
         return 'Uniform mutation'
 
 
-class SwapMutation(Mutation[PermutationSolution]):
+class PermutationSwapMutation(Mutation[PermutationSolution]):
 
     def execute(self, solution: PermutationSolution) -> PermutationSolution:
-        for i in range(solution.number_of_variables):
-            for _ in range(len(solution.variables[i])):
-                rand = random.random()
+        rand = random.random()
 
-                if rand <= self.probability:
-                    idx = solution.variables[i]
-                    unsorted = random.sample(idx, 2)
-                    idx[unsorted[0]], idx[unsorted[1]] = idx[unsorted[1]], idx[unsorted[0]]
+        if rand <= self.probability:
+            pos_one, pos_two = random.sample(range(solution.number_of_variables - 1), 2)
+            solution.variables[pos_one], solution.variables[pos_two] = \
+                solution.variables[pos_two], solution.variables[pos_one]
 
         return solution
 
     def get_name(self):
-        return 'Swap'
+        return 'Permutation Swap mutation'
 
 
 class ScrambleMutation(Mutation[PermutationSolution]):

@@ -45,43 +45,42 @@ class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
             raise Exception('The number of parents is not two: {}'.format(len(parents)))
 
         offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
+        permutation_length = offspring[0].number_of_variables
+
         rand = random.random()
-
         if rand <= self.probability:
-            for i in range(parents[0].number_of_variables):
-                size = min(len(offspring[0].variables[i]), len(offspring[1].variables[i]))
-                p1, p2 = [0] * size, [0] * size
+            cross_points = sorted([random.randint(0, permutation_length) for _ in range(2)])
 
-                # Initialize the position of each indices in the individuals
-                for j in range(size):
-                    p1[offspring[0].variables[i][j]] = j
-                    p2[offspring[1].variables[i][j]] = j
+            def _repeated(element, collection):
+                c = 0
+                for e in collection:
+                    if e == element:
+                        c += 1
+                return c > 1
 
-                # Choose crossover points
-                cxpoint1 = random.randint(0, size)
-                cxpoint2 = random.randint(0, size - 1)
+            def _swap(data_a, data_b, cross_points):
+                c1, c2 = cross_points
+                new_a = data_a[:c1] + data_b[c1:c2] + data_a[c2:]
+                new_b = data_b[:c1] + data_a[c1:c2] + data_b[c2:]
+                return new_a, new_b
 
-                if cxpoint2 >= cxpoint1:
-                    cxpoint2 += 1
-                else:  # Swap the two cx points
-                    cxpoint1, cxpoint2 = cxpoint2, cxpoint1
+            def _map(swapped, cross_points):
+                n = len(swapped[0])
+                c1, c2 = cross_points
+                s1, s2 = swapped
+                map_ = s1[c1:c2], s2[c1:c2]
+                for i_chromosome in range(n):
+                    if not c1 < i_chromosome < c2:
+                        for i_son in range(2):
+                            while _repeated(swapped[i_son][i_chromosome], swapped[i_son]):
+                                map_index = map_[i_son].index(swapped[i_son][i_chromosome])
+                                swapped[i_son][i_chromosome] = map_[1 - i_son][map_index]
+                return s1, s2
 
-                # Apply crossover between cx points
-                for j in range(cxpoint1, cxpoint2):
-                    # Keep track of the selected values
-                    temp1 = offspring[0].variables[i][j]
-                    temp2 = offspring[1].variables[i][j]
+            swapped = _swap(parents[0].variables, parents[1].variables, cross_points)
+            mapped = _map(swapped, cross_points)
 
-                    # Swap the matched value
-                    offspring[0].variables[i][j], offspring[0].variables[i][p1[temp2]] = temp2, temp1
-                    offspring[1].variables[i][j], offspring[1].variables[i][p2[temp1]] = temp1, temp2
-
-                    # Position bookkeeping
-                    p1[temp1], p1[temp2] = p1[temp2], p1[temp1]
-                    p2[temp1], p2[temp2] = p2[temp2], p2[temp1]
-
-                offspring[0].variables[i] = p1
-                offspring[1].variables[i] = p2
+            offspring[0].variables, offspring[1].variables = mapped
 
         return offspring
 
