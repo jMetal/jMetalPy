@@ -1,11 +1,11 @@
 from jmetal.algorithm.multiobjective.moead import MOEAD
+from jmetal.lab.visualization import Plot, InteractivePlot
 from jmetal.operator import PolynomialMutation, DifferentialEvolutionCrossover
 from jmetal.problem import DTLZ2
 from jmetal.util.aggregative_function import Tschebycheff
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solutions import read_solutions, print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
-from jmetal.lab.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
     problem = DTLZ2()

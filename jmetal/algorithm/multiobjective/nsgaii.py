@@ -85,7 +85,7 @@ class NSGAII(GeneticAlgorithm[S, R]):
         :param offspring_population: Offspring population.
         :return: New population after ranking and crowding distance selection is applied.
         """
-        ranking = FastNonDominatedRanking()
+        ranking = FastNonDominatedRanking(self.dominance_comparator)
         density_estimator = CrowdingDistance()
 
         r = RankingAndDensityEstimatorReplacement(ranking, density_estimator, RemovalPolicyType.ONE_SHOT)

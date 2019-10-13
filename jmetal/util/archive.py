@@ -1,12 +1,11 @@
+import copy
 import random
 from abc import ABC, abstractmethod
 from threading import Lock
 from typing import TypeVar, Generic, List
-import copy
 
-from jmetal.util.solutions.comparator import Comparator, DominanceComparator, SolutionAttributeComparator
 from jmetal.util.density_estimator import CrowdingDistance, DensityEstimator
-
+from jmetal.util.solutions.comparator import Comparator, DominanceComparator, SolutionAttributeComparator
 
 S = TypeVar('S')
 
@@ -56,11 +55,12 @@ class BoundedArchive(Archive[S]):
 
     def add(self, solution: S) -> bool:
         success = self.non_dominated_solution_archive.add(solution)
+
         if success:
             if self.size() > self.maximum_size:
                 self.compute_density_estimator()
-                worst_solution = self.__find_worst_solution(self.solution_list)
-                self.solution_list.remove(worst_solution)
+                worst_solution, index_to_remove = self.__find_worst_solution(self.solution_list)
+                self.solution_list.pop(index_to_remove)
 
         return success
 
@@ -71,11 +71,14 @@ class BoundedArchive(Archive[S]):
             raise Exception("The solution list is empty")
 
         worst_solution = solution_list[0]
-        for solution in solution_list[1:]:
+        index_to_remove = 0
+
+        for solution_index, solution in enumerate(solution_list[1:]):
             if self.comparator.compare(worst_solution, solution) < 0:
                 worst_solution = solution
+                index_to_remove = solution_index + 1
 
-        return worst_solution
+        return worst_solution, index_to_remove
 
 
 class NonDominatedSolutionListArchive(Archive[S]):

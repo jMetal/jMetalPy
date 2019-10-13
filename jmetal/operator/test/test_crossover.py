@@ -2,7 +2,7 @@ import unittest
 from unittest import mock
 
 from jmetal.core.solution import BinarySolution, PermutationSolution
-from jmetal.operator.crossover import NullCrossover, SPXCrossover, CXCrossover
+from jmetal.operator.crossover import NullCrossover, SPXCrossover, CXCrossover, PMXCrossover
 
 
 class NullCrossoverTestCases(unittest.TestCase):
@@ -125,6 +125,75 @@ class SinglePointTestCases(unittest.TestCase):
         self.assertEqual([True, False, True, True, True, True], offspring[1].variables[2])
 
 
+class PMXTestCases(unittest.TestCase):
+
+    def test_should_constructor_raises_an_exception_is_probability_is_negative(self) -> None:
+        with self.assertRaises(Exception):
+            PMXCrossover(-1)
+
+    def test_should_constructor_raises_an_exception_is_probability_is_higher_than_one(self) -> None:
+        with self.assertRaises(Exception):
+            PMXCrossover(1.01)
+
+    def test_should_constructor_create_a_non_null_object(self):
+        solution = PMXCrossover(1.0)
+        self.assertIsNotNone(solution)
+
+    def test_should_constructor_create_a_valid_operator(self):
+        operator = PMXCrossover(0.5)
+        self.assertEqual(0.5, operator.probability)
+
+    def test_should_the_solution_remain_unchanged_if_the_probability_is_zero(self):
+        operator = PMXCrossover(0.0)
+        solution1 = PermutationSolution(number_of_variables=2, number_of_objectives=1)
+        solution1.variables[0] = [1, 2]
+        solution1.variables[1] = [2, 6]
+
+        solution2 = PermutationSolution(number_of_variables=2, number_of_objectives=1)
+        solution2.variables[0] = [2, 3]
+        solution2.variables[1] = [5, 3]
+
+        offspring = operator.execute([solution1, solution2])
+
+        self.assertEqual([1, 2], offspring[0].variables[0])
+        self.assertEqual([2, 6], offspring[0].variables[1])
+
+        self.assertEqual([2, 3], offspring[1].variables[0])
+        self.assertEqual([5, 3], offspring[1].variables[1])
+
+    @mock.patch('random.randint')
+    def test_should_the_operator_work_with_permutation_at_the_middle(self, random_call):
+        operator = PMXCrossover(1.0)
+
+        solution1 = PermutationSolution(number_of_variables=10, number_of_objectives=1)
+        solution1.variables = [i for i in range(10)]
+
+        solution2 = PermutationSolution(number_of_variables=10, number_of_objectives=1)
+        solution2.variables = [i for i in range(10, 20)]
+
+        random_call.side_effect = (2, 4)
+        offspring = operator.execute([solution1, solution2])
+
+        self.assertEqual([0, 1, 12, 13, 4, 5, 6, 7, 8, 9], offspring[0].variables)
+        self.assertEqual([10, 11, 2, 3, 14, 15, 16, 17, 18, 19], offspring[1].variables)
+
+    @mock.patch('random.randint')
+    def test_should_the_operator_work_with_permutation_at_the_beginning(self, random_call):
+        operator = PMXCrossover(1.0)
+
+        solution1 = PermutationSolution(number_of_variables=10, number_of_objectives=1)
+        solution1.variables = [i for i in range(10)]
+
+        solution2 = PermutationSolution(number_of_variables=10, number_of_objectives=1)
+        solution2.variables = [i for i in range(10, 20)]
+
+        random_call.side_effect = (0, 5)
+        offspring = operator.execute([solution1, solution2])
+
+        self.assertEqual([10, 11, 12, 13, 14, 5, 6, 7, 8, 9], offspring[0].variables)
+        self.assertEqual([0, 1, 2, 3, 4, 15, 16, 17, 18, 19], offspring[1].variables)
+
+
 class CXTestCases(unittest.TestCase):
 
     def test_should_constructor_raises_an_exception_is_probability_is_negative(self) -> None:
@@ -152,7 +221,7 @@ class CXTestCases(unittest.TestCase):
             CXCrossover(-12)
 
     @mock.patch('random.randint')
-    def test_should_the_solution_remain_unchanged_if_the_probability_is_zero(self, random_call):
+    def test_should_the_operator_work_with_two_solutions_with_two_variables(self, random_call):
         operator = CXCrossover(1.0)
         solution1 = PermutationSolution(number_of_variables=2, number_of_objectives=1)
         solution1.variables[0] = [1, 2, 3, 4, 7]

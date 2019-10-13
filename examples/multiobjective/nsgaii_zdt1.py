@@ -1,10 +1,10 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
+from jmetal.lab.visualization import Plot, InteractivePlot
 from jmetal.operator import SBXCrossover, PolynomialMutation
 from jmetal.problem import ZDT1
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solutions import read_solutions, print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
-from jmetal.lab.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
     problem = ZDT1()
