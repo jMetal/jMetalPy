@@ -1,12 +1,11 @@
 <p align="center">
   <br/>
-  <img src=docs/source/jmetalpy.png alt="jMetalPy">
+  <img src=source/jmetalpy.png alt="jMetalPy">
   <br/>
 </p>
 
 # jMetalPy: Python version of the jMetal framework
 [![Build Status](https://img.shields.io/travis/jMetal/jMetalPy/master.svg?style=flat-square)](https://travis-ci.org/jMetal/jMetalPy)
-[![Read the Docs](https://img.shields.io/readthedocs/jmetalpy.svg?style=flat-square)](https://readthedocs.org/projects/jmetalpy/)
 [![PyPI License](https://img.shields.io/pypi/l/jMetalPy.svg?style=flat-square)]()
 [![PyPI Python version](https://img.shields.io/pypi/pyversions/jMetalPy.svg?style=flat-square)]()
 
