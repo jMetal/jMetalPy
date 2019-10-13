@@ -8,6 +8,11 @@ jMetalPy: Python version of the jMetal framework
 
 .. warning:: Documentation is work in progress!! Some information may be missing or incomplete.
 
+.. table::
+
+   +---------------------+----------+
+   | **Target**          |  v1.5.1  |
+   +---------------------+----------+
 
 Content
 ------------------------

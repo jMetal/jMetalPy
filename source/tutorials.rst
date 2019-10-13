@@ -10,8 +10,8 @@ Getting started
    tutorials/visualization
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Laboratory:
 
-   tutorials/statistics
    tutorials/experiment
+   tutorials/statistics
