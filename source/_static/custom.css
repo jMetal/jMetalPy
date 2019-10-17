@@ -1,0 +1,42 @@
+body {
+    font-size: 13px;
+}
+
+h1 {
+    font-size: 30px;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+h3 {
+    font-size: 20px;
+}
+
+.sidebar-toc {
+    font-size: 13px;
+}
+
+code, pre, tt {
+    font-size: 12px;
+    padding: 10px 0 10px 0;
+}
+
+pre {
+    padding: 10px 0 10px 20px;
+}
+
+blockquote {
+    font-size: 13px;
+}
+
+.admonition {
+    margin: 20px 0;
+    padding: 10px 20px;
+}
+
+.admonition-title {
+    font-size: 13px;
+    margin: 10px 0 5px;
+}

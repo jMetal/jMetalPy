@@ -9,8 +9,7 @@ from jmetal.util.density_estimator import KNearestNeighborDensityEstimator
 from jmetal.util.ranking import StrengthRanking
 from jmetal.util.replacement import RankingAndDensityEstimatorReplacement, RemovalPolicyType
 from jmetal.util.solutions import Evaluator, Generator
-from jmetal.util.solutions.comparator import Comparator, StrengthAndKNNDistanceComparator, \
-    SolutionAttributeComparator, MultiComparator
+from jmetal.util.solutions.comparator import Comparator, MultiComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -75,7 +74,7 @@ class SPEA2(GeneticAlgorithm[S, R]):
         :param offspring_population: Offspring population.
         :return: New population after ranking and crowding distance selection is applied.
         """
-        ranking = StrengthRanking()
+        ranking = StrengthRanking(self.dominance_comparator)
         density_estimator = KNearestNeighborDensityEstimator()
 
         r = RankingAndDensityEstimatorReplacement(ranking, density_estimator, RemovalPolicyType.SEQUENTIAL)

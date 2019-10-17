@@ -69,7 +69,8 @@ class DominanceComparatorTestCases(unittest.TestCase):
 
         self.assertEqual(0, self.comparator.compare(solution, solution2))
 
-    def test_should_dominance_comparator_return_one_if_the_two_solutions_have_one_objective_and_the_second_one_is_lower(self):
+    def test_should_dominance_comparator_return_one_if_the_two_solutions_have_one_objective_and_the_second_one_is_lower(
+            self):
         solution = Solution(1, 1)
         solution2 = Solution(1, 1)
         solution.objectives = [2.0]
@@ -77,7 +78,8 @@ class DominanceComparatorTestCases(unittest.TestCase):
 
         self.assertEqual(1, self.comparator.compare(solution, solution2))
 
-    def test_should_dominance_comparator_return_minus_one_if_the_two_solutions_have_one_objective_and_the_first_one_is_lower(self):
+    def test_should_dominance_comparator_return_minus_one_if_the_two_solutions_have_one_objective_and_the_first_one_is_lower(
+            self):
         solution = Solution(1, 1)
         solution2 = Solution(1, 1)
         solution.objectives = [1.0]

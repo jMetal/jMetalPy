@@ -9,14 +9,14 @@ with open(join(basedir, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='jmetalpy',
-    version='1.5.0',
+    version='1.5.1',
     description='Python version of the jMetal framework',
     long_description=README,
     long_description_content_type='text/markdown',
     author='Antonio J. Nebro',
     author_email='antonio@lcc.uma.es',
     maintainer='Antonio J. Nebro, Antonio Benitez-Hidalgo',
-    maintainer_email='antonio@lcc.uma.es, antonio.b@uma.es',
+    maintainer_email='antonio@lcc.uma.es, antonio.benitez@lcc.uma.es',
     license='MIT',
     url='https://github.com/jMetal/jMetalPy',
     packages=find_packages(exclude=['test_']),
@@ -29,7 +29,6 @@ setup(
     ],
     install_requires=[
         'tqdm',
-        'ipython',
         'numpy>=1.16.0',
         'pandas>=0.24.2',
         'pyspark>=2.4.0',

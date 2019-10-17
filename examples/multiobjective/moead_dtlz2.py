@@ -1,15 +1,15 @@
 from jmetal.algorithm.multiobjective.moead import MOEAD
+from jmetal.lab.visualization import Plot, InteractivePlot
 from jmetal.operator import PolynomialMutation, DifferentialEvolutionCrossover
 from jmetal.problem import DTLZ2
 from jmetal.util.aggregative_function import Tschebycheff
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solutions import read_solutions, print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
-from jmetal.lab.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
     problem = DTLZ2()
-    problem.reference_front = read_solutions(filename='resources/reference_front/DTLZ2.3D.pf')
+    problem.reference_front = read_solutions(filename='../../resources/reference_front/DTLZ2.3D.pf')
 
     max_evaluations = 150000
 
@@ -22,7 +22,7 @@ if __name__ == '__main__':
         neighbor_size=20,
         neighbourhood_selection_probability=0.9,
         max_number_of_replaced_solutions=2,
-        weight_files_path='resources/MOEAD_weights',
+        weight_files_path='../../resources/MOEAD_weights',
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 

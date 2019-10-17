@@ -1,4 +1,5 @@
 from jmetal.algorithm.multiobjective.smpso import SMPSO
+from jmetal.lab.visualization import Plot, InteractivePlot
 from jmetal.operator import PolynomialMutation
 from jmetal.problem import ZDT4
 from jmetal.util.archive import CrowdingDistanceArchive
@@ -6,12 +7,10 @@ from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file
 from jmetal.util.solutions import read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
-from jmetal.lab.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
     problem = ZDT4()
-    problem.reference_front = read_solutions(
-        filename='../../resources/reference_front/{}.pf'.format(problem.get_name()))
+    problem.reference_front = read_solutions(filename='../../resources/reference_front/ZDT4.pf')
 
     max_evaluations = 25000
     algorithm = SMPSO(
