@@ -109,7 +109,8 @@ class StrengthRanking(Ranking[List[S]]):
     """ Class implementing a ranking scheme based on the strength ranking used in SPEA2. """
 
     def __init__(self, comparator: Comparator = DominanceComparator()):
-        super(StrengthRanking, self).__init__(comparator)
+        super(StrengthRanking, self).__init__()
+        self.comparator = comparator
 
     def compute_ranking(self, solutions: List[S], k: int = None):
         """

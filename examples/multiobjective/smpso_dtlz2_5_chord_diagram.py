@@ -1,11 +1,13 @@
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.lab.visualization import InteractivePlot, Plot
-from jmetal.lab.visualization.chord_plot import chord_diagram
+
 from jmetal.operator import PolynomialMutation
 from jmetal.problem import DTLZ2
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.observer import ProgressBarObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
+
+from jmetal.lab.visualization.chord_plot import chord_diagram
 
 if __name__ == '__main__':
     problem = DTLZ2(number_of_objectives=5)

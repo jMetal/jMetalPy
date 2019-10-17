@@ -8,9 +8,11 @@ from jmetal.util.solutions import print_function_values_to_file, print_variables
 from jmetal.util.solutions import read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
+from jmetal.lab.visualization import Plot, InteractivePlot
+
 if __name__ == '__main__':
     problem = ZDT4()
-    problem.reference_front = read_solutions(filename='../../resources/reference_front/ZDT4.pf')
+    problem.reference_front = read_solutions(filename='resources/reference_front/ZDT4.pf')
 
     max_evaluations = 25000
     algorithm = SMPSO(

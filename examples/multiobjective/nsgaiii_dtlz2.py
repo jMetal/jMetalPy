@@ -1,35 +1,24 @@
-from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-<<<<<<< HEAD
+from jmetal.algorithm.multiobjective.nsgaiii import NSGAIII, UniformReferenceDirectionFactory
 from jmetal.lab.visualization import Plot, InteractivePlot
 from jmetal.operator import SBXCrossover, PolynomialMutation
-from jmetal.problem import DTLZ2
+from jmetal.problem import DTLZ1, DTLZ2
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
-from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file
-from jmetal.util.solutions.comparator import DominanceComparator
+from jmetal.util.solutions import read_solutions, print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
-=======
-from jmetal.operator import SBXCrossover, PolynomialMutation
-from jmetal.problem import DTLZ2
-from jmetal.util.solutions.comparator import DominanceComparator
-from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
-from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file
-from jmetal.util.termination_criterion import StoppingByEvaluations
-from jmetal.lab.visualization import Plot, InteractivePlot
->>>>>>> develop
 
 if __name__ == '__main__':
     problem = DTLZ2()
-    problem.reference = '../../resources/reference_front/DTLZ2.3D.pf'
+    problem.reference_front = read_solutions(filename='resources/reference_front/DTLZ2.3D.pf')
 
     max_evaluations = 25000
-    algorithm = NSGAII(
+
+    algorithm = NSGAIII(
         problem=problem,
-        population_size=100,
-        offspring_population_size=100,
+        population_size=92,
+        reference_directions=UniformReferenceDirectionFactory(3, n_points=91),
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
-        crossover=SBXCrossover(probability=1.0, distribution_index=20),
-        termination_criterion=StoppingByEvaluations(max=max_evaluations),
-        dominance_comparator=DominanceComparator()
+        crossover=SBXCrossover(probability=1.0, distribution_index=30),
+        termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
     algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))

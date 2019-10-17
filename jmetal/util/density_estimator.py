@@ -1,7 +1,13 @@
 import logging
+import numpy
 from abc import ABC, abstractmethod
 from functools import cmp_to_key
 from typing import TypeVar, List
+from functools import cmp_to_key
+
+from scipy.spatial.distance import euclidean
+
+from jmetal.util.solutions.comparator import SolutionAttributeComparator, Comparator
 
 import numpy
 from scipy.spatial.distance import euclidean

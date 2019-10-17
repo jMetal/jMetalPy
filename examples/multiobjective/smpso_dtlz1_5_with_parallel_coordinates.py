@@ -7,6 +7,8 @@ from jmetal.util.observer import ProgressBarObserver
 from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
+from jmetal.lab.visualization import InteractivePlot, Plot
+
 if __name__ == '__main__':
     problem = DTLZ1(number_of_objectives=5)
 

@@ -29,6 +29,7 @@ setup(
     ],
     install_requires=[
         'tqdm',
+        'ipython',
         'numpy>=1.16.0',
         'pandas>=0.24.2',
         'pyspark>=2.4.0',
