@@ -7,13 +7,8 @@ from jmetal.util.solutions import read_solutions, print_function_values_to_file,
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
-<<<<<<< HEAD:examples/multiobjective/nsgaiii_dtlz1.py
-    problem = DTLZ1()
-    problem.reference_front = read_solutions(filename='esources/reference_front/DTLZ1.3D.pf')
-=======
     problem = DTLZ2()
     problem.reference_front = read_solutions(filename='resources/reference_front/DTLZ2.3D.pf')
->>>>>>> master:examples/multiobjective/nsgaiii_dtlz2.py
 
     max_evaluations = 25000
 

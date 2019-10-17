@@ -9,13 +9,8 @@ if __name__ == '__main__':
 
     algorithm = GeneticAlgorithm(
         problem=problem,
-<<<<<<< HEAD
         population_size=100,
         offspring_population_size=100,
-=======
-        population_size=40,
-        offspring_population_size=40,
->>>>>>> master
         mutation=BitFlipMutation(1.0 / problem.number_of_bits),
         crossover=SPXCrossover(1.0),
         selection=BinaryTournamentSelection(),

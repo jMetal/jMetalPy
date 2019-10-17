@@ -181,16 +181,8 @@ def chord_diagram(solutions: List[FloatSolution], nbins='auto', ax=None, obj_lab
         handle_plots.append([])
 
         for indexBin in range(len(histValues)):
-<<<<<<< HEAD
-
             startAngleBin = sector_angles[iobj][0] + (sector_angles[iobj][1] - sector_angles[iobj][0]) * binsDim[
                 indexBin]
-=======
-            startAngleBin = sector_angles[iobj][0] + (sector_angles[iobj][1] - sector_angles[iobj][0]) * binsDim[indexBin]
-            startAngleBin = sector_angles[iobj][0] + (sector_angles[iobj][1] - sector_angles[iobj][0]) * binsDim[
-                indexBin]
-
->>>>>>> master
             endAngleBin = sector_angles[iobj][0] + (sector_angles[iobj][1] - sector_angles[iobj][0]) * binsDim[
                 indexBin + 1]
             relativeHeightBin = 0.15 * histValues[indexBin] / max(histValues)
@@ -251,10 +243,7 @@ def chord_diagram(solutions: List[FloatSolution], nbins='auto', ax=None, obj_lab
         ax.text(labels_pos_and_ros[i][3], labels_pos_and_ros[i][4], '0', **prop_legend_bins, color=colors[i])
         ax.text(labels_pos_and_ros[i][6], labels_pos_and_ros[i][7], str(max_hist_values[i]), **prop_legend_bins,
                 color=colors[i])
-<<<<<<< HEAD
 
-=======
->>>>>>> master
     plt.axis([-1.2, 1.2, -1.2, 1.2])
     fig.canvas.mpl_connect("motion_notify_event",
                            lambda event: hover_over_bin(event, handle_tickers, handle_plots, colors, fig))

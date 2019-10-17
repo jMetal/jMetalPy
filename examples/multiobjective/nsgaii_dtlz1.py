@@ -1,31 +1,16 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> master
+
 from jmetal.lab.visualization import Plot, InteractivePlot
 from jmetal.operator import SBXCrossover, PolynomialMutation
 from jmetal.problem import DTLZ2
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
-from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file
+from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file, read_solutions
 from jmetal.util.solutions.comparator import DominanceComparator
 from jmetal.util.termination_criterion import StoppingByEvaluations
-<<<<<<< HEAD
-=======
-=======
-from jmetal.operator import SBXCrossover, PolynomialMutation
-from jmetal.problem import DTLZ2
-from jmetal.util.solutions.comparator import DominanceComparator
-from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
-from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file
-from jmetal.util.termination_criterion import StoppingByEvaluations
-from jmetal.lab.visualization import Plot, InteractivePlot
->>>>>>> develop
->>>>>>> master
 
 if __name__ == '__main__':
     problem = DTLZ2()
-    problem.reference = '../../resources/reference_front/DTLZ2.3D.pf'
+    problem.reference_front = read_solutions(filename='resources/reference_front/DTLZ2.3D.pf')
 
     max_evaluations = 25000
     algorithm = NSGAII(

@@ -9,13 +9,8 @@ from jmetal.util.solutions import read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
-<<<<<<< HEAD
-    problem = ZDT4()
-    problem.reference_front = read_solutions(filename='../../resources/reference_front/ZDT4.pf')
-=======
     problem = ZDT1()
     problem.reference_front = read_solutions(filename='resources/reference_front/ZDT4.pf')
->>>>>>> master
 
     max_evaluations = 25000
     algorithm = MOCell(

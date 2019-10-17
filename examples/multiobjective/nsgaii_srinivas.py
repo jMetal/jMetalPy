@@ -1,8 +1,5 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-<<<<<<< HEAD
-=======
 
->>>>>>> master
 from jmetal.lab.visualization import Plot, InteractivePlot
 from jmetal.operator import SBXCrossover, PolynomialMutation
 from jmetal.problem import Srinivas
@@ -11,17 +8,6 @@ from jmetal.util.solutions import read_solutions, print_function_values_to_file,
 from jmetal.util.solutions.comparator import DominanceComparator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
-<<<<<<< HEAD
-=======
-from jmetal.operator import SBXCrossover, PolynomialMutation
-from jmetal.problem import Srinivas
-from jmetal.util.solutions.comparator import DominanceComparator
-from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
-from jmetal.util.solutions import read_solutions, print_function_values_to_file, print_variables_to_file
-from jmetal.util.termination_criterion import StoppingByEvaluations
-from jmetal.lab.visualization import Plot, InteractivePlot
-
->>>>>>> master
 if __name__ == '__main__':
     problem = Srinivas()
     problem.reference_front = read_solutions(filename='resources/reference_front/Srinivas.pf')

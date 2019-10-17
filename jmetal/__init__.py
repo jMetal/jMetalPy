@@ -1,10 +1,7 @@
 import logging
 
 import matplotlib
-<<<<<<< HEAD
-=======
 
->>>>>>> master
 matplotlib.use('TkAgg')
 
 from jmetal import algorithm
