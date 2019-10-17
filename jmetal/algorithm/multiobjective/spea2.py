@@ -9,7 +9,13 @@ from jmetal.util.density_estimator import KNearestNeighborDensityEstimator
 from jmetal.util.ranking import StrengthRanking
 from jmetal.util.replacement import RankingAndDensityEstimatorReplacement, RemovalPolicyType
 from jmetal.util.solutions import Evaluator, Generator
+<<<<<<< HEAD
 from jmetal.util.solutions.comparator import Comparator, MultiComparator
+=======
+
+from jmetal.util.solutions.comparator import Comparator, StrengthAndKNNDistanceComparator, \
+    SolutionAttributeComparator, MultiComparator
+>>>>>>> master
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')

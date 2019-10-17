@@ -6,6 +6,11 @@ from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.observer import ProgressBarObserver
 from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
+<<<<<<< HEAD:examples/multiobjective/smpso_dtlz1_5.py
+=======
+
+from jmetal.lab.visualization import InteractivePlot, Plot
+>>>>>>> master:examples/multiobjective/smpso_dtlz1_5_with_parallel_coordinates.py
 
 if __name__ == '__main__':
     problem = DTLZ1(number_of_objectives=5)

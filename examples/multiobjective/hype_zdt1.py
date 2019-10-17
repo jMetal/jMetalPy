@@ -8,7 +8,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
     problem = ZDT1()
-    problem.reference_front = read_solutions(filename='../../resources/reference_front/ZDT1.pf')
+    problem.reference_front = read_solutions(filename='resources/reference_front/ZDT1.pf')
 
     reference_point = FloatSolution([0], [1], problem.number_of_objectives, )
     reference_point.objectives = [1., 1.]  # Mandatory for HYPE

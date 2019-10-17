@@ -9,7 +9,11 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
     problem = LIRCMOP2()
+<<<<<<< HEAD
     problem.reference_front = read_solutions(filename='../../resources/reference_front/LIRCMOP2.pf')
+=======
+    problem.reference_front = read_solutions(filename='resources/reference_front/LIRCMOP2.pf')
+>>>>>>> master
 
     max_evaluations = 300000
 
@@ -22,7 +26,11 @@ if __name__ == '__main__':
         neighbor_size=20,
         neighbourhood_selection_probability=0.9,
         max_number_of_replaced_solutions=2,
+<<<<<<< HEAD
         weight_files_path='../../resources/MOEAD_weights',
+=======
+        weight_files_path='resources/MOEAD_weights',
+>>>>>>> master
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 

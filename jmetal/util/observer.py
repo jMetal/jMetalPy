@@ -8,8 +8,13 @@ from tqdm import tqdm
 from jmetal.core.observer import Observer
 from jmetal.core.problem import DynamicProblem
 from jmetal.core.quality_indicator import InvertedGenerationalDistance
+<<<<<<< HEAD
 from jmetal.lab.visualization import StreamingPlot, Plot
 from jmetal.util.solutions import print_function_values_to_file
+=======
+from jmetal.util.solutions import print_function_values_to_file
+from jmetal.lab.visualization import StreamingPlot, Plot
+>>>>>>> master
 
 S = TypeVar('S')
 
