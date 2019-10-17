@@ -9,7 +9,7 @@ from jmetal.lab.visualization import Plot, InteractivePlot
 
 if __name__ == '__main__':
     problem = Srinivas()
-    problem.reference_front = read_solutions(filename='../../resources/reference_front/Srinivas.pf')
+    problem.reference_front = read_solutions(filename='resources/reference_front/Srinivas.pf')
 
     max_evaluations = 25000
     algorithm = NSGAII(
