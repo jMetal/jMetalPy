@@ -2,7 +2,6 @@ from enum import Enum
 from typing import TypeVar, List
 
 from jmetal.util.density_estimator import DensityEstimator
-
 from jmetal.util.ranking import Ranking
 
 S = TypeVar('S')

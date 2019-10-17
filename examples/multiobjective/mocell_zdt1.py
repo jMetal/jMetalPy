@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.mocell import MOCell
 from jmetal.lab.visualization import Plot
 from jmetal.operator import SBXCrossover, PolynomialMutation
-from jmetal.problem import ZDT4, ZDT1
+from jmetal.problem import ZDT1
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.neighborhood import C9
 from jmetal.util.observer import ProgressBarObserver

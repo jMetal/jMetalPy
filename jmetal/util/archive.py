@@ -4,8 +4,8 @@ from abc import ABC, abstractmethod
 from threading import Lock
 from typing import TypeVar, Generic, List
 
-from jmetal.util.solutions.comparator import Comparator, DominanceComparator, SolutionAttributeComparator
 from jmetal.util.density_estimator import CrowdingDistance, DensityEstimator
+from jmetal.util.solutions.comparator import Comparator, DominanceComparator, SolutionAttributeComparator
 
 S = TypeVar('S')
 

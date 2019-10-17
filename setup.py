@@ -1,6 +1,6 @@
 from os.path import abspath, dirname, join
 
-from setuptools import find_packages, setup
+from setuptools import find_packages
 
 basedir = abspath(dirname(__file__))
 

@@ -10,7 +10,6 @@ from jmetal.util.ranking import StrengthRanking
 from jmetal.util.replacement import RankingAndDensityEstimatorReplacement, RemovalPolicyType
 from jmetal.util.solutions import Evaluator, Generator
 from jmetal.util.solutions.comparator import Comparator, MultiComparator
-
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')

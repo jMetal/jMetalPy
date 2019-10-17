@@ -1,5 +1,4 @@
 import unittest
-
 from math import pi
 
 from jmetal.problem.multiobjective.constrained import Srinivas, Tanaka

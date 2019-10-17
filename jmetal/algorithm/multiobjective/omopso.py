@@ -1,9 +1,9 @@
 import random
 from copy import copy
+from math import sqrt
 from typing import TypeVar, List, Optional
 
 import numpy
-from math import sqrt
 
 from jmetal.config import store
 from jmetal.core.algorithm import ParticleSwarmOptimization
@@ -14,8 +14,6 @@ from jmetal.operator.mutation import NonUniformMutation
 from jmetal.util.archive import BoundedArchive, NonDominatedSolutionListArchive
 from jmetal.util.solutions import Evaluator, Generator
 from jmetal.util.solutions.comparator import DominanceComparator, EpsilonDominanceComparator
-from jmetal.util.solutions.comparator import DominanceComparator, EpsilonDominanceComparator
-from jmetal.util.solutions import Evaluator, Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 R = TypeVar('R')
