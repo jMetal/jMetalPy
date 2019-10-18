@@ -9,7 +9,6 @@ from jmetal.lab.visualization.plotting import Plot
 
 LOGGER = logging.getLogger('jmetal')
 
-
 S = TypeVar('S')
 
 """
@@ -67,7 +66,7 @@ class StreamingPlot:
         if self.reference_front:
             rpoints, _ = Plot.get_points(self.reference_front)
             self.scf, = self.ax.plot(*[rpoints[column].tolist() for column in rpoints.columns.values],
-                                    c='k', ls='None', marker='*', markersize=1)
+                                     c='k', ls='None', marker='*', markersize=1)
 
         # Plot data
         self.sc, = self.ax.plot(*[points[column].tolist() for column in points.columns.values],

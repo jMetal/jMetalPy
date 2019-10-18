@@ -200,12 +200,12 @@ class NonUniformMutation(Mutation[FloatSolution]):
 
         return solution
 
-    def set_current_iteration(self, current_iteration:int):
+    def set_current_iteration(self, current_iteration: int):
         self.current_iteration = current_iteration
 
-    def __delta(self, y:float, b_mutation_parameter:float):
+    def __delta(self, y: float, b_mutation_parameter: float):
         return (y * (1.0 - pow(random.random(),
-                pow((1.0 - 1.0 * self.current_iteration/self.max_iterations), b_mutation_parameter))))
+                               pow((1.0 - 1.0 * self.current_iteration / self.max_iterations), b_mutation_parameter))))
 
     def get_name(self):
         return 'Uniform mutation'

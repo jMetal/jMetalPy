@@ -302,7 +302,7 @@ class SMPSORP(SMPSO):
         self.reference_points = reference_points
         self.lock = threading.Lock()
 
-        thread = threading.Thread(target=change_reference_point, args=(self, ))
+        thread = threading.Thread(target=change_reference_point, args=(self,))
         thread.start()
 
     def initialize_global_best(self, swarm: List[FloatSolution]) -> None:

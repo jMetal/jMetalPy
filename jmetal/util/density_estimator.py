@@ -26,11 +26,11 @@ class DensityEstimator(List[S], ABC):
     """
 
     @abstractmethod
-    def compute_density_estimator(self, solution_list: List[S]) -> float:
+    def compute_density_estimator(self, solutions: List[S]) -> float:
         pass
 
     @abstractmethod
-    def sort(self, solution_list: List[S]) -> List[S]:
+    def sort(self, solutions: List[S]) -> List[S]:
         pass
 
     @classmethod
@@ -41,6 +41,7 @@ class DensityEstimator(List[S], ABC):
 class CrowdingDistance(DensityEstimator[List[S]]):
     """This class implements a DensityEstimator based on the crowding distance of algorithm NSGA-II.
     """
+
     def compute_density_estimator(self, front: List[S]):
         """This function performs the computation of the crowding density estimation over the solution list.
 
@@ -88,7 +89,7 @@ class CrowdingDistance(DensityEstimator[List[S]]):
                 distance += front[j].attributes['crowding_distance']
                 front[j].attributes['crowding_distance'] = distance
 
-    def sort(self, solutions:List[S]) -> List[S]:
+    def sort(self, solutions: List[S]) -> List[S]:
         solutions.sort(key=cmp_to_key(self.get_comparator().compare))
 
     @classmethod
@@ -100,7 +101,8 @@ class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
     """This class implements a density estimator based on the distance to the k-th nearest solution.
     """
 
-    def __init__(self, k=1):
+    def __init__(self, k: int = 1):
+        super().__init__()
         self.k = k
         self.distance_matrix = []
 
@@ -127,7 +129,7 @@ class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
             distances.sort()
             solutions[i].attributes['knn_density'] = distances[self.k]
 
-    def sort(self, solutions:List[S]) -> List[S]:
+    def sort(self, solutions: List[S]) -> List[S]:
         def compare(solution1, solution2):
             distances1 = solution1.attributes["distances_"]
             distances2 = solution2.attributes["distances_"]

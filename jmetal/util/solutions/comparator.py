@@ -86,8 +86,8 @@ class MultiComparator(Comparator):
     value != 0 is obtained or the list becomes empty
     """
 
-    def __init__(self, comparator_list:[Comparator]):
-        self.comparator_list:[Comparator] = comparator_list
+    def __init__(self, comparator_list: [Comparator]):
+        self.comparator_list: [Comparator] = comparator_list
 
     def compare(self, solution1: Solution, solution2: Solution) -> int:
         for comparator in self.comparator_list:

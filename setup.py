@@ -1,6 +1,6 @@
 from os.path import abspath, dirname, join
 
-from setuptools import find_packages
+from setuptools import find_packages, setup
 
 basedir = abspath(dirname(__file__))
 
@@ -29,10 +29,6 @@ setup(
     ],
     install_requires=[
         'tqdm',
-<<<<<<< HEAD
-=======
-        'ipython',
->>>>>>> master
         'numpy>=1.16.0',
         'pandas>=0.24.2',
         'pyspark>=2.4.0',
