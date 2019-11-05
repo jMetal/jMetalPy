@@ -44,8 +44,8 @@ The current release of jMetalPy (v1.5.1) contains the following components:
 * Encodings: real, binary, permutations.
 * Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random).
 * Quality indicators: hypervolume, additive epsilon, GD, IGD.
-* [Pareto front plotting](https://jmetalpy.readthedocs.io/en/latest/examples/visualization.html) for problems with two or more objectives (as scatter plot/parallel coordinates/chordplot) in real-time, static or interactive.
-* [Experiment class](https://jmetalpy.readthedocs.io/en/latest/examples/experiment.html) for performing studies either alone or alongside jMetal.
+* Pareto front plotting for problems with two or more objectives (as scatter plot/parallel coordinates/chordplot) in real-time, static or interactive.
+* Experiment class for performing studies either alone or alongside jMetal.
 * Pairwise and multiple hypothesis testing for statistical analysis, including several frequentist and Bayesian testing methods, critical distance plots and posterior diagrams.
 
 <p align="center">
