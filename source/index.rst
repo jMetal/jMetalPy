@@ -65,21 +65,14 @@ Cite us
 
 .. code-block:: LaTeX
 
-   @article{DBLP:journals/corr/abs-1903-02915,
-     author    = {Antonio Ben{\'{\i}}tez{-}Hidalgo and
-                  Antonio J. Nebro and
-                  Jos{\'{e}} Garc{\'{\i}}a{-}Nieto and
-                  Izaskun Oregi and
-                  Javier Del Ser},
-     title     = {jMetalPy: a Python Framework for Multi-Objective Optimization with
-                  Metaheuristics},
-     journal   = {CoRR},
-     volume    = {abs/1903.02915},
-     year      = {2019},
-     url       = {http://arxiv.org/abs/1903.02915},
-     archivePrefix = {arXiv},
-     eprint    = {1903.02915},
-     timestamp = {Sun, 31 Mar 2019 19:01:24 +0200},
-     biburl    = {https://dblp.org/rec/bib/journals/corr/abs-1903-02915},
-     bibsource = {dblp computer science bibliography, https://dblp.org}
+   @article{BENITEZHIDALGO2019100598,
+      title = "jMetalPy: A Python framework for multi-objective optimization with metaheuristics",
+      journal = "Swarm and Evolutionary Computation",
+      pages = "100598",
+      year = "2019",
+      issn = "2210-6502",
+      doi = "https://doi.org/10.1016/j.swevo.2019.100598",
+      url = "http://www.sciencedirect.com/science/article/pii/S2210650219301397",
+      author = "Antonio Benítez-Hidalgo and Antonio J. Nebro and José García-Nieto and Izaskun Oregi and Javier Del Ser",
+      keywords = "Multi-objective optimization, Metaheuristics, Software framework, Python, Statistical analysis, Visualization",
    }

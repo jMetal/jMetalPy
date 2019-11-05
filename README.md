@@ -10,7 +10,7 @@
 [![PyPI License](https://img.shields.io/pypi/l/jMetalPy.svg?style=flat-square)]()
 [![PyPI Python version](https://img.shields.io/pypi/pyversions/jMetalPy.svg?style=flat-square)]()
 
-A preprint of the paper introducing JMetalPy is available at: https://arxiv.org/abs/1903.02915
+A paper introducing JMetalPy is available at: https://doi.org/10.1016/j.swevo.2019.100598
 
 ## Table of Contents
 - [Installation](#installation)
@@ -50,14 +50,14 @@ The current release of jMetalPy (v1.5.1) contains the following components:
 
 <p align="center">
   <br/>
-  <img src=docs/source/2D.gif width=600 alt="Scatter plot 2D">
+  <img src=source/_static/2D.gif width=600 alt="Scatter plot 2D">
   <br/>
-  <img src=docs/source/3D.gif width=600 alt="Scatter plot 3D">
+  <img src=source/_static/3D.gif width=600 alt="Scatter plot 3D">
   <br/>
-  <img src=docs/source/p-c.gif width=600 alt="Parallel coordinates">
+  <img src=source/_static/p-c.gif width=600 alt="Parallel coordinates">
   <br/>
   <br/>
-  <img src=docs/source/chordplot.gif width=400 alt="Interactive chord plot">
+  <img src=source/_static/chordplot.gif width=400 alt="Interactive chord plot">
   <br/>
 </p>
 
