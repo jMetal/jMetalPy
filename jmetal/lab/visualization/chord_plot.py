@@ -168,7 +168,8 @@ def chord_diagram(solutions: List[FloatSolution], nbins='auto', ax=None, obj_lab
         draw_sector(start_angle=sector_angles[iobj][0], end_angle=sector_angles[iobj][1], radius=0.925, width=0.225,
                     ax=ax,
                     fc=(1, 1, 1, 0.0), ec=(0, 0, 0), lw=2, z_order=10)
-        draw_sector(start_angle=sector_angles[iobj][0], end_angle=sector_angles[iobj][1], radius=0.925, width=0.05, ax=ax,
+        draw_sector(start_angle=sector_angles[iobj][0], end_angle=sector_angles[iobj][1], radius=0.925, width=0.05,
+                    ax=ax,
                     fc=colors[iobj], ec=(0, 0, 0), lw=2, z_order=10)
         draw_sector(start_angle=sector_angles[iobj][0], end_angle=sector_angles[iobj][1], radius=0.7 + 0.15, width=0.0,
                     ax=ax, fc=colors[iobj], ec=colors[iobj], lw=2, ls=':', z_order=5)
@@ -180,8 +181,8 @@ def chord_diagram(solutions: List[FloatSolution], nbins='auto', ax=None, obj_lab
         handle_plots.append([])
 
         for indexBin in range(len(histValues)):
-
-            startAngleBin = sector_angles[iobj][0] + (sector_angles[iobj][1] - sector_angles[iobj][0]) * binsDim[indexBin]
+            startAngleBin = sector_angles[iobj][0] + (sector_angles[iobj][1] - sector_angles[iobj][0]) * binsDim[
+                indexBin]
             endAngleBin = sector_angles[iobj][0] + (sector_angles[iobj][1] - sector_angles[iobj][0]) * binsDim[
                 indexBin + 1]
             relativeHeightBin = 0.15 * histValues[indexBin] / max(histValues)
@@ -240,7 +241,8 @@ def chord_diagram(solutions: List[FloatSolution], nbins='auto', ax=None, obj_lab
         ax.text(labels_pos_and_ros[i][0], labels_pos_and_ros[i][1], obj_labels[i], rotation=labels_pos_and_ros[i][2],
                 **prop_labels)
         ax.text(labels_pos_and_ros[i][3], labels_pos_and_ros[i][4], '0', **prop_legend_bins, color=colors[i])
-        ax.text(labels_pos_and_ros[i][6], labels_pos_and_ros[i][7], str(max_hist_values[i]), **prop_legend_bins, color=colors[i])
+        ax.text(labels_pos_and_ros[i][6], labels_pos_and_ros[i][7], str(max_hist_values[i]), **prop_legend_bins,
+                color=colors[i])
 
     plt.axis([-1.2, 1.2, -1.2, 1.2])
     fig.canvas.mpl_connect("motion_notify_event",

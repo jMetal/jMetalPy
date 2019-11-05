@@ -64,9 +64,6 @@ class BinaryProblem(Problem[BinarySolution], ABC):
     def __init__(self):
         super(BinaryProblem, self).__init__()
 
-    def create_solution(self) -> BinarySolution:
-        pass
-
 
 class FloatProblem(Problem[FloatSolution], ABC):
     """ Class representing float problems. """
@@ -114,9 +111,6 @@ class PermutationProblem(Problem[PermutationSolution], ABC):
 
     def __init__(self):
         super(PermutationProblem, self).__init__()
-
-    def create_solution(self) -> IntegerSolution:
-        pass
 
 
 class OnTheFlyFloatProblem(FloatProblem):

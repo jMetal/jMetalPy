@@ -145,7 +145,8 @@ class SubsetSum(BinaryProblem):
         return solution
 
     def create_solution(self) -> BinarySolution:
-        new_solution = BinarySolution(number_of_variables=1, number_of_objectives=1)
+        new_solution = BinarySolution(number_of_variables=self.number_of_variables,
+                                      number_of_objectives=self.number_of_objectives)
         new_solution.variables[0] = \
             [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
 

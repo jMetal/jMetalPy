@@ -10,7 +10,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
     problem = Srinivas()
-    problem.reference_front = read_solutions(filename='../../resources/reference_front/Srinivas.pf')
+    problem.reference_front = read_solutions(filename='resources/reference_front/Srinivas.pf')
 
     max_evaluations = 25000
     algorithm = SMPSO(

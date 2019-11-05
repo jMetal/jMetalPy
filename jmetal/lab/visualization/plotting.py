@@ -157,7 +157,7 @@ class Plot:
         plt.show()
         plt.close(fig)
 
-    def pcoords(self, fronts: list, normalize: bool = False, filename: str = None, format: str = 'eps'):
+    def pcoords(self, fronts: List[list], normalize: bool = False, filename: str = None, format: str = 'eps'):
         """ Plot any arbitrary number of fronts in parallel coordinates.
 
         :param fronts: List of fronts (containing solutions).

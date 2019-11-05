@@ -16,7 +16,7 @@ setup(
     author='Antonio J. Nebro',
     author_email='antonio@lcc.uma.es',
     maintainer='Antonio J. Nebro, Antonio Benitez-Hidalgo',
-    maintainer_email='antonio@lcc.uma.es, antonio.b@uma.es',
+    maintainer_email='antonio@lcc.uma.es, antonio.benitez@lcc.uma.es',
     license='MIT',
     url='https://github.com/jMetal/jMetalPy',
     packages=find_packages(exclude=['test_']),

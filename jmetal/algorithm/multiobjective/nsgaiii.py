@@ -332,7 +332,8 @@ class NSGAIII(NSGAII):
             # if some individuals already survived
             else:
                 until_last_front = np.concatenate(fronts[:-1])
-                niche_count = compute_niche_count(len(self.reference_directions), niche_of_individuals[until_last_front])
+                niche_count = compute_niche_count(len(self.reference_directions),
+                                                  niche_of_individuals[until_last_front])
                 n_remaining = self.population_size - len(until_last_front)
 
             S_idx = niching(pop=pop[last_front],

@@ -9,13 +9,12 @@ from jmetal.config import store
 from jmetal.core.algorithm import DynamicAlgorithm, Algorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem, DynamicProblem
-from jmetal.operator import RankingAndCrowdingDistanceSelection, BinaryTournamentSelection
+from jmetal.operator import BinaryTournamentSelection
 from jmetal.util.density_estimator import CrowdingDistance
 from jmetal.util.ranking import FastNonDominatedRanking
 from jmetal.util.replacement import RankingAndDensityEstimatorReplacement, RemovalPolicyType
 from jmetal.util.solutions import Evaluator, Generator
-from jmetal.util.solutions.comparator import DominanceComparator, Comparator, RankingAndCrowdingDistanceComparator, \
-    MultiComparator
+from jmetal.util.solutions.comparator import DominanceComparator, Comparator, MultiComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -164,14 +163,18 @@ class DistributedNSGAII(Algorithm[S, R]):
                  crossover: Crossover,
                  number_of_cores: int,
                  client: Client,
-                 selection: Selection = BinaryTournamentSelection(RankingAndCrowdingDistanceComparator()),
-                 termination_criterion: TerminationCriterion = store.default_termination_criteria):
+                 selection: Selection = BinaryTournamentSelection(
+                     MultiComparator([FastNonDominatedRanking.get_comparator(),
+                                      CrowdingDistance.get_comparator()])),
+                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
+                 dominance_comparator: DominanceComparator = DominanceComparator()):
         super(DistributedNSGAII, self).__init__()
         self.problem = problem
         self.population_size = population_size
         self.mutation_operator = mutation
         self.crossover_operator = crossover
         self.selection_operator = selection
+        self.dominance_comparator = dominance_comparator
 
         self.termination_criterion = termination_criterion
         self.observable.register(termination_criterion)
@@ -254,9 +257,11 @@ class DistributedNSGAII(Algorithm[S, R]):
                 offspring_population = [received_solution]
 
                 # replacement
-                join_population = auxiliar_population + offspring_population
-                auxiliar_population = RankingAndCrowdingDistanceSelection(self.population_size).execute(
-                    join_population)
+                ranking = FastNonDominatedRanking(self.dominance_comparator)
+                density_estimator = CrowdingDistance()
+
+                r = RankingAndDensityEstimatorReplacement(ranking, density_estimator, RemovalPolicyType.ONE_SHOT)
+                auxiliar_population = r.replace(auxiliar_population, offspring_population)
 
                 # selection
                 mating_population = []

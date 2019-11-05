@@ -30,7 +30,6 @@ class ProgressBarObserver(Observer):
         """ Show a smart progress meter with the number of evaluations and computing time.
 
         :param max: Number of expected iterations.
-        :param desc: Prefix for the progressbar.
         """
         self.progress_bar = None
         self.progress = 0
@@ -135,12 +134,17 @@ class WriteFrontToFileObserver(Observer):
 
 class PlotFrontToFileObserver(Observer):
 
-    def __init__(self, output_directory: str) -> None:
+    def __init__(self, output_directory: str, step: int = 100, **kwargs) -> None:
+        """ Plot and save Pareto front approximations into files.
+
+        :param output_directory: Output directory.
+        """
         self.directory = output_directory
-        self.plot_front = Plot(plot_title='Pareto front approximation')
+        self.plot_front = Plot(plot_title='Pareto front approximation', **kwargs)
         self.last_front = []
         self.fronts = []
         self.counter = 0
+        self.step = step
 
         if Path(self.directory).is_dir():
             LOGGER.warning('Directory {} exists. Removing contents.'.format(self.directory))
@@ -153,29 +157,32 @@ class PlotFrontToFileObserver(Observer):
     def update(self, *args, **kwargs):
         problem = kwargs['PROBLEM']
         solutions = kwargs['SOLUTIONS']
+        evaluations = kwargs['EVALUATIONS']
 
         if solutions:
-            if isinstance(problem, DynamicProblem):
-                termination_criterion_is_met = kwargs.get('TERMINATION_CRITERIA_IS_MET', None)
+            if (evaluations % self.step) == 0:
+                if isinstance(problem, DynamicProblem):
+                    termination_criterion_is_met = kwargs.get('TERMINATION_CRITERIA_IS_MET', None)
 
-                if termination_criterion_is_met:
-                    if self.counter > 0:
-                        igd = InvertedGenerationalDistance(self.last_front)
-                        igd_value = igd.compute(solutions)
-                    else:
-                        igd_value = 1
+                    if termination_criterion_is_met:
+                        if self.counter > 0:
+                            igd = InvertedGenerationalDistance(self.last_front)
+                            igd_value = igd.compute(solutions)
+                        else:
+                            igd_value = 1
 
-                    if igd_value > 0.005:
-                        self.fronts += solutions
-                        self.plot_front.plot([self.fronts],
-                                             label=[problem.get_name()],
-                                             filename='{}/front-{}'.format(self.directory, self.counter))
-
+                        if igd_value > 0.005:
+                            self.fronts += solutions
+                            self.plot_front.plot([self.fronts],
+                                                 label=problem.get_name(),
+                                                 filename=f'{self.directory}/front-{evaluations}')
+                        self.counter += 1
+                        self.last_front = solutions
+                else:
+                    self.plot_front.plot([solutions],
+                                         label=f'{evaluations} evaluations',
+                                         filename=f'{self.directory}/front-{evaluations}')
                     self.counter += 1
-                    self.last_front = solutions
-            else:
-                self.plot_front.plot([solutions], filename='{}/front-{}'.format(self.directory, self.counter))
-                self.counter += 1
 
 
 class VisualizerObserver(Observer):

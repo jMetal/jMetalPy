@@ -214,7 +214,8 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
 class RankingAndFitnessSelection(Selection[List[S], List[S]]):
 
     def __init__(self,
-                 max_population_size: int, reference_point: S, dominance_comparator: Comparator = DominanceComparator()):
+                 max_population_size: int, reference_point: S,
+                 dominance_comparator: Comparator = DominanceComparator()):
         super(RankingAndFitnessSelection, self).__init__()
         self.max_population_size = max_population_size
         self.dominance_comparator = dominance_comparator

@@ -68,7 +68,7 @@ class SimulatedAnnealing(Algorithm[S, R], threading.Thread):
 
         self.temperature *= self.alpha
 
-    def compute_acceptance_probability(self, current:float, new: float, temperature:float) -> float:
+    def compute_acceptance_probability(self, current: float, new: float, temperature: float) -> float:
         if new < current:
             return 1.0
         else:
@@ -84,7 +84,8 @@ class SimulatedAnnealing(Algorithm[S, R], threading.Thread):
 
     def get_observable_data(self) -> dict:
         ctime = time.time() - self.start_computing_time
-        return {'PROBLEM': self.problem, 'EVALUATIONS': self.evaluations, 'SOLUTIONS': self.get_result(), 'COMPUTING_TIME': ctime}
+        return {'PROBLEM': self.problem, 'EVALUATIONS': self.evaluations, 'SOLUTIONS': self.get_result(),
+                'COMPUTING_TIME': ctime}
 
     def get_result(self) -> R:
         return self.solutions[0]

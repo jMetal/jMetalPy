@@ -23,7 +23,8 @@ class Solution(Generic[S], ABC):
         return False
 
     def __str__(self) -> str:
-        return 'Solution(variables={},objectives={},constraints={})'.format(self.variables, self.objectives, self.constraints)
+        return 'Solution(variables={},objectives={},constraints={})'.format(self.variables, self.objectives,
+                                                                            self.constraints)
 
 
 class BinarySolution(Solution[BitSet]):
@@ -87,7 +88,7 @@ class IntegerSolution(Solution[int]):
     """ Class representing integer solutions """
 
     def __init__(self, lower_bound: List[int], upper_bound: List[int], number_of_objectives: int,
-                  number_of_constraints: int = 0):
+                 number_of_constraints: int = 0):
         super(IntegerSolution, self).__init__(len(lower_bound), number_of_objectives, number_of_constraints)
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound

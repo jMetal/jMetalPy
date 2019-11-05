@@ -1,3 +1,4 @@
+
 from jmetal.algorithm.multiobjective.spea2 import SPEA2
 from jmetal.lab.visualization import Plot, InteractivePlot
 from jmetal.operator import SBXCrossover, PolynomialMutation

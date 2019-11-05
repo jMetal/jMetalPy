@@ -159,11 +159,11 @@ class MOEAD_DRA(MOEAD):
                  weight_files_path, termination_criterion=store.default_termination_criteria,
                  population_generator=store.default_generator, population_evaluator=store.default_evaluator):
         super(MOEAD_DRA, self).__init__(problem, population_size, mutation, crossover, aggregative_function,
-                                               neighbourhood_selection_probability, max_number_of_replaced_solutions,
-                                               neighbor_size, weight_files_path,
-                                               termination_criterion=termination_criterion,
-                                               population_generator=population_generator,
-                                               population_evaluator=population_evaluator)
+                                        neighbourhood_selection_probability, max_number_of_replaced_solutions,
+                                        neighbor_size, weight_files_path,
+                                        termination_criterion=termination_criterion,
+                                        population_generator=population_generator,
+                                        population_evaluator=population_evaluator)
 
         self.saved_values = []
         self.utility = [1.0 for _ in range(population_size)]
