@@ -1,4 +1,5 @@
 import math
+import threading
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic
 
@@ -125,6 +126,7 @@ class StrengthAndKNNDistanceComparator(Comparator):
 
 
 class OverallConstraintViolationComparator(Comparator):
+
     def compare(self, solution1: Solution, solution2: Solution) -> int:
         violation_degree_solution_1 = overall_constraint_violation_degree(solution1)
         violation_degree_solution_2 = overall_constraint_violation_degree(solution2)
@@ -147,7 +149,8 @@ class OverallConstraintViolationComparator(Comparator):
 
 class DominanceComparator(Comparator):
 
-    def __init__(self, constraint_comparator=OverallConstraintViolationComparator()):
+    def __init__(self,
+                 constraint_comparator: Comparator = SolutionAttributeComparator('overall_constraint_violation', False)):
         self.constraint_comparator = constraint_comparator
 
     def compare(self, solution1: Solution, solution2: Solution) -> int:
@@ -189,7 +192,7 @@ class GDominanceComparator(DominanceComparator):
 
     def __init__(self,
                  reference_point: (),
-                 constraint_comparator=SolutionAttributeComparator('overall_constraint_violation', False)):
+                 constraint_comparator: Comparator = SolutionAttributeComparator('overall_constraint_violation', False)):
         super(GDominanceComparator, self).__init__(constraint_comparator)
         self.reference_point = reference_point
 
@@ -218,11 +221,21 @@ class GDominanceComparator(DominanceComparator):
         return result
 
 
+class InteractiveGDominanceComparator(GDominanceComparator):
+
+    def __init__(self,
+                 reference_point: (),
+                 constraint_comparator: Comparator = SolutionAttributeComparator('overall_constraint_violation', False)):
+        super(GDominanceComparator, self).__init__(reference_point, constraint_comparator)
+        thread = threading.Thread(target=_change_reference_point, args=(self,))
+        thread.start()
+
+
 class EpsilonDominanceComparator(DominanceComparator):
 
     def __init__(self,
                  epsilon: float,
-                 constraint_comparator=SolutionAttributeComparator('overall_constraint_violation', False)):
+                 constraint_comparator: Comparator = SolutionAttributeComparator('overall_constraint_violation', False)):
         super(EpsilonDominanceComparator, self).__init__(constraint_comparator)
         self.epsilon = epsilon
 
@@ -269,3 +282,12 @@ class EpsilonDominanceComparator(DominanceComparator):
                 return 1
             else:
                 return -1
+
+
+def _change_reference_point(comparator: InteractiveGDominanceComparator):
+    while True:
+        print(f'Enter new reference point: ')
+        point = [float(x) for x in input().split()]
+
+        # Update reference point
+        comparator.reference_point = point

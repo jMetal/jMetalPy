@@ -302,7 +302,7 @@ class SMPSORP(SMPSO):
         self.reference_points = reference_points
         self.lock = threading.Lock()
 
-        thread = threading.Thread(target=change_reference_point, args=(self,))
+        thread = threading.Thread(target=_change_reference_point, args=(self,))
         thread.start()
 
     def initialize_global_best(self, swarm: List[FloatSolution]) -> None:
@@ -383,7 +383,7 @@ class SMPSORP(SMPSO):
         return 'SMPSO/RP'
 
 
-def change_reference_point(algorithm: SMPSORP):
+def _change_reference_point(algorithm: SMPSORP):
     """ Auxiliar function to read new reference points from the keyboard for the SMPSO/RP algorithm
     """
     number_of_reference_points = len(algorithm.reference_points)
