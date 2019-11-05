@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>jmetal.algorithm.multiobjective.hype &#8212; jMetalPy 1.5.1 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../../../../index.html" class="text-logo">jMetalPy</a>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../operators.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../../../index.html">Docs</a></li>
+              
+                <li><a href="../../../index.html">Module code</a></li>
+              
+              <li>jmetal.algorithm.multiobjective.hype</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <h1>Source code for jmetal.algorithm.multiobjective.hype</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">jmetal.algorithm.singleobjective.genetic_algorithm</span> <span class="k">import</span> <span class="n">GeneticAlgorithm</span>
+<span class="kn">from</span> <span class="nn">jmetal.config</span> <span class="k">import</span> <span class="n">store</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.operator</span> <span class="k">import</span> <span class="n">Mutation</span><span class="p">,</span> <span class="n">Crossover</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="k">import</span> <span class="n">Problem</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="k">import</span> <span class="n">Solution</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="k">import</span> <span class="n">BinaryTournamentSelection</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator.selection</span> <span class="k">import</span> <span class="n">RankingAndFitnessSelection</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.solutions</span> <span class="k">import</span> <span class="n">Evaluator</span><span class="p">,</span> <span class="n">Generator</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.solutions.comparator</span> <span class="k">import</span> <span class="n">Comparator</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.solutions.comparator</span> <span class="k">import</span> <span class="n">SolutionAttributeComparator</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="k">import</span> <span class="n">TerminationCriterion</span>
+
+<span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;R&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="HYPE"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/hype.html#jmetal.algorithm.multiobjective.hype.HYPE">[docs]</a><span class="k">class</span> <span class="nc">HYPE</span><span class="p">(</span><span class="n">GeneticAlgorithm</span><span class="p">[</span><span class="n">S</span><span class="p">,</span> <span class="n">R</span><span class="p">]):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">problem</span><span class="p">:</span> <span class="n">Problem</span><span class="p">,</span>
+                 <span class="n">reference_point</span><span class="p">:</span> <span class="n">Solution</span><span class="p">,</span>
+                 <span class="n">population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">offspring_population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">mutation</span><span class="p">:</span> <span class="n">Mutation</span><span class="p">,</span>
+                 <span class="n">crossover</span><span class="p">:</span> <span class="n">Crossover</span><span class="p">,</span>
+                 <span class="n">termination_criterion</span><span class="p">:</span> <span class="n">TerminationCriterion</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_termination_criteria</span><span class="p">,</span>
+                 <span class="n">population_generator</span><span class="p">:</span> <span class="n">Generator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_generator</span><span class="p">,</span>
+                 <span class="n">population_evaluator</span><span class="p">:</span> <span class="n">Evaluator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_evaluator</span><span class="p">,</span>
+                 <span class="n">dominance_comparator</span><span class="p">:</span> <span class="n">Comparator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_comparator</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; This is an implementation of the Hypervolume Estimation Algorithm for Multi-objective Optimization</span>
+<span class="sd">        proposed in:</span>
+
+<span class="sd">        * J. Bader and E. Zitzler. HypE: An Algorithm for Fast Hypervolume-Based Many-Objective</span>
+<span class="sd">        Optimization. TIK Report 286, Computer Engineering and Networks Laboratory (TIK), ETH</span>
+<span class="sd">        Zurich, November 2008.</span>
+
+<span class="sd">        It uses the Exact Hypervolume-based indicator formulation, which once computed, guides both</span>
+<span class="sd">        the environmental selection and the binary tournament selection operator</span>
+
+<span class="sd">        Please note that as per the publication above, the evaluator and replacement should not be changed</span>
+<span class="sd">        anyhow. It also requires that Problem() has a reference_point with objective values defined, e.g.</span>
+
+<span class="sd">        problem = ZDT1()</span>
+<span class="sd">        reference_point = FloatSolution(problem.number_of_variables,problem.number_of_objectives, [0], [1])</span>
+<span class="sd">        reference_point.objectives = [1., 1.]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">selection</span> <span class="o">=</span> <span class="n">BinaryTournamentSelection</span><span class="p">(</span>
+            <span class="n">comparator</span><span class="o">=</span><span class="n">SolutionAttributeComparator</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;fitness&#39;</span><span class="p">,</span> <span class="n">lowest_is_best</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ranking_fitness</span> <span class="o">=</span> <span class="n">RankingAndFitnessSelection</span><span class="p">(</span><span class="n">population_size</span><span class="p">,</span>
+                                                          <span class="n">dominance_comparator</span><span class="o">=</span><span class="n">dominance_comparator</span><span class="p">,</span>
+                                                          <span class="n">reference_point</span><span class="o">=</span><span class="n">reference_point</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reference_point</span> <span class="o">=</span> <span class="n">reference_point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dominance_comparator</span> <span class="o">=</span> <span class="n">dominance_comparator</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">HYPE</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">,</span>
+            <span class="n">population_size</span><span class="o">=</span><span class="n">population_size</span><span class="p">,</span>
+            <span class="n">offspring_population_size</span><span class="o">=</span><span class="n">offspring_population_size</span><span class="p">,</span>
+            <span class="n">mutation</span><span class="o">=</span><span class="n">mutation</span><span class="p">,</span>
+            <span class="n">crossover</span><span class="o">=</span><span class="n">crossover</span><span class="p">,</span>
+            <span class="n">selection</span><span class="o">=</span><span class="n">selection</span><span class="p">,</span>
+            <span class="n">termination_criterion</span><span class="o">=</span><span class="n">termination_criterion</span><span class="p">,</span>
+            <span class="n">population_evaluator</span><span class="o">=</span><span class="n">population_evaluator</span><span class="p">,</span>
+            <span class="n">population_generator</span><span class="o">=</span><span class="n">population_generator</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="HYPE.evaluate"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/hype.html#jmetal.algorithm.multiobjective.hype.HYPE.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
+        <span class="n">population</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">)</span>
+        <span class="n">population</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranking_fitness</span><span class="o">.</span><span class="n">compute_hypervol_fitness_values</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_point</span><span class="p">,</span>
+                                                                          <span class="nb">len</span><span class="p">(</span><span class="n">population</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">population</span></div>
+
+<div class="viewcode-block" id="HYPE.replacement"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/hype.html#jmetal.algorithm.multiobjective.hype.HYPE.replacement">[docs]</a>    <span class="k">def</span> <span class="nf">replacement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">offspring_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]]:</span>
+        <span class="n">join_population</span> <span class="o">=</span> <span class="n">population</span> <span class="o">+</span> <span class="n">offspring_population</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranking_fitness</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">join_population</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HYPE.get_result"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/hype.html#jmetal.algorithm.multiobjective.hype.HYPE.get_result">[docs]</a>    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">R</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span></div>
+
+<div class="viewcode-block" id="HYPE.get_name"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/hype.html#jmetal.algorithm.multiobjective.hype.HYPE.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;HYPE&#39;</span></div></div>
+</pre></div>
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

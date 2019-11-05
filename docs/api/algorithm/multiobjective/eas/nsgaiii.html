@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>NSGA-III &#8212; jMetalPy 1.5.1 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="SPEA2" href="spea2.html" />
+    <link rel="prev" title="NSGA-II" href="nsgaii.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="spea2.html" title="SPEA2"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nsgaii.html" title="NSGA-II"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../multiobjective.algorithms.html" >Multi-objective algorithms</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../ea.html" accesskey="U">Evolutionary Algorithms</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../../../../index.html" class="text-logo">jMetalPy</a>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials.html">Getting started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../multiobjective.algorithms.html">Multi-objective algorithms</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../ea.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pso.html">PSO Algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../operators.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Contents</h2>
+    <div class="sidebar-localtoc">
+      <ul>
+<li><a class="reference internal" href="#">NSGA-III</a><ul>
+<li><a class="reference internal" href="#module-jmetal.algorithm.multiobjective.nsgaiii">API</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../../../index.html">Docs</a></li>
+              
+                <li><a href="../../../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+              
+                <li><a href="../ea.html">Evolutionary Algorithms</a></li>
+              
+              <li>NSGA-III</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="nsga-iii">
+<h1>NSGA-III<a class="headerlink" href="#nsga-iii" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-jmetal.algorithm.multiobjective.nsgaiii">
+<span id="api"></span><h2>API<a class="headerlink" href="#module-jmetal.algorithm.multiobjective.nsgaiii" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jmetal.algorithm.multiobjective.nsgaiii.NSGAIII">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaiii.</code><code class="sig-name descname">NSGAIII</code><span class="sig-paren">(</span><em class="sig-param">reference_directions</em>, <em class="sig-param">problem: jmetal.core.problem.Problem</em>, <em class="sig-param">mutation: jmetal.core.operator.Mutation</em>, <em class="sig-param">crossover: jmetal.core.operator.Crossover</em>, <em class="sig-param">population_size: int = None</em>, <em class="sig-param">selection: jmetal.core.operator.Selection = &lt;jmetal.operator.selection.BinaryTournamentSelection object&gt;</em>, <em class="sig-param">termination_criterion: jmetal.util.termination_criterion.TerminationCriterion = &lt;jmetal.util.termination_criterion.StoppingByEvaluations object&gt;</em>, <em class="sig-param">population_generator: jmetal.util.solutions.generator.Generator = &lt;jmetal.util.solutions.generator.RandomGenerator object&gt;</em>, <em class="sig-param">population_evaluator: jmetal.util.solutions.evaluator.Evaluator = &lt;jmetal.util.solutions.evaluator.SequentialEvaluator object&gt;</em>, <em class="sig-param">dominance_comparator: jmetal.util.solutions.comparator.Comparator = &lt;jmetal.util.solutions.comparator.DominanceComparator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#NSGAIII"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.NSGAIII" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII" title="jmetal.algorithm.multiobjective.nsgaii.NSGAII"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.algorithm.multiobjective.nsgaii.NSGAII</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#NSGAIII.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.get_result">
+<code class="sig-name descname">get_result</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#NSGAIII.get_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.get_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return only non dominated solutions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.replacement">
+<code class="sig-name descname">replacement</code><span class="sig-paren">(</span><em class="sig-param">population: List[S], offspring_population: List[S]</em><span class="sig-paren">)</span> &#x2192; List[S]<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#NSGAIII.replacement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.replacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements NSGA-III environmental selection based on reference points as described in:</p>
+<ul class="simple">
+<li><p>Deb, K., &amp; Jain, H. (2014). An Evolutionary Many-Objective Optimization
+Algorithm Using Reference-Point-Based Nondominated Sorting Approach,
+Part I: Solving Problems With Box Constraints. IEEE Transactions on
+Evolutionary Computation, 18(4), 577–601. doi:10.1109/TEVC.2013.2281535.</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.algorithm.multiobjective.nsgaiii.ReferenceDirectionFactory">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaiii.</code><code class="sig-name descname">ReferenceDirectionFactory</code><span class="sig-paren">(</span><em class="sig-param">n_dim: int</em>, <em class="sig-param">scaling=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#ReferenceDirectionFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.ReferenceDirectionFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaiii.ReferenceDirectionFactory.compute">
+<code class="sig-name descname">compute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#ReferenceDirectionFactory.compute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.ReferenceDirectionFactory.compute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.algorithm.multiobjective.nsgaiii.UniformReferenceDirectionFactory">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaiii.</code><code class="sig-name descname">UniformReferenceDirectionFactory</code><span class="sig-paren">(</span><em class="sig-param">n_dim: int</em>, <em class="sig-param">scaling=None</em>, <em class="sig-param">n_points: int = None</em>, <em class="sig-param">n_partitions: int = None</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#UniformReferenceDirectionFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.UniformReferenceDirectionFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.algorithm.multiobjective.nsgaiii.ReferenceDirectionFactory" title="jmetal.algorithm.multiobjective.nsgaiii.ReferenceDirectionFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.algorithm.multiobjective.nsgaiii.ReferenceDirectionFactory</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaiii.UniformReferenceDirectionFactory.get_n_points">
+<em class="property">static </em><code class="sig-name descname">get_n_points</code><span class="sig-paren">(</span><em class="sig-param">n_partitions</em>, <em class="sig-param">n_dim</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#UniformReferenceDirectionFactory.get_n_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.UniformReferenceDirectionFactory.get_n_points" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaiii.UniformReferenceDirectionFactory.get_partition_closest_to_points">
+<em class="property">static </em><code class="sig-name descname">get_partition_closest_to_points</code><span class="sig-paren">(</span><em class="sig-param">n_points</em>, <em class="sig-param">n_dim</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#UniformReferenceDirectionFactory.get_partition_closest_to_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.UniformReferenceDirectionFactory.get_partition_closest_to_points" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaiii.UniformReferenceDirectionFactory.uniform_reference_directions">
+<code class="sig-name descname">uniform_reference_directions</code><span class="sig-paren">(</span><em class="sig-param">n_partitions: int</em>, <em class="sig-param">n_dim: int</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#UniformReferenceDirectionFactory.uniform_reference_directions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.UniformReferenceDirectionFactory.uniform_reference_directions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.algorithm.multiobjective.nsgaiii.associate_to_niches">
+<code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaiii.</code><code class="sig-name descname">associate_to_niches</code><span class="sig-paren">(</span><em class="sig-param">F</em>, <em class="sig-param">niches</em>, <em class="sig-param">ideal_point</em>, <em class="sig-param">nadir_point</em>, <em class="sig-param">utopian_epsilon: float = 0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#associate_to_niches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.associate_to_niches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Associate each solution to a reference point.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.algorithm.multiobjective.nsgaiii.compute_niche_count">
+<code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaiii.</code><code class="sig-name descname">compute_niche_count</code><span class="sig-paren">(</span><em class="sig-param">n_niches: int</em>, <em class="sig-param">niche_of_individuals</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#compute_niche_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.compute_niche_count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="jmetal.algorithm.multiobjective.nsgaiii.get_extreme_points">
+<code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaiii.</code><code class="sig-name descname">get_extreme_points</code><span class="sig-paren">(</span><em class="sig-param">F</em>, <em class="sig-param">n_objs</em>, <em class="sig-param">ideal_point</em>, <em class="sig-param">extreme_points=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#get_extreme_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.get_extreme_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Achievement Scalarization Function which is used for the extreme point decomposition.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.algorithm.multiobjective.nsgaiii.get_nadir_point">
+<code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaiii.</code><code class="sig-name descname">get_nadir_point</code><span class="sig-paren">(</span><em class="sig-param">extreme_points</em>, <em class="sig-param">ideal_point</em>, <em class="sig-param">worst_point</em>, <em class="sig-param">worst_of_front</em>, <em class="sig-param">worst_of_population</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#get_nadir_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.get_nadir_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the axis intersects for a set of individuals and its extremes (construct hyperplane).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.algorithm.multiobjective.nsgaiii.niching">
+<code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaiii.</code><code class="sig-name descname">niching</code><span class="sig-paren">(</span><em class="sig-param">pop: List[S], n_remaining: int, niche_count, niche_of_individuals, dist_to_niche</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#niching"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.niching" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="nsgaii.html" title="previous chapter (use the left arrow)">NSGA-II</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="spea2.html" title="next chapter (use the right arrow)">SPEA2</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="spea2.html" title="SPEA2"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nsgaii.html" title="NSGA-II"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../multiobjective.algorithms.html" >Multi-objective algorithms</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../ea.html" >Evolutionary Algorithms</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

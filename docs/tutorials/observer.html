@@ -1,0 +1,325 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Extending algorithms &#8212; jMetalPy 1.5.1 documentation</title>
+    <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Front visualization" href="visualization.html" />
+    <link rel="prev" title="Defining new problems" href="problem.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="visualization.html" title="Front visualization"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="problem.html" title="Defining new problems"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Getting started</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../index.html" class="text-logo">jMetalPy</a>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Getting started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="problem.html">Defining new problems</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Extending algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization.html">Front visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="experiment.html">Experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="statistics.html">Statistical analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Contents</h2>
+    <div class="sidebar-localtoc">
+      <ul>
+<li><a class="reference internal" href="#">Extending algorithms</a><ul>
+<li><a class="reference internal" href="#module-jmetal.util.observer">List of observers</a></li>
+<li><a class="reference internal" href="#module-jmetal.core.observer">API</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../index.html">Docs</a></li>
+              
+                <li><a href="../tutorials.html">Getting started</a></li>
+              
+              <li>Extending algorithms</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="extending-algorithms">
+<h1>Extending algorithms<a class="headerlink" href="#extending-algorithms" title="Permalink to this headline">¶</a></h1>
+<p>It is possible to attach any number of observers to any algorithm to get information from each iteration.
+For example, a basic algorithm observer will print the number of evaluations, the objectives from the best individual in the population and the computing time:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">basic</span> <span class="o">=</span> <span class="n">BasicAlgorithmObserver</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">algorithm</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">observer</span><span class="o">=</span><span class="n">basic</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A progress bar observer will print a <a class="reference external" href="https://github.com/tqdm/tqdm">smart progress meter</a> that increases, on each iteration, a fixed value (<cite>step</cite>) until the maximum is reached.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">max_evaluations</span> <span class="o">=</span> <span class="mi">25000</span>
+
+<span class="n">algorithm</span> <span class="o">=</span> <span class="n">GeneticAlgorithm</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="n">progress_bar</span> <span class="o">=</span> <span class="n">ProgressBarObserver</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="n">max_evaluations</span><span class="p">)</span>
+<span class="n">algorithm</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">progress_bar</span><span class="p">)</span>
+
+<span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This will produce:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> Progress:  <span class="m">50</span>%<span class="p">|</span><span class="c1">#####     | 12500/25000 [13:59&lt;14:12, 14.66it/s]</span>
+</pre></div>
+</div>
+<p>A full list of all available observers can be found at the <a class="reference internal" href="#module-jmetal.util.observer" title="jmetal.util.observer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jmetal.util.observer</span></code></a> module.</p>
+<div class="section" id="module-jmetal.util.observer">
+<span id="list-of-observers"></span><h2>List of observers<a class="headerlink" href="#module-jmetal.util.observer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jmetal.util.observer.BasicObserver">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.util.observer.</code><code class="sig-name descname">BasicObserver</code><span class="sig-paren">(</span><em class="sig-param">frequency: float = 1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/util/observer.html#BasicObserver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.util.observer.BasicObserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.core.observer.Observer" title="jmetal.core.observer.Observer"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.observer.Observer</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.util.observer.BasicObserver.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/util/observer.html#BasicObserver.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.util.observer.BasicObserver.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update method.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.util.observer.PlotFrontToFileObserver">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.util.observer.</code><code class="sig-name descname">PlotFrontToFileObserver</code><span class="sig-paren">(</span><em class="sig-param">output_directory: str</em>, <em class="sig-param">step: int = 100</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/util/observer.html#PlotFrontToFileObserver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.util.observer.PlotFrontToFileObserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.core.observer.Observer" title="jmetal.core.observer.Observer"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.observer.Observer</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.util.observer.PlotFrontToFileObserver.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/util/observer.html#PlotFrontToFileObserver.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.util.observer.PlotFrontToFileObserver.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update method.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.util.observer.PrintObjectivesObserver">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.util.observer.</code><code class="sig-name descname">PrintObjectivesObserver</code><span class="sig-paren">(</span><em class="sig-param">frequency: float = 1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/util/observer.html#PrintObjectivesObserver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.util.observer.PrintObjectivesObserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.core.observer.Observer" title="jmetal.core.observer.Observer"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.observer.Observer</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.util.observer.PrintObjectivesObserver.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/util/observer.html#PrintObjectivesObserver.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.util.observer.PrintObjectivesObserver.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update method.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.util.observer.ProgressBarObserver">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.util.observer.</code><code class="sig-name descname">ProgressBarObserver</code><span class="sig-paren">(</span><em class="sig-param">max: int</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/util/observer.html#ProgressBarObserver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.util.observer.ProgressBarObserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.core.observer.Observer" title="jmetal.core.observer.Observer"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.observer.Observer</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.util.observer.ProgressBarObserver.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/util/observer.html#ProgressBarObserver.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.util.observer.ProgressBarObserver.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update method.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.util.observer.VisualizerObserver">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.util.observer.</code><code class="sig-name descname">VisualizerObserver</code><span class="sig-paren">(</span><em class="sig-param">reference_front: List[S] = None</em>, <em class="sig-param">reference_point: list = None</em>, <em class="sig-param">display_frequency: float = 1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/util/observer.html#VisualizerObserver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.util.observer.VisualizerObserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.core.observer.Observer" title="jmetal.core.observer.Observer"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.observer.Observer</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.util.observer.VisualizerObserver.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/util/observer.html#VisualizerObserver.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.util.observer.VisualizerObserver.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update method.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.util.observer.WriteFrontToFileObserver">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.util.observer.</code><code class="sig-name descname">WriteFrontToFileObserver</code><span class="sig-paren">(</span><em class="sig-param">output_directory: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/util/observer.html#WriteFrontToFileObserver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.util.observer.WriteFrontToFileObserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.core.observer.Observer" title="jmetal.core.observer.Observer"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.observer.Observer</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.util.observer.WriteFrontToFileObserver.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/util/observer.html#WriteFrontToFileObserver.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.util.observer.WriteFrontToFileObserver.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update method.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-jmetal.core.observer">
+<span id="api"></span><h2>API<a class="headerlink" href="#module-jmetal.core.observer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jmetal.core.observer.Observable">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.core.observer.</code><code class="sig-name descname">Observable</code><a class="reference internal" href="../_modules/jmetal/core/observer.html#Observable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.observer.Observable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.core.observer.Observable.deregister">
+<em class="property">abstract </em><code class="sig-name descname">deregister</code><span class="sig-paren">(</span><em class="sig-param">observer</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/core/observer.html#Observable.deregister"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.observer.Observable.deregister" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.core.observer.Observable.deregister_all">
+<em class="property">abstract </em><code class="sig-name descname">deregister_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/core/observer.html#Observable.deregister_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.observer.Observable.deregister_all" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.core.observer.Observable.notify_all">
+<em class="property">abstract </em><code class="sig-name descname">notify_all</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/core/observer.html#Observable.notify_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.observer.Observable.notify_all" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.core.observer.Observable.register">
+<em class="property">abstract </em><code class="sig-name descname">register</code><span class="sig-paren">(</span><em class="sig-param">observer</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/core/observer.html#Observable.register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.observer.Observable.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a virtual subclass of an ABC.</p>
+<p>Returns the subclass, to allow usage as a class decorator.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.core.observer.Observer">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.core.observer.</code><code class="sig-name descname">Observer</code><a class="reference internal" href="../_modules/jmetal/core/observer.html#Observer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.observer.Observer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.core.observer.Observer.update">
+<em class="property">abstract </em><code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/core/observer.html#Observer.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.observer.Observer.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update method.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="problem.html" title="previous chapter (use the left arrow)">Defining new problems</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="visualization.html" title="next chapter (use the right arrow)">Front visualization</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="visualization.html" title="Front visualization"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="problem.html" title="Defining new problems"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../tutorials.html" >Getting started</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

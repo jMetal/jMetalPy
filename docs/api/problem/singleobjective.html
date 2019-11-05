@@ -1,0 +1,381 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Single-objective problems &#8212; jMetalPy 1.5.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Contributing" href="../../contributing.html" />
+    <link rel="prev" title="Multi-objective problems" href="multiobjective.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../contributing.html" title="Contributing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="multiobjective.html" title="Multi-objective problems"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../problems.html" accesskey="U">Problems</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../../index.html" class="text-logo">jMetalPy</a>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../operators.html">Operators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../problems.html">Problems</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="multiobjective.html">Multi-objective problems</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Single-objective problems</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Contents</h2>
+    <div class="sidebar-localtoc">
+      <ul>
+<li><a class="reference internal" href="#">Single-objective problems</a><ul>
+<li><a class="reference internal" href="#module-jmetal.problem.singleobjective.unconstrained">Unconstrained</a></li>
+<li><a class="reference internal" href="#module-jmetal.problem.singleobjective.knapsack">Knapsack</a></li>
+<li><a class="reference internal" href="#module-jmetal.problem.singleobjective.tsp">TSP</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../index.html">Docs</a></li>
+              
+                <li><a href="../../problems.html">Problems</a></li>
+              
+              <li>Single-objective problems</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="single-objective-problems">
+<h1>Single-objective problems<a class="headerlink" href="#single-objective-problems" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-jmetal.problem.singleobjective.unconstrained">
+<span id="unconstrained"></span><h2>Unconstrained<a class="headerlink" href="#module-jmetal.problem.singleobjective.unconstrained" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jmetal.problem.singleobjective.unconstrained.OneMax">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.singleobjective.unconstrained.</code><code class="sig-name descname">OneMax</code><span class="sig-paren">(</span><em class="sig-param">number_of_bits: int = 256</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/unconstrained.html#OneMax"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.unconstrained.OneMax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.BinaryProblem" title="jmetal.core.problem.BinaryProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.BinaryProblem</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.singleobjective.unconstrained.OneMax.create_solution">
+<code class="sig-name descname">create_solution</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.BinarySolution<a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/unconstrained.html#OneMax.create_solution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.unconstrained.OneMax.create_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a random solution to the problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.singleobjective.unconstrained.OneMax.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.BinarySolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.BinarySolution<a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/unconstrained.html#OneMax.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.unconstrained.OneMax.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.singleobjective.unconstrained.OneMax.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/unconstrained.html#OneMax.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.unconstrained.OneMax.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.singleobjective.unconstrained.Rastrigin">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.singleobjective.unconstrained.</code><code class="sig-name descname">Rastrigin</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 10</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/unconstrained.html#Rastrigin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.unconstrained.Rastrigin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.FloatProblem" title="jmetal.core.problem.FloatProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.FloatProblem</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.singleobjective.unconstrained.Rastrigin.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/unconstrained.html#Rastrigin.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.unconstrained.Rastrigin.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.singleobjective.unconstrained.Rastrigin.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/unconstrained.html#Rastrigin.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.unconstrained.Rastrigin.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.singleobjective.unconstrained.Sphere">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.singleobjective.unconstrained.</code><code class="sig-name descname">Sphere</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 10</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/unconstrained.html#Sphere"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.unconstrained.Sphere" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.FloatProblem" title="jmetal.core.problem.FloatProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.FloatProblem</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.singleobjective.unconstrained.Sphere.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/unconstrained.html#Sphere.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.unconstrained.Sphere.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.singleobjective.unconstrained.Sphere.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/unconstrained.html#Sphere.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.unconstrained.Sphere.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.singleobjective.unconstrained.SubsetSum">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.singleobjective.unconstrained.</code><code class="sig-name descname">SubsetSum</code><span class="sig-paren">(</span><em class="sig-param">C: int</em>, <em class="sig-param">W: list</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/unconstrained.html#SubsetSum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.unconstrained.SubsetSum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.BinaryProblem" title="jmetal.core.problem.BinaryProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.BinaryProblem</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.singleobjective.unconstrained.SubsetSum.create_solution">
+<code class="sig-name descname">create_solution</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.BinarySolution<a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/unconstrained.html#SubsetSum.create_solution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.unconstrained.SubsetSum.create_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a random solution to the problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.singleobjective.unconstrained.SubsetSum.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.BinarySolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.BinarySolution<a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/unconstrained.html#SubsetSum.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.unconstrained.SubsetSum.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.singleobjective.unconstrained.SubsetSum.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/unconstrained.html#SubsetSum.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.unconstrained.SubsetSum.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-jmetal.problem.singleobjective.knapsack">
+<span id="knapsack"></span><h2>Knapsack<a class="headerlink" href="#module-jmetal.problem.singleobjective.knapsack" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jmetal.problem.singleobjective.knapsack.Knapsack">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.singleobjective.knapsack.</code><code class="sig-name descname">Knapsack</code><span class="sig-paren">(</span><em class="sig-param">number_of_items: int = 50</em>, <em class="sig-param">capacity: float = 1000</em>, <em class="sig-param">weights: list = None</em>, <em class="sig-param">profits: list = None</em>, <em class="sig-param">from_file: bool = False</em>, <em class="sig-param">filename: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/knapsack.html#Knapsack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.knapsack.Knapsack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.BinaryProblem" title="jmetal.core.problem.BinaryProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.BinaryProblem</span></code></a></p>
+<p>Class representing Knapsack Problem.</p>
+<dl class="method">
+<dt id="jmetal.problem.singleobjective.knapsack.Knapsack.create_solution">
+<code class="sig-name descname">create_solution</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.BinarySolution<a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/knapsack.html#Knapsack.create_solution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.knapsack.Knapsack.create_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a random solution to the problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.singleobjective.knapsack.Knapsack.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.BinarySolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.BinarySolution<a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/knapsack.html#Knapsack.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.knapsack.Knapsack.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.singleobjective.knapsack.Knapsack.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/knapsack.html#Knapsack.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.knapsack.Knapsack.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-jmetal.problem.singleobjective.tsp">
+<span id="tsp"></span><h2>TSP<a class="headerlink" href="#module-jmetal.problem.singleobjective.tsp" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jmetal.problem.singleobjective.tsp.TSP">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.singleobjective.tsp.</code><code class="sig-name descname">TSP</code><span class="sig-paren">(</span><em class="sig-param">instance: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/tsp.html#TSP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.tsp.TSP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.PermutationProblem" title="jmetal.core.problem.PermutationProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.PermutationProblem</span></code></a></p>
+<p>Class representing TSP Problem.</p>
+<dl class="method">
+<dt id="jmetal.problem.singleobjective.tsp.TSP.create_solution">
+<code class="sig-name descname">create_solution</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.PermutationSolution<a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/tsp.html#TSP.create_solution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.tsp.TSP.create_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a random solution to the problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.singleobjective.tsp.TSP.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.PermutationSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.PermutationSolution<a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/tsp.html#TSP.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.tsp.TSP.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.singleobjective.tsp.TSP.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/singleobjective/tsp.html#TSP.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.singleobjective.tsp.TSP.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.singleobjective.tsp.TSP.number_of_cities">
+<em class="property">property </em><code class="sig-name descname">number_of_cities</code><a class="headerlink" href="#jmetal.problem.singleobjective.tsp.TSP.number_of_cities" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="multiobjective.html" title="previous chapter (use the left arrow)">Multi-objective problems</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="../../contributing.html" title="next chapter (use the right arrow)">Contributing</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../contributing.html" title="Contributing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="multiobjective.html" title="Multi-objective problems"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../problems.html" >Problems</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

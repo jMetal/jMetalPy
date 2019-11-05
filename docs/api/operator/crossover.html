@@ -1,0 +1,329 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Crossover &#8212; jMetalPy 1.5.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Mutation" href="mutation.html" />
+    <link rel="prev" title="Operators" href="../../operators.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mutation.html" title="Mutation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../../operators.html" title="Operators"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../operators.html" accesskey="U">Operators</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../../index.html" class="text-logo">jMetalPy</a>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../operators.html">Operators</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Crossover</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mutation.html">Mutation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="selection.html">Selection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../index.html">Docs</a></li>
+              
+                <li><a href="../../operators.html">Operators</a></li>
+              
+              <li>Crossover</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="module-jmetal.operator.crossover">
+<span id="crossover"></span><h1>Crossover<a class="headerlink" href="#module-jmetal.operator.crossover" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="jmetal.operator.crossover.CXCrossover">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.operator.crossover.</code><code class="sig-name descname">CXCrossover</code><span class="sig-paren">(</span><em class="sig-param">probability: float</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#CXCrossover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.CXCrossover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.operator.Crossover</span></code></p>
+<dl class="method">
+<dt id="jmetal.operator.crossover.CXCrossover.execute">
+<code class="sig-name descname">execute</code><span class="sig-paren">(</span><em class="sig-param">parents: List[jmetal.core.solution.PermutationSolution]</em><span class="sig-paren">)</span> &#x2192; List[jmetal.core.solution.PermutationSolution]<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#CXCrossover.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.CXCrossover.execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.operator.crossover.CXCrossover.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#CXCrossover.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.CXCrossover.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.operator.crossover.CXCrossover.get_number_of_children">
+<code class="sig-name descname">get_number_of_children</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#CXCrossover.get_number_of_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.CXCrossover.get_number_of_children" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.operator.crossover.CXCrossover.get_number_of_parents">
+<code class="sig-name descname">get_number_of_parents</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#CXCrossover.get_number_of_parents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.CXCrossover.get_number_of_parents" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.operator.crossover.DifferentialEvolutionCrossover">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.operator.crossover.</code><code class="sig-name descname">DifferentialEvolutionCrossover</code><span class="sig-paren">(</span><em class="sig-param">CR: float</em>, <em class="sig-param">F: float</em>, <em class="sig-param">K: float</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#DifferentialEvolutionCrossover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.DifferentialEvolutionCrossover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.operator.Crossover</span></code></p>
+<p>This operator receives two parameters: the current individual and an array of three parent individuals. The
+best and rand variants depends on the third parent, according whether it represents the current of the “best”
+individual or a random one. The implementation of both variants are the same, due to that the parent selection is
+external to the crossover operator.</p>
+<dl class="method">
+<dt id="jmetal.operator.crossover.DifferentialEvolutionCrossover.execute">
+<code class="sig-name descname">execute</code><span class="sig-paren">(</span><em class="sig-param">parents: List[jmetal.core.solution.FloatSolution]</em><span class="sig-paren">)</span> &#x2192; List[jmetal.core.solution.FloatSolution]<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#DifferentialEvolutionCrossover.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.DifferentialEvolutionCrossover.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the differential evolution crossover (‘best/1/bin’ variant in jMetal).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.operator.crossover.DifferentialEvolutionCrossover.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#DifferentialEvolutionCrossover.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.DifferentialEvolutionCrossover.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.operator.crossover.DifferentialEvolutionCrossover.get_number_of_children">
+<code class="sig-name descname">get_number_of_children</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#DifferentialEvolutionCrossover.get_number_of_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.DifferentialEvolutionCrossover.get_number_of_children" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.operator.crossover.DifferentialEvolutionCrossover.get_number_of_parents">
+<code class="sig-name descname">get_number_of_parents</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#DifferentialEvolutionCrossover.get_number_of_parents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.DifferentialEvolutionCrossover.get_number_of_parents" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.operator.crossover.NullCrossover">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.operator.crossover.</code><code class="sig-name descname">NullCrossover</code><a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#NullCrossover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.NullCrossover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.operator.Crossover</span></code></p>
+<dl class="method">
+<dt id="jmetal.operator.crossover.NullCrossover.execute">
+<code class="sig-name descname">execute</code><span class="sig-paren">(</span><em class="sig-param">parents: List[jmetal.core.solution.Solution]</em><span class="sig-paren">)</span> &#x2192; List[jmetal.core.solution.Solution]<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#NullCrossover.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.NullCrossover.execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.operator.crossover.NullCrossover.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#NullCrossover.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.NullCrossover.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.operator.crossover.NullCrossover.get_number_of_children">
+<code class="sig-name descname">get_number_of_children</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#NullCrossover.get_number_of_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.NullCrossover.get_number_of_children" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.operator.crossover.NullCrossover.get_number_of_parents">
+<code class="sig-name descname">get_number_of_parents</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#NullCrossover.get_number_of_parents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.NullCrossover.get_number_of_parents" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.operator.crossover.PMXCrossover">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.operator.crossover.</code><code class="sig-name descname">PMXCrossover</code><span class="sig-paren">(</span><em class="sig-param">probability: float</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#PMXCrossover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.PMXCrossover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.operator.Crossover</span></code></p>
+<dl class="method">
+<dt id="jmetal.operator.crossover.PMXCrossover.execute">
+<code class="sig-name descname">execute</code><span class="sig-paren">(</span><em class="sig-param">parents: List[jmetal.core.solution.PermutationSolution]</em><span class="sig-paren">)</span> &#x2192; List[jmetal.core.solution.PermutationSolution]<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#PMXCrossover.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.PMXCrossover.execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.operator.crossover.PMXCrossover.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#PMXCrossover.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.PMXCrossover.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.operator.crossover.PMXCrossover.get_number_of_children">
+<code class="sig-name descname">get_number_of_children</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#PMXCrossover.get_number_of_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.PMXCrossover.get_number_of_children" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.operator.crossover.PMXCrossover.get_number_of_parents">
+<code class="sig-name descname">get_number_of_parents</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#PMXCrossover.get_number_of_parents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.PMXCrossover.get_number_of_parents" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.operator.crossover.SBXCrossover">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.operator.crossover.</code><code class="sig-name descname">SBXCrossover</code><span class="sig-paren">(</span><em class="sig-param">probability: float</em>, <em class="sig-param">distribution_index: float = 20.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#SBXCrossover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.SBXCrossover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.operator.Crossover</span></code></p>
+<dl class="method">
+<dt id="jmetal.operator.crossover.SBXCrossover.execute">
+<code class="sig-name descname">execute</code><span class="sig-paren">(</span><em class="sig-param">parents: List[jmetal.core.solution.FloatSolution]</em><span class="sig-paren">)</span> &#x2192; List[jmetal.core.solution.FloatSolution]<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#SBXCrossover.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.SBXCrossover.execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.operator.crossover.SBXCrossover.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#SBXCrossover.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.SBXCrossover.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.operator.crossover.SBXCrossover.get_number_of_children">
+<code class="sig-name descname">get_number_of_children</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#SBXCrossover.get_number_of_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.SBXCrossover.get_number_of_children" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.operator.crossover.SBXCrossover.get_number_of_parents">
+<code class="sig-name descname">get_number_of_parents</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#SBXCrossover.get_number_of_parents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.SBXCrossover.get_number_of_parents" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.operator.crossover.SPXCrossover">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.operator.crossover.</code><code class="sig-name descname">SPXCrossover</code><span class="sig-paren">(</span><em class="sig-param">probability: float</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#SPXCrossover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.SPXCrossover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.operator.Crossover</span></code></p>
+<dl class="method">
+<dt id="jmetal.operator.crossover.SPXCrossover.execute">
+<code class="sig-name descname">execute</code><span class="sig-paren">(</span><em class="sig-param">parents: List[jmetal.core.solution.BinarySolution]</em><span class="sig-paren">)</span> &#x2192; List[jmetal.core.solution.BinarySolution]<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#SPXCrossover.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.SPXCrossover.execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.operator.crossover.SPXCrossover.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#SPXCrossover.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.SPXCrossover.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.operator.crossover.SPXCrossover.get_number_of_children">
+<code class="sig-name descname">get_number_of_children</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#SPXCrossover.get_number_of_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.SPXCrossover.get_number_of_children" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.operator.crossover.SPXCrossover.get_number_of_parents">
+<code class="sig-name descname">get_number_of_parents</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../../_modules/jmetal/operator/crossover.html#SPXCrossover.get_number_of_parents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.crossover.SPXCrossover.get_number_of_parents" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="../../operators.html" title="previous chapter (use the left arrow)">Operators</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="mutation.html" title="next chapter (use the right arrow)">Mutation</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mutation.html" title="Mutation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../../operators.html" title="Operators"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../operators.html" >Operators</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

@@ -1,0 +1,1522 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Multi-objective problems &#8212; jMetalPy 1.5.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Single-objective problems" href="singleobjective.html" />
+    <link rel="prev" title="Problems" href="../../problems.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="singleobjective.html" title="Single-objective problems"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../../problems.html" title="Problems"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../problems.html" accesskey="U">Problems</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../../index.html" class="text-logo">jMetalPy</a>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../operators.html">Operators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../problems.html">Problems</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Multi-objective problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="singleobjective.html">Single-objective problems</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Contents</h2>
+    <div class="sidebar-localtoc">
+      <ul>
+<li><a class="reference internal" href="#">Multi-objective problems</a><ul>
+<li><a class="reference internal" href="#module-jmetal.problem.multiobjective.constrained">Constrained</a></li>
+<li><a class="reference internal" href="#module-jmetal.problem.multiobjective.unconstrained">Unconstrained</a></li>
+<li><a class="reference internal" href="#module-jmetal.problem.multiobjective.zdt">ZDT</a></li>
+<li><a class="reference internal" href="#module-jmetal.problem.multiobjective.dtlz">DTLZ</a></li>
+<li><a class="reference internal" href="#module-jmetal.problem.multiobjective.fda">FDA</a></li>
+<li><a class="reference internal" href="#module-jmetal.problem.multiobjective.lircmop">LIRCMOP</a></li>
+<li><a class="reference internal" href="#module-jmetal.problem.multiobjective.lz09">LZ09</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../index.html">Docs</a></li>
+              
+                <li><a href="../../problems.html">Problems</a></li>
+              
+              <li>Multi-objective problems</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="multi-objective-problems">
+<h1>Multi-objective problems<a class="headerlink" href="#multi-objective-problems" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-jmetal.problem.multiobjective.constrained">
+<span id="constrained"></span><h2>Constrained<a class="headerlink" href="#module-jmetal.problem.multiobjective.constrained" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.constrained.Binh2">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.constrained.</code><code class="sig-name descname">Binh2</code><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/constrained.html#Binh2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.constrained.Binh2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.FloatProblem" title="jmetal.core.problem.FloatProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.FloatProblem</span></code></a></p>
+<p>Class representing problem Binh2.</p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.constrained.Binh2.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/constrained.html#Binh2.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.constrained.Binh2.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.constrained.Binh2.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/constrained.html#Binh2.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.constrained.Binh2.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.constrained.Osyczka2">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.constrained.</code><code class="sig-name descname">Osyczka2</code><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/constrained.html#Osyczka2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.constrained.Osyczka2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.FloatProblem" title="jmetal.core.problem.FloatProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.FloatProblem</span></code></a></p>
+<p>Class representing problem Osyczka2.</p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.constrained.Osyczka2.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/constrained.html#Osyczka2.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.constrained.Osyczka2.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.constrained.Osyczka2.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/constrained.html#Osyczka2.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.constrained.Osyczka2.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.constrained.Srinivas">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.constrained.</code><code class="sig-name descname">Srinivas</code><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/constrained.html#Srinivas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.constrained.Srinivas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.FloatProblem" title="jmetal.core.problem.FloatProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.FloatProblem</span></code></a></p>
+<p>Class representing problem Srinivas.</p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.constrained.Srinivas.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/constrained.html#Srinivas.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.constrained.Srinivas.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.constrained.Srinivas.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/constrained.html#Srinivas.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.constrained.Srinivas.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.constrained.Tanaka">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.constrained.</code><code class="sig-name descname">Tanaka</code><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/constrained.html#Tanaka"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.constrained.Tanaka" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.FloatProblem" title="jmetal.core.problem.FloatProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.FloatProblem</span></code></a></p>
+<p>Class representing problem Tanaka.</p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.constrained.Tanaka.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/constrained.html#Tanaka.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.constrained.Tanaka.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.constrained.Tanaka.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/constrained.html#Tanaka.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.constrained.Tanaka.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-jmetal.problem.multiobjective.unconstrained">
+<span id="unconstrained"></span><h2>Unconstrained<a class="headerlink" href="#module-jmetal.problem.multiobjective.unconstrained" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.unconstrained.Fonseca">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.unconstrained.</code><code class="sig-name descname">Fonseca</code><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#Fonseca"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.Fonseca" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.FloatProblem" title="jmetal.core.problem.FloatProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.FloatProblem</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.unconstrained.Fonseca.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#Fonseca.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.Fonseca.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.unconstrained.Fonseca.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#Fonseca.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.Fonseca.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.unconstrained.Kursawe">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.unconstrained.</code><code class="sig-name descname">Kursawe</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 3</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#Kursawe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.Kursawe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.FloatProblem" title="jmetal.core.problem.FloatProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.FloatProblem</span></code></a></p>
+<p>Class representing problem Kursawe.</p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.unconstrained.Kursawe.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#Kursawe.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.Kursawe.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.unconstrained.Kursawe.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#Kursawe.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.Kursawe.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.unconstrained.OneZeroMax">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.unconstrained.</code><code class="sig-name descname">OneZeroMax</code><span class="sig-paren">(</span><em class="sig-param">number_of_bits: int = 256</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#OneZeroMax"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.OneZeroMax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.BinaryProblem" title="jmetal.core.problem.BinaryProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.BinaryProblem</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.unconstrained.OneZeroMax.create_solution">
+<code class="sig-name descname">create_solution</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.BinarySolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#OneZeroMax.create_solution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.OneZeroMax.create_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a random solution to the problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.unconstrained.OneZeroMax.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.BinarySolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.BinarySolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#OneZeroMax.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.OneZeroMax.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.unconstrained.OneZeroMax.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#OneZeroMax.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.OneZeroMax.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.unconstrained.Schaffer">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.unconstrained.</code><code class="sig-name descname">Schaffer</code><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#Schaffer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.Schaffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.FloatProblem" title="jmetal.core.problem.FloatProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.FloatProblem</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.unconstrained.Schaffer.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#Schaffer.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.Schaffer.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.unconstrained.Schaffer.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#Schaffer.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.Schaffer.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.unconstrained.SubsetSum">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.unconstrained.</code><code class="sig-name descname">SubsetSum</code><span class="sig-paren">(</span><em class="sig-param">C: int</em>, <em class="sig-param">W: list</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#SubsetSum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.SubsetSum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.BinaryProblem" title="jmetal.core.problem.BinaryProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.BinaryProblem</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.unconstrained.SubsetSum.create_solution">
+<code class="sig-name descname">create_solution</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.BinarySolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#SubsetSum.create_solution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.SubsetSum.create_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a random solution to the problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.unconstrained.SubsetSum.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.BinarySolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.BinarySolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#SubsetSum.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.SubsetSum.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.unconstrained.SubsetSum.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#SubsetSum.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.SubsetSum.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.unconstrained.Viennet2">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.unconstrained.</code><code class="sig-name descname">Viennet2</code><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#Viennet2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.Viennet2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.FloatProblem" title="jmetal.core.problem.FloatProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.FloatProblem</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.unconstrained.Viennet2.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#Viennet2.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.Viennet2.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.unconstrained.Viennet2.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/unconstrained.html#Viennet2.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.unconstrained.Viennet2.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-jmetal.problem.multiobjective.zdt">
+<span id="zdt"></span><h2>ZDT<a class="headerlink" href="#module-jmetal.problem.multiobjective.zdt" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT1">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.zdt.</code><code class="sig-name descname">ZDT1</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.FloatProblem" title="jmetal.core.problem.FloatProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.FloatProblem</span></code></a></p>
+<p>Problem ZDT1.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Bi-objective unconstrained problem. The default number of variables is 30.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Continuous problem having a convex Pareto front</p>
+</div>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT1.eval_g">
+<code class="sig-name descname">eval_g</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT1.eval_g"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT1.eval_g" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT1.eval_h">
+<code class="sig-name descname">eval_h</code><span class="sig-paren">(</span><em class="sig-param">f: float</em>, <em class="sig-param">g: float</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT1.eval_h"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT1.eval_h" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT1.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT1.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT1.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT1.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT1.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT1.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT2">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.zdt.</code><code class="sig-name descname">ZDT2</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.zdt.ZDT1" title="jmetal.problem.multiobjective.zdt.ZDT1"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.zdt.ZDT1</span></code></a></p>
+<p>Problem ZDT2.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Bi-objective unconstrained problem. The default number of variables is 30.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Continuous problem having a non-convex Pareto front</p>
+</div>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT2.eval_h">
+<code class="sig-name descname">eval_h</code><span class="sig-paren">(</span><em class="sig-param">f: float</em>, <em class="sig-param">g: float</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT2.eval_h"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT2.eval_h" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT2.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT2.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT2.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT3">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.zdt.</code><code class="sig-name descname">ZDT3</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.zdt.ZDT1" title="jmetal.problem.multiobjective.zdt.ZDT1"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.zdt.ZDT1</span></code></a></p>
+<p>Problem ZDT3.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Bi-objective unconstrained problem. The default number of variables is 30.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Continuous problem having a partitioned Pareto front</p>
+</div>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT3.eval_h">
+<code class="sig-name descname">eval_h</code><span class="sig-paren">(</span><em class="sig-param">f: float</em>, <em class="sig-param">g: float</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT3.eval_h"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT3.eval_h" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT3.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT3.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT3.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT4">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.zdt.</code><code class="sig-name descname">ZDT4</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 10</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.zdt.ZDT1" title="jmetal.problem.multiobjective.zdt.ZDT1"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.zdt.ZDT1</span></code></a></p>
+<p>Problem ZDT4.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Bi-objective unconstrained problem. The default number of variables is 10.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Continuous multi-modal problem having a convex Pareto front</p>
+</div>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT4.eval_g">
+<code class="sig-name descname">eval_g</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT4.eval_g"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT4.eval_g" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT4.eval_h">
+<code class="sig-name descname">eval_h</code><span class="sig-paren">(</span><em class="sig-param">f: float</em>, <em class="sig-param">g: float</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT4.eval_h"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT4.eval_h" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT4.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT4.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT4.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT6">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.zdt.</code><code class="sig-name descname">ZDT6</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 10</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT6" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.zdt.ZDT1" title="jmetal.problem.multiobjective.zdt.ZDT1"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.zdt.ZDT1</span></code></a></p>
+<p>Problem ZDT6.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Bi-objective unconstrained problem. The default number of variables is 10.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Continuous problem having a non-convex Pareto front</p>
+</div>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT6.eval_g">
+<code class="sig-name descname">eval_g</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT6.eval_g"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT6.eval_g" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT6.eval_h">
+<code class="sig-name descname">eval_h</code><span class="sig-paren">(</span><em class="sig-param">f: float</em>, <em class="sig-param">g: float</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT6.eval_h"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT6.eval_h" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.zdt.ZDT6.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/zdt.html#ZDT6.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.zdt.ZDT6.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-jmetal.problem.multiobjective.dtlz">
+<span id="dtlz"></span><h2>DTLZ<a class="headerlink" href="#module-jmetal.problem.multiobjective.dtlz" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ1">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.dtlz.</code><code class="sig-name descname">DTLZ1</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 7</em>, <em class="sig-param">number_of_objectives=3</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.FloatProblem" title="jmetal.core.problem.FloatProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.FloatProblem</span></code></a></p>
+<p>Problem DTLZ1. Continuous problem having a flat Pareto front</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unconstrained problem. The default number of variables and objectives are, respectively, 7 and 3.</p>
+</div>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ1.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ1.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ1.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ1.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ1.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ1.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ2">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.dtlz.</code><code class="sig-name descname">DTLZ2</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 12</em>, <em class="sig-param">number_of_objectives=3</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.dtlz.DTLZ1" title="jmetal.problem.multiobjective.dtlz.DTLZ1"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.dtlz.DTLZ1</span></code></a></p>
+<p>Problem DTLZ2. Continuous problem having a convex Pareto front</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unconstrained problem. The default number of variables and objectives are, respectively, 12 and 3.</p>
+</div>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ2.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ2.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ2.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ2.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ2.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ2.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ3">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.dtlz.</code><code class="sig-name descname">DTLZ3</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 12</em>, <em class="sig-param">number_of_objectives=3</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.dtlz.DTLZ1" title="jmetal.problem.multiobjective.dtlz.DTLZ1"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.dtlz.DTLZ1</span></code></a></p>
+<p>Problem DTLZ3. Continuous problem having a convex Pareto front</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unconstrained problem. The default number of variables and objectives are, respectively, 12 and 3.</p>
+</div>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ3.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ3.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ3.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ3.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ3.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ3.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ4">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.dtlz.</code><code class="sig-name descname">DTLZ4</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 12</em>, <em class="sig-param">number_of_objectives=3</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.dtlz.DTLZ1" title="jmetal.problem.multiobjective.dtlz.DTLZ1"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.dtlz.DTLZ1</span></code></a></p>
+<p>Problem DTLZ4. Continuous problem having a convex Pareto front</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unconstrained problem. The default number of variables and objectives are, respectively, 12 and 3.</p>
+</div>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ4.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ4.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ4.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ4.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ4.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ4.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ5">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.dtlz.</code><code class="sig-name descname">DTLZ5</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 12</em>, <em class="sig-param">number_of_objectives=3</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.dtlz.DTLZ1" title="jmetal.problem.multiobjective.dtlz.DTLZ1"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.dtlz.DTLZ1</span></code></a></p>
+<p>Problem DTLZ5. Continuous problem having a convex Pareto front</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unconstrained problem. The default number of variables and objectives are, respectively, 12 and 3.</p>
+</div>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ5.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ5.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ5.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ5.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ5.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ5.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ6">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.dtlz.</code><code class="sig-name descname">DTLZ6</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 12</em>, <em class="sig-param">number_of_objectives=3</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ6" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.dtlz.DTLZ1" title="jmetal.problem.multiobjective.dtlz.DTLZ1"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.dtlz.DTLZ1</span></code></a></p>
+<p>Problem DTLZ6. Continuous problem having a convex Pareto front</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unconstrained problem. The default number of variables and objectives are, respectively, 12 and 3.</p>
+</div>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ6.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ6.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ6.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ6.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ6.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ6.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ7">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.dtlz.</code><code class="sig-name descname">DTLZ7</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 22</em>, <em class="sig-param">number_of_objectives=3</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ7" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.dtlz.DTLZ1" title="jmetal.problem.multiobjective.dtlz.DTLZ1"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.dtlz.DTLZ1</span></code></a></p>
+<p>Problem DTLZ6. Continuous problem having a disconnected Pareto front</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unconstrained problem. The default number of variables and objectives are, respectively, 22 and 3.</p>
+</div>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ7.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ7.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ7.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.dtlz.DTLZ7.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/dtlz.html#DTLZ7.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.dtlz.DTLZ7.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-jmetal.problem.multiobjective.fda">
+<span id="fda"></span><h2>FDA<a class="headerlink" href="#module-jmetal.problem.multiobjective.fda" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.fda.FDA">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.fda.</code><code class="sig-name descname">FDA</code><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.DynamicProblem" title="jmetal.core.problem.DynamicProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.DynamicProblem</span></code></a>, <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.FloatProblem" title="jmetal.core.problem.FloatProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.FloatProblem</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.fda.FDA.clear_changed">
+<code class="sig-name descname">clear_changed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA.clear_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA.clear_changed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.fda.FDA.evaluate">
+<em class="property">abstract </em><code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.fda.FDA.the_problem_has_changed">
+<code class="sig-name descname">the_problem_has_changed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA.the_problem_has_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA.the_problem_has_changed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.fda.FDA.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update method.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.fda.FDA1">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.fda.</code><code class="sig-name descname">FDA1</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 100</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.fda.FDA" title="jmetal.problem.multiobjective.fda.FDA"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.fda.FDA</span></code></a></p>
+<p>Problem FDA1.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Bi-objective dynamic unconstrained problem. The default number of variables is 100.</p>
+</div>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.fda.FDA1.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA1.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA1.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.fda.FDA1.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA1.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA1.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.fda.FDA2">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.fda.</code><code class="sig-name descname">FDA2</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 31</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.fda.FDA" title="jmetal.problem.multiobjective.fda.FDA"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.fda.FDA</span></code></a></p>
+<p>Problem FDA2</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Bi-objective dynamic unconstrained problem. The default number of variables is 31.</p>
+</div>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.fda.FDA2.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA2.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA2.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.fda.FDA2.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA2.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA2.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.fda.FDA3">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.fda.</code><code class="sig-name descname">FDA3</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.fda.FDA" title="jmetal.problem.multiobjective.fda.FDA"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.fda.FDA</span></code></a></p>
+<p>Problem FDA3</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Bi-objective dynamic unconstrained problem. The default number of variables is 30.</p>
+</div>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.fda.FDA3.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA3.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA3.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.fda.FDA3.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA3.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA3.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.fda.FDA4">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.fda.</code><code class="sig-name descname">FDA4</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 12</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.fda.FDA" title="jmetal.problem.multiobjective.fda.FDA"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.fda.FDA</span></code></a></p>
+<p>Problem FDA4</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Three-objective dynamic unconstrained problem. The default number of variables is 12.</p>
+</div>
+<dl class="attribute">
+<dt id="jmetal.problem.multiobjective.fda.FDA4.M">
+<code class="sig-name descname">M</code><em class="property"> = 3</em><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA4.M" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.fda.FDA4.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA4.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA4.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.fda.FDA4.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA4.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA4.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.fda.FDA5">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.fda.</code><code class="sig-name descname">FDA5</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 12</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.fda.FDA" title="jmetal.problem.multiobjective.fda.FDA"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.fda.FDA</span></code></a></p>
+<p>Problem FDA5</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Three-objective dynamic unconstrained problem. The default number of variables is 12.</p>
+</div>
+<dl class="attribute">
+<dt id="jmetal.problem.multiobjective.fda.FDA5.M">
+<code class="sig-name descname">M</code><em class="property"> = 3</em><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA5.M" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.fda.FDA5.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA5.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA5.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.fda.FDA5.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/fda.html#FDA5.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.fda.FDA5.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-jmetal.problem.multiobjective.lircmop">
+<span id="lircmop"></span><h2>LIRCMOP<a class="headerlink" href="#module-jmetal.problem.multiobjective.lircmop" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP1">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lircmop.</code><code class="sig-name descname">LIRCMOP1</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.FloatProblem" title="jmetal.core.problem.FloatProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.FloatProblem</span></code></a></p>
+<p>Class representing problem LIR-CMOP1, defined in:</p>
+<ul class="simple">
+<li><p>An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
+Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). <a class="reference external" href="https://doi.org/10.1007/s00500-019-03794-x">https://doi.org/10.1007/s00500-019-03794-x</a></p></li>
+</ul>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP1.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP1.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP1.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP1.evaluate_constraints">
+<code class="sig-name descname">evaluate_constraints</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP1.evaluate_constraints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP1.evaluate_constraints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP1.g1">
+<code class="sig-name descname">g1</code><span class="sig-paren">(</span><em class="sig-param">x: [&lt;class 'float'&gt;]</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP1.g1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP1.g1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP1.g2">
+<code class="sig-name descname">g2</code><span class="sig-paren">(</span><em class="sig-param">x: [&lt;class 'float'&gt;]</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP1.g2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP1.g2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP1.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP1.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP1.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP10">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lircmop.</code><code class="sig-name descname">LIRCMOP10</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP10"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP10" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP8" title="jmetal.problem.multiobjective.lircmop.LIRCMOP8"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lircmop.LIRCMOP8</span></code></a></p>
+<p>Class representing problem LIR-CMOP10, defined in:</p>
+<ul class="simple">
+<li><p>An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
+Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). <a class="reference external" href="https://doi.org/10.1007/s00500-019-03794-x">https://doi.org/10.1007/s00500-019-03794-x</a></p></li>
+</ul>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP10.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP10.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP10.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP10.evaluate_constraints">
+<code class="sig-name descname">evaluate_constraints</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP10.evaluate_constraints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP10.evaluate_constraints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP10.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP10.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP10.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP11">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lircmop.</code><code class="sig-name descname">LIRCMOP11</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP11"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP11" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP10" title="jmetal.problem.multiobjective.lircmop.LIRCMOP10"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lircmop.LIRCMOP10</span></code></a></p>
+<p>Class representing problem LIR-CMOP11, defined in:</p>
+<ul class="simple">
+<li><p>An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
+Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). <a class="reference external" href="https://doi.org/10.1007/s00500-019-03794-x">https://doi.org/10.1007/s00500-019-03794-x</a></p></li>
+</ul>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP11.evaluate_constraints">
+<code class="sig-name descname">evaluate_constraints</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP11.evaluate_constraints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP11.evaluate_constraints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP11.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP11.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP11.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP12">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lircmop.</code><code class="sig-name descname">LIRCMOP12</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP12"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP12" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP9" title="jmetal.problem.multiobjective.lircmop.LIRCMOP9"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lircmop.LIRCMOP9</span></code></a></p>
+<p>Class representing problem LIR-CMOP9, defined in:</p>
+<ul class="simple">
+<li><p>An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
+Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). <a class="reference external" href="https://doi.org/10.1007/s00500-019-03794-x">https://doi.org/10.1007/s00500-019-03794-x</a></p></li>
+</ul>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP12.evaluate_constraints">
+<code class="sig-name descname">evaluate_constraints</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP12.evaluate_constraints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP12.evaluate_constraints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP12.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP12.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP12.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP13">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lircmop.</code><code class="sig-name descname">LIRCMOP13</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP13"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP13" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.FloatProblem" title="jmetal.core.problem.FloatProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.FloatProblem</span></code></a></p>
+<p>Class representing problem LIR-CMOP13, defined in:</p>
+<ul class="simple">
+<li><p>An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
+Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). <a class="reference external" href="https://doi.org/10.1007/s00500-019-03794-x">https://doi.org/10.1007/s00500-019-03794-x</a></p></li>
+</ul>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP13.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP13.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP13.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP13.evaluate_constraints">
+<code class="sig-name descname">evaluate_constraints</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP13.evaluate_constraints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP13.evaluate_constraints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP13.g1">
+<code class="sig-name descname">g1</code><span class="sig-paren">(</span><em class="sig-param">x: [&lt;class 'float'&gt;]</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP13.g1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP13.g1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP13.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP13.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP13.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP14">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lircmop.</code><code class="sig-name descname">LIRCMOP14</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP14"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP14" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP13" title="jmetal.problem.multiobjective.lircmop.LIRCMOP13"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lircmop.LIRCMOP13</span></code></a></p>
+<p>Class representing problem LIR-CMOP14, defined in:</p>
+<ul class="simple">
+<li><p>An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
+Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). <a class="reference external" href="https://doi.org/10.1007/s00500-019-03794-x">https://doi.org/10.1007/s00500-019-03794-x</a></p></li>
+</ul>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP14.evaluate_constraints">
+<code class="sig-name descname">evaluate_constraints</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP14.evaluate_constraints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP14.evaluate_constraints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP14.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP14.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP14.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP2">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lircmop.</code><code class="sig-name descname">LIRCMOP2</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP1" title="jmetal.problem.multiobjective.lircmop.LIRCMOP1"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lircmop.LIRCMOP1</span></code></a></p>
+<p>Class representing problem LIR-CMOP1, defined in:</p>
+<ul class="simple">
+<li><p>An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
+Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). <a class="reference external" href="https://doi.org/10.1007/s00500-019-03794-x">https://doi.org/10.1007/s00500-019-03794-x</a></p></li>
+</ul>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP2.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP2.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP2.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP2.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP2.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP2.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP3">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lircmop.</code><code class="sig-name descname">LIRCMOP3</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP1" title="jmetal.problem.multiobjective.lircmop.LIRCMOP1"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lircmop.LIRCMOP1</span></code></a></p>
+<p>Class representing problem LIR-CMOP3, defined in:</p>
+<ul class="simple">
+<li><p>An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
+Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). <a class="reference external" href="https://doi.org/10.1007/s00500-019-03794-x">https://doi.org/10.1007/s00500-019-03794-x</a></p></li>
+</ul>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP3.evaluate_constraints">
+<code class="sig-name descname">evaluate_constraints</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP3.evaluate_constraints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP3.evaluate_constraints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP3.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP3.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP3.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP4">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lircmop.</code><code class="sig-name descname">LIRCMOP4</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP2" title="jmetal.problem.multiobjective.lircmop.LIRCMOP2"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lircmop.LIRCMOP2</span></code></a></p>
+<p>Class representing problem LIR-CMOP4, defined in:</p>
+<ul class="simple">
+<li><p>An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
+Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). <a class="reference external" href="https://doi.org/10.1007/s00500-019-03794-x">https://doi.org/10.1007/s00500-019-03794-x</a></p></li>
+</ul>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP4.evaluate_constraints">
+<code class="sig-name descname">evaluate_constraints</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP4.evaluate_constraints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP4.evaluate_constraints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP4.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP4.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP4.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP5">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lircmop.</code><code class="sig-name descname">LIRCMOP5</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.FloatProblem" title="jmetal.core.problem.FloatProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.FloatProblem</span></code></a></p>
+<p>Class representing problem LIR-CMOP5, defined in:</p>
+<ul class="simple">
+<li><p>An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
+Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). <a class="reference external" href="https://doi.org/10.1007/s00500-019-03794-x">https://doi.org/10.1007/s00500-019-03794-x</a></p></li>
+</ul>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP5.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP5.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP5.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP5.evaluate_constraints">
+<code class="sig-name descname">evaluate_constraints</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP5.evaluate_constraints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP5.evaluate_constraints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP5.g1">
+<code class="sig-name descname">g1</code><span class="sig-paren">(</span><em class="sig-param">x: [&lt;class 'float'&gt;]</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP5.g1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP5.g1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP5.g2">
+<code class="sig-name descname">g2</code><span class="sig-paren">(</span><em class="sig-param">x: [&lt;class 'float'&gt;]</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP5.g2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP5.g2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP5.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP5.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP5.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP6">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lircmop.</code><code class="sig-name descname">LIRCMOP6</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP6" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP5" title="jmetal.problem.multiobjective.lircmop.LIRCMOP5"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lircmop.LIRCMOP5</span></code></a></p>
+<p>Class representing problem LIR-CMOP6, defined in:</p>
+<ul class="simple">
+<li><p>An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
+Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). <a class="reference external" href="https://doi.org/10.1007/s00500-019-03794-x">https://doi.org/10.1007/s00500-019-03794-x</a></p></li>
+</ul>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP6.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP6.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP6.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP6.evaluate_constraints">
+<code class="sig-name descname">evaluate_constraints</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP6.evaluate_constraints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP6.evaluate_constraints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP6.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP6.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP6.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP7">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lircmop.</code><code class="sig-name descname">LIRCMOP7</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP7" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP5" title="jmetal.problem.multiobjective.lircmop.LIRCMOP5"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lircmop.LIRCMOP5</span></code></a></p>
+<p>Class representing problem LIR-CMOP7, defined in:</p>
+<ul class="simple">
+<li><p>An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
+Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). <a class="reference external" href="https://doi.org/10.1007/s00500-019-03794-x">https://doi.org/10.1007/s00500-019-03794-x</a></p></li>
+</ul>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP7.evaluate_constraints">
+<code class="sig-name descname">evaluate_constraints</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP7.evaluate_constraints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP7.evaluate_constraints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP7.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP7.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP7.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP8">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lircmop.</code><code class="sig-name descname">LIRCMOP8</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP8"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP6" title="jmetal.problem.multiobjective.lircmop.LIRCMOP6"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lircmop.LIRCMOP6</span></code></a></p>
+<p>Class representing problem LIR-CMOP8, defined in:</p>
+<ul class="simple">
+<li><p>An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
+Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). <a class="reference external" href="https://doi.org/10.1007/s00500-019-03794-x">https://doi.org/10.1007/s00500-019-03794-x</a></p></li>
+</ul>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP8.evaluate_constraints">
+<code class="sig-name descname">evaluate_constraints</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP8.evaluate_constraints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP8.evaluate_constraints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP8.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP8.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP8.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP9">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lircmop.</code><code class="sig-name descname">LIRCMOP9</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP9"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP9" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP8" title="jmetal.problem.multiobjective.lircmop.LIRCMOP8"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lircmop.LIRCMOP8</span></code></a></p>
+<p>Class representing problem LIR-CMOP9, defined in:</p>
+<ul class="simple">
+<li><p>An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
+Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). <a class="reference external" href="https://doi.org/10.1007/s00500-019-03794-x">https://doi.org/10.1007/s00500-019-03794-x</a></p></li>
+</ul>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP9.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP9.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP9.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP9.evaluate_constraints">
+<code class="sig-name descname">evaluate_constraints</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP9.evaluate_constraints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP9.evaluate_constraints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lircmop.LIRCMOP9.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lircmop.html#LIRCMOP9.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lircmop.LIRCMOP9.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-jmetal.problem.multiobjective.lz09">
+<span id="lz09"></span><h2>LZ09<a class="headerlink" href="#module-jmetal.problem.multiobjective.lz09" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lz09.</code><code class="sig-name descname">LZ09</code><span class="sig-paren">(</span><em class="sig-param">number_of_variables: int</em>, <em class="sig-param">number_of_objectives: int</em>, <em class="sig-param">number_of_constraints: int</em>, <em class="sig-param">ptype: int</em>, <em class="sig-param">dtype: int</em>, <em class="sig-param">ltype: int</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../tutorials/problem.html#jmetal.core.problem.FloatProblem" title="jmetal.core.problem.FloatProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.FloatProblem</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09.objective">
+<code class="sig-name descname">objective</code><span class="sig-paren">(</span><em class="sig-param">x_variables: list</em><span class="sig-paren">)</span> &#x2192; list<a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09.objective"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09.objective" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09_F1">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lz09.</code><code class="sig-name descname">LZ09_F1</code><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09_F1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09_F1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lz09.LZ09" title="jmetal.problem.multiobjective.lz09.LZ09"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lz09.LZ09</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09_F1.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09_F1.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09_F1.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09_F2">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lz09.</code><code class="sig-name descname">LZ09_F2</code><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09_F2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09_F2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lz09.LZ09" title="jmetal.problem.multiobjective.lz09.LZ09"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lz09.LZ09</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09_F2.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09_F2.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09_F2.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09_F3">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lz09.</code><code class="sig-name descname">LZ09_F3</code><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09_F3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09_F3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lz09.LZ09" title="jmetal.problem.multiobjective.lz09.LZ09"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lz09.LZ09</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09_F3.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09_F3.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09_F3.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09_F4">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lz09.</code><code class="sig-name descname">LZ09_F4</code><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09_F4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09_F4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lz09.LZ09" title="jmetal.problem.multiobjective.lz09.LZ09"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lz09.LZ09</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09_F4.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09_F4.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09_F4.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09_F5">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lz09.</code><code class="sig-name descname">LZ09_F5</code><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09_F5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09_F5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lz09.LZ09" title="jmetal.problem.multiobjective.lz09.LZ09"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lz09.LZ09</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09_F5.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09_F5.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09_F5.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09_F6">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lz09.</code><code class="sig-name descname">LZ09_F6</code><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09_F6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09_F6" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lz09.LZ09" title="jmetal.problem.multiobjective.lz09.LZ09"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lz09.LZ09</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09_F6.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09_F6.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09_F6.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09_F7">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lz09.</code><code class="sig-name descname">LZ09_F7</code><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09_F7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09_F7" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lz09.LZ09" title="jmetal.problem.multiobjective.lz09.LZ09"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lz09.LZ09</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09_F7.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09_F7.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09_F7.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09_F8">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lz09.</code><code class="sig-name descname">LZ09_F8</code><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09_F8"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09_F8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lz09.LZ09" title="jmetal.problem.multiobjective.lz09.LZ09"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lz09.LZ09</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09_F8.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09_F8.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09_F8.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09_F9">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.problem.multiobjective.lz09.</code><code class="sig-name descname">LZ09_F9</code><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09_F9"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09_F9" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.problem.multiobjective.lz09.LZ09" title="jmetal.problem.multiobjective.lz09.LZ09"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.problem.multiobjective.lz09.LZ09</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.problem.multiobjective.lz09.LZ09_F9.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/problem/multiobjective/lz09.html#LZ09_F9.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.problem.multiobjective.lz09.LZ09_F9.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="../../problems.html" title="previous chapter (use the left arrow)">Problems</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="singleobjective.html" title="next chapter (use the right arrow)">Single-objective problems</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="singleobjective.html" title="Single-objective problems"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../../problems.html" title="Problems"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../problems.html" >Problems</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

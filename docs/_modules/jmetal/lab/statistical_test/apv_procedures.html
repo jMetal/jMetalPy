@@ -1,0 +1,550 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>jmetal.lab.statistical_test.apv_procedures &#8212; jMetalPy 1.5.1 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../../../../index.html" class="text-logo">jMetalPy</a>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../operators.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../../../index.html">Docs</a></li>
+              
+                <li><a href="../../../index.html">Module code</a></li>
+              
+              <li>jmetal.lab.statistical_test.apv_procedures</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <h1>Source code for jmetal.lab.statistical_test.apv_procedures</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<div class="viewcode-block" id="bonferroni_dunn"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.apv_procedures.bonferroni_dunn">[docs]</a><span class="k">def</span> <span class="nf">bonferroni_dunn</span><span class="p">(</span><span class="n">p_values</span><span class="p">,</span> <span class="n">control</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bonferroni-Dunn&#39;s procedure for the adjusted p-value computation.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.</span>
+<span class="sd">    control: int or string. Index or Name of the control algorithm.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    APVs: DataFrame containing the adjusted p-values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Initial Checking</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">p_values</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="s1">&#39;Alg</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">alg</span> <span class="k">for</span> <span class="n">alg</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">control</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">control</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">algorithms</span> <span class="o">==</span> <span class="n">control</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">control</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Initialization ERROR. Incorrect value for control.&#39;</span><span class="p">)</span>
+
+    <span class="n">k</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># sort p-values p(0) &lt;= p(1) &lt;= ... &lt;= p(k-1)</span>
+    <span class="n">argsorted_pvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">p_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
+
+    <span class="n">APVs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">comparison</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">comparison</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">algorithms</span><span class="p">[</span><span class="n">control</span><span class="p">]</span> <span class="o">+</span>
+                          <span class="s1">&#39; vs &#39;</span> <span class="o">+</span> <span class="n">algorithms</span><span class="p">[</span><span class="n">argsorted_pvals</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+        <span class="n">APVs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">p_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">argsorted_pvals</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">APVs</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">comparison</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Bonferroni&#39;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="holland"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.apv_procedures.holland">[docs]</a><span class="k">def</span> <span class="nf">holland</span><span class="p">(</span><span class="n">p_values</span><span class="p">,</span> <span class="n">control</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Holland&#39;s procedure for the adjusted p-value computation.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.</span>
+<span class="sd">    control: int or string. Index or Name of the control algorithm.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    APVs: DataFrame containing the adjusted p-values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Initial Checking</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">p_values</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="s1">&#39;Alg</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">alg</span> <span class="k">for</span> <span class="n">alg</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">control</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">control</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">algorithms</span> <span class="o">==</span> <span class="n">control</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">control</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Initialization ERROR. Incorrect value for control.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># --------------------------------------------------------------------------</span>
+    <span class="c1"># ------------------------------- Procedure --------------------------------</span>
+    <span class="c1"># --------------------------------------------------------------------------</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># sort p-values p(0) &lt;= p(1) &lt;= ... &lt;= p(k-1)</span>
+    <span class="n">argsorted_pvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">p_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
+
+    <span class="n">APVs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">comparison</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">comparison</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">algorithms</span><span class="p">[</span><span class="n">control</span><span class="p">]</span> <span class="o">+</span>
+                          <span class="s1">&#39; vs &#39;</span> <span class="o">+</span> <span class="n">algorithms</span><span class="p">[</span><span class="n">argsorted_pvals</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+        <span class="n">aux</span> <span class="o">=</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">argsorted_pvals</span><span class="p">[:(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]])</span> <span class="o">**</span> <span class="n">aux</span><span class="p">)</span>
+        <span class="n">APVs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">v</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">APVs</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">comparison</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Holland&#39;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="finner"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.apv_procedures.finner">[docs]</a><span class="k">def</span> <span class="nf">finner</span><span class="p">(</span><span class="n">p_values</span><span class="p">,</span> <span class="n">control</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Finner&#39;s procedure for the adjusted p-value computation.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.</span>
+<span class="sd">    control: int or string. Index or Name of the control algorithm.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    APVs: DataFrame containing the adjusted p-values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Initial Checking</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">p_values</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="s1">&#39;Alg</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">alg</span> <span class="k">for</span> <span class="n">alg</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">control</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">control</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">algorithms</span> <span class="o">==</span> <span class="n">control</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">control</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Initialization ERROR. Incorrect value for control.&#39;</span><span class="p">)</span>
+
+    <span class="n">k</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># sort p-values p(0) &lt;= p(1) &lt;= ... &lt;= p(k-1)</span>
+    <span class="n">argsorted_pvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">p_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
+
+    <span class="n">APVs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">comparison</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">comparison</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">algorithms</span><span class="p">[</span><span class="n">control</span><span class="p">]</span> <span class="o">+</span>
+                          <span class="s1">&#39; vs &#39;</span> <span class="o">+</span> <span class="n">algorithms</span><span class="p">[</span><span class="n">argsorted_pvals</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+        <span class="n">aux</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">argsorted_pvals</span><span class="p">[:(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]])</span> <span class="o">**</span> <span class="n">aux</span><span class="p">)</span>
+        <span class="n">APVs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">v</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">APVs</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">comparison</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Finner&#39;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="hochberg"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.apv_procedures.hochberg">[docs]</a><span class="k">def</span> <span class="nf">hochberg</span><span class="p">(</span><span class="n">p_values</span><span class="p">,</span> <span class="n">control</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Hochberg&#39;s procedure for the adjusted p-value computation.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.</span>
+<span class="sd">    control: int or string. Index or Name of the control algorithm.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    APVs: DataFrame containing the adjusted p-values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Initial Checking</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">p_values</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="s1">&#39;Alg</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">alg</span> <span class="k">for</span> <span class="n">alg</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">control</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">control</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">algorithms</span> <span class="o">==</span> <span class="n">control</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">control</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Initialization ERROR. Incorrect value for control.&#39;</span><span class="p">)</span>
+
+    <span class="n">k</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># sort p-values p(0) &lt;= p(1) &lt;= ... &lt;= p(k-1)</span>
+    <span class="n">argsorted_pvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">p_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
+
+    <span class="n">APVs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">comparison</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">comparison</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">algorithms</span><span class="p">[</span><span class="n">control</span><span class="p">]</span> <span class="o">+</span>
+                          <span class="s1">&#39; vs &#39;</span> <span class="o">+</span> <span class="n">algorithms</span><span class="p">[</span><span class="n">argsorted_pvals</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+        <span class="n">aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">p_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">argsorted_pvals</span><span class="p">[</span><span class="n">aux</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">aux</span><span class="p">))</span>
+        <span class="n">APVs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">v</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">APVs</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">comparison</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Hochberg&#39;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="li"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.apv_procedures.li">[docs]</a><span class="k">def</span> <span class="nf">li</span><span class="p">(</span><span class="n">p_values</span><span class="p">,</span> <span class="n">control</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Li&#39;s procedure for the adjusted p-value computation.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.</span>
+<span class="sd">    control: optional int or string. Default None</span>
+<span class="sd">        Index or Name of the control algorithm. If control is provided, control vs all</span>
+<span class="sd">        comparisons are considered, else all vs all.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    APVs: DataFrame containing the adjusted p-values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Initial Checking</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">p_values</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="s1">&#39;Alg</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">alg</span> <span class="k">for</span> <span class="n">alg</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">control</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">control</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">algorithms</span> <span class="o">==</span> <span class="n">control</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">control</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Initialization ERROR. Incorrect value for control.&#39;</span><span class="p">)</span>
+
+    <span class="n">k</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># sort p-values p(0) &lt;= p(1) &lt;= ... &lt;= p(k-1)</span>
+    <span class="n">argsorted_pvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">p_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
+
+    <span class="n">APVs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">comparison</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">comparison</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">algorithms</span><span class="p">[</span><span class="n">control</span><span class="p">]</span> <span class="o">+</span>
+                          <span class="s1">&#39; vs &#39;</span> <span class="o">+</span> <span class="n">algorithms</span><span class="p">[</span><span class="n">argsorted_pvals</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+        <span class="n">APVs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">p_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">argsorted_pvals</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]],</span> <span class="n">p_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">argsorted_pvals</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">/</span> <span class="p">(</span>
+                <span class="n">p_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">argsorted_pvals</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">p_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">argsorted_pvals</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]])])</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">APVs</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">comparison</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Li&#39;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="holm"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.apv_procedures.holm">[docs]</a><span class="k">def</span> <span class="nf">holm</span><span class="p">(</span><span class="n">p_values</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Holm&#39;s procedure for the adjusted p-value computation.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.</span>
+<span class="sd">    control: optional int or string. Default None</span>
+<span class="sd">        Index or Name of the control algorithm. If control is provided, control vs all</span>
+<span class="sd">        comparisons are considered, else all vs all.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    APVs: DataFrame containing the adjusted p-values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Initial Checking</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">p_values</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="s1">&#39;Alg</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">alg</span> <span class="k">for</span> <span class="n">alg</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">control</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">control</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">algorithms</span> <span class="o">==</span> <span class="n">control</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">control</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># sort p-values p(0) &lt;= p(1) &lt;= ... &lt;= p(k-1)</span>
+        <span class="n">argsorted_pvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">p_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
+
+        <span class="n">APVs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">comparison</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">aux</span> <span class="o">=</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">comparison</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">algorithms</span><span class="p">[</span><span class="n">control</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; vs &#39;</span> <span class="o">+</span> <span class="n">algorithms</span><span class="p">[</span><span class="n">argsorted_pvals</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">aux</span> <span class="o">*</span> <span class="n">p_values</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">argsorted_pvals</span><span class="p">[:(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]])</span>
+            <span class="n">APVs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">v</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">elif</span> <span class="n">control</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+
+        <span class="c1"># sort p-values p(0) &lt;= p(1) &lt;= ... &lt;= p(m-1)</span>
+        <span class="n">pairs_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">pairs_pvals</span> <span class="o">=</span> <span class="n">p_values</span><span class="p">[</span><span class="n">pairs_index</span><span class="p">]</span>
+        <span class="n">pairs_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">pairs_pvals</span><span class="p">)</span>
+
+        <span class="n">APVs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">m</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">aux</span> <span class="o">=</span> <span class="n">pairs_pvals</span><span class="p">[</span><span class="n">pairs_sorted</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+        <span class="n">comparison</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">pairs_index</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">pairs_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="n">pairs_index</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">pairs_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+            <span class="n">comparison</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">algorithms</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; vs &#39;</span> <span class="o">+</span> <span class="n">algorithms</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">aux</span><span class="p">[:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">APVs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">v</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">APVs</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">comparison</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Holm&#39;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="shaffer"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.apv_procedures.shaffer">[docs]</a><span class="k">def</span> <span class="nf">shaffer</span><span class="p">(</span><span class="n">p_values</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Shaffer&#39;s procedure for adjusted p_value ccmputation.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    data: 2-D array or DataFrame containing the p-values.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    APVs: DataFrame containing the adjusted p-values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">S</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the set of possible numbers of true hoypotheses.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        k: int</span>
+<span class="sd">            number of algorithms being compared.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ----------</span>
+<span class="sd">        TrueSet : array-like</span>
+<span class="sd">            Set of true hypotheses.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="k">import</span> <span class="n">binom</span> <span class="k">as</span> <span class="n">binomial</span>
+
+        <span class="n">TrueHset</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">):</span>
+                <span class="n">TrueHset</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">TrueHset</span><span class="p">)</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">binomial</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">S</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">j</span><span class="p">)]))</span>
+        <span class="k">return</span> <span class="n">TrueHset</span>
+
+    <span class="c1"># Initial Checking</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">p_values</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="s1">&#39;Alg</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">alg</span> <span class="k">for</span> <span class="n">alg</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+
+    <span class="k">if</span> <span class="n">p_values</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Initialization ERROR. Incorrect number of array dimensions.&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Initialization ERROR. Incorrect number of array dimensions.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># define parameters</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">S</span><span class="p">(</span><span class="n">k</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+
+    <span class="c1"># sort p-values p(0) &lt;= p(1) &lt;= ... &lt;= p(m-1)</span>
+    <span class="n">pairs_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">pairs_pvals</span> <span class="o">=</span> <span class="n">p_values</span><span class="p">[</span><span class="n">pairs_index</span><span class="p">]</span>
+    <span class="n">pairs_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">pairs_pvals</span><span class="p">)</span>
+
+    <span class="c1"># compute ti: max number of hypotheses that can be true given that any</span>
+    <span class="c1"># (i-1) hypotheses are false.</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">s</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">s</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)))</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="o">-</span><span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># Adjust p-values</span>
+    <span class="n">APVs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">m</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">aux</span> <span class="o">=</span> <span class="p">(</span><span class="n">pairs_pvals</span><span class="p">[</span><span class="n">pairs_sorted</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+    <span class="n">comparison</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">pairs_index</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">pairs_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">pairs_index</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">pairs_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+        <span class="n">comparison</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">algorithms</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; vs &#39;</span> <span class="o">+</span> <span class="n">algorithms</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">aux</span><span class="p">[:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">APVs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">v</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">APVs</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">comparison</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Shaffer&#39;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="nemenyi"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.apv_procedures.nemenyi">[docs]</a><span class="k">def</span> <span class="nf">nemenyi</span><span class="p">(</span><span class="n">p_values</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Nemenyi&#39;s procedure for adjusted p_value computation.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    data: 2-D array or DataFrame containing the p-values.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    APVs: DataFrame containing the adjusted p-values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Initial Checking</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">p_values</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="s1">&#39;Alg</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">alg</span> <span class="k">for</span> <span class="n">alg</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+
+    <span class="k">if</span> <span class="n">p_values</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Initialization ERROR. Incorrect number of array dimensions.&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Initialization ERROR. Incorrect number of array dimensions.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># define parameters</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">p_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+
+    <span class="c1"># sort p-values p(0) &lt;= p(1) &lt;= ... &lt;= p(m-1)</span>
+    <span class="n">pairs_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">pairs_pvals</span> <span class="o">=</span> <span class="n">p_values</span><span class="p">[</span><span class="n">pairs_index</span><span class="p">]</span>
+    <span class="n">pairs_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">pairs_pvals</span><span class="p">)</span>
+
+    <span class="c1"># Adjust p-values</span>
+    <span class="n">APVs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">m</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">comparison</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">pairs_index</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">pairs_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">pairs_index</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">pairs_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+        <span class="n">comparison</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">algorithms</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; vs &#39;</span> <span class="o">+</span> <span class="n">algorithms</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+        <span class="n">APVs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">pairs_pvals</span><span class="p">[</span><span class="n">pairs_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">*</span> <span class="n">m</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">APVs</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">comparison</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Nemenyi&#39;</span><span class="p">])</span></div>
+</pre></div>
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

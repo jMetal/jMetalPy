@@ -109,10 +109,6 @@ ENV/
 # Dask
 dask-worker-space
 
-# Plotly
-
-*.html
-
 # osx
 .DS_Store
 

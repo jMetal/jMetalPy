@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Evolution Strategy &#8212; jMetalPy 1.5.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Genetic Algorithm" href="genetic.algorithm.html" />
+    <link rel="prev" title="Single-objective algorithms" href="../../../singleobjective.algorithms.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="genetic.algorithm.html" title="Genetic Algorithm"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../../../singleobjective.algorithms.html" title="Single-objective algorithms"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../singleobjective.algorithms.html" accesskey="U">Single-objective algorithms</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../../../index.html" class="text-logo">jMetalPy</a>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../singleobjective.algorithms.html">Single-objective algorithms</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Evolution Strategy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="genetic.algorithm.html">Genetic Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="local.search.html">Local Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulated.annealing.html">Simulated annealing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../operators.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../../index.html">Docs</a></li>
+              
+                <li><a href="../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
+              
+              <li>Evolution Strategy</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="module-jmetal.algorithm.singleobjective.evolution_strategy">
+<span id="evolution-strategy"></span><h1>Evolution Strategy<a class="headerlink" href="#module-jmetal.algorithm.singleobjective.evolution_strategy" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.singleobjective.evolution_strategy.</code><code class="sig-name descname">EvolutionStrategy</code><span class="sig-paren">(</span><em class="sig-param">problem: jmetal.core.problem.Problem</em>, <em class="sig-param">mu: int</em>, <em class="sig-param">lambda_: int</em>, <em class="sig-param">elitist: bool</em>, <em class="sig-param">mutation: jmetal.core.operator.Mutation</em>, <em class="sig-param">termination_criterion: jmetal.util.termination_criterion.TerminationCriterion</em>, <em class="sig-param">population_generator: jmetal.util.solutions.generator.Generator = &lt;jmetal.util.solutions.generator.RandomGenerator object&gt;</em>, <em class="sig-param">population_evaluator: jmetal.util.solutions.evaluator.Evaluator = &lt;jmetal.util.solutions.evaluator.SequentialEvaluator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/evolution_strategy.html#EvolutionStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.algorithm.EvolutionaryAlgorithm</span></code></p>
+<dl class="method">
+<dt id="jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy.create_initial_solutions">
+<code class="sig-name descname">create_initial_solutions</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[S]<a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/evolution_strategy.html#EvolutionStrategy.create_initial_solutions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy.create_initial_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the initial list of solutions of a metaheuristic.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution_list: List[S]</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/evolution_strategy.html#EvolutionStrategy.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates a solution list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/evolution_strategy.html#EvolutionStrategy.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy.get_result">
+<code class="sig-name descname">get_result</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; R<a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/evolution_strategy.html#EvolutionStrategy.get_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy.get_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy.replacement">
+<code class="sig-name descname">replacement</code><span class="sig-paren">(</span><em class="sig-param">population: List[S], offspring_population: List[S]</em><span class="sig-paren">)</span> &#x2192; List[S]<a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/evolution_strategy.html#EvolutionStrategy.replacement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy.replacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace least-fit population with new individuals.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy.reproduction">
+<code class="sig-name descname">reproduction</code><span class="sig-paren">(</span><em class="sig-param">population: List[S]</em><span class="sig-paren">)</span> &#x2192; List[S]<a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/evolution_strategy.html#EvolutionStrategy.reproduction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy.reproduction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Breed new individuals through crossover and mutation operations to give birth to offspring.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy.selection">
+<code class="sig-name descname">selection</code><span class="sig-paren">(</span><em class="sig-param">population: List[S]</em><span class="sig-paren">)</span> &#x2192; List[S]<a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/evolution_strategy.html#EvolutionStrategy.selection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy.selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select the best-fit individuals for reproduction (parents).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy.stopping_condition_is_met">
+<code class="sig-name descname">stopping_condition_is_met</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/evolution_strategy.html#EvolutionStrategy.stopping_condition_is_met"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy.stopping_condition_is_met" title="Permalink to this definition">¶</a></dt>
+<dd><p>The stopping condition is met or not.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="../../../singleobjective.algorithms.html" title="previous chapter (use the left arrow)">Single-objective algorithms</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="genetic.algorithm.html" title="next chapter (use the right arrow)">Genetic Algorithm</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="genetic.algorithm.html" title="Genetic Algorithm"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../../../singleobjective.algorithms.html" title="Single-objective algorithms"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../singleobjective.algorithms.html" >Single-objective algorithms</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

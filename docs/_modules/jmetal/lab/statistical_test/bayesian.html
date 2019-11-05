@@ -1,0 +1,279 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>jmetal.lab.statistical_test.bayesian &#8212; jMetalPy 1.5.1 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../../../../index.html" class="text-logo">jMetalPy</a>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../operators.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../../../index.html">Docs</a></li>
+              
+                <li><a href="../../../index.html">Module code</a></li>
+              
+              <li>jmetal.lab.statistical_test.bayesian</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <h1>Source code for jmetal.lab.statistical_test.bayesian</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<div class="viewcode-block" id="bayesian_sign_test"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.bayesian.bayesian_sign_test">[docs]</a><span class="k">def</span> <span class="nf">bayesian_sign_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">rope_limits</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">],</span> <span class="n">prior_strength</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">prior_place</span><span class="o">=</span><span class="s1">&#39;rope&#39;</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span>
+                       <span class="n">return_sample</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Bayesian version of the sign test.</span>
+
+<span class="sd">    :param data: An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.</span>
+<span class="sd">    :param rope_limits: array_like. Default [-0.01, 0.01]. Limits of the practical equivalence.</span>
+<span class="sd">    :param prior_strength: positive float. Default 0.5. Value of the prior strengt</span>
+<span class="sd">    :param prior_place: string {left, rope, right}. Default &#39;left&#39;. Place of the pseudo-observation z_0.</span>
+<span class="sd">    :param sample_size: integer. Default 10000. Total number of random samples generated</span>
+<span class="sd">    :param return_sample: boolean. Default False. If true, also return the samples drawn from the Dirichlet process.</span>
+
+<span class="sd">    :return: List of posterior probabilities:</span>
+<span class="sd">        [Pr(algorith_1 &lt; algorithm_2),</span>
+<span class="sd">        Pr(algorithm_1 equiv algorithm_2),</span>
+<span class="sd">        Pr(algorithm_1 &gt; algorithm_2)]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Initial Checking</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">sample1</span><span class="p">,</span> <span class="n">sample2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Initialization ERROR. Incorrect number of dimensions for axis 1&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">prior_strength</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Initialization ERROR. prior_strength mustb be a positive float&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">prior_place</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;rope&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Initialization ERROR. Incorrect value fro prior_place&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Compute the differences</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">sample1</span> <span class="o">-</span> <span class="n">sample2</span>
+
+    <span class="c1"># Compute the number of pairs diff &gt; right_limit</span>
+    <span class="n">Nright</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">Z</span> <span class="o">&gt;</span> <span class="n">rope_limits</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="c1"># Compute the number of pairs diff &lt; right_lelft</span>
+    <span class="n">Nleft</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">Z</span> <span class="o">&lt;</span> <span class="n">rope_limits</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="c1"># Compute the number of pairs diff in rope_limits</span>
+    <span class="n">Nequiv</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">Nright</span> <span class="o">-</span> <span class="n">Nleft</span>
+
+    <span class="c1"># compute the the probabilities that the mean difference of accuracy is in</span>
+    <span class="c1"># the interval (−Inf, left), [left, right], or (ringth, Inf).</span>
+
+    <span class="c1"># Parameters of the Dirichlet distribution</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Nleft</span><span class="p">,</span> <span class="n">Nequiv</span><span class="p">,</span> <span class="n">Nright</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-6</span>
+    <span class="n">alpha</span><span class="p">[[</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;rope&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">prior_place</span><span class="p">)]</span> <span class="o">+=</span> <span class="n">prior_strength</span>
+    <span class="c1"># Simulate dirichlet process</span>
+    <span class="n">Dprocess</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">sample_size</span><span class="p">)</span>
+
+    <span class="c1"># Compute posterior probabilities</span>
+    <span class="n">winner_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">Dprocess</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">win_left</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">winner_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">win_rifht</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">winner_id</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">win_rope</span> <span class="o">=</span> <span class="n">sample_size</span> <span class="o">-</span> <span class="n">win_left</span> <span class="o">-</span> <span class="n">win_rifht</span>
+
+    <span class="k">if</span> <span class="n">return_sample</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">win_left</span><span class="p">,</span> <span class="n">win_rope</span><span class="p">,</span> <span class="n">win_rifht</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">sample_size</span><span class="p">),</span> <span class="n">Dprocess</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">win_left</span><span class="p">,</span> <span class="n">win_rope</span><span class="p">,</span> <span class="n">win_rifht</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">sample_size</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="bayesian_signed_rank_test"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.bayesian.bayesian_signed_rank_test">[docs]</a><span class="k">def</span> <span class="nf">bayesian_signed_rank_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">rope_limits</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">],</span> <span class="n">prior_strength</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">prior_place</span><span class="o">=</span><span class="s1">&#39;rope&#39;</span><span class="p">,</span>
+                              <span class="n">sample_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+                              <span class="n">return_sample</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Bayesian version of the signed rank test.</span>
+
+<span class="sd">    :param data: An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.</span>
+<span class="sd">    :param rope_limits: array_like. Default [-0.01, 0.01]. Limits of the practical equivalence.</span>
+<span class="sd">    :param prior_strength: positive float. Default 0.5. Value of the prior strengt</span>
+<span class="sd">    :param prior_place: string {left, rope, right}. Default &#39;left&#39;. Place of the pseudo-observation z_0.</span>
+<span class="sd">    :param sample_size: integer. Default 10000. Total number of random samples generated</span>
+<span class="sd">    :param return_sample: boolean. Default False. If true, also return the samples drawn from the Dirichlet process.</span>
+
+<span class="sd">    :return: List of posterior probabilities:</span>
+<span class="sd">        [Pr(algorith_1 &lt; algorithm_2), Pr(algorithm_1 equiv algorithm_2), Pr(algorithm_1 &gt; algorithm_2)]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">weights</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">alpha</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Initial Checking</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">sample1</span><span class="p">,</span> <span class="n">sample2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Initialization ERROR. Incorrect number of dimensions for axis 1&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">prior_strength</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Initialization ERROR. prior_strength must be a positive float&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">prior_place</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;rope&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Initialization ERROR. Incorrect value for prior_place&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Compute the differences</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">sample1</span> <span class="o">-</span> <span class="n">sample2</span>
+    <span class="n">Z0</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;Inf&#39;</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;Inf&#39;</span><span class="p">)][[</span><span class="s1">&#39;left&#39;</span><span class="p">,</span>
+                                             <span class="s1">&#39;rope&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">prior_place</span><span class="p">)]</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(([</span><span class="n">Z0</span><span class="p">],</span> <span class="n">Z</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># compute the the probabilities that the mean difference of accuracy is in</span>
+    <span class="c1"># the interval (−Inf, left), [left, right], or (ringth, Inf).</span>
+
+    <span class="n">Dprocess</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">sample_size</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">mc</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sample_size</span><span class="p">):</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">weights</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">prior_strength</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">aux</span> <span class="o">=</span> <span class="n">Z</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">Z</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">sumval</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">W</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span> <span class="k">else</span> <span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">W</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">aux</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">rope_limits</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">Dprocess</span><span class="p">[</span><span class="n">mc</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">sumval</span>
+                <span class="k">elif</span> <span class="n">aux</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">rope_limits</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">Dprocess</span><span class="p">[</span><span class="n">mc</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">sumval</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">Dprocess</span><span class="p">[</span><span class="n">mc</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">sumval</span>
+
+    <span class="c1"># Compute posterior probabilities</span>
+    <span class="n">winner_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">Dprocess</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">win_left</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">winner_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">win_rifht</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">winner_id</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">win_rope</span> <span class="o">=</span> <span class="n">sample_size</span> <span class="o">-</span> <span class="n">win_left</span> <span class="o">-</span> <span class="n">win_rifht</span>
+
+    <span class="k">if</span> <span class="n">return_sample</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">win_left</span><span class="p">,</span> <span class="n">win_rope</span><span class="p">,</span> <span class="n">win_rifht</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">sample_size</span><span class="p">),</span> <span class="n">Dprocess</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">win_left</span><span class="p">,</span> <span class="n">win_rope</span><span class="p">,</span> <span class="n">win_rifht</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">sample_size</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

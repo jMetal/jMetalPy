@@ -1,0 +1,279 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>jmetal.problem.multiobjective.zdt &#8212; jMetalPy 1.5.1 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../../../../index.html" class="text-logo">jMetalPy</a>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../operators.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../../../index.html">Docs</a></li>
+              
+                <li><a href="../../../index.html">Module code</a></li>
+              
+              <li>jmetal.problem.multiobjective.zdt</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <h1>Source code for jmetal.problem.multiobjective.zdt</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">sqrt</span><span class="p">,</span> <span class="nb">pow</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">cos</span>
+
+<span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="k">import</span> <span class="n">FloatProblem</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="k">import</span> <span class="n">FloatSolution</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: ZDT</span>
+<span class="sd">   :platform: Unix, Windows</span>
+<span class="sd">   :synopsis: ZDT problem family of multi-objective problems.</span>
+
+<span class="sd">.. moduleauthor:: Antonio J. Nebro &lt;antonio@lcc.uma.es&gt;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="ZDT1"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT1">[docs]</a><span class="k">class</span> <span class="nc">ZDT1</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Problem ZDT1.</span>
+
+<span class="sd">    .. note:: Bi-objective unconstrained problem. The default number of variables is 30.</span>
+<span class="sd">    .. note:: Continuous problem having a convex Pareto front</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; :param number_of_variables: Number of decision variables of the problem.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ZDT1</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">=</span> <span class="n">number_of_variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">*</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">*</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]</span>
+
+<div class="viewcode-block" id="ZDT1.evaluate"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT1.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_g</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_h</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">g</span><span class="p">)</span>
+
+        <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span> <span class="o">*</span> <span class="n">g</span>
+
+        <span class="k">return</span> <span class="n">solution</span></div>
+
+<div class="viewcode-block" id="ZDT1.eval_g"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT1.eval_g">[docs]</a>    <span class="k">def</span> <span class="nf">eval_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">):</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span> <span class="o">-</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">constant</span> <span class="o">=</span> <span class="mf">9.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">constant</span> <span class="o">*</span> <span class="n">g</span> <span class="o">+</span> <span class="mf">1.0</span></div>
+
+<div class="viewcode-block" id="ZDT1.eval_h"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT1.eval_h">[docs]</a>    <span class="k">def</span> <span class="nf">eval_h</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">f</span> <span class="o">/</span> <span class="n">g</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ZDT1.get_name"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT1.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;ZDT1&#39;</span></div></div>
+
+
+<div class="viewcode-block" id="ZDT2"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT2">[docs]</a><span class="k">class</span> <span class="nc">ZDT2</span><span class="p">(</span><span class="n">ZDT1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Problem ZDT2.</span>
+
+<span class="sd">    .. note:: Bi-objective unconstrained problem. The default number of variables is 30.</span>
+<span class="sd">    .. note:: Continuous problem having a non-convex Pareto front</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ZDT2.eval_h"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT2.eval_h">[docs]</a>    <span class="k">def</span> <span class="nf">eval_h</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="nb">pow</span><span class="p">(</span><span class="n">f</span> <span class="o">/</span> <span class="n">g</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ZDT2.get_name"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT2.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;ZDT2&#39;</span></div></div>
+
+
+<div class="viewcode-block" id="ZDT3"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT3">[docs]</a><span class="k">class</span> <span class="nc">ZDT3</span><span class="p">(</span><span class="n">ZDT1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Problem ZDT3.</span>
+
+<span class="sd">    .. note:: Bi-objective unconstrained problem. The default number of variables is 30.</span>
+<span class="sd">    .. note:: Continuous problem having a partitioned Pareto front</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ZDT3.eval_h"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT3.eval_h">[docs]</a>    <span class="k">def</span> <span class="nf">eval_h</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">f</span> <span class="o">/</span> <span class="n">g</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">f</span> <span class="o">/</span> <span class="n">g</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="mf">10.0</span> <span class="o">*</span> <span class="n">f</span> <span class="o">*</span> <span class="n">pi</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ZDT3.get_name"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT3.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;ZDT3&#39;</span></div></div>
+
+
+<div class="viewcode-block" id="ZDT4"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT4">[docs]</a><span class="k">class</span> <span class="nc">ZDT4</span><span class="p">(</span><span class="n">ZDT1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Problem ZDT4.</span>
+
+<span class="sd">    .. note:: Bi-objective unconstrained problem. The default number of variables is 10.</span>
+<span class="sd">    .. note:: Continuous multi-modal problem having a convex Pareto front</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; :param number_of_variables: Number of decision variables of the problem.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ZDT4</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="o">=</span><span class="n">number_of_variables</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">*</span> <span class="p">[</span><span class="o">-</span><span class="mf">5.0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">*</span> <span class="p">[</span><span class="mf">5.0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<div class="viewcode-block" id="ZDT4.eval_g"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT4.eval_g">[docs]</a>    <span class="k">def</span> <span class="nf">eval_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">):</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">solution</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">):</span>
+            <span class="n">g</span> <span class="o">+=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">-</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="mf">4.0</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="n">g</span> <span class="o">+=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">g</span></div>
+
+<div class="viewcode-block" id="ZDT4.eval_h"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT4.eval_h">[docs]</a>    <span class="k">def</span> <span class="nf">eval_h</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">f</span> <span class="o">/</span> <span class="n">g</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ZDT4.get_name"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT4.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;ZDT4&#39;</span></div></div>
+
+
+<div class="viewcode-block" id="ZDT6"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT6">[docs]</a><span class="k">class</span> <span class="nc">ZDT6</span><span class="p">(</span><span class="n">ZDT1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Problem ZDT6.</span>
+
+<span class="sd">    .. note:: Bi-objective unconstrained problem. The default number of variables is 10.</span>
+<span class="sd">    .. note:: Continuous problem having a non-convex Pareto front</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; :param number_of_variables: Number of decision variables of the problem.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ZDT6</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="o">=</span><span class="n">number_of_variables</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ZDT6.eval_g"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT6.eval_g">[docs]</a>    <span class="k">def</span> <span class="nf">eval_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">):</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span> <span class="o">-</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">g</span> <span class="o">/</span> <span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">)</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="mf">9.0</span> <span class="o">*</span> <span class="n">g</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">g</span>
+
+        <span class="k">return</span> <span class="n">g</span></div>
+
+<div class="viewcode-block" id="ZDT6.eval_h"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT6.eval_h">[docs]</a>    <span class="k">def</span> <span class="nf">eval_h</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="nb">pow</span><span class="p">(</span><span class="n">f</span> <span class="o">/</span> <span class="n">g</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ZDT6.get_name"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT6.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;ZDT6&#39;</span></div></div>
+</pre></div>
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

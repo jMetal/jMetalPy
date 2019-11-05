@@ -1,0 +1,507 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>jmetal.lab.statistical_test package &#8212; jMetalPy 1.5.1 documentation</title>
+    <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../index.html" class="text-logo">jMetalPy</a>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Contents</h2>
+    <div class="sidebar-localtoc">
+      <ul>
+<li><a class="reference internal" href="#">jmetal.lab.statistical_test package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-jmetal.lab.statistical_test.apv_procedures">jmetal.lab.statistical_test.apv_procedures module</a></li>
+<li><a class="reference internal" href="#module-jmetal.lab.statistical_test.bayesian">jmetal.lab.statistical_test.bayesian module</a></li>
+<li><a class="reference internal" href="#module-jmetal.lab.statistical_test.critical_distance">jmetal.lab.statistical_test.critical_distance module</a></li>
+<li><a class="reference internal" href="#module-jmetal.lab.statistical_test.functions">jmetal.lab.statistical_test.functions module</a></li>
+<li><a class="reference internal" href="#module-jmetal.lab.statistical_test">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../index.html">Docs</a></li>
+              
+              <li>jmetal.lab.statistical_test package</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="jmetal-lab-statistical-test-package">
+<h1>jmetal.lab.statistical_test package<a class="headerlink" href="#jmetal-lab-statistical-test-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-jmetal.lab.statistical_test.apv_procedures">
+<span id="jmetal-lab-statistical-test-apv-procedures-module"></span><h2>jmetal.lab.statistical_test.apv_procedures module<a class="headerlink" href="#module-jmetal.lab.statistical_test.apv_procedures" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.apv_procedures.bonferroni_dunn">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.apv_procedures.</code><code class="sig-name descname">bonferroni_dunn</code><span class="sig-paren">(</span><em class="sig-param">p_values</em>, <em class="sig-param">control</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/apv_procedures.html#bonferroni_dunn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.apv_procedures.bonferroni_dunn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bonferroni-Dunn’s procedure for the adjusted p-value computation.</p>
+<p>p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.
+control: int or string. Index or Name of the control algorithm.</p>
+<p>APVs: DataFrame containing the adjusted p-values.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.apv_procedures.finner">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.apv_procedures.</code><code class="sig-name descname">finner</code><span class="sig-paren">(</span><em class="sig-param">p_values</em>, <em class="sig-param">control</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/apv_procedures.html#finner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.apv_procedures.finner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finner’s procedure for the adjusted p-value computation.</p>
+<p>p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.
+control: int or string. Index or Name of the control algorithm.</p>
+<p>APVs: DataFrame containing the adjusted p-values.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.apv_procedures.hochberg">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.apv_procedures.</code><code class="sig-name descname">hochberg</code><span class="sig-paren">(</span><em class="sig-param">p_values</em>, <em class="sig-param">control</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/apv_procedures.html#hochberg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.apv_procedures.hochberg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hochberg’s procedure for the adjusted p-value computation.</p>
+<p>p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.
+control: int or string. Index or Name of the control algorithm.</p>
+<p>APVs: DataFrame containing the adjusted p-values.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.apv_procedures.holland">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.apv_procedures.</code><code class="sig-name descname">holland</code><span class="sig-paren">(</span><em class="sig-param">p_values</em>, <em class="sig-param">control</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/apv_procedures.html#holland"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.apv_procedures.holland" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holland’s procedure for the adjusted p-value computation.</p>
+<p>p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.
+control: int or string. Index or Name of the control algorithm.</p>
+<p>APVs: DataFrame containing the adjusted p-values.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.apv_procedures.holm">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.apv_procedures.</code><code class="sig-name descname">holm</code><span class="sig-paren">(</span><em class="sig-param">p_values</em>, <em class="sig-param">control=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/apv_procedures.html#holm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.apv_procedures.holm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holm’s procedure for the adjusted p-value computation.</p>
+<p>p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.
+control: optional int or string. Default None</p>
+<blockquote>
+<div><p>Index or Name of the control algorithm. If control is provided, control vs all
+comparisons are considered, else all vs all.</p>
+</div></blockquote>
+<p>APVs: DataFrame containing the adjusted p-values.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.apv_procedures.li">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.apv_procedures.</code><code class="sig-name descname">li</code><span class="sig-paren">(</span><em class="sig-param">p_values</em>, <em class="sig-param">control</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/apv_procedures.html#li"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.apv_procedures.li" title="Permalink to this definition">¶</a></dt>
+<dd><p>Li’s procedure for the adjusted p-value computation.</p>
+<p>p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.
+control: optional int or string. Default None</p>
+<blockquote>
+<div><p>Index or Name of the control algorithm. If control is provided, control vs all
+comparisons are considered, else all vs all.</p>
+</div></blockquote>
+<p>APVs: DataFrame containing the adjusted p-values.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.apv_procedures.nemenyi">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.apv_procedures.</code><code class="sig-name descname">nemenyi</code><span class="sig-paren">(</span><em class="sig-param">p_values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/apv_procedures.html#nemenyi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.apv_procedures.nemenyi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nemenyi’s procedure for adjusted p_value computation.</p>
+<p>data: 2-D array or DataFrame containing the p-values.</p>
+<p>APVs: DataFrame containing the adjusted p-values.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.apv_procedures.shaffer">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.apv_procedures.</code><code class="sig-name descname">shaffer</code><span class="sig-paren">(</span><em class="sig-param">p_values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/apv_procedures.html#shaffer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.apv_procedures.shaffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shaffer’s procedure for adjusted p_value ccmputation.</p>
+<p>data: 2-D array or DataFrame containing the p-values.</p>
+<p>APVs: DataFrame containing the adjusted p-values.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-jmetal.lab.statistical_test.bayesian">
+<span id="jmetal-lab-statistical-test-bayesian-module"></span><h2>jmetal.lab.statistical_test.bayesian module<a class="headerlink" href="#module-jmetal.lab.statistical_test.bayesian" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.bayesian.bayesian_sign_test">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.bayesian.</code><code class="sig-name descname">bayesian_sign_test</code><span class="sig-paren">(</span><em class="sig-param">data, rope_limits=[-0.01, 0.01], prior_strength=0.5, prior_place='rope', sample_size=50000, return_sample=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/bayesian.html#bayesian_sign_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.bayesian.bayesian_sign_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bayesian version of the sign test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.</p></li>
+<li><p><strong>rope_limits</strong> – array_like. Default [-0.01, 0.01]. Limits of the practical equivalence.</p></li>
+<li><p><strong>prior_strength</strong> – positive float. Default 0.5. Value of the prior strengt</p></li>
+<li><p><strong>prior_place</strong> – string {left, rope, right}. Default ‘left’. Place of the pseudo-observation z_0.</p></li>
+<li><p><strong>sample_size</strong> – integer. Default 10000. Total number of random samples generated</p></li>
+<li><p><strong>return_sample</strong> – boolean. Default False. If true, also return the samples drawn from the Dirichlet process.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of posterior probabilities:
+[Pr(algorith_1 &lt; algorithm_2),
+Pr(algorithm_1 equiv algorithm_2),
+Pr(algorithm_1 &gt; algorithm_2)]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.bayesian.bayesian_signed_rank_test">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.bayesian.</code><code class="sig-name descname">bayesian_signed_rank_test</code><span class="sig-paren">(</span><em class="sig-param">data, rope_limits=[-0.01, 0.01], prior_strength=1.0, prior_place='rope', sample_size=10000, return_sample=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/bayesian.html#bayesian_signed_rank_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.bayesian.bayesian_signed_rank_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bayesian version of the signed rank test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.</p></li>
+<li><p><strong>rope_limits</strong> – array_like. Default [-0.01, 0.01]. Limits of the practical equivalence.</p></li>
+<li><p><strong>prior_strength</strong> – positive float. Default 0.5. Value of the prior strengt</p></li>
+<li><p><strong>prior_place</strong> – string {left, rope, right}. Default ‘left’. Place of the pseudo-observation z_0.</p></li>
+<li><p><strong>sample_size</strong> – integer. Default 10000. Total number of random samples generated</p></li>
+<li><p><strong>return_sample</strong> – boolean. Default False. If true, also return the samples drawn from the Dirichlet process.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of posterior probabilities:
+[Pr(algorith_1 &lt; algorithm_2), Pr(algorithm_1 equiv algorithm_2), Pr(algorithm_1 &gt; algorithm_2)]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-jmetal.lab.statistical_test.critical_distance">
+<span id="jmetal-lab-statistical-test-critical-distance-module"></span><h2>jmetal.lab.statistical_test.critical_distance module<a class="headerlink" href="#module-jmetal.lab.statistical_test.critical_distance" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.critical_distance.CDplot">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.critical_distance.</code><code class="sig-name descname">CDplot</code><span class="sig-paren">(</span><em class="sig-param">results</em>, <em class="sig-param">alpha: float = 0.05</em>, <em class="sig-param">higher_is_better: bool = False</em>, <em class="sig-param">alg_names: list = None</em>, <em class="sig-param">output_filename: str = 'cdplot.eps'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/critical_distance.html#CDplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.critical_distance.CDplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>CDgraph plots the critical difference graph show in Janez Demsar’s 2006 work:
+* Statistical Comparisons of Classifiers over Multiple Data Sets.
+:param results: A 2-D array containing results from each algorithm. Each row of ‘results’ represents an algorithm, and each column a dataset.
+:param alpha: {0.1, 0.999}. Significance level for the critical difference.
+:param alg_names: Names of the tested algorithms.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.critical_distance.NemenyiCD">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.critical_distance.</code><code class="sig-name descname">NemenyiCD</code><span class="sig-paren">(</span><em class="sig-param">alpha: float</em>, <em class="sig-param">num_alg</em>, <em class="sig-param">num_dataset</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/critical_distance.html#NemenyiCD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.critical_distance.NemenyiCD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes Nemenyi’s critical difference:
+* CD = q_alpha * sqrt(num_alg*(num_alg + 1)/(6*num_prob))
+where q_alpha is the critical value, of the Studentized range statistic divided by sqrt(2).
+:param alpha: {0.1, 0.999}. Significance level.
+:param num_alg: number of tested algorithms.
+:param num_dataset: Number of problems/datasets where the algorithms have been tested.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-jmetal.lab.statistical_test.functions">
+<span id="jmetal-lab-statistical-test-functions-module"></span><h2>jmetal.lab.statistical_test.functions module<a class="headerlink" href="#module-jmetal.lab.statistical_test.functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.functions.friedman_aligned_ph_test">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.functions.</code><code class="sig-name descname">friedman_aligned_ph_test</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">control=None</em>, <em class="sig-param">apv_procedure=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/functions.html#friedman_aligned_ph_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.functions.friedman_aligned_ph_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Friedman Aligned Ranks post-hoc test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.</p></li>
+<li><p><strong>control</strong> – optional int or string. Default None. Index or Name of the control algorithm. If control = None all FriedmanPosHocTest considers all possible comparisons among algorithms.</p></li>
+<li><p><strong>apv_procedure</strong> – <p>optional string. Default None.
+Name of the procedure for computing adjusted p-values. If apv_procedure
+is None, adjusted p-value are not computed, else the values are computed
+according to the specified procedure:
+For 1 vs all comparisons.</p>
+<blockquote>
+<div><p>{‘Bonferroni’, ‘Holm’, ‘Hochberg’, ‘Holland’, ‘Finner’, ‘Li’}</p>
+</div></blockquote>
+<dl class="simple">
+<dt>For all vs all coparisons.</dt><dd><p>{‘Shaffer’, ‘Holm’, ‘Nemenyi’}</p>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return z_values</dt>
+<dd class="field-even"><p>Test statistic.</p>
+</dd>
+<dt class="field-odd">Return p_values</dt>
+<dd class="field-odd"><p>The p-value according to the Studentized range distribution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.functions.friedman_aligned_rank_test">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.functions.</code><code class="sig-name descname">friedman_aligned_rank_test</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/functions.html#friedman_aligned_rank_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.functions.friedman_aligned_rank_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method of aligned ranks for the Friedman test.</p>
+<p>..note:: Null Hypothesis: In a set of k (&gt;=2) treaments (or tested algorithms), all the treatments are equivalent, so their average ranks should be equal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> – An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.</p>
+</dd>
+<dt class="field-even">Return p_value</dt>
+<dd class="field-even"><p>The associated p-value.</p>
+</dd>
+<dt class="field-odd">Return aligned_rank_stat</dt>
+<dd class="field-odd"><p>Friedman’s aligned rank chi-square statistic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.functions.friedman_ph_test">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.functions.</code><code class="sig-name descname">friedman_ph_test</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">control=None</em>, <em class="sig-param">apv_procedure=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/functions.html#friedman_ph_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.functions.friedman_ph_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Friedman post-hoc test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.</p></li>
+<li><p><strong>control</strong> – optional int or string. Default None. Index or Name of the control algorithm. If control = None all FriedmanPosHocTest considers all possible comparisons among algorithms.</p></li>
+<li><p><strong>apv_procedure</strong> – <p>optional string. Default None.
+Name of the procedure for computing adjusted p-values. If apv_procedure
+is None, adjusted p-value are not computed, else the values are computed
+according to the specified procedure:
+For 1 vs all comparisons.</p>
+<blockquote>
+<div><p>{‘Bonferroni’, ‘Holm’, ‘Hochberg’, ‘Holland’, ‘Finner’, ‘Li’}</p>
+</div></blockquote>
+<dl class="simple">
+<dt>For all vs all coparisons.</dt><dd><p>{‘Shaffer’, ‘Holm’, ‘Nemenyi’}</p>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return z_values</dt>
+<dd class="field-even"><p>Test statistic.</p>
+</dd>
+<dt class="field-odd">Return p_values</dt>
+<dd class="field-odd"><p>The p-value according to the Studentized range distribution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.functions.friedman_test">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.functions.</code><code class="sig-name descname">friedman_test</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/functions.html#friedman_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.functions.friedman_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Friedman ranking test.</p>
+<p>..note:: Null Hypothesis: In a set of k (&gt;=2) treaments (or tested algorithms), all the treatments are equivalent, so their average ranks should be equal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> – An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.</p>
+</dd>
+<dt class="field-even">Return p_value</dt>
+<dd class="field-even"><p>The associated p-value.</p>
+</dd>
+<dt class="field-odd">Return friedman_stat</dt>
+<dd class="field-odd"><p>Friedman’s chi-square.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.functions.quade_ph_test">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.functions.</code><code class="sig-name descname">quade_ph_test</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">control=None</em>, <em class="sig-param">apv_procedure=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/functions.html#quade_ph_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.functions.quade_ph_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Quade post-hoc test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.</p></li>
+<li><p><strong>control</strong> – optional int or string. Default None. Index or Name of the control algorithm. If control = None all FriedmanPosHocTest considers all possible comparisons among algorithms.</p></li>
+<li><p><strong>apv_procedure</strong> – <p>optional string. Default None.
+Name of the procedure for computing adjusted p-values. If apv_procedure
+is None, adjusted p-value are not computed, else the values are computed
+according to the specified procedure:
+For 1 vs all comparisons.</p>
+<blockquote>
+<div><p>{‘Bonferroni’, ‘Holm’, ‘Hochberg’, ‘Holland’, ‘Finner’, ‘Li’}</p>
+</div></blockquote>
+<dl class="simple">
+<dt>For all vs all coparisons.</dt><dd><p>{‘Shaffer’, ‘Holm’, ‘Nemenyi’}</p>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return z_values</dt>
+<dd class="field-even"><p>Test statistic.</p>
+</dd>
+<dt class="field-odd">Return p_values</dt>
+<dd class="field-odd"><p>The p-value according to the Studentized range distribution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.functions.quade_test">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.functions.</code><code class="sig-name descname">quade_test</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/functions.html#quade_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.functions.quade_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Quade test.</p>
+<p>..note:: Null Hypothesis: In a set of k (&gt;=2) treaments (or tested algorithms), all the treatments are equivalent, so their average ranks should be equal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> – An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.</p>
+</dd>
+<dt class="field-even">Return p_value</dt>
+<dd class="field-even"><p>The associated p-value from the F-distribution.</p>
+</dd>
+<dt class="field-odd">Return fq</dt>
+<dd class="field-odd"><p>Computed F-value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.functions.ranks">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.functions.</code><code class="sig-name descname">ranks</code><span class="sig-paren">(</span><em class="sig-param">data: numpy.array</em>, <em class="sig-param">descending=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/functions.html#ranks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.functions.ranks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the rank of the elements in data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – 2-D matrix</p></li>
+<li><p><strong>descending</strong> – boolean (default False). If true, rank is sorted in descending order.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>ranks, where ranks[i][j] == rank of the i-th row w.r.t the j-th column.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.statistical_test.functions.sign_test">
+<code class="sig-prename descclassname">jmetal.lab.statistical_test.functions.</code><code class="sig-name descname">sign_test</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/functions.html#sign_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.functions.sign_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the results drawn from two algorithms/methods X and Y, the sign test analyses if
+there is a difference between X and Y.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Null Hypothesis: Pr(X&lt;Y)= 0.5</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> – An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.</p>
+</dd>
+<dt class="field-even">Return p_value</dt>
+<dd class="field-even"><p>The associated p-value from the binomial distribution.</p>
+</dd>
+<dt class="field-odd">Return bstat</dt>
+<dd class="field-odd"><p>Number of successes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-jmetal.lab.statistical_test">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-jmetal.lab.statistical_test" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

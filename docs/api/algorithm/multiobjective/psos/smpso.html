@@ -1,0 +1,459 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>SMPSO &#8212; jMetalPy 1.5.1 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Single-objective algorithms" href="../../../../singleobjective.algorithms.html" />
+    <link rel="prev" title="OMOPSO" href="omopso.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../../singleobjective.algorithms.html" title="Single-objective algorithms"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="omopso.html" title="OMOPSO"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../multiobjective.algorithms.html" >Multi-objective algorithms</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../pso.html" accesskey="U">PSO Algorithms</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../../../../index.html" class="text-logo">jMetalPy</a>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials.html">Getting started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../multiobjective.algorithms.html">Multi-objective algorithms</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../ea.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../pso.html">PSO Algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../operators.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Contents</h2>
+    <div class="sidebar-localtoc">
+      <ul>
+<li><a class="reference internal" href="#">SMPSO</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#standard">Standard</a></li>
+<li><a class="reference internal" href="#dynamic">Dynamic</a></li>
+<li><a class="reference internal" href="#reference-point-based-smpso-rp">Reference-point based (SMPSO/RP)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-jmetal.algorithm.multiobjective.smpso">API</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../../../index.html">Docs</a></li>
+              
+                <li><a href="../../../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+              
+                <li><a href="../pso.html">PSO Algorithms</a></li>
+              
+              <li>SMPSO</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="smpso">
+<h1>SMPSO<a class="headerlink" href="#smpso" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="standard">
+<h3>Standard<a class="headerlink" href="#standard" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jmetal.algorithm.multiobjective.smpso</span> <span class="kn">import</span> <span class="n">SMPSO</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="kn">import</span> <span class="n">PolynomialMutation</span>
+<span class="kn">from</span> <span class="nn">jmetal.problem</span> <span class="kn">import</span> <span class="n">DTLZ1</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.archive</span> <span class="kn">import</span> <span class="n">CrowdingDistanceArchive</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">StoppingByEvaluations</span>
+
+<span class="n">problem</span> <span class="o">=</span> <span class="n">DTLZ1</span><span class="p">(</span><span class="n">number_of_objectives</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">max_evaluations</span> <span class="o">=</span> <span class="mi">25000</span>
+<span class="n">algorithm</span> <span class="o">=</span> <span class="n">SMPSO</span><span class="p">(</span>
+    <span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">,</span>
+    <span class="n">swarm_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">mutation</span><span class="o">=</span><span class="n">PolynomialMutation</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">problem</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">,</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+    <span class="n">leaders</span><span class="o">=</span><span class="n">CrowdingDistanceArchive</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
+    <span class="n">termination_criterion</span><span class="o">=</span><span class="n">StoppingByEvaluations</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="n">max_evaluations</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">algorithm</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">observer</span><span class="o">=</span><span class="n">ProgressBarObserver</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="n">max_evaluations</span><span class="p">))</span>
+
+<span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="n">front</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dynamic">
+<h3>Dynamic<a class="headerlink" href="#dynamic" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jmetal.algorithm.multiobjective.smpso</span> <span class="kn">import</span> <span class="n">DynamicSMPSO</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="kn">import</span> <span class="n">PolynomialMutation</span>
+<span class="kn">from</span> <span class="nn">jmetal.problem.multiobjective.fda</span> <span class="kn">import</span> <span class="n">FDA2</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.archive</span> <span class="kn">import</span> <span class="n">CrowdingDistanceArchive</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.observable</span> <span class="kn">import</span> <span class="n">TimeCounter</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.observer</span> <span class="kn">import</span> <span class="n">PlotFrontToFileObserver</span><span class="p">,</span> <span class="n">WriteFrontToFileObserver</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">StoppingByEvaluations</span>
+
+<span class="n">problem</span> <span class="o">=</span> <span class="n">FDA2</span><span class="p">()</span>
+
+<span class="n">time_counter</span> <span class="o">=</span> <span class="n">TimeCounter</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">time_counter</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">problem</span><span class="p">)</span>
+<span class="n">time_counter</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="n">max_evaluations</span> <span class="o">=</span> <span class="mi">25000</span>
+<span class="n">algorithm</span> <span class="o">=</span> <span class="n">DynamicSMPSO</span><span class="p">(</span>
+    <span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">,</span>
+    <span class="n">swarm_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">mutation</span><span class="o">=</span><span class="n">PolynomialMutation</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">problem</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">,</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+    <span class="n">leaders</span><span class="o">=</span><span class="n">CrowdingDistanceArchive</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
+    <span class="n">termination_criterion</span><span class="o">=</span><span class="n">StoppingByEvaluations</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="n">max_evaluations</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">algorithm</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">observer</span><span class="o">=</span><span class="n">PlotFrontToFileObserver</span><span class="p">(</span><span class="s1">&#39;front_vis&#39;</span><span class="p">))</span>
+<span class="n">algorithm</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">observer</span><span class="o">=</span><span class="n">WriteFrontToFileObserver</span><span class="p">(</span><span class="s1">&#39;front_files&#39;</span><span class="p">))</span>
+
+<span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="reference-point-based-smpso-rp">
+<h3>Reference-point based (SMPSO/RP)<a class="headerlink" href="#reference-point-based-smpso-rp" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jmetal.algorithm.multiobjective.smpso</span> <span class="kn">import</span> <span class="n">SMPSORP</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="kn">import</span> <span class="n">PolynomialMutation</span>
+<span class="kn">from</span> <span class="nn">jmetal.problem</span> <span class="kn">import</span> <span class="n">ZDT4</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.archive</span> <span class="kn">import</span> <span class="n">CrowdingDistanceArchiveWithReferencePoint</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.solutions</span> <span class="kn">import</span> <span class="n">read_solutions</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">StoppingByEvaluations</span>
+
+<span class="n">problem</span> <span class="o">=</span> <span class="n">ZDT4</span><span class="p">()</span>
+<span class="n">problem</span><span class="o">.</span><span class="n">reference_front</span> <span class="o">=</span> <span class="n">read_solutions</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;resources/reference_front/ZDT4.pf&#39;</span><span class="p">)</span>
+
+<span class="n">swarm_size</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="n">reference_point</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]]</span>
+<span class="n">archives_with_reference_points</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">reference_point</span><span class="p">:</span>
+    <span class="n">archives_with_reference_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="n">CrowdingDistanceArchiveWithReferencePoint</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">swarm_size</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">reference_point</span><span class="p">)),</span> <span class="n">point</span><span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="n">max_evaluations</span> <span class="o">=</span> <span class="mi">50000</span>
+<span class="n">algorithm</span> <span class="o">=</span> <span class="n">SMPSORP</span><span class="p">(</span>
+    <span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">,</span>
+    <span class="n">swarm_size</span><span class="o">=</span><span class="n">swarm_size</span><span class="p">,</span>
+    <span class="n">mutation</span><span class="o">=</span><span class="n">PolynomialMutation</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">problem</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">,</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+    <span class="n">reference_points</span><span class="o">=</span><span class="n">reference_point</span><span class="p">,</span>
+    <span class="n">leaders</span><span class="o">=</span><span class="n">archives_with_reference_points</span><span class="p">,</span>
+    <span class="n">termination_criterion</span><span class="o">=</span><span class="n">StoppingByEvaluations</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="n">max_evaluations</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="n">front</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="module-jmetal.algorithm.multiobjective.smpso">
+<span id="api"></span><h2>API<a class="headerlink" href="#module-jmetal.algorithm.multiobjective.smpso" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jmetal.algorithm.multiobjective.smpso.DynamicSMPSO">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.multiobjective.smpso.</code><code class="sig-name descname">DynamicSMPSO</code><span class="sig-paren">(</span><em class="sig-param">problem: jmetal.core.problem.DynamicProblem[jmetal.core.solution.FloatSolution][jmetal.core.solution.FloatSolution], swarm_size: int, mutation: jmetal.core.operator.Mutation, leaders: jmetal.util.archive.BoundedArchive, termination_criterion: jmetal.util.termination_criterion.TerminationCriterion = &lt;jmetal.util.termination_criterion.StoppingByEvaluations object&gt;, swarm_generator: jmetal.util.solutions.generator.Generator = &lt;jmetal.util.solutions.generator.RandomGenerator object&gt;, swarm_evaluator: jmetal.util.solutions.evaluator.Evaluator = &lt;jmetal.util.solutions.evaluator.SequentialEvaluator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#DynamicSMPSO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.DynamicSMPSO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.algorithm.multiobjective.smpso.SMPSO" title="jmetal.algorithm.multiobjective.smpso.SMPSO"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.algorithm.multiobjective.smpso.SMPSO</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.algorithm.DynamicAlgorithm</span></code></p>
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.DynamicSMPSO.restart">
+<code class="sig-name descname">restart</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#DynamicSMPSO.restart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.DynamicSMPSO.restart" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.DynamicSMPSO.stopping_condition_is_met">
+<code class="sig-name descname">stopping_condition_is_met</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#DynamicSMPSO.stopping_condition_is_met"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.DynamicSMPSO.stopping_condition_is_met" title="Permalink to this definition">¶</a></dt>
+<dd><p>The stopping condition is met or not.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.DynamicSMPSO.update_progress">
+<code class="sig-name descname">update_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#DynamicSMPSO.update_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.DynamicSMPSO.update_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the progress after each iteration.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSO">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.multiobjective.smpso.</code><code class="sig-name descname">SMPSO</code><span class="sig-paren">(</span><em class="sig-param">problem: jmetal.core.problem.FloatProblem, swarm_size: int, mutation: jmetal.core.operator.Mutation, leaders: Optional[jmetal.util.archive.BoundedArchive], termination_criterion: jmetal.util.termination_criterion.TerminationCriterion = &lt;jmetal.util.termination_criterion.StoppingByEvaluations object&gt;, swarm_generator: jmetal.util.solutions.generator.Generator = &lt;jmetal.util.solutions.generator.RandomGenerator object&gt;, swarm_evaluator: jmetal.util.solutions.evaluator.Evaluator = &lt;jmetal.util.solutions.evaluator.SequentialEvaluator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.algorithm.ParticleSwarmOptimization</span></code></p>
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSO.create_initial_solutions">
+<code class="sig-name descname">create_initial_solutions</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[jmetal.core.solution.FloatSolution]<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSO.create_initial_solutions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSO.create_initial_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the initial list of solutions of a metaheuristic.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSO.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution_list: List[jmetal.core.solution.FloatSolution]</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSO.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSO.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates a solution list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSO.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSO.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSO.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSO.get_result">
+<code class="sig-name descname">get_result</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[jmetal.core.solution.FloatSolution]<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSO.get_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSO.get_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSO.init_progress">
+<code class="sig-name descname">init_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSO.init_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSO.init_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the algorithm.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSO.initialize_global_best">
+<code class="sig-name descname">initialize_global_best</code><span class="sig-paren">(</span><em class="sig-param">swarm: List[jmetal.core.solution.FloatSolution]</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSO.initialize_global_best"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSO.initialize_global_best" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSO.initialize_particle_best">
+<code class="sig-name descname">initialize_particle_best</code><span class="sig-paren">(</span><em class="sig-param">swarm: List[jmetal.core.solution.FloatSolution]</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSO.initialize_particle_best"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSO.initialize_particle_best" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSO.initialize_velocity">
+<code class="sig-name descname">initialize_velocity</code><span class="sig-paren">(</span><em class="sig-param">swarm: List[jmetal.core.solution.FloatSolution]</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSO.initialize_velocity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSO.initialize_velocity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSO.perturbation">
+<code class="sig-name descname">perturbation</code><span class="sig-paren">(</span><em class="sig-param">swarm: List[jmetal.core.solution.FloatSolution]</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSO.perturbation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSO.perturbation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSO.select_global_best">
+<code class="sig-name descname">select_global_best</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSO.select_global_best"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSO.select_global_best" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSO.stopping_condition_is_met">
+<code class="sig-name descname">stopping_condition_is_met</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSO.stopping_condition_is_met"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSO.stopping_condition_is_met" title="Permalink to this definition">¶</a></dt>
+<dd><p>The stopping condition is met or not.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSO.update_global_best">
+<code class="sig-name descname">update_global_best</code><span class="sig-paren">(</span><em class="sig-param">swarm: List[jmetal.core.solution.FloatSolution]</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSO.update_global_best"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSO.update_global_best" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSO.update_particle_best">
+<code class="sig-name descname">update_particle_best</code><span class="sig-paren">(</span><em class="sig-param">swarm: List[jmetal.core.solution.FloatSolution]</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSO.update_particle_best"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSO.update_particle_best" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSO.update_position">
+<code class="sig-name descname">update_position</code><span class="sig-paren">(</span><em class="sig-param">swarm: List[jmetal.core.solution.FloatSolution]</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSO.update_position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSO.update_position" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSO.update_progress">
+<code class="sig-name descname">update_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSO.update_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSO.update_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the progress after each iteration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSO.update_velocity">
+<code class="sig-name descname">update_velocity</code><span class="sig-paren">(</span><em class="sig-param">swarm: List[jmetal.core.solution.FloatSolution]</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSO.update_velocity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSO.update_velocity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSORP">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.multiobjective.smpso.</code><code class="sig-name descname">SMPSORP</code><span class="sig-paren">(</span><em class="sig-param">problem: jmetal.core.problem.FloatProblem, swarm_size: int, mutation: jmetal.core.operator.Mutation, reference_points: List[List[float]], leaders: List[jmetal.util.archive.ArchiveWithReferencePoint], termination_criterion: jmetal.util.termination_criterion.TerminationCriterion, swarm_generator: jmetal.util.solutions.generator.Generator = &lt;jmetal.util.solutions.generator.RandomGenerator object&gt;, swarm_evaluator: jmetal.util.solutions.evaluator.Evaluator = &lt;jmetal.util.solutions.evaluator.SequentialEvaluator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSORP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSORP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.algorithm.multiobjective.smpso.SMPSO" title="jmetal.algorithm.multiobjective.smpso.SMPSO"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.algorithm.multiobjective.smpso.SMPSO</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSORP.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSORP.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSORP.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSORP.get_reference_point">
+<code class="sig-name descname">get_reference_point</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSORP.get_reference_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSORP.get_reference_point" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSORP.get_result">
+<code class="sig-name descname">get_result</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[jmetal.core.solution.FloatSolution]<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSORP.get_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSORP.get_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSORP.init_progress">
+<code class="sig-name descname">init_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSORP.init_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSORP.init_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the algorithm.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSORP.initialize_global_best">
+<code class="sig-name descname">initialize_global_best</code><span class="sig-paren">(</span><em class="sig-param">swarm: List[jmetal.core.solution.FloatSolution]</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSORP.initialize_global_best"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSORP.initialize_global_best" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSORP.select_global_best">
+<code class="sig-name descname">select_global_best</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSORP.select_global_best"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSORP.select_global_best" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSORP.update_global_best">
+<code class="sig-name descname">update_global_best</code><span class="sig-paren">(</span><em class="sig-param">swarm: List[jmetal.core.solution.FloatSolution]</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSORP.update_global_best"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSORP.update_global_best" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSORP.update_progress">
+<code class="sig-name descname">update_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSORP.update_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSORP.update_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the progress after each iteration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.smpso.SMPSORP.update_reference_point">
+<code class="sig-name descname">update_reference_point</code><span class="sig-paren">(</span><em class="sig-param">new_reference_points: list</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/smpso.html#SMPSORP.update_reference_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.smpso.SMPSORP.update_reference_point" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="omopso.html" title="previous chapter (use the left arrow)">OMOPSO</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="../../../../singleobjective.algorithms.html" title="next chapter (use the right arrow)">Single-objective algorithms</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../../singleobjective.algorithms.html" title="Single-objective algorithms"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="omopso.html" title="OMOPSO"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../multiobjective.algorithms.html" >Multi-objective algorithms</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../pso.html" >PSO Algorithms</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>
