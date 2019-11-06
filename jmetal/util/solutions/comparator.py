@@ -1,8 +1,7 @@
-import math
-import threading
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic
 
+import math
 from jmetal.core.solution import Solution
 from jmetal.util.constraint_handling import overall_constraint_violation_degree
 
@@ -126,7 +125,6 @@ class StrengthAndKNNDistanceComparator(Comparator):
 
 
 class OverallConstraintViolationComparator(Comparator):
-
     def compare(self, solution1: Solution, solution2: Solution) -> int:
         violation_degree_solution_1 = overall_constraint_violation_degree(solution1)
         violation_degree_solution_2 = overall_constraint_violation_degree(solution2)
@@ -149,8 +147,7 @@ class OverallConstraintViolationComparator(Comparator):
 
 class DominanceComparator(Comparator):
 
-    def __init__(self,
-                 constraint_comparator: Comparator = SolutionAttributeComparator('overall_constraint_violation', False)):
+    def __init__(self, constraint_comparator=OverallConstraintViolationComparator()):
         self.constraint_comparator = constraint_comparator
 
     def compare(self, solution1: Solution, solution2: Solution) -> int:
@@ -161,7 +158,8 @@ class DominanceComparator(Comparator):
 
         result = self.constraint_comparator.compare(solution1, solution2)
         if result == 0:
-            result = self.__dominance_test(solution1, solution2)
+            # result = self.__dominance_test(solution1, solution2)
+            result = self.dominance_test(solution1.objectives, solution2.objectives)
 
         return result
 
@@ -187,12 +185,27 @@ class DominanceComparator(Comparator):
 
         return result
 
+    @staticmethod
+    def dominance_test(vector1: [float], vector2: [float]) -> int:
+        result = 0
+        for i in range(len(vector1)):
+            if vector1[i] > vector2[i]:
+                if result == -1:
+                    return 0
+                result = 1
+            elif vector2[i] > vector1[i]:
+                if result == 1:
+                    return 0
+                result = -1
+
+        return result
+
 
 class GDominanceComparator(DominanceComparator):
 
     def __init__(self,
                  reference_point: (),
-                 constraint_comparator: Comparator = SolutionAttributeComparator('overall_constraint_violation', False)):
+                 constraint_comparator=SolutionAttributeComparator('overall_constraint_violation', False)):
         super(GDominanceComparator, self).__init__(constraint_comparator)
         self.reference_point = reference_point
 
@@ -221,21 +234,11 @@ class GDominanceComparator(DominanceComparator):
         return result
 
 
-class InteractiveGDominanceComparator(GDominanceComparator):
-
-    def __init__(self,
-                 reference_point: (),
-                 constraint_comparator: Comparator = SolutionAttributeComparator('overall_constraint_violation', False)):
-        super(GDominanceComparator, self).__init__(reference_point, constraint_comparator)
-        thread = threading.Thread(target=_change_reference_point, args=(self,))
-        thread.start()
-
-
 class EpsilonDominanceComparator(DominanceComparator):
 
     def __init__(self,
                  epsilon: float,
-                 constraint_comparator: Comparator = SolutionAttributeComparator('overall_constraint_violation', False)):
+                 constraint_comparator=SolutionAttributeComparator('overall_constraint_violation', False)):
         super(EpsilonDominanceComparator, self).__init__(constraint_comparator)
         self.epsilon = epsilon
 
@@ -282,12 +285,3 @@ class EpsilonDominanceComparator(DominanceComparator):
                 return 1
             else:
                 return -1
-
-
-def _change_reference_point(comparator: InteractiveGDominanceComparator):
-    while True:
-        print(f'Enter new reference point: ')
-        point = [float(x) for x in input().split()]
-
-        # Update reference point
-        comparator.reference_point = point
