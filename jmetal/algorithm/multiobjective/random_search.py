@@ -45,6 +45,9 @@ class RandomSearch(Algorithm[S, R]):
     def init_progress(self) -> None:
         self.evaluations = 1
 
+        observable_data = self.get_observable_data()
+        self.observable.notify_all(**observable_data)
+
     def stopping_condition_is_met(self) -> bool:
         return self.termination_criterion.is_met
 
@@ -56,8 +59,15 @@ class RandomSearch(Algorithm[S, R]):
     def update_progress(self) -> None:
         self.evaluations += 1
 
+        observable_data = self.get_observable_data()
+        self.observable.notify_all(**observable_data)
+
     def get_result(self) -> List[S]:
         return self.archive.solution_list
 
     def get_name(self) -> str:
-        return 'RS'
+        return 'Random Search'
+
+    @property
+    def label(self) -> str:
+        return f'{self.get_name()}.{self.problem.get_name()}'
