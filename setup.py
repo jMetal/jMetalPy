@@ -9,7 +9,7 @@ with open(join(basedir, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='jmetalpy',
-    version='1.5.1',
+    version='1.5.2',
     description='Python version of the jMetal framework',
     long_description=README,
     long_description_content_type='text/markdown',
@@ -35,9 +35,9 @@ setup(
         'plotly>=3.3.0',
         'matplotlib>=3.0.2',
         'statsmodels>=0.9.0',
-        'dask[complete]==1.2.2',
-        'distributed==1.28.1',
-        'scipy==1.3.0'
+        'dask[complete]>=1.2.2',
+        'distributed>=1.28.1',
+        'scipy>=1.3.0'
     ],
     tests_require=[
         'mockito',
