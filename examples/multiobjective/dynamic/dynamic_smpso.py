@@ -3,11 +3,8 @@ from jmetal.operator import PolynomialMutation
 from jmetal.problem.multiobjective.fda import FDA2
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.observable import TimeCounter
-<<<<<<< HEAD
 from jmetal.util.observer import PlotFrontToFileObserver, WriteFrontToFileObserver
-=======
 
->>>>>>> master
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
