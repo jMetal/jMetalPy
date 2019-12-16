@@ -14,7 +14,7 @@ from jmetal.util.density_estimator import CrowdingDistance
 from jmetal.util.ranking import FastNonDominatedRanking
 from jmetal.util.replacement import RankingAndDensityEstimatorReplacement, RemovalPolicyType
 from jmetal.util.solutions import Evaluator, Generator
-from jmetal.util.solutions.comparator import DominanceComparator, Comparator, MultiComparator
+from jmetal.util.comparator import DominanceComparator, Comparator, MultiComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')

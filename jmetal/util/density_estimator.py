@@ -6,7 +6,7 @@ from typing import TypeVar, List
 import numpy
 from scipy.spatial.distance import euclidean
 
-from jmetal.util.solutions.comparator import SolutionAttributeComparator, Comparator
+from jmetal.util.comparator import SolutionAttributeComparator, Comparator
 
 LOGGER = logging.getLogger('jmetal')
 

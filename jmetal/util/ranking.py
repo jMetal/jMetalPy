@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar, List
 
-from jmetal.util.solutions.comparator import DominanceComparator, Comparator, SolutionAttributeComparator
+from jmetal.util.comparator import DominanceComparator, Comparator, SolutionAttributeComparator
 
 S = TypeVar('S')
 

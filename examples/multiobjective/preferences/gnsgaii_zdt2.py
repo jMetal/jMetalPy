@@ -4,7 +4,7 @@ from jmetal.operator import SBXCrossover, PolynomialMutation
 from jmetal.problem import ZDT2
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file, read_solutions
-from jmetal.util.solutions.comparator import GDominanceComparator
+from jmetal.util.comparator import GDominanceComparator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':

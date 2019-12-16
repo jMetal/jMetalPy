@@ -3,9 +3,8 @@ import os
 from pathlib import Path
 from typing import List
 
-from jmetal.util.archive import NonDominatedSolutionListArchive
-
 from jmetal.core.solution import FloatSolution, Solution
+#from jmetal.util.archive import NonDominatedSolutionListArchive
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -18,13 +17,13 @@ LOGGER = logging.getLogger('jmetal')
 """
 
 
-def get_non_dominated_solutions(solutions: List[Solution]) -> List[Solution]:
-    archive: NonDominatedSolutionListArchive()
-
-    for solution in solutions:
-        archive.add(solution)
-
-    return archive.solution_list
+#def get_non_dominated_solutions(solutions: List[Solution]) -> List[Solution]:
+#    archive: NonDominatedSolutionListArchive()
+#
+#    for solution in solutions:
+#        archive.add(solution)
+#
+#    return archive.solution_list
 
 
 def read_solutions(filename: str) -> List[FloatSolution]:

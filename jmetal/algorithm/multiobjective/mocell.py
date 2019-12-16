@@ -12,7 +12,7 @@ from jmetal.util.density_estimator import CrowdingDistance, DensityEstimator
 from jmetal.util.neighborhood import Neighborhood
 from jmetal.util.ranking import FastNonDominatedRanking, Ranking
 from jmetal.util.solutions import Evaluator, Generator
-from jmetal.util.solutions.comparator import Comparator, MultiComparator
+from jmetal.util.comparator import Comparator, MultiComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')

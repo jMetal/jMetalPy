@@ -8,8 +8,8 @@ from jmetal.core.solution import Solution
 from jmetal.operator import BinaryTournamentSelection
 from jmetal.operator.selection import RankingAndFitnessSelection
 from jmetal.util.solutions import Evaluator, Generator
-from jmetal.util.solutions.comparator import Comparator
-from jmetal.util.solutions.comparator import SolutionAttributeComparator
+from jmetal.util.comparator import Comparator
+from jmetal.util.comparator import SolutionAttributeComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')

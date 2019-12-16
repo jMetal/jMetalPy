@@ -9,7 +9,7 @@ from jmetal.core.algorithm import Algorithm
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
 from jmetal.core.solution import Solution
-from jmetal.util.solutions.comparator import Comparator
+from jmetal.util.comparator import Comparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')

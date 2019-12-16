@@ -6,9 +6,8 @@ from jmetal.core.problem import Problem, DynamicProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.operator import DifferentialEvolutionCrossover, RankingAndCrowdingDistanceSelection
 from jmetal.operator.selection import DifferentialEvolutionSelection
-from jmetal.util.archive import NonDominatedSolutionListArchive
 from jmetal.util.solutions import Evaluator, Generator
-from jmetal.util.solutions.comparator import Comparator, DominanceComparator
+from jmetal.util.comparator import Comparator, DominanceComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')

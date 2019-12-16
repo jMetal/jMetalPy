@@ -13,7 +13,7 @@ from jmetal.operator import UniformMutation
 from jmetal.operator.mutation import NonUniformMutation
 from jmetal.util.archive import BoundedArchive, NonDominatedSolutionListArchive
 from jmetal.util.solutions import Evaluator, Generator
-from jmetal.util.solutions.comparator import DominanceComparator, EpsilonDominanceComparator
+from jmetal.util.comparator import DominanceComparator, EpsilonDominanceComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 R = TypeVar('R')
