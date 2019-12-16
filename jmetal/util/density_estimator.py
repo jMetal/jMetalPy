@@ -13,9 +13,9 @@ LOGGER = logging.getLogger('jmetal')
 S = TypeVar('S')
 
 """
-.. module:: crowding_distance
+.. module:: density_estimator
    :platform: Unix, Windows
-   :synopsis: Crowding distance implementation.
+   :synopsis: Module including the implementation of density estimators.
 
 .. moduleauthor:: Antonio J. Nebro <ajnebro@uma.es>
 """

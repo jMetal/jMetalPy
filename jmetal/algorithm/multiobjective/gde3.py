@@ -93,12 +93,7 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
         return self.termination_criterion.is_met
 
     def get_result(self) -> List[FloatSolution]:
-        archive = NonDominatedSolutionListArchive()
-
-        for solution in self.solutions:
-            archive.add(solution)
-
-        return archive.solution_list
+        return self.solutions
 
     def get_name(self) -> str:
         return 'GDE3'
