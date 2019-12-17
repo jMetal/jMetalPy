@@ -1,7 +1,7 @@
 import copy
 import random
 from math import ceil
-from typing import TypeVar, List
+from typing import TypeVar, List, Generator
 
 import numpy as np
 
@@ -14,9 +14,9 @@ from jmetal.util.aggregative_function import AggregativeFunction
 from jmetal.util.constraint_handling import feasibility_ratio, \
     overall_constraint_violation_degree, is_feasible
 from jmetal.util.density_estimator import CrowdingDistance
+from jmetal.util.evaluator import Evaluator
 from jmetal.util.neighborhood import WeightVectorNeighborhood
 from jmetal.util.ranking import FastNonDominatedRanking
-from jmetal.util.solutions import Evaluator, Generator
 from jmetal.util.termination_criterion import TerminationCriterion, StoppingByEvaluations
 
 S = TypeVar('S')
