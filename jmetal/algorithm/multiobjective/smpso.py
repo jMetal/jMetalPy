@@ -2,7 +2,7 @@ import random
 import threading
 from copy import copy
 from math import sqrt
-from typing import TypeVar, List, Optional
+from typing import TypeVar, List, Optional, Generator
 
 import numpy
 
@@ -12,8 +12,8 @@ from jmetal.core.operator import Mutation
 from jmetal.core.problem import FloatProblem, DynamicProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.util.archive import BoundedArchive, ArchiveWithReferencePoint
-from jmetal.util.solutions import Evaluator, Generator
 from jmetal.util.comparator import DominanceComparator
+from jmetal.util.evaluator import Evaluator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 R = TypeVar('R')

@@ -8,7 +8,7 @@ from jmetal.core.solution import Solution
 R = TypeVar('R')
 
 """
-.. module:: generator
+.. module:: solutionsgenerator
    :platform: Unix, Windows
    :synopsis: Population generators implementation.
 
