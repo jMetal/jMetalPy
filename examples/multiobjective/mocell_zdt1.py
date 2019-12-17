@@ -5,7 +5,7 @@ from jmetal.problem import ZDT1
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.neighborhood import C9
 from jmetal.util.observer import ProgressBarObserver
-from jmetal.util.solutions import read_solutions
+from jmetal.util.solutions_utils import read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':

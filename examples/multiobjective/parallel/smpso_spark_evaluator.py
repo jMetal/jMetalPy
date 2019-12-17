@@ -3,8 +3,8 @@ from examples.multiobjective.parallel.zdt1_modified import ZDT1Modified
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.operator import PolynomialMutation
 from jmetal.util.archive import CrowdingDistanceArchive
-from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file, SparkEvaluator
-from jmetal.util.solutions import read_solutions
+from jmetal.util.solutions_utils import print_function_values_to_file, print_variables_to_file, SparkEvaluator
+from jmetal.util.solutions_utils import read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':

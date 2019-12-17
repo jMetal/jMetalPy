@@ -2,7 +2,7 @@ from jmetal.algorithm.multiobjective.smpso import SMPSORP
 from jmetal.operator import PolynomialMutation
 from jmetal.problem import ZDT4, ZDT1
 from jmetal.util.archive import CrowdingDistanceArchiveWithReferencePoint
-from jmetal.util.solutions import read_solutions
+from jmetal.util.solutions_utils import read_solutions
 
 if __name__ == '__main__':
     problem = ZDT4()

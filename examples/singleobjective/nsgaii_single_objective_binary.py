@@ -2,7 +2,7 @@ from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import BitFlipMutation, SPXCrossover
 from jmetal.problem import OneMax
 from jmetal.util.observer import PrintObjectivesObserver
-from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file
+from jmetal.util.solutions_utils import print_function_values_to_file, print_variables_to_file
 from jmetal.util.comparator import DominanceComparator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
