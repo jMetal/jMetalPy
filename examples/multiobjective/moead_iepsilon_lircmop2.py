@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.moead import MOEADIEpsilon
 from jmetal.lab.visualization import Plot, InteractivePlot
 from jmetal.operator import PolynomialMutation, DifferentialEvolutionCrossover
-from jmetal.problem.multiobjective.lircmop import LIRCMOP2
+from jmetal.problem.multiobjective.lircmop import LIRCMOP2, LIRCMOP1
 from jmetal.util.aggregative_function import Tschebycheff
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solutions_utils import read_solutions, print_function_values_to_file, print_variables_to_file
@@ -32,11 +32,6 @@ if __name__ == '__main__':
 
     algorithm.run()
     front = algorithm.get_result()
-
-    # Plot front
-    plot_front = Plot(plot_title='Pareto front approximation', reference_front=problem.reference_front,
-                      axis_labels=problem.obj_labels)
-    plot_front.plot(front, label=algorithm.label, filename=algorithm.get_name())
 
     # Plot interactive front
     plot_front = InteractivePlot(plot_title='Pareto front approximation', reference_front=problem.reference_front,
