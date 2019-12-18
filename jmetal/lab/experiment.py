@@ -9,11 +9,11 @@ from typing import List
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file, read_solutions
 from scipy.stats import mannwhitneyu
 
 from jmetal.core.algorithm import Algorithm
 from jmetal.core.quality_indicator import QualityIndicator
-from jmetal.util.solutions import print_function_values_to_file, print_variables_to_file, read_solutions
 
 LOGGER = logging.getLogger('jmetal')
 

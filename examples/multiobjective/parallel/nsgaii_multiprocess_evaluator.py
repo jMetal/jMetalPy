@@ -1,8 +1,8 @@
 from examples.multiobjective.parallel.zdt1_modified import ZDT1Modified
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import SBXCrossover, PolynomialMutation
-from jmetal.util.observer import ProgressBarObserver
 from jmetal.util.evaluator import MultiprocessEvaluator
+from jmetal.util.observer import ProgressBarObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':

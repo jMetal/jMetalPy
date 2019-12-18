@@ -1,6 +1,7 @@
 from typing import TypeVar, List
 
 import numpy as np
+from jmetal.util.solutions import Evaluator, Generator
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
@@ -8,7 +9,6 @@ from jmetal.core.operator import Mutation, Crossover
 from jmetal.core.problem import Problem
 from jmetal.core.quality_indicator import EpsilonIndicator
 from jmetal.operator import BinaryTournamentSelection
-from jmetal.util.solutions import Evaluator, Generator
 from jmetal.util.comparator import SolutionAttributeComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 

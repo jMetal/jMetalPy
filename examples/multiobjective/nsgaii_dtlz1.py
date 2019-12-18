@@ -1,11 +1,10 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-
 from jmetal.lab.visualization import Plot, InteractivePlot
 from jmetal.operator import SBXCrossover, PolynomialMutation
 from jmetal.problem import DTLZ2
+from jmetal.util.comparator import DominanceComparator
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solutions_utils import print_function_values_to_file, print_variables_to_file, read_solutions
-from jmetal.util.comparator import DominanceComparator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':

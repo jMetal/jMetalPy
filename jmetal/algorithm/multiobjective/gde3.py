@@ -1,12 +1,13 @@
 from typing import TypeVar, List
 
+from jmetal.util.solutions import Evaluator, Generator
+
 from jmetal.config import store
 from jmetal.core.algorithm import EvolutionaryAlgorithm, DynamicAlgorithm
 from jmetal.core.problem import Problem, DynamicProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.operator import DifferentialEvolutionCrossover, RankingAndCrowdingDistanceSelection
 from jmetal.operator.selection import DifferentialEvolutionSelection
-from jmetal.util.solutions import Evaluator, Generator
 from jmetal.util.comparator import Comparator, DominanceComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 

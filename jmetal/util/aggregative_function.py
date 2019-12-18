@@ -10,8 +10,6 @@ from jmetal.util.point import IdealPoint
 .. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
 
-from jmetal.util.archive import CrowdingDistanceArchive
-
 
 class AggregativeFunction(ABC):
 

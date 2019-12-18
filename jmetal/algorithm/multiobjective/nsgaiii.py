@@ -2,6 +2,7 @@ from abc import abstractmethod, ABC
 from typing import TypeVar, List
 
 import numpy as np
+from jmetal.util.solutions import Evaluator, Generator
 from numpy.linalg import LinAlgError
 from scipy import special
 
@@ -10,10 +11,9 @@ from jmetal.config import store
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
 from jmetal.operator import BinaryTournamentSelection
+from jmetal.util.comparator import Comparator, MultiComparator
 from jmetal.util.density_estimator import CrowdingDistance
 from jmetal.util.ranking import FastNonDominatedRanking
-from jmetal.util.solutions import Evaluator, Generator
-from jmetal.util.comparator import Comparator, MultiComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')

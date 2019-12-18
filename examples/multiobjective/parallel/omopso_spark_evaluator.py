@@ -1,9 +1,10 @@
+from jmetal.util.solutions import SparkEvaluator
+
 from examples.multiobjective.parallel.zdt1_modified import ZDT1Modified
 from jmetal.algorithm.multiobjective.omopso import OMOPSO
 from jmetal.operator import UniformMutation
 from jmetal.operator.mutation import NonUniformMutation
 from jmetal.util.archive import CrowdingDistanceArchive
-from jmetal.util.solutions import SparkEvaluator
 from jmetal.util.solutions_utils import print_function_values_to_file, print_variables_to_file
 from jmetal.util.solutions_utils import read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations

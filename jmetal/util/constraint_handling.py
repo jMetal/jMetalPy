@@ -1,6 +1,5 @@
-from jmetal.util.ckecking import Check
-
 from jmetal.core.solution import Solution
+from jmetal.util.ckecking import Check
 
 
 def is_feasible(solution: Solution) -> bool:

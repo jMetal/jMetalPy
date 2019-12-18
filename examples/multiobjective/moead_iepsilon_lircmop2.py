@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.moead import MOEADIEpsilon
-from jmetal.lab.visualization import Plot, InteractivePlot
+from jmetal.lab.visualization import InteractivePlot
 from jmetal.operator import PolynomialMutation, DifferentialEvolutionCrossover
-from jmetal.problem.multiobjective.lircmop import LIRCMOP2, LIRCMOP1
+from jmetal.problem.multiobjective.lircmop import LIRCMOP2
 from jmetal.util.aggregative_function import Tschebycheff
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solutions_utils import read_solutions, print_function_values_to_file, print_variables_to_file
