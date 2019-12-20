@@ -8,7 +8,7 @@
 
 A paper introducing jMetalPy is available at: https://doi.org/10.1016/j.swevo.2019.100598
 
-### Table of Contents
+#### Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
 - [Features](#features)
@@ -17,36 +17,50 @@ A paper introducing jMetalPy is available at: https://doi.org/10.1016/j.swevo.20
 ### Installation
 
 You can install the latest version of jMetalPy with `pip`, 
-including parallel and distributed computing dependencies such as pySpark and Dask:
-
-```console
-pip install "jmetalpy[complete]"
-```
-
-You can also install the core functionality of the framework (which is often enough for most users):
-
-```console
-pip install "jmetalpy[core]"
-```
-
-Or simply:
 
 ```console
 pip install jmetalpy
 ```
 
-### Usage
+<details><summary><b>Notes on installing with <tt>pip</tt></b></summary>
+<p>
+
+jMetalPy includes features for parallel and distributed computing based on [pySpark](https://spark.apache.org/docs/latest/api/python/index.html) and [Dask](https://dask.org/).
+
+These (extra) dependencies are automatically installed when running `pip`:
+
+```console
+pip install jmetalpy
+```
+
+But you can also install the core functionality of the framework (which is often enough for most users):
+
+```console
+pip install "jmetalpy[core]"
+```
+
+Other supported commands are listed next:
+
+```console
+pip install "jmetalpy[doc]"  # Install requirements for building docs
+pip install "jmetalpy[distributed]"  # Install requirements for parallel/distributed computing
+pip install "jmetalpy[complete]"  # Install all requirements
+```
+
+</p>
+</details>
+
+### Hello, world! 👋
+
+Examples of configuring and running all the included algorithms are located [in the documentation](https://jmetal.github.io/jMetalPy/multiobjective.algorithms.html).
 
 ```python
-from jmetal.algorithm.multiobjective.nsgaii import NSGAII
+from jmetal.algorithm import NSGAII
 from jmetal.operator import SBXCrossover, PolynomialMutation
 from jmetal.problem import ZDT1
-from jmetal.util.solution import get_non_dominated_solutions, read_solutions, print_function_values_to_file, \
-    print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 problem = ZDT1()
-problem.reference_front = read_solutions(filename='resources/reference_front/ZDT1.pf')
 
 algorithm = NSGAII(
     problem=problem,
@@ -58,14 +72,20 @@ algorithm = NSGAII(
 )
 
 algorithm.run()
+```
+
+We can then proceed to explore the results:
+
+```python
+from jmetal.util.solution import get_non_dominated_solutions, print_function_values_to_file, \ 
+    print_variables_to_file
+
 front = get_non_dominated_solutions(algorithm.get_result())
 
-# save front to file
+# save to files
 print_function_values_to_file(front, 'FUN.NSGAII.ZDT1')
 print_variables_to_file(front, 'VAR.NSGAII.ZDT1')
 ```
-
-Examples of configuring and running all the included algorithms are located [in the documentation](https://jmetal.github.io/jMetalPy/multiobjective.algorithms.html).
 
 ### Features
 The current release of jMetalPy (v1.5.3) contains the following components:
