@@ -1,8 +1,3 @@
-.. jMetalPy documentation master file, created by
-   sphinx-quickstart on Fri Oct 11 10:56:26 2019.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 jMetalPy: Python version of the jMetal framework
 ================================================
 

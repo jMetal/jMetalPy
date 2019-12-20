@@ -6,7 +6,7 @@ The :py:mod:`jmetal.lab.visualization` submodule contains several classes useful
 Static plots
 ------------------------
 
-- It is possible to visualize the final front approximation by means of the :code:`Plot` class:
+- It is possible to visualize the final front approximation by using the :code:`Plot` class:
 
   .. code-block:: python
 
