@@ -1,7 +1,7 @@
 <p align="center">
-  <br/>
-  <img src=source/jmetalpy.png alt="jMetalPy">
-  <br/>
+
+  ![jMetalPy](source/jmetalpy.png) <!-- .element height="50%" width="50%" -->
+
 </p>
 
 [![Build Status](https://img.shields.io/travis/jMetal/jMetalPy/master.svg?style=flat-square)](https://travis-ci.org/jMetal/jMetalPy)
