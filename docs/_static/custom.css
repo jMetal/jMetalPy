@@ -14,8 +14,8 @@ h3 {
     font-size: 20px;
 }
 
-.sidebar-toc {
-    font-size: 13px;
+p {
+    margin: 10px 0 10px;
 }
 
 code, pre, tt {
@@ -28,6 +28,10 @@ pre {
 }
 
 blockquote {
+    font-size: 13px;
+}
+
+.sidebar-toc {
     font-size: 13px;
 }
 

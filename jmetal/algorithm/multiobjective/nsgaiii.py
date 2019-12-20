@@ -10,10 +10,11 @@ from jmetal.config import store
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
 from jmetal.operator import BinaryTournamentSelection
-from jmetal.util.density_estimator import CrowdingDistance
-from jmetal.util.ranking import FastNonDominatedRanking
-from jmetal.util.solutions import Evaluator, Generator
 from jmetal.util.comparator import Comparator, MultiComparator
+from jmetal.util.density_estimator import CrowdingDistance
+from jmetal.util.evaluator import Evaluator
+from jmetal.util.generator import Generator
+from jmetal.util.ranking import FastNonDominatedRanking
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -167,7 +168,7 @@ def niching(pop: List[S], n_remaining: int, niche_count, niche_of_individuals, d
             # indices of individuals that are considered and assign to next_niche
             next_ind = np.where(np.logical_and(niche_of_individuals == next_niche, mask))[0]
 
-            # shuffle to break random tie (equal perp. dist) or select randomly
+            # shuffle to break random_search tie (equal perp. dist) or select randomly
             np.random.shuffle(next_ind)
 
             if niche_count[next_niche] == 0:

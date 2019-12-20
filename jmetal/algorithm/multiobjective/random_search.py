@@ -4,7 +4,7 @@ from typing import TypeVar, List
 from jmetal.config import store
 from jmetal.core.algorithm import Algorithm
 from jmetal.core.problem import Problem
-from jmetal.util.archive import NonDominatedSolutionListArchive
+from jmetal.util.archive import NonDominatedSolutionsArchive
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -13,7 +13,7 @@ R = TypeVar('R')
 """
 .. module:: RamdomSearch
    :platform: Unix, Windows
-   :synopsis: Simple random search algorithms.
+   :synopsis: Simple random_search search algorithms.
 
 .. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
 """
@@ -29,7 +29,7 @@ class RandomSearch(Algorithm[S, R]):
         self.termination_criterion = termination_criterion
         self.observable.register(termination_criterion)
 
-        self.archive = NonDominatedSolutionListArchive()
+        self.archive = NonDominatedSolutionsArchive()
 
     def get_observable_data(self) -> dict:
         ctime = time.time() - self.start_computing_time

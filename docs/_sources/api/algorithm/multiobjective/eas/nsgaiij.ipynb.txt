@@ -1,0 +1,112 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "source": [
+    "NSGA-II\n",
+    "========================\n",
+    "\n",
+    "Examples\n",
+    "------------------------"
+   ],
+   "metadata": {
+    "collapsed": false
+   }
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "outputs": [],
+   "source": [
+    "from jmetal.algorithm.multiobjective.nsgaii import NSGAII\n",
+    "from jmetal.operator import SBXCrossover, PolynomialMutation\n",
+    "from jmetal.problem import ZDT1\n",
+    "from jmetal.util.termination_criterion import StoppingByEvaluations\n",
+    "\n",
+    "problem = ZDT1()\n",
+    "\n",
+    "max_evaluations = 2500\n",
+    "algorithm = NSGAII(\n",
+    "    problem=problem,\n",
+    "    population_size=100,\n",
+    "    offspring_population_size=100,\n",
+    "    mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),\n",
+    "    crossover=SBXCrossover(probability=1.0, distribution_index=20),\n",
+    "    termination_criterion=StoppingByEvaluations(max=max_evaluations)\n",
+    ")\n",
+    "\n",
+    "algorithm.run()\n",
+    "front = algorithm.get_result()"
+   ],
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%%\n",
+     "is_executing": false
+    }
+   }
+  },
+  {
+   "cell_type": "markdown",
+   "source": [
+    "We can now vis"
+   ],
+   "metadata": {
+    "collapsed": false
+   }
+  },
+  {
+   "cell_type": "markdown",
+   "source": [
+    "API\n",
+    "------------------------"
+   ],
+   "metadata": {
+    "collapsed": false
+   }
+  },
+  {
+   "cell_type": "raw",
+   "source": [
+    "\n",
+    ".. automodule:: jmetal.algorithm.multiobjective.nsgaii\n",
+    "   :members:\n",
+    "   :undoc-members:\n",
+    "   :show-inheritance:\n"
+   ],
+   "metadata": {
+    "collapsed": false
+   }
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 2
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython2",
+   "version": "2.7.6"
+  },
+  "pycharm": {
+   "stem_cell": {
+    "cell_type": "raw",
+    "source": [],
+    "metadata": {
+     "collapsed": false
+    }
+   }
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 0
+}

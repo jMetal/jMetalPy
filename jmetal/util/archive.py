@@ -48,7 +48,7 @@ class BoundedArchive(Archive[S]):
         self.maximum_size = maximum_size
         self.comparator = comparator
         self.density_estimator = density_estimator
-        self.non_dominated_solution_archive = NonDominatedSolutionListArchive()
+        self.non_dominated_solution_archive = NonDominatedSolutionsArchive()
         self.solution_list = self.non_dominated_solution_archive.solution_list
 
     def compute_density_estimator(self):
@@ -82,10 +82,10 @@ class BoundedArchive(Archive[S]):
         return worst_solution, index_to_remove
 
 
-class NonDominatedSolutionListArchive(Archive[S]):
+class NonDominatedSolutionsArchive(Archive[S]):
 
-    def __init__(self, dominance_comparator=DominanceComparator()):
-        super(NonDominatedSolutionListArchive, self).__init__()
+    def __init__(self, dominance_comparator: Comparator = DominanceComparator()):
+        super(NonDominatedSolutionsArchive, self).__init__()
         self.comparator = dominance_comparator
 
     def add(self, solution: S) -> bool:

@@ -13,7 +13,7 @@
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>jmetal.algorithm.multiobjective.nsgaii &#8212; jMetalPy 1.5.1 documentation</title>
+    <title>jmetal.algorithm.multiobjective.nsgaii &#8212; jMetalPy 1.5.3 documentation</title>
     <link rel="stylesheet" href="../../../../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
@@ -22,7 +22,9 @@
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="author" title="About these documents" href="../../../../about.html" />
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
@@ -39,7 +41,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -103,10 +105,13 @@
             
   <h1>Source code for jmetal.algorithm.multiobjective.nsgaii</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Generator</span>
 
-<span class="kn">import</span> <span class="nn">dask</span>
-<span class="kn">from</span> <span class="nn">distributed</span> <span class="k">import</span> <span class="n">as_completed</span><span class="p">,</span> <span class="n">Client</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">dask</span>
+    <span class="kn">from</span> <span class="nn">distributed</span> <span class="k">import</span> <span class="n">as_completed</span><span class="p">,</span> <span class="n">Client</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">pass</span>
 
 <span class="kn">from</span> <span class="nn">jmetal.algorithm.singleobjective.genetic_algorithm</span> <span class="k">import</span> <span class="n">GeneticAlgorithm</span>
 <span class="kn">from</span> <span class="nn">jmetal.config</span> <span class="k">import</span> <span class="n">store</span>
@@ -115,10 +120,10 @@
 <span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="k">import</span> <span class="n">Problem</span><span class="p">,</span> <span class="n">DynamicProblem</span>
 <span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="k">import</span> <span class="n">BinaryTournamentSelection</span>
 <span class="kn">from</span> <span class="nn">jmetal.util.density_estimator</span> <span class="k">import</span> <span class="n">CrowdingDistance</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.evaluator</span> <span class="k">import</span> <span class="n">Evaluator</span>
 <span class="kn">from</span> <span class="nn">jmetal.util.ranking</span> <span class="k">import</span> <span class="n">FastNonDominatedRanking</span>
 <span class="kn">from</span> <span class="nn">jmetal.util.replacement</span> <span class="k">import</span> <span class="n">RankingAndDensityEstimatorReplacement</span><span class="p">,</span> <span class="n">RemovalPolicyType</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.solutions</span> <span class="k">import</span> <span class="n">Evaluator</span><span class="p">,</span> <span class="n">Generator</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.solutions.comparator</span> <span class="k">import</span> <span class="n">DominanceComparator</span><span class="p">,</span> <span class="n">Comparator</span><span class="p">,</span> <span class="n">MultiComparator</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.comparator</span> <span class="k">import</span> <span class="n">DominanceComparator</span><span class="p">,</span> <span class="n">Comparator</span><span class="p">,</span> <span class="n">MultiComparator</span>
 <span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="k">import</span> <span class="n">TerminationCriterion</span>
 
 <span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
@@ -133,7 +138,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="NSGAII"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII">[docs]</a><span class="k">class</span> <span class="nc">NSGAII</span><span class="p">(</span><span class="n">GeneticAlgorithm</span><span class="p">[</span><span class="n">S</span><span class="p">,</span> <span class="n">R</span><span class="p">]):</span>
+<div class="viewcode-block" id="NSGAII"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII">[docs]</a><span class="k">class</span> <span class="nc">NSGAII</span><span class="p">(</span><span class="n">GeneticAlgorithm</span><span class="p">[</span><span class="n">S</span><span class="p">,</span> <span class="n">R</span><span class="p">]):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">problem</span><span class="p">:</span> <span class="n">Problem</span><span class="p">,</span>
@@ -180,7 +185,7 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dominance_comparator</span> <span class="o">=</span> <span class="n">dominance_comparator</span>
 
-<div class="viewcode-block" id="NSGAII.replacement"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII.replacement">[docs]</a>    <span class="k">def</span> <span class="nf">replacement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">offspring_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]]:</span>
+<div class="viewcode-block" id="NSGAII.replacement"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII.replacement">[docs]</a>    <span class="k">def</span> <span class="nf">replacement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">offspring_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot; This method joins the current and offspring populations to produce the population of the next generation</span>
 <span class="sd">        by applying the ranking and crowding distance selection.</span>
 
@@ -196,14 +201,14 @@
 
         <span class="k">return</span> <span class="n">solutions</span></div>
 
-<div class="viewcode-block" id="NSGAII.get_result"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII.get_result">[docs]</a>    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">R</span><span class="p">:</span>
+<div class="viewcode-block" id="NSGAII.get_result"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII.get_result">[docs]</a>    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">R</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span></div>
 
-<div class="viewcode-block" id="NSGAII.get_name"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="NSGAII.get_name"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s1">&#39;NSGAII&#39;</span></div></div>
 
 
-<div class="viewcode-block" id="DynamicNSGAII"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII">[docs]</a><span class="k">class</span> <span class="nc">DynamicNSGAII</span><span class="p">(</span><span class="n">NSGAII</span><span class="p">[</span><span class="n">S</span><span class="p">,</span> <span class="n">R</span><span class="p">],</span> <span class="n">DynamicAlgorithm</span><span class="p">):</span>
+<div class="viewcode-block" id="DynamicNSGAII"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII">[docs]</a><span class="k">class</span> <span class="nc">DynamicNSGAII</span><span class="p">(</span><span class="n">NSGAII</span><span class="p">[</span><span class="n">S</span><span class="p">,</span> <span class="n">R</span><span class="p">],</span> <span class="n">DynamicAlgorithm</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">problem</span><span class="p">:</span> <span class="n">DynamicProblem</span><span class="p">[</span><span class="n">S</span><span class="p">],</span>
@@ -233,10 +238,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">start_computing_time</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">total_computing_time</span> <span class="o">=</span> <span class="mi">0</span>
 
-<div class="viewcode-block" id="DynamicNSGAII.restart"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DynamicNSGAII.restart"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DynamicNSGAII.update_progress"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII.update_progress">[docs]</a>    <span class="k">def</span> <span class="nf">update_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DynamicNSGAII.update_progress"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII.update_progress">[docs]</a>    <span class="k">def</span> <span class="nf">update_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">the_problem_has_changed</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">clear_changed</span><span class="p">()</span>
@@ -246,7 +251,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">offspring_population_size</span></div>
 
-<div class="viewcode-block" id="DynamicNSGAII.stopping_condition_is_met"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII.stopping_condition_is_met">[docs]</a>    <span class="k">def</span> <span class="nf">stopping_condition_is_met</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DynamicNSGAII.stopping_condition_is_met"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII.stopping_condition_is_met">[docs]</a>    <span class="k">def</span> <span class="nf">stopping_condition_is_met</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">termination_criterion</span><span class="o">.</span><span class="n">is_met</span><span class="p">:</span>
             <span class="n">observable_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_observable_data</span><span class="p">()</span>
             <span class="n">observable_data</span><span class="p">[</span><span class="s1">&#39;TERMINATION_CRITERIA_IS_MET&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
@@ -258,7 +263,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">completed_iterations</span> <span class="o">+=</span> <span class="mi">1</span></div></div>
 
 
-<div class="viewcode-block" id="DistributedNSGAII"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII">[docs]</a><span class="k">class</span> <span class="nc">DistributedNSGAII</span><span class="p">(</span><span class="n">Algorithm</span><span class="p">[</span><span class="n">S</span><span class="p">,</span> <span class="n">R</span><span class="p">]):</span>
+<div class="viewcode-block" id="DistributedNSGAII"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII">[docs]</a><span class="k">class</span> <span class="nc">DistributedNSGAII</span><span class="p">(</span><span class="n">Algorithm</span><span class="p">[</span><span class="n">S</span><span class="p">,</span> <span class="n">R</span><span class="p">]):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">problem</span><span class="p">:</span> <span class="n">Problem</span><span class="p">,</span>
@@ -286,16 +291,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">number_of_cores</span> <span class="o">=</span> <span class="n">number_of_cores</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">client</span>
 
-<div class="viewcode-block" id="DistributedNSGAII.create_initial_solutions"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.create_initial_solutions">[docs]</a>    <span class="k">def</span> <span class="nf">create_initial_solutions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+<div class="viewcode-block" id="DistributedNSGAII.create_initial_solutions"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.create_initial_solutions">[docs]</a>    <span class="k">def</span> <span class="nf">create_initial_solutions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">create_solution</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_cores</span><span class="p">)]</span></div>
 
-<div class="viewcode-block" id="DistributedNSGAII.evaluate"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solutions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+<div class="viewcode-block" id="DistributedNSGAII.evaluate"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solutions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">evaluate</span><span class="p">,</span> <span class="n">solutions</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DistributedNSGAII.stopping_condition_is_met"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.stopping_condition_is_met">[docs]</a>    <span class="k">def</span> <span class="nf">stopping_condition_is_met</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="DistributedNSGAII.stopping_condition_is_met"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.stopping_condition_is_met">[docs]</a>    <span class="k">def</span> <span class="nf">stopping_condition_is_met</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">termination_criterion</span><span class="o">.</span><span class="n">is_met</span></div>
 
-<div class="viewcode-block" id="DistributedNSGAII.get_observable_data"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_observable_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_observable_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<div class="viewcode-block" id="DistributedNSGAII.get_observable_data"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_observable_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_observable_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="n">ctime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_computing_time</span>
 
         <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;PROBLEM&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">,</span>
@@ -303,20 +308,20 @@
                 <span class="s1">&#39;SOLUTIONS&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_result</span><span class="p">(),</span>
                 <span class="s1">&#39;COMPUTING_TIME&#39;</span><span class="p">:</span> <span class="n">ctime</span><span class="p">}</span></div>
 
-<div class="viewcode-block" id="DistributedNSGAII.init_progress"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.init_progress">[docs]</a>    <span class="k">def</span> <span class="nf">init_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="DistributedNSGAII.init_progress"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.init_progress">[docs]</a>    <span class="k">def</span> <span class="nf">init_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_cores</span>
 
         <span class="n">observable_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_observable_data</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">notify_all</span><span class="p">(</span><span class="o">**</span><span class="n">observable_data</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DistributedNSGAII.step"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="DistributedNSGAII.step"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="DistributedNSGAII.update_progress"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.update_progress">[docs]</a>    <span class="k">def</span> <span class="nf">update_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DistributedNSGAII.update_progress"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.update_progress">[docs]</a>    <span class="k">def</span> <span class="nf">update_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">observable_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_observable_data</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">notify_all</span><span class="p">(</span><span class="o">**</span><span class="n">observable_data</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DistributedNSGAII.run"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DistributedNSGAII.run"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Execute the algorithm. &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">start_computing_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
@@ -393,14 +398,14 @@
         <span class="k">for</span> <span class="n">future</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">task_pool</span><span class="p">:</span>
             <span class="n">future</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DistributedNSGAII.get_result"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_result">[docs]</a>    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">R</span><span class="p">:</span>
+<div class="viewcode-block" id="DistributedNSGAII.get_result"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_result">[docs]</a>    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">R</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span></div>
 
-<div class="viewcode-block" id="DistributedNSGAII.get_name"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="DistributedNSGAII.get_name"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s1">&#39;dNSGA-II&#39;</span></div></div>
 
 
-<div class="viewcode-block" id="reproduction"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.reproduction">[docs]</a><span class="k">def</span> <span class="nf">reproduction</span><span class="p">(</span><span class="n">mating_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">problem</span><span class="p">,</span> <span class="n">crossover_operator</span><span class="p">,</span> <span class="n">mutation_operator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
+<div class="viewcode-block" id="reproduction"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.reproduction">[docs]</a><span class="k">def</span> <span class="nf">reproduction</span><span class="p">(</span><span class="n">mating_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">problem</span><span class="p">,</span> <span class="n">crossover_operator</span><span class="p">,</span> <span class="n">mutation_operator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
     <span class="n">offspring_pool</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">parents</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">mating_population</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">):</span>
         <span class="n">offspring_pool</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">crossover_operator</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">parents</span><span class="p">))</span>
@@ -428,7 +433,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

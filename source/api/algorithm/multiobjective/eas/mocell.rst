@@ -11,7 +11,7 @@ Examples
     from jmetal.problem import ZDT4
     from jmetal.util.archive import CrowdingDistanceArchive
     from jmetal.util.neighborhood import C9
-    from jmetal.util.solutions import read_solutions
+    from jmetal.util.solution import read_solutions
     from jmetal.util.termination_criterion import StoppingByEvaluations
 
     problem = ZDT4()

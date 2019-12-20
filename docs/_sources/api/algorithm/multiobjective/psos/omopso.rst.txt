@@ -11,7 +11,7 @@ Examples
     from jmetal.operator.mutation import NonUniformMutation
     from jmetal.problem import ZDT1
     from jmetal.util.archive import CrowdingDistanceArchive
-    from jmetal.util.solutions import read_solutions
+    from jmetal.util.solution import read_solutions
     from jmetal.util.termination_criterion import StoppingByEvaluations
 
     problem = ZDT1()

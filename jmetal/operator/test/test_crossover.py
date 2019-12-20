@@ -64,7 +64,7 @@ class SinglePointTestCases(unittest.TestCase):
         self.assertEqual([True, False, False, True, True, False], offspring[0].variables[0])
         self.assertEqual([False, True, False, False, True, False], offspring[1].variables[0])
 
-    @mock.patch('random.randrange')
+    @mock.patch('random_search.randrange')
     def test_should_the_operator_work_if_the_first_bit_is_selected(self, random_call):
         operator = SPXCrossover(1.0)
         solution1 = BinarySolution(number_of_variables=1, number_of_objectives=1)
@@ -77,7 +77,7 @@ class SinglePointTestCases(unittest.TestCase):
         self.assertEqual([False, True, False, False, True, False], offspring[0].variables[0])
         self.assertEqual([True, False, False, True, True, False], offspring[1].variables[0])
 
-    @mock.patch('random.randrange')
+    @mock.patch('random_search.randrange')
     def test_should_the_operator_work_if_the_last_bit_is_selected(self, random_call):
         operator = SPXCrossover(1.0)
         solution1 = BinarySolution(number_of_variables=1, number_of_objectives=1)
@@ -90,7 +90,7 @@ class SinglePointTestCases(unittest.TestCase):
         self.assertEqual([True, False, False, True, True, True], offspring[0].variables[0])
         self.assertEqual([False, True, False, False, True, False], offspring[1].variables[0])
 
-    @mock.patch('random.randrange')
+    @mock.patch('random_search.randrange')
     def test_should_the_operator_work_if_the_third_bit_is_selected(self, random_call):
         operator = SPXCrossover(1.0)
         solution1 = BinarySolution(number_of_variables=1, number_of_objectives=1)
@@ -103,7 +103,7 @@ class SinglePointTestCases(unittest.TestCase):
         self.assertEqual([True, False, False, False, True, True], offspring[0].variables[0])
         self.assertEqual([False, True, False, True, True, False], offspring[1].variables[0])
 
-    @mock.patch('random.randrange')
+    @mock.patch('random_search.randrange')
     def test_should_the_operator_work_with_a_solution_with_three_binary_variables(self, random_call):
         operator = SPXCrossover(1.0)
         solution1 = BinarySolution(number_of_variables=3, number_of_objectives=1)
@@ -161,7 +161,7 @@ class PMXTestCases(unittest.TestCase):
         self.assertEqual([2, 3], offspring[1].variables[0])
         self.assertEqual([5, 3], offspring[1].variables[1])
 
-    @mock.patch('random.randint')
+    @mock.patch('random_search.randint')
     def test_should_the_operator_work_with_permutation_at_the_middle(self, random_call):
         operator = PMXCrossover(1.0)
 
@@ -177,7 +177,7 @@ class PMXTestCases(unittest.TestCase):
         self.assertEqual([0, 1, 12, 13, 4, 5, 6, 7, 8, 9], offspring[0].variables)
         self.assertEqual([10, 11, 2, 3, 14, 15, 16, 17, 18, 19], offspring[1].variables)
 
-    @mock.patch('random.randint')
+    @mock.patch('random_search.randint')
     def test_should_the_operator_work_with_permutation_at_the_beginning(self, random_call):
         operator = PMXCrossover(1.0)
 
@@ -220,7 +220,7 @@ class CXTestCases(unittest.TestCase):
         with self.assertRaises(Exception):
             CXCrossover(-12)
 
-    @mock.patch('random.randint')
+    @mock.patch('random_search.randint')
     def test_should_the_operator_work_with_two_solutions_with_two_variables(self, random_call):
         operator = CXCrossover(1.0)
         solution1 = PermutationSolution(number_of_variables=2, number_of_objectives=1)

@@ -13,7 +13,7 @@
   <link rel="stylesheet" type="text/css" href="../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>jmetal.operator.crossover &#8212; jMetalPy 1.5.1 documentation</title>
+    <title>jmetal.operator.crossover &#8212; jMetalPy 1.5.3 documentation</title>
     <link rel="stylesheet" href="../../../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
@@ -22,7 +22,9 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -39,7 +41,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -382,7 +384,7 @@
 <div class="viewcode-block" id="DifferentialEvolutionCrossover"><a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.DifferentialEvolutionCrossover">[docs]</a><span class="k">class</span> <span class="nc">DifferentialEvolutionCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">,</span> <span class="n">FloatSolution</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot; This operator receives two parameters: the current individual and an array of three parent individuals. The</span>
 <span class="sd">    best and rand variants depends on the third parent, according whether it represents the current of the &quot;best&quot;</span>
-<span class="sd">    individual or a random one. The implementation of both variants are the same, due to that the parent selection is</span>
+<span class="sd">    individual or a random_search one. The implementation of both variants are the same, due to that the parent selection is</span>
 <span class="sd">    external to the crossover operator.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -444,7 +446,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

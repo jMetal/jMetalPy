@@ -147,7 +147,7 @@ class OverallConstraintViolationComparator(Comparator):
 
 class DominanceComparator(Comparator):
 
-    def __init__(self, constraint_comparator=OverallConstraintViolationComparator()):
+    def __init__(self, constraint_comparator: Comparator = OverallConstraintViolationComparator()):
         self.constraint_comparator = constraint_comparator
 
     def compare(self, solution1: Solution, solution2: Solution) -> int:

@@ -13,7 +13,7 @@
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>jmetal.lab.statistical_test.bayesian &#8212; jMetalPy 1.5.1 documentation</title>
+    <title>jmetal.lab.statistical_test.bayesian &#8212; jMetalPy 1.5.3 documentation</title>
     <link rel="stylesheet" href="../../../../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
@@ -22,7 +22,9 @@
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="author" title="About these documents" href="../../../../about.html" />
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
@@ -39,7 +41,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -114,7 +116,7 @@
 <span class="sd">    :param rope_limits: array_like. Default [-0.01, 0.01]. Limits of the practical equivalence.</span>
 <span class="sd">    :param prior_strength: positive float. Default 0.5. Value of the prior strengt</span>
 <span class="sd">    :param prior_place: string {left, rope, right}. Default &#39;left&#39;. Place of the pseudo-observation z_0.</span>
-<span class="sd">    :param sample_size: integer. Default 10000. Total number of random samples generated</span>
+<span class="sd">    :param sample_size: integer. Default 10000. Total number of random_search samples generated</span>
 <span class="sd">    :param return_sample: boolean. Default False. If true, also return the samples drawn from the Dirichlet process.</span>
 
 <span class="sd">    :return: List of posterior probabilities:</span>
@@ -182,7 +184,7 @@
 <span class="sd">    :param rope_limits: array_like. Default [-0.01, 0.01]. Limits of the practical equivalence.</span>
 <span class="sd">    :param prior_strength: positive float. Default 0.5. Value of the prior strengt</span>
 <span class="sd">    :param prior_place: string {left, rope, right}. Default &#39;left&#39;. Place of the pseudo-observation z_0.</span>
-<span class="sd">    :param sample_size: integer. Default 10000. Total number of random samples generated</span>
+<span class="sd">    :param sample_size: integer. Default 10000. Total number of random_search samples generated</span>
 <span class="sd">    :param return_sample: boolean. Default False. If true, also return the samples drawn from the Dirichlet process.</span>
 
 <span class="sd">    :return: List of posterior probabilities:</span>
@@ -262,7 +264,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

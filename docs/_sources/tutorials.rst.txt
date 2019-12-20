@@ -7,6 +7,7 @@ Getting started
 
    tutorials/problem
    tutorials/observer
+   tutorials/evaluator
    tutorials/visualization
 
 .. toctree::

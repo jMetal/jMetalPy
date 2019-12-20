@@ -46,7 +46,6 @@ Interactive plots
      plot_front = InteractivePlot(plot_title='Pareto front approximation')
      plot_front.plot(front, label='NSGAII-ZDT1', filename='NSGAII-ZDT1-interactive')
 
-
   .. raw:: html
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -71,13 +70,12 @@ API
 Streaming plots
 ------------------------
 
-- The visualizer observer displays the front in real-time (although **it only works for problems with two and three objectives**) during the execution of the algorithms; this can be useful to observe the evolution of the Pareto front approximation produced by any algorithm:
+- The visualizer observer displays the front in real-time (note **it only works for problems with two and three objectives**) during the execution of the algorithms; this can be useful to observe the evolution of the Pareto front approximation produced by any algorithm:
 
   .. code-block:: python
 
      from jmetal.util.observer import VisualizerObserver
 
-     # algorithm = ...
      algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front))
 
 API

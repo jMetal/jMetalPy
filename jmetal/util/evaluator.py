@@ -3,8 +3,15 @@ from abc import ABC, abstractmethod
 from multiprocessing.pool import ThreadPool, Pool
 from typing import TypeVar, List, Generic
 
-import dask
-from pyspark import SparkConf, SparkContext
+try:
+    import dask
+except ImportError:
+    pass
+
+try:
+    from pyspark import SparkConf, SparkContext
+except ImportError:
+    pass
 
 from jmetal.core.problem import Problem
 
@@ -42,9 +49,18 @@ class MapEvaluator(Evaluator[S]):
         return solution_list
 
 
+class MultiprocessEvaluator(Evaluator[S]):
+    def __init__(self, processes: int = None):
+        super().__init__()
+        self.pool = Pool(processes)
+
+    def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
+        return self.pool.map(functools.partial(evaluate_solution, problem=problem), solution_list)
+
+
 class SparkEvaluator(Evaluator[S]):
     def __init__(self, processes: int = 8):
-        self.spark_conf = SparkConf().setAppName("jMetalPy").setMaster(f"local[{processes}]")
+        self.spark_conf = SparkConf().setAppName("jmetalpy").setMaster(f"local[{processes}]")
         self.spark_context = SparkContext(conf=self.spark_conf)
 
         logger = self.spark_context._jvm.org.apache.log4j
@@ -72,13 +88,3 @@ class DaskEvaluator(Evaluator[S]):
             return list(dask.compute(*[
                 dask.delayed(evaluate_solution)(solution=solution, problem=problem) for solution in solution_list
             ]))
-
-
-class MultiprocessEvaluator(Evaluator[S]):
-    def __init__(self, processes=None):
-        super().__init__()
-        self.pool = Pool(processes)
-
-    def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
-        return self.pool.map(functools.partial(evaluate_solution, problem=problem), solution_list)
-

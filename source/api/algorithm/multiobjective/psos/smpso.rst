@@ -74,7 +74,7 @@ Reference-point based (SMPSO/RP)
     from jmetal.operator import PolynomialMutation
     from jmetal.problem import ZDT4
     from jmetal.util.archive import CrowdingDistanceArchiveWithReferencePoint
-    from jmetal.util.solutions import read_solutions
+    from jmetal.util.solution import read_solutions
     from jmetal.util.termination_criterion import StoppingByEvaluations
 
     problem = ZDT4()

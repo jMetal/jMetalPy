@@ -13,7 +13,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Experiments &#8212; jMetalPy 1.5.1 documentation</title>
+    <title>Experiments &#8212; jMetalPy 1.5.3 documentation</title>
     <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
@@ -22,7 +22,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -47,7 +49,7 @@
         <li class="right" >
           <a href="visualization.html" title="Front visualization"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Getting started</a> &#187;</li> 
       </ul>
     </div>
@@ -70,6 +72,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Getting started</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="problem.html">Defining new problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="observer.html">Extending algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluator.html">Evaluate solutions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="visualization.html">Front visualization</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Experiments</a></li>
 <li class="toctree-l2"><a class="reference internal" href="statistics.html">Statistical analysis</a></li>
@@ -94,7 +97,7 @@
 <li><a class="reference internal" href="#">Experiments</a><ul>
 <li><a class="reference internal" href="#running-the-experiment">Running the experiment</a></li>
 <li><a class="reference internal" href="#summary-file">Summary file</a></li>
-<li><a class="reference internal" href="#module-jmetal.lab.experiment">API</a></li>
+<li><a class="reference internal" href="#api">API</a></li>
 </ul>
 </li>
 </ul>
@@ -240,68 +243,8 @@ The summary file is the input of all the statistical tests, so that they can be 
 </pre></div>
 </div>
 </div>
-<div class="section" id="module-jmetal.lab.experiment">
-<span id="api"></span><h2>API<a class="headerlink" href="#module-jmetal.lab.experiment" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="jmetal.lab.experiment.Experiment">
-<em class="property">class </em><code class="sig-prename descclassname">jmetal.lab.experiment.</code><code class="sig-name descname">Experiment</code><span class="sig-paren">(</span><em class="sig-param">output_dir: str, jobs: List[jmetal.lab.experiment.Job], m_workers: int = 6</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/experiment.html#Experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.experiment.Experiment" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="method">
-<dt id="jmetal.lab.experiment.Experiment.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/jmetal/lab/experiment.html#Experiment.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.experiment.Experiment.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="jmetal.lab.experiment.Job">
-<em class="property">class </em><code class="sig-prename descclassname">jmetal.lab.experiment.</code><code class="sig-name descname">Job</code><span class="sig-paren">(</span><em class="sig-param">algorithm: jmetal.core.algorithm.Algorithm</em>, <em class="sig-param">algorithm_tag: str</em>, <em class="sig-param">problem_tag: str</em>, <em class="sig-param">run: int</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/experiment.html#Job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.experiment.Job" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="method">
-<dt id="jmetal.lab.experiment.Job.execute">
-<code class="sig-name descname">execute</code><span class="sig-paren">(</span><em class="sig-param">output_path: str = ''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/experiment.html#Job.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.experiment.Job.execute" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="jmetal.lab.experiment.generate_summary_from_experiment">
-<code class="sig-prename descclassname">jmetal.lab.experiment.</code><code class="sig-name descname">generate_summary_from_experiment</code><span class="sig-paren">(</span><em class="sig-param">input_dir: str, quality_indicators: List[jmetal.core.quality_indicator.QualityIndicator], reference_fronts: str = ''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/experiment.html#generate_summary_from_experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.experiment.generate_summary_from_experiment" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute a list of quality indicators. The input data directory <em>must</em> met the following structure (this is generated
-automatically by the Experiment class):</p>
-<ul class="simple">
-<li><p>&lt;base_dir&gt;</p>
-<ul>
-<li><p>algorithm_a</p>
-<ul>
-<li><p>problem_a</p>
-<ul>
-<li><p>FUN.0.tsv</p></li>
-<li><p>FUN.1.tsv</p></li>
-<li><p>VAR.0.tsv</p></li>
-<li><p>VAR.1.tsv</p></li>
-<li><p>…</p></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input_dir</strong> – Directory where all the input data is found (function values and variables).</p></li>
-<li><p><strong>reference_fronts</strong> – Directory where reference fronts are found.</p></li>
-<li><p><strong>quality_indicators</strong> – List of quality indicators to compute.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None.</p>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -338,7 +281,7 @@ automatically by the Experiment class):</p>
         <li class="right" >
           <a href="visualization.html" title="Front visualization"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../tutorials.html" >Getting started</a> &#187;</li> 
       </ul>
     </div>

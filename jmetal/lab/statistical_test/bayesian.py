@@ -10,7 +10,7 @@ def bayesian_sign_test(data, rope_limits=[-0.01, 0.01], prior_strength=0.5, prio
     :param rope_limits: array_like. Default [-0.01, 0.01]. Limits of the practical equivalence.
     :param prior_strength: positive float. Default 0.5. Value of the prior strengt
     :param prior_place: string {left, rope, right}. Default 'left'. Place of the pseudo-observation z_0.
-    :param sample_size: integer. Default 10000. Total number of random samples generated
+    :param sample_size: integer. Default 10000. Total number of random_search samples generated
     :param return_sample: boolean. Default False. If true, also return the samples drawn from the Dirichlet process.
 
     :return: List of posterior probabilities:
@@ -78,7 +78,7 @@ def bayesian_signed_rank_test(data, rope_limits=[-0.01, 0.01], prior_strength=1.
     :param rope_limits: array_like. Default [-0.01, 0.01]. Limits of the practical equivalence.
     :param prior_strength: positive float. Default 0.5. Value of the prior strengt
     :param prior_place: string {left, rope, right}. Default 'left'. Place of the pseudo-observation z_0.
-    :param sample_size: integer. Default 10000. Total number of random samples generated
+    :param sample_size: integer. Default 10000. Total number of random_search samples generated
     :param return_sample: boolean. Default False. If true, also return the samples drawn from the Dirichlet process.
 
     :return: List of posterior probabilities:

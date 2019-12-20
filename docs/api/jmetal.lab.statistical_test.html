@@ -13,7 +13,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>jmetal.lab.statistical_test package &#8212; jMetalPy 1.5.1 documentation</title>
+    <title>jmetal.lab.statistical_test package &#8212; jMetalPy 1.5.3 documentation</title>
     <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
@@ -22,7 +22,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -39,7 +41,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -79,7 +81,7 @@
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-jmetal.lab.statistical_test.apv_procedures">jmetal.lab.statistical_test.apv_procedures module</a></li>
 <li><a class="reference internal" href="#module-jmetal.lab.statistical_test.bayesian">jmetal.lab.statistical_test.bayesian module</a></li>
-<li><a class="reference internal" href="#module-jmetal.lab.statistical_test.critical_distance">jmetal.lab.statistical_test.critical_distance module</a></li>
+<li><a class="reference internal" href="#jmetal-lab-statistical-test-critical-distance-module">jmetal.lab.statistical_test.critical_distance module</a></li>
 <li><a class="reference internal" href="#module-jmetal.lab.statistical_test.functions">jmetal.lab.statistical_test.functions module</a></li>
 <li><a class="reference internal" href="#module-jmetal.lab.statistical_test">Module contents</a></li>
 </ul>
@@ -216,7 +218,7 @@ comparisons are considered, else all vs all.</p>
 <li><p><strong>rope_limits</strong> – array_like. Default [-0.01, 0.01]. Limits of the practical equivalence.</p></li>
 <li><p><strong>prior_strength</strong> – positive float. Default 0.5. Value of the prior strengt</p></li>
 <li><p><strong>prior_place</strong> – string {left, rope, right}. Default ‘left’. Place of the pseudo-observation z_0.</p></li>
-<li><p><strong>sample_size</strong> – integer. Default 10000. Total number of random samples generated</p></li>
+<li><p><strong>sample_size</strong> – integer. Default 10000. Total number of random_search samples generated</p></li>
 <li><p><strong>return_sample</strong> – boolean. Default False. If true, also return the samples drawn from the Dirichlet process.</p></li>
 </ul>
 </dd>
@@ -240,7 +242,7 @@ Pr(algorithm_1 &gt; algorithm_2)]</p>
 <li><p><strong>rope_limits</strong> – array_like. Default [-0.01, 0.01]. Limits of the practical equivalence.</p></li>
 <li><p><strong>prior_strength</strong> – positive float. Default 0.5. Value of the prior strengt</p></li>
 <li><p><strong>prior_place</strong> – string {left, rope, right}. Default ‘left’. Place of the pseudo-observation z_0.</p></li>
-<li><p><strong>sample_size</strong> – integer. Default 10000. Total number of random samples generated</p></li>
+<li><p><strong>sample_size</strong> – integer. Default 10000. Total number of random_search samples generated</p></li>
 <li><p><strong>return_sample</strong> – boolean. Default False. If true, also return the samples drawn from the Dirichlet process.</p></li>
 </ul>
 </dd>
@@ -252,29 +254,8 @@ Pr(algorithm_1 &gt; algorithm_2)]</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-jmetal.lab.statistical_test.critical_distance">
-<span id="jmetal-lab-statistical-test-critical-distance-module"></span><h2>jmetal.lab.statistical_test.critical_distance module<a class="headerlink" href="#module-jmetal.lab.statistical_test.critical_distance" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="jmetal.lab.statistical_test.critical_distance.CDplot">
-<code class="sig-prename descclassname">jmetal.lab.statistical_test.critical_distance.</code><code class="sig-name descname">CDplot</code><span class="sig-paren">(</span><em class="sig-param">results</em>, <em class="sig-param">alpha: float = 0.05</em>, <em class="sig-param">higher_is_better: bool = False</em>, <em class="sig-param">alg_names: list = None</em>, <em class="sig-param">output_filename: str = 'cdplot.eps'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/critical_distance.html#CDplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.critical_distance.CDplot" title="Permalink to this definition">¶</a></dt>
-<dd><p>CDgraph plots the critical difference graph show in Janez Demsar’s 2006 work:
-* Statistical Comparisons of Classifiers over Multiple Data Sets.
-:param results: A 2-D array containing results from each algorithm. Each row of ‘results’ represents an algorithm, and each column a dataset.
-:param alpha: {0.1, 0.999}. Significance level for the critical difference.
-:param alg_names: Names of the tested algorithms.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="jmetal.lab.statistical_test.critical_distance.NemenyiCD">
-<code class="sig-prename descclassname">jmetal.lab.statistical_test.critical_distance.</code><code class="sig-name descname">NemenyiCD</code><span class="sig-paren">(</span><em class="sig-param">alpha: float</em>, <em class="sig-param">num_alg</em>, <em class="sig-param">num_dataset</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/statistical_test/critical_distance.html#NemenyiCD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.statistical_test.critical_distance.NemenyiCD" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes Nemenyi’s critical difference:
-* CD = q_alpha * sqrt(num_alg*(num_alg + 1)/(6*num_prob))
-where q_alpha is the critical value, of the Studentized range statistic divided by sqrt(2).
-:param alpha: {0.1, 0.999}. Significance level.
-:param num_alg: number of tested algorithms.
-:param num_dataset: Number of problems/datasets where the algorithms have been tested.</p>
-</dd></dl>
-
+<div class="section" id="jmetal-lab-statistical-test-critical-distance-module">
+<h2>jmetal.lab.statistical_test.critical_distance module<a class="headerlink" href="#jmetal-lab-statistical-test-critical-distance-module" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-jmetal.lab.statistical_test.functions">
 <span id="jmetal-lab-statistical-test-functions-module"></span><h2>jmetal.lab.statistical_test.functions module<a class="headerlink" href="#module-jmetal.lab.statistical_test.functions" title="Permalink to this headline">¶</a></h2>
@@ -491,7 +472,7 @@ there is a difference between X and Y.</p>
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li> 
       </ul>
     </div>
 <script type="text/javascript">

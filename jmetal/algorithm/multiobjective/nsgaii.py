@@ -1,8 +1,11 @@
 import time
 from typing import TypeVar, List, Generator
 
-import dask
-from distributed import as_completed, Client
+try:
+    import dask
+    from distributed import as_completed, Client
+except ImportError:
+    pass
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store

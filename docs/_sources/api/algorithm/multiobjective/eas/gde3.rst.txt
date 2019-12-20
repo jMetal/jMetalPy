@@ -11,7 +11,7 @@ Standard
 
     from jmetal.algorithm.multiobjective.gde3 import GDE3
     from jmetal.problem import ZDT1
-    from jmetal.util.solutions import read_solutions
+    from jmetal.util.solution import read_solutions
     from jmetal.util.termination_criterion import StoppingByEvaluations
 
     problem = ZDT1()
@@ -53,7 +53,7 @@ Dynamic
         termination_criterion=StoppingByEvaluations(max=500)
     )
 
-    algorithm.observable.register(observer=PlotFrontToFileObserver('front_vis'))
+    algorithm.observable.register(observer=PlotFrontToFileObserver('front_plot'))
     algorithm.observable.register(observer=WriteFrontToFileObserver('front_files'))
 
     algorithm.run()

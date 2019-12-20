@@ -1,0 +1,421 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>NSGA-II &#8212; jMetalPy 1.5.3 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../../../../index.html" class="text-logo">jMetalPy</a>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../operators.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Contents</h2>
+    <div class="sidebar-localtoc">
+      <ul>
+<li><a class="reference internal" href="#">NSGA-II</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#standard">Standard</a></li>
+<li><a class="reference internal" href="#distributed">Distributed</a></li>
+<li><a class="reference internal" href="#dynamic">Dynamic</a></li>
+<li><a class="reference internal" href="#preference-point-based-gnsga-ii">Preference point-based (gNSGA-II)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-jmetal.algorithm.multiobjective.nsgaii">API</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../../../index.html">Docs</a></li>
+              
+              <li>NSGA-II</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="nsga-ii">
+<h1>NSGA-II<a class="headerlink" href="#nsga-ii" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="standard">
+<h3>Standard<a class="headerlink" href="#standard" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jmetal.algorithm.multiobjective.nsgaii</span> <span class="kn">import</span> <span class="n">NSGAII</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="kn">import</span> <span class="n">SBXCrossover</span><span class="p">,</span> <span class="n">PolynomialMutation</span>
+<span class="kn">from</span> <span class="nn">jmetal.problem</span> <span class="kn">import</span> <span class="n">ZDT1</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.solution</span> <span class="kn">import</span> <span class="n">read_solutions</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">StoppingByEvaluations</span>
+
+<span class="n">problem</span> <span class="o">=</span> <span class="n">ZDT1</span><span class="p">()</span>
+<span class="n">problem</span><span class="o">.</span><span class="n">reference_front</span> <span class="o">=</span> <span class="n">read_solutions</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;resources/reference_front/ZDT1.pf&#39;</span><span class="p">)</span>
+
+<span class="n">max_evaluations</span> <span class="o">=</span> <span class="mi">25000</span>
+<span class="n">algorithm</span> <span class="o">=</span> <span class="n">NSGAII</span><span class="p">(</span>
+    <span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">,</span>
+    <span class="n">population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">offspring_population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">mutation</span><span class="o">=</span><span class="n">PolynomialMutation</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">problem</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">,</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+    <span class="n">crossover</span><span class="o">=</span><span class="n">SBXCrossover</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+    <span class="n">termination_criterion</span><span class="o">=</span><span class="n">StoppingByEvaluations</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="n">max_evaluations</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="n">front</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="distributed">
+<h3>Distributed<a class="headerlink" href="#distributed" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This requires some extra dependencies</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">LocalCluster</span>
+
+<span class="kn">from</span> <span class="nn">examples.multiobjective.parallel.zdt1_modified</span> <span class="kn">import</span> <span class="n">ZDT1Modified</span>
+<span class="kn">from</span> <span class="nn">jmetal.algorithm.multiobjective.nsgaii</span> <span class="kn">import</span> <span class="n">DistributedNSGAII</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="kn">import</span> <span class="n">PolynomialMutation</span><span class="p">,</span> <span class="n">SBXCrossover</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">StoppingByEvaluations</span>
+
+<span class="n">problem</span> <span class="o">=</span> <span class="n">ZDT1Modified</span><span class="p">()</span>
+
+<span class="c1"># setup Dask client</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">LocalCluster</span><span class="p">(</span><span class="n">n_workers</span><span class="o">=</span><span class="mi">24</span><span class="p">))</span>
+
+<span class="n">ncores</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">ncores</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;{ncores} cores available&#39;</span><span class="p">)</span>
+
+<span class="c1"># creates the algorithm</span>
+<span class="n">max_evaluations</span> <span class="o">=</span> <span class="mi">25000</span>
+
+<span class="n">algorithm</span> <span class="o">=</span> <span class="n">DistributedNSGAII</span><span class="p">(</span>
+    <span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">,</span>
+    <span class="n">population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">mutation</span><span class="o">=</span><span class="n">PolynomialMutation</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">problem</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">,</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+    <span class="n">crossover</span><span class="o">=</span><span class="n">SBXCrossover</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+    <span class="n">termination_criterion</span><span class="o">=</span><span class="n">StoppingByEvaluations</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="n">max_evaluations</span><span class="p">),</span>
+    <span class="n">number_of_cores</span><span class="o">=</span><span class="n">ncores</span><span class="p">,</span>
+    <span class="n">client</span><span class="o">=</span><span class="n">client</span>
+<span class="p">)</span>
+
+<span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="n">front</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dynamic">
+<h3>Dynamic<a class="headerlink" href="#dynamic" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jmetal.algorithm.multiobjective.nsgaii</span> <span class="kn">import</span> <span class="n">DynamicNSGAII</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="kn">import</span> <span class="n">PolynomialMutation</span><span class="p">,</span> <span class="n">SBXCrossover</span>
+<span class="kn">from</span> <span class="nn">jmetal.problem.multiobjective.fda</span> <span class="kn">import</span> <span class="n">FDA2</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.observable</span> <span class="kn">import</span> <span class="n">TimeCounter</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.observer</span> <span class="kn">import</span> <span class="n">PlotFrontToFileObserver</span><span class="p">,</span> <span class="n">WriteFrontToFileObserver</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">StoppingByEvaluations</span>
+
+<span class="n">problem</span> <span class="o">=</span> <span class="n">FDA2</span><span class="p">()</span>
+
+<span class="n">time_counter</span> <span class="o">=</span> <span class="n">TimeCounter</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">time_counter</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">problem</span><span class="p">)</span>
+<span class="n">time_counter</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="n">max_evaluations</span> <span class="o">=</span> <span class="mi">25000</span>
+<span class="n">algorithm</span> <span class="o">=</span> <span class="n">DynamicNSGAII</span><span class="p">(</span>
+    <span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">,</span>
+    <span class="n">population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">offspring_population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">mutation</span><span class="o">=</span><span class="n">PolynomialMutation</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">problem</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">,</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+    <span class="n">crossover</span><span class="o">=</span><span class="n">SBXCrossover</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+    <span class="n">termination_criterion</span><span class="o">=</span><span class="n">StoppingByEvaluations</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="n">max_evaluations</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">algorithm</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">observer</span><span class="o">=</span><span class="n">PlotFrontToFileObserver</span><span class="p">(</span><span class="s1">&#39;front_vis&#39;</span><span class="p">))</span>
+<span class="n">algorithm</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">observer</span><span class="o">=</span><span class="n">WriteFrontToFileObserver</span><span class="p">(</span><span class="s1">&#39;front_files&#39;</span><span class="p">))</span>
+
+<span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="preference-point-based-gnsga-ii">
+<h3>Preference point-based (gNSGA-II)<a class="headerlink" href="#preference-point-based-gnsga-ii" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jmetal.algorithm.multiobjective.nsgaii</span> <span class="kn">import</span> <span class="n">NSGAII</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="kn">import</span> <span class="n">SBXCrossover</span><span class="p">,</span> <span class="n">PolynomialMutation</span>
+<span class="kn">from</span> <span class="nn">jmetal.problem</span> <span class="kn">import</span> <span class="n">ZDT2</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.solutions</span> <span class="kn">import</span> <span class="n">read_solutions</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.solutions.comparator</span> <span class="kn">import</span> <span class="n">GDominanceComparator</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">StoppingByEvaluations</span>
+
+<span class="n">problem</span> <span class="o">=</span> <span class="n">ZDT2</span><span class="p">()</span>
+<span class="n">problem</span><span class="o">.</span><span class="n">reference_front</span> <span class="o">=</span> <span class="n">read_solutions</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;resources/reference_front/ZDT2.pf&#39;</span><span class="p">)</span>
+
+<span class="n">reference_point</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+
+<span class="n">max_evaluations</span> <span class="o">=</span> <span class="mi">25000</span>
+<span class="n">algorithm</span> <span class="o">=</span> <span class="n">NSGAII</span><span class="p">(</span>
+    <span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">,</span>
+    <span class="n">population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">offspring_population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">mutation</span><span class="o">=</span><span class="n">PolynomialMutation</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">problem</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">,</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+    <span class="n">crossover</span><span class="o">=</span><span class="n">SBXCrossover</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+    <span class="n">dominance_comparator</span><span class="o">=</span><span class="n">GDominanceComparator</span><span class="p">(</span><span class="n">reference_point</span><span class="p">),</span>
+    <span class="n">termination_criterion</span><span class="o">=</span><span class="n">StoppingByEvaluations</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="n">max_evaluations</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="n">front</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="module-jmetal.algorithm.multiobjective.nsgaii">
+<span id="api"></span><h2>API<a class="headerlink" href="#module-jmetal.algorithm.multiobjective.nsgaii" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaii.</code><code class="sig-name descname">DistributedNSGAII</code><span class="sig-paren">(</span><em class="sig-param">problem: jmetal.core.problem.Problem</em>, <em class="sig-param">population_size: int</em>, <em class="sig-param">mutation: jmetal.core.operator.Mutation</em>, <em class="sig-param">crossover: jmetal.core.operator.Crossover</em>, <em class="sig-param">number_of_cores: int</em>, <em class="sig-param">client: distributed.client.Client</em>, <em class="sig-param">selection: jmetal.core.operator.Selection = &lt;jmetal.operator.selection.BinaryTournamentSelection object&gt;</em>, <em class="sig-param">termination_criterion: jmetal.util.termination_criterion.TerminationCriterion = &lt;jmetal.util.termination_criterion.StoppingByEvaluations object&gt;</em>, <em class="sig-param">dominance_comparator: jmetal.util.comparator.DominanceComparator = &lt;jmetal.util.comparator.DominanceComparator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.algorithm.Algorithm</span></code></p>
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.create_initial_solutions">
+<code class="sig-name descname">create_initial_solutions</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[S]<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.create_initial_solutions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.create_initial_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the initial list of solutions of a metaheuristic.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solutions: List[S]</em><span class="sig-paren">)</span> &#x2192; List[S]<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates a solution list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_observable_data">
+<code class="sig-name descname">get_observable_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.get_observable_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_observable_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get observable data, with the information that will be send to all observers each time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_result">
+<code class="sig-name descname">get_result</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; R<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.get_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.init_progress">
+<code class="sig-name descname">init_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.init_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.init_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the algorithm.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the algorithm.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.step">
+<code class="sig-name descname">step</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs one iteration/step of the algorithm’s loop.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.stopping_condition_is_met">
+<code class="sig-name descname">stopping_condition_is_met</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.stopping_condition_is_met"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.stopping_condition_is_met" title="Permalink to this definition">¶</a></dt>
+<dd><p>The stopping condition is met or not.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.update_progress">
+<code class="sig-name descname">update_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.update_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.update_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the progress after each iteration.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaii.</code><code class="sig-name descname">DynamicNSGAII</code><span class="sig-paren">(</span><em class="sig-param">problem: jmetal.core.problem.DynamicProblem[~S][S], population_size: int, offspring_population_size: int, mutation: jmetal.core.operator.Mutation, crossover: jmetal.core.operator.Crossover, selection: jmetal.core.operator.Selection = &lt;jmetal.operator.selection.BinaryTournamentSelection object&gt;, termination_criterion: jmetal.util.termination_criterion.TerminationCriterion = &lt;jmetal.util.termination_criterion.StoppingByEvaluations object&gt;, population_generator: Generator = &lt;jmetal.util.generator.RandomGenerator object&gt;, population_evaluator: jmetal.util.evaluator.Evaluator = &lt;jmetal.util.evaluator.SequentialEvaluator object&gt;, dominance_comparator: jmetal.util.comparator.DominanceComparator = &lt;jmetal.util.comparator.DominanceComparator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DynamicNSGAII"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.algorithm.multiobjective.nsgaii.NSGAII" title="jmetal.algorithm.multiobjective.nsgaii.NSGAII"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.algorithm.multiobjective.nsgaii.NSGAII</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.algorithm.DynamicAlgorithm</span></code></p>
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII.restart">
+<code class="sig-name descname">restart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DynamicNSGAII.restart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII.restart" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII.stopping_condition_is_met">
+<code class="sig-name descname">stopping_condition_is_met</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DynamicNSGAII.stopping_condition_is_met"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII.stopping_condition_is_met" title="Permalink to this definition">¶</a></dt>
+<dd><p>The stopping condition is met or not.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII.update_progress">
+<code class="sig-name descname">update_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DynamicNSGAII.update_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII.update_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the progress after each iteration.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.NSGAII">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaii.</code><code class="sig-name descname">NSGAII</code><span class="sig-paren">(</span><em class="sig-param">problem: jmetal.core.problem.Problem</em>, <em class="sig-param">population_size: int</em>, <em class="sig-param">offspring_population_size: int</em>, <em class="sig-param">mutation: jmetal.core.operator.Mutation</em>, <em class="sig-param">crossover: jmetal.core.operator.Crossover</em>, <em class="sig-param">selection: jmetal.core.operator.Selection = &lt;jmetal.operator.selection.BinaryTournamentSelection object&gt;</em>, <em class="sig-param">termination_criterion: jmetal.util.termination_criterion.TerminationCriterion = &lt;jmetal.util.termination_criterion.StoppingByEvaluations object&gt;</em>, <em class="sig-param">population_generator: Generator = &lt;jmetal.util.generator.RandomGenerator object&gt;</em>, <em class="sig-param">population_evaluator: jmetal.util.evaluator.Evaluator = &lt;jmetal.util.evaluator.SequentialEvaluator object&gt;</em>, <em class="sig-param">dominance_comparator: jmetal.util.comparator.Comparator = &lt;jmetal.util.comparator.DominanceComparator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#NSGAII"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.NSGAII" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../singleobjective/genetic.algorithm.html#jmetal.algorithm.singleobjective.genetic_algorithm.GeneticAlgorithm" title="jmetal.algorithm.singleobjective.genetic_algorithm.GeneticAlgorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.algorithm.singleobjective.genetic_algorithm.GeneticAlgorithm</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.NSGAII.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#NSGAII.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.NSGAII.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.NSGAII.get_result">
+<code class="sig-name descname">get_result</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; R<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#NSGAII.get_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.NSGAII.get_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.NSGAII.replacement">
+<code class="sig-name descname">replacement</code><span class="sig-paren">(</span><em class="sig-param">population: List[S], offspring_population: List[S]</em><span class="sig-paren">)</span> &#x2192; List[List[S]]<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#NSGAII.replacement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.NSGAII.replacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method joins the current and offspring populations to produce the population of the next generation
+by applying the ranking and crowding distance selection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>population</strong> – Parent population.</p></li>
+<li><p><strong>offspring_population</strong> – Offspring population.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>New population after ranking and crowding distance selection is applied.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="data">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.R">
+<code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaii.</code><code class="sig-name descname">R</code><em class="property"> = ~R</em><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.R" title="Permalink to this definition">¶</a></dt>
+<dd><span class="target" id="module-NSGA-II"></span></dd></dl>
+
+<dl class="function">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.reproduction">
+<code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaii.</code><code class="sig-name descname">reproduction</code><span class="sig-paren">(</span><em class="sig-param">mating_population: List[S], problem, crossover_operator, mutation_operator</em><span class="sig-paren">)</span> &#x2192; S<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#reproduction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.reproduction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

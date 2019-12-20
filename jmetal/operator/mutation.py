@@ -141,7 +141,7 @@ class SimpleRandomMutation(Mutation[FloatSolution]):
         return solution
 
     def get_name(self):
-        return 'Simple random mutation'
+        return 'Simple random_search mutation'
 
 
 class UniformMutation(Mutation[FloatSolution]):

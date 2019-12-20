@@ -13,7 +13,7 @@
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>jmetal.algorithm.multiobjective.gde3 &#8212; jMetalPy 1.5.1 documentation</title>
+    <title>jmetal.algorithm.multiobjective.gde3 &#8212; jMetalPy 1.5.3 documentation</title>
     <link rel="stylesheet" href="../../../../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
@@ -22,7 +22,9 @@
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="author" title="About these documents" href="../../../../about.html" />
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
@@ -39,7 +41,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -110,9 +112,9 @@
 <span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="k">import</span> <span class="n">FloatSolution</span>
 <span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="k">import</span> <span class="n">DifferentialEvolutionCrossover</span><span class="p">,</span> <span class="n">RankingAndCrowdingDistanceSelection</span>
 <span class="kn">from</span> <span class="nn">jmetal.operator.selection</span> <span class="k">import</span> <span class="n">DifferentialEvolutionSelection</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.archive</span> <span class="k">import</span> <span class="n">NonDominatedSolutionListArchive</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.solutions</span> <span class="k">import</span> <span class="n">Evaluator</span><span class="p">,</span> <span class="n">Generator</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.solutions.comparator</span> <span class="k">import</span> <span class="n">Comparator</span><span class="p">,</span> <span class="n">DominanceComparator</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.comparator</span> <span class="k">import</span> <span class="n">Comparator</span><span class="p">,</span> <span class="n">DominanceComparator</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.evaluator</span> <span class="k">import</span> <span class="n">Evaluator</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.generator</span> <span class="k">import</span> <span class="n">Generator</span>
 <span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="k">import</span> <span class="n">TerminationCriterion</span>
 
 <span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
@@ -197,12 +199,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">termination_criterion</span><span class="o">.</span><span class="n">is_met</span></div>
 
 <div class="viewcode-block" id="GDE3.get_result"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3.html#jmetal.algorithm.multiobjective.gde3.GDE3.get_result">[docs]</a>    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
-        <span class="n">archive</span> <span class="o">=</span> <span class="n">NonDominatedSolutionListArchive</span><span class="p">()</span>
-
-        <span class="k">for</span> <span class="n">solution</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">:</span>
-            <span class="n">archive</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">archive</span><span class="o">.</span><span class="n">solution_list</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span></div>
 
 <div class="viewcode-block" id="GDE3.get_name"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3.html#jmetal.algorithm.multiobjective.gde3.GDE3.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s1">&#39;GDE3&#39;</span></div></div>
@@ -264,7 +261,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

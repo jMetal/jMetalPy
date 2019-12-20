@@ -13,7 +13,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Selection &#8212; jMetalPy 1.5.1 documentation</title>
+    <title>Selection &#8212; jMetalPy 1.5.3 documentation</title>
     <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
@@ -22,7 +22,9 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -47,7 +49,7 @@
         <li class="right" >
           <a href="mutation.html" title="Mutation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../operators.html" accesskey="U">Operators</a> &#187;</li> 
       </ul>
     </div>
@@ -134,7 +136,7 @@
 
 <dl class="class">
 <dt id="jmetal.operator.selection.BinaryTournament2Selection">
-<em class="property">class </em><code class="sig-prename descclassname">jmetal.operator.selection.</code><code class="sig-name descname">BinaryTournament2Selection</code><span class="sig-paren">(</span><em class="sig-param">comparator_list: List[jmetal.util.solutions.comparator.Comparator]</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/selection.html#BinaryTournament2Selection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.selection.BinaryTournament2Selection" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.operator.selection.</code><code class="sig-name descname">BinaryTournament2Selection</code><span class="sig-paren">(</span><em class="sig-param">comparator_list: List[jmetal.util.comparator.Comparator]</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/selection.html#BinaryTournament2Selection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.selection.BinaryTournament2Selection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.operator.Selection</span></code></p>
 <dl class="method">
 <dt id="jmetal.operator.selection.BinaryTournament2Selection.execute">
@@ -150,7 +152,7 @@
 
 <dl class="class">
 <dt id="jmetal.operator.selection.BinaryTournamentSelection">
-<em class="property">class </em><code class="sig-prename descclassname">jmetal.operator.selection.</code><code class="sig-name descname">BinaryTournamentSelection</code><span class="sig-paren">(</span><em class="sig-param">comparator: jmetal.util.solutions.comparator.Comparator = &lt;jmetal.util.solutions.comparator.DominanceComparator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/selection.html#BinaryTournamentSelection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.selection.BinaryTournamentSelection" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.operator.selection.</code><code class="sig-name descname">BinaryTournamentSelection</code><span class="sig-paren">(</span><em class="sig-param">comparator: jmetal.util.comparator.Comparator = &lt;jmetal.util.comparator.DominanceComparator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/selection.html#BinaryTournamentSelection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.selection.BinaryTournamentSelection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.operator.Selection</span></code></p>
 <dl class="method">
 <dt id="jmetal.operator.selection.BinaryTournamentSelection.execute">
@@ -219,7 +221,7 @@
 
 <dl class="class">
 <dt id="jmetal.operator.selection.RankingAndCrowdingDistanceSelection">
-<em class="property">class </em><code class="sig-prename descclassname">jmetal.operator.selection.</code><code class="sig-name descname">RankingAndCrowdingDistanceSelection</code><span class="sig-paren">(</span><em class="sig-param">max_population_size: int</em>, <em class="sig-param">dominance_comparator: jmetal.util.solutions.comparator.Comparator = &lt;jmetal.util.solutions.comparator.DominanceComparator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/selection.html#RankingAndCrowdingDistanceSelection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.selection.RankingAndCrowdingDistanceSelection" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.operator.selection.</code><code class="sig-name descname">RankingAndCrowdingDistanceSelection</code><span class="sig-paren">(</span><em class="sig-param">max_population_size: int</em>, <em class="sig-param">dominance_comparator: jmetal.util.comparator.Comparator = &lt;jmetal.util.comparator.DominanceComparator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/selection.html#RankingAndCrowdingDistanceSelection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.selection.RankingAndCrowdingDistanceSelection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.operator.Selection</span></code></p>
 <dl class="method">
 <dt id="jmetal.operator.selection.RankingAndCrowdingDistanceSelection.execute">
@@ -235,7 +237,7 @@
 
 <dl class="class">
 <dt id="jmetal.operator.selection.RankingAndFitnessSelection">
-<em class="property">class </em><code class="sig-prename descclassname">jmetal.operator.selection.</code><code class="sig-name descname">RankingAndFitnessSelection</code><span class="sig-paren">(</span><em class="sig-param">max_population_size: int</em>, <em class="sig-param">reference_point: S</em>, <em class="sig-param">dominance_comparator: jmetal.util.solutions.comparator.Comparator = &lt;jmetal.util.solutions.comparator.DominanceComparator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/selection.html#RankingAndFitnessSelection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.selection.RankingAndFitnessSelection" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.operator.selection.</code><code class="sig-name descname">RankingAndFitnessSelection</code><span class="sig-paren">(</span><em class="sig-param">max_population_size: int</em>, <em class="sig-param">reference_point: S</em>, <em class="sig-param">dominance_comparator: jmetal.util.comparator.Comparator = &lt;jmetal.util.comparator.DominanceComparator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/selection.html#RankingAndFitnessSelection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.operator.selection.RankingAndFitnessSelection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.operator.Selection</span></code></p>
 <dl class="method">
 <dt id="jmetal.operator.selection.RankingAndFitnessSelection.compute_hypervol_fitness_values">
@@ -316,7 +318,7 @@
         <li class="right" >
           <a href="mutation.html" title="Mutation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../operators.html" >Operators</a> &#187;</li> 
       </ul>
     </div>

@@ -9,7 +9,7 @@ from jmetal.core.observer import Observer
 from jmetal.core.problem import DynamicProblem
 from jmetal.core.quality_indicator import InvertedGenerationalDistance
 from jmetal.lab.visualization import StreamingPlot, Plot
-from jmetal.util.solutions_utils import print_function_values_to_file
+from jmetal.util.solution import print_function_values_to_file
 
 S = TypeVar('S')
 
@@ -33,18 +33,18 @@ class ProgressBarObserver(Observer):
         """
         self.progress_bar = None
         self.progress = 0
-        self.maxx = max
+        self._max = max
 
     def update(self, *args, **kwargs):
         if not self.progress_bar:
-            self.progress_bar = tqdm(total=self.maxx, ascii=True, desc='Progress')
+            self.progress_bar = tqdm(total=self._max, ascii=True, desc='Progress')
 
         evaluations = kwargs['EVALUATIONS']
 
         self.progress_bar.update(evaluations - self.progress)
         self.progress = evaluations
 
-        if self.progress >= self.maxx:
+        if self.progress >= self._max:
             self.progress_bar.close()
 
 

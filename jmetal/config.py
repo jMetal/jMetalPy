@@ -1,12 +1,13 @@
 from jmetal.operator import PolynomialMutation, BitFlipMutation
-from jmetal.util.evaluator import SequentialEvaluator
-from jmetal.util.observable import DefaultObservable
 from jmetal.util.comparator import DominanceComparator
-from jmetal.util.solutionsgenerator import RandomGenerator
+from jmetal.util.evaluator import SequentialEvaluator
+from jmetal.util.generator import RandomGenerator
+from jmetal.util.observable import DefaultObservable
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 
 class _Store:
+
     @property
     def default_observable(self):
         return DefaultObservable()

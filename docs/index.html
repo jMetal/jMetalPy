@@ -13,7 +13,7 @@
   <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>jMetalPy: Python version of the jMetal framework &#8212; jMetalPy 1.5.1 documentation</title>
+    <title>jMetalPy: Python version of the jMetal framework &#8212; jMetalPy 1.5.3 documentation</title>
     <link rel="stylesheet" href="_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css" />
@@ -22,7 +22,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -43,7 +45,7 @@
         <li class="right" >
           <a href="tutorials.html" title="Getting started"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">jMetalPy 1.5.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">jMetalPy 1.5.3 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -132,7 +134,7 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><strong>Target</strong></p></td>
-<td><p>v1.5.1</p></td>
+<td><p>v1.5.3</p></td>
 </tr>
 </tbody>
 </table>
@@ -153,19 +155,19 @@
 <div class="section" id="installation-steps">
 <h2>Installation steps<a class="headerlink" href="#installation-steps" title="Permalink to this headline">¶</a></h2>
 <p>Via pip:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install jmetalpy
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install <span class="s2">&quot;jmetalpy[core]&quot;</span>  <span class="c1"># Install core components of the framework</span>
+<span class="gp">$</span> pip install <span class="s2">&quot;jmetalpy[complete]&quot;</span>  <span class="c1"># Install dependencies for distributed computing</span>
 </pre></div>
 </div>
 <p>Via source code:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone https://github.com/jMetal/jMetalPy.git
-<span class="gp">$</span> pip install -r requirements.txt
 <span class="gp">$</span> python setup.py install
 </pre></div>
 </div>
 </div>
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
-<p>The current release of jMetalPy (v1.5.1) contains the following components:</p>
+<p>The current release of jMetalPy (v1.5.3) contains the following components:</p>
 <ul class="simple">
 <li><p>Algorithms: local search, genetic algorithm, evolution strategy, simulated annealing, random search, NSGA-II, NSGA-III, SMPSO, OMOPSO, MOEA/D, MOEA/D-DRA, MOEA/D-IEpsilon, GDE3, SPEA2, HYPE, IBEA. Preference articulation-based algorithms (G-NSGA-II, G-GDE3, G-SPEA2, SMPSO/RP); Dynamic versions of NSGA-II, SMPSO, and GDE3.</p></li>
 <li><p>Parallel computing based on Apache Spark and Dask.</p></li>
@@ -222,7 +224,7 @@
         <li class="right" >
           <a href="tutorials.html" title="Getting started"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">jMetalPy 1.5.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">jMetalPy 1.5.3 documentation</a> &#187;</li> 
       </ul>
     </div>
 <script type="text/javascript">
