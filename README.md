@@ -8,13 +8,13 @@
 
 A paper introducing jMetalPy is available at: https://doi.org/10.1016/j.swevo.2019.100598
 
-#### Table of Contents
+### Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
 - [Features](#features)
 - [License](#license)
 
-### Installation
+## Installation
 
 You can install the latest version of jMetalPy with `pip`, 
 
@@ -50,7 +50,7 @@ pip install "jmetalpy[complete]"  # Install all requirements
 </p>
 </details>
 
-### Hello, world! 👋
+## Hello, world! 👋
 
 Examples of configuring and running all the included algorithms are located [in the documentation](https://jmetal.github.io/jMetalPy/multiobjective.algorithms.html).
 
@@ -87,7 +87,7 @@ print_function_values_to_file(front, 'FUN.NSGAII.ZDT1')
 print_variables_to_file(front, 'VAR.NSGAII.ZDT1')
 ```
 
-### Features
+## Features
 The current release of jMetalPy (v1.5.3) contains the following components:
 
 * Algorithms: local search, genetic algorithm, evolution strategy, simulated annealing, random search, NSGA-II, NSGA-III, SMPSO, OMOPSO, MOEA/D, MOEA/D-DRA, MOEA/D-IEpsilon, GDE3, SPEA2, HYPE, IBEA. Preference articulation-based algorithms (G-NSGA-II, G-GDE3, G-SPEA2, SMPSO/RP); Dynamic versions of NSGA-II, SMPSO, and GDE3.
@@ -113,5 +113,5 @@ The current release of jMetalPy (v1.5.3) contains the following components:
   <br/>
 </p>
 
-### License
+## License
 This project is licensed under the terms of the MIT - see the [LICENSE](LICENSE) file for details.
