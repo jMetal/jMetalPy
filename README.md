@@ -1,8 +1,4 @@
-<p align="center">
-
-  ![jMetalPy](source/jmetalpy.png) <!-- .element height="50%" width="50%" -->
-
-</p>
+![jMetalPy](source/jmetalpy.png)
 
 [![Build Status](https://img.shields.io/travis/jMetal/jMetalPy/master.svg?style=flat-square)](https://travis-ci.org/jMetal/jMetalPy)
 [![Documentation](https://img.shields.io/badge/docs-online-success?style=flat-square)](https://jmetal.github.io/jMetalPy/index.html)
