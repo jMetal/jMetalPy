@@ -3,8 +3,8 @@ Evaluate solutions
 
 The lifecycle of metaheuristics often requires to evaluate list of solutions on every iteration. In evolutionary algorithms, for example, this list of solutions is known as *population*.
 
-In order to evaluate a population, NSGA-II (and in general, any generational algorithms in jMetalPy) use an evaluator object.
-The default evaluator runs in a sequential fashion:
+In order to evaluate a population, NSGA-II (and in general, any generational algorithms in jMetalPy) uses an evaluator object.
+The default evaluator runs in a sequential fashion (i.e., one solution at a time):
 
 .. code-block:: python
 

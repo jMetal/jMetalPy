@@ -136,8 +136,8 @@
   <div class="section" id="evaluate-solutions">
 <h1>Evaluate solutions<a class="headerlink" href="#evaluate-solutions" title="Permalink to this headline">¶</a></h1>
 <p>The lifecycle of metaheuristics often requires to evaluate list of solutions on every iteration. In evolutionary algorithms, for example, this list of solutions is known as <em>population</em>.</p>
-<p>In order to evaluate a population, NSGA-II (and in general, any generational algorithms in jMetalPy) use an evaluator object.
-The default evaluator runs in a sequential fashion:</p>
+<p>In order to evaluate a population, NSGA-II (and in general, any generational algorithms in jMetalPy) uses an evaluator object.
+The default evaluator runs in a sequential fashion (i.e., one solution at a time):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jmetal.util.evaluator</span> <span class="kn">import</span> <span class="n">SequentialEvaluator</span>
 
 <span class="n">algorithm</span> <span class="o">=</span> <span class="n">NSGAII</span><span class="p">(</span>

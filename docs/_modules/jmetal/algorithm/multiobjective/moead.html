@@ -259,7 +259,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span></div></div>
 
 
-<div class="viewcode-block" id="MOEAD_DRA"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD_DRA">[docs]</a><span class="k">class</span> <span class="nc">MOEAD_DRA</span><span class="p">(</span><span class="n">MOEAD</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">MOEAD_DRA</span><span class="p">(</span><span class="n">MOEAD</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">population_size</span><span class="p">,</span> <span class="n">mutation</span><span class="p">,</span> <span class="n">crossover</span><span class="p">,</span> <span class="n">aggregative_function</span><span class="p">,</span>
                  <span class="n">neighbourhood_selection_probability</span><span class="p">,</span> <span class="n">max_number_of_replaced_solutions</span><span class="p">,</span> <span class="n">neighbor_size</span><span class="p">,</span>
                  <span class="n">weight_files_path</span><span class="p">,</span> <span class="n">termination_criterion</span><span class="o">=</span><span class="n">store</span><span class="o">.</span><span class="n">default_termination_criteria</span><span class="p">,</span>
@@ -278,7 +278,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_order_index</span> <span class="o">=</span> <span class="mi">0</span>
 
-<div class="viewcode-block" id="MOEAD_DRA.init_progress"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD_DRA.init_progress">[docs]</a>    <span class="k">def</span> <span class="nf">init_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">init_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">init_progress</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">saved_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span> <span class="k">for</span> <span class="n">solution</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">]</span>
 
@@ -290,9 +290,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">current_order_index</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="n">observable_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_observable_data</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">notify_all</span><span class="p">(</span><span class="o">**</span><span class="n">observable_data</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">notify_all</span><span class="p">(</span><span class="o">**</span><span class="n">observable_data</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MOEAD_DRA.update_progress"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD_DRA.update_progress">[docs]</a>    <span class="k">def</span> <span class="nf">update_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update_progress</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">current_order_index</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -302,9 +302,9 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">generation_counter</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation_counter</span> <span class="o">%</span> <span class="mi">30</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__utility_function</span><span class="p">()</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__utility_function</span><span class="p">()</span>
 
-<div class="viewcode-block" id="MOEAD_DRA.selection"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD_DRA.selection">[docs]</a>    <span class="k">def</span> <span class="nf">selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="nf">selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_subproblem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_order_index</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_order_index</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_subproblem</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -319,10 +319,10 @@
 
         <span class="n">mating_population</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">population</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_subproblem</span><span class="p">])</span>
 
-        <span class="k">return</span> <span class="n">mating_population</span></div>
+        <span class="k">return</span> <span class="n">mating_population</span>
 
-<div class="viewcode-block" id="MOEAD_DRA.get_name"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD_DRA.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;MOEAD-DRA&#39;</span></div>
+    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;MOEAD-DRA&#39;</span>
 
     <span class="k">def</span> <span class="nf">__utility_function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">)):</span>
@@ -353,10 +353,10 @@
             <span class="n">selected</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best_sub</span><span class="p">)</span>
             <span class="k">del</span> <span class="n">candidate</span><span class="p">[</span><span class="n">best_idd</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">selected</span></div>
+        <span class="k">return</span> <span class="n">selected</span>
 
 
-<div class="viewcode-block" id="MOEADIEpsilon"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEADIEpsilon">[docs]</a><span class="k">class</span> <span class="nc">MOEADIEpsilon</span><span class="p">(</span><span class="n">MOEAD</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">MOEADIEpsilon</span><span class="p">(</span><span class="n">MOEAD</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">problem</span><span class="p">:</span> <span class="n">Problem</span><span class="p">,</span>
                  <span class="n">population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -399,7 +399,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">generation_counter</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">archive</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="MOEADIEpsilon.init_progress"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEADIEpsilon.init_progress">[docs]</a>    <span class="k">def</span> <span class="nf">init_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">init_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">init_progress</span><span class="p">()</span>
 
         <span class="c1"># for i in range(self.population_size):</span>
@@ -414,9 +414,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">phi_max</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">rk</span> <span class="o">=</span> <span class="n">feasibility_ratio</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_zero</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_zero</span>
 
-<div class="viewcode-block" id="MOEADIEpsilon.update_progress"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEADIEpsilon.update_progress">[docs]</a>    <span class="k">def</span> <span class="nf">update_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">update_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update_progress</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -429,9 +429,9 @@
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rk</span> <span class="o">&lt;</span> <span class="mf">0.95</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_k</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">tao</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_k</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi_max</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tao</span><span class="p">)</span></div>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi_max</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tao</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MOEADIEpsilon.update_current_subproblem_neighborhood"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEADIEpsilon.update_current_subproblem_neighborhood">[docs]</a>    <span class="k">def</span> <span class="nf">update_current_subproblem_neighborhood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_solution</span><span class="p">,</span> <span class="n">population</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update_current_subproblem_neighborhood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_solution</span><span class="p">,</span> <span class="n">population</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi_max</span> <span class="o">&lt;</span> <span class="n">overall_constraint_violation_degree</span><span class="p">(</span><span class="n">new_solution</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">phi_max</span> <span class="o">=</span> <span class="n">overall_constraint_violation_degree</span><span class="p">(</span><span class="n">new_solution</span><span class="p">)</span>
 
@@ -462,9 +462,9 @@
             <span class="k">if</span> <span class="n">replacements</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_number_of_replaced_solutions</span><span class="p">:</span>
                 <span class="k">break</span>
 
-        <span class="k">return</span> <span class="n">population</span></div>
+        <span class="k">return</span> <span class="n">population</span>
 
-<div class="viewcode-block" id="MOEADIEpsilon.update_external_archive"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEADIEpsilon.update_external_archive">[docs]</a>    <span class="k">def</span> <span class="nf">update_external_archive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update_external_archive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">feasible_solutions</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">solution</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">is_feasible</span><span class="p">(</span><span class="n">solution</span><span class="p">):</span>
@@ -490,20 +490,20 @@
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">archive</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">solution</span> <span class="ow">in</span> <span class="n">first_rank_solutions</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">archive</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">solution</span><span class="p">))</span></div>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">archive</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">solution</span><span class="p">))</span>
 
-<div class="viewcode-block" id="MOEADIEpsilon.get_result"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEADIEpsilon.get_result">[docs]</a>    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">archive</span></div></div>
+    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">archive</span>
 
 
-<div class="viewcode-block" id="Permutation"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.Permutation">[docs]</a><span class="k">class</span> <span class="nc">Permutation</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">Permutation</span><span class="p">:</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="n">length</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">permutation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Permutation.get_next_value"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.Permutation.get_next_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_next_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_next_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">next_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">permutation</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
 
@@ -511,10 +511,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">permutation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">return</span> <span class="n">next_value</span></div>
+        <span class="k">return</span> <span class="n">next_value</span>
 
-<div class="viewcode-block" id="Permutation.get_permutation"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.Permutation.get_permutation">[docs]</a>    <span class="k">def</span> <span class="nf">get_permutation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">permutation</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span></div></div>
+    <span class="k">def</span> <span class="nf">get_permutation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">permutation</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 </pre></div>
 
           </div>

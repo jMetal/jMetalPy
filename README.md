@@ -55,7 +55,7 @@ pip install "jmetalpy[complete]"  # Install all requirements
 Examples of configuring and running all the included algorithms are located [in the documentation](https://jmetal.github.io/jMetalPy/multiobjective.algorithms.html).
 
 ```python
-from jmetal.algorithm import NSGAII
+from jmetal.algorithm.multiobjective import NSGAII
 from jmetal.operator import SBXCrossover, PolynomialMutation
 from jmetal.problem import ZDT1
 from jmetal.util.termination_criterion import StoppingByEvaluations

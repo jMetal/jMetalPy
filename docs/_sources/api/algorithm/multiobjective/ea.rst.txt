@@ -2,7 +2,7 @@ Evolutionary Algorithms
 =======================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
    :caption: Multi-objective evolutionary algorithms:
 
    eas/gde3

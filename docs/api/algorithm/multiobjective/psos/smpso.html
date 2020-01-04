@@ -164,7 +164,7 @@
 <span class="n">algorithm</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">observer</span><span class="o">=</span><span class="n">ProgressBarObserver</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="n">max_evaluations</span><span class="p">))</span>
 
 <span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-<span class="n">front</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
+<span class="n">solutions</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -193,7 +193,7 @@
     <span class="n">termination_criterion</span><span class="o">=</span><span class="n">StoppingByEvaluations</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="n">max_evaluations</span><span class="p">)</span>
 <span class="p">)</span>
 
-<span class="n">algorithm</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">observer</span><span class="o">=</span><span class="n">PlotFrontToFileObserver</span><span class="p">(</span><span class="s1">&#39;front_vis&#39;</span><span class="p">))</span>
+<span class="n">algorithm</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">observer</span><span class="o">=</span><span class="n">PlotFrontToFileObserver</span><span class="p">(</span><span class="s1">&#39;front_plot&#39;</span><span class="p">))</span>
 <span class="n">algorithm</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">observer</span><span class="o">=</span><span class="n">WriteFrontToFileObserver</span><span class="p">(</span><span class="s1">&#39;front_files&#39;</span><span class="p">))</span>
 
 <span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
@@ -206,11 +206,9 @@
 <span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="kn">import</span> <span class="n">PolynomialMutation</span>
 <span class="kn">from</span> <span class="nn">jmetal.problem</span> <span class="kn">import</span> <span class="n">ZDT4</span>
 <span class="kn">from</span> <span class="nn">jmetal.util.archive</span> <span class="kn">import</span> <span class="n">CrowdingDistanceArchiveWithReferencePoint</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.solution</span> <span class="kn">import</span> <span class="n">read_solutions</span>
 <span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">StoppingByEvaluations</span>
 
 <span class="n">problem</span> <span class="o">=</span> <span class="n">ZDT4</span><span class="p">()</span>
-<span class="n">problem</span><span class="o">.</span><span class="n">reference_front</span> <span class="o">=</span> <span class="n">read_solutions</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;resources/reference_front/ZDT4.pf&#39;</span><span class="p">)</span>
 
 <span class="n">swarm_size</span> <span class="o">=</span> <span class="mi">100</span>
 
@@ -233,7 +231,7 @@
 <span class="p">)</span>
 
 <span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-<span class="n">front</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
+<span class="n">solutions</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>

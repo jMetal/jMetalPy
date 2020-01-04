@@ -1,0 +1,427 @@
+{
+ "cells": [
+  {
+   "cell_type": "raw",
+   "metadata": {
+    "raw_mimetype": "text/restructuredtext"
+   },
+   "source": [
+    ".. _nb_dnsgaii:"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Distributed NSGA-II"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Example"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "pycharm": {
+     "is_executing": false,
+     "name": "#%%\n"
+    },
+    "tags": [
+     "hide_input"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "from math import sqrt\n",
+    "\n",
+    "from jmetal.core.problem import FloatProblem\n",
+    "from jmetal.core.solution import FloatSolution\n",
+    "\n",
+    "\n",
+    "class ZDT1Modified(FloatProblem):\n",
+    "\n",
+    "    def __init__(self, number_of_variables: int=30):\n",
+    "        \"\"\" :param number_of_variables: Number of decision variables of the problem.\n",
+    "        \"\"\"\n",
+    "        super(ZDT1Modified, self).__init__()\n",
+    "        self.number_of_variables = number_of_variables\n",
+    "        self.number_of_objectives = 2\n",
+    "        self.number_of_constraints = 0\n",
+    "\n",
+    "        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]\n",
+    "        self.obj_labels = ['f(x)', 'f(y)']\n",
+    "\n",
+    "        self.lower_bound = self.number_of_variables * [0.0]\n",
+    "        self.upper_bound = self.number_of_variables * [1.0]\n",
+    "\n",
+    "    def evaluate(self, solution: FloatSolution) -> FloatSolution:\n",
+    "        g = self.__eval_g(solution)\n",
+    "        h = self.__eval_h(solution.variables[0], g)\n",
+    "\n",
+    "        solution.objectives[0] = solution.variables[0]\n",
+    "        solution.objectives[1] = h * g\n",
+    "\n",
+    "        s: float = 0.0\n",
+    "        for i in range(1000):\n",
+    "            for j in range(1000):\n",
+    "                s += i * 0.235 / 1.234 + 1.23525 * j\n",
+    "\n",
+    "        return solution\n",
+    "\n",
+    "    def __eval_g(self, solution: FloatSolution):\n",
+    "        g = sum(solution.variables) - solution.variables[0]\n",
+    "\n",
+    "        constant = 9.0 / (solution.number_of_variables - 1)\n",
+    "        g = constant * g\n",
+    "        g = g + 1.0\n",
+    "\n",
+    "        return g\n",
+    "\n",
+    "    def __eval_h(self, f: float, g: float) -> float:\n",
+    "        return 1.0 - sqrt(f / g)\n",
+    "\n",
+    "    def get_name(self):\n",
+    "        return 'ZDT1'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "pycharm": {
+     "is_executing": false,
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "24 cores available\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "tornado.application - ERROR - Exception in callback <bound method Nanny.memory_monitor of <Nanny: tcp://127.0.0.1:57588, threads: 1>>\n",
+      "Traceback (most recent call last):\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_common.py\", line 342, in wrapper\n",
+      "    ret = self._cache[fun]\n",
+      "AttributeError: 'Process' object has no attribute '_cache'\n",
+      "\n",
+      "During handling of the above exception, another exception occurred:\n",
+      "\n",
+      "Traceback (most recent call last):\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_common.py\", line 342, in wrapper\n",
+      "    ret = self._cache[fun]\n",
+      "AttributeError: _cache\n",
+      "\n",
+      "During handling of the above exception, another exception occurred:\n",
+      "\n",
+      "Traceback (most recent call last):\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py\", line 359, in catch_zombie\n",
+      "    yield\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py\", line 400, in _get_pidtaskinfo\n",
+      "    ret = cext.proc_pidtaskinfo_oneshot(self.pid)\n",
+      "ProcessLookupError: [Errno 3] No such process\n",
+      "\n",
+      "During handling of the above exception, another exception occurred:\n",
+      "\n",
+      "Traceback (most recent call last):\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/ioloop.py\", line 907, in _run\n",
+      "    return self.callback()\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/distributed/nanny.py\", line 314, in memory_monitor\n",
+      "    memory = proc.memory_info().rss\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_common.py\", line 345, in wrapper\n",
+      "    return fun(self)\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/__init__.py\", line 1170, in memory_info\n",
+      "    return self._proc.memory_info()\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py\", line 339, in wrapper\n",
+      "    return fun(self, *args, **kwargs)\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py\", line 469, in memory_info\n",
+      "    rawtuple = self._get_pidtaskinfo()\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py\", line 339, in wrapper\n",
+      "    return fun(self, *args, **kwargs)\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_common.py\", line 345, in wrapper\n",
+      "    return fun(self)\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py\", line 400, in _get_pidtaskinfo\n",
+      "    ret = cext.proc_pidtaskinfo_oneshot(self.pid)\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/contextlib.py\", line 130, in __exit__\n",
+      "    self.gen.throw(type, value, traceback)\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py\", line 372, in catch_zombie\n",
+      "    raise AccessDenied(proc.pid, proc._name)\n",
+      "psutil.AccessDenied: psutil.AccessDenied (pid=26563)\n",
+      "tornado.application - ERROR - Exception in callback <bound method Nanny.memory_monitor of <Nanny: tcp://127.0.0.1:57599, threads: 1>>\n",
+      "Traceback (most recent call last):\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_common.py\", line 342, in wrapper\n",
+      "    ret = self._cache[fun]\n",
+      "AttributeError: 'Process' object has no attribute '_cache'\n",
+      "\n",
+      "During handling of the above exception, another exception occurred:\n",
+      "\n",
+      "Traceback (most recent call last):\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_common.py\", line 342, in wrapper\n",
+      "    ret = self._cache[fun]\n",
+      "AttributeError: _cache\n",
+      "\n",
+      "During handling of the above exception, another exception occurred:\n",
+      "\n",
+      "Traceback (most recent call last):\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py\", line 359, in catch_zombie\n",
+      "    yield\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py\", line 400, in _get_pidtaskinfo\n",
+      "    ret = cext.proc_pidtaskinfo_oneshot(self.pid)\n",
+      "ProcessLookupError: [Errno 3] No such process\n",
+      "\n",
+      "During handling of the above exception, another exception occurred:\n",
+      "\n",
+      "Traceback (most recent call last):\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/ioloop.py\", line 907, in _run\n",
+      "    return self.callback()\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/distributed/nanny.py\", line 314, in memory_monitor\n",
+      "    memory = proc.memory_info().rss\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_common.py\", line 345, in wrapper\n",
+      "    return fun(self)\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/__init__.py\", line 1170, in memory_info\n",
+      "    return self._proc.memory_info()\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py\", line 339, in wrapper\n",
+      "    return fun(self, *args, **kwargs)\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py\", line 469, in memory_info\n",
+      "    rawtuple = self._get_pidtaskinfo()\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py\", line 339, in wrapper\n",
+      "    return fun(self, *args, **kwargs)\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_common.py\", line 345, in wrapper\n",
+      "    return fun(self)\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py\", line 400, in _get_pidtaskinfo\n",
+      "    ret = cext.proc_pidtaskinfo_oneshot(self.pid)\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/contextlib.py\", line 130, in __exit__\n",
+      "    self.gen.throw(type, value, traceback)\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py\", line 372, in catch_zombie\n",
+      "    raise AccessDenied(proc.pid, proc._name)\n",
+      "psutil.AccessDenied: psutil.AccessDenied (pid=26569)\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.nanny - WARNING - Restarting worker\n",
+      "distributed.client - WARNING - Couldn't gather 1 keys, rescheduling {'reproduction-9a853710788cfb057e3d5f405be3095d': ()}\n",
+      "distributed.client - WARNING - Couldn't gather 1 keys, rescheduling {'reproduction-5326bec5f73885fd92959290231588cb': ()}\n",
+      "distributed.client - WARNING - Couldn't gather 1 keys, rescheduling {'reproduction-b0713937618f4740d5d1aea65f447e18': ()}\n",
+      "tornado.application - ERROR - Exception in callback functools.partial(<bound method IOLoop._discard_future_result of <zmq.eventloop.ioloop.ZMQIOLoop object at 0x819bfda20>>, <Future finished exception=KilledWorker('reproduction-9a853710788cfb057e3d5f405be3095d', <Worker 'tcp://127.0.0.1:57612', memory: 0, processing: 5>)>)\n",
+      "Traceback (most recent call last):\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/ioloop.py\", line 743, in _run_callback\n",
+      "    ret = callback()\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/ioloop.py\", line 767, in _discard_future_result\n",
+      "    future.result()\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py\", line 736, in run\n",
+      "    yielded = self.gen.throw(*exc_info)  # type: ignore\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/distributed/client.py\", line 4142, in _track_future\n",
+      "    result = yield future._result(raiseit=False)\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py\", line 729, in run\n",
+      "    value = future.result()\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py\", line 736, in run\n",
+      "    yielded = self.gen.throw(*exc_info)  # type: ignore\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/distributed/client.py\", line 249, in _result\n",
+      "    result = yield self.client._gather([self])\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py\", line 729, in run\n",
+      "    value = future.result()\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py\", line 736, in run\n",
+      "    yielded = self.gen.throw(*exc_info)  # type: ignore\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/distributed/client.py\", line 1653, in _gather\n",
+      "    six.reraise(type(exception), exception, traceback)\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/six.py\", line 693, in reraise\n",
+      "    raise value\n",
+      "distributed.scheduler.KilledWorker: ('reproduction-9a853710788cfb057e3d5f405be3095d', <Worker 'tcp://127.0.0.1:57612', memory: 0, processing: 5>)\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "tornado.application - ERROR - Exception in callback functools.partial(<bound method IOLoop._discard_future_result of <zmq.eventloop.ioloop.ZMQIOLoop object at 0x819bfda20>>, <Future finished exception=KilledWorker('reproduction-b0713937618f4740d5d1aea65f447e18', <Worker 'tcp://127.0.0.1:57618', memory: 0, processing: 3>)>)\n",
+      "Traceback (most recent call last):\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/ioloop.py\", line 743, in _run_callback\n",
+      "    ret = callback()\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/ioloop.py\", line 767, in _discard_future_result\n",
+      "    future.result()\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py\", line 736, in run\n",
+      "    yielded = self.gen.throw(*exc_info)  # type: ignore\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/distributed/client.py\", line 4142, in _track_future\n",
+      "    result = yield future._result(raiseit=False)\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py\", line 729, in run\n",
+      "    value = future.result()\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py\", line 736, in run\n",
+      "    yielded = self.gen.throw(*exc_info)  # type: ignore\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/distributed/client.py\", line 249, in _result\n",
+      "    result = yield self.client._gather([self])\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py\", line 729, in run\n",
+      "    value = future.result()\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py\", line 736, in run\n",
+      "    yielded = self.gen.throw(*exc_info)  # type: ignore\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/distributed/client.py\", line 1653, in _gather\n",
+      "    six.reraise(type(exception), exception, traceback)\n",
+      "  File \"/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/six.py\", line 693, in reraise\n",
+      "    raise value\n",
+      "distributed.scheduler.KilledWorker: ('reproduction-b0713937618f4740d5d1aea65f447e18', <Worker 'tcp://127.0.0.1:57618', memory: 0, processing: 3>)\n"
+     ]
+    },
+    {
+     "ename": "KeyboardInterrupt",
+     "evalue": "",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mKeyboardInterrupt\u001b[0m                         Traceback (most recent call last)",
+      "\u001b[0;32m<ipython-input-2-63356297d8df>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[1;32m     29\u001b[0m )\n\u001b[1;32m     30\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 31\u001b[0;31m \u001b[0malgorithm\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mrun\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     32\u001b[0m \u001b[0mfront\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0malgorithm\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mget_result\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m~/Documents/jMetalPy/jmetal/algorithm/multiobjective/nsgaii.py\u001b[0m in \u001b[0;36mrun\u001b[0;34m(self)\u001b[0m\n\u001b[1;32m    265\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    266\u001b[0m                 \u001b[0mr\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mRankingAndDensityEstimatorReplacement\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mranking\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mdensity_estimator\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mRemovalPolicyType\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mONE_SHOT\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 267\u001b[0;31m                 \u001b[0mauxiliar_population\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mr\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mreplace\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mauxiliar_population\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0moffspring_population\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    268\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    269\u001b[0m                 \u001b[0;31m# selection\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m~/Documents/jMetalPy/jmetal/util/replacement.py\u001b[0m in \u001b[0;36mreplace\u001b[0;34m(self, solution_list, offspring_list)\u001b[0m\n\u001b[1;32m     24\u001b[0m         \u001b[0mjoin_population\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0msolution_list\u001b[0m \u001b[0;34m+\u001b[0m \u001b[0moffspring_list\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     25\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 26\u001b[0;31m         \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mranking\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcompute_ranking\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mjoin_population\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     27\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mremoval_policy\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0mRemovalPolicyType\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mSEQUENTIAL\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     28\u001b[0m             \u001b[0mresult_list\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0msequential_truncation\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;36m0\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mlen\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0msolution_list\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m~/Documents/jMetalPy/jmetal/util/ranking.py\u001b[0m in \u001b[0;36mcompute_ranking\u001b[0;34m(self, solutions, k)\u001b[0m\n\u001b[1;32m     58\u001b[0m         \u001b[0;32mfor\u001b[0m \u001b[0mp\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mrange\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mlen\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0msolutions\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m-\u001b[0m \u001b[0;36m1\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     59\u001b[0m             \u001b[0;32mfor\u001b[0m \u001b[0mq\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mrange\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mp\u001b[0m \u001b[0;34m+\u001b[0m \u001b[0;36m1\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mlen\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0msolutions\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 60\u001b[0;31m                 \u001b[0mdominance_test_result\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcomparator\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcompare\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0msolutions\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mp\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0msolutions\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mq\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     61\u001b[0m                 \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mnumber_of_comparisons\u001b[0m \u001b[0;34m+=\u001b[0m \u001b[0;36m1\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     62\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m~/Documents/jMetalPy/jmetal/util/comparator.py\u001b[0m in \u001b[0;36mcompare\u001b[0;34m(self, solution1, solution2)\u001b[0m\n\u001b[1;32m    160\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mresult\u001b[0m \u001b[0;34m==\u001b[0m \u001b[0;36m0\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    161\u001b[0m             \u001b[0;31m# result = self.__dominance_test(solution1, solution2)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 162\u001b[0;31m             \u001b[0mresult\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdominance_test\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0msolution1\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mobjectives\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0msolution2\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mobjectives\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    163\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    164\u001b[0m         \u001b[0;32mreturn\u001b[0m \u001b[0mresult\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m~/Documents/jMetalPy/jmetal/util/comparator.py\u001b[0m in \u001b[0;36mdominance_test\u001b[0;34m(vector1, vector2)\u001b[0m\n\u001b[1;32m    190\u001b[0m         \u001b[0mresult\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;36m0\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    191\u001b[0m         \u001b[0;32mfor\u001b[0m \u001b[0mi\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mrange\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mlen\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mvector1\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 192\u001b[0;31m             \u001b[0;32mif\u001b[0m \u001b[0mvector1\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mi\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m>\u001b[0m \u001b[0mvector2\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mi\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    193\u001b[0m                 \u001b[0;32mif\u001b[0m \u001b[0mresult\u001b[0m \u001b[0;34m==\u001b[0m \u001b[0;34m-\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    194\u001b[0m                     \u001b[0;32mreturn\u001b[0m \u001b[0;36m0\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;31mKeyboardInterrupt\u001b[0m: "
+     ]
+    }
+   ],
+   "source": [
+    "from dask.distributed import Client\n",
+    "from distributed import LocalCluster\n",
+    "\n",
+    "from jmetal.algorithm.multiobjective.nsgaii import DistributedNSGAII\n",
+    "from jmetal.operator import PolynomialMutation, SBXCrossover\n",
+    "from jmetal.util.termination_criterion import StoppingByEvaluations\n",
+    "\n",
+    "# ZDT1 version including a loop for increasing the computing time \n",
+    "#  of the evaluation functions\n",
+    "problem = ZDT1Modified()\n",
+    "\n",
+    "# setup Dask client\n",
+    "client = Client(LocalCluster(n_workers=24))\n",
+    "\n",
+    "ncores = sum(client.ncores().values())\n",
+    "print(f'{ncores} cores available')\n",
+    "\n",
+    "# creates the algorithm\n",
+    "max_evaluations = 25000\n",
+    "\n",
+    "algorithm = DistributedNSGAII(\n",
+    "    problem=problem,\n",
+    "    population_size=100,\n",
+    "    mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),\n",
+    "    crossover=SBXCrossover(probability=1.0, distribution_index=20),\n",
+    "    termination_criterion=StoppingByEvaluations(max=max_evaluations),\n",
+    "    number_of_cores=ncores,\n",
+    "    client=client\n",
+    ")\n",
+    "\n",
+    "algorithm.run()\n",
+    "solutions = algorithm.get_result()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can now visualize the Pareto front approximation:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "from jmetal.lab.visualization.plotting import Plot\n",
+    "from jmetal.util.solution import get_non_dominated_solutions\n",
+    "\n",
+    "front = get_non_dominated_solutions(solutions)\n",
+    "    \n",
+    "plot_front = Plot(plot_title='Pareto front approximation', axis_labels=['x', 'y'])\n",
+    "plot_front.plot(front, label='Distributed NSGAII-ZDT1')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### API"
+   ]
+  },
+  {
+   "cell_type": "raw",
+   "metadata": {
+    "pycharm": {
+     "is_executing": false,
+     "name": "#%% raw\n"
+    },
+    "raw_mimetype": "text/restructuredtext"
+   },
+   "source": [
+    ".. autoclass:: jmetal.algorithm.multiobjective.nsgaii.dNSGAII\n",
+    "   :members:\n",
+    "   :undoc-members:\n",
+    "   :show-inheritance:\n"
+   ]
+  }
+ ],
+ "metadata": {
+  "celltoolbar": "Tags",
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.3"
+  },
+  "pycharm": {
+   "stem_cell": {
+    "cell_type": "raw",
+    "source": [],
+    "metadata": {
+     "collapsed": false
+    }
+   }
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 1
+}

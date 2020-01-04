@@ -92,12 +92,8 @@
     <div class="sidebar-localtoc">
       <ul>
 <li><a class="reference internal" href="#">MOEA/D</a><ul>
-<li><a class="reference internal" href="#examples">Examples</a><ul>
-<li><a class="reference internal" href="#standard">Standard</a></li>
-<li><a class="reference internal" href="#epsilon-moeadiepsilon">Epsilon (MOEADIEpsilon)</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-jmetal.algorithm.multiobjective.moead">API</a></li>
+<li><a class="reference internal" href="#Example">Example</a></li>
+<li><a class="reference internal" href="#API">API</a></li>
 </ul>
 </li>
 </ul>
@@ -137,21 +133,222 @@
           
           <div class="document clearer body">
             
-  <div class="section" id="moea-d">
-<h1>MOEA/D<a class="headerlink" href="#moea-d" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="standard">
-<h3>Standard<a class="headerlink" href="#standard" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jmetal.algorithm.multiobjective.moead</span> <span class="kn">import</span> <span class="n">MOEAD</span>
-<span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="kn">import</span> <span class="n">PolynomialMutation</span><span class="p">,</span> <span class="n">DifferentialEvolutionCrossover</span>
-<span class="kn">from</span> <span class="nn">jmetal.problem</span> <span class="kn">import</span> <span class="n">LZ09_F2</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.aggregative_function</span> <span class="kn">import</span> <span class="n">Tschebycheff</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.solutions</span> <span class="kn">import</span> <span class="n">read_solutions</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">StoppingByEvaluations</span>
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    min-width: 6ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<div class="section" id="MOEA/D">
+<span id="nb-moead"></span><h1>MOEA/D<a class="headerlink" href="#MOEA/D" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="Example">
+<h2>Example<a class="headerlink" href="#Example" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">jmetal.algorithm.multiobjective.moead</span> <span class="k">import</span> <span class="n">MOEAD</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="k">import</span> <span class="n">PolynomialMutation</span><span class="p">,</span> <span class="n">DifferentialEvolutionCrossover</span>
+<span class="kn">from</span> <span class="nn">jmetal.problem</span> <span class="k">import</span> <span class="n">LZ09_F2</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.aggregative_function</span> <span class="k">import</span> <span class="n">Tschebycheff</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="k">import</span> <span class="n">StoppingByEvaluations</span>
 
 <span class="n">problem</span> <span class="o">=</span> <span class="n">LZ09_F2</span><span class="p">()</span>
-<span class="n">problem</span><span class="o">.</span><span class="n">reference_front</span> <span class="o">=</span> <span class="n">read_solutions</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;resources/reference_front/LZ09_F2.pf&#39;</span><span class="p">)</span>
 
 <span class="n">max_evaluations</span> <span class="o">=</span> <span class="mi">150000</span>
 
@@ -169,45 +366,45 @@
 <span class="p">)</span>
 
 <span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-<span class="n">front</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
+<span class="n">solutions</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="epsilon-moeadiepsilon">
-<h3>Epsilon (MOEADIEpsilon)<a class="headerlink" href="#epsilon-moeadiepsilon" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jmetal.algorithm.multiobjective.moead</span> <span class="kn">import</span> <span class="n">MOEADIEpsilon</span>
-<span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="kn">import</span> <span class="n">PolynomialMutation</span><span class="p">,</span> <span class="n">DifferentialEvolutionCrossover</span>
-<span class="kn">from</span> <span class="nn">jmetal.problem.multiobjective.lircmop</span> <span class="kn">import</span> <span class="n">LIRCMOP2</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.aggregative_function</span> <span class="kn">import</span> <span class="n">Tschebycheff</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.solutions</span> <span class="kn">import</span> <span class="n">read_solutions</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">StoppingByEvaluations</span>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/dask/config.py:161: YAMLLoadWarning: calling yaml.load() without Loader=... is deprecated, as the default Loader is unsafe. Please read https://msg.pyyaml.org/load for full details.
+  data = yaml.load(f.read()) or {}
+</pre></div></div>
+</div>
+<p>We can now visualize the Pareto front approximation:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">jmetal.lab.visualization.plotting</span> <span class="k">import</span> <span class="n">Plot</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.solution</span> <span class="k">import</span> <span class="n">get_non_dominated_solutions</span>
 
-<span class="n">problem</span> <span class="o">=</span> <span class="n">LIRCMOP2</span><span class="p">()</span>
-<span class="n">problem</span><span class="o">.</span><span class="n">reference_front</span> <span class="o">=</span> <span class="n">read_solutions</span><span class="p">(</span><span class="s1">&#39;resources/reference_front/LIRCMOP2.pf&#39;</span><span class="p">)</span>
+<span class="n">front</span> <span class="o">=</span> <span class="n">get_non_dominated_solutions</span><span class="p">(</span><span class="n">solutions</span><span class="p">)</span>
 
-<span class="n">max_evaluations</span> <span class="o">=</span> <span class="mi">300000</span>
-
-<span class="n">algorithm</span> <span class="o">=</span> <span class="n">MOEADIEpsilon</span><span class="p">(</span>
-    <span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">,</span>
-    <span class="n">population_size</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
-    <span class="n">crossover</span><span class="o">=</span><span class="n">DifferentialEvolutionCrossover</span><span class="p">(</span><span class="n">CR</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span>
-    <span class="n">mutation</span><span class="o">=</span><span class="n">PolynomialMutation</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">problem</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">,</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
-    <span class="n">aggregative_function</span><span class="o">=</span><span class="n">Tschebycheff</span><span class="p">(</span><span class="n">dimension</span><span class="o">=</span><span class="n">problem</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">),</span>
-    <span class="n">neighbor_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-    <span class="n">neighbourhood_selection_probability</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
-    <span class="n">max_number_of_replaced_solutions</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="n">weight_files_path</span><span class="o">=</span><span class="s1">&#39;resources/MOEAD_weights&#39;</span><span class="p">,</span>
-    <span class="n">termination_criterion</span><span class="o">=</span><span class="n">StoppingByEvaluations</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="n">max_evaluations</span><span class="p">)</span>
-<span class="p">)</span>
-
-<span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-<span class="n">front</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
+<span class="n">plot_front</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span><span class="n">plot_title</span><span class="o">=</span><span class="s1">&#39;Pareto front approximation&#39;</span><span class="p">,</span> <span class="n">axis_labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span>
+<span class="n">plot_front</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">front</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;MOEAD-LZ09_F2&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
 </div>
-<div class="section" id="module-jmetal.algorithm.multiobjective.moead">
-<span id="api"></span><h2>API<a class="headerlink" href="#module-jmetal.algorithm.multiobjective.moead" title="Permalink to this headline">¶</a></h2>
+<div class="output_area docutils container">
+<img alt="../../../../_images/api_algorithm_multiobjective_eas_moead_5_0.png" src="../../../../_images/api_algorithm_multiobjective_eas_moead_5_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="API">
+<h2>API<a class="headerlink" href="#API" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="jmetal.algorithm.multiobjective.moead.MOEAD">
 <em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.multiobjective.moead.</code><code class="sig-name descname">MOEAD</code><span class="sig-paren">(</span><em class="sig-param">problem: jmetal.core.problem.Problem</em>, <em class="sig-param">population_size: int</em>, <em class="sig-param">mutation: jmetal.core.operator.Mutation</em>, <em class="sig-param">crossover: jmetal.operator.crossover.DifferentialEvolutionCrossover</em>, <em class="sig-param">aggregative_function: jmetal.util.aggregative_function.AggregativeFunction</em>, <em class="sig-param">neighbourhood_selection_probability: float</em>, <em class="sig-param">max_number_of_replaced_solutions: int</em>, <em class="sig-param">neighbor_size: int</em>, <em class="sig-param">weight_files_path: str</em>, <em class="sig-param">termination_criterion: jmetal.util.termination_criterion.TerminationCriterion = &lt;jmetal.util.termination_criterion.StoppingByEvaluations object&gt;</em>, <em class="sig-param">population_generator: Generator = &lt;jmetal.util.generator.RandomGenerator object&gt;</em>, <em class="sig-param">population_evaluator: jmetal.util.evaluator.Evaluator = &lt;jmetal.util.evaluator.SequentialEvaluator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/moead.html#MOEAD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.moead.MOEAD" title="Permalink to this definition">¶</a></dt>
@@ -259,84 +456,6 @@
 <dl class="method">
 <dt id="jmetal.algorithm.multiobjective.moead.MOEAD.update_current_subproblem_neighborhood">
 <code class="sig-name descname">update_current_subproblem_neighborhood</code><span class="sig-paren">(</span><em class="sig-param">new_solution</em>, <em class="sig-param">population</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/moead.html#MOEAD.update_current_subproblem_neighborhood"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.moead.MOEAD.update_current_subproblem_neighborhood" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="jmetal.algorithm.multiobjective.moead.MOEADIEpsilon">
-<em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.multiobjective.moead.</code><code class="sig-name descname">MOEADIEpsilon</code><span class="sig-paren">(</span><em class="sig-param">problem: jmetal.core.problem.Problem</em>, <em class="sig-param">population_size: int</em>, <em class="sig-param">mutation: jmetal.core.operator.Mutation</em>, <em class="sig-param">crossover: jmetal.operator.crossover.DifferentialEvolutionCrossover</em>, <em class="sig-param">aggregative_function: jmetal.util.aggregative_function.AggregativeFunction</em>, <em class="sig-param">neighbourhood_selection_probability: float</em>, <em class="sig-param">max_number_of_replaced_solutions: int</em>, <em class="sig-param">neighbor_size: int</em>, <em class="sig-param">weight_files_path: str</em>, <em class="sig-param">termination_criterion: jmetal.util.termination_criterion.TerminationCriterion = &lt;jmetal.util.termination_criterion.StoppingByEvaluations object&gt;</em>, <em class="sig-param">population_generator: Generator = &lt;jmetal.util.generator.RandomGenerator object&gt;</em>, <em class="sig-param">population_evaluator: jmetal.util.evaluator.Evaluator = &lt;jmetal.util.evaluator.SequentialEvaluator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/moead.html#MOEADIEpsilon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.moead.MOEADIEpsilon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#jmetal.algorithm.multiobjective.moead.MOEAD" title="jmetal.algorithm.multiobjective.moead.MOEAD"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.algorithm.multiobjective.moead.MOEAD</span></code></a></p>
-<dl class="method">
-<dt id="jmetal.algorithm.multiobjective.moead.MOEADIEpsilon.get_result">
-<code class="sig-name descname">get_result</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/moead.html#MOEADIEpsilon.get_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.moead.MOEADIEpsilon.get_result" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="jmetal.algorithm.multiobjective.moead.MOEADIEpsilon.init_progress">
-<code class="sig-name descname">init_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/moead.html#MOEADIEpsilon.init_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.moead.MOEADIEpsilon.init_progress" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize the algorithm.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="jmetal.algorithm.multiobjective.moead.MOEADIEpsilon.update_current_subproblem_neighborhood">
-<code class="sig-name descname">update_current_subproblem_neighborhood</code><span class="sig-paren">(</span><em class="sig-param">new_solution</em>, <em class="sig-param">population</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/moead.html#MOEADIEpsilon.update_current_subproblem_neighborhood"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.moead.MOEADIEpsilon.update_current_subproblem_neighborhood" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="jmetal.algorithm.multiobjective.moead.MOEADIEpsilon.update_external_archive">
-<code class="sig-name descname">update_external_archive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/moead.html#MOEADIEpsilon.update_external_archive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.moead.MOEADIEpsilon.update_external_archive" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="jmetal.algorithm.multiobjective.moead.MOEADIEpsilon.update_progress">
-<code class="sig-name descname">update_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/moead.html#MOEADIEpsilon.update_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.moead.MOEADIEpsilon.update_progress" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update the progress after each iteration.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="jmetal.algorithm.multiobjective.moead.MOEAD_DRA">
-<em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.multiobjective.moead.</code><code class="sig-name descname">MOEAD_DRA</code><span class="sig-paren">(</span><em class="sig-param">problem</em>, <em class="sig-param">population_size</em>, <em class="sig-param">mutation</em>, <em class="sig-param">crossover</em>, <em class="sig-param">aggregative_function</em>, <em class="sig-param">neighbourhood_selection_probability</em>, <em class="sig-param">max_number_of_replaced_solutions</em>, <em class="sig-param">neighbor_size</em>, <em class="sig-param">weight_files_path</em>, <em class="sig-param">termination_criterion=&lt;jmetal.util.termination_criterion.StoppingByEvaluations object&gt;</em>, <em class="sig-param">population_generator=&lt;jmetal.util.generator.RandomGenerator object&gt;</em>, <em class="sig-param">population_evaluator=&lt;jmetal.util.evaluator.SequentialEvaluator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/moead.html#MOEAD_DRA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.moead.MOEAD_DRA" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#jmetal.algorithm.multiobjective.moead.MOEAD" title="jmetal.algorithm.multiobjective.moead.MOEAD"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.algorithm.multiobjective.moead.MOEAD</span></code></a></p>
-<dl class="method">
-<dt id="jmetal.algorithm.multiobjective.moead.MOEAD_DRA.get_name">
-<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/moead.html#MOEAD_DRA.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.moead.MOEAD_DRA.get_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="jmetal.algorithm.multiobjective.moead.MOEAD_DRA.init_progress">
-<code class="sig-name descname">init_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/moead.html#MOEAD_DRA.init_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.moead.MOEAD_DRA.init_progress" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize the algorithm.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="jmetal.algorithm.multiobjective.moead.MOEAD_DRA.selection">
-<code class="sig-name descname">selection</code><span class="sig-paren">(</span><em class="sig-param">population: List[S]</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/moead.html#MOEAD_DRA.selection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.moead.MOEAD_DRA.selection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Select the best-fit individuals for reproduction (parents).</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="jmetal.algorithm.multiobjective.moead.MOEAD_DRA.update_progress">
-<code class="sig-name descname">update_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/moead.html#MOEAD_DRA.update_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.moead.MOEAD_DRA.update_progress" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update the progress after each iteration.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="jmetal.algorithm.multiobjective.moead.Permutation">
-<em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.multiobjective.moead.</code><code class="sig-name descname">Permutation</code><span class="sig-paren">(</span><em class="sig-param">length: int</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/moead.html#Permutation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.moead.Permutation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="method">
-<dt id="jmetal.algorithm.multiobjective.moead.Permutation.get_next_value">
-<code class="sig-name descname">get_next_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/moead.html#Permutation.get_next_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.moead.Permutation.get_next_value" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="jmetal.algorithm.multiobjective.moead.Permutation.get_permutation">
-<code class="sig-name descname">get_permutation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/moead.html#Permutation.get_permutation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.moead.Permutation.get_permutation" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

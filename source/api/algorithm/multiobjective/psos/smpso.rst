@@ -29,7 +29,7 @@ Standard
     algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
 
     algorithm.run()
-    front = algorithm.get_result()
+    solutions = algorithm.get_result()
 
 
 Dynamic
@@ -60,7 +60,7 @@ Dynamic
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
-    algorithm.observable.register(observer=PlotFrontToFileObserver('front_vis'))
+    algorithm.observable.register(observer=PlotFrontToFileObserver('front_plot'))
     algorithm.observable.register(observer=WriteFrontToFileObserver('front_files'))
 
     algorithm.run()
@@ -74,11 +74,9 @@ Reference-point based (SMPSO/RP)
     from jmetal.operator import PolynomialMutation
     from jmetal.problem import ZDT4
     from jmetal.util.archive import CrowdingDistanceArchiveWithReferencePoint
-    from jmetal.util.solution import read_solutions
     from jmetal.util.termination_criterion import StoppingByEvaluations
 
     problem = ZDT4()
-    problem.reference_front = read_solutions(filename='resources/reference_front/ZDT4.pf')
 
     swarm_size = 100
 
@@ -101,7 +99,7 @@ Reference-point based (SMPSO/RP)
     )
 
     algorithm.run()
-    front = algorithm.get_result()
+    solutions = algorithm.get_result()
 
 
 API

@@ -205,7 +205,7 @@
         <span class="k">return</span> <span class="s1">&#39;GDE3&#39;</span></div></div>
 
 
-<div class="viewcode-block" id="DynamicGDE3"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3.html#jmetal.algorithm.multiobjective.gde3.DynamicGDE3">[docs]</a><span class="k">class</span> <span class="nc">DynamicGDE3</span><span class="p">(</span><span class="n">GDE3</span><span class="p">,</span> <span class="n">DynamicAlgorithm</span><span class="p">):</span>
+<div class="viewcode-block" id="DynamicGDE3"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3_dynamic.html#jmetal.algorithm.multiobjective.gde3.DynamicGDE3">[docs]</a><span class="k">class</span> <span class="nc">DynamicGDE3</span><span class="p">(</span><span class="n">GDE3</span><span class="p">,</span> <span class="n">DynamicAlgorithm</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">problem</span><span class="p">:</span> <span class="n">DynamicProblem</span><span class="p">,</span>
@@ -223,10 +223,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">completed_iterations</span> <span class="o">=</span> <span class="mi">0</span>
 
-<div class="viewcode-block" id="DynamicGDE3.restart"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3.html#jmetal.algorithm.multiobjective.gde3.DynamicGDE3.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="DynamicGDE3.restart"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3_dynamic.html#jmetal.algorithm.multiobjective.gde3.DynamicGDE3.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="DynamicGDE3.update_progress"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3.html#jmetal.algorithm.multiobjective.gde3.DynamicGDE3.update_progress">[docs]</a>    <span class="k">def</span> <span class="nf">update_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DynamicGDE3.update_progress"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3_dynamic.html#jmetal.algorithm.multiobjective.gde3.DynamicGDE3.update_progress">[docs]</a>    <span class="k">def</span> <span class="nf">update_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">the_problem_has_changed</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">clear_changed</span><span class="p">()</span>
@@ -236,7 +236,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">offspring_population_size</span></div>
 
-<div class="viewcode-block" id="DynamicGDE3.stopping_condition_is_met"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3.html#jmetal.algorithm.multiobjective.gde3.DynamicGDE3.stopping_condition_is_met">[docs]</a>    <span class="k">def</span> <span class="nf">stopping_condition_is_met</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DynamicGDE3.stopping_condition_is_met"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3_dynamic.html#jmetal.algorithm.multiobjective.gde3.DynamicGDE3.stopping_condition_is_met">[docs]</a>    <span class="k">def</span> <span class="nf">stopping_condition_is_met</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">termination_criterion</span><span class="o">.</span><span class="n">is_met</span><span class="p">:</span>
             <span class="n">observable_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_observable_data</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">notify_all</span><span class="p">(</span><span class="o">**</span><span class="n">observable_data</span><span class="p">)</span>

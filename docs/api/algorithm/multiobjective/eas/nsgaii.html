@@ -337,7 +337,7 @@ div.rendered_html tbody tr:hover {
 <span id="nb-nsgaii"></span><h1>NSGA-II<a class="headerlink" href="#NSGA-II" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="Example">
 <h2>Example<a class="headerlink" href="#Example" title="Permalink to this headline">¶</a></h2>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
@@ -350,6 +350,7 @@ div.rendered_html tbody tr:hover {
 <span class="n">problem</span> <span class="o">=</span> <span class="n">ZDT1</span><span class="p">()</span>
 
 <span class="n">max_evaluations</span> <span class="o">=</span> <span class="mi">25000</span>
+
 <span class="n">algorithm</span> <span class="o">=</span> <span class="n">NSGAII</span><span class="p">(</span>
     <span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">,</span>
     <span class="n">population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
@@ -360,9 +361,18 @@ div.rendered_html tbody tr:hover {
 <span class="p">)</span>
 
 <span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-<span class="n">front</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
+<span class="n">solutions</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/dask/config.py:161: YAMLLoadWarning: calling yaml.load() without Loader=... is deprecated, as the default Loader is unsafe. Please read https://msg.pyyaml.org/load for full details.
+  data = yaml.load(f.read()) or {}
+</pre></div></div>
 </div>
 <p>We can now visualize the Pareto front approximation:</p>
 <div class="nbinput docutils container">
@@ -371,6 +381,9 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">jmetal.lab.visualization.plotting</span> <span class="k">import</span> <span class="n">Plot</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.solution</span> <span class="k">import</span> <span class="n">get_non_dominated_solutions</span>
+
+<span class="n">front</span> <span class="o">=</span> <span class="n">get_non_dominated_solutions</span><span class="p">(</span><span class="n">solutions</span><span class="p">)</span>
 
 <span class="n">plot_front</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span><span class="n">plot_title</span><span class="o">=</span><span class="s1">&#39;Pareto front approximation&#39;</span><span class="p">,</span> <span class="n">axis_labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span>
 <span class="n">plot_front</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">front</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;NSGAII-ZDT1&#39;</span><span class="p">)</span>
