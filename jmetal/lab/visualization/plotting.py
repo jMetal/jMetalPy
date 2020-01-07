@@ -14,17 +14,17 @@ S = TypeVar('S')
 class Plot:
 
     def __init__(self,
-                 plot_title: str = 'Pareto front approximation',
+                 title: str = 'Pareto front approximation',
                  reference_front: List[S] = None,
                  reference_point: list = None,
                  axis_labels: list = None):
         """
-        :param plot_title: Title of the graph.
+        :param title: Title of the graph.
         :param axis_labels: List of axis labels.
         :param reference_point: Reference point (e.g., [0.4, 1.2]).
         :param reference_front: Reference Pareto front (if any) as solutions.
         """
-        self.plot_title = plot_title
+        self.plot_title = title
         self.axis_labels = axis_labels
 
         if reference_point and not isinstance(reference_point[0], list):
@@ -115,7 +115,7 @@ class Plot:
             plt.savefig(filename + '.' + format, format=format, dpi=200)
 
         plt.show()
-        plt.close(fig)
+        plt.close(fig=fig)
 
     def three_dim(self, fronts: List[list], labels: List[str] = None, filename: str = None, format: str = 'eps'):
         """ Plot any arbitrary number of fronts in 3D.
@@ -155,7 +155,7 @@ class Plot:
             plt.savefig(filename + '.' + format, format=format, dpi=1000)
 
         plt.show()
-        plt.close(fig)
+        plt.close(fig=fig)
 
     def pcoords(self, fronts: List[list], normalize: bool = False, filename: str = None, format: str = 'eps'):
         """ Plot any arbitrary number of fronts in parallel coordinates.
@@ -185,4 +185,4 @@ class Plot:
             plt.savefig(filename + '.' + format, format=format, dpi=1000)
 
         plt.show()
-        plt.close(fig)
+        plt.close(fig=fig)
