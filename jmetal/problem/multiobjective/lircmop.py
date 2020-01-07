@@ -157,7 +157,7 @@ class LIRCMOP5(FloatProblem):
     """
 
     def __init__(self, number_of_variables: int = 30):
-        super(LIRCMOP1, self).__init__()
+        super(LIRCMOP5, self).__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 2
