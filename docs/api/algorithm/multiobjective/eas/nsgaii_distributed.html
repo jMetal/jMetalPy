@@ -10,7 +10,6 @@
   <!-- Licensed under the SIL Open Font License -->
   <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap.min.css" />
-  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <title>Distributed NSGA-II &#8212; jMetalPy 1.5.3 documentation</title>
@@ -51,7 +50,16 @@
       </div>
   <div id="left-column">
     <div class="sphinxsidebar"><a href="
-    ../../../../index.html" class="text-logo">jMetalPy</a>
+    ../../../../index.html" class="text-logo">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.5.3 documentation">
+    <br>
+</a>
+
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    Python version of the jMetal framework
+  </div>
+</div>
 <div class="sidebar-block">
   <div class="sidebar-wrapper">
     <h2>Table Of Contents</h2>
@@ -105,13 +113,13 @@
   </div>
         <div id="right-column">
           
-          <div role="navigation" aria-label="breadcrumbs navigation">
+          <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-              <li><a href="../../../../index.html">Docs</a></li>
+              <li class="breadcrumb-item"><a href="../../../../index.html">Docs</a></li>
               
-              <li>Distributed NSGA-II</li>
+              <li class="breadcrumb-item">Distributed NSGA-II</li>
             </ol>
-          </div>
+          </nav>
           
           <div class="document clearer body">
             
@@ -181,7 +189,7 @@ div.nboutput.container div.prompt pre {
 /* all prompts */
 div.nbinput.container div.prompt,
 div.nboutput.container div.prompt {
-    min-width: 6ex;
+    min-width: 7ex;
     padding-top: 0.4em;
     padding-right: 0.4em;
     text-align: right;
@@ -320,7 +328,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Example">
 <h2>Example<a class="headerlink" href="#Example" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -377,8 +385,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -417,245 +425,6 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-24 cores available
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-tornado.application - ERROR - Exception in callback &lt;bound method Nanny.memory_monitor of &lt;Nanny: tcp://127.0.0.1:57588, threads: 1&gt;&gt;
-Traceback (most recent call last):
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_common.py&#34;, line 342, in wrapper
-    ret = self._cache[fun]
-AttributeError: &#39;Process&#39; object has no attribute &#39;_cache&#39;
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_common.py&#34;, line 342, in wrapper
-    ret = self._cache[fun]
-AttributeError: _cache
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py&#34;, line 359, in catch_zombie
-    yield
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py&#34;, line 400, in _get_pidtaskinfo
-    ret = cext.proc_pidtaskinfo_oneshot(self.pid)
-ProcessLookupError: [Errno 3] No such process
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/ioloop.py&#34;, line 907, in _run
-    return self.callback()
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/distributed/nanny.py&#34;, line 314, in memory_monitor
-    memory = proc.memory_info().rss
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_common.py&#34;, line 345, in wrapper
-    return fun(self)
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/__init__.py&#34;, line 1170, in memory_info
-    return self._proc.memory_info()
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py&#34;, line 339, in wrapper
-    return fun(self, *args, **kwargs)
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py&#34;, line 469, in memory_info
-    rawtuple = self._get_pidtaskinfo()
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py&#34;, line 339, in wrapper
-    return fun(self, *args, **kwargs)
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_common.py&#34;, line 345, in wrapper
-    return fun(self)
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py&#34;, line 400, in _get_pidtaskinfo
-    ret = cext.proc_pidtaskinfo_oneshot(self.pid)
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/contextlib.py&#34;, line 130, in __exit__
-    self.gen.throw(type, value, traceback)
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py&#34;, line 372, in catch_zombie
-    raise AccessDenied(proc.pid, proc._name)
-psutil.AccessDenied: psutil.AccessDenied (pid=26563)
-tornado.application - ERROR - Exception in callback &lt;bound method Nanny.memory_monitor of &lt;Nanny: tcp://127.0.0.1:57599, threads: 1&gt;&gt;
-Traceback (most recent call last):
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_common.py&#34;, line 342, in wrapper
-    ret = self._cache[fun]
-AttributeError: &#39;Process&#39; object has no attribute &#39;_cache&#39;
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_common.py&#34;, line 342, in wrapper
-    ret = self._cache[fun]
-AttributeError: _cache
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py&#34;, line 359, in catch_zombie
-    yield
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py&#34;, line 400, in _get_pidtaskinfo
-    ret = cext.proc_pidtaskinfo_oneshot(self.pid)
-ProcessLookupError: [Errno 3] No such process
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/ioloop.py&#34;, line 907, in _run
-    return self.callback()
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/distributed/nanny.py&#34;, line 314, in memory_monitor
-    memory = proc.memory_info().rss
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_common.py&#34;, line 345, in wrapper
-    return fun(self)
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/__init__.py&#34;, line 1170, in memory_info
-    return self._proc.memory_info()
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py&#34;, line 339, in wrapper
-    return fun(self, *args, **kwargs)
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py&#34;, line 469, in memory_info
-    rawtuple = self._get_pidtaskinfo()
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py&#34;, line 339, in wrapper
-    return fun(self, *args, **kwargs)
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_common.py&#34;, line 345, in wrapper
-    return fun(self)
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py&#34;, line 400, in _get_pidtaskinfo
-    ret = cext.proc_pidtaskinfo_oneshot(self.pid)
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/contextlib.py&#34;, line 130, in __exit__
-    self.gen.throw(type, value, traceback)
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/psutil/_psosx.py&#34;, line 372, in catch_zombie
-    raise AccessDenied(proc.pid, proc._name)
-psutil.AccessDenied: psutil.AccessDenied (pid=26569)
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.nanny - WARNING - Restarting worker
-distributed.client - WARNING - Couldn&#39;t gather 1 keys, rescheduling {&#39;reproduction-9a853710788cfb057e3d5f405be3095d&#39;: ()}
-distributed.client - WARNING - Couldn&#39;t gather 1 keys, rescheduling {&#39;reproduction-5326bec5f73885fd92959290231588cb&#39;: ()}
-distributed.client - WARNING - Couldn&#39;t gather 1 keys, rescheduling {&#39;reproduction-b0713937618f4740d5d1aea65f447e18&#39;: ()}
-tornado.application - ERROR - Exception in callback functools.partial(&lt;bound method IOLoop._discard_future_result of &lt;zmq.eventloop.ioloop.ZMQIOLoop object at 0x819bfda20&gt;&gt;, &lt;Future finished exception=KilledWorker(&#39;reproduction-9a853710788cfb057e3d5f405be3095d&#39;, &lt;Worker &#39;tcp://127.0.0.1:57612&#39;, memory: 0, processing: 5&gt;)&gt;)
-Traceback (most recent call last):
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/ioloop.py&#34;, line 743, in _run_callback
-    ret = callback()
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/ioloop.py&#34;, line 767, in _discard_future_result
-    future.result()
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py&#34;, line 736, in run
-    yielded = self.gen.throw(*exc_info)  # type: ignore
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/distributed/client.py&#34;, line 4142, in _track_future
-    result = yield future._result(raiseit=False)
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py&#34;, line 729, in run
-    value = future.result()
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py&#34;, line 736, in run
-    yielded = self.gen.throw(*exc_info)  # type: ignore
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/distributed/client.py&#34;, line 249, in _result
-    result = yield self.client._gather([self])
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py&#34;, line 729, in run
-    value = future.result()
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py&#34;, line 736, in run
-    yielded = self.gen.throw(*exc_info)  # type: ignore
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/distributed/client.py&#34;, line 1653, in _gather
-    six.reraise(type(exception), exception, traceback)
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/six.py&#34;, line 693, in reraise
-    raise value
-distributed.scheduler.KilledWorker: (&#39;reproduction-9a853710788cfb057e3d5f405be3095d&#39;, &lt;Worker &#39;tcp://127.0.0.1:57612&#39;, memory: 0, processing: 5&gt;)
-tornado.application - ERROR - Exception in callback functools.partial(&lt;bound method IOLoop._discard_future_result of &lt;zmq.eventloop.ioloop.ZMQIOLoop object at 0x819bfda20&gt;&gt;, &lt;Future finished exception=KilledWorker(&#39;reproduction-b0713937618f4740d5d1aea65f447e18&#39;, &lt;Worker &#39;tcp://127.0.0.1:57618&#39;, memory: 0, processing: 3&gt;)&gt;)
-Traceback (most recent call last):
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/ioloop.py&#34;, line 743, in _run_callback
-    ret = callback()
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/ioloop.py&#34;, line 767, in _discard_future_result
-    future.result()
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py&#34;, line 736, in run
-    yielded = self.gen.throw(*exc_info)  # type: ignore
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/distributed/client.py&#34;, line 4142, in _track_future
-    result = yield future._result(raiseit=False)
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py&#34;, line 729, in run
-    value = future.result()
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py&#34;, line 736, in run
-    yielded = self.gen.throw(*exc_info)  # type: ignore
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/distributed/client.py&#34;, line 249, in _result
-    result = yield self.client._gather([self])
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py&#34;, line 729, in run
-    value = future.result()
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/tornado/gen.py&#34;, line 736, in run
-    yielded = self.gen.throw(*exc_info)  # type: ignore
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/distributed/client.py&#34;, line 1653, in _gather
-    six.reraise(type(exception), exception, traceback)
-  File &#34;/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/six.py&#34;, line 693, in reraise
-    raise value
-distributed.scheduler.KilledWorker: (&#39;reproduction-b0713937618f4740d5d1aea65f447e18&#39;, &lt;Worker &#39;tcp://127.0.0.1:57618&#39;, memory: 0, processing: 3&gt;)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">KeyboardInterrupt</span>                         Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-2-63356297d8df&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">     29</span> )
-<span class="ansi-green-intense-fg ansi-bold">     30</span>
-<span class="ansi-green-fg">---&gt; 31</span><span class="ansi-red-fg"> </span>algorithm<span class="ansi-blue-fg">.</span>run<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     32</span> front <span class="ansi-blue-fg">=</span> algorithm<span class="ansi-blue-fg">.</span>get_result<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/Documents/jMetalPy/jmetal/algorithm/multiobjective/nsgaii.py</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    265</span>
-<span class="ansi-green-intense-fg ansi-bold">    266</span>                 r <span class="ansi-blue-fg">=</span> RankingAndDensityEstimatorReplacement<span class="ansi-blue-fg">(</span>ranking<span class="ansi-blue-fg">,</span> density_estimator<span class="ansi-blue-fg">,</span> RemovalPolicyType<span class="ansi-blue-fg">.</span>ONE_SHOT<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">--&gt; 267</span><span class="ansi-red-fg">                 </span>auxiliar_population <span class="ansi-blue-fg">=</span> r<span class="ansi-blue-fg">.</span>replace<span class="ansi-blue-fg">(</span>auxiliar_population<span class="ansi-blue-fg">,</span> offspring_population<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    268</span>
-<span class="ansi-green-intense-fg ansi-bold">    269</span>                 <span class="ansi-red-fg"># selection</span>
-
-<span class="ansi-green-fg">~/Documents/jMetalPy/jmetal/util/replacement.py</span> in <span class="ansi-cyan-fg">replace</span><span class="ansi-blue-fg">(self, solution_list, offspring_list)</span>
-<span class="ansi-green-intense-fg ansi-bold">     24</span>         join_population <span class="ansi-blue-fg">=</span> solution_list <span class="ansi-blue-fg">+</span> offspring_list
-<span class="ansi-green-intense-fg ansi-bold">     25</span>
-<span class="ansi-green-fg">---&gt; 26</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>ranking<span class="ansi-blue-fg">.</span>compute_ranking<span class="ansi-blue-fg">(</span>join_population<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     27</span>         <span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>removal_policy <span class="ansi-green-fg">is</span> RemovalPolicyType<span class="ansi-blue-fg">.</span>SEQUENTIAL<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     28</span>             result_list <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>sequential_truncation<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span> len<span class="ansi-blue-fg">(</span>solution_list<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/Documents/jMetalPy/jmetal/util/ranking.py</span> in <span class="ansi-cyan-fg">compute_ranking</span><span class="ansi-blue-fg">(self, solutions, k)</span>
-<span class="ansi-green-intense-fg ansi-bold">     58</span>         <span class="ansi-green-fg">for</span> p <span class="ansi-green-fg">in</span> range<span class="ansi-blue-fg">(</span>len<span class="ansi-blue-fg">(</span>solutions<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-</span> <span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     59</span>             <span class="ansi-green-fg">for</span> q <span class="ansi-green-fg">in</span> range<span class="ansi-blue-fg">(</span>p <span class="ansi-blue-fg">+</span> <span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span> len<span class="ansi-blue-fg">(</span>solutions<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 60</span><span class="ansi-red-fg">                 </span>dominance_test_result <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>comparator<span class="ansi-blue-fg">.</span>compare<span class="ansi-blue-fg">(</span>solutions<span class="ansi-blue-fg">[</span>p<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> solutions<span class="ansi-blue-fg">[</span>q<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     61</span>                 self<span class="ansi-blue-fg">.</span>number_of_comparisons <span class="ansi-blue-fg">+=</span> <span class="ansi-cyan-fg">1</span>
-<span class="ansi-green-intense-fg ansi-bold">     62</span>
-
-<span class="ansi-green-fg">~/Documents/jMetalPy/jmetal/util/comparator.py</span> in <span class="ansi-cyan-fg">compare</span><span class="ansi-blue-fg">(self, solution1, solution2)</span>
-<span class="ansi-green-intense-fg ansi-bold">    160</span>         <span class="ansi-green-fg">if</span> result <span class="ansi-blue-fg">==</span> <span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    161</span>             <span class="ansi-red-fg"># result = self.__dominance_test(solution1, solution2)</span>
-<span class="ansi-green-fg">--&gt; 162</span><span class="ansi-red-fg">             </span>result <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>dominance_test<span class="ansi-blue-fg">(</span>solution1<span class="ansi-blue-fg">.</span>objectives<span class="ansi-blue-fg">,</span> solution2<span class="ansi-blue-fg">.</span>objectives<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    163</span>
-<span class="ansi-green-intense-fg ansi-bold">    164</span>         <span class="ansi-green-fg">return</span> result
-
-<span class="ansi-green-fg">~/Documents/jMetalPy/jmetal/util/comparator.py</span> in <span class="ansi-cyan-fg">dominance_test</span><span class="ansi-blue-fg">(vector1, vector2)</span>
-<span class="ansi-green-intense-fg ansi-bold">    190</span>         result <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">0</span>
-<span class="ansi-green-intense-fg ansi-bold">    191</span>         <span class="ansi-green-fg">for</span> i <span class="ansi-green-fg">in</span> range<span class="ansi-blue-fg">(</span>len<span class="ansi-blue-fg">(</span>vector1<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 192</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">if</span> vector1<span class="ansi-blue-fg">[</span>i<span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">&gt;</span> vector2<span class="ansi-blue-fg">[</span>i<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    193</span>                 <span class="ansi-green-fg">if</span> result <span class="ansi-blue-fg">==</span> <span class="ansi-blue-fg">-</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    194</span>                     <span class="ansi-green-fg">return</span> <span class="ansi-cyan-fg">0</span>
-
-<span class="ansi-red-fg">KeyboardInterrupt</span>:
-</pre></div></div>
-</div>
 <p>We can now visualize the Pareto front approximation:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
@@ -675,6 +444,70 @@ distributed.scheduler.KilledWorker: (&#39;reproduction-b0713937618f4740d5d1aea65
 </div>
 <div class="section" id="API">
 <h2>API<a class="headerlink" href="#API" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaii.</code><code class="sig-name descname">DistributedNSGAII</code><span class="sig-paren">(</span><em class="sig-param">problem: jmetal.core.problem.Problem</em>, <em class="sig-param">population_size: int</em>, <em class="sig-param">mutation: jmetal.core.operator.Mutation</em>, <em class="sig-param">crossover: jmetal.core.operator.Crossover</em>, <em class="sig-param">number_of_cores: int</em>, <em class="sig-param">client</em>, <em class="sig-param">selection: jmetal.core.operator.Selection = &lt;jmetal.operator.selection.BinaryTournamentSelection object&gt;</em>, <em class="sig-param">termination_criterion: jmetal.util.termination_criterion.TerminationCriterion = &lt;jmetal.util.termination_criterion.StoppingByEvaluations object&gt;</em>, <em class="sig-param">dominance_comparator: jmetal.util.comparator.DominanceComparator = &lt;jmetal.util.comparator.DominanceComparator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.algorithm.Algorithm</span></code></p>
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.create_initial_solutions">
+<code class="sig-name descname">create_initial_solutions</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[S]<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.create_initial_solutions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.create_initial_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the initial list of solutions of a metaheuristic.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solutions: List[S]</em><span class="sig-paren">)</span> &#x2192; List[S]<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates a solution list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_observable_data">
+<code class="sig-name descname">get_observable_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.get_observable_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_observable_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get observable data, with the information that will be send to all observers each time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_result">
+<code class="sig-name descname">get_result</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; R<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.get_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.init_progress">
+<code class="sig-name descname">init_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.init_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.init_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the algorithm.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the algorithm.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.step">
+<code class="sig-name descname">step</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs one iteration/step of the algorithm’s loop.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.stopping_condition_is_met">
+<code class="sig-name descname">stopping_condition_is_met</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.stopping_condition_is_met"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.stopping_condition_is_met" title="Permalink to this definition">¶</a></dt>
+<dd><p>The stopping condition is met or not.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.update_progress">
+<code class="sig-name descname">update_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaii.html#DistributedNSGAII.update_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.update_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the progress after each iteration.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 

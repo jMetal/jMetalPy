@@ -4,8 +4,6 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('../'))
 
-import guzzle_sphinx_theme
-
 # -- Project information -----------------------------------------------------
 
 project = 'jMetalPy'
@@ -39,15 +37,13 @@ pygments_style = 'sphinx'
 
 # -- Options for HTML output -------------------------------------------------
 
-extensions.append("guzzle_sphinx_theme")
 html_show_sourcelink = False
-html_theme_path = guzzle_sphinx_theme.html_theme_path()
-html_theme = 'guzzle_sphinx_theme'
-html_css_files = [
-    'custom.css',
-]
+html_theme_path = templates_path
+html_theme = 'guzzle'
+html_css_files = ['custom.css']
 html_theme_options = {
-    "project_nav_name": "jMetalPy"
+    "project_nav_name": "Python version of the jMetal framework",
+    "project_nav_logo": "_static/jmetalpy.png"
 }
 html_static_path = ['_static']
 html_sidebars = {
@@ -69,6 +65,7 @@ nbsphinx_execute_arguments = [
     "--InlineBackend.figure_formats={'svg', 'pdf'}",
     "--InlineBackend.rc={'figure.dpi': 96}",
 ]
+nbsphinx_execute = 'never'
 
 # -- Options for LaTeX output ------------------------------------------------
 
@@ -91,7 +88,7 @@ man_pages = [
 
 texinfo_documents = [
     (master_doc, 'jMetalPy', 'jMetalPy Documentation',
-     author, 'jMetalPy', 'One line description of project.',
+     author, 'jMetalPy', 'Python version of the jMetal framework.',
      'Miscellaneous'),
 ]
 

@@ -6,7 +6,7 @@
     "raw_mimetype": "text/restructuredtext"
    },
    "source": [
-    ".. _nb_gde3:"
+    ".. _nb_gde3_dynamic:"
    ]
   },
   {
@@ -25,23 +25,14 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 1,
+   "execution_count": null,
    "metadata": {
     "pycharm": {
      "is_executing": false,
      "name": "#%%\n"
     }
    },
-   "outputs": [
-    {
-     "name": "stderr",
-     "output_type": "stream",
-     "text": [
-      "/Users/benhid/.conda/envs/wk/lib/python3.7/site-packages/dask/config.py:161: YAMLLoadWarning: calling yaml.load() without Loader=... is deprecated, as the default Loader is unsafe. Please read https://msg.pyyaml.org/load for full details.\n",
-      "  data = yaml.load(f.read()) or {}\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "from jmetal.algorithm.multiobjective.gde3 import DynamicGDE3\n",
     "from jmetal.problem.multiobjective.fda import FDA2\n",

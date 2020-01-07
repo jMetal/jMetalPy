@@ -4,6 +4,10 @@ Evaluate solutions
 The lifecycle of metaheuristics often requires to evaluate list of solutions on every iteration. In evolutionary algorithms, for example, this list of solutions is known as *population*.
 
 In order to evaluate a population, NSGA-II (and in general, any generational algorithms in jMetalPy) uses an evaluator object.
+
+Sequential
+------------------------
+
 The default evaluator runs in a sequential fashion (i.e., one solution at a time):
 
 .. code-block:: python
@@ -17,6 +21,17 @@ The default evaluator runs in a sequential fashion (i.e., one solution at a time
       ...
       population_evaluator = SequentialEvaluator(),
     )
+
+API
+^^^
+
+.. autoclass:: jmetal.util.evaluator.SequentialEvaluator
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Parallel and distributed
+------------------------
 
 Solutions can also be evaluated in parallel, using threads or processes:
 
@@ -53,10 +68,27 @@ Or by means of Dask:
       population_evaluator = DaskEvaluator(),
     )
 
-API
------------------------
+.. warning:: :code:`SparkEvaluator` and :code:`DaskEvaluator` requires pySpark and Dask, respectively.
 
-.. automodule:: jmetal.util.evaluator
+API
+^^^
+
+.. autoclass:: jmetal.util.evaluator.MapEvaluator
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. autoclass:: jmetal.util.evaluator.MultiprocessEvaluator
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. autoclass:: jmetal.util.evaluator.SparkEvaluator
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. autoclass:: jmetal.util.evaluator.DaskEvaluator
    :members:
    :undoc-members:
    :show-inheritance:

@@ -6,7 +6,7 @@
     "raw_mimetype": "text/restructuredtext"
    },
    "source": [
-    ".. _nb_nsgaii:"
+    ".. _nb_nsgaii_dynamic:"
    ]
   },
   {
@@ -25,7 +25,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 1,
+   "execution_count": null,
    "metadata": {
     "pycharm": {
      "is_executing": false,

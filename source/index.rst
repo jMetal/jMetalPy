@@ -6,7 +6,7 @@ jMetalPy: Python version of the jMetal framework
 .. table::
 
    +---------------------+----------+
-   | **Target**          |  v1.5.3  |
+   | **Target doc**      |  v1.5.3  |
    +---------------------+----------+
 
 Content
@@ -30,8 +30,9 @@ Via pip:
 
 .. code-block:: console
 
+    $ pip install jmetalpy
     $ pip install "jmetalpy[core]"  # Install core components of the framework
-    $ pip install "jmetalpy[complete]"  # Install dependencies for distributed computing
+    $ pip install "jmetalpy[complete]"  # Install also dependencies for distributed computing
 
 Via source code:
 
@@ -40,7 +41,7 @@ Via source code:
     $ git clone https://github.com/jMetal/jMetalPy.git
     $ python setup.py install
 
-Features
+Summary of features
 ------------------------
 The current release of jMetalPy (v1.5.3) contains the following components:
 

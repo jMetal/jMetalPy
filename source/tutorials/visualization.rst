@@ -10,12 +10,10 @@ Static plots
 
   .. code-block:: python
 
-     from jmetal.util.visualization import Plot
+     from jmetal.lab.visualization import Plot
 
-     front = algorithm.get_result()
-
-     plot_front = Plot(plot_title='Pareto front approximation', axis_labels=['x', 'y'], reference_front=None)
-     plot_front.plot(front, label='NSGAII-ZDT1', filename='NSGAII-ZDT1', format='png')
+     plot_front = Plot(title='Pareto front approximation', axis_labels=['x', 'y'])
+     plot_front.plot(front, label='NSGAII-ZDT1')
 
   .. note:: Static charts can be shown in the screen or stored in a file by setting the filename.
 
@@ -25,8 +23,8 @@ Static plots
 
   .. code-block:: python
 
-     plot_front = Plot(plot_title='Title', axis_labels=['x', 'y'], reference_front=reference_front)
-     plot_front.plot([front1, front2], label=['ProblemA', 'ProblemB'], filename='output', format='eps')
+     plot_front = Plot(title='Pareto front approximation', axis_labels=['x', 'y'])
+     plot_front.plot([front1, front2], label=['zdt1', 'zdt2'], filename='output', format='eps')
 
 API
 ^^^
@@ -43,7 +41,7 @@ Interactive plots
 
   .. code-block:: python
 
-     plot_front = InteractivePlot(plot_title='Pareto front approximation')
+     plot_front = InteractivePlot(title='Pareto front approximation')
      plot_front.plot(front, label='NSGAII-ZDT1', filename='NSGAII-ZDT1-interactive')
 
 API
@@ -77,6 +75,9 @@ API
 Chord plot
 -------------------------------------------
 
+API
+^^^
+
 .. automodule:: jmetal.lab.visualization.chord_plot
    :members:
    :undoc-members:
@@ -84,6 +85,9 @@ Chord plot
 
 Posterior plot
 -----------------------------------------
+
+API
+^^^
 
 .. automodule:: jmetal.lab.visualization.posterior
    :members:
