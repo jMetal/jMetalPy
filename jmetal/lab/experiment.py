@@ -184,8 +184,8 @@ def generate_boxplot(filename: str, output_dir: str = 'boxplot'):
             ax.set_xticklabels(algorithms)
             ax.tick_params(labelsize=20)
 
-            plt.savefig('boxplot/boxplot-{}-{}.png'.format(pr, indicator_name), bbox_inches='tight')
-            plt.savefig('boxplot/boxplot-{}-{}.eps'.format(pr, indicator_name), bbox_inches='tight')
+            plt.savefig(os.path.join(output_dir, 'boxplot-{}-{}.png'.format(pr, indicator_name)), bbox_inches='tight')
+            plt.savefig(os.path.join(output_dir, 'boxplot-{}-{}.eps'.format(pr, indicator_name)), bbox_inches='tight')
             plt.close(fig)
 
 
