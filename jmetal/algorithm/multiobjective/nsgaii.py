@@ -165,7 +165,7 @@ class DistributedNSGAII(Algorithm[S, R]):
                  mutation: Mutation,
                  crossover: Crossover,
                  number_of_cores: int,
-                 client: Client,
+                 client,
                  selection: Selection = BinaryTournamentSelection(
                      MultiComparator([FastNonDominatedRanking.get_comparator(),
                                       CrowdingDistance.get_comparator()])),

@@ -140,7 +140,7 @@ class PlotFrontToFileObserver(Observer):
         :param output_directory: Output directory.
         """
         self.directory = output_directory
-        self.plot_front = Plot(plot_title='Pareto front approximation', **kwargs)
+        self.plot_front = Plot(title='Pareto front approximation', **kwargs)
         self.last_front = []
         self.fronts = []
         self.counter = 0
