@@ -28,7 +28,7 @@ def read_solutions(filename: str) -> List[FloatSolution]:
             for line in file:
                 vector = [float(x) for x in line.split()]
 
-                solution = FloatSolution([], [], 2)
+                solution = FloatSolution([], [], len(vector))
                 solution.objectives = vector
 
                 front.append(solution)
