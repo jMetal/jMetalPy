@@ -31,8 +31,15 @@ Via pip:
 .. code-block:: console
 
     $ pip install jmetalpy
-    $ pip install "jmetalpy[core]"  # Install core components of the framework
-    $ pip install "jmetalpy[complete]"  # Install also dependencies for distributed computing
+
+.. note:: Alternatively, you can use one of these instead:
+
+    .. code-block:: console
+
+        $ pip install "jmetalpy[core]"  # Install core components of the framework
+        $ pip install "jmetalpy[docs]"  # Install requirements for building docs
+        $ pip install "jmetalpy[distributed]"  # Install requirements for parallel/distributed computing
+        $ pip install "jmetalpy[complete]"  # Install all dependencies (equivalent to `pip install jmetalpy`)
 
 Via source code:
 
@@ -51,7 +58,7 @@ The current release of jMetalPy (v1.5.3) contains the following components:
 * Encodings: real, binary, permutations.
 * Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random).
 * Quality indicators: hypervolume, additive epsilon, GD, IGD.
-* Pareto front plotting for problems with two or more objectives (as scatter plot/parallel coordinates/chordplot) in real-time, static or interactive.
+* Pareto front approximation plotting in real-time, static or interactive.
 * Experiment class for performing studies either alone or alongside jMetal.
 * Pairwise and multiple hypothesis testing for statistical analysis, including several frequentist and Bayesian testing methods, critical distance plots and posterior diagrams.
 

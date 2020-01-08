@@ -1,4 +1,4 @@
-![jMetalPy](source/jmetalpy.png)
+![jMetalPy](docs/source/jmetalpy.png)
 
 [![Build Status](https://img.shields.io/travis/jMetal/jMetalPy/master.svg?style=flat-square)](https://travis-ci.org/jMetal/jMetalPy)
 [![Documentation](https://img.shields.io/badge/docs-online-success?style=flat-square)](https://jmetal.github.io/jMetalPy/index.html)
@@ -42,7 +42,7 @@ pip install "jmetalpy[core]"
 Other supported commands are listed next:
 
 ```console
-pip install "jmetalpy[doc]"  # Install requirements for building docs
+pip install "jmetalpy[docs]"  # Install requirements for building docs
 pip install "jmetalpy[distributed]"  # Install requirements for parallel/distributed computing
 pip install "jmetalpy[complete]"  # Install all requirements
 ```
@@ -96,7 +96,7 @@ plot_front = Plot(title='Pareto front approximation', axis_labels=['x', 'y'])
 plot_front.plot(front, label='NSGAII-ZDT1', filename='NSGAII-ZDT1', format='png')
 ```
 
-<img src=source/_static/NSGAII-ZDT1.png width=450 alt="Pareto front approximation">
+<img src=docs/source/_static/NSGAII-ZDT1.png width=450 alt="Pareto front approximation">
 
 ## Features
 The current release of jMetalPy (v1.5.3) contains the following components:
@@ -111,9 +111,9 @@ The current release of jMetalPy (v1.5.3) contains the following components:
 * Experiment class for performing studies either alone or alongside [jMetal](https://github.com/jMetal/jMetal).
 * Pairwise and multiple hypothesis testing for statistical analysis, including several frequentist and Bayesian testing methods, critical distance plots and posterior diagrams.
 
-| ![Scatter plot 2D](source/_static/2D.gif) | ![Scatter plot 3D](source/_static/3D.gif) |
+| ![Scatter plot 2D](docs/source/_static/2D.gif) | ![Scatter plot 3D](docs/source/_static/3D.gif) |
 |-------------- | ----------------  |
-| ![Parallel coordinates](source/_static/p-c.gif) | ![Interactive chord plot](source/_static/chordplot.gif) |
+| ![Parallel coordinates](docs/source/_static/p-c.gif) | ![Interactive chord plot](docs/source/_static/chordplot.gif) |
 
 ## License
 This project is licensed under the terms of the MIT - see the [LICENSE](LICENSE) file for details.

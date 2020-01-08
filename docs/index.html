@@ -164,9 +164,17 @@
 <h2>Installation steps<a class="headerlink" href="#installation-steps" title="Permalink to this headline">¶</a></h2>
 <p>Via pip:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install jmetalpy
-<span class="gp">$</span> pip install <span class="s2">&quot;jmetalpy[core]&quot;</span>  <span class="c1"># Install core components of the framework</span>
-<span class="gp">$</span> pip install <span class="s2">&quot;jmetalpy[complete]&quot;</span>  <span class="c1"># Install also dependencies for distributed computing</span>
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Alternatively, you can use one of these instead:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install <span class="s2">&quot;jmetalpy[core]&quot;</span>  <span class="c1"># Install core components of the framework</span>
+<span class="gp">$</span> pip install <span class="s2">&quot;jmetalpy[docs]&quot;</span>  <span class="c1"># Install requirements for building docs</span>
+<span class="gp">$</span> pip install <span class="s2">&quot;jmetalpy[distributed]&quot;</span>  <span class="c1"># Install requirements for parallel/distributed computing</span>
+<span class="gp">$</span> pip install <span class="s2">&quot;jmetalpy[complete]&quot;</span>  <span class="c1"># Install all dependencies (equivalent to `pip install jmetalpy`)</span>
+</pre></div>
+</div>
 </div>
 <p>Via source code:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone https://github.com/jMetal/jMetalPy.git
@@ -184,7 +192,7 @@
 <li><p>Encodings: real, binary, permutations.</p></li>
 <li><p>Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random).</p></li>
 <li><p>Quality indicators: hypervolume, additive epsilon, GD, IGD.</p></li>
-<li><p>Pareto front plotting for problems with two or more objectives (as scatter plot/parallel coordinates/chordplot) in real-time, static or interactive.</p></li>
+<li><p>Pareto front approximation plotting in real-time, static or interactive.</p></li>
 <li><p>Experiment class for performing studies either alone or alongside jMetal.</p></li>
 <li><p>Pairwise and multiple hypothesis testing for statistical analysis, including several frequentist and Bayesian testing methods, critical distance plots and posterior diagrams.</p></li>
 </ul>
