@@ -113,8 +113,9 @@ class Plot:
 
         if filename:
             plt.savefig(filename + '.' + format, format=format, dpi=200)
+        else:
+            plt.show()
 
-        plt.show()
         plt.close(fig=fig)
 
     def three_dim(self, fronts: List[list], labels: List[str] = None, filename: str = None, format: str = 'eps'):
@@ -153,8 +154,9 @@ class Plot:
 
         if filename:
             plt.savefig(filename + '.' + format, format=format, dpi=1000)
+        else:
+            plt.show()
 
-        plt.show()
         plt.close(fig=fig)
 
     def pcoords(self, fronts: List[list], normalize: bool = False, filename: str = None, format: str = 'eps'):
@@ -186,6 +188,7 @@ class Plot:
 
         if filename:
             plt.savefig(filename + '.' + format, format=format, dpi=1000)
+        else:
+            plt.show()
 
-        plt.show()
         plt.close(fig=fig)
