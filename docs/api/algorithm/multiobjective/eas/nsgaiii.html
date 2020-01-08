@@ -24,7 +24,6 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <link rel="author" title="About these documents" href="../../../../about.html" />
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
     <link rel="next" title="SPEA2" href="spea2.html" />
@@ -87,8 +86,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../operators.html">Operators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../problems.html">Problems</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About</a></li>
 </ul>
 
     
@@ -144,35 +141,6 @@
 <span id="nb-nsgaiii"></span><h1>NSGA-III<a class="headerlink" href="#NSGA-III" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="API">
 <h2>API<a class="headerlink" href="#API" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="jmetal.algorithm.multiobjective.nsgaiii.NSGAIII">
-<em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaiii.</code><code class="sig-name descname">NSGAIII</code><span class="sig-paren">(</span><em class="sig-param">reference_directions</em>, <em class="sig-param">problem: jmetal.core.problem.Problem</em>, <em class="sig-param">mutation: jmetal.core.operator.Mutation</em>, <em class="sig-param">crossover: jmetal.core.operator.Crossover</em>, <em class="sig-param">population_size: int = None</em>, <em class="sig-param">selection: jmetal.core.operator.Selection = &lt;jmetal.operator.selection.BinaryTournamentSelection object&gt;</em>, <em class="sig-param">termination_criterion: jmetal.util.termination_criterion.TerminationCriterion = &lt;jmetal.util.termination_criterion.StoppingByEvaluations object&gt;</em>, <em class="sig-param">population_generator: jmetal.util.generator.Generator = &lt;jmetal.util.generator.RandomGenerator object&gt;</em>, <em class="sig-param">population_evaluator: jmetal.util.evaluator.Evaluator = &lt;jmetal.util.evaluator.SequentialEvaluator object&gt;</em>, <em class="sig-param">dominance_comparator: jmetal.util.comparator.Comparator = &lt;jmetal.util.comparator.DominanceComparator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#NSGAIII"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.NSGAIII" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII" title="jmetal.algorithm.multiobjective.nsgaii.NSGAII"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.algorithm.multiobjective.nsgaii.NSGAII</span></code></a></p>
-<dl class="method">
-<dt id="jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.get_name">
-<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#NSGAIII.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.get_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.get_result">
-<code class="sig-name descname">get_result</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#NSGAIII.get_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.get_result" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return only non dominated solutions.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.replacement">
-<code class="sig-name descname">replacement</code><span class="sig-paren">(</span><em class="sig-param">population: List[S], offspring_population: List[S]</em><span class="sig-paren">)</span> &#x2192; List[S]<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#NSGAIII.replacement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.replacement" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implements NSGA-III environmental selection based on reference points as described in:</p>
-<ul class="simple">
-<li><p>Deb, K., &amp; Jain, H. (2014). An Evolutionary Many-Objective Optimization
-Algorithm Using Reference-Point-Based Nondominated Sorting Approach,
-Part I: Solving Problems With Box Constraints. IEEE Transactions on
-Evolutionary Computation, 18(4), 577–601. doi:10.1109/TEVC.2013.2281535.</p></li>
-</ul>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 </div>
 

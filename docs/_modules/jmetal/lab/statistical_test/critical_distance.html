@@ -10,10 +10,9 @@
   <!-- Licensed under the SIL Open Font License -->
   <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap.min.css" />
-  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>jmetal.lab.statistical_test.critical_distance &#8212; jMetalPy 1.5.1 documentation</title>
+    <title>jmetal.lab.statistical_test.critical_distance &#8212; jMetalPy 1.5.3 documentation</title>
     <link rel="stylesheet" href="../../../../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
@@ -22,8 +21,9 @@
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
   
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -50,7 +50,16 @@
       </div>
   <div id="left-column">
     <div class="sphinxsidebar"><a href="
-    ../../../../index.html" class="text-logo">jMetalPy</a>
+    ../../../../index.html" class="text-logo">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.5.3 documentation">
+    <br>
+</a>
+
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    Python version of the jMetal framework
+  </div>
+</div>
 <div class="sidebar-block">
   <div class="sidebar-wrapper">
     <h2>Table Of Contents</h2>
@@ -64,8 +73,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../operators.html">Operators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../problems.html">Problems</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About</a></li>
 </ul>
 
     
@@ -89,25 +96,25 @@
   </div>
         <div id="right-column">
           
-          <div role="navigation" aria-label="breadcrumbs navigation">
+          <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-              <li><a href="../../../../index.html">Docs</a></li>
+              <li class="breadcrumb-item"><a href="../../../../index.html">Docs</a></li>
               
-                <li><a href="../../../index.html">Module code</a></li>
+              <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
               
-              <li>jmetal.lab.statistical_test.critical_distance</li>
+              <li class="breadcrumb-item">jmetal.lab.statistical_test.critical_distance</li>
             </ol>
-          </div>
+          </nav>
           
           <div class="document clearer body">
             
   <h1>Source code for jmetal.lab.statistical_test.critical_distance</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">from</span> <span class="nn">statsmodels.stats.libqsturng</span> <span class="k">import</span> <span class="n">qsturng</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">statsmodels.stats.libqsturng</span> <span class="kn">import</span> <span class="n">qsturng</span>
 
-<span class="kn">from</span> <span class="nn">jmetal.lab.statistical_test.functions</span> <span class="k">import</span> <span class="n">ranks</span>
+<span class="kn">from</span> <span class="nn">jmetal.lab.statistical_test.functions</span> <span class="kn">import</span> <span class="n">ranks</span>
 
 
 <div class="viewcode-block" id="NemenyiCD"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.critical_distance.NemenyiCD">[docs]</a><span class="k">def</span> <span class="nf">NemenyiCD</span><span class="p">(</span><span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">num_alg</span><span class="p">,</span> <span class="n">num_dataset</span><span class="p">):</span>
@@ -326,7 +333,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

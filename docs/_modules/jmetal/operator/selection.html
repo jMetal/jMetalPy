@@ -24,7 +24,6 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   
@@ -74,8 +73,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../operators.html">Operators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Problems</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a></li>
 </ul>
 
     
@@ -113,14 +110,14 @@
             
   <h1>Source code for jmetal.operator.selection</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">TypeVar</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">TypeVar</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">jmetal.core.operator</span> <span class="k">import</span> <span class="n">Selection</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.density_estimator</span> <span class="k">import</span> <span class="n">CrowdingDistance</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.ranking</span> <span class="k">import</span> <span class="n">FastNonDominatedRanking</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.comparator</span> <span class="k">import</span> <span class="n">Comparator</span><span class="p">,</span> <span class="n">DominanceComparator</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.operator</span> <span class="kn">import</span> <span class="n">Selection</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.density_estimator</span> <span class="kn">import</span> <span class="n">CrowdingDistance</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.ranking</span> <span class="kn">import</span> <span class="n">FastNonDominatedRanking</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.comparator</span> <span class="kn">import</span> <span class="n">Comparator</span><span class="p">,</span> <span class="n">DominanceComparator</span>
 
 <span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
 
@@ -137,7 +134,7 @@
     <span class="sd">&quot;&quot;&quot;Performs roulette wheel selection.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RouletteWheelSelection</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
 <div class="viewcode-block" id="RouletteWheelSelection.execute"><a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RouletteWheelSelection.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">front</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
@@ -164,7 +161,7 @@
 
 <div class="viewcode-block" id="BinaryTournamentSelection"><a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.BinaryTournamentSelection">[docs]</a><span class="k">class</span> <span class="nc">BinaryTournamentSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">S</span><span class="p">]):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comparator</span><span class="p">:</span> <span class="n">Comparator</span> <span class="o">=</span> <span class="n">DominanceComparator</span><span class="p">()):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comparator</span><span class="p">:</span> <span class="n">Comparator</span> <span class="o">=</span> <span class="n">DominanceComparator</span><span class="p">()):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">BinaryTournamentSelection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">comparator</span> <span class="o">=</span> <span class="n">comparator</span>
 
@@ -199,7 +196,7 @@
 
 <div class="viewcode-block" id="BestSolutionSelection"><a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.BestSolutionSelection">[docs]</a><span class="k">class</span> <span class="nc">BestSolutionSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">S</span><span class="p">]):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">BestSolutionSelection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
 <div class="viewcode-block" id="BestSolutionSelection.execute"><a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.BestSolutionSelection.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">front</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
@@ -222,7 +219,7 @@
 
 <div class="viewcode-block" id="NaryRandomSolutionSelection"><a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.NaryRandomSolutionSelection">[docs]</a><span class="k">class</span> <span class="nc">NaryRandomSolutionSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">S</span><span class="p">]):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_solutions_to_be_returned</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_solutions_to_be_returned</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NaryRandomSolutionSelection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">number_of_solutions_to_be_returned</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;The number of solutions to be returned must be positive integer&#39;</span><span class="p">)</span>
@@ -246,7 +243,7 @@
 
 <div class="viewcode-block" id="DifferentialEvolutionSelection"><a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.DifferentialEvolutionSelection">[docs]</a><span class="k">class</span> <span class="nc">DifferentialEvolutionSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]]):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DifferentialEvolutionSelection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">index_to_exclude</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -273,7 +270,7 @@
 
 <div class="viewcode-block" id="RandomSolutionSelection"><a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RandomSolutionSelection">[docs]</a><span class="k">class</span> <span class="nc">RandomSolutionSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">S</span><span class="p">]):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RandomSolutionSelection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
 <div class="viewcode-block" id="RandomSolutionSelection.execute"><a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RandomSolutionSelection.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">front</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
@@ -290,7 +287,7 @@
 
 <div class="viewcode-block" id="RankingAndCrowdingDistanceSelection"><a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RankingAndCrowdingDistanceSelection">[docs]</a><span class="k">class</span> <span class="nc">RankingAndCrowdingDistanceSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]]):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dominance_comparator</span><span class="p">:</span> <span class="n">Comparator</span> <span class="o">=</span> <span class="n">DominanceComparator</span><span class="p">()):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dominance_comparator</span><span class="p">:</span> <span class="n">Comparator</span> <span class="o">=</span> <span class="n">DominanceComparator</span><span class="p">()):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RankingAndCrowdingDistanceSelection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_population_size</span> <span class="o">=</span> <span class="n">max_population_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dominance_comparator</span> <span class="o">=</span> <span class="n">dominance_comparator</span>
@@ -327,7 +324,7 @@
 
 <div class="viewcode-block" id="RankingAndFitnessSelection"><a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RankingAndFitnessSelection">[docs]</a><span class="k">class</span> <span class="nc">RankingAndFitnessSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]]):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">max_population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">reference_point</span><span class="p">:</span> <span class="n">S</span><span class="p">,</span>
                  <span class="n">dominance_comparator</span><span class="p">:</span> <span class="n">Comparator</span> <span class="o">=</span> <span class="n">DominanceComparator</span><span class="p">()):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RankingAndFitnessSelection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -417,7 +414,7 @@
 
 <div class="viewcode-block" id="BinaryTournament2Selection"><a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.BinaryTournament2Selection">[docs]</a><span class="k">class</span> <span class="nc">BinaryTournament2Selection</span><span class="p">(</span><span class="n">Selection</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">S</span><span class="p">]):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comparator_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Comparator</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comparator_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Comparator</span><span class="p">]):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">BinaryTournament2Selection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">comparator_list</span> <span class="o">=</span> <span class="n">comparator_list</span>
 

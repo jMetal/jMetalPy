@@ -24,7 +24,6 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   
@@ -74,8 +73,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../operators.html">Operators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Problems</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a></li>
 </ul>
 
     
@@ -114,16 +111,16 @@
   <h1>Source code for jmetal.util.observer</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">TypeVar</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">TypeVar</span>
 
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
-<span class="kn">from</span> <span class="nn">jmetal.core.observer</span> <span class="k">import</span> <span class="n">Observer</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="k">import</span> <span class="n">DynamicProblem</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.quality_indicator</span> <span class="k">import</span> <span class="n">InvertedGenerationalDistance</span>
-<span class="kn">from</span> <span class="nn">jmetal.lab.visualization</span> <span class="k">import</span> <span class="n">StreamingPlot</span><span class="p">,</span> <span class="n">Plot</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.solution</span> <span class="k">import</span> <span class="n">print_function_values_to_file</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.observer</span> <span class="kn">import</span> <span class="n">Observer</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="kn">import</span> <span class="n">DynamicProblem</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.quality_indicator</span> <span class="kn">import</span> <span class="n">InvertedGenerationalDistance</span>
+<span class="kn">from</span> <span class="nn">jmetal.lab.visualization</span> <span class="kn">import</span> <span class="n">StreamingPlot</span><span class="p">,</span> <span class="n">Plot</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.solution</span> <span class="kn">import</span> <span class="n">print_function_values_to_file</span>
 
 <span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
 
@@ -140,7 +137,7 @@
 
 <div class="viewcode-block" id="ProgressBarObserver"><a class="viewcode-back" href="../../../tutorials/observer.html#jmetal.util.observer.ProgressBarObserver">[docs]</a><span class="k">class</span> <span class="nc">ProgressBarObserver</span><span class="p">(</span><span class="n">Observer</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">max</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">max</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot; Show a smart progress meter with the number of evaluations and computing time.</span>
 
 <span class="sd">        :param max: Number of expected iterations.</span>
@@ -164,7 +161,7 @@
 
 <div class="viewcode-block" id="BasicObserver"><a class="viewcode-back" href="../../../tutorials/observer.html#jmetal.util.observer.BasicObserver">[docs]</a><span class="k">class</span> <span class="nc">BasicObserver</span><span class="p">(</span><span class="n">Observer</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot; Show the number of evaluations, best fitness and computing time.</span>
 
 <span class="sd">        :param frequency: Display frequency. &quot;&quot;&quot;</span>
@@ -190,7 +187,7 @@
 
 <div class="viewcode-block" id="PrintObjectivesObserver"><a class="viewcode-back" href="../../../tutorials/observer.html#jmetal.util.observer.PrintObjectivesObserver">[docs]</a><span class="k">class</span> <span class="nc">PrintObjectivesObserver</span><span class="p">(</span><span class="n">Observer</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot; Show the number of evaluations, best fitness and computing time.</span>
 
 <span class="sd">        :param frequency: Display frequency. &quot;&quot;&quot;</span>
@@ -215,7 +212,7 @@
 
 <div class="viewcode-block" id="WriteFrontToFileObserver"><a class="viewcode-back" href="../../../tutorials/observer.html#jmetal.util.observer.WriteFrontToFileObserver">[docs]</a><span class="k">class</span> <span class="nc">WriteFrontToFileObserver</span><span class="p">(</span><span class="n">Observer</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot; Write function values of the front into files.</span>
 
 <span class="sd">        :param output_directory: Output directory. Each front will be saved on a file `FUN.x`. &quot;&quot;&quot;</span>
@@ -248,7 +245,7 @@
 
 <div class="viewcode-block" id="PlotFrontToFileObserver"><a class="viewcode-back" href="../../../tutorials/observer.html#jmetal.util.observer.PlotFrontToFileObserver">[docs]</a><span class="k">class</span> <span class="nc">PlotFrontToFileObserver</span><span class="p">(</span><span class="n">Observer</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot; Plot and save Pareto front approximations into files.</span>
 
 <span class="sd">        :param output_directory: Output directory.</span>
@@ -289,19 +286,19 @@
                             <span class="bp">self</span><span class="o">.</span><span class="n">fronts</span> <span class="o">+=</span> <span class="n">solutions</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">plot_front</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">fronts</span><span class="p">],</span>
                                                  <span class="n">label</span><span class="o">=</span><span class="n">problem</span><span class="o">.</span><span class="n">get_name</span><span class="p">(),</span>
-                                                 <span class="n">filename</span><span class="o">=</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{self.directory}</span><span class="s1">/front-</span><span class="si">{evaluations}</span><span class="s1">&#39;</span><span class="p">)</span>
+                                                 <span class="n">filename</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{self.directory}</span><span class="s1">/front-</span><span class="si">{evaluations}</span><span class="s1">&#39;</span><span class="p">)</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">last_front</span> <span class="o">=</span> <span class="n">solutions</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">plot_front</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">solutions</span><span class="p">],</span>
-                                         <span class="n">label</span><span class="o">=</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{evaluations}</span><span class="s1"> evaluations&#39;</span><span class="p">,</span>
-                                         <span class="n">filename</span><span class="o">=</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{self.directory}</span><span class="s1">/front-</span><span class="si">{evaluations}</span><span class="s1">&#39;</span><span class="p">)</span>
+                                         <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{evaluations}</span><span class="s1"> evaluations&#39;</span><span class="p">,</span>
+                                         <span class="n">filename</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{self.directory}</span><span class="s1">/front-</span><span class="si">{evaluations}</span><span class="s1">&#39;</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span></div></div>
 
 
 <div class="viewcode-block" id="VisualizerObserver"><a class="viewcode-back" href="../../../tutorials/observer.html#jmetal.util.observer.VisualizerObserver">[docs]</a><span class="k">class</span> <span class="nc">VisualizerObserver</span><span class="p">(</span><span class="n">Observer</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">reference_front</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">reference_point</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">display_frequency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>

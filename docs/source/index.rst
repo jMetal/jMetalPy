@@ -30,16 +30,16 @@ Via pip:
 
 .. code-block:: console
 
-    $ pip install jmetalpy
+    $ pip install jmetalpy  # or "jmetalpy[distributed]"
 
 .. note:: Alternatively, you can use one of these instead:
 
     .. code-block:: console
 
-        $ pip install "jmetalpy[core]"  # Install core components of the framework
+        $ pip install "jmetalpy[core]"  # Install core components of the framework (equivalent to `pip install jmetalpy`)
         $ pip install "jmetalpy[docs]"  # Install requirements for building docs
         $ pip install "jmetalpy[distributed]"  # Install requirements for parallel/distributed computing
-        $ pip install "jmetalpy[complete]"  # Install all dependencies (equivalent to `pip install jmetalpy`)
+        $ pip install "jmetalpy[complete]"  # Install all dependencies
 
 Via source code:
 

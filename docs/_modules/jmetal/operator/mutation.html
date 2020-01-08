@@ -24,7 +24,6 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   
@@ -74,8 +73,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../operators.html">Operators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Problems</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a></li>
 </ul>
 
     
@@ -114,8 +111,8 @@
   <h1>Source code for jmetal.operator.mutation</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">random</span>
 
-<span class="kn">from</span> <span class="nn">jmetal.core.operator</span> <span class="k">import</span> <span class="n">Mutation</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="k">import</span> <span class="n">BinarySolution</span><span class="p">,</span> <span class="n">Solution</span><span class="p">,</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">IntegerSolution</span><span class="p">,</span> <span class="n">PermutationSolution</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.operator</span> <span class="kn">import</span> <span class="n">Mutation</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="kn">import</span> <span class="n">BinarySolution</span><span class="p">,</span> <span class="n">Solution</span><span class="p">,</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">IntegerSolution</span><span class="p">,</span> <span class="n">PermutationSolution</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">.. module:: mutation</span>
@@ -128,7 +125,7 @@
 
 <div class="viewcode-block" id="NullMutation"><a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.NullMutation">[docs]</a><span class="k">class</span> <span class="nc">NullMutation</span><span class="p">(</span><span class="n">Mutation</span><span class="p">[</span><span class="n">Solution</span><span class="p">]):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NullMutation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 <div class="viewcode-block" id="NullMutation.execute"><a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.NullMutation.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">Solution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Solution</span><span class="p">:</span>
@@ -140,7 +137,7 @@
 
 <div class="viewcode-block" id="BitFlipMutation"><a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.BitFlipMutation">[docs]</a><span class="k">class</span> <span class="nc">BitFlipMutation</span><span class="p">(</span><span class="n">Mutation</span><span class="p">[</span><span class="n">BinarySolution</span><span class="p">]):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">BitFlipMutation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
 
 <div class="viewcode-block" id="BitFlipMutation.execute"><a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.BitFlipMutation.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">BinarySolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
@@ -158,7 +155,7 @@
 
 <div class="viewcode-block" id="PolynomialMutation"><a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.PolynomialMutation">[docs]</a><span class="k">class</span> <span class="nc">PolynomialMutation</span><span class="p">(</span><span class="n">Mutation</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">distribution_index</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.20</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">distribution_index</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.20</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PolynomialMutation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">=</span> <span class="n">distribution_index</span>
 
@@ -202,7 +199,7 @@
 
 <div class="viewcode-block" id="IntegerPolynomialMutation"><a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.IntegerPolynomialMutation">[docs]</a><span class="k">class</span> <span class="nc">IntegerPolynomialMutation</span><span class="p">(</span><span class="n">Mutation</span><span class="p">[</span><span class="n">IntegerSolution</span><span class="p">]):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">distribution_index</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.20</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">distribution_index</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.20</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">IntegerPolynomialMutation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">=</span> <span class="n">distribution_index</span>
 
@@ -243,7 +240,7 @@
 
 <div class="viewcode-block" id="SimpleRandomMutation"><a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.SimpleRandomMutation">[docs]</a><span class="k">class</span> <span class="nc">SimpleRandomMutation</span><span class="p">(</span><span class="n">Mutation</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SimpleRandomMutation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SimpleRandomMutation.execute"><a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.SimpleRandomMutation.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
@@ -260,7 +257,7 @@
 
 <div class="viewcode-block" id="UniformMutation"><a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.UniformMutation">[docs]</a><span class="k">class</span> <span class="nc">UniformMutation</span><span class="p">(</span><span class="n">Mutation</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">perturbation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">perturbation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">UniformMutation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">perturbation</span> <span class="o">=</span> <span class="n">perturbation</span>
 
@@ -287,7 +284,7 @@
 
 <div class="viewcode-block" id="NonUniformMutation"><a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.NonUniformMutation">[docs]</a><span class="k">class</span> <span class="nc">NonUniformMutation</span><span class="p">(</span><span class="n">Mutation</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">perturbation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">max_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">perturbation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">max_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NonUniformMutation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">perturbation</span> <span class="o">=</span> <span class="n">perturbation</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_iterations</span> <span class="o">=</span> <span class="n">max_iterations</span>

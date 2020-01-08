@@ -24,7 +24,6 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <link rel="author" title="About these documents" href="../../../../about.html" />
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
   
@@ -74,8 +73,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../operators.html">Operators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../problems.html">Problems</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About</a></li>
 </ul>
 
     
@@ -113,23 +110,23 @@
             
   <h1>Source code for jmetal.algorithm.multiobjective.omopso</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">copy</span>
-<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">sqrt</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span>
 
-<span class="kn">from</span> <span class="nn">jmetal.config</span> <span class="k">import</span> <span class="n">store</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.algorithm</span> <span class="k">import</span> <span class="n">ParticleSwarmOptimization</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="k">import</span> <span class="n">FloatProblem</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="k">import</span> <span class="n">FloatSolution</span>
-<span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="k">import</span> <span class="n">UniformMutation</span>
-<span class="kn">from</span> <span class="nn">jmetal.operator.mutation</span> <span class="k">import</span> <span class="n">NonUniformMutation</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.archive</span> <span class="k">import</span> <span class="n">BoundedArchive</span><span class="p">,</span> <span class="n">NonDominatedSolutionsArchive</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.comparator</span> <span class="k">import</span> <span class="n">DominanceComparator</span><span class="p">,</span> <span class="n">EpsilonDominanceComparator</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.evaluator</span> <span class="k">import</span> <span class="n">Evaluator</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.generator</span> <span class="k">import</span> <span class="n">Generator</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="k">import</span> <span class="n">TerminationCriterion</span>
+<span class="kn">from</span> <span class="nn">jmetal.config</span> <span class="kn">import</span> <span class="n">store</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.algorithm</span> <span class="kn">import</span> <span class="n">ParticleSwarmOptimization</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="kn">import</span> <span class="n">FloatProblem</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="kn">import</span> <span class="n">FloatSolution</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="kn">import</span> <span class="n">UniformMutation</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator.mutation</span> <span class="kn">import</span> <span class="n">NonUniformMutation</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.archive</span> <span class="kn">import</span> <span class="n">BoundedArchive</span><span class="p">,</span> <span class="n">NonDominatedSolutionsArchive</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.comparator</span> <span class="kn">import</span> <span class="n">DominanceComparator</span><span class="p">,</span> <span class="n">EpsilonDominanceComparator</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.evaluator</span> <span class="kn">import</span> <span class="n">Evaluator</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.generator</span> <span class="kn">import</span> <span class="n">Generator</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">TerminationCriterion</span>
 
 <span class="n">R</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;R&#39;</span><span class="p">)</span>
 
@@ -144,7 +141,7 @@
 
 <div class="viewcode-block" id="OMOPSO"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO">[docs]</a><span class="k">class</span> <span class="nc">OMOPSO</span><span class="p">(</span><span class="n">ParticleSwarmOptimization</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">problem</span><span class="p">:</span> <span class="n">FloatProblem</span><span class="p">,</span>
                  <span class="n">swarm_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                  <span class="n">uniform_mutation</span><span class="p">:</span> <span class="n">UniformMutation</span><span class="p">,</span>

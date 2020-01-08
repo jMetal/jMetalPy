@@ -19,7 +19,7 @@ A paper introducing jMetalPy is available at: https://doi.org/10.1016/j.swevo.20
 You can install the latest version of jMetalPy with `pip`, 
 
 ```console
-pip install jmetalpy
+pip install jmetalpy  # or "jmetalpy[distributed]"
 ```
 
 <details><summary><b>Notes on installing with <tt>pip</tt></b></summary>
@@ -27,13 +27,13 @@ pip install jmetalpy
 
 jMetalPy includes features for parallel and distributed computing based on [pySpark](https://spark.apache.org/docs/latest/api/python/index.html) and [Dask](https://dask.org/).
 
-These (extra) dependencies are automatically installed when running `pip`:
+These (extra) dependencies are *not* automatically installed when running `pip`, which only comprises the core functionality of the framework (enough for most users):
 
 ```console
 pip install jmetalpy
 ```
 
-But you can also install the core functionality of the framework (which is often enough for most users):
+This is the equivalent of running: 
 
 ```console
 pip install "jmetalpy[core]"

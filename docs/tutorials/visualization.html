@@ -24,7 +24,6 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Experiments" href="experiment.html" />
@@ -90,8 +89,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../singleobjective.algorithms.html">Single-objective algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../operators.html">Operators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../problems.html">Problems</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
 </ul>
 
     
@@ -181,7 +178,7 @@
 a parallel coordinates plot is used.
 Note that any arbitrary number of fronts can be plotted for comparison purposes:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plot_front</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Pareto front approximation&#39;</span><span class="p">,</span> <span class="n">axis_labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span>
-<span class="n">plot_front</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">front1</span><span class="p">,</span> <span class="n">front2</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zdt1&#39;</span><span class="p">,</span> <span class="s1">&#39;zdt2&#39;</span><span class="p">],</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;output&#39;</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s1">&#39;eps&#39;</span><span class="p">)</span>
+<span class="n">plot_front</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">front1</span><span class="p">,</span> <span class="n">front2</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zdt1&#39;</span><span class="p">,</span> <span class="s1">&#39;zdt2&#39;</span><span class="p">],</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;output&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;eps&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>

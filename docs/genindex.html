@@ -25,7 +25,6 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
   
@@ -74,8 +73,6 @@
 <li class="toctree-l1"><a class="reference internal" href="singleobjective.algorithms.html">Single-objective algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="operators.html">Operators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="problems.html">Problems</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
 </ul>
 
     
@@ -184,6 +181,8 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.critical_distance.CDplot">CDplot() (in module jmetal.lab.statistical_test.critical_distance)</a>
+</li>
       <li><a href="api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.choose_neighbor_type">choose_neighbor_type() (jmetal.algorithm.multiobjective.moead.MOEAD method)</a>
 </li>
       <li><a href="tutorials/visualization.html#jmetal.lab.visualization.chord_plot.chord_diagram">chord_diagram() (in module jmetal.lab.visualization.chord_plot)</a>
@@ -460,9 +459,11 @@
       </ul></li>
       <li><a href="api/algorithm/singleobjective/evolution.strategy.html#jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy">EvolutionStrategy (class in jmetal.algorithm.singleobjective.evolution_strategy)</a>
 </li>
-      <li><a href="api/operator/crossover.html#jmetal.operator.crossover.CXCrossover.execute">execute() (jmetal.operator.crossover.CXCrossover method)</a>
+      <li><a href="tutorials/experiment.html#jmetal.lab.experiment.Job.execute">execute() (jmetal.lab.experiment.Job method)</a>
 
       <ul>
+        <li><a href="api/operator/crossover.html#jmetal.operator.crossover.CXCrossover.execute">(jmetal.operator.crossover.CXCrossover method)</a>
+</li>
         <li><a href="api/operator/crossover.html#jmetal.operator.crossover.DifferentialEvolutionCrossover.execute">(jmetal.operator.crossover.DifferentialEvolutionCrossover method)</a>
 </li>
         <li><a href="api/operator/crossover.html#jmetal.operator.crossover.NullCrossover.execute">(jmetal.operator.crossover.NullCrossover method)</a>
@@ -510,6 +511,8 @@
         <li><a href="api/operator/selection.html#jmetal.operator.selection.RouletteWheelSelection.execute">(jmetal.operator.selection.RouletteWheelSelection method)</a>
 </li>
       </ul></li>
+      <li><a href="tutorials/experiment.html#jmetal.lab.experiment.Experiment">Experiment (class in jmetal.lab.experiment)</a>
+</li>
       <li><a href="tutorials/visualization.html#jmetal.lab.visualization.interactive.InteractivePlot.export_to_div">export_to_div() (jmetal.lab.visualization.interactive.InteractivePlot method)</a>
 </li>
       <li><a href="tutorials/visualization.html#jmetal.lab.visualization.interactive.InteractivePlot.export_to_html">export_to_html() (jmetal.lab.visualization.interactive.InteractivePlot method)</a>
@@ -572,6 +575,8 @@
 </li>
       <li><a href="api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.generate_permutation_of_neighbors">generate_permutation_of_neighbors() (jmetal.algorithm.multiobjective.moead.MOEAD method)</a>
 </li>
+      <li><a href="tutorials/experiment.html#jmetal.lab.experiment.generate_summary_from_experiment">generate_summary_from_experiment() (in module jmetal.lab.experiment)</a>
+</li>
       <li><a href="api/algorithm/singleobjective/genetic.algorithm.html#jmetal.algorithm.singleobjective.genetic_algorithm.GeneticAlgorithm">GeneticAlgorithm (class in jmetal.algorithm.singleobjective.genetic_algorithm)</a>
 </li>
       <li><a href="api/algorithm/multiobjective/eas/gde3.html#jmetal.algorithm.multiobjective.gde3.GDE3.get_name">get_name() (jmetal.algorithm.multiobjective.gde3.GDE3 method)</a>
@@ -588,8 +593,6 @@
         <li><a href="api/algorithm/multiobjective/eas/nsgaii_distributed.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_name">(jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII method)</a>
 </li>
         <li><a href="api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII.get_name">(jmetal.algorithm.multiobjective.nsgaii.NSGAII method)</a>
-</li>
-        <li><a href="api/algorithm/multiobjective/eas/nsgaiii.html#jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.get_name">(jmetal.algorithm.multiobjective.nsgaiii.NSGAIII method)</a>
 </li>
         <li><a href="api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO.get_name">(jmetal.algorithm.multiobjective.omopso.OMOPSO method)</a>
 </li>
@@ -831,8 +834,6 @@
 </li>
         <li><a href="api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII.get_result">(jmetal.algorithm.multiobjective.nsgaii.NSGAII method)</a>
 </li>
-        <li><a href="api/algorithm/multiobjective/eas/nsgaiii.html#jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.get_result">(jmetal.algorithm.multiobjective.nsgaiii.NSGAIII method)</a>
-</li>
         <li><a href="api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO.get_result">(jmetal.algorithm.multiobjective.omopso.OMOPSO method)</a>
 </li>
         <li><a href="api/algorithm/multiobjective/psos/smpso.html#jmetal.algorithm.multiobjective.smpso.SMPSO.get_result">(jmetal.algorithm.multiobjective.smpso.SMPSO method)</a>
@@ -942,11 +943,15 @@
 </li>
       <li><a href="tutorials/problem.html#module-jmetal.core.problem">jmetal.core.problem (module)</a>
 </li>
+      <li><a href="tutorials/experiment.html#module-jmetal.lab.experiment">jmetal.lab.experiment (module)</a>
+</li>
       <li><a href="api/jmetal.lab.statistical_test.html#module-jmetal.lab.statistical_test">jmetal.lab.statistical_test (module)</a>
 </li>
       <li><a href="api/jmetal.lab.statistical_test.html#module-jmetal.lab.statistical_test.apv_procedures">jmetal.lab.statistical_test.apv_procedures (module)</a>
 </li>
       <li><a href="api/jmetal.lab.statistical_test.html#module-jmetal.lab.statistical_test.bayesian">jmetal.lab.statistical_test.bayesian (module)</a>
+</li>
+      <li><a href="api/jmetal.lab.statistical_test.html#module-jmetal.lab.statistical_test.critical_distance">jmetal.lab.statistical_test.critical_distance (module)</a>
 </li>
       <li><a href="api/jmetal.lab.statistical_test.html#module-jmetal.lab.statistical_test.functions">jmetal.lab.statistical_test.functions (module)</a>
 </li>
@@ -989,6 +994,8 @@
       <li><a href="api/problem/singleobjective.html#module-jmetal.problem.singleobjective.unconstrained">jmetal.problem.singleobjective.unconstrained (module)</a>
 </li>
       <li><a href="tutorials/observer.html#module-jmetal.util.observer">jmetal.util.observer (module)</a>
+</li>
+      <li><a href="tutorials/experiment.html#jmetal.lab.experiment.Job">Job (class in jmetal.lab.experiment)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1098,15 +1105,15 @@
 </li>
       <li><a href="api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.apv_procedures.nemenyi">nemenyi() (in module jmetal.lab.statistical_test.apv_procedures)</a>
 </li>
-      <li><a href="api/operator/mutation.html#jmetal.operator.mutation.NonUniformMutation">NonUniformMutation (class in jmetal.operator.mutation)</a>
+      <li><a href="api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.critical_distance.NemenyiCD">NemenyiCD() (in module jmetal.lab.statistical_test.critical_distance)</a>
 </li>
-      <li><a href="tutorials/observer.html#jmetal.core.observer.Observable.notify_all">notify_all() (jmetal.core.observer.Observable method)</a>
+      <li><a href="api/operator/mutation.html#jmetal.operator.mutation.NonUniformMutation">NonUniformMutation (class in jmetal.operator.mutation)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII">NSGAII (class in jmetal.algorithm.multiobjective.nsgaii)</a>
+      <li><a href="tutorials/observer.html#jmetal.core.observer.Observable.notify_all">notify_all() (jmetal.core.observer.Observable method)</a>
 </li>
-      <li><a href="api/algorithm/multiobjective/eas/nsgaiii.html#jmetal.algorithm.multiobjective.nsgaiii.NSGAIII">NSGAIII (class in jmetal.algorithm.multiobjective.nsgaiii)</a>
+      <li><a href="api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII">NSGAII (class in jmetal.algorithm.multiobjective.nsgaii)</a>
 </li>
       <li><a href="api/operator/crossover.html#jmetal.operator.crossover.NullCrossover">NullCrossover (class in jmetal.operator.crossover)</a>
 </li>
@@ -1227,8 +1234,6 @@
 </li>
         <li><a href="api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII.replacement">(jmetal.algorithm.multiobjective.nsgaii.NSGAII method)</a>
 </li>
-        <li><a href="api/algorithm/multiobjective/eas/nsgaiii.html#jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.replacement">(jmetal.algorithm.multiobjective.nsgaiii.NSGAIII method)</a>
-</li>
         <li><a href="api/algorithm/multiobjective/eas/spea2.html#jmetal.algorithm.multiobjective.spea2.SPEA2.replacement">(jmetal.algorithm.multiobjective.spea2.SPEA2 method)</a>
 </li>
         <li><a href="api/algorithm/singleobjective/evolution.strategy.html#jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy.replacement">(jmetal.algorithm.singleobjective.evolution_strategy.EvolutionStrategy method)</a>
@@ -1261,7 +1266,11 @@
       <li><a href="api/operator/selection.html#jmetal.operator.selection.RouletteWheelSelection">RouletteWheelSelection (class in jmetal.operator.selection)</a>
 </li>
       <li><a href="api/algorithm/multiobjective/eas/nsgaii_distributed.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.run">run() (jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII method)</a>
+
+      <ul>
+        <li><a href="tutorials/experiment.html#jmetal.lab.experiment.Experiment.run">(jmetal.lab.experiment.Experiment method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 

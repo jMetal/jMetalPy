@@ -24,7 +24,6 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Getting started" href="tutorials.html" />
@@ -77,8 +76,6 @@
 <li class="toctree-l1"><a class="reference internal" href="singleobjective.algorithms.html">Single-objective algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="operators.html">Operators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="problems.html">Problems</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
 </ul>
 
     
@@ -155,24 +152,22 @@
 <li class="toctree-l1"><a class="reference internal" href="singleobjective.algorithms.html">Single-objective algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="operators.html">Operators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="problems.html">Problems</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
 </ul>
 </div>
 </div>
 <div class="section" id="installation-steps">
 <h2>Installation steps<a class="headerlink" href="#installation-steps" title="Permalink to this headline">¶</a></h2>
 <p>Via pip:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install jmetalpy
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install jmetalpy  <span class="c1"># or &quot;jmetalpy[distributed]&quot;</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Alternatively, you can use one of these instead:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install <span class="s2">&quot;jmetalpy[core]&quot;</span>  <span class="c1"># Install core components of the framework</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install <span class="s2">&quot;jmetalpy[core]&quot;</span>  <span class="c1"># Install core components of the framework (equivalent to `pip install jmetalpy`)</span>
 <span class="gp">$</span> pip install <span class="s2">&quot;jmetalpy[docs]&quot;</span>  <span class="c1"># Install requirements for building docs</span>
 <span class="gp">$</span> pip install <span class="s2">&quot;jmetalpy[distributed]&quot;</span>  <span class="c1"># Install requirements for parallel/distributed computing</span>
-<span class="gp">$</span> pip install <span class="s2">&quot;jmetalpy[complete]&quot;</span>  <span class="c1"># Install all dependencies (equivalent to `pip install jmetalpy`)</span>
+<span class="gp">$</span> pip install <span class="s2">&quot;jmetalpy[complete]&quot;</span>  <span class="c1"># Install all dependencies</span>
 </pre></div>
 </div>
 </div>
