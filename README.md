@@ -1,11 +1,3 @@
-<style>
-thead > tr {
-  padding: 0;
-  margin: 0;
-  border: 0;
-}
-</style>
-
 ![jMetalPy](source/jmetalpy.png)
 
 [![Build Status](https://img.shields.io/travis/jMetal/jMetalPy/master.svg?style=flat-square)](https://travis-ci.org/jMetal/jMetalPy)
@@ -94,6 +86,17 @@ front = get_non_dominated_solutions(algorithm.get_result())
 print_function_values_to_file(front, 'FUN.NSGAII.ZDT1')
 print_variables_to_file(front, 'VAR.NSGAII.ZDT1')
 ```
+
+Or visualize the Pareto front approximation produced by the algorithm:
+
+```python
+from jmetal.lab.visualization import Plot
+
+plot_front = Plot(title='Pareto front approximation', axis_labels=['x', 'y'])
+plot_front.plot(front, label='NSGAII-ZDT1', filename='NSGAII-ZDT1', format='png')
+```
+
+<img src=source/_static/NSGAII-ZDT1.png width=450 alt="Pareto front approximation">
 
 ## Features
 The current release of jMetalPy (v1.5.3) contains the following components:
