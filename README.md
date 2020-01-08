@@ -1,3 +1,11 @@
+<style>
+thead > tr {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+</style>
+
 ![jMetalPy](source/jmetalpy.png)
 
 [![Build Status](https://img.shields.io/travis/jMetal/jMetalPy/master.svg?style=flat-square)](https://travis-ci.org/jMetal/jMetalPy)
@@ -10,7 +18,7 @@ A paper introducing jMetalPy is available at: https://doi.org/10.1016/j.swevo.20
 
 ### Table of Contents
 - [Installation](#installation)
-- [Usage](#usage)
+- [Usage](#hello-world-)
 - [Features](#features)
 - [License](#license)
 
@@ -100,18 +108,9 @@ The current release of jMetalPy (v1.5.3) contains the following components:
 * Experiment class for performing studies either alone or alongside [jMetal](https://github.com/jMetal/jMetal).
 * Pairwise and multiple hypothesis testing for statistical analysis, including several frequentist and Bayesian testing methods, critical distance plots and posterior diagrams.
 
-<p align="center">
-  <br/>
-  <img src=source/_static/2D.gif width=600 alt="Scatter plot 2D">
-  <br/>
-  <img src=source/_static/3D.gif width=600 alt="Scatter plot 3D">
-  <br/>
-  <img src=source/_static/p-c.gif width=600 alt="Parallel coordinates">
-  <br/>
-  <br/>
-  <img src=source/_static/chordplot.gif width=400 alt="Interactive chord plot">
-  <br/>
-</p>
+| ![Scatter plot 2D](source/_static/2D.gif) | ![Scatter plot 3D](source/_static/3D.gif) |
+|-------------- | ----------------  |
+| ![Parallel coordinates](source/_static/p-c.gif) | ![Interactive chord plot](source/_static/chordplot.gif) |
 
 ## License
 This project is licensed under the terms of the MIT - see the [LICENSE](LICENSE) file for details.
