@@ -6,7 +6,7 @@ import numpy as np
 from jmetal.core.operator import Selection
 from jmetal.util.density_estimator import CrowdingDistance
 from jmetal.util.ranking import FastNonDominatedRanking
-from jmetal.util.solutions.comparator import Comparator, DominanceComparator
+from jmetal.util.comparator import Comparator, DominanceComparator
 
 S = TypeVar('S')
 
@@ -123,11 +123,11 @@ class NaryRandomSolutionSelection(Selection[List[S], S]):
         if len(front) < self.number_of_solutions_to_be_returned:
             raise Exception('The front contains less elements than required')
 
-        # random sampling without replacement
+        # random_search sampling without replacement
         return random.sample(front, self.number_of_solutions_to_be_returned)
 
     def get_name(self) -> str:
-        return 'Nary random solution selection'
+        return 'Nary random_search solution selection'
 
 
 class DifferentialEvolutionSelection(Selection[List[S], List[S]]):

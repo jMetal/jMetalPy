@@ -1,0 +1,485 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Defining new problems &#8212; jMetalPy 1.5.3 documentation</title>
+    <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Extending algorithms" href="observer.html" />
+    <link rel="prev" title="Getting started" href="../tutorials.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="observer.html" title="Extending algorithms"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../tutorials.html" title="Getting started"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Getting started</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../index.html" class="text-logo">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.5.3 documentation">
+    <br>
+</a>
+
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    Python version of the jMetal framework
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Getting started</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Defining new problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="observer.html">Extending algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluator.html">Evaluate solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization.html">Front visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="experiment.html">Experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="statistics.html">Statistical analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Contents</h2>
+    <div class="sidebar-localtoc">
+      <ul>
+<li><a class="reference internal" href="#">Defining new problems</a><ul>
+<li><a class="reference internal" href="#use-case-subset-sum">Use case: Subset Sum</a></li>
+<li><a class="reference internal" href="#use-case-multi-objective-subset-sum">Use case: Multi-objective Subset Sum</a></li>
+<li><a class="reference internal" href="#module-jmetal.core.problem">API</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="../index.html">Docs</a></li>
+              
+              <li class="breadcrumb-item"><a href="../tutorials.html">Getting started</a></li>
+              
+              <li class="breadcrumb-item">Defining new problems</li>
+            </ol>
+          </nav>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="defining-new-problems">
+<h1>Defining new problems<a class="headerlink" href="#defining-new-problems" title="Permalink to this headline">¶</a></h1>
+<p>To include a problem in jMetalPy, it must implement the <code class="code docutils literal notranslate"><span class="pre">Problem</span></code> interface from the <a class="reference internal" href="#module-jmetal.core.problem" title="jmetal.core.problem"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jmetal.core.problem</span></code></a> module.</p>
+<div class="section" id="use-case-subset-sum">
+<h2>Use case: Subset Sum<a class="headerlink" href="#use-case-subset-sum" title="Permalink to this headline">¶</a></h2>
+<p>The goal is to find a subset S of W (list of non-negative integers) whose elements sum is closest to (without exceeding) C.
+For example, for the input <span class="math notranslate nohighlight">\(W=\{3, 34, 4, 12, 5, 2\}\)</span> and <span class="math notranslate nohighlight">\(C=9\)</span>, one output could be <span class="math notranslate nohighlight">\(S=\{4, 5\}\)</span> (as it is a subset with sum 9).</p>
+<p>In jMetalPy, this problem can be encoded as a binary problem with one objective (to be maximized) and one variable
+(a binary array representing whethever the ith element of W is selected or not):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SubsetSum</span><span class="p">(</span><span class="n">BinaryProblem</span><span class="p">):</span>
+
+   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">W</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+      <span class="nb">super</span><span class="p">(</span><span class="n">SubsetSum</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">reference_front</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">C</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">W</span> <span class="o">=</span> <span class="n">W</span>
+
+      <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span> <span class="o">=</span> <span class="mi">1</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">=</span> <span class="mi">1</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span> <span class="o">=</span> <span class="mi">0</span>
+
+      <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MAXIMIZE</span><span class="p">]</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">obj_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Sum&#39;</span><span class="p">]</span>
+
+   <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">BinarySolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
+      <span class="k">pass</span>
+
+   <span class="k">def</span> <span class="nf">create_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
+      <span class="k">pass</span>
+
+   <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+      <span class="k">return</span> <span class="s1">&#39;Subset Sum&#39;</span>
+</pre></div>
+</div>
+<p>Now we have to define the abstract methods <code class="code docutils literal notranslate"><span class="pre">evaluate</span></code> and <code class="code docutils literal notranslate"><span class="pre">create_solution</span></code> from the <a class="reference internal" href="#jmetal.core.problem.Problem" title="jmetal.core.problem.Problem"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jmetal.core.problem.Problem</span></code></a> class.</p>
+<p>Note that each solution consists of one objective function to be maximized to be as close as possible to <span class="math notranslate nohighlight">\(C\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\max{\sum_{i \in S}{s_i}}\]</div>
+<p>Taking this into account, one solution could be created and evaluated as follows:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>jMetalPy assumes minimization by default. Therefore, we will have to multiply the solution objective by <span class="math notranslate nohighlight">\(-1.0\)</span>.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">BinarySolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
+    <span class="n">total_sum</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">bits</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">bits</span><span class="p">:</span>
+            <span class="n">total_sum</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">total_sum</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">:</span>
+        <span class="n">total_sum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span> <span class="o">-</span> <span class="n">total_sum</span> <span class="o">*</span> <span class="mf">0.1</span>
+
+        <span class="k">if</span> <span class="n">total_sum</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">total_sum</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="n">total_sum</span>
+
+    <span class="k">return</span> <span class="n">solution</span>
+
+<span class="k">def</span> <span class="nf">create_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
+    <span class="n">new_solution</span> <span class="o">=</span> <span class="n">BinarySolution</span><span class="p">(</span><span class="n">number_of_variables</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">,</span>
+                                  <span class="n">number_of_objectives</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">)</span>
+    <span class="n">new_solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> \
+        <span class="p">[</span><span class="bp">True</span> <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="bp">False</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits</span><span class="p">)]</span>
+
+    <span class="k">return</span> <span class="n">new_solution</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="use-case-multi-objective-subset-sum">
+<h2>Use case: Multi-objective Subset Sum<a class="headerlink" href="#use-case-multi-objective-subset-sum" title="Permalink to this headline">¶</a></h2>
+<p>The former problem can be formulated as a multi-objective binary problem whose objectives are as follows:</p>
+<ol class="arabic simple">
+<li><p>Maximize the sum of subsets to be as close as possible to <span class="math notranslate nohighlight">\(C\)</span> and</p></li>
+<li><p>Minimize the number of elements selected from <span class="math notranslate nohighlight">\(W\)</span>.</p></li>
+</ol>
+<p>This can be done by incorporating the objective function and increasing the number of objectives in consecuence:</p>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span>class SubsetSum(BinaryProblem):
+
+   def __init__(self, C: int, W: list):
+      super(SubsetSum, self).__init__(reference_front=None)
+      self.C = C
+      self.W = W
+
+      self.number_of_bits = len(self.W)
+<span class="gi">+     self.number_of_objectives = 2</span>
+      self.number_of_variables = 1
+      self.number_of_constraints = 0
+
+<span class="gi">+     self.obj_directions = [self.MAXIMIZE, self.MINIMIZE]</span>
+<span class="gi">+     self.obj_labels = [&#39;Sum&#39;, &#39;No. of Objects&#39;]</span>
+
+   def evaluate(self, solution: BinarySolution) -&gt; BinarySolution:
+      total_sum = 0.0
+<span class="gi">+     number_of_objects = 0</span>
+
+<span class="gi">+     for index, bits in enumerate(solution.variables[0]):</span>
+<span class="gi">+        if bits:</span>
+<span class="gi">+           total_sum += self.W[index]</span>
+<span class="gi">+              number_of_objects += 1</span>
+
+      if total_sum &gt; self.C:
+         total_sum = self.C - total_sum * 0.1
+
+         if total_sum &lt; 0.0:
+             total_sum = 0.0
+
+      solution.objectives[0] = -1.0 * total_sum
+<span class="gi">+     solution.objectives[1] = number_of_objects</span>
+
+      return solution
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-jmetal.core.problem">
+<span id="api"></span><h2>API<a class="headerlink" href="#module-jmetal.core.problem" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jmetal.core.problem.BinaryProblem">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.core.problem.</code><code class="sig-name descname">BinaryProblem</code><a class="reference internal" href="../_modules/jmetal/core/problem.html#BinaryProblem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.BinaryProblem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.core.problem.Problem" title="jmetal.core.problem.Problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.Problem</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<p>Class representing binary problems.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.core.problem.DynamicProblem">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.core.problem.</code><code class="sig-name descname">DynamicProblem</code><a class="reference internal" href="../_modules/jmetal/core/problem.html#DynamicProblem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.DynamicProblem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.core.problem.Problem" title="jmetal.core.problem.Problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.Problem</span></code></a>, <a class="reference internal" href="observer.html#jmetal.core.observer.Observer" title="jmetal.core.observer.Observer"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.observer.Observer</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.core.problem.DynamicProblem.clear_changed">
+<em class="property">abstract </em><code class="sig-name descname">clear_changed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/jmetal/core/problem.html#DynamicProblem.clear_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.DynamicProblem.clear_changed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.core.problem.DynamicProblem.the_problem_has_changed">
+<em class="property">abstract </em><code class="sig-name descname">the_problem_has_changed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/jmetal/core/problem.html#DynamicProblem.the_problem_has_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.DynamicProblem.the_problem_has_changed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.core.problem.FloatProblem">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.core.problem.</code><code class="sig-name descname">FloatProblem</code><a class="reference internal" href="../_modules/jmetal/core/problem.html#FloatProblem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.FloatProblem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.core.problem.Problem" title="jmetal.core.problem.Problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.Problem</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<p>Class representing float problems.</p>
+<dl class="method">
+<dt id="jmetal.core.problem.FloatProblem.create_solution">
+<code class="sig-name descname">create_solution</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.FloatSolution<a class="reference internal" href="../_modules/jmetal/core/problem.html#FloatProblem.create_solution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.FloatProblem.create_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a random_search solution to the problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.core.problem.IntegerProblem">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.core.problem.</code><code class="sig-name descname">IntegerProblem</code><a class="reference internal" href="../_modules/jmetal/core/problem.html#IntegerProblem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.IntegerProblem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.core.problem.Problem" title="jmetal.core.problem.Problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.Problem</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<p>Class representing integer problems.</p>
+<dl class="method">
+<dt id="jmetal.core.problem.IntegerProblem.create_solution">
+<code class="sig-name descname">create_solution</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; jmetal.core.solution.IntegerSolution<a class="reference internal" href="../_modules/jmetal/core/problem.html#IntegerProblem.create_solution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.IntegerProblem.create_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a random_search solution to the problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.core.problem.OnTheFlyFloatProblem">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.core.problem.</code><code class="sig-name descname">OnTheFlyFloatProblem</code><a class="reference internal" href="../_modules/jmetal/core/problem.html#OnTheFlyFloatProblem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.OnTheFlyFloatProblem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.core.problem.FloatProblem" title="jmetal.core.problem.FloatProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.FloatProblem</span></code></a></p>
+<p>Class for defining float problems on the fly.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Defining problem Srinivas on the fly</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f1</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="nb">float</span><span class="p">]):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">return</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f2</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="nb">float</span><span class="p">]):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">return</span> <span class="mf">9.0</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">c1</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="nb">float</span><span class="p">]):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mf">225.0</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">c2</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="nb">float</span><span class="p">]):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">return</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">10.0</span> <span class="o">-</span> <span class="mf">1.0</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">problem</span> <span class="o">=</span> <span class="n">OnTheFlyFloatProblem</span><span class="p">()</span>            <span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="s2">&quot;Srinivas&quot;</span><span class="p">)</span>            <span class="o">.</span><span class="n">add_variable</span><span class="p">(</span><span class="o">-</span><span class="mf">20.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">)</span>            <span class="o">.</span><span class="n">add_variable</span><span class="p">(</span><span class="o">-</span><span class="mf">20.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">)</span>            <span class="o">.</span><span class="n">add_function</span><span class="p">(</span><span class="n">f1</span><span class="p">)</span>            <span class="o">.</span><span class="n">add_function</span><span class="p">(</span><span class="n">f2</span><span class="p">)</span>            <span class="o">.</span><span class="n">add_constraint</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span>            <span class="o">.</span><span class="n">add_constraint</span><span class="p">(</span><span class="n">c2</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="jmetal.core.problem.OnTheFlyFloatProblem.add_constraint">
+<code class="sig-name descname">add_constraint</code><span class="sig-paren">(</span><em class="sig-param">constraint</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/core/problem.html#OnTheFlyFloatProblem.add_constraint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.OnTheFlyFloatProblem.add_constraint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.core.problem.OnTheFlyFloatProblem.add_function">
+<code class="sig-name descname">add_function</code><span class="sig-paren">(</span><em class="sig-param">function</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/core/problem.html#OnTheFlyFloatProblem.add_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.OnTheFlyFloatProblem.add_function" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.core.problem.OnTheFlyFloatProblem.add_variable">
+<code class="sig-name descname">add_variable</code><span class="sig-paren">(</span><em class="sig-param">lower_bound</em>, <em class="sig-param">upper_bound</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/core/problem.html#OnTheFlyFloatProblem.add_variable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.OnTheFlyFloatProblem.add_variable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.core.problem.OnTheFlyFloatProblem.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: jmetal.core.solution.FloatSolution</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/core/problem.html#OnTheFlyFloatProblem.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.OnTheFlyFloatProblem.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <a class="reference internal" href="#jmetal.core.problem.Problem" title="jmetal.core.problem.Problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code></a>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.core.problem.OnTheFlyFloatProblem.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/jmetal/core/problem.html#OnTheFlyFloatProblem.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.OnTheFlyFloatProblem.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.core.problem.OnTheFlyFloatProblem.set_name">
+<code class="sig-name descname">set_name</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/core/problem.html#OnTheFlyFloatProblem.set_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.OnTheFlyFloatProblem.set_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.core.problem.PermutationProblem">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.core.problem.</code><code class="sig-name descname">PermutationProblem</code><a class="reference internal" href="../_modules/jmetal/core/problem.html#PermutationProblem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.PermutationProblem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.core.problem.Problem" title="jmetal.core.problem.Problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.problem.Problem</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<p>Class representing permutation problems.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="jmetal.core.problem.Problem">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.core.problem.</code><code class="sig-name descname">Problem</code><a class="reference internal" href="../_modules/jmetal/core/problem.html#Problem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.Problem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Generic" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.Generic</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<p>Class representing problems.</p>
+<dl class="attribute">
+<dt id="jmetal.core.problem.Problem.MAXIMIZE">
+<code class="sig-name descname">MAXIMIZE</code><em class="property"> = 1</em><a class="headerlink" href="#jmetal.core.problem.Problem.MAXIMIZE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="jmetal.core.problem.Problem.MINIMIZE">
+<code class="sig-name descname">MINIMIZE</code><em class="property"> = -1</em><a class="headerlink" href="#jmetal.core.problem.Problem.MINIMIZE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.core.problem.Problem.create_solution">
+<em class="property">abstract </em><code class="sig-name descname">create_solution</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; S<a class="reference internal" href="../_modules/jmetal/core/problem.html#Problem.create_solution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.Problem.create_solution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a random_search solution to the problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.core.problem.Problem.evaluate">
+<em class="property">abstract </em><code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solution: S</em><span class="sig-paren">)</span> &#x2192; S<a class="reference internal" href="../_modules/jmetal/core/problem.html#Problem.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.Problem.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a solution. For any new problem inheriting from <a class="reference internal" href="#jmetal.core.problem.Problem" title="jmetal.core.problem.Problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Problem</span></code></a>, this method should be
+replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Evaluated solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.core.problem.Problem.get_name">
+<em class="property">abstract </em><code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/jmetal/core/problem.html#Problem.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.core.problem.Problem.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="float-left">
+        <a class="btn btn-outline btn-sm" href="../tutorials.html" title="previous chapter (use the left arrow)">← Getting started</a>
+      </div>
+    
+      <div class="float-right">
+        <a class="btn btn-outline btn-sm" href="observer.html" title="next chapter (use the right arrow)">Extending algorithms →</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="observer.html" title="Extending algorithms"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../tutorials.html" title="Getting started"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../tutorials.html" >Getting started</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

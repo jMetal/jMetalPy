@@ -2,7 +2,7 @@ import unittest
 
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
-from jmetal.util.solutions.evaluator import SequentialEvaluator, MapEvaluator
+from jmetal.util.evaluator import SequentialEvaluator, MapEvaluator
 
 
 class MockedProblem(FloatProblem):

@@ -1,8 +1,11 @@
 import time
-from typing import TypeVar, List
+from typing import TypeVar, List, Generator
 
-import dask
-from distributed import as_completed, Client
+try:
+    import dask
+    from distributed import as_completed, Client
+except ImportError:
+    pass
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
@@ -11,10 +14,10 @@ from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem, DynamicProblem
 from jmetal.operator import BinaryTournamentSelection
 from jmetal.util.density_estimator import CrowdingDistance
+from jmetal.util.evaluator import Evaluator
 from jmetal.util.ranking import FastNonDominatedRanking
 from jmetal.util.replacement import RankingAndDensityEstimatorReplacement, RemovalPolicyType
-from jmetal.util.solutions import Evaluator, Generator
-from jmetal.util.solutions.comparator import DominanceComparator, Comparator, MultiComparator
+from jmetal.util.comparator import DominanceComparator, Comparator, MultiComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -162,7 +165,7 @@ class DistributedNSGAII(Algorithm[S, R]):
                  mutation: Mutation,
                  crossover: Crossover,
                  number_of_cores: int,
-                 client: Client,
+                 client,
                  selection: Selection = BinaryTournamentSelection(
                      MultiComparator([FastNonDominatedRanking.get_comparator(),
                                       CrowdingDistance.get_comparator()])),

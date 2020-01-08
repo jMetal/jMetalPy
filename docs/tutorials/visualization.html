@@ -1,0 +1,477 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Front visualization &#8212; jMetalPy 1.5.3 documentation</title>
+    <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Experiments" href="experiment.html" />
+    <link rel="prev" title="Evaluate solutions" href="evaluator.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="experiment.html" title="Experiments"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="evaluator.html" title="Evaluate solutions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Getting started</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../index.html" class="text-logo">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.5.3 documentation">
+    <br>
+</a>
+
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    Python version of the jMetal framework
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Getting started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="problem.html">Defining new problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="observer.html">Extending algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluator.html">Evaluate solutions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Front visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="experiment.html">Experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="statistics.html">Statistical analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Contents</h2>
+    <div class="sidebar-localtoc">
+      <ul>
+<li><a class="reference internal" href="#">Front visualization</a><ul>
+<li><a class="reference internal" href="#static-plots">Static plots</a><ul>
+<li><a class="reference internal" href="#module-jmetal.lab.visualization.plotting">API</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#interactive-plots">Interactive plots</a><ul>
+<li><a class="reference internal" href="#id1">API</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#streaming-plots">Streaming plots</a><ul>
+<li><a class="reference internal" href="#id2">API</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#chord-plot">Chord plot</a><ul>
+<li><a class="reference internal" href="#id3">API</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#posterior-plot">Posterior plot</a><ul>
+<li><a class="reference internal" href="#id4">API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="../index.html">Docs</a></li>
+              
+              <li class="breadcrumb-item"><a href="../tutorials.html">Getting started</a></li>
+              
+              <li class="breadcrumb-item">Front visualization</li>
+            </ol>
+          </nav>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="front-visualization">
+<h1>Front visualization<a class="headerlink" href="#front-visualization" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">jmetal.lab.visualization</span></code> submodule contains several classes useful for plotting solutions. jMetalPy includes three types of visualization charts: static, interactive and streaming.</p>
+<div class="section" id="static-plots">
+<h2>Static plots<a class="headerlink" href="#static-plots" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>It is possible to visualize the final front approximation by using the <code class="code docutils literal notranslate"><span class="pre">Plot</span></code> class:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jmetal.lab.visualization</span> <span class="kn">import</span> <span class="n">Plot</span>
+
+<span class="n">plot_front</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Pareto front approximation&#39;</span><span class="p">,</span> <span class="n">axis_labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span>
+<span class="n">plot_front</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">front</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;NSGAII-ZDT1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Static charts can be shown in the screen or stored in a file by setting the filename.</p>
+</div>
+<p>For problems with two and three objectives, the figure produced is a scatter plot; for problems with more than three objectives,
+a parallel coordinates plot is used.
+Note that any arbitrary number of fronts can be plotted for comparison purposes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plot_front</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Pareto front approximation&#39;</span><span class="p">,</span> <span class="n">axis_labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span>
+<span class="n">plot_front</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">front1</span><span class="p">,</span> <span class="n">front2</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zdt1&#39;</span><span class="p">,</span> <span class="s1">&#39;zdt2&#39;</span><span class="p">],</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;output&#39;</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s1">&#39;eps&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="section" id="module-jmetal.lab.visualization.plotting">
+<span id="api"></span><h3>API<a class="headerlink" href="#module-jmetal.lab.visualization.plotting" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="jmetal.lab.visualization.plotting.Plot">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.lab.visualization.plotting.</code><code class="sig-name descname">Plot</code><span class="sig-paren">(</span><em class="sig-param">title: str = 'Pareto front approximation'</em>, <em class="sig-param">reference_front: List[S] = None</em>, <em class="sig-param">reference_point: list = None</em>, <em class="sig-param">axis_labels: list = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/visualization/plotting.html#Plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.plotting.Plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.lab.visualization.plotting.Plot.get_points">
+<em class="property">static </em><code class="sig-name descname">get_points</code><span class="sig-paren">(</span><em class="sig-param">solutions: List[S]</em><span class="sig-paren">)</span> &#x2192; Tuple[pandas.core.frame.DataFrame, int]<a class="reference internal" href="../_modules/jmetal/lab/visualization/plotting.html#Plot.get_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.plotting.Plot.get_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get points for each solution of the front.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>solutions</strong> – List of solutions.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas dataframe with one column for each objective and one row for each solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.lab.visualization.plotting.Plot.pcoords">
+<code class="sig-name descname">pcoords</code><span class="sig-paren">(</span><em class="sig-param">fronts: List[list], normalize: bool = False, filename: str = None, format: str = 'eps'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/visualization/plotting.html#Plot.pcoords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.plotting.Plot.pcoords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot any arbitrary number of fronts in parallel coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fronts</strong> – List of fronts (containing solutions).</p></li>
+<li><p><strong>filename</strong> – Output filename.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.lab.visualization.plotting.Plot.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">front</em>, <em class="sig-param">label=''</em>, <em class="sig-param">normalize: bool = False</em>, <em class="sig-param">filename: str = None</em>, <em class="sig-param">format: str = 'eps'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/visualization/plotting.html#Plot.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.plotting.Plot.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot any arbitrary number of fronts in 2D, 3D or p-coords.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>front</strong> – Pareto front or a list of them.</p></li>
+<li><p><strong>label</strong> – Pareto front title or a list of them.</p></li>
+<li><p><strong>normalize</strong> – If True, normalize data (for p-coords).</p></li>
+<li><p><strong>filename</strong> – Output filename.</p></li>
+<li><p><strong>format</strong> – Output file format.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.lab.visualization.plotting.Plot.three_dim">
+<code class="sig-name descname">three_dim</code><span class="sig-paren">(</span><em class="sig-param">fronts: List[list], labels: List[str] = None, filename: str = None, format: str = 'eps'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/visualization/plotting.html#Plot.three_dim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.plotting.Plot.three_dim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot any arbitrary number of fronts in 3D.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fronts</strong> – List of fronts (containing solutions).</p></li>
+<li><p><strong>labels</strong> – List of fronts title (if any).</p></li>
+<li><p><strong>filename</strong> – Output filename.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.lab.visualization.plotting.Plot.two_dim">
+<code class="sig-name descname">two_dim</code><span class="sig-paren">(</span><em class="sig-param">fronts: List[list], labels: List[str] = None, filename: str = None, format: str = 'eps'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/visualization/plotting.html#Plot.two_dim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.plotting.Plot.two_dim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot any arbitrary number of fronts in 2D.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fronts</strong> – List of fronts (containing solutions).</p></li>
+<li><p><strong>labels</strong> – List of fronts title (if any).</p></li>
+<li><p><strong>filename</strong> – Output filename.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="interactive-plots">
+<h2>Interactive plots<a class="headerlink" href="#interactive-plots" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>This kind of plots are interactive in such a way that every solution can be manipulated (e.g., actions such as zoom, selecting part of the graph, or clicking in a point to see its objective values are allowed).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plot_front</span> <span class="o">=</span> <span class="n">InteractivePlot</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Pareto front approximation&#39;</span><span class="p">)</span>
+<span class="n">plot_front</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">front</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;NSGAII-ZDT1&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;NSGAII-ZDT1-interactive&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="section" id="id1">
+<h3>API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<span class="target" id="module-jmetal.lab.visualization.interactive"></span><dl class="class">
+<dt id="jmetal.lab.visualization.interactive.InteractivePlot">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.lab.visualization.interactive.</code><code class="sig-name descname">InteractivePlot</code><span class="sig-paren">(</span><em class="sig-param">title: str = 'Pareto front approximation'</em>, <em class="sig-param">reference_front: List[S] = None</em>, <em class="sig-param">reference_point: list = None</em>, <em class="sig-param">axis_labels: list = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/visualization/interactive.html#InteractivePlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.interactive.InteractivePlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.lab.visualization.plotting.Plot" title="jmetal.lab.visualization.plotting.Plot"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.lab.visualization.plotting.Plot</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.lab.visualization.interactive.InteractivePlot.export_to_div">
+<code class="sig-name descname">export_to_div</code><span class="sig-paren">(</span><em class="sig-param">filename=None</em>, <em class="sig-param">include_plotlyjs: bool = False</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/jmetal/lab/visualization/interactive.html#InteractivePlot.export_to_div"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.interactive.InteractivePlot.export_to_div" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export as a <cite>div</cite> for embedding the graph in an HTML file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – Output file name (if desired, default to None).</p></li>
+<li><p><strong>include_plotlyjs</strong> – If True, include plot.ly JS script (default to False).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Script as string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.lab.visualization.interactive.InteractivePlot.export_to_html">
+<code class="sig-name descname">export_to_html</code><span class="sig-paren">(</span><em class="sig-param">filename: str</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/jmetal/lab/visualization/interactive.html#InteractivePlot.export_to_html"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.interactive.InteractivePlot.export_to_html" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export the graph to an interactive HTML (solutions can be selected to show some metadata).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> – Output file name.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Script as string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jmetal.lab.visualization.interactive.InteractivePlot.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">front</em>, <em class="sig-param">label=None</em>, <em class="sig-param">normalize: bool = False</em>, <em class="sig-param">filename: str = None</em>, <em class="sig-param">format: str = 'HTML'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/visualization/interactive.html#InteractivePlot.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.interactive.InteractivePlot.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a front of solutions (2D, 3D or parallel coordinates).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>front</strong> – List of solutions.</p></li>
+<li><p><strong>label</strong> – Front name.</p></li>
+<li><p><strong>normalize</strong> – Normalize the input front between 0 and 1 (for problems with more than 3 objectives).</p></li>
+<li><p><strong>filename</strong> – Output filename.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="streaming-plots">
+<h2>Streaming plots<a class="headerlink" href="#streaming-plots" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>The visualizer observer displays the front in real-time (note <strong>it only works for problems with two and three objectives</strong>) during the execution of multi-objective algorithms; this can be useful to observe the evolution of the Pareto front approximation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jmetal.util.observer</span> <span class="kn">import</span> <span class="n">VisualizerObserver</span>
+
+<span class="n">algorithm</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">observer</span><span class="o">=</span><span class="n">VisualizerObserver</span><span class="p">(</span><span class="n">reference_front</span><span class="o">=</span><span class="n">problem</span><span class="o">.</span><span class="n">reference_front</span><span class="p">))</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="section" id="id2">
+<h3>API<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<span class="target" id="module-jmetal.lab.visualization.streaming"></span><dl class="class">
+<dt id="jmetal.lab.visualization.streaming.StreamingPlot">
+<em class="property">class </em><code class="sig-prename descclassname">jmetal.lab.visualization.streaming.</code><code class="sig-name descname">StreamingPlot</code><span class="sig-paren">(</span><em class="sig-param">plot_title: str = 'Pareto front approximation'</em>, <em class="sig-param">reference_front: List[S] = None</em>, <em class="sig-param">reference_point: list = None</em>, <em class="sig-param">axis_labels: list = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/visualization/streaming.html#StreamingPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.streaming.StreamingPlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="jmetal.lab.visualization.streaming.StreamingPlot.create_layout">
+<code class="sig-name descname">create_layout</code><span class="sig-paren">(</span><em class="sig-param">dimension: int</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/jmetal/lab/visualization/streaming.html#StreamingPlot.create_layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.streaming.StreamingPlot.create_layout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.lab.visualization.streaming.StreamingPlot.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">front</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/visualization/streaming.html#StreamingPlot.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.streaming.StreamingPlot.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jmetal.lab.visualization.streaming.StreamingPlot.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">front: List[S], reference_point: list = None</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/jmetal/lab/visualization/streaming.html#StreamingPlot.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.streaming.StreamingPlot.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="chord-plot">
+<h2>Chord plot<a class="headerlink" href="#chord-plot" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h3>API<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<span class="target" id="module-jmetal.lab.visualization.chord_plot"></span><dl class="function">
+<dt id="jmetal.lab.visualization.chord_plot.chord_diagram">
+<code class="sig-prename descclassname">jmetal.lab.visualization.chord_plot.</code><code class="sig-name descname">chord_diagram</code><span class="sig-paren">(</span><em class="sig-param">solutions: List[jmetal.core.solution.FloatSolution], nbins='auto', ax=None, obj_labels=None, prop_labels={'fontsize': 13, 'ha': 'center', 'va': 'center'}, pad=6</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/visualization/chord_plot.html#chord_diagram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.chord_plot.chord_diagram" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.visualization.chord_plot.draw_chord">
+<code class="sig-prename descclassname">jmetal.lab.visualization.chord_plot.</code><code class="sig-name descname">draw_chord</code><span class="sig-paren">(</span><em class="sig-param">start_angle1=0</em>, <em class="sig-param">end_angle1=60</em>, <em class="sig-param">start_angle2=180</em>, <em class="sig-param">end_angle2=240</em>, <em class="sig-param">radius=1.0</em>, <em class="sig-param">chord_width=0.7</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">color=(1</em>, <em class="sig-param">0</em>, <em class="sig-param">0)</em>, <em class="sig-param">z_order=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/visualization/chord_plot.html#draw_chord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.chord_plot.draw_chord" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.visualization.chord_plot.draw_sector">
+<code class="sig-prename descclassname">jmetal.lab.visualization.chord_plot.</code><code class="sig-name descname">draw_sector</code><span class="sig-paren">(</span><em class="sig-param">start_angle=0</em>, <em class="sig-param">end_angle=60</em>, <em class="sig-param">radius=1.0</em>, <em class="sig-param">width=0.2</em>, <em class="sig-param">lw=2</em>, <em class="sig-param">ls='-'</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">fc=(1</em>, <em class="sig-param">0</em>, <em class="sig-param">0)</em>, <em class="sig-param">ec=(0</em>, <em class="sig-param">0</em>, <em class="sig-param">0)</em>, <em class="sig-param">z_order=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/visualization/chord_plot.html#draw_sector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.chord_plot.draw_sector" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.visualization.chord_plot.hover_over_bin">
+<code class="sig-prename descclassname">jmetal.lab.visualization.chord_plot.</code><code class="sig-name descname">hover_over_bin</code><span class="sig-paren">(</span><em class="sig-param">event</em>, <em class="sig-param">handle_tickers</em>, <em class="sig-param">handle_plots</em>, <em class="sig-param">colors</em>, <em class="sig-param">fig</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/visualization/chord_plot.html#hover_over_bin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.chord_plot.hover_over_bin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="jmetal.lab.visualization.chord_plot.polar_to_cartesian">
+<code class="sig-prename descclassname">jmetal.lab.visualization.chord_plot.</code><code class="sig-name descname">polar_to_cartesian</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">theta</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/visualization/chord_plot.html#polar_to_cartesian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.chord_plot.polar_to_cartesian" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="posterior-plot">
+<h2>Posterior plot<a class="headerlink" href="#posterior-plot" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id4">
+<h3>API<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<span class="target" id="module-jmetal.lab.visualization.posterior"></span><dl class="function">
+<dt id="jmetal.lab.visualization.posterior.plot_posterior">
+<code class="sig-prename descclassname">jmetal.lab.visualization.posterior.</code><code class="sig-name descname">plot_posterior</code><span class="sig-paren">(</span><em class="sig-param">sample</em>, <em class="sig-param">higher_is_better: bool = False</em>, <em class="sig-param">min_points_per_hexbin: int = 2</em>, <em class="sig-param">alg_names: list = None</em>, <em class="sig-param">filename: str = 'posterior.eps'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/visualization/posterior.html#plot_posterior"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.visualization.posterior.plot_posterior" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the sample from posterior distribution of a Bayesian statistical test.
+Parameters:
+———–
+data: An (n x 3) array or DataFrame contaning the probabilities.
+alg_names: array of strings. Default np.array([‘Alg1’, ‘Alg2’])</p>
+<blockquote>
+<div><p>Names of the algorithms under evaluation</p>
+</div></blockquote>
+<p>Figure</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="float-left">
+        <a class="btn btn-outline btn-sm" href="evaluator.html" title="previous chapter (use the left arrow)">← Evaluate solutions</a>
+      </div>
+    
+      <div class="float-right">
+        <a class="btn btn-outline btn-sm" href="experiment.html" title="next chapter (use the right arrow)">Experiments →</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="experiment.html" title="Experiments"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="evaluator.html" title="Evaluate solutions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../tutorials.html" >Getting started</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

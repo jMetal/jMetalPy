@@ -4,7 +4,7 @@ from os.path import dirname, join
 from jmetal.core.quality_indicator import HyperVolume, GenerationalDistance
 from jmetal.core.solution import Solution
 from jmetal.problem import ZDT1
-from jmetal.util.solutions import read_solutions
+from jmetal.util.solution import read_solutions
 
 
 class HyperVolumeTestCases(unittest.TestCase):

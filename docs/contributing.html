@@ -1,0 +1,380 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="_static/css/bootstrap.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Contributing &#8212; jMetalPy 1.5.3 documentation</title>
+    <link rel="stylesheet" href="_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="About" href="about.html" />
+    <link rel="prev" title="Single-objective problems" href="api/problem/singleobjective.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="about.html" title="About"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="api/problem/singleobjective.html" title="Single-objective problems"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jMetalPy 1.5.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    index.html" class="text-logo">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.5.3 documentation">
+    <br>
+</a>
+
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    Python version of the jMetal framework
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operators.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problems.html">Problems</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#git-workflow">Git WorkFlow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pep8">PEP8!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#object-oriented-programming">Object-oriented programming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-3-6">Python 3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-automatic-documentation-files-with-sphinx">Create automatic documentation files with Sphinx</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Contents</h2>
+    <div class="sidebar-localtoc">
+      <ul>
+<li><a class="reference internal" href="#">Contributing</a><ul>
+<li><a class="reference internal" href="#git-workflow">Git WorkFlow</a></li>
+<li><a class="reference internal" href="#pep8">PEP8!</a></li>
+<li><a class="reference internal" href="#object-oriented-programming">Object-oriented programming</a></li>
+<li><a class="reference internal" href="#structure">Structure</a></li>
+<li><a class="reference internal" href="#python-3-6">Python 3.6</a></li>
+<li><a class="reference internal" href="#create-automatic-documentation-files-with-sphinx">Create automatic documentation files with Sphinx</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="index.html">Docs</a></li>
+              
+              <li class="breadcrumb-item">Contributing</li>
+            </ol>
+          </nav>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="contributing">
+<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h1>
+<p>Contributions to the jMetalPy project are welcome.
+Please, take into account the following guidelines (all developers should follow these guidelines):</p>
+<div class="section" id="git-workflow">
+<h2>Git WorkFlow<a class="headerlink" href="#git-workflow" title="Permalink to this headline">¶</a></h2>
+<p>We have a set of branches on the remote Git server.
+Some branches are temporary, and others are constant throughout the life of the repository.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Branches always present in the repository:</dt><dd><ul>
+<li><dl class="simple">
+<dt><em>master</em>: You have the latest released to production, receive merges from the develop branch, or merge from a <em>hotfix</em> branch (emergency).</dt><dd><ul>
+<li><p>Do I have to put a TAG when doing a merge from develop to master? yes</p></li>
+<li><p>Do I have to put a TAG when doing a merge from a hotfix branch to master? yes</p></li>
+<li><p>After merge from a hotfix to master, do I have to merge from master to develop? yes</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><em>develop</em>: It is considered the “Next Release”, receives merges from branches of each developer, either corrections (<em>fix</em>) or new features (<em>feature</em>).</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Temporary branches:</dt><dd><ul>
+<li><dl class="simple">
+<dt><em>feature/&lt;task-id&gt;-&lt;description&gt;</em>: When we are doing a development, we create a local branch with the prefix “feature/”, then only if there is a task id, we indicate it and we add a hyphen. The following we indicate a description according to the functionality that we are developing. The words are separated by hyphens.</dt><dd><ul>
+<li><p>Where does this branch emerge? This branch always emerge from the develop branch</p></li>
+<li><p>When I finish the development in my feature branch, which branch to merge into?: You always merge feature branch into develop branch</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><em>fix/&lt;task-id&gt;-&lt;description&gt;</em>: When we are making a correction, we create a local branch with the prefix “fix/”, then only if there is a task id, we indicate it and we add a hyphen. The following we indicate a description according to the functionality that we are correcting. The words are separated by hyphens.</dt><dd><ul>
+<li><p>Where does this branch emerge? This branch always emerge from the develop branch</p></li>
+<li><p>When I finish the correction in my fix branch, which branch to merge into?: You always merge feature branch into develop branch</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><em>hotfix/&lt;task-id&gt;-&lt;description&gt;</em>: When we are correcting an emergency incidence in production, we create a local branch with the prefix “hotfix/”, then only if there is a task id, we indicate it and we add a hyphen. The following we indicate a description according to the functionality that we are correcting. The words are separated by hyphens.</dt><dd><ul>
+<li><p>Where does this branch emerge?: This branch always emerge from the master branch</p></li>
+<li><p>When I finish the correction in my hotfix branch, which branch to merge into?: This branch always emerge from the master and develop branch</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Steps to follow when you are creating or going to work on a branch of any kind (feature / fix / hotfix):</dt><dd><ol class="arabic simple">
+<li><p>After you create your branch (feature / fix / hotfix) locally, upload it to the remote Git server. The integration system will verify your code from the outset.</p></li>
+<li><p>Each time you commit, as much as possible, you send a push to the server. Each push will trigger the automated launch of the tests, etc.</p></li>
+<li><p>Once the development is finished, having done a push to the remote Git server, and that the test phase has passed without problem, you create an <a class="reference external" href="https://help.github.com/articles/creating-a-pull-request/">pull request</a>.</p></li>
+</ol>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Do not forget to remove your branch (feature / fix / hotfix) once the merge has been made.</p>
+</div>
+<p>Some useful Git commands:</p>
+<ul class="simple">
+<li><p>git fetch –prune: Cleaning branches removed and bringing new branches</p></li>
+</ul>
+</div>
+<div class="section" id="pep8">
+<h2>PEP8!<a class="headerlink" href="#pep8" title="Permalink to this headline">¶</a></h2>
+<p>It is really important to follow some standards when a team develops an application. If all team members format the code in the same format, then it is much easier to read the code. PEP8 is Python’s style guide. It’s a set of rules for how to format your Python code.</p>
+<p>Some style rules:</p>
+<ul class="simple">
+<li><p>Package and module names: Modules should have short, <strong>all-lowercase</strong> names. Underscores can be used in the module name if it improves readability. Python packages should also have short, <strong>all-lowercase</strong> names, although the use of underscores is discouraged. In Python, a module is a file with the suffix ‘.py’.</p></li>
+<li><p>Class names: Class names should normally use the <strong>CapWords</strong> convention.</p></li>
+<li><p>Method names and instance variables: <strong>Lowercase with words separated by underscores</strong> as necessary to improve readability.</p></li>
+</ul>
+<p>There are many more style standards in PEP8 so, please, refer to <a class="reference external" href="https://www.python.org/dev/peps/pep-0008">PEP8 documentation</a>
+. The most appropriate is to use an IDE that has support for PEP8. For example, <a class="reference external" href="https://www.jetbrains.com/pycharm/">PyCharm</a>.</p>
+</div>
+<div class="section" id="object-oriented-programming">
+<h2>Object-oriented programming<a class="headerlink" href="#object-oriented-programming" title="Permalink to this headline">¶</a></h2>
+<p><strong>Object-oriented programming should be the single programming paradigm used</strong>. Avoiding as far as possible, imperative and functional programming.</p>
+<img alt="_images/python_poo_programming.png" src="_images/python_poo_programming.png" />
+<img alt="_images/python_functional_programming.png" src="_images/python_functional_programming.png" />
+<img alt="_images/python_imperative_programming.png" src="_images/python_imperative_programming.png" />
+<p>In classes, we directly access the attributes, which are usually defined as public.</p>
+<img alt="_images/without_getter_setter.png" src="_images/without_getter_setter.png" />
+<p>Only when we want to <strong>implement additional logic in the accesses to the attributes</strong> we define getter/setter methods, but <strong>always by using the *property*</strong> annotation or the <strong>*property*</strong> function:</p>
+<img alt="_images/property_annotation.png" src="_images/property_annotation.png" />
+<img alt="_images/property_functional.png" src="_images/property_functional.png" />
+<p>By using <strong>*property*</strong>, we continue to access the attributes directly:</p>
+<img alt="_images/good_access.png" src="_images/good_access.png" />
+<p>Do not use getter/setter methods without the <em>property</em> annotation or the <em>property</em> function:</p>
+<img alt="_images/with_getter_setter.png" src="_images/with_getter_setter.png" />
+<p>Since this way of accessing the attribute is not commonly used in Python:</p>
+<img alt="_images/bad_access.png" src="_images/bad_access.png" />
+</div>
+<div class="section" id="structure">
+<h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
+<p>Python is not Java. In Java you cannot, by design, have more than one class in a file. In Python, you can do it.</p>
+<p>In Python, <strong>it is appropriate to group several classes into a single .py file. For that reason, the .py files are called modules.</strong></p>
+</div>
+<div class="section" id="python-3-6">
+<h2>Python 3.6<a class="headerlink" href="#python-3-6" title="Permalink to this headline">¶</a></h2>
+<p>We <strong>always</strong> define types in the parameters of the arguments and the return value:</p>
+<img alt="_images/types_in_methods.png" src="_images/types_in_methods.png" />
+<p>We can define abstract classes (ABCs) in Python:</p>
+<img alt="_images/abstract.png" src="_images/abstract.png" />
+<p>In the case that we want to define an <strong>interface</strong> class, it is done in the same way. We just have to define all the methods of the class as abstract.</p>
+<p>Example of use of generic types:</p>
+<img alt="_images/generic_types.png" src="_images/generic_types.png" />
+<p>In the code below, the IDE displays a <strong>warning</strong>, since although the 2nd parameter is a float type, which is a type allowed in the definition of the generic type X, it is not of the same type as the first, since the first 2 parameters must be of the same generic type (S):</p>
+<img alt="_images/instance_with_generic_types1_wearning.png" src="_images/instance_with_generic_types1_wearning.png" />
+<p>In the code below, the IDE displays a <strong>warning</strong>, since the 2nd parameter is a type not allowed in the definition of the generic type ( <em>TypeVar(‘S’, int, float)</em> ):</p>
+<img alt="_images/instance_with_generic_types2_wearning.png" src="_images/instance_with_generic_types2_wearning.png" />
+<p>When the class inherits from <em>Generic[…]</em>, the <strong>class is defined as generic</strong>. In this way we can indicate the types that will have the values of the generic types, when using the class as type. Look at the <em>add_car()</em> method of the <em>Parking</em> class.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The generic classes inherit from abc.ABCMeta, so they are abstract classes and <strong>abstract methods can be used</strong>.</p>
+</div>
+<img alt="_images/generic_class1.png" src="_images/generic_class1.png" />
+<img alt="_images/generic_class2.png" src="_images/generic_class2.png" />
+<p>In the code below, the IDE displays a <strong>warning</strong> in the call to the <em>add_car()</em> method when adding the car, since the 3rd parameter of the init must be a <em>str</em> type, as defined in the <em>add_car()</em> method of the <em>Parking</em> class.</p>
+<img alt="_images/instance_with_generic_class_wearning.png" src="_images/instance_with_generic_class_wearning.png" />
+<p>When inheriting from generic classes, some type variables could be fixed:</p>
+<img alt="_images/generic_types_fixed.png" src="_images/generic_types_fixed.png" />
+<p>Example of inheritance from non-generic class to generic class:</p>
+<img alt="_images/inheritance_non_generic_to_generic.png" src="_images/inheritance_non_generic_to_generic.png" />
+<p>Example of inheritance from generic class to another generic class:</p>
+<img alt="_images/inheritance_generic_to_generic.png" src="_images/inheritance_generic_to_generic.png" />
+</div>
+<div class="section" id="create-automatic-documentation-files-with-sphinx">
+<h2>Create automatic documentation files with Sphinx<a class="headerlink" href="#create-automatic-documentation-files-with-sphinx" title="Permalink to this headline">¶</a></h2>
+<p>First, you need to know how to correctly document your code. It is <strong>important</strong> to follow these simple rules in order to automatically create good documentation for the project.</p>
+<p>When you create a new module file (testDoc.py in this example), you should mention it using this format:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: testDoc</span>
+<span class="sd">   :platform: Unix, Windows</span>
+<span class="sd">   :synopsis: A useful module indeed.</span>
+
+<span class="sd">.. moduleauthor:: Andrew Carter &lt;andrew@invalid.com&gt;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="k">class</span> <span class="nc">testDoc</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;We use this as a public class example class.</span>
+
+<span class="sd">    This class is ruled by the very trendy important method :func:`public_fn_with_sphinxy_docstring`.</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">       An example of intersphinx is this: you **cannot** use :mod:`pickle` on this class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+<p>This code snippet generates the following documentation:</p>
+<img alt="_images/class_header.png" src="_images/class_header.png" />
+<p>Now, you can document your methods using the following sintax:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">public_fn_with_sphinxy_docstring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;This function does something.</span>
+
+<span class="sd">    :param name: The name to use.</span>
+<span class="sd">    :type name: str.</span>
+<span class="sd">    :param state: Current state to be in.</span>
+<span class="sd">    :type state: bool.</span>
+<span class="sd">    :returns:  int -- the return code.</span>
+<span class="sd">    :raises: AttributeError, KeyError</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mi">0</span>
+
+<span class="k">def</span> <span class="nf">public_fn_without_docstring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<p>And the produced output doc will be:</p>
+<img alt="_images/method_way_sphinx.png" src="_images/method_way_sphinx.png" />
+<p>As you may notice, if you don’t use any docstring, the method documentation will be empty.</p>
+</div>
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="float-left">
+        <a class="btn btn-outline btn-sm" href="api/problem/singleobjective.html" title="previous chapter (use the left arrow)">← Single-objective problems</a>
+      </div>
+    
+      <div class="float-right">
+        <a class="btn btn-outline btn-sm" href="about.html" title="next chapter (use the right arrow)">About →</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="about.html" title="About"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="api/problem/singleobjective.html" title="Single-objective problems"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jMetalPy 1.5.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

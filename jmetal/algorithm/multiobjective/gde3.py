@@ -6,9 +6,9 @@ from jmetal.core.problem import Problem, DynamicProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.operator import DifferentialEvolutionCrossover, RankingAndCrowdingDistanceSelection
 from jmetal.operator.selection import DifferentialEvolutionSelection
-from jmetal.util.archive import NonDominatedSolutionListArchive
-from jmetal.util.solutions import Evaluator, Generator
-from jmetal.util.solutions.comparator import Comparator, DominanceComparator
+from jmetal.util.comparator import Comparator, DominanceComparator
+from jmetal.util.evaluator import Evaluator
+from jmetal.util.generator import Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -93,12 +93,7 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
         return self.termination_criterion.is_met
 
     def get_result(self) -> List[FloatSolution]:
-        archive = NonDominatedSolutionListArchive()
-
-        for solution in self.solutions:
-            archive.add(solution)
-
-        return archive.solution_list
+        return self.solutions
 
     def get_name(self) -> str:
         return 'GDE3'

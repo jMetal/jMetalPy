@@ -6,16 +6,16 @@ from typing import TypeVar, List
 import numpy
 from scipy.spatial.distance import euclidean
 
-from jmetal.util.solutions.comparator import SolutionAttributeComparator, Comparator
+from jmetal.util.comparator import SolutionAttributeComparator, Comparator
 
 LOGGER = logging.getLogger('jmetal')
 
 S = TypeVar('S')
 
 """
-.. module:: crowding_distance
+.. module:: density_estimator
    :platform: Unix, Windows
-   :synopsis: Crowding distance implementation.
+   :synopsis: Module including the implementation of density estimators.
 
 .. moduleauthor:: Antonio J. Nebro <ajnebro@uma.es>
 """

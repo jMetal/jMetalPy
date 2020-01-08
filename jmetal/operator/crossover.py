@@ -278,7 +278,7 @@ class SPXCrossover(Crossover[BinarySolution, BinarySolution]):
 class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
     """ This operator receives two parameters: the current individual and an array of three parent individuals. The
     best and rand variants depends on the third parent, according whether it represents the current of the "best"
-    individual or a random one. The implementation of both variants are the same, due to that the parent selection is
+    individual or a random_search one. The implementation of both variants are the same, due to that the parent selection is
     external to the crossover operator.
     """
 

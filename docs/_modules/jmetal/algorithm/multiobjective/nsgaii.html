@@ -1,0 +1,458 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>jmetal.algorithm.multiobjective.nsgaii &#8212; jMetalPy 1.5.3 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../../../../index.html" class="text-logo">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.5.3 documentation">
+    <br>
+</a>
+
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    Python version of the jMetal framework
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../operators.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="../../../../index.html">Docs</a></li>
+              
+              <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+              
+              <li class="breadcrumb-item">jmetal.algorithm.multiobjective.nsgaii</li>
+            </ol>
+          </nav>
+          
+          <div class="document clearer body">
+            
+  <h1>Source code for jmetal.algorithm.multiobjective.nsgaii</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Generator</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">dask</span>
+    <span class="kn">from</span> <span class="nn">distributed</span> <span class="k">import</span> <span class="n">as_completed</span><span class="p">,</span> <span class="n">Client</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="kn">from</span> <span class="nn">jmetal.algorithm.singleobjective.genetic_algorithm</span> <span class="k">import</span> <span class="n">GeneticAlgorithm</span>
+<span class="kn">from</span> <span class="nn">jmetal.config</span> <span class="k">import</span> <span class="n">store</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.algorithm</span> <span class="k">import</span> <span class="n">DynamicAlgorithm</span><span class="p">,</span> <span class="n">Algorithm</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.operator</span> <span class="k">import</span> <span class="n">Mutation</span><span class="p">,</span> <span class="n">Crossover</span><span class="p">,</span> <span class="n">Selection</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="k">import</span> <span class="n">Problem</span><span class="p">,</span> <span class="n">DynamicProblem</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="k">import</span> <span class="n">BinaryTournamentSelection</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.density_estimator</span> <span class="k">import</span> <span class="n">CrowdingDistance</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.evaluator</span> <span class="k">import</span> <span class="n">Evaluator</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.ranking</span> <span class="k">import</span> <span class="n">FastNonDominatedRanking</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.replacement</span> <span class="k">import</span> <span class="n">RankingAndDensityEstimatorReplacement</span><span class="p">,</span> <span class="n">RemovalPolicyType</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.comparator</span> <span class="k">import</span> <span class="n">DominanceComparator</span><span class="p">,</span> <span class="n">Comparator</span><span class="p">,</span> <span class="n">MultiComparator</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="k">import</span> <span class="n">TerminationCriterion</span>
+
+<span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;R&#39;</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: NSGA-II</span>
+<span class="sd">   :platform: Unix, Windows</span>
+<span class="sd">   :synopsis: NSGA-II (Non-dominance Sorting Genetic Algorithm II) implementation.</span>
+
+<span class="sd">.. moduleauthor:: Antonio J. Nebro &lt;antonio@lcc.uma.es&gt;, Antonio Benítez-Hidalgo &lt;antonio.b@uma.es&gt;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="NSGAII"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII">[docs]</a><span class="k">class</span> <span class="nc">NSGAII</span><span class="p">(</span><span class="n">GeneticAlgorithm</span><span class="p">[</span><span class="n">S</span><span class="p">,</span> <span class="n">R</span><span class="p">]):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">problem</span><span class="p">:</span> <span class="n">Problem</span><span class="p">,</span>
+                 <span class="n">population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">offspring_population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">mutation</span><span class="p">:</span> <span class="n">Mutation</span><span class="p">,</span>
+                 <span class="n">crossover</span><span class="p">:</span> <span class="n">Crossover</span><span class="p">,</span>
+                 <span class="n">selection</span><span class="p">:</span> <span class="n">Selection</span> <span class="o">=</span> <span class="n">BinaryTournamentSelection</span><span class="p">(</span>
+                     <span class="n">MultiComparator</span><span class="p">([</span><span class="n">FastNonDominatedRanking</span><span class="o">.</span><span class="n">get_comparator</span><span class="p">(),</span>
+                                      <span class="n">CrowdingDistance</span><span class="o">.</span><span class="n">get_comparator</span><span class="p">()])),</span>
+                 <span class="n">termination_criterion</span><span class="p">:</span> <span class="n">TerminationCriterion</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_termination_criteria</span><span class="p">,</span>
+                 <span class="n">population_generator</span><span class="p">:</span> <span class="n">Generator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_generator</span><span class="p">,</span>
+                 <span class="n">population_evaluator</span><span class="p">:</span> <span class="n">Evaluator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_evaluator</span><span class="p">,</span>
+                 <span class="n">dominance_comparator</span><span class="p">:</span> <span class="n">Comparator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_comparator</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NSGA-II implementation as described in</span>
+
+<span class="sd">        * K. Deb, A. Pratap, S. Agarwal and T. Meyarivan, &quot;A fast and elitist</span>
+<span class="sd">          multiobjective genetic algorithm: NSGA-II,&quot; in IEEE Transactions on Evolutionary Computation,</span>
+<span class="sd">          vol. 6, no. 2, pp. 182-197, Apr 2002. doi: 10.1109/4235.996017</span>
+
+<span class="sd">        NSGA-II is a genetic algorithm (GA), i.e. it belongs to the evolutionary algorithms (EAs)</span>
+<span class="sd">        family. The implementation of NSGA-II provided in jMetalPy follows the evolutionary</span>
+<span class="sd">        algorithm template described in the algorithm module (:py:mod:`jmetal.core.algorithm`).</span>
+
+<span class="sd">        .. note:: A steady-state version of this algorithm can be run by setting the offspring size to 1.</span>
+
+<span class="sd">        :param problem: The problem to solve.</span>
+<span class="sd">        :param population_size: Size of the population.</span>
+<span class="sd">        :param mutation: Mutation operator (see :py:mod:`jmetal.operator.mutation`).</span>
+<span class="sd">        :param crossover: Crossover operator (see :py:mod:`jmetal.operator.crossover`).</span>
+<span class="sd">        :param selection: Selection operator (see :py:mod:`jmetal.operator.selection`).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">NSGAII</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">,</span>
+            <span class="n">population_size</span><span class="o">=</span><span class="n">population_size</span><span class="p">,</span>
+            <span class="n">offspring_population_size</span><span class="o">=</span><span class="n">offspring_population_size</span><span class="p">,</span>
+            <span class="n">mutation</span><span class="o">=</span><span class="n">mutation</span><span class="p">,</span>
+            <span class="n">crossover</span><span class="o">=</span><span class="n">crossover</span><span class="p">,</span>
+            <span class="n">selection</span><span class="o">=</span><span class="n">selection</span><span class="p">,</span>
+            <span class="n">termination_criterion</span><span class="o">=</span><span class="n">termination_criterion</span><span class="p">,</span>
+            <span class="n">population_evaluator</span><span class="o">=</span><span class="n">population_evaluator</span><span class="p">,</span>
+            <span class="n">population_generator</span><span class="o">=</span><span class="n">population_generator</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dominance_comparator</span> <span class="o">=</span> <span class="n">dominance_comparator</span>
+
+<div class="viewcode-block" id="NSGAII.replacement"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII.replacement">[docs]</a>    <span class="k">def</span> <span class="nf">replacement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">offspring_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot; This method joins the current and offspring populations to produce the population of the next generation</span>
+<span class="sd">        by applying the ranking and crowding distance selection.</span>
+
+<span class="sd">        :param population: Parent population.</span>
+<span class="sd">        :param offspring_population: Offspring population.</span>
+<span class="sd">        :return: New population after ranking and crowding distance selection is applied.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ranking</span> <span class="o">=</span> <span class="n">FastNonDominatedRanking</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dominance_comparator</span><span class="p">)</span>
+        <span class="n">density_estimator</span> <span class="o">=</span> <span class="n">CrowdingDistance</span><span class="p">()</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">RankingAndDensityEstimatorReplacement</span><span class="p">(</span><span class="n">ranking</span><span class="p">,</span> <span class="n">density_estimator</span><span class="p">,</span> <span class="n">RemovalPolicyType</span><span class="o">.</span><span class="n">ONE_SHOT</span><span class="p">)</span>
+        <span class="n">solutions</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">offspring_population</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">solutions</span></div>
+
+<div class="viewcode-block" id="NSGAII.get_result"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII.get_result">[docs]</a>    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">R</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span></div>
+
+<div class="viewcode-block" id="NSGAII.get_name"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;NSGAII&#39;</span></div></div>
+
+
+<div class="viewcode-block" id="DynamicNSGAII"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii_preference.html#jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII">[docs]</a><span class="k">class</span> <span class="nc">DynamicNSGAII</span><span class="p">(</span><span class="n">NSGAII</span><span class="p">[</span><span class="n">S</span><span class="p">,</span> <span class="n">R</span><span class="p">],</span> <span class="n">DynamicAlgorithm</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">problem</span><span class="p">:</span> <span class="n">DynamicProblem</span><span class="p">[</span><span class="n">S</span><span class="p">],</span>
+                 <span class="n">population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">offspring_population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">mutation</span><span class="p">:</span> <span class="n">Mutation</span><span class="p">,</span>
+                 <span class="n">crossover</span><span class="p">:</span> <span class="n">Crossover</span><span class="p">,</span>
+                 <span class="n">selection</span><span class="p">:</span> <span class="n">Selection</span> <span class="o">=</span> <span class="n">BinaryTournamentSelection</span><span class="p">(</span>
+                     <span class="n">MultiComparator</span><span class="p">([</span><span class="n">FastNonDominatedRanking</span><span class="o">.</span><span class="n">get_comparator</span><span class="p">(),</span>
+                                      <span class="n">CrowdingDistance</span><span class="o">.</span><span class="n">get_comparator</span><span class="p">()])),</span>
+                 <span class="n">termination_criterion</span><span class="p">:</span> <span class="n">TerminationCriterion</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_termination_criteria</span><span class="p">,</span>
+                 <span class="n">population_generator</span><span class="p">:</span> <span class="n">Generator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_generator</span><span class="p">,</span>
+                 <span class="n">population_evaluator</span><span class="p">:</span> <span class="n">Evaluator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_evaluator</span><span class="p">,</span>
+                 <span class="n">dominance_comparator</span><span class="p">:</span> <span class="n">DominanceComparator</span> <span class="o">=</span> <span class="n">DominanceComparator</span><span class="p">()):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DynamicNSGAII</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">,</span>
+            <span class="n">population_size</span><span class="o">=</span><span class="n">population_size</span><span class="p">,</span>
+            <span class="n">offspring_population_size</span><span class="o">=</span><span class="n">offspring_population_size</span><span class="p">,</span>
+            <span class="n">mutation</span><span class="o">=</span><span class="n">mutation</span><span class="p">,</span>
+            <span class="n">crossover</span><span class="o">=</span><span class="n">crossover</span><span class="p">,</span>
+            <span class="n">selection</span><span class="o">=</span><span class="n">selection</span><span class="p">,</span>
+            <span class="n">population_evaluator</span><span class="o">=</span><span class="n">population_evaluator</span><span class="p">,</span>
+            <span class="n">population_generator</span><span class="o">=</span><span class="n">population_generator</span><span class="p">,</span>
+            <span class="n">termination_criterion</span><span class="o">=</span><span class="n">termination_criterion</span><span class="p">,</span>
+            <span class="n">dominance_comparator</span><span class="o">=</span><span class="n">dominance_comparator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">completed_iterations</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_computing_time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_computing_time</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="DynamicNSGAII.restart"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii_preference.html#jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII.restart">[docs]</a>    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DynamicNSGAII.update_progress"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii_preference.html#jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII.update_progress">[docs]</a>    <span class="k">def</span> <span class="nf">update_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">the_problem_has_changed</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">clear_changed</span><span class="p">()</span>
+
+        <span class="n">observable_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_observable_data</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">notify_all</span><span class="p">(</span><span class="o">**</span><span class="n">observable_data</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">offspring_population_size</span></div>
+
+<div class="viewcode-block" id="DynamicNSGAII.stopping_condition_is_met"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii_preference.html#jmetal.algorithm.multiobjective.nsgaii.DynamicNSGAII.stopping_condition_is_met">[docs]</a>    <span class="k">def</span> <span class="nf">stopping_condition_is_met</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">termination_criterion</span><span class="o">.</span><span class="n">is_met</span><span class="p">:</span>
+            <span class="n">observable_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_observable_data</span><span class="p">()</span>
+            <span class="n">observable_data</span><span class="p">[</span><span class="s1">&#39;TERMINATION_CRITERIA_IS_MET&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">notify_all</span><span class="p">(</span><span class="o">**</span><span class="n">observable_data</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_progress</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">completed_iterations</span> <span class="o">+=</span> <span class="mi">1</span></div></div>
+
+
+<div class="viewcode-block" id="DistributedNSGAII"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii_distributed.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII">[docs]</a><span class="k">class</span> <span class="nc">DistributedNSGAII</span><span class="p">(</span><span class="n">Algorithm</span><span class="p">[</span><span class="n">S</span><span class="p">,</span> <span class="n">R</span><span class="p">]):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">problem</span><span class="p">:</span> <span class="n">Problem</span><span class="p">,</span>
+                 <span class="n">population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">mutation</span><span class="p">:</span> <span class="n">Mutation</span><span class="p">,</span>
+                 <span class="n">crossover</span><span class="p">:</span> <span class="n">Crossover</span><span class="p">,</span>
+                 <span class="n">number_of_cores</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">client</span><span class="p">,</span>
+                 <span class="n">selection</span><span class="p">:</span> <span class="n">Selection</span> <span class="o">=</span> <span class="n">BinaryTournamentSelection</span><span class="p">(</span>
+                     <span class="n">MultiComparator</span><span class="p">([</span><span class="n">FastNonDominatedRanking</span><span class="o">.</span><span class="n">get_comparator</span><span class="p">(),</span>
+                                      <span class="n">CrowdingDistance</span><span class="o">.</span><span class="n">get_comparator</span><span class="p">()])),</span>
+                 <span class="n">termination_criterion</span><span class="p">:</span> <span class="n">TerminationCriterion</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_termination_criteria</span><span class="p">,</span>
+                 <span class="n">dominance_comparator</span><span class="p">:</span> <span class="n">DominanceComparator</span> <span class="o">=</span> <span class="n">DominanceComparator</span><span class="p">()):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DistributedNSGAII</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span> <span class="o">=</span> <span class="n">problem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">population_size</span> <span class="o">=</span> <span class="n">population_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mutation_operator</span> <span class="o">=</span> <span class="n">mutation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">crossover_operator</span> <span class="o">=</span> <span class="n">crossover</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selection_operator</span> <span class="o">=</span> <span class="n">selection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dominance_comparator</span> <span class="o">=</span> <span class="n">dominance_comparator</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">termination_criterion</span> <span class="o">=</span> <span class="n">termination_criterion</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">termination_criterion</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_cores</span> <span class="o">=</span> <span class="n">number_of_cores</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">client</span>
+
+<div class="viewcode-block" id="DistributedNSGAII.create_initial_solutions"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii_distributed.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.create_initial_solutions">[docs]</a>    <span class="k">def</span> <span class="nf">create_initial_solutions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">create_solution</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_cores</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="DistributedNSGAII.evaluate"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii_distributed.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solutions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">evaluate</span><span class="p">,</span> <span class="n">solutions</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DistributedNSGAII.stopping_condition_is_met"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii_distributed.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.stopping_condition_is_met">[docs]</a>    <span class="k">def</span> <span class="nf">stopping_condition_is_met</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">termination_criterion</span><span class="o">.</span><span class="n">is_met</span></div>
+
+<div class="viewcode-block" id="DistributedNSGAII.get_observable_data"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii_distributed.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_observable_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_observable_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="n">ctime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_computing_time</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;PROBLEM&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">,</span>
+                <span class="s1">&#39;EVALUATIONS&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span><span class="p">,</span>
+                <span class="s1">&#39;SOLUTIONS&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_result</span><span class="p">(),</span>
+                <span class="s1">&#39;COMPUTING_TIME&#39;</span><span class="p">:</span> <span class="n">ctime</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="DistributedNSGAII.init_progress"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii_distributed.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.init_progress">[docs]</a>    <span class="k">def</span> <span class="nf">init_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_cores</span>
+
+        <span class="n">observable_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_observable_data</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">notify_all</span><span class="p">(</span><span class="o">**</span><span class="n">observable_data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DistributedNSGAII.step"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii_distributed.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="DistributedNSGAII.update_progress"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii_distributed.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.update_progress">[docs]</a>    <span class="k">def</span> <span class="nf">update_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">observable_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_observable_data</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">notify_all</span><span class="p">(</span><span class="o">**</span><span class="n">observable_data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DistributedNSGAII.run"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii_distributed.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Execute the algorithm. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_computing_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="n">create_solution</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">create_solution</span><span class="p">)</span>
+        <span class="n">evaluate_solution</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">evaluate</span><span class="p">)</span>
+
+        <span class="n">task_pool</span> <span class="o">=</span> <span class="n">as_completed</span><span class="p">([],</span> <span class="n">with_results</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_cores</span><span class="p">):</span>
+            <span class="n">new_solution</span> <span class="o">=</span> <span class="n">create_solution</span><span class="p">()</span>
+            <span class="n">new_evaluated_solution</span> <span class="o">=</span> <span class="n">evaluate_solution</span><span class="p">(</span><span class="n">new_solution</span><span class="p">)</span>
+            <span class="n">future</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">new_evaluated_solution</span><span class="p">)</span>
+
+            <span class="n">task_pool</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">future</span><span class="p">)</span>
+
+        <span class="n">batches</span> <span class="o">=</span> <span class="n">task_pool</span><span class="o">.</span><span class="n">batches</span><span class="p">()</span>
+
+        <span class="n">auxiliar_population</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">auxiliar_population</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_size</span><span class="p">:</span>
+            <span class="n">batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">batches</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">received_solution</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">:</span>
+                <span class="n">auxiliar_population</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">received_solution</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">auxiliar_population</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_size</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+            <span class="c1"># submit as many new tasks as we collected</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">:</span>
+                <span class="n">new_solution</span> <span class="o">=</span> <span class="n">create_solution</span><span class="p">()</span>
+                <span class="n">new_evaluated_solution</span> <span class="o">=</span> <span class="n">evaluate_solution</span><span class="p">(</span><span class="n">new_solution</span><span class="p">)</span>
+                <span class="n">future</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">new_evaluated_solution</span><span class="p">)</span>
+
+                <span class="n">task_pool</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">future</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_progress</span><span class="p">()</span>
+
+        <span class="c1"># perform an algorithm step to create a new solution to be evaluated</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">stopping_condition_is_met</span><span class="p">():</span>
+            <span class="n">batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">batches</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">received_solution</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">:</span>
+                <span class="n">offspring_population</span> <span class="o">=</span> <span class="p">[</span><span class="n">received_solution</span><span class="p">]</span>
+
+                <span class="c1"># replacement</span>
+                <span class="n">ranking</span> <span class="o">=</span> <span class="n">FastNonDominatedRanking</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dominance_comparator</span><span class="p">)</span>
+                <span class="n">density_estimator</span> <span class="o">=</span> <span class="n">CrowdingDistance</span><span class="p">()</span>
+
+                <span class="n">r</span> <span class="o">=</span> <span class="n">RankingAndDensityEstimatorReplacement</span><span class="p">(</span><span class="n">ranking</span><span class="p">,</span> <span class="n">density_estimator</span><span class="p">,</span> <span class="n">RemovalPolicyType</span><span class="o">.</span><span class="n">ONE_SHOT</span><span class="p">)</span>
+                <span class="n">auxiliar_population</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">auxiliar_population</span><span class="p">,</span> <span class="n">offspring_population</span><span class="p">)</span>
+
+                <span class="c1"># selection</span>
+                <span class="n">mating_population</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+                    <span class="n">solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_operator</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">auxiliar_population</span><span class="p">)</span>
+                    <span class="n">mating_population</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+
+                <span class="c1"># Reproduction and evaluation</span>
+                <span class="n">new_task</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">reproduction</span><span class="p">,</span> <span class="n">mating_population</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">,</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">crossover_operator</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mutation_operator</span><span class="p">)</span>
+                <span class="n">task_pool</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_task</span><span class="p">)</span>
+
+                <span class="c1"># update progress</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span> <span class="o">=</span> <span class="n">auxiliar_population</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_progress</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stopping_condition_is_met</span><span class="p">():</span>
+                    <span class="k">break</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_computing_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_computing_time</span>
+
+        <span class="c1"># at this point, computation is done</span>
+        <span class="k">for</span> <span class="n">future</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">task_pool</span><span class="p">:</span>
+            <span class="n">future</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DistributedNSGAII.get_result"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii_distributed.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_result">[docs]</a>    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">R</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span></div>
+
+<div class="viewcode-block" id="DistributedNSGAII.get_name"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaii_distributed.html#jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;dNSGA-II&#39;</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">reproduction</span><span class="p">(</span><span class="n">mating_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">problem</span><span class="p">,</span> <span class="n">crossover_operator</span><span class="p">,</span> <span class="n">mutation_operator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
+    <span class="n">offspring_pool</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">parents</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">mating_population</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">offspring_pool</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">crossover_operator</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">parents</span><span class="p">))</span>
+
+    <span class="n">offspring_population</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">offspring_pool</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">solution</span> <span class="ow">in</span> <span class="n">pair</span><span class="p">:</span>
+            <span class="n">mutated_solution</span> <span class="o">=</span> <span class="n">mutation_operator</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+            <span class="n">offspring_population</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mutated_solution</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">problem</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">offspring_population</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

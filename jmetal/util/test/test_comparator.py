@@ -3,7 +3,7 @@ import unittest
 from mockito import mock, when, verify, never
 
 from jmetal.core.solution import Solution
-from jmetal.util.solutions.comparator import DominanceComparator, SolutionAttributeComparator, \
+from jmetal.util.comparator import DominanceComparator, SolutionAttributeComparator, \
     RankingAndCrowdingDistanceComparator, Comparator, OverallConstraintViolationComparator, MultiComparator
 
 

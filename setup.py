@@ -7,9 +7,26 @@ basedir = abspath(dirname(__file__))
 with open(join(basedir, 'README.md'), encoding='utf-8') as f:
     README = f.read()
 
+install_requires = [
+    'tqdm',
+    'numpy>=1.16.0',
+    'pandas>=0.24.2',
+    'plotly>=3.3.0',
+    'matplotlib>=3.0.2',
+    'scipy>=1.3.0',
+    'statsmodels>=0.9.0'
+]
+
+extras_require = {
+    'core': install_requires,
+    'doc': install_requires + ['guzzle_sphinx_theme', 'jupyter', 'nbsphinx'],
+    'distributed': install_requires + ['dask[complete]>=1.2.2', 'distributed>=1.28.1', 'pyspark>=2.4.0']
+}
+extras_require['complete'] = {v for req in extras_require.values() for v in req}
+
 setup(
     name='jmetalpy',
-    version='1.5.1',
+    version='1.5.3',
     description='Python version of the jMetal framework',
     long_description=README,
     long_description_content_type='text/markdown',
@@ -27,18 +44,8 @@ setup(
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
         'Programming Language :: Python :: 3.6'
     ],
-    install_requires=[
-        'tqdm',
-        'numpy>=1.16.0',
-        'pandas>=0.24.2',
-        'pyspark>=2.4.0',
-        'plotly>=3.3.0',
-        'matplotlib>=3.0.2',
-        'statsmodels>=0.9.0',
-        'dask[complete]==1.2.2',
-        'distributed==1.28.1',
-        'scipy==1.3.0'
-    ],
+    install_requires=install_requires,
+    extras_require=extras_require,
     tests_require=[
         'mockito',
         'PyHamcrest',

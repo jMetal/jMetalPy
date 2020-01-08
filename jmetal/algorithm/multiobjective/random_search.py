@@ -4,7 +4,7 @@ from typing import TypeVar, List
 from jmetal.config import store
 from jmetal.core.algorithm import Algorithm
 from jmetal.core.problem import Problem
-from jmetal.util.archive import NonDominatedSolutionListArchive
+from jmetal.util.archive import NonDominatedSolutionsArchive
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -13,7 +13,7 @@ R = TypeVar('R')
 """
 .. module:: RamdomSearch
    :platform: Unix, Windows
-   :synopsis: Simple random search algorithms.
+   :synopsis: Simple random_search search algorithms.
 
 .. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
 """
@@ -29,7 +29,7 @@ class RandomSearch(Algorithm[S, R]):
         self.termination_criterion = termination_criterion
         self.observable.register(termination_criterion)
 
-        self.archive = NonDominatedSolutionListArchive()
+        self.archive = NonDominatedSolutionsArchive()
 
     def get_observable_data(self) -> dict:
         ctime = time.time() - self.start_computing_time
@@ -45,6 +45,9 @@ class RandomSearch(Algorithm[S, R]):
     def init_progress(self) -> None:
         self.evaluations = 1
 
+        observable_data = self.get_observable_data()
+        self.observable.notify_all(**observable_data)
+
     def stopping_condition_is_met(self) -> bool:
         return self.termination_criterion.is_met
 
@@ -56,8 +59,15 @@ class RandomSearch(Algorithm[S, R]):
     def update_progress(self) -> None:
         self.evaluations += 1
 
+        observable_data = self.get_observable_data()
+        self.observable.notify_all(**observable_data)
+
     def get_result(self) -> List[S]:
         return self.archive.solution_list
 
     def get_name(self) -> str:
-        return 'RS'
+        return 'Random Search'
+
+    @property
+    def label(self) -> str:
+        return f'{self.get_name()}.{self.problem.get_name()}'

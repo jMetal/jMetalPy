@@ -1,0 +1,365 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>jmetal.algorithm.multiobjective.omopso &#8212; jMetalPy 1.5.3 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../../../../index.html" class="text-logo">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.5.3 documentation">
+    <br>
+</a>
+
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    Python version of the jMetal framework
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../operators.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="../../../../index.html">Docs</a></li>
+              
+              <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+              
+              <li class="breadcrumb-item">jmetal.algorithm.multiobjective.omopso</li>
+            </ol>
+          </nav>
+          
+          <div class="document clearer body">
+            
+  <h1>Source code for jmetal.algorithm.multiobjective.omopso</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">copy</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">sqrt</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="kn">from</span> <span class="nn">jmetal.config</span> <span class="k">import</span> <span class="n">store</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.algorithm</span> <span class="k">import</span> <span class="n">ParticleSwarmOptimization</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="k">import</span> <span class="n">FloatProblem</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="k">import</span> <span class="n">FloatSolution</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="k">import</span> <span class="n">UniformMutation</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator.mutation</span> <span class="k">import</span> <span class="n">NonUniformMutation</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.archive</span> <span class="k">import</span> <span class="n">BoundedArchive</span><span class="p">,</span> <span class="n">NonDominatedSolutionsArchive</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.comparator</span> <span class="k">import</span> <span class="n">DominanceComparator</span><span class="p">,</span> <span class="n">EpsilonDominanceComparator</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.evaluator</span> <span class="k">import</span> <span class="n">Evaluator</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.generator</span> <span class="k">import</span> <span class="n">Generator</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="k">import</span> <span class="n">TerminationCriterion</span>
+
+<span class="n">R</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;R&#39;</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: OMOPSO</span>
+<span class="sd">   :platform: Unix, Windows</span>
+<span class="sd">   :synopsis: Implementation of SMPSO.</span>
+
+<span class="sd">.. moduleauthor:: Antonio J. Nebro &lt;antonio@lcc.uma.es&gt;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="OMOPSO"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO">[docs]</a><span class="k">class</span> <span class="nc">OMOPSO</span><span class="p">(</span><span class="n">ParticleSwarmOptimization</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">problem</span><span class="p">:</span> <span class="n">FloatProblem</span><span class="p">,</span>
+                 <span class="n">swarm_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">uniform_mutation</span><span class="p">:</span> <span class="n">UniformMutation</span><span class="p">,</span>
+                 <span class="n">non_uniform_mutation</span><span class="p">:</span> <span class="n">NonUniformMutation</span><span class="p">,</span>
+                 <span class="n">leaders</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BoundedArchive</span><span class="p">],</span>
+                 <span class="n">epsilon</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">termination_criterion</span><span class="p">:</span> <span class="n">TerminationCriterion</span><span class="p">,</span>
+                 <span class="n">swarm_generator</span><span class="p">:</span> <span class="n">Generator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_generator</span><span class="p">,</span>
+                 <span class="n">swarm_evaluator</span><span class="p">:</span> <span class="n">Evaluator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_evaluator</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; This class implements the OMOPSO algorithm as described in</span>
+
+<span class="sd">        todo Update this reference</span>
+<span class="sd">        * SMPSO: A new PSO-based metaheuristic for multi-objective optimization</span>
+
+<span class="sd">        The implementation of OMOPSO provided in jMetalPy follows the algorithm template described in the algorithm</span>
+<span class="sd">        templates section of the documentation.</span>
+
+<span class="sd">        :param problem: The problem to solve.</span>
+<span class="sd">        :param swarm_size: Size of the swarm.</span>
+<span class="sd">        :param leaders: Archive for leaders.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OMOPSO</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">,</span>
+            <span class="n">swarm_size</span><span class="o">=</span><span class="n">swarm_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">swarm_generator</span> <span class="o">=</span> <span class="n">swarm_generator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">swarm_evaluator</span> <span class="o">=</span> <span class="n">swarm_evaluator</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">termination_criterion</span> <span class="o">=</span> <span class="n">termination_criterion</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">termination_criterion</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">uniform_mutation</span> <span class="o">=</span> <span class="n">uniform_mutation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">non_uniform_mutation</span> <span class="o">=</span> <span class="n">non_uniform_mutation</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">leaders</span> <span class="o">=</span> <span class="n">leaders</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="n">epsilon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_archive</span> <span class="o">=</span> <span class="n">NonDominatedSolutionsArchive</span><span class="p">(</span><span class="n">EpsilonDominanceComparator</span><span class="p">(</span><span class="n">epsilon</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">c1_min</span> <span class="o">=</span> <span class="mf">1.5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c1_max</span> <span class="o">=</span> <span class="mf">2.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c2_min</span> <span class="o">=</span> <span class="mf">1.5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c2_max</span> <span class="o">=</span> <span class="mf">2.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r1_min</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r1_max</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r2_min</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r2_max</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight_min</span> <span class="o">=</span> <span class="mf">0.1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight_max</span> <span class="o">=</span> <span class="mf">0.5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">change_velocity1</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">change_velocity2</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dominance_comparator</span> <span class="o">=</span> <span class="n">DominanceComparator</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">swarm_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+<div class="viewcode-block" id="OMOPSO.create_initial_solutions"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO.create_initial_solutions">[docs]</a>    <span class="k">def</span> <span class="nf">create_initial_solutions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">swarm_generator</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swarm_size</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="OMOPSO.evaluate"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">swarm_evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">solution_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OMOPSO.stopping_condition_is_met"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO.stopping_condition_is_met">[docs]</a>    <span class="k">def</span> <span class="nf">stopping_condition_is_met</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">termination_criterion</span><span class="o">.</span><span class="n">is_met</span></div>
+
+<div class="viewcode-block" id="OMOPSO.initialize_global_best"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO.initialize_global_best">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_global_best</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">swarm</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="n">swarm</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaders</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">particle</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_archive</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">copy</span><span class="p">(</span><span class="n">particle</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="OMOPSO.initialize_particle_best"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO.initialize_particle_best">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_particle_best</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">swarm</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="n">swarm</span><span class="p">:</span>
+            <span class="n">particle</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;local_best&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">particle</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OMOPSO.initialize_velocity"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO.initialize_velocity">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">swarm</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swarm_size</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span></div>
+
+<div class="viewcode-block" id="OMOPSO.update_velocity"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO.update_velocity">[docs]</a>    <span class="k">def</span> <span class="nf">update_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">swarm</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swarm_size</span><span class="p">):</span>
+            <span class="n">best_particle</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">swarm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;local_best&#39;</span><span class="p">])</span>
+            <span class="n">best_global</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select_global_best</span><span class="p">()</span>
+
+            <span class="n">r1</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r1_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">r1_max</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">r2</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r2_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">r2_max</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">c1</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">c1_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">c1_max</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">c2</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">c2_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">c2_max</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_max</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">swarm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">var</span><span class="p">]</span> \
+                                     <span class="o">+</span> <span class="p">(</span><span class="n">c1</span> <span class="o">*</span> <span class="n">r1</span> <span class="o">*</span> <span class="p">(</span><span class="n">best_particle</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">-</span> <span class="n">swarm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">var</span><span class="p">]))</span> \
+                                     <span class="o">+</span> <span class="p">(</span><span class="n">c2</span> <span class="o">*</span> <span class="n">r2</span> <span class="o">*</span> <span class="p">(</span><span class="n">best_global</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">-</span> <span class="n">swarm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">var</span><span class="p">]))</span></div>
+
+<div class="viewcode-block" id="OMOPSO.update_position"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO.update_position">[docs]</a>    <span class="k">def</span> <span class="nf">update_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">swarm</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swarm_size</span><span class="p">):</span>
+            <span class="n">particle</span> <span class="o">=</span> <span class="n">swarm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">particle</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">):</span>
+                <span class="n">particle</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">particle</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                    <span class="n">particle</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">change_velocity1</span>
+
+                <span class="k">if</span> <span class="n">particle</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                    <span class="n">particle</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">change_velocity2</span></div>
+
+<div class="viewcode-block" id="OMOPSO.update_global_best"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO.update_global_best">[docs]</a>    <span class="k">def</span> <span class="nf">update_global_best</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">swarm</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="n">swarm</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaders</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">copy</span><span class="p">(</span><span class="n">particle</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_archive</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">copy</span><span class="p">(</span><span class="n">particle</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="OMOPSO.update_particle_best"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO.update_particle_best">[docs]</a>    <span class="k">def</span> <span class="nf">update_particle_best</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">swarm</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swarm_size</span><span class="p">):</span>
+            <span class="n">flag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dominance_comparator</span><span class="o">.</span><span class="n">compare</span><span class="p">(</span>
+                <span class="n">swarm</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">swarm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;local_best&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">flag</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">swarm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;local_best&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">swarm</span><span class="p">[</span><span class="n">i</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="OMOPSO.perturbation"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO.perturbation">[docs]</a>    <span class="k">def</span> <span class="nf">perturbation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">swarm</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">non_uniform_mutation</span><span class="o">.</span><span class="n">set_current_iteration</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">swarm_size</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swarm_size</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">non_uniform_mutation</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">swarm</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">uniform_mutation</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">swarm</span><span class="p">[</span><span class="n">i</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="OMOPSO.select_global_best"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO.select_global_best">[docs]</a>    <span class="k">def</span> <span class="nf">select_global_best</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+        <span class="n">leaders</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaders</span><span class="o">.</span><span class="n">solution_list</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">leaders</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">particles</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">leaders</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaders</span><span class="o">.</span><span class="n">comparator</span><span class="o">.</span><span class="n">compare</span><span class="p">(</span><span class="n">particles</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">particles</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">best_global</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">particles</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">best_global</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">particles</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">best_global</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">leaders</span><span class="o">.</span><span class="n">solution_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">best_global</span></div>
+
+    <span class="k">def</span> <span class="nf">__velocity_constriction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">delta_max</span><span class="p">:</span> <span class="p">[],</span> <span class="n">delta_min</span><span class="p">:</span> <span class="p">[],</span> <span class="n">variable_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="n">delta_max</span><span class="p">[</span><span class="n">variable_index</span><span class="p">]:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">delta_max</span><span class="p">[</span><span class="n">variable_index</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">delta_min</span><span class="p">[</span><span class="n">variable_index</span><span class="p">]:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">delta_min</span><span class="p">[</span><span class="n">variable_index</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">__inertia_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wmax</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">wmax</span>
+
+    <span class="k">def</span> <span class="nf">__constriction_coefficient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">c2</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">rho</span> <span class="o">=</span> <span class="n">c1</span> <span class="o">+</span> <span class="n">c2</span>
+        <span class="k">if</span> <span class="n">rho</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">-</span> <span class="n">rho</span> <span class="o">-</span> <span class="n">sqrt</span><span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">-</span> <span class="mf">4.0</span> <span class="o">*</span> <span class="n">rho</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+<div class="viewcode-block" id="OMOPSO.init_progress"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO.init_progress">[docs]</a>    <span class="k">def</span> <span class="nf">init_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">swarm_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">leaders</span><span class="o">.</span><span class="n">compute_density_estimator</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize_velocity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize_particle_best</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize_global_best</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OMOPSO.update_progress"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO.update_progress">[docs]</a>    <span class="k">def</span> <span class="nf">update_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">swarm_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">leaders</span><span class="o">.</span><span class="n">compute_density_estimator</span><span class="p">()</span>
+
+        <span class="n">observable_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_observable_data</span><span class="p">()</span>
+        <span class="n">observable_data</span><span class="p">[</span><span class="s1">&#39;SOLUTIONS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_archive</span><span class="o">.</span><span class="n">solution_list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">notify_all</span><span class="p">(</span><span class="o">**</span><span class="n">observable_data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OMOPSO.get_result"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO.get_result">[docs]</a>    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_archive</span><span class="o">.</span><span class="n">solution_list</span></div>
+
+<div class="viewcode-block" id="OMOPSO.get_name"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/psos/omopso.html#jmetal.algorithm.multiobjective.omopso.OMOPSO.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;OMOPSO&#39;</span></div></div>
+</pre></div>
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

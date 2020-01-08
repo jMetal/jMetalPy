@@ -29,7 +29,7 @@ class Problem(Generic[S], ABC):
 
     @abstractmethod
     def create_solution(self) -> S:
-        """ Creates a random solution to the problem.
+        """ Creates a random_search solution to the problem.
 
         :return: Solution. """
         pass

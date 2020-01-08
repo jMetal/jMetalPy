@@ -1,15 +1,17 @@
 Extending algorithms
 ========================
 
-It is possible to attach any number of observers to any algorithm to get information from each iteration.
-For example, a basic algorithm observer will print the number of evaluations, the objectives from the best individual in the population and the computing time:
+In jMetalPy, algorithms maintain a list of dependents or *observers* which are notified automatically after each iteration (think about event listeners).
+This is known as the **observer pattern** and can be used to extend the functionality of our algorithms by registering new observers.
+
+For example, a basic observer will log the current number of evaluations, the objective(s) from the best individual in the population and the current computing time:
 
 .. code-block:: python
 
    basic = BasicAlgorithmObserver(frequency=1.0)
    algorithm.observable.register(observer=basic)
 
-A progress bar observer will print a `smart progress meter <https://github.com/tqdm/tqdm>`_ that increases, on each iteration, a fixed value (`step`) until the maximum is reached.
+A progress bar observer will print a `smart progress meter <https://github.com/tqdm/tqdm>`_ that increases, on each iteration, a fixed value (or `step`) until the maximum is reached:
 
 .. code-block:: python
 

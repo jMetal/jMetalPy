@@ -1,7 +1,7 @@
 import unittest
 
 from jmetal.core.solution import Solution
-from jmetal.util.archive import NonDominatedSolutionListArchive, BoundedArchive, CrowdingDistanceArchive, Archive
+from jmetal.util.archive import NonDominatedSolutionsArchive, BoundedArchive, CrowdingDistanceArchive, Archive
 
 
 class ArchiveTestCases(unittest.TestCase):
@@ -35,7 +35,7 @@ class BoundedArchiveTestCases(unittest.TestCase):
 class NonDominatedSolutionListArchiveTestCases(unittest.TestCase):
 
     def setUp(self):
-        self.archive = NonDominatedSolutionListArchive()
+        self.archive = NonDominatedSolutionsArchive()
 
     def test_should_constructor_create_a_non_null_object(self):
         self.assertIsNotNone(self.archive)

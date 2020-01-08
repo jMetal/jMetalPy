@@ -1,9 +1,5 @@
 import logging
 
-import matplotlib
-
-matplotlib.use('TkAgg')
-
 from jmetal import algorithm
 from jmetal import core
 from jmetal import operator

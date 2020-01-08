@@ -64,6 +64,25 @@ class IntegrationTestCases(unittest.TestCase):
 
         self.assertTrue(value >= 0.65)
 
+    def test_should_SMPSO_work_when_solving_problem_ZDT1_with_standard_settings(self):
+        problem = ZDT1()
+
+        algorithm = SMPSO(
+            problem=problem,
+            swarm_size=100,
+            mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
+            leaders=CrowdingDistanceArchive(100),
+            termination_criterion=StoppingByEvaluations(max=25000)
+        )
+
+        algorithm.run()
+        front = algorithm.get_result()
+
+        hv = HyperVolume(reference_point=[1, 1])
+        value = hv.compute(front)
+
+        self.assertTrue(value >= 0.655)
+
 
 if __name__ == '__main__':
     unittest.main()

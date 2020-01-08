@@ -24,12 +24,3 @@ class IdealPoint(Point):
     def update(self, vector: []) -> None:
         self.point = [y if x > y else x for x, y in zip(self.point, vector)]
 
-
-class ReferencePoint(list):
-    """ A reference point exists in objective space an has a set of individuals
-    associated to it. """
-
-    def __init__(self, *args):
-        list.__init__(self, *args)
-        self.associations_count = 0
-        self.associations = []

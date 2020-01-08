@@ -1,8 +1,3 @@
-.. jMetalPy documentation master file, created by
-   sphinx-quickstart on Fri Oct 11 10:56:26 2019.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 jMetalPy: Python version of the jMetal framework
 ================================================
 
@@ -11,7 +6,7 @@ jMetalPy: Python version of the jMetal framework
 .. table::
 
    +---------------------+----------+
-   | **Target**          |  v1.5.1  |
+   | **Target doc**      |  v1.5.3  |
    +---------------------+----------+
 
 Content
@@ -36,18 +31,19 @@ Via pip:
 .. code-block:: console
 
     $ pip install jmetalpy
+    $ pip install "jmetalpy[core]"  # Install core components of the framework
+    $ pip install "jmetalpy[complete]"  # Install also dependencies for distributed computing
 
 Via source code:
 
 .. code-block:: console
 
     $ git clone https://github.com/jMetal/jMetalPy.git
-    $ pip install -r requirements.txt
     $ python setup.py install
 
-Features
+Summary of features
 ------------------------
-The current release of jMetalPy (v1.5.1) contains the following components:
+The current release of jMetalPy (v1.5.3) contains the following components:
 
 * Algorithms: local search, genetic algorithm, evolution strategy, simulated annealing, random search, NSGA-II, NSGA-III, SMPSO, OMOPSO, MOEA/D, MOEA/D-DRA, MOEA/D-IEpsilon, GDE3, SPEA2, HYPE, IBEA. Preference articulation-based algorithms (G-NSGA-II, G-GDE3, G-SPEA2, SMPSO/RP); Dynamic versions of NSGA-II, SMPSO, and GDE3.
 * Parallel computing based on Apache Spark and Dask.

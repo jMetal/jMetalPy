@@ -6,7 +6,7 @@ from jmetal.core.solution import Solution
 from jmetal.operator.selection import BinaryTournamentSelection, BestSolutionSelection, RandomSolutionSelection, \
     NaryRandomSolutionSelection, RankingAndCrowdingDistanceSelection, BinaryTournament2Selection, \
     DifferentialEvolutionSelection
-from jmetal.util.solutions.comparator import SolutionAttributeComparator, EqualSolutionsComparator
+from jmetal.util.comparator import SolutionAttributeComparator, EqualSolutionsComparator
 
 
 class BinaryTournamentTestCases(unittest.TestCase):

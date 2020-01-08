@@ -4,8 +4,8 @@ from typing import TypeVar, List
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
-from jmetal.util.solutions.evaluator import Evaluator, SequentialEvaluator
-from jmetal.util.solutions.generator import Generator, RandomGenerator
+from jmetal.util.evaluator import Evaluator, SequentialEvaluator
+from jmetal.util.generator import Generator, RandomGenerator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')

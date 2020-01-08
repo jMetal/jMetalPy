@@ -11,9 +11,10 @@ from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.operator import UniformMutation
 from jmetal.operator.mutation import NonUniformMutation
-from jmetal.util.archive import BoundedArchive, NonDominatedSolutionListArchive
-from jmetal.util.solutions import Evaluator, Generator
-from jmetal.util.solutions.comparator import DominanceComparator, EpsilonDominanceComparator
+from jmetal.util.archive import BoundedArchive, NonDominatedSolutionsArchive
+from jmetal.util.comparator import DominanceComparator, EpsilonDominanceComparator
+from jmetal.util.evaluator import Evaluator
+from jmetal.util.generator import Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 R = TypeVar('R')
@@ -66,7 +67,7 @@ class OMOPSO(ParticleSwarmOptimization):
         self.leaders = leaders
 
         self.epsilon = epsilon
-        self.epsilon_archive = NonDominatedSolutionListArchive(EpsilonDominanceComparator(epsilon))
+        self.epsilon_archive = NonDominatedSolutionsArchive(EpsilonDominanceComparator(epsilon))
 
         self.c1_min = 1.5
         self.c1_max = 2.0

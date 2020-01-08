@@ -12,8 +12,9 @@ from jmetal.core.operator import Mutation
 from jmetal.core.problem import FloatProblem, DynamicProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.util.archive import BoundedArchive, ArchiveWithReferencePoint
-from jmetal.util.solutions import Evaluator, Generator
-from jmetal.util.solutions.comparator import DominanceComparator
+from jmetal.util.comparator import DominanceComparator
+from jmetal.util.evaluator import Evaluator
+from jmetal.util.generator import Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 R = TypeVar('R')
