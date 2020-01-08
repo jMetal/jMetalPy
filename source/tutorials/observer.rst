@@ -8,8 +8,6 @@ For example, a basic observer will log the current number of evaluations, the ob
 
 .. code-block:: python
 
-   algorithm = GeneticAlgorithm(...)
-
    basic = BasicAlgorithmObserver(frequency=1.0)
    algorithm.observable.register(observer=basic)
 

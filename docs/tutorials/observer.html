@@ -147,9 +147,7 @@
 <p>In jMetalPy, algorithms maintain a list of dependents or <em>observers</em> which are notified automatically after each iteration (think about event listeners).
 This is known as the <strong>observer pattern</strong> and can be used to extend the functionality of our algorithms by registering new observers.</p>
 <p>For example, a basic observer will log the current number of evaluations, the objective(s) from the best individual in the population and the current computing time:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">algorithm</span> <span class="o">=</span> <span class="n">GeneticAlgorithm</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-
-<span class="n">basic</span> <span class="o">=</span> <span class="n">BasicAlgorithmObserver</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">basic</span> <span class="o">=</span> <span class="n">BasicAlgorithmObserver</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 <span class="n">algorithm</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">observer</span><span class="o">=</span><span class="n">basic</span><span class="p">)</span>
 </pre></div>
 </div>
