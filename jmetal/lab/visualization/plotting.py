@@ -174,7 +174,10 @@ class Plot:
                 points = (points - points.min()) / (points.max() - points.min())
 
             ax = fig.add_subplot(n, n, i + 1)
-            pd.plotting.parallel_coordinates(points, 0, ax=ax)
+
+            min_, max_ = points.values.min(), points.values.max()
+            points['scale'] = np.linspace(0, 1, len(points)) * (max_ - min_) + min_
+            pd.plotting.parallel_coordinates(points, 'scale', ax=ax)
 
             ax.get_legend().remove()
 
