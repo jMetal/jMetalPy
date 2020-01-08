@@ -1,5 +1,7 @@
 from typing import TypeVar, List
 
+from jmetal.util.solutions import Evaluator, Generator
+
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
 from jmetal.core.operator import Mutation, Crossover

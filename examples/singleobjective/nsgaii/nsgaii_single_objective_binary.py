@@ -2,7 +2,12 @@ from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import BitFlipMutation, SPXCrossover
 from jmetal.problem import OneMax
 from jmetal.util.comparator import DominanceComparator
+<<<<<<< HEAD:examples/singleobjective/nsgaii/nsgaii_single_objective_binary.py
 from jmetal.util.solution import print_function_values_to_file, print_variables_to_file
+=======
+from jmetal.util.observer import PrintObjectivesObserver
+from jmetal.util.solutions_utils import print_function_values_to_file, print_variables_to_file
+>>>>>>> 62f5065855a15103e25bf874f08cf7a1355c9576:examples/singleobjective/nsgaii_single_objective_binary.py
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
