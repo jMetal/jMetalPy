@@ -1,0 +1,218 @@
+{
+ "cells": [
+  {
+   "cell_type": "raw",
+   "metadata": {
+    "raw_mimetype": "text/restructuredtext"
+   },
+   "source": [
+    ".. _nb_dnsgaii:"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Distributed NSGA-II"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Example"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "pycharm": {
+     "is_executing": false,
+     "name": "#%%\n"
+    },
+    "tags": [
+     "hide_input"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "from math import sqrt\n",
+    "\n",
+    "from jmetal.core.problem import FloatProblem\n",
+    "from jmetal.core.solution import FloatSolution\n",
+    "\n",
+    "\n",
+    "class ZDT1Modified(FloatProblem):\n",
+    "\n",
+    "    def __init__(self, number_of_variables: int=30):\n",
+    "        \"\"\" :param number_of_variables: Number of decision variables of the problem.\n",
+    "        \"\"\"\n",
+    "        super(ZDT1Modified, self).__init__()\n",
+    "        self.number_of_variables = number_of_variables\n",
+    "        self.number_of_objectives = 2\n",
+    "        self.number_of_constraints = 0\n",
+    "\n",
+    "        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]\n",
+    "        self.obj_labels = ['f(x)', 'f(y)']\n",
+    "\n",
+    "        self.lower_bound = self.number_of_variables * [0.0]\n",
+    "        self.upper_bound = self.number_of_variables * [1.0]\n",
+    "\n",
+    "    def evaluate(self, solution: FloatSolution) -> FloatSolution:\n",
+    "        g = self.__eval_g(solution)\n",
+    "        h = self.__eval_h(solution.variables[0], g)\n",
+    "\n",
+    "        solution.objectives[0] = solution.variables[0]\n",
+    "        solution.objectives[1] = h * g\n",
+    "\n",
+    "        s: float = 0.0\n",
+    "        for i in range(1000):\n",
+    "            for j in range(1000):\n",
+    "                s += i * 0.235 / 1.234 + 1.23525 * j\n",
+    "\n",
+    "        return solution\n",
+    "\n",
+    "    def __eval_g(self, solution: FloatSolution):\n",
+    "        g = sum(solution.variables) - solution.variables[0]\n",
+    "\n",
+    "        constant = 9.0 / (solution.number_of_variables - 1)\n",
+    "        g = constant * g\n",
+    "        g = g + 1.0\n",
+    "\n",
+    "        return g\n",
+    "\n",
+    "    def __eval_h(self, f: float, g: float) -> float:\n",
+    "        return 1.0 - sqrt(f / g)\n",
+    "\n",
+    "    def get_name(self):\n",
+    "        return 'ZDT1'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "pycharm": {
+     "is_executing": false,
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "from dask.distributed import Client\n",
+    "from distributed import LocalCluster\n",
+    "\n",
+    "from jmetal.algorithm.multiobjective.nsgaii import DistributedNSGAII\n",
+    "from jmetal.operator import PolynomialMutation, SBXCrossover\n",
+    "from jmetal.util.termination_criterion import StoppingByEvaluations\n",
+    "\n",
+    "# ZDT1 version including a loop for increasing the computing time \n",
+    "#  of the evaluation functions\n",
+    "problem = ZDT1Modified()\n",
+    "\n",
+    "# setup Dask client\n",
+    "client = Client(LocalCluster(n_workers=24))\n",
+    "\n",
+    "ncores = sum(client.ncores().values())\n",
+    "print(f'{ncores} cores available')\n",
+    "\n",
+    "# creates the algorithm\n",
+    "max_evaluations = 25000\n",
+    "\n",
+    "algorithm = DistributedNSGAII(\n",
+    "    problem=problem,\n",
+    "    population_size=100,\n",
+    "    mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),\n",
+    "    crossover=SBXCrossover(probability=1.0, distribution_index=20),\n",
+    "    termination_criterion=StoppingByEvaluations(max=max_evaluations),\n",
+    "    number_of_cores=ncores,\n",
+    "    client=client\n",
+    ")\n",
+    "\n",
+    "algorithm.run()\n",
+    "solutions = algorithm.get_result()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can now visualize the Pareto front approximation:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "pycharm": {
+     "name": "#%%\n"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "from jmetal.lab.visualization.plotting import Plot\n",
+    "from jmetal.util.solution import get_non_dominated_solutions\n",
+    "\n",
+    "front = get_non_dominated_solutions(solutions)\n",
+    "    \n",
+    "plot_front = Plot(plot_title='Pareto front approximation', axis_labels=['x', 'y'])\n",
+    "plot_front.plot(front, label='Distributed NSGAII-ZDT1')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### API"
+   ]
+  },
+  {
+   "cell_type": "raw",
+   "metadata": {
+    "pycharm": {
+     "is_executing": false,
+     "name": "#%% raw\n"
+    },
+    "raw_mimetype": "text/restructuredtext"
+   },
+   "source": [
+    ".. autoclass:: jmetal.algorithm.multiobjective.nsgaii.DistributedNSGAII\n",
+    "   :members:\n",
+    "   :undoc-members:\n",
+    "   :show-inheritance:\n"
+   ]
+  }
+ ],
+ "metadata": {
+  "celltoolbar": "Tags",
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.3"
+  },
+  "pycharm": {
+   "stem_cell": {
+    "cell_type": "raw",
+    "source": [],
+    "metadata": {
+     "collapsed": false
+    }
+   }
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 1
+}

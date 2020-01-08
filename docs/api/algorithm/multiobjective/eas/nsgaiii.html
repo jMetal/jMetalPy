@@ -10,7 +10,6 @@
   <!-- Licensed under the SIL Open Font License -->
   <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap.min.css" />
-  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <title>NSGA-III &#8212; jMetalPy 1.5.3 documentation</title>
@@ -61,7 +60,16 @@
       </div>
   <div id="left-column">
     <div class="sphinxsidebar"><a href="
-    ../../../../index.html" class="text-logo">jMetalPy</a>
+    ../../../../index.html" class="text-logo">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.5.3 documentation">
+    <br>
+</a>
+
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    Python version of the jMetal framework
+  </div>
+</div>
 <div class="sidebar-block">
   <div class="sidebar-wrapper">
     <h2>Table Of Contents</h2>
@@ -92,7 +100,7 @@
     <div class="sidebar-localtoc">
       <ul>
 <li><a class="reference internal" href="#">NSGA-III</a><ul>
-<li><a class="reference internal" href="#module-jmetal.algorithm.multiobjective.nsgaiii">API</a></li>
+<li><a class="reference internal" href="#API">API</a></li>
 </ul>
 </li>
 </ul>
@@ -118,28 +126,28 @@
   </div>
         <div id="right-column">
           
-          <div role="navigation" aria-label="breadcrumbs navigation">
+          <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-              <li><a href="../../../../index.html">Docs</a></li>
+              <li class="breadcrumb-item"><a href="../../../../index.html">Docs</a></li>
               
-                <li><a href="../../../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+              <li class="breadcrumb-item"><a href="../../../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
               
-                <li><a href="../ea.html">Evolutionary Algorithms</a></li>
+              <li class="breadcrumb-item"><a href="../ea.html">Evolutionary Algorithms</a></li>
               
-              <li>NSGA-III</li>
+              <li class="breadcrumb-item">NSGA-III</li>
             </ol>
-          </div>
+          </nav>
           
           <div class="document clearer body">
             
-  <div class="section" id="nsga-iii">
-<h1>NSGA-III<a class="headerlink" href="#nsga-iii" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-jmetal.algorithm.multiobjective.nsgaiii">
-<span id="api"></span><h2>API<a class="headerlink" href="#module-jmetal.algorithm.multiobjective.nsgaiii" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="NSGA-III">
+<span id="nb-nsgaiii"></span><h1>NSGA-III<a class="headerlink" href="#NSGA-III" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="API">
+<h2>API<a class="headerlink" href="#API" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="jmetal.algorithm.multiobjective.nsgaiii.NSGAIII">
 <em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaiii.</code><code class="sig-name descname">NSGAIII</code><span class="sig-paren">(</span><em class="sig-param">reference_directions</em>, <em class="sig-param">problem: jmetal.core.problem.Problem</em>, <em class="sig-param">mutation: jmetal.core.operator.Mutation</em>, <em class="sig-param">crossover: jmetal.core.operator.Crossover</em>, <em class="sig-param">population_size: int = None</em>, <em class="sig-param">selection: jmetal.core.operator.Selection = &lt;jmetal.operator.selection.BinaryTournamentSelection object&gt;</em>, <em class="sig-param">termination_criterion: jmetal.util.termination_criterion.TerminationCriterion = &lt;jmetal.util.termination_criterion.StoppingByEvaluations object&gt;</em>, <em class="sig-param">population_generator: jmetal.util.generator.Generator = &lt;jmetal.util.generator.RandomGenerator object&gt;</em>, <em class="sig-param">population_evaluator: jmetal.util.evaluator.Evaluator = &lt;jmetal.util.evaluator.SequentialEvaluator object&gt;</em>, <em class="sig-param">dominance_comparator: jmetal.util.comparator.Comparator = &lt;jmetal.util.comparator.DominanceComparator object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#NSGAIII"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.NSGAIII" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="oldnsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII" title="jmetal.algorithm.multiobjective.nsgaii.NSGAII"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.algorithm.multiobjective.nsgaii.NSGAII</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="nsgaii.html#jmetal.algorithm.multiobjective.nsgaii.NSGAII" title="jmetal.algorithm.multiobjective.nsgaii.NSGAII"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.algorithm.multiobjective.nsgaii.NSGAII</span></code></a></p>
 <dl class="method">
 <dt id="jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.get_name">
 <code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#NSGAIII.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.get_name" title="Permalink to this definition">¶</a></dt>
@@ -165,66 +173,6 @@ Evolutionary Computation, 18(4), 577–601. doi:10.1109/TEVC.2013.2281535.</p></
 
 </dd></dl>
 
-<dl class="class">
-<dt id="jmetal.algorithm.multiobjective.nsgaiii.ReferenceDirectionFactory">
-<em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaiii.</code><code class="sig-name descname">ReferenceDirectionFactory</code><span class="sig-paren">(</span><em class="sig-param">n_dim: int</em>, <em class="sig-param">scaling=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#ReferenceDirectionFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.ReferenceDirectionFactory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
-<dl class="method">
-<dt id="jmetal.algorithm.multiobjective.nsgaiii.ReferenceDirectionFactory.compute">
-<code class="sig-name descname">compute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#ReferenceDirectionFactory.compute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.ReferenceDirectionFactory.compute" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="jmetal.algorithm.multiobjective.nsgaiii.UniformReferenceDirectionFactory">
-<em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaiii.</code><code class="sig-name descname">UniformReferenceDirectionFactory</code><span class="sig-paren">(</span><em class="sig-param">n_dim: int</em>, <em class="sig-param">scaling=None</em>, <em class="sig-param">n_points: int = None</em>, <em class="sig-param">n_partitions: int = None</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#UniformReferenceDirectionFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.UniformReferenceDirectionFactory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#jmetal.algorithm.multiobjective.nsgaiii.ReferenceDirectionFactory" title="jmetal.algorithm.multiobjective.nsgaiii.ReferenceDirectionFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.algorithm.multiobjective.nsgaiii.ReferenceDirectionFactory</span></code></a></p>
-<dl class="method">
-<dt id="jmetal.algorithm.multiobjective.nsgaiii.UniformReferenceDirectionFactory.get_n_points">
-<em class="property">static </em><code class="sig-name descname">get_n_points</code><span class="sig-paren">(</span><em class="sig-param">n_partitions</em>, <em class="sig-param">n_dim</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#UniformReferenceDirectionFactory.get_n_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.UniformReferenceDirectionFactory.get_n_points" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="jmetal.algorithm.multiobjective.nsgaiii.UniformReferenceDirectionFactory.get_partition_closest_to_points">
-<em class="property">static </em><code class="sig-name descname">get_partition_closest_to_points</code><span class="sig-paren">(</span><em class="sig-param">n_points</em>, <em class="sig-param">n_dim</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#UniformReferenceDirectionFactory.get_partition_closest_to_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.UniformReferenceDirectionFactory.get_partition_closest_to_points" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="jmetal.algorithm.multiobjective.nsgaiii.UniformReferenceDirectionFactory.uniform_reference_directions">
-<code class="sig-name descname">uniform_reference_directions</code><span class="sig-paren">(</span><em class="sig-param">n_partitions: int</em>, <em class="sig-param">n_dim: int</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#UniformReferenceDirectionFactory.uniform_reference_directions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.UniformReferenceDirectionFactory.uniform_reference_directions" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="jmetal.algorithm.multiobjective.nsgaiii.associate_to_niches">
-<code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaiii.</code><code class="sig-name descname">associate_to_niches</code><span class="sig-paren">(</span><em class="sig-param">F</em>, <em class="sig-param">niches</em>, <em class="sig-param">ideal_point</em>, <em class="sig-param">nadir_point</em>, <em class="sig-param">utopian_epsilon: float = 0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#associate_to_niches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.associate_to_niches" title="Permalink to this definition">¶</a></dt>
-<dd><p>Associate each solution to a reference point.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="jmetal.algorithm.multiobjective.nsgaiii.compute_niche_count">
-<code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaiii.</code><code class="sig-name descname">compute_niche_count</code><span class="sig-paren">(</span><em class="sig-param">n_niches: int</em>, <em class="sig-param">niche_of_individuals</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#compute_niche_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.compute_niche_count" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="jmetal.algorithm.multiobjective.nsgaiii.get_extreme_points">
-<code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaiii.</code><code class="sig-name descname">get_extreme_points</code><span class="sig-paren">(</span><em class="sig-param">F</em>, <em class="sig-param">n_objs</em>, <em class="sig-param">ideal_point</em>, <em class="sig-param">extreme_points=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#get_extreme_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.get_extreme_points" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the Achievement Scalarization Function which is used for the extreme point decomposition.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="jmetal.algorithm.multiobjective.nsgaiii.get_nadir_point">
-<code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaiii.</code><code class="sig-name descname">get_nadir_point</code><span class="sig-paren">(</span><em class="sig-param">extreme_points</em>, <em class="sig-param">ideal_point</em>, <em class="sig-param">worst_point</em>, <em class="sig-param">worst_of_front</em>, <em class="sig-param">worst_of_population</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#get_nadir_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.get_nadir_point" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the axis intersects for a set of individuals and its extremes (construct hyperplane).</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="jmetal.algorithm.multiobjective.nsgaiii.niching">
-<code class="sig-prename descclassname">jmetal.algorithm.multiobjective.nsgaiii.</code><code class="sig-name descname">niching</code><span class="sig-paren">(</span><em class="sig-param">pop: List[S], n_remaining: int, niche_count, niche_of_individuals, dist_to_niche</em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/nsgaiii.html#niching"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.nsgaiii.niching" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </div>
 </div>
 
@@ -233,12 +181,12 @@ Evolutionary Computation, 18(4), 577–601. doi:10.1109/TEVC.2013.2281535.</p></
             
   <div class="footer-relations">
     
-      <div class="pull-left">
-        <a class="btn btn-default" href="nsgaii.html" title="previous chapter (use the left arrow)">NSGA-II</a>
+      <div class="float-left">
+        <a class="btn btn-outline btn-sm" href="nsgaii.html" title="previous chapter (use the left arrow)">← NSGA-II</a>
       </div>
     
-      <div class="pull-right">
-        <a class="btn btn-default" href="spea2.html" title="next chapter (use the right arrow)">SPEA2</a>
+      <div class="float-right">
+        <a class="btn btn-outline btn-sm" href="spea2.html" title="next chapter (use the right arrow)">SPEA2 →</a>
       </div>
     </div>
     <div class="clearer"></div>

@@ -1,15 +1,7 @@
-<<<<<<< HEAD:examples/multiobjective/gde3/gde3_spark_evaluator.py
 from examples.multiobjective.zdt1_modified import ZDT1Modified
 from jmetal.algorithm.multiobjective.gde3 import GDE3
 from jmetal.util.evaluator import SparkEvaluator
 from jmetal.util.solution import print_function_values_to_file, print_variables_to_file
-=======
-from jmetal.util.solutions import SparkEvaluator
-
-from examples.multiobjective.parallel.zdt1_modified import ZDT1Modified
-from jmetal.algorithm.multiobjective.gde3 import GDE3
-from jmetal.util.solutions_utils import print_function_values_to_file, print_variables_to_file
->>>>>>> 62f5065855a15103e25bf874f08cf7a1355c9576:examples/multiobjective/parallel/gde3_spark_evaluator.py
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':

@@ -13,6 +13,7 @@ from scipy.stats import mannwhitneyu
 
 from jmetal.core.algorithm import Algorithm
 from jmetal.core.quality_indicator import QualityIndicator
+from jmetal.util.solution import print_function_values_to_file, print_variables_to_file, read_solutions
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -183,8 +184,8 @@ def generate_boxplot(filename: str, output_dir: str = 'boxplot'):
             ax.set_xticklabels(algorithms)
             ax.tick_params(labelsize=20)
 
-            plt.savefig('boxplot/boxplot-{}-{}.png'.format(pr, indicator_name), bbox_inches='tight')
-            plt.savefig('boxplot/boxplot-{}-{}.eps'.format(pr, indicator_name), bbox_inches='tight')
+            plt.savefig(os.path.join(output_dir, 'boxplot-{}-{}.png'.format(pr, indicator_name)), bbox_inches='tight')
+            plt.savefig(os.path.join(output_dir, 'boxplot-{}-{}.eps'.format(pr, indicator_name)), bbox_inches='tight')
             plt.close(fig)
 
 

@@ -41,7 +41,8 @@ h3:hover > a.headerlink,
 h4:hover > a.headerlink,
 h5:hover > a.headerlink,
 h6:hover > a.headerlink,
-dt:hover > a.headerlink {
+dt:hover > a.headerlink,
+.code-block-caption:hover > a.headerlink {
   visibility: visible;
 }
 
@@ -789,6 +790,21 @@ dt:target, .highlight {
 
 /* -- code displays --------------------------------------------------------- */
 
+.code-block-caption {
+  margin-bottom: -20px;
+}
+
+.code-block-caption .caption-text {
+  display: inline-block;
+  padding: 6px 20px;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 1.1;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #fff;
+  background-color: #337ab7;
+}
+
 td.linenos pre {
   padding: 5px 0px;
   border: 0;
@@ -999,6 +1015,8 @@ span.eqno {
 .mh { color: #009999 } /* Literal.Number.Hex */
 .mi { color: #009999 } /* Literal.Number.Integer */
 .mo { color: #009999 } /* Literal.Number.Oct */
+.mn { color: #009999 } /* Literal.Number.Number */
+.mrow { color: #009999 } /* Literal.Number.Row */
 .sb { color: #d01040 } /* Literal.String.Backtick */
 .sc { color: #d01040 } /* Literal.String.Char */
 .sd { color: #d01040 } /* Literal.String.Doc */

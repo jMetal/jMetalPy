@@ -16,10 +16,9 @@ install_requires = [
     'scipy>=1.3.0',
     'statsmodels>=0.9.0'
 ]
-
 extras_require = {
     'core': install_requires,
-    'doc': install_requires + ['guzzle_sphinx_theme', 'jupyter', 'nbsphinx'],
+    'docs': install_requires + ['jupyter', 'nbsphinx'],
     'distributed': install_requires + ['dask[complete]>=1.2.2', 'distributed>=1.28.1', 'pyspark>=2.4.0']
 }
 extras_require['complete'] = {v for req in extras_require.values() for v in req}

@@ -16,11 +16,11 @@ S = TypeVar('S')
 class InteractivePlot(Plot):
 
     def __init__(self,
-                 plot_title: str = 'Pareto front approximation',
+                 title: str = 'Pareto front approximation',
                  reference_front: List[S] = None,
                  reference_point: list = None,
                  axis_labels: list = None):
-        super(InteractivePlot, self).__init__(plot_title, reference_front, reference_point, axis_labels)
+        super(InteractivePlot, self).__init__(title, reference_front, reference_point, axis_labels)
         self.figure = None
         self.layout = None
         self.data = []

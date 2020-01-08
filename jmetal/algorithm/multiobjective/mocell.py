@@ -2,24 +2,18 @@ import copy
 from functools import cmp_to_key
 from typing import TypeVar, List
 
-from jmetal.util.solutions import Evaluator, Generator
-
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
 from jmetal.operator import BinaryTournamentSelection
 from jmetal.util.archive import BoundedArchive
-from jmetal.util.comparator import Comparator, MultiComparator
 from jmetal.util.density_estimator import CrowdingDistance, DensityEstimator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
 from jmetal.util.neighborhood import Neighborhood
 from jmetal.util.ranking import FastNonDominatedRanking, Ranking
-<<<<<<< HEAD
 from jmetal.util.comparator import Comparator, MultiComparator
-=======
->>>>>>> 62f5065855a15103e25bf874f08cf7a1355c9576
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')

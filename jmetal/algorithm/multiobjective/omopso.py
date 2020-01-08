@@ -4,7 +4,6 @@ from math import sqrt
 from typing import TypeVar, List, Optional
 
 import numpy
-from jmetal.util.solutions import Evaluator, Generator
 
 from jmetal.config import store
 from jmetal.core.algorithm import ParticleSwarmOptimization
@@ -12,11 +11,7 @@ from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.operator import UniformMutation
 from jmetal.operator.mutation import NonUniformMutation
-<<<<<<< HEAD
 from jmetal.util.archive import BoundedArchive, NonDominatedSolutionsArchive
-=======
-from jmetal.util.archive import BoundedArchive, NonDominatedSolutionListArchive
->>>>>>> 62f5065855a15103e25bf874f08cf7a1355c9576
 from jmetal.util.comparator import DominanceComparator, EpsilonDominanceComparator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator

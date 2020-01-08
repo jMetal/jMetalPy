@@ -1,21 +1,10 @@
-<<<<<<< HEAD:examples/multiobjective/omopso/omopso_spark_evaluator.py
 from examples.multiobjective.zdt1_modified import ZDT1Modified
-=======
-from jmetal.util.solutions import SparkEvaluator
-
-from examples.multiobjective.parallel.zdt1_modified import ZDT1Modified
->>>>>>> 62f5065855a15103e25bf874f08cf7a1355c9576:examples/multiobjective/parallel/omopso_spark_evaluator.py
 from jmetal.algorithm.multiobjective.omopso import OMOPSO
 from jmetal.operator import UniformMutation
 from jmetal.operator.mutation import NonUniformMutation
 from jmetal.util.archive import CrowdingDistanceArchive
-<<<<<<< HEAD:examples/multiobjective/omopso/omopso_spark_evaluator.py
 from jmetal.util.evaluator import SparkEvaluator
 from jmetal.util.solution import print_function_values_to_file, print_variables_to_file, read_solutions
-=======
-from jmetal.util.solutions_utils import print_function_values_to_file, print_variables_to_file
-from jmetal.util.solutions_utils import read_solutions
->>>>>>> 62f5065855a15103e25bf874f08cf7a1355c9576:examples/multiobjective/parallel/omopso_spark_evaluator.py
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
