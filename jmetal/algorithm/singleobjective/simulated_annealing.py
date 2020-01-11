@@ -6,10 +6,13 @@ from typing import TypeVar, List
 
 import numpy
 
+from jmetal.config import store
 from jmetal.core.algorithm import Algorithm
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
 from jmetal.core.solution import Solution
+from jmetal.util.evaluator import Evaluator
+from jmetal.util.generator import Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -18,7 +21,7 @@ R = TypeVar('R')
 """
 .. module:: simulated_annealing
    :platform: Unix, Windows
-   :synopsis: Implementation of Local search.
+   :synopsis: Implementation of Simulated Annealing.
 
 .. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
@@ -29,11 +32,15 @@ class SimulatedAnnealing(Algorithm[S, R], threading.Thread):
     def __init__(self,
                  problem: Problem[S],
                  mutation: Mutation,
-                 termination_criterion: TerminationCriterion):
+                 termination_criterion: TerminationCriterion,
+                 solution_generator: Generator = store.default_generator,
+                 solution_evaluator: Evaluator = store.default_evaluator):
         super(SimulatedAnnealing, self).__init__()
         self.problem = problem
         self.mutation = mutation
         self.termination_criterion = termination_criterion
+        self.solution_generator = solution_generator
+        self.solution_evaluator = solution_evaluator
         self.observable.register(termination_criterion)
         self.temperature = 1.0
         self.minimum_temperature = 0.000001
@@ -41,11 +48,10 @@ class SimulatedAnnealing(Algorithm[S, R], threading.Thread):
         self.counter = 0
 
     def create_initial_solutions(self) -> List[S]:
-        self.solutions.append(self.problem.create_solution())
-        return self.solutions
+        return [self.solution_generator.new(self.problem)]
 
     def evaluate(self, solutions: List[S]) -> List[S]:
-        return [self.problem.evaluate(solutions[0])]
+        return self.solution_evaluator.evaluate(solutions, self.problem)
 
     def stopping_condition_is_met(self) -> bool:
         return self.termination_criterion.is_met
