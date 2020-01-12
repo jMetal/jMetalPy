@@ -270,23 +270,22 @@ class CompositeMutation(Mutation[Solution]):
 class ScrambleMutation(Mutation[PermutationSolution]):
 
     def execute(self, solution: PermutationSolution) -> PermutationSolution:
-        for i in range(solution.number_of_variables):
-            rand = random.random()
+        rand = random.random()
 
-            if rand <= self.probability:
-                point1 = random.randint(0, len(solution.variables[i]))
-                point2 = random.randint(0, len(solution.variables[i]) - 1)
+        if rand <= self.probability:
+            point1 = random.randint(0, len(solution.variables))
+            point2 = random.randint(0, len(solution.variables) - 1)
 
-                if point2 >= point1:
-                    point2 += 1
-                else:
-                    point1, point2 = point2, point1
+            if point2 >= point1:
+                point2 += 1
+            else:
+                point1, point2 = point2, point1
 
-                if point2 - point1 >= 20:
-                    point2 = point1 + 20
+            if point2 - point1 >= 20:
+                point2 = point1 + 20
 
-                values = solution.variables[i][point1:point2]
-                solution.variables[i][point1:point2] = random.sample(values, len(values))
+            values = solution.variables[point1:point2]
+            solution.variables[point1:point2] = random.sample(values, len(values))
 
         return solution
 

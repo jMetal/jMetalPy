@@ -106,22 +106,21 @@ class CXCrossover(Crossover[PermutationSolution, PermutationSolution]):
         rand = random.random()
 
         if rand <= self.probability:
-            for i in range(parents[0].number_of_variables):
-                idx = random.randint(0, len(parents[0].variables[i]) - 1)
-                curr_idx = idx
-                cycle = []
+            idx = random.randint(0, len(parents[0].variables) - 1)
+            curr_idx = idx
+            cycle = []
 
-                while True:
-                    cycle.append(curr_idx)
-                    curr_idx = parents[0].variables[i].index(parents[1].variables[i][curr_idx])
+            while True:
+                cycle.append(curr_idx)
+                curr_idx = parents[0].variables.index(parents[1].variables[curr_idx])
 
-                    if curr_idx == idx:
-                        break
+                if curr_idx == idx:
+                    break
 
-                for j in range(len(parents[0].variables[i])):
-                    if j in cycle:
-                        offspring[0].variables[i][j] = parents[0].variables[i][j]
-                        offspring[1].variables[i][j] = parents[0].variables[i][j]
+            for j in range(len(parents[0].variables)):
+                if j in cycle:
+                    offspring[0].variables[j] = parents[0].variables[j]
+                    offspring[1].variables[j] = parents[0].variables[j]
 
         return offspring
 
