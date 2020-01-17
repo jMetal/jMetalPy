@@ -11,7 +11,6 @@ from jmetal.core.algorithm import Algorithm
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
 from jmetal.core.solution import Solution
-from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
@@ -33,14 +32,12 @@ class SimulatedAnnealing(Algorithm[S, R], threading.Thread):
                  problem: Problem[S],
                  mutation: Mutation,
                  termination_criterion: TerminationCriterion,
-                 solution_generator: Generator = store.default_generator,
-                 solution_evaluator: Evaluator = store.default_evaluator):
+                 solution_generator: Generator = store.default_generator):
         super(SimulatedAnnealing, self).__init__()
         self.problem = problem
         self.mutation = mutation
         self.termination_criterion = termination_criterion
         self.solution_generator = solution_generator
-        self.solution_evaluator = solution_evaluator
         self.observable.register(termination_criterion)
         self.temperature = 1.0
         self.minimum_temperature = 0.000001
@@ -51,7 +48,7 @@ class SimulatedAnnealing(Algorithm[S, R], threading.Thread):
         return [self.solution_generator.new(self.problem)]
 
     def evaluate(self, solutions: List[S]) -> List[S]:
-        return self.solution_evaluator.evaluate(solutions, self.problem)
+        return [self.problem.evaluate(solutions[0])]
 
     def stopping_condition_is_met(self) -> bool:
         return self.termination_criterion.is_met
