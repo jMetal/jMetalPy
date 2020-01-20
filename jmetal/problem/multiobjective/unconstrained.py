@@ -1,8 +1,8 @@
 import random
 from math import sqrt, exp, pow, sin
 
-from jmetal.core.problem import FloatProblem, BinaryProblem
-from jmetal.core.solution import FloatSolution, BinarySolution
+from jmetal.core.problem import FloatProblem, BinaryProblem, IntegerFloatProblem
+from jmetal.core.solution import FloatSolution, BinarySolution, IntegerFloatSolution
 
 """
 .. module:: constrained
@@ -227,3 +227,44 @@ class OneZeroMax(BinaryProblem):
 
     def get_name(self) -> str:
         return 'OneZeroMax'
+
+
+class NMMin(IntegerFloatProblem):
+    """ Bi-objective problem for testing class IntegerFloatProblem, with solves solutions of class IntegerFloatSolution,
+        which are composed of an integer solution and a double solution. It is assumed that the lower and upper bounds of
+        the variables of both solutions are the same.
+        * Objective 1: minimizing the sum of the distances of every variable to value N
+        * Objective 2: minimizing the sum of the distances of every variable to value M
+
+    """
+    def __init__(self, number_of_integer_variables, number_of_float_variables, n, m, lower_bound, upper_bound):
+        super(IntegerFloatProblem, self).__init__()
+        self.number_of_objectives = 2
+        self.number_of_variables = 2
+        self.number_of_constraints = 0
+
+        self.n = n
+        self.m = m
+
+        self.int_lower_bound = [lower_bound for _ in range(number_of_integer_variables)]
+        self.int_upper_bound = [upper_bound for _ in range(number_of_integer_variables)]
+        self.float_lower_bound = [lower_bound for _ in range(number_of_float_variables)]
+        self.float_upper_bound = [upper_bound for _ in range(number_of_float_variables)]
+
+        self.obj_directions = [self.MINIMIZE]
+        self.obj_labels = ['Ones']
+
+    def evaluate(self, solution: IntegerFloatSolution) -> IntegerFloatSolution:
+        distance_to_n = sum([abs(self.n - value) for value in solution.variables[0].variables])
+        distance_to_m = sum([abs(self.m - value) for value in solution.variables[0].variables])
+
+        distance_to_n += sum([abs(self.n - value) for value in solution.variables[1].variables])
+        distance_to_m += sum([abs(self.m - value) for value in solution.variables[1].variables])
+
+        solution.objectives[0] = -1.0 * distance_to_n
+        solution.objectives[1] = -1.0 * distance_to_m
+
+        return solution
+
+    def get_name(self) -> str:
+        return 'NMMin'
