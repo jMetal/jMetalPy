@@ -108,6 +108,38 @@ class IntegerSolution(Solution[int]):
         return new_solution
 
 
+class IntegerFloatSolution(Solution):
+    """ Class representing solutions composed of an integer and float solution"""
+
+    def __init__(self, int_lower_bound: List[int], int_upper_bound: List[int], float_lower_bound: List[int],
+                 float_upper_bound: [int], number_of_objectives: int,
+                 number_of_constraints: int = 0):
+        super(IntegerFloatSolution, self).__init__(2, number_of_objectives, number_of_constraints)
+        self.int_lower_bound = int_lower_bound
+        self.int_upper_bound = int_upper_bound
+        self.float_lower_bound = float_lower_bound
+        self.float_upper_bound = float_upper_bound
+
+        self.variables[0] = IntegerSolution(int_lower_bound, int_upper_bound, number_of_objectives, number_of_constraints)
+        self.variables[1] = FloatSolution(float_lower_bound, float_upper_bound, number_of_objectives, number_of_constraints)
+
+    def __copy__(self):
+        new_solution = IntegerFloatSolution(
+            self.int_lower_bound,
+            self.int_upper_bound,
+            self.float_lower_bound,
+            self.float_upper_bound,
+            self.number_of_objectives,
+            self.number_of_constrains)
+        new_solution.objectives = self.objectives[:]
+        new_solution.variables = self.variables[:]
+        new_solution.constraints = self.constraints[:]
+
+        new_solution.attributes = self.attributes.copy()
+
+        return new_solution
+
+
 class PermutationSolution(Solution):
     """ Class representing permutation solutions """
 

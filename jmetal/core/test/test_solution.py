@@ -1,7 +1,7 @@
 import copy
 import unittest
 
-from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, Solution
+from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, Solution, IntegerFloatSolution
 
 
 class SolutionTestCase(unittest.TestCase):
@@ -52,6 +52,7 @@ class FloatSolutionTestCase(unittest.TestCase):
 
     def test_should_default_constructor_create_a_valid_solution(self) -> None:
         solution = FloatSolution([0.0, 0.5], [1.0, 2.0], 3)
+
         self.assertEqual(2, solution.number_of_variables)
         self.assertEqual(3, solution.number_of_objectives)
         self.assertEqual(2, len(solution.variables))
@@ -87,12 +88,13 @@ class IntegerSolutionTestCase(unittest.TestCase):
         self.assertIsNotNone(solution)
 
     def test_should_default_constructor_create_a_valid_solution(self) -> None:
-        solution = IntegerSolution([0, 5], [1, 2], 3)
+        solution = IntegerSolution([0, 5], [1, 2], 3, 0)
 
         self.assertEqual(2, solution.number_of_variables)
         self.assertEqual(3, solution.number_of_objectives)
         self.assertEqual(2, len(solution.variables))
         self.assertEqual(3, len(solution.objectives))
+        self.assertEqual(0, len(solution.constraints))
         self.assertEqual([0, 5], solution.lower_bound)
         self.assertEqual([1, 2], solution.upper_bound)
 
@@ -114,6 +116,54 @@ class IntegerSolutionTestCase(unittest.TestCase):
         self.assertEqual(solution.constraints, new_solution.constraints)
         self.assertIs(solution.lower_bound, solution.lower_bound)
         self.assertIs(solution.upper_bound, solution.upper_bound)
+        self.assertEqual(solution.attributes, new_solution.attributes)
+
+
+class IntegerFloatSolutionTestCase(unittest.TestCase):
+    def test_should_constructor_create_a_non_null_object(self) -> None:
+        solution = IntegerFloatSolution([], [], [], [], 2, 1)
+        self.assertIsNotNone(solution)
+
+    def test_should_default_constructor_create_a_valid_solution(self) -> None:
+        solution = IntegerFloatSolution([0, 5, 7], [2, 8, 10], [0.5, 0.1], [6.0, 7.2], 3, 0)
+
+        self.assertEqual(2, solution.number_of_variables)
+        self.assertEqual(3, solution.number_of_objectives)
+        self.assertEqual(0, solution.number_of_constrains)
+        self.assertEqual(2, len(solution.variables))
+
+        self.assertEqual([0, 5, 7], solution.variables[0].lower_bound)
+        self.assertEqual([2, 8, 10], solution.variables[0].upper_bound)
+        self.assertEqual(3, solution.variables[0].number_of_objectives)
+        self.assertEqual(0, solution.variables[0].number_of_constrains)
+
+        self.assertEqual([0.5, 0.1], solution.variables[1].lower_bound)
+        self.assertEqual([6.0, 7.2], solution.variables[1].upper_bound)
+        self.assertEqual(3, solution.variables[1].number_of_objectives)
+        self.assertEqual(0, solution.variables[1].number_of_constrains)
+
+    def test_should_copy_work_properly(self) -> None:
+        solution = IntegerFloatSolution([0, 5, 7], [2, 8, 10], [0.5, 0.1], [6.0, 7.2], 3, 0)
+
+        solution.variables[0].variables = [0, 6, 8]
+        solution.variables[1].variables = [1.5, 6.5]
+        solution.objectives = [0.16, -2.34, 9.25]
+        solution.constraints = [-1.2, -0.25]
+        solution.attributes["attr"] = "value"
+
+        new_solution = copy.copy(solution)
+
+        self.assertEqual(solution.number_of_variables, new_solution.number_of_variables)
+        self.assertEqual(solution.number_of_objectives, new_solution.number_of_objectives)
+        self.assertEqual(solution.variables, new_solution.variables)
+        self.assertEqual(solution.objectives, new_solution.objectives)
+
+        self.assertEqual(solution.objectives, )
+        self.assertEqual(solution.variables[0].lower_bound, new_solution.variables[0].lower_bound)
+        self.assertEqual(solution.variables[0].upper_bound, new_solution.variables[0].upper_bound)
+        self.assertEqual(solution.variables[1].lower_bound, new_solution.variables[0].lower_bound)
+        self.assertEqual(solution.variables[1].upper_bound, new_solution.variables[1].upper_bound)
+
         self.assertEqual(solution.attributes, new_solution.attributes)
 
 
