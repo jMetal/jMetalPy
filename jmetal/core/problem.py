@@ -123,12 +123,12 @@ class IntegerFloatProblem(Problem[IntegerFloatSolution], ABC):
         new_solution.variables[0] = IntegerSolution(self.int_lower_bound, self.int_upper_bound,
                                                     self.number_of_objectives, self.number_of_constraints)
         new_solution.variables[0].variables = [int(random.uniform(self.int_lower_bound[i] * 1.0, self.int_upper_bound[i] * 1.0))
-             for i in range(self.number_of_variables)]
+             for i in range(len(self.int_lower_bound))]
 
         new_solution.variables[1] = FloatSolution(self.float_lower_bound, self.float_upper_bound,
                                                   self.number_of_objectives, self.number_of_constraints)
         new_solution.variables[1].variables = [int(random.uniform(self.float_lower_bound[i] * 1.0, self.float_upper_bound[i] * 1.0))
-             for i in range(self.number_of_variables)]
+             for i in range(len(self.float_upper_bound))]
 
         return new_solution
 

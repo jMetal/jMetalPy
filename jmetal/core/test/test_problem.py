@@ -1,29 +1,60 @@
 import unittest
 
-from jmetal.core.problem import FloatProblem, IntegerProblem
-from jmetal.core.solution import FloatSolution, IntegerSolution
+from jmetal.core.problem import FloatProblem, IntegerProblem, IntegerFloatProblem
+from jmetal.core.solution import FloatSolution, IntegerSolution, IntegerFloatSolution
+
+
+class DummyIntegerProblem(IntegerProblem):
+
+    def __init__(self):
+        super(DummyIntegerProblem, self).__init__()
+
+    def evaluate(self, solution: IntegerSolution) -> IntegerSolution:
+        pass
+
+    def get_name(self) -> str:
+        pass
+
+
+class DummyFloatProblem(FloatProblem):
+
+    def __init__(self):
+        super(DummyFloatProblem, self).__init__()
+
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
+        pass
+
+    def get_name(self) -> str:
+        pass
+
+
+class DummyIntegerFloatProblem(IntegerFloatProblem):
+
+    def __init__(self):
+        super(DummyIntegerFloatProblem, self).__init__()
+
+    def evaluate(self, solution: IntegerFloatSolution) -> IntegerFloatSolution:
+        pass
+
+    def get_name(self) -> str:
+        pass
 
 
 class FloatProblemTestCases(unittest.TestCase):
 
-    class DummyFloatProblem(FloatProblem):
-
-        def __init__(self):
-            super(FloatProblem, self).__init__()
-
-        def evaluate(self, solution: FloatSolution) -> FloatSolution:
-            pass
-
-        def get_name(self) -> str:
-            pass
-
     def test_should_default_constructor_create_a_valid_problem(self) -> None:
-        problem = self.DummyFloatProblem()
-        problem.number_of_variables = 1
-        problem.number_of_objectives = 2
-        problem.number_of_constraints = 0
-        problem.lower_bound = [-1.0]
-        problem.upper_bound = [1.0]
+        number_of_objectives = 2
+        number_of_constraints = 0
+        lower_bound = [-1.0]
+        upper_bound = [1.0]
+
+        problem = DummyFloatProblem()
+        problem.lower_bound = lower_bound
+        problem.upper_bound = upper_bound
+        problem.number_of_constraints = number_of_constraints
+        problem.number_of_objectives = number_of_objectives
+        problem.number_of_variables = len(lower_bound)
+
         self.assertEqual(1, problem.number_of_variables)
         self.assertEqual(2, problem.number_of_objectives)
         self.assertEqual(0, problem.number_of_constraints)
@@ -31,7 +62,7 @@ class FloatProblemTestCases(unittest.TestCase):
         self.assertEqual([1], problem.upper_bound)
 
     def test_should_create_solution_create_a_valid_solution(self) -> None:
-        problem = self.DummyFloatProblem()
+        problem = DummyFloatProblem()
         problem.number_of_variables = 2
         problem.number_of_objectives = 2
         problem.number_of_constraints = 0
@@ -46,19 +77,8 @@ class FloatProblemTestCases(unittest.TestCase):
 
 class IntegerProblemTestCases(unittest.TestCase):
 
-    class DummyIntegerProblem(IntegerProblem):
-
-        def __init__(self):
-            super(IntegerProblem, self).__init__()
-
-        def evaluate(self, solution: IntegerSolution) -> IntegerSolution:
-            pass
-
-        def get_name(self) -> str:
-            pass
-
     def test_should_default_constructor_create_a_valid_problem(self) -> None:
-        problem = self.DummyIntegerProblem()
+        problem = DummyIntegerProblem()
         problem.number_of_variables = 1
         problem.number_of_objectives = 2
         problem.number_of_constraints = 0
@@ -72,7 +92,7 @@ class IntegerProblemTestCases(unittest.TestCase):
         self.assertEqual([1], problem.upper_bound)
 
     def test_should_create_solution_create_a_valid_solution(self) -> None:
-        problem = self.DummyIntegerProblem()
+        problem = DummyIntegerProblem()
         problem.number_of_variables = 2
         problem.number_of_objectives = 2
         problem.number_of_constraints = 0
@@ -83,6 +103,60 @@ class IntegerProblemTestCases(unittest.TestCase):
         self.assertNotEqual(None, solution)
         self.assertTrue(-1 <= solution.variables[0] <= 1)
         self.assertTrue(-2 <= solution.variables[1] <= 2)
+
+
+class IntegerFloatProblemTestCases(unittest.TestCase):
+
+    def test_should_default_constructor_create_a_valid_problem(self) -> None:
+        number_of_objectives = 2
+        number_of_constraints = 3
+        int_lower_bound = [-1]
+        int_upper_bound = [1]
+        float_lower_bound = [2.0]
+        float_upper_bound = [5.1]
+
+        problem: DummyIntegerFloatProblem = DummyIntegerFloatProblem()
+
+        problem.number_of_variables = 2
+        problem.number_of_objectives = number_of_objectives
+        problem.number_of_constraints = number_of_constraints
+        problem.int_lower_bound = int_lower_bound
+        problem.int_upper_bound = int_upper_bound
+        problem.float_lower_bound = float_lower_bound
+        problem.float_upper_bound = float_upper_bound
+
+        self.assertEqual(2, problem.number_of_variables)
+        self.assertEqual(number_of_objectives, problem.number_of_objectives)
+        self.assertEqual(number_of_constraints, problem.number_of_constraints)
+
+    def test_should_create_solution_create_a_valid_solution(self) -> None:
+        number_of_objectives = 2
+        number_of_constraints = 3
+        int_lower_bound = [-1]
+        int_upper_bound = [1]
+        float_lower_bound = [2.0]
+        float_upper_bound = [5.1]
+
+        problem: DummyIntegerFloatProblem = DummyIntegerFloatProblem()
+
+        problem.number_of_variables = 2
+        problem.number_of_objectives = number_of_objectives
+        problem.number_of_constraints = number_of_constraints
+        problem.int_lower_bound = int_lower_bound
+        problem.int_upper_bound = int_upper_bound
+        problem.float_lower_bound = float_lower_bound
+        problem.float_upper_bound = float_upper_bound
+
+        solution = problem.create_solution()
+
+        self.assertNotEqual(None, solution)
+        self.assertEqual(number_of_objectives, solution.number_of_objectives)
+        self.assertEqual(2, solution.number_of_variables)
+        self.assertEqual(number_of_constraints, solution.number_of_constrains)
+
+        self.assertTrue(int_lower_bound[0] <= solution.variables[0].variables[0] <= int_upper_bound[0])
+        self.assertTrue(float_lower_bound[0] <= solution.variables[1].variables[0] <= float_upper_bound[0])
+        #self.assertTrue(-2 <= solution.variables[1] <= 2)
 
 
 if __name__ == '__main__':
