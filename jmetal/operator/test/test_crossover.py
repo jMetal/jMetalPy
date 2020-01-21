@@ -1,8 +1,8 @@
 import unittest
 from unittest import mock
 
-from jmetal.core.solution import BinarySolution, PermutationSolution
-from jmetal.operator.crossover import NullCrossover, SPXCrossover, CXCrossover, PMXCrossover
+from jmetal.core.solution import BinarySolution, PermutationSolution, FloatSolution
+from jmetal.operator.crossover import NullCrossover, SPXCrossover, CXCrossover, PMXCrossover, SBXCrossover
 
 
 class NullCrossoverTestCases(unittest.TestCase):
@@ -239,6 +239,42 @@ class CXTestCases(unittest.TestCase):
 
         self.assertEqual([1, 2, 3, 4, 7], offspring[1].variables[0])
         self.assertEqual([2, 6, 4, 5, 3], offspring[1].variables[1])
+
+
+class SBXCrossoverTestCases(unittest.TestCase):
+    def test_should_constructor_assign_the_correct_probability_value(self):
+        crossover_probability = 0.1
+        crossover: SBXCrossover = SBXCrossover(crossover_probability, 2.0)
+
+        self.assertEqual(crossover_probability, crossover.probability)
+
+    def test_should_constructor_assign_the_correct_distribution_index_value(self):
+        distribution_index = 10.5
+        crossover: SBXCrossover = SBXCrossover(0.1, distribution_index)
+
+        self.assertEqual(distribution_index, crossover.distribution_index)
+
+    def test_should_constructor_raise_an_exception_if_the_probability_is_greater_than_one(self):
+        with self.assertRaises(Exception):
+            SBXCrossover(1.5, 2.0)
+
+    def test_should_constructor_raise_an_exception_if_the_probability_is_negative(self):
+        with self.assertRaises(Exception):
+            SBXCrossover(-0.1, 2.0)
+
+    def test_should_constructor_raise_an_exception_if_the_distribution_index_is_negative(self):
+        with self.assertRaises(Exception):
+            SBXCrossover(0.1, -2.0)
+
+    def test_should_execute_with_an_invalid_solution_list_size_raise_an_exception(self):
+        crossover: SBXCrossover = SBXCrossover(0.1, 20.0)
+
+        solution = FloatSolution([1, 2], [2, 4], 2, 2)
+        with self.assertRaises(Exception):
+            crossover.execute([solution])
+
+        with self.assertRaises(Exception):
+            crossover.execute([solution, solution, solution])
 
 
 if __name__ == '__main__':

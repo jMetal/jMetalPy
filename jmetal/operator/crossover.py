@@ -143,6 +143,8 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
     def __init__(self, probability: float, distribution_index: float = 20.0):
         super(SBXCrossover, self).__init__(probability=probability)
         self.distribution_index = distribution_index
+        if distribution_index < 0:
+            raise Exception("The distribution index is negative: " + str(distribution_index))
 
     def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
         if len(parents) != 2:
