@@ -117,18 +117,18 @@ class IntegerFloatProblem(Problem[IntegerFloatSolution], ABC):
         self.float_upper_bound = None
 
     def create_solution(self) -> IntegerFloatSolution:
-        new_solution = IntegerFloatSolution(self.int_lower_bound, self.int_upper_bound, self.float_lower_bound,
-                                            self.float_upper_bound, self.number_of_objectives,
-                                            self.number_of_constraints)
-        new_solution.variables[0] = IntegerSolution(self.int_lower_bound, self.int_upper_bound,
-                                                    self.number_of_objectives, self.number_of_constraints)
-        new_solution.variables[0].variables = [int(random.uniform(self.int_lower_bound[i] * 1.0, self.int_upper_bound[i] * 1.0))
-             for i in range(len(self.int_lower_bound))]
+        integer_solution = IntegerSolution(self.int_lower_bound, self.int_upper_bound,
+                                           self.number_of_objectives, self.number_of_constraints)
+        integer_solution.variables = [int(random.uniform(self.int_lower_bound[i] * 1.0, self.int_upper_bound[i] * 1.0))
+                                      for i in range(len(self.int_lower_bound))]
 
-        new_solution.variables[1] = FloatSolution(self.float_lower_bound, self.float_upper_bound,
-                                                  self.number_of_objectives, self.number_of_constraints)
-        new_solution.variables[1].variables = [int(random.uniform(self.float_lower_bound[i] * 1.0, self.float_upper_bound[i] * 1.0))
-             for i in range(len(self.float_upper_bound))]
+        float_solution = FloatSolution(self.float_lower_bound, self.float_upper_bound,
+                                       self.number_of_objectives, self.number_of_constraints)
+        float_solution.variables = [
+            int(random.uniform(self.float_lower_bound[i] * 1.0, self.float_upper_bound[i] * 1.0))
+            for i in range(len(self.float_upper_bound))]
+
+        new_solution = IntegerFloatSolution(integer_solution, float_solution)
 
         return new_solution
 

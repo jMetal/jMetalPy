@@ -276,6 +276,24 @@ class SBXCrossoverTestCases(unittest.TestCase):
         with self.assertRaises(Exception):
             crossover.execute([solution, solution, solution])
 
+    def test_should_execute_return_the_parents_if_the_crossover_probability_is_zero(self):
+        crossover: SBXCrossover = SBXCrossover(0.0, 20.0)
+
+        solution1 = FloatSolution([1, 2], [2, 4], 2, 2)
+        solution2 = FloatSolution([1, 2], [2, 4], 2, 2)
+
+        solution1.variables = [1.5, 2.7]
+        solution2.variables = [1.7, 3.6]
+
+        offspring = crossover.execute([solution1, solution2])
+
+        self.assertEqual(2, len(offspring))
+        self.assertEquals(solution1.variables, offspring[0].variables)
+        self.assertEquals(solution2.variables, offspring[1].variables)
+
+    def test_should_execute_produce_valid_solutions_when_crossing_two_single_variable_solutions(self):
+        pass
+
 
 if __name__ == '__main__':
     unittest.main()

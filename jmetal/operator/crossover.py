@@ -413,7 +413,7 @@ class IntegerFloatSBXCrossover(Crossover[IntegerFloatSolution, IntegerFloatSolut
     __EPS = 1.0e-14
 
     def __init__(self, integer_SBX_crossover: IntegerSBXCrossover, float_SBX_crossover: SBXCrossover):
-        super(IntegerFloatSBXCrossover, self).__init__()
+        super(IntegerFloatSBXCrossover, self).__init__(1.0)
         self.integer_SBX_crossover = integer_SBX_crossover
         self.float_SBX_crossover = float_SBX_crossover
 

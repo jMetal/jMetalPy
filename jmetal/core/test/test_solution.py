@@ -121,26 +121,29 @@ class IntegerSolutionTestCase(unittest.TestCase):
 
 class IntegerFloatSolutionTestCase(unittest.TestCase):
     def test_should_constructor_create_a_non_null_object(self) -> None:
-        solution = IntegerFloatSolution([], [], [], [], 2, 1)
+        solution = IntegerFloatSolution(None, None, 2, 1)
         self.assertIsNotNone(solution)
 
     def test_should_default_constructor_create_a_valid_solution(self) -> None:
-        solution = IntegerFloatSolution([0, 5, 7], [2, 8, 10], [0.5, 0.1], [6.0, 7.2], 3, 0)
+        number_of_objectives = 3
+        number_of_constraints = 0
+        solution = IntegerFloatSolution(IntegerSolution([0, 5, 7], [2, 8, 10], number_of_objectives, number_of_constraints),
+                                        FloatSolution([0.5, 0.1], [6.0, 7.2], number_of_objectives, number_of_constraints))
 
         self.assertEqual(2, solution.number_of_variables)
         self.assertEqual(3, solution.number_of_objectives)
-        self.assertEqual(0, solution.number_of_constrains)
+        self.assertEqual(0, solution.number_of_constraints)
         self.assertEqual(2, len(solution.variables))
 
         self.assertEqual([0, 5, 7], solution.variables[0].lower_bound)
         self.assertEqual([2, 8, 10], solution.variables[0].upper_bound)
         self.assertEqual(3, solution.variables[0].number_of_objectives)
-        self.assertEqual(0, solution.variables[0].number_of_constrains)
+        self.assertEqual(0, solution.variables[0].number_of_constraints)
 
         self.assertEqual([0.5, 0.1], solution.variables[1].lower_bound)
         self.assertEqual([6.0, 7.2], solution.variables[1].upper_bound)
         self.assertEqual(3, solution.variables[1].number_of_objectives)
-        self.assertEqual(0, solution.variables[1].number_of_constrains)
+        self.assertEqual(0, solution.variables[1].number_of_constraints)
 
     def test_should_copy_work_properly(self) -> None:
         solution = IntegerFloatSolution([0, 5, 7], [2, 8, 10], [0.5, 0.1], [6.0, 7.2], 3, 0)

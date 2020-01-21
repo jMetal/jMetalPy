@@ -11,10 +11,10 @@ class Solution(Generic[S], ABC):
     def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int = 0):
         self.number_of_variables = number_of_variables
         self.number_of_objectives = number_of_objectives
-        self.number_of_constrains = number_of_constraints
+        self.number_of_constraints = number_of_constraints
         self.variables = [[] for _ in range(self.number_of_variables)]
         self.objectives = [0.0 for _ in range(self.number_of_objectives)]
-        self.constraints = [0.0 for _ in range(self.number_of_constrains)]
+        self.constraints = [0.0 for _ in range(self.number_of_constraints)]
         self.attributes = {}
 
     def __eq__(self, solution) -> bool:
@@ -72,7 +72,7 @@ class FloatSolution(Solution[float]):
             self.lower_bound,
             self.upper_bound,
             self.number_of_objectives,
-            self.number_of_constrains)
+            self.number_of_constraints)
         new_solution.objectives = self.objectives[:]
         new_solution.variables = self.variables[:]
         new_solution.constraints = self.constraints[:]
@@ -98,7 +98,7 @@ class IntegerSolution(Solution[int]):
             self.lower_bound,
             self.upper_bound,
             self.number_of_objectives,
-            self.number_of_constrains)
+            self.number_of_constraints)
         new_solution.objectives = self.objectives[:]
         new_solution.variables = self.variables[:]
         new_solution.constraints = self.constraints[:]
@@ -111,17 +111,11 @@ class IntegerSolution(Solution[int]):
 class IntegerFloatSolution(Solution):
     """ Class representing solutions composed of an integer and float solution"""
 
-    def __init__(self, int_lower_bound: List[int], int_upper_bound: List[int], float_lower_bound: List[int],
-                 float_upper_bound: [int], number_of_objectives: int,
-                 number_of_constraints: int = 0):
-        super(IntegerFloatSolution, self).__init__(2, number_of_objectives, number_of_constraints)
-        self.int_lower_bound = int_lower_bound
-        self.int_upper_bound = int_upper_bound
-        self.float_lower_bound = float_lower_bound
-        self.float_upper_bound = float_upper_bound
+    def __init__(self, integer_solution: IntegerSolution, float_solution: FloatSolution):
+        super(IntegerFloatSolution, self).__init__(2, integer_solution.number_of_objectives, integer_solution.number_of_constraints)
 
-        self.variables[0] = IntegerSolution(int_lower_bound, int_upper_bound, number_of_objectives, number_of_constraints)
-        self.variables[1] = FloatSolution(float_lower_bound, float_upper_bound, number_of_objectives, number_of_constraints)
+        self.variables[0] = integer_solution
+        self.variables[1] = float_solution
 
     def __copy__(self):
         new_solution = IntegerFloatSolution(
@@ -130,7 +124,7 @@ class IntegerFloatSolution(Solution):
             self.float_lower_bound,
             self.float_upper_bound,
             self.number_of_objectives,
-            self.number_of_constrains)
+            self.number_of_constraints)
         new_solution.objectives = self.objectives[:]
         new_solution.variables = self.variables[:]
         new_solution.constraints = self.constraints[:]

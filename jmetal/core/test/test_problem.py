@@ -152,7 +152,7 @@ class IntegerFloatProblemTestCases(unittest.TestCase):
         self.assertNotEqual(None, solution)
         self.assertEqual(number_of_objectives, solution.number_of_objectives)
         self.assertEqual(2, solution.number_of_variables)
-        self.assertEqual(number_of_constraints, solution.number_of_constrains)
+        self.assertEqual(number_of_constraints, solution.number_of_constraints)
 
         self.assertTrue(int_lower_bound[0] <= solution.variables[0].variables[0] <= int_upper_bound[0])
         self.assertTrue(float_lower_bound[0] <= solution.variables[1].variables[0] <= float_upper_bound[0])
