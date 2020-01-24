@@ -108,30 +108,19 @@ class IntegerSolution(Solution[int]):
         return new_solution
 
 
-class IntegerFloatSolution(Solution):
-    """ Class representing solutions composed of an integer and float solution"""
+class CompositeSolution(Solution):
+    """ Class representing solutions composed of a list of solutions. The idea is that each decision  variable can
+    be a solution of any type, so we can create mixed solutions (e.g., solutions combining any of the existing
+    encodings). The adopted approach has the advantage of easing the reuse of existing variation operators, but all the
+    solutions in the list will need to have the same function and constraint violation values.
 
-    def __init__(self, integer_solution: IntegerSolution, float_solution: FloatSolution):
-        super(IntegerFloatSolution, self).__init__(2, integer_solution.number_of_objectives, integer_solution.number_of_constraints)
+    It is assumed that problems using instances of this class will properly manage the solutions it contains.
+    """
 
-        self.variables[0] = integer_solution
-        self.variables[1] = float_solution
-
-    def __copy__(self):
-        new_solution = IntegerFloatSolution(
-            self.int_lower_bound,
-            self.int_upper_bound,
-            self.float_lower_bound,
-            self.float_upper_bound,
-            self.number_of_objectives,
-            self.number_of_constraints)
-        new_solution.objectives = self.objectives[:]
-        new_solution.variables = self.variables[:]
-        new_solution.constraints = self.constraints[:]
-
-        new_solution.attributes = self.attributes.copy()
-
-        return new_solution
+    def __init__(self, solutions: List[Solution]):
+        super(CompositeSolution, self).__init__(len(solutions), solutions[0].number_of_objectives,
+                                                solutions[0].number_of_constraints)
+        self.variables = solutions
 
 
 class PermutationSolution(Solution):
@@ -150,3 +139,4 @@ class PermutationSolution(Solution):
         new_solution.attributes = self.attributes.copy()
 
         return new_solution
+

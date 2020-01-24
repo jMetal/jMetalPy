@@ -4,8 +4,7 @@ from abc import ABC, abstractmethod
 from typing import Generic, TypeVar, List
 
 from jmetal.core.observer import Observer
-from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, PermutationSolution, \
-    IntegerFloatSolution
+from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, PermutationSolution
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -106,32 +105,6 @@ class IntegerProblem(Problem[IntegerSolution], ABC):
              for i in range(self.number_of_variables)]
 
         return new_solution
-
-
-class IntegerFloatProblem(Problem[IntegerFloatSolution], ABC):
-    def __init__(self):
-        super(IntegerFloatProblem, self).__init__()
-        self.int_lower_bound = None
-        self.int_upper_bound = None
-        self.float_lower_bound = None
-        self.float_upper_bound = None
-
-    def create_solution(self) -> IntegerFloatSolution:
-        integer_solution = IntegerSolution(self.int_lower_bound, self.int_upper_bound,
-                                           self.number_of_objectives, self.number_of_constraints)
-        integer_solution.variables = [int(random.uniform(self.int_lower_bound[i] * 1.0, self.int_upper_bound[i] * 1.0))
-                                      for i in range(len(self.int_lower_bound))]
-
-        float_solution = FloatSolution(self.float_lower_bound, self.float_upper_bound,
-                                       self.number_of_objectives, self.number_of_constraints)
-        float_solution.variables = [
-            int(random.uniform(self.float_lower_bound[i] * 1.0, self.float_upper_bound[i] * 1.0))
-            for i in range(len(self.float_upper_bound))]
-
-        new_solution = IntegerFloatSolution(integer_solution, float_solution)
-
-        return new_solution
-
 
 class PermutationProblem(Problem[PermutationSolution], ABC):
     """ Class representing permutation problems. """

@@ -1,8 +1,8 @@
 import random
 from math import sqrt, exp, pow, sin
 
-from jmetal.core.problem import FloatProblem, BinaryProblem, IntegerFloatProblem
-from jmetal.core.solution import FloatSolution, BinarySolution, IntegerFloatSolution
+from jmetal.core.problem import FloatProblem, BinaryProblem
+from jmetal.core.solution import FloatSolution, BinarySolution
 
 """
 .. module:: constrained
@@ -229,14 +229,15 @@ class OneZeroMax(BinaryProblem):
         return 'OneZeroMax'
 
 
+"""
 class NMMin(IntegerFloatProblem):
-    """ Bi-objective problem for testing class IntegerFloatProblem, with solves solutions of class IntegerFloatSolution,
+    Bi-objective problem for testing class IntegerFloatProblem, with solves solutions of class IntegerFloatSolution,
         which are composed of an integer solution and a double solution. It is assumed that the lower and upper bounds of
         the variables of both solutions are the same.
         * Objective 1: minimizing the sum of the distances of every variable to value N
         * Objective 2: minimizing the sum of the distances of every variable to value M
 
-    """
+    
     def __init__(self, number_of_integer_variables, number_of_float_variables, n, m, lower_bound, upper_bound):
         super(IntegerFloatProblem, self).__init__()
         self.number_of_objectives = 2
@@ -267,4 +268,6 @@ class NMMin(IntegerFloatProblem):
         return solution
 
     def get_name(self) -> str:
-        return 'NMMin'
+        return NMMin
+        
+"""
