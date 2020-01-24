@@ -1,6 +1,8 @@
 from abc import ABC
 from typing import List, Generic, TypeVar
 
+from jmetal.util.ckecking import Check
+
 BitSet = List[bool]
 S = TypeVar('S')
 
@@ -120,7 +122,29 @@ class CompositeSolution(Solution):
     def __init__(self, solutions: List[Solution]):
         super(CompositeSolution, self).__init__(len(solutions), solutions[0].number_of_objectives,
                                                 solutions[0].number_of_constraints)
+        Check.is_not_none(solutions)
+        Check.collection_is_not_empty(solutions)
+
+        for solution in solutions:
+            Check.that(solution.number_of_objectives == solutions[0].number_of_objectives,
+                       "The solutions in the list must have the same number of objectives: " + str(
+                           solutions[0].number_of_objectives))
+            Check.that(solution.number_of_constraints == solutions[0].number_of_constraints,
+                       "The solutions in the list must have the same number of constraints: " + str(
+                           solutions[0].number_of_constraints))
+
         self.variables = solutions
+
+    def __copy__(self):
+        new_solution = CompositeSolution(self.number_of_variables, self.number_of_objectives, self.number_of_constraints)
+
+        new_solution.objectives = self.objectives[:]
+        new_solution.variables = self.variables[:]
+        new_solution.constraints = self.constraints[:]
+
+        new_solution.attributes = self.attributes.copy()
+
+        return new_solution
 
 
 class PermutationSolution(Solution):
@@ -139,4 +163,3 @@ class PermutationSolution(Solution):
         new_solution.attributes = self.attributes.copy()
 
         return new_solution
-

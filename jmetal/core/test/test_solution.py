@@ -1,7 +1,7 @@
 import copy
 import unittest
 
-from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, Solution, IntegerFloatSolution
+from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, Solution, CompositeSolution
 
 
 class SolutionTestCase(unittest.TestCase):
@@ -16,7 +16,6 @@ class SolutionTestCase(unittest.TestCase):
 
 
 class BinarySolutionTestCase(unittest.TestCase):
-
     def test_should_default_constructor_create_a_valid_solution(self) -> None:
         solution = BinarySolution(2, 3)
         self.assertEqual(2, solution.number_of_variables)
@@ -127,8 +126,9 @@ class IntegerFloatSolutionTestCase(unittest.TestCase):
     def test_should_default_constructor_create_a_valid_solution(self) -> None:
         number_of_objectives = 3
         number_of_constraints = 0
-        solution = IntegerFloatSolution(IntegerSolution([0, 5, 7], [2, 8, 10], number_of_objectives, number_of_constraints),
-                                        FloatSolution([0.5, 0.1], [6.0, 7.2], number_of_objectives, number_of_constraints))
+        solution = IntegerFloatSolution(
+            IntegerSolution([0, 5, 7], [2, 8, 10], number_of_objectives, number_of_constraints),
+            FloatSolution([0.5, 0.1], [6.0, 7.2], number_of_objectives, number_of_constraints))
 
         self.assertEqual(2, solution.number_of_variables)
         self.assertEqual(3, solution.number_of_objectives)
@@ -169,6 +169,14 @@ class IntegerFloatSolutionTestCase(unittest.TestCase):
 
         self.assertEqual(solution.attributes, new_solution.attributes)
 
+
+class CompositeSolutionTestCase(unittest.TestCase):
+    def test_should_constructor_create_a_valid_not_none_composite_solution_composed_of_a_double_solution(self):
+        composite_solution: CompositeSolution([FloatSolution()])
+        self.assertIsNotNone(composite_solution)
+
+    def test_should_constructor_raise_an_exception_if_the_number_of_objectives_is_not_coherent(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()
