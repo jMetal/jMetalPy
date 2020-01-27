@@ -275,5 +275,6 @@ class L5TestCases(unittest.TestCase):
         self.assertEqual(2, result.count(solution_list[1]))
         self.assertEqual(2, result.count(solution_list[2]))
 
+
 if __name__ == '__main__':
     unittest.main()

@@ -3,9 +3,9 @@ from pathlib import Path
 from typing import TypeVar, Generic, List
 
 import numpy
+from jmetal.util.ckecking import Check
 
 from jmetal.core.solution import Solution
-from jmetal.util.ckecking import Check
 
 """
 .. module:: neighborhood
@@ -186,7 +186,7 @@ class TwoDimensionalMesh(Neighborhood):
         return neighbors
 
     def get_neighbors(self, index: int, solution_list: List[Solution]) -> List[Solution]:
-        Check.is_not_null(solution_list)
+        Check.is_not_none(solution_list)
         Check.that(len(solution_list) != 0, "The list of solutions is empty")
 
         return self.__find_neighbors(solution_list, index, self.neighborhood)
