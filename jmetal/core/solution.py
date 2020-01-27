@@ -108,6 +108,14 @@ class IntegerSolution(Solution[int]):
         return new_solution
 
 
+class CompositeSolution(Solution):
+    """ Class representing solutions composed of a list of solutions"""
+
+    def __init__(self, solutions:List[Solution]):
+        super(CompositeSolution, self).__init__(len(solutions))
+
+
+
 class IntegerFloatSolution(Solution):
     """ Class representing solutions composed of an integer and float solution"""
 
