@@ -1,7 +1,7 @@
 from dask.distributed import Client
 from distributed import LocalCluster
+from examples.multiobjective.parallel.zdt1_modified import ZDT1Modified
 
-from examples.multiobjective.zdt1_modified import ZDT1Modified
 from jmetal.algorithm.multiobjective.nsgaii import DistributedNSGAII
 from jmetal.operator import PolynomialMutation, SBXCrossover
 from jmetal.util.termination_criterion import StoppingByEvaluations
