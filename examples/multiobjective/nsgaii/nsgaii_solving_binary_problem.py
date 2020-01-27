@@ -4,6 +4,10 @@ from jmetal.problem.multiobjective.unconstrained import OneZeroMax
 from jmetal.util.solution import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
+"""  Program to  configure and run the NSGA-II algorithm configured to solve a binary problem, OneZeroMax, which is 
+multiobjective version of the ONE_MAX problem where the numbers of 1s and 0s have to be maximized at the same time.
+
+"""
 if __name__ == '__main__':
     binary_string_length = 512
     problem = OneZeroMax(binary_string_length)
