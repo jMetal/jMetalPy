@@ -2,8 +2,11 @@ import copy
 import random
 from typing import List
 
+from jmetal.util.ckecking import Check
+
 from jmetal.core.operator import Crossover
-from jmetal.core.solution import Solution, FloatSolution, BinarySolution, PermutationSolution, IntegerSolution
+from jmetal.core.solution import Solution, FloatSolution, BinarySolution, PermutationSolution, IntegerSolution, \
+    CompositeSolution
 
 """
 .. module:: crossover
@@ -146,8 +149,9 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
             raise Exception("The distribution index is negative: " + str(distribution_index))
 
     def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
-        if len(parents) != 2:
-            raise Exception('The number of parents is not two: {}'.format(len(parents)))
+        Check.that(type(parents[0]) is FloatSolution, "Solution type invalid: " + str(type(parents[0])))
+        Check.that(type(parents[1]) is FloatSolution, "Solution type invalid")
+        Check.that(len(parents) == 2, 'The number of parents is not two: {}'.format(len(parents)))
 
         offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
         rand = random.random()
@@ -226,8 +230,9 @@ class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
         self.distribution_index = distribution_index
 
     def execute(self, parents: List[IntegerSolution]) -> List[IntegerSolution]:
-        if len(parents) != 2:
-            raise Exception('The number of parents is not two: {}'.format(len(parents)))
+        Check.that(type(parents[0]) is IntegerSolution, "Solution type invalid")
+        Check.that(type(parents[1]) is IntegerSolution, "Solution type invalid")
+        Check.that(len(parents) == 2, 'The number of parents is not two: {}'.format(len(parents)))
 
         offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
         rand = random.random()
@@ -304,8 +309,9 @@ class SPXCrossover(Crossover[BinarySolution, BinarySolution]):
         super(SPXCrossover, self).__init__(probability=probability)
 
     def execute(self, parents: List[BinarySolution]) -> List[BinarySolution]:
-        if len(parents) != 2:
-            raise Exception('The number of parents is not two: {}'.format(len(parents)))
+        Check.that(type(parents[0]) is BinarySolution, "Solution type invalid")
+        Check.that(type(parents[1]) is BinarySolution, "Solution type invalid")
+        Check.that(len(parents) == 2, 'The number of parents is not two: {}'.format(len(parents)))
 
         offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
         rand = random.random()
@@ -407,3 +413,43 @@ class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
     def get_name(self) -> str:
         return 'Differential Evolution crossover'
 
+
+class CompositeCrossover(Crossover[CompositeSolution, CompositeSolution]):
+    __EPS = 1.0e-14
+
+    def __init__(self, crossover_operator_list:[Crossover]):
+        super(CompositeCrossover, self).__init__(probability=1.0)
+
+        Check.is_not_none(crossover_operator_list)
+        Check.collection_is_not_empty(crossover_operator_list)
+
+        self.crossover_operators_list = []
+        for operator in crossover_operator_list:
+            Check.that(issubclass(operator.__class__, Crossover), "Object is not a subclass of Crossover")
+            self.crossover_operators_list.append(operator)
+
+    def execute(self, solutions: List[CompositeSolution]) -> List[CompositeSolution]:
+        Check.is_not_none(solutions)
+        Check.that(len(solutions) == 2, "The number of parents is not two: " + str(len(solutions)))
+
+        offspring1 = []
+        offspring2 = []
+
+        number_of_solutions_in_composite_solution = solutions[0].number_of_variables
+
+        for i in range(number_of_solutions_in_composite_solution):
+            parents = [solutions[0].variables[i], solutions[1].variables[i]]
+            children = self.crossover_operators_list[i].execute(parents)
+            offspring1.append(children[0])
+            offspring2.append(children[1])
+
+        return [CompositeSolution(offspring1), CompositeSolution(offspring2)]
+
+    def get_number_of_parents(self) -> int:
+        return 2
+
+    def get_number_of_children(self) -> int:
+        return 2
+
+    def get_name(self) -> str:
+        return 'Composite crossover'

@@ -270,7 +270,7 @@ class CompositeMutationTestCases(unittest.TestCase):
 
         operator = CompositeMutation([mutation])
         self.assertIsNotNone(operator)
-        self.assertEquals(1, len(operator.mutation_operators_list))
+        self.assertEqual(1, len(operator.mutation_operators_list))
 
     def test_should_constructor_create_a_valid_operator_when_adding_two_mutation_operators(self):
         polynomial_mutation = PolynomialMutation(1.0, 20.0)
@@ -279,7 +279,7 @@ class CompositeMutationTestCases(unittest.TestCase):
         operator = CompositeMutation([polynomial_mutation, bit_flip_mutation])
 
         self.assertIsNotNone(operator)
-        self.assertEquals(2, len(operator.mutation_operators_list))
+        self.assertEqual(2, len(operator.mutation_operators_list))
         self.assertTrue(issubclass(operator.mutation_operators_list[0].__class__, PolynomialMutation))
         self.assertTrue(issubclass(operator.mutation_operators_list[1].__class__, BitFlipMutation))
 
