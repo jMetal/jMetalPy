@@ -3,9 +3,9 @@ from pathlib import Path
 from typing import TypeVar, Generic, List
 
 import numpy
-from jmetal.util.ckecking import Check
 
 from jmetal.core.solution import Solution
+from jmetal.util.ckecking import Check
 
 """
 .. module:: neighborhood

@@ -1,4 +1,5 @@
 from examples.multiobjective.zdt1_modified import ZDT1Modified
+
 from jmetal.algorithm.multiobjective.gde3 import GDE3
 from jmetal.util.evaluator import SparkEvaluator
 from jmetal.util.solution import print_function_values_to_file, print_variables_to_file

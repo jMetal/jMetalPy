@@ -1,10 +1,10 @@
+from jmetal.util.solutions import read_solutions, print_function_values_to_file, print_variables_to_file
+from jmetal.util.solutions.comparator import GDominanceComparator
+
 from jmetal.algorithm.multiobjective.gde3 import GDE3
 from jmetal.lab.visualization import Plot, InteractivePlot
 from jmetal.problem import ZDT2
-
 from jmetal.util.observer import VisualizerObserver
-from jmetal.util.solutions import read_solutions, print_function_values_to_file, print_variables_to_file
-from jmetal.util.solutions.comparator import GDominanceComparator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':

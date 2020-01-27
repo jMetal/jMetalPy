@@ -2,11 +2,10 @@ import copy
 import random
 from typing import List
 
-from jmetal.util.ckecking import Check
-
 from jmetal.core.operator import Crossover
 from jmetal.core.solution import Solution, FloatSolution, BinarySolution, PermutationSolution, IntegerSolution, \
     CompositeSolution
+from jmetal.util.ckecking import Check
 
 """
 .. module:: crossover

@@ -8,12 +8,12 @@ from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
 from jmetal.operator import BinaryTournamentSelection
 from jmetal.util.archive import BoundedArchive
+from jmetal.util.comparator import Comparator, MultiComparator
 from jmetal.util.density_estimator import CrowdingDistance, DensityEstimator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
 from jmetal.util.neighborhood import Neighborhood
 from jmetal.util.ranking import FastNonDominatedRanking, Ranking
-from jmetal.util.comparator import Comparator, MultiComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')

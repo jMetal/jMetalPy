@@ -2,12 +2,10 @@ import unittest
 from unittest import mock
 
 from jmetal.core.operator import Crossover
-
-from jmetal.util.ckecking import NoneParameterException, EmptyCollectionException, InvalidConditionException
-
 from jmetal.core.solution import BinarySolution, PermutationSolution, FloatSolution, CompositeSolution, IntegerSolution
 from jmetal.operator.crossover import NullCrossover, SPXCrossover, CXCrossover, PMXCrossover, SBXCrossover, \
     CompositeCrossover, IntegerSBXCrossover
+from jmetal.util.ckecking import NoneParameterException, EmptyCollectionException, InvalidConditionException
 
 
 class NullCrossoverTestCases(unittest.TestCase):

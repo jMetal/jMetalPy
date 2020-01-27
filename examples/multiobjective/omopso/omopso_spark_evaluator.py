@@ -1,4 +1,5 @@
 from examples.multiobjective.zdt1_modified import ZDT1Modified
+
 from jmetal.algorithm.multiobjective.omopso import OMOPSO
 from jmetal.operator import UniformMutation
 from jmetal.operator.mutation import NonUniformMutation

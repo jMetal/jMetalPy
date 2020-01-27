@@ -1,12 +1,10 @@
 import unittest
 
 from jmetal.core.operator import Mutation
-
-from jmetal.util.ckecking import NoneParameterException, EmptyCollectionException, InvalidConditionException
-
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, CompositeSolution
 from jmetal.operator.mutation import BitFlipMutation, UniformMutation, SimpleRandomMutation, PolynomialMutation, \
     IntegerPolynomialMutation, CompositeMutation
+from jmetal.util.ckecking import NoneParameterException, EmptyCollectionException, InvalidConditionException
 
 
 class PolynomialMutationTestMethods(unittest.TestCase):

@@ -1,10 +1,9 @@
 import random
 
-from jmetal.util.ckecking import Check
-
 from jmetal.core.operator import Mutation
 from jmetal.core.solution import BinarySolution, Solution, FloatSolution, IntegerSolution, PermutationSolution, \
     CompositeSolution
+from jmetal.util.ckecking import Check
 
 """
 .. module:: mutation

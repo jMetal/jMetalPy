@@ -3,7 +3,6 @@ from jmetal.operator import PolynomialMutation
 from jmetal.problem import ZDT4, ZDT1
 from jmetal.util.archive import CrowdingDistanceArchiveWithReferencePoint
 <<<<<<< HEAD:examples/multiobjective/smpso/smpsorp_zdt4.py
-from jmetal.util.solution import read_solutions, print_variables_to_file, print_function_values_to_file
 =======
 from jmetal.util.solutions import read_solutions
 
@@ -11,11 +10,9 @@ if __name__ == '__main__':
     problem = ZDT4()
     problem.reference_front = read_solutions(filename='resources/reference_front/ZDT4.pf')
 
-from jmetal.util.observer import VisualizerObserver
 from jmetal.util.solutions import read_solutions, print_function_values_to_file, print_variables_to_file
 >>>>>>> develop:examples/multiobjective/preferences/smpsorp_zdt4.py
 from jmetal.util.termination_criterion import StoppingByEvaluations
-from jmetal.lab.visualization import InteractivePlot, Plot
 
 if __name__ == '__main__':
     problem = ZDT1()

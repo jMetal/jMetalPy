@@ -1,12 +1,10 @@
 from jmetal.util.solution_list import print_function_values_to_file, print_variables_to_file
 
 from jmetal.algorithm.multiobjective.mocell import MOCell
-from jmetal.lab.visualization import Plot
 from jmetal.operator import SBXCrossover, PolynomialMutation
 from jmetal.problem import ZDT1
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.neighborhood import C9
-from jmetal.util.observer import ProgressBarObserver
 from jmetal.util.solution import read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 

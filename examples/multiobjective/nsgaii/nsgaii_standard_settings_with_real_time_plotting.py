@@ -1,14 +1,11 @@
-from jmetal.lab.visualization import Plot, InteractivePlot
-from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
-
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
+from jmetal.lab.visualization import Plot, InteractivePlot
 from jmetal.operator import SBXCrossover, PolynomialMutation
 from jmetal.problem import ZDT1
-from jmetal.problem.multiobjective.zdt import ZDT1Modified
-from jmetal.util.solution import get_non_dominated_solutions, read_solutions, print_function_values_to_file, \
+from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
+from jmetal.util.solution import read_solutions, print_function_values_to_file, \
     print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
-
 
 """  Program to  configure and run the NSGA-II algorithm configured with standard settings.
 """

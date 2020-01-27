@@ -1,9 +1,8 @@
 import copy
 import unittest
 
-from jmetal.util.ckecking import InvalidConditionException
-
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, Solution, CompositeSolution
+from jmetal.util.ckecking import InvalidConditionException
 
 
 class SolutionTestCase(unittest.TestCase):
