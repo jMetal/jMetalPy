@@ -3,8 +3,7 @@ import random
 from typing import List
 
 from jmetal.core.operator import Crossover
-from jmetal.core.solution import Solution, FloatSolution, BinarySolution, PermutationSolution, IntegerFloatSolution, \
-    IntegerSolution
+from jmetal.core.solution import Solution, FloatSolution, BinarySolution, PermutationSolution, IntegerSolution
 
 """
 .. module:: crossover
@@ -408,33 +407,3 @@ class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
     def get_name(self) -> str:
         return 'Differential Evolution crossover'
 
-
-class IntegerFloatSBXCrossover(Crossover[IntegerFloatSolution, IntegerFloatSolution]):
-    __EPS = 1.0e-14
-
-    def __init__(self, integer_SBX_crossover: IntegerSBXCrossover, float_SBX_crossover: SBXCrossover):
-        super(IntegerFloatSBXCrossover, self).__init__(1.0)
-        self.integer_SBX_crossover = integer_SBX_crossover
-        self.float_SBX_crossover = float_SBX_crossover
-
-    def execute(self, parents: List[IntegerFloatSolution]) -> List[IntegerFloatSolution]:
-        if len(parents) != 2:
-            raise Exception('The number of parents is not two: {}'.format(len(parents)))
-
-        integer_parent_solutions = [parents[0].variables[0], parents[1].variables[0]]
-        float_parent_solutions = [parents[0].variables[1], parents[1].variables[1]]
-
-        integer_children_solutions = self.integer_SBX_crossover.execute(integer_parent_solutions)
-        float_children_solutions = self.float_SBX_crossover.execute(float_parent_solutions)
-
-        return [IntegerFloatSolution(integer_children_solutions[0], float_children_solutions[0]),
-                IntegerFloatSolution(integer_children_solutions[1], float_children_solutions[1])]
-
-    def get_number_of_parents(self) -> int:
-        return 2
-
-    def get_number_of_children(self) -> int:
-        return 2
-
-    def get_name(self) -> str:
-        return 'Integer floatSBX crossover'
