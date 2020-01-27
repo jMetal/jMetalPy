@@ -1,12 +1,13 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import SBXCrossover, PolynomialMutation
 from jmetal.problem import ZDT1
+from jmetal.problem.multiobjective.zdt import ZDT1Modified
 from jmetal.util.solution import get_non_dominated_solutions, read_solutions, print_function_values_to_file, \
     print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
-    problem = ZDT1()
+    problem = ZDT1Modified()
     problem.reference_front = read_solutions(filename='resources/reference_front/ZDT1.pf')
 
     max_evaluations = 25000
