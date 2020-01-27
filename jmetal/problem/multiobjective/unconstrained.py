@@ -1,8 +1,8 @@
 import random
 from math import sqrt, exp, pow, sin
 
-from jmetal.core.problem import FloatProblem, BinaryProblem
-from jmetal.core.solution import FloatSolution, BinarySolution
+from jmetal.core.problem import FloatProblem, BinaryProblem, Problem
+from jmetal.core.solution import FloatSolution, BinarySolution, CompositeSolution, IntegerSolution
 
 """
 .. module:: constrained
@@ -228,6 +228,58 @@ class OneZeroMax(BinaryProblem):
     def get_name(self) -> str:
         return 'OneZeroMax'
 
+
+class MixedIntegerFloatProblem(Problem):
+    def __init__(self, number_of_integer_variables=10, number_of_float_variables=10, n=100, m=-100, lower_bound=-1000,
+                 upper_bound=1000):
+        super(MixedIntegerFloatProblem, self).__init__()
+        self.number_of_objectives = 2
+        self.number_of_variables = 2
+        self.number_of_constraints = 0
+
+        self.n = n
+        self.m = m
+
+        self.float_lower_bound = [lower_bound for _ in range(number_of_float_variables)]
+        self.float_upper_bound = [upper_bound for _ in range(number_of_float_variables)]
+        self.int_lower_bound = [lower_bound for _ in range(number_of_integer_variables)]
+        self.int_upper_bound = [upper_bound for _ in range(number_of_integer_variables)]
+
+        self.obj_directions = [self.MINIMIZE]
+        self.obj_labels = ['Ones']
+
+    def evaluate(self, solution: CompositeSolution) -> CompositeSolution:
+        distance_to_n = sum([abs(self.n - value) for value in solution.variables[0].variables])
+        distance_to_m = sum([abs(self.m - value) for value in solution.variables[0].variables])
+
+        distance_to_n += sum([abs(self.n - value) for value in solution.variables[1].variables])
+        distance_to_m += sum([abs(self.m - value) for value in solution.variables[1].variables])
+
+        solution.objectives[0] = distance_to_n
+        solution.objectives[1] = distance_to_m
+
+        return solution
+
+    def create_solution(self) -> CompositeSolution:
+        integer_solution = IntegerSolution(self.int_lower_bound, self.int_upper_bound, self.number_of_objectives,
+                                           self.number_of_constraints)
+        float_solution = FloatSolution(
+            self.float_lower_bound,
+            self.float_upper_bound,
+            self.number_of_objectives, self.number_of_constraints)
+
+        float_solution.variables = \
+            [random.uniform(self.lower_bound[i] * 1.0, self.upper_bound[i] * .01) for i in
+             range(len(self.int_lower_bound))]
+
+        integer_solution.variables = \
+            [random.uniform(self.lower_bound[i], self.upper_bound[i]) for i in
+             range(len(self.float_lower_bound))]
+
+        return CompositeSolution([float_solution, integer_solution])
+
+    def get_name(self) -> str:
+        return "Mixed Integer Float Problem"
 
 """
 class NMMin(IntegerFloatProblem):
