@@ -6,6 +6,9 @@ from jmetal.operator import PolynomialMutation, SBXCrossover
 from jmetal.problem.multiobjective.zdt import ZDT1Modified
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
+""" Distributed (asynchronous) version of NSGA-II using Dask.
+"""
+
 if __name__ == '__main__':
     problem = ZDT1Modified()
 

@@ -1,5 +1,4 @@
-from jmetal.lab.visualization import Plot, InteractivePlot
-from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
+from jmetal.core.problem import OnTheFlyFloatProblem
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import SBXCrossover, PolynomialMutation
@@ -13,8 +12,33 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 """  Program to  configure and run the NSGA-II algorithm configured with standard settings.
 """
 if __name__ == '__main__':
-    problem = ZDT1()
-    problem.reference_front = read_solutions(filename='resources/reference_front/ZDT1.pf')
+    # Defining problem Srinivas on the fly
+    def f1(x: [float]):
+        return 2.0 + (x[0] - 2.0) * (x[0] - 2.0) + (x[1] - 1.0) * (x[1] - 1.0)
+
+
+    def f2(x: [float]):
+        return 9.0 * x[0] - (x[1] - 1.0) * (x[1] - 1.0)
+
+
+    def c1(x: [float]):
+        return 1.0 - (x[0] * x[0] + x[1] * x[1]) / 225.0
+
+
+    def c2(x: [float]):
+        return (3.0 * x[1] - x[0]) / 10.0 - 1.0
+
+
+    problem = OnTheFlyFloatProblem() \
+        .set_name('Srinivas') \
+        .add_variable(-20.0, 20.0) \
+        .add_variable(-20.0, 20.0) \
+        .add_function(f1) \
+        .add_function(f2) \
+        .add_constraint(c1) \
+        .add_constraint(c2)
+
+    problem.reference_front = read_solutions(filename='resources/reference_front/Srinivas.pf')
 
     max_evaluations = 25000
     algorithm = NSGAII(
@@ -26,19 +50,8 @@ if __name__ == '__main__':
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
-    algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
-    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front))
-
     algorithm.run()
-    front = algorithm.get_result()
-
-    # Plot front
-    plot_front = Plot(title='Pareto front approximation. Problem: ' + problem.get_name(), reference_front=problem.reference_front, axis_labels=problem.obj_labels)
-    plot_front.plot(front, label=algorithm.label, filename=algorithm.get_name())
-
-    # Plot interactive front
-    plot_front = InteractivePlot(title='Pareto front approximation. Problem: ' + problem.get_name(), reference_front=problem.reference_front, axis_labels=problem.obj_labels)
-    plot_front.plot(front, label=algorithm.label, filename=algorithm.get_name())
+    front = get_non_dominated_solutions(algorithm.get_result())
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.' + algorithm.label)
@@ -47,3 +60,4 @@ if __name__ == '__main__':
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())
     print('Computing time: ' + str(algorithm.total_computing_time))
+

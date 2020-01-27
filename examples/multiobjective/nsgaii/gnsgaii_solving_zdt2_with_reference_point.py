@@ -3,18 +3,19 @@ from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import SBXCrossover, PolynomialMutation
-from jmetal.problem import ZDT1
-from jmetal.problem.multiobjective.zdt import ZDT1Modified
-from jmetal.util.solution import get_non_dominated_solutions, read_solutions, print_function_values_to_file, \
-    print_variables_to_file
+from jmetal.problem import ZDT2
+from jmetal.util.comparator import GDominanceComparator
+from jmetal.util.solution import print_function_values_to_file, print_variables_to_file, read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
-
-"""  Program to  configure and run the NSGA-II algorithm configured with standard settings.
+"""  Program to configure and run G-NSGA-II (NSGA-II with G-Dominance) to solve problem ZDT2 with 
+reference point = [0.2, 0.5].
 """
 if __name__ == '__main__':
-    problem = ZDT1()
-    problem.reference_front = read_solutions(filename='resources/reference_front/ZDT1.pf')
+    problem = ZDT2()
+    problem.reference_front = read_solutions(filename='resources/reference_front/ZDT2.pf')
+
+    reference_point = [0.2, 0.5]
 
     max_evaluations = 25000
     algorithm = NSGAII(
@@ -23,26 +24,30 @@ if __name__ == '__main__':
         offspring_population_size=100,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
+        dominance_comparator=GDominanceComparator(reference_point),
         termination_criterion=StoppingByEvaluations(max=max_evaluations)
     )
 
     algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
-    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front))
+    algorithm.observable.register(
+        observer=VisualizerObserver(reference_front=problem.reference_front, reference_point=reference_point))
 
     algorithm.run()
     front = algorithm.get_result()
 
     # Plot front
-    plot_front = Plot(title='Pareto front approximation. Problem: ' + problem.get_name(), reference_front=problem.reference_front, axis_labels=problem.obj_labels)
+    plot_front = Plot(title='Pareto front approximation. Problem: ' + problem.get_name(),
+                      reference_front=problem.reference_front, axis_labels=problem.obj_labels)
     plot_front.plot(front, label=algorithm.label, filename=algorithm.get_name())
 
     # Plot interactive front
-    plot_front = InteractivePlot(title='Pareto front approximation. Problem: ' + problem.get_name(), reference_front=problem.reference_front, axis_labels=problem.obj_labels)
+    plot_front = InteractivePlot(title='Pareto front approximation. Problem: ' + problem.get_name(),
+                                 reference_front=problem.reference_front, axis_labels=problem.obj_labels)
     plot_front.plot(front, label=algorithm.label, filename=algorithm.get_name())
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.' + algorithm.label)
-    print_variables_to_file(front, 'VAR.'+ algorithm.label)
+    print_variables_to_file(front, 'VAR.' + algorithm.label)
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())
