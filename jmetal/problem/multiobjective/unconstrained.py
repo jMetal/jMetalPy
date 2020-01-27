@@ -269,14 +269,14 @@ class MixedIntegerFloatProblem(Problem):
             self.number_of_objectives, self.number_of_constraints)
 
         float_solution.variables = \
-            [random.uniform(self.lower_bound[i] * 1.0, self.upper_bound[i] * .01) for i in
+            [random.uniform(self.float_lower_bound[i] * 1.0, self.float_upper_bound[i] * .01) for i in
              range(len(self.int_lower_bound))]
 
         integer_solution.variables = \
-            [random.uniform(self.lower_bound[i], self.upper_bound[i]) for i in
+            [random.uniform(self.float_lower_bound[i], self.float_upper_bound[i]) for i in
              range(len(self.float_lower_bound))]
 
-        return CompositeSolution([float_solution, integer_solution])
+        return CompositeSolution([integer_solution, float_solution])
 
     def get_name(self) -> str:
         return "Mixed Integer Float Problem"
