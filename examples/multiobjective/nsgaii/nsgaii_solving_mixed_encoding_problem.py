@@ -8,7 +8,7 @@ from jmetal.util.solution import get_non_dominated_solutions, print_function_val
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
-    problem = MixedIntegerFloatProblem(10,10, 100, -100, -1000, 1000)
+    problem = MixedIntegerFloatProblem(10, 10, 100, -100, -1000, 1000)
 
     max_evaluations = 25000
     algorithm = NSGAII(
@@ -16,8 +16,9 @@ if __name__ == '__main__':
         population_size=100,
         offspring_population_size=100,
         mutation=CompositeMutation([IntegerPolynomialMutation(0.01, 20), PolynomialMutation(0.01, 20.0)]),
-        crossover=CompositeCrossover([IntegerSBXCrossover(probability=1.0, distribution_index=20), SBXCrossover(probability=1.0, distribution_index=20)]),
-        termination_criterion=StoppingByEvaluations(max=max_evaluations)
+        crossover=CompositeCrossover([IntegerSBXCrossover(probability=1.0, distribution_index=20),
+                                      SBXCrossover(probability=1.0, distribution_index=20)]),
+        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations)
     )
 
     algorithm.run()

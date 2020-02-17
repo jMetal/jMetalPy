@@ -12,7 +12,7 @@ if __name__ == '__main__':
     algorithm = LocalSearch(
         problem=problem,
         mutation=PolynomialMutation(1.0 / problem.number_of_variables, 20.0),
-        termination_criterion=StoppingByEvaluations(max=max_evaluations)
+        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations)
     )
 
     algorithm.run()

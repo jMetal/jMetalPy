@@ -22,7 +22,7 @@ class Problem(Generic[S], ABC):
         self.number_of_objectives: int = 0
         self.number_of_constraints: int = 0
 
-        self.reference_front: List[S] = None
+        self.reference_front: List[S] = []
 
         self.directions: List[int] = []
         self.labels: List[str] = []
@@ -105,6 +105,7 @@ class IntegerProblem(Problem[IntegerSolution], ABC):
              for i in range(self.number_of_variables)]
 
         return new_solution
+
 
 class PermutationProblem(Problem[PermutationSolution], ABC):
     """ Class representing permutation problems. """

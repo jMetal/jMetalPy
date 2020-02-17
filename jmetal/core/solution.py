@@ -81,8 +81,6 @@ class FloatSolution(Solution[float]):
 
         new_solution.attributes = self.attributes.copy()
 
-        new_solution.attributes = self.attributes.copy()
-
         return new_solution
 
 
@@ -136,10 +134,9 @@ class CompositeSolution(Solution):
         self.variables = solutions
 
     def __copy__(self):
-        new_solution = CompositeSolution(self.number_of_variables, self.number_of_objectives, self.number_of_constraints)
+        new_solution = CompositeSolution(self.variables)
 
         new_solution.objectives = self.objectives[:]
-        new_solution.variables = self.variables[:]
         new_solution.constraints = self.constraints[:]
 
         new_solution.attributes = self.attributes.copy()

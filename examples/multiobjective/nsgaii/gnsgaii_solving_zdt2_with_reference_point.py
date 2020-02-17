@@ -7,9 +7,11 @@ from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution import print_function_values_to_file, print_variables_to_file, read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
-"""  Program to configure and run G-NSGA-II (NSGA-II with G-Dominance) to solve problem ZDT2 with 
+"""  
+Program to configure and run G-NSGA-II (NSGA-II with G-Dominance) to solve problem ZDT2 with 
 reference point = [0.2, 0.5].
 """
+
 if __name__ == '__main__':
     problem = ZDT2()
     problem.reference_front = read_solutions(filename='resources/reference_front/ZDT2.pf')
@@ -24,7 +26,7 @@ if __name__ == '__main__':
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
         dominance_comparator=GDominanceComparator(reference_point),
-        termination_criterion=StoppingByEvaluations(max=max_evaluations)
+        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations)
     )
 
     algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))

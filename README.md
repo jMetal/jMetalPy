@@ -68,7 +68,7 @@ algorithm = NSGAII(
     offspring_population_size=100,
     mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
     crossover=SBXCrossover(probability=1.0, distribution_index=20),
-    termination_criterion=StoppingByEvaluations(max=25000)
+    termination_criterion=StoppingByEvaluations(max_evaluations=25000)
 )
 
 algorithm.run()
@@ -99,7 +99,7 @@ plot_front.plot(front, label='NSGAII-ZDT1', filename='NSGAII-ZDT1', format='png'
 <img src=docs/source/_static/NSGAII-ZDT1.png width=450 alt="Pareto front approximation">
 
 ## Features
-The current release of jMetalPy (v1.5.3) contains the following components:
+The current release of jMetalPy (v1.5.4) contains the following components:
 
 * Algorithms: local search, genetic algorithm, evolution strategy, simulated annealing, random search, NSGA-II, NSGA-III, SMPSO, OMOPSO, MOEA/D, MOEA/D-DRA, MOEA/D-IEpsilon, GDE3, SPEA2, HYPE, IBEA. Preference articulation-based algorithms (G-NSGA-II, G-GDE3, G-SPEA2, SMPSO/RP); Dynamic versions of NSGA-II, SMPSO, and GDE3.
 * Parallel computing based on Apache Spark and Dask.

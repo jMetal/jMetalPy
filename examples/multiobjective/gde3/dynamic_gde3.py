@@ -16,7 +16,7 @@ if __name__ == '__main__':
         population_size=100,
         cr=0.5,
         f=0.5,
-        termination_criterion=StoppingByEvaluations(max=500)
+        termination_criterion=StoppingByEvaluations(max_evaluations=500)
     )
 
     algorithm.observable.register(observer=PlotFrontToFileObserver('dynamic_front_vis'))

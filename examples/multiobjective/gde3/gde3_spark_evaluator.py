@@ -1,6 +1,5 @@
-from examples.multiobjective.zdt1_modified import ZDT1Modified
-
 from jmetal.algorithm.multiobjective.gde3 import GDE3
+from jmetal.problem.multiobjective.zdt import ZDT1Modified
 from jmetal.util.evaluator import SparkEvaluator
 from jmetal.util.solution import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
@@ -13,7 +12,7 @@ if __name__ == '__main__':
         population_size=10,
         cr=0.5,
         f=0.5,
-        termination_criterion=StoppingByEvaluations(max=100),
+        termination_criterion=StoppingByEvaluations(max_evaluations=100),
         population_evaluator=SparkEvaluator()
     )
 

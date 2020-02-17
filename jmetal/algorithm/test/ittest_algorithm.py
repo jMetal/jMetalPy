@@ -27,7 +27,7 @@ class RunningAlgorithmsTestCases(unittest.TestCase):
             offspring_population_size=self.offspring_size,
             mutation=self.mutation,
             crossover=self.crossover,
-            termination_criterion=StoppingByEvaluations(max=1000)
+            termination_criterion=StoppingByEvaluations(max_evaluations=1000)
         ).run()
 
     def test_SMPSO(self):
@@ -36,7 +36,7 @@ class RunningAlgorithmsTestCases(unittest.TestCase):
             swarm_size=self.population_size,
             mutation=self.mutation,
             leaders=CrowdingDistanceArchive(100),
-            termination_criterion=StoppingByEvaluations(max=1000)
+            termination_criterion=StoppingByEvaluations(max_evaluations=1000)
         ).run()
 
 
@@ -53,7 +53,7 @@ class IntegrationTestCases(unittest.TestCase):
             offspring_population_size=100,
             mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
             crossover=SBXCrossover(probability=1.0, distribution_index=20),
-            termination_criterion=StoppingByEvaluations(max=max_evaluations)
+            termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations)
         )
 
         algorithm.run()
@@ -72,7 +72,7 @@ class IntegrationTestCases(unittest.TestCase):
             swarm_size=100,
             mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
             leaders=CrowdingDistanceArchive(100),
-            termination_criterion=StoppingByEvaluations(max=25000)
+            termination_criterion=StoppingByEvaluations(max_evaluations=25000)
         )
 
         algorithm.run()

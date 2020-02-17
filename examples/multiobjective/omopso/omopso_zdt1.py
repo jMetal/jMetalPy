@@ -23,7 +23,7 @@ if __name__ == '__main__':
         non_uniform_mutation=NonUniformMutation(mutation_probability, perturbation=0.5,
                                                 max_iterations=int(max_evaluations / swarm_size)),
         leaders=CrowdingDistanceArchive(100),
-        termination_criterion=StoppingByEvaluations(max=max_evaluations)
+        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations)
     )
 
     algorithm.run()
