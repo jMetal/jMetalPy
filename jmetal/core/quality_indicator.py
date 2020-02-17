@@ -46,7 +46,7 @@ class FitnessValue(QualityIndicator):
 
 
 class GenerationalDistance(QualityIndicator):
-    def __init__(self, reference_front: np.array):
+    def __init__(self, reference_front: np.array=None):
         """
         * Van Veldhuizen, D.A., Lamont, G.B.: Multiobjective Evolutionary Algorithm Research: A History and Analysis.
           Technical Report TR-98-03, Dept. Elec. Comput. Eng., Air Force. Inst. Technol. (1998)
@@ -74,7 +74,7 @@ class InvertedGenerationalDistance(QualityIndicator):
         super(InvertedGenerationalDistance, self).__init__(is_minimization=True)
         self.reference_front = reference_front
 
-    def compute(self, solutions: np.array):
+    def compute(self, solutions: np.array = None):
         if self.reference_front is None:
             raise Exception('Reference front is none')
 
@@ -90,7 +90,7 @@ class InvertedGenerationalDistance(QualityIndicator):
 
 
 class EpsilonIndicator(QualityIndicator):
-    def __init__(self, reference_front: np.array):
+    def __init__(self, reference_front: np.array = None):
         super(EpsilonIndicator, self).__init__(is_minimization=True)
         self.reference_front = reference_front
 
@@ -115,7 +115,7 @@ class HyperVolume(QualityIndicator):
     Minimization is implicitly assumed here!
     """
 
-    def __init__(self, reference_point: [float]):
+    def __init__(self, reference_point: [float] = None):
         super(HyperVolume, self).__init__(is_minimization=False)
         self.referencePoint = reference_point
         self.list: MultiList = []
