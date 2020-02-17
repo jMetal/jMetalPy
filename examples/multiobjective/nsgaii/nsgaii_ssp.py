@@ -30,7 +30,7 @@ if __name__ == '__main__':
         offspring_population_size=100,
         mutation=BitFlipMutation(probability=0.5),
         crossover=SPXCrossover(probability=0.8),
-        termination_criterion=StoppingByEvaluations(max=25000)
+        termination_criterion=StoppingByEvaluations(max_evaluations=25000)
     )
 
     algorithm.run()

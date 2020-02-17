@@ -22,7 +22,7 @@ class _Store:
 
     @property
     def default_termination_criteria(self):
-        return StoppingByEvaluations(max=25000)
+        return StoppingByEvaluations(max_evaluations=25000)
 
     @property
     def default_comparator(self):

@@ -2,7 +2,6 @@ from abc import abstractmethod, ABC
 from typing import TypeVar, List
 
 import numpy as np
-from jmetal.util.solutions import Evaluator, Generator
 from numpy.linalg import LinAlgError
 from scipy import special
 

@@ -16,7 +16,7 @@ if __name__ == '__main__':
         population_size=100,
         cr=0.5,
         f=0.5,
-        termination_criterion=StoppingByEvaluations(max=max_evaluations),
+        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
         dominance_comparator=GDominanceComparator(reference_point)
     )
 

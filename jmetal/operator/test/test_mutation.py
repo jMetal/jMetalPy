@@ -1,8 +1,10 @@
 import unittest
 
-from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution
+from jmetal.core.operator import Mutation
+from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, CompositeSolution
 from jmetal.operator.mutation import BitFlipMutation, UniformMutation, SimpleRandomMutation, PolynomialMutation, \
-    IntegerPolynomialMutation
+    IntegerPolynomialMutation, CompositeMutation
+from jmetal.util.ckecking import NoneParameterException, EmptyCollectionException, InvalidConditionException
 
 
 class PolynomialMutationTestMethods(unittest.TestCase):
@@ -250,6 +252,46 @@ class IntegerPolynomialMutationTestCases(unittest.TestCase):
         mutated_solution = operator.execute(solution)
         self.assertNotEqual([1, 2, 3], mutated_solution.variables)
         self.assertEqual([True, True, True], [isinstance(x, int) for x in mutated_solution.variables])
+
+
+class CompositeMutationTestCases(unittest.TestCase):
+    def test_should_constructor_raise_an_exception_if_the_parameter_list_is_None(self):
+        with self.assertRaises(NoneParameterException):
+            CompositeMutation(None)
+
+    def test_should_constructor_raise_an_exception_if_the_parameter_list_is_Empty(self):
+        with self.assertRaises(EmptyCollectionException):
+            CompositeMutation([])
+
+    def test_should_constructor_create_a_valid_operator_when_adding_a_single_mutation_operator(self):
+        mutation: Mutation =  PolynomialMutation(0.9, 20.0)
+
+        operator = CompositeMutation([mutation])
+        self.assertIsNotNone(operator)
+        self.assertEqual(1, len(operator.mutation_operators_list))
+
+    def test_should_constructor_create_a_valid_operator_when_adding_two_mutation_operators(self):
+        polynomial_mutation = PolynomialMutation(1.0, 20.0)
+        bit_flip_mutation = BitFlipMutation(0.01)
+
+        operator = CompositeMutation([polynomial_mutation, bit_flip_mutation])
+
+        self.assertIsNotNone(operator)
+        self.assertEqual(2, len(operator.mutation_operators_list))
+        self.assertTrue(issubclass(operator.mutation_operators_list[0].__class__, PolynomialMutation))
+        self.assertTrue(issubclass(operator.mutation_operators_list[1].__class__, BitFlipMutation))
+
+    def test_should_execute_raise_and_exception_if_the_types_of_the_solutions_do_not_match_the_operators(self):
+        operator = CompositeMutation([PolynomialMutation(1.0, 5.0), PolynomialMutation(0.9, 25.0)])
+
+        float_solution = FloatSolution([2.0], [3.9], 3)
+        binary_solution = BinarySolution(1, 3, 0)
+        float_solution.variables = [3.0]
+
+        composite_solution = CompositeSolution([float_solution, binary_solution])
+
+        with self.assertRaises(InvalidConditionException):
+            operator.execute(composite_solution)
 
 
 if __name__ == '__main__':

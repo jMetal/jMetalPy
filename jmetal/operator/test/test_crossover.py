@@ -1,8 +1,11 @@
 import unittest
 from unittest import mock
 
-from jmetal.core.solution import BinarySolution, PermutationSolution
-from jmetal.operator.crossover import NullCrossover, SPXCrossover, CXCrossover, PMXCrossover
+from jmetal.core.operator import Crossover
+from jmetal.core.solution import BinarySolution, PermutationSolution, FloatSolution, CompositeSolution, IntegerSolution
+from jmetal.operator.crossover import NullCrossover, SPXCrossover, CXCrossover, PMXCrossover, SBXCrossover, \
+    CompositeCrossover, IntegerSBXCrossover
+from jmetal.util.ckecking import NoneParameterException, EmptyCollectionException, InvalidConditionException
 
 
 class NullCrossoverTestCases(unittest.TestCase):
@@ -239,6 +242,141 @@ class CXTestCases(unittest.TestCase):
 
         self.assertEqual([1, 2, 3, 4, 7], offspring[1].variables[0])
         self.assertEqual([2, 6, 4, 5, 3], offspring[1].variables[1])
+
+
+class SBXCrossoverTestCases(unittest.TestCase):
+    def test_should_constructor_assign_the_correct_probability_value(self):
+        crossover_probability = 0.1
+        crossover: SBXCrossover = SBXCrossover(crossover_probability, 2.0)
+
+        self.assertEqual(crossover_probability, crossover.probability)
+
+    def test_should_constructor_assign_the_correct_distribution_index_value(self):
+        distribution_index = 10.5
+        crossover: SBXCrossover = SBXCrossover(0.1, distribution_index)
+
+        self.assertEqual(distribution_index, crossover.distribution_index)
+
+    def test_should_constructor_raise_an_exception_if_the_probability_is_greater_than_one(self):
+        with self.assertRaises(Exception):
+            SBXCrossover(1.5, 2.0)
+
+    def test_should_constructor_raise_an_exception_if_the_probability_is_negative(self):
+        with self.assertRaises(Exception):
+            SBXCrossover(-0.1, 2.0)
+
+    def test_should_constructor_raise_an_exception_if_the_distribution_index_is_negative(self):
+        with self.assertRaises(Exception):
+            SBXCrossover(0.1, -2.0)
+
+    def test_should_execute_with_an_invalid_solution_list_size_raise_an_exception(self):
+        crossover: SBXCrossover = SBXCrossover(0.1, 20.0)
+
+        solution = FloatSolution([1, 2], [2, 4], 2, 2)
+        with self.assertRaises(Exception):
+            crossover.execute([solution])
+
+        with self.assertRaises(Exception):
+            crossover.execute([solution, solution, solution])
+
+    def test_should_execute_return_the_parents_if_the_crossover_probability_is_zero(self):
+        crossover: SBXCrossover = SBXCrossover(0.0, 20.0)
+
+        solution1 = FloatSolution([1, 2], [2, 4], 2, 2)
+        solution2 = FloatSolution([1, 2], [2, 4], 2, 2)
+
+        solution1.variables = [1.5, 2.7]
+        solution2.variables = [1.7, 3.6]
+
+        offspring = crossover.execute([solution1, solution2])
+
+        self.assertEqual(2, len(offspring))
+        self.assertEqual(solution1.variables, offspring[0].variables)
+        self.assertEqual(solution2.variables, offspring[1].variables)
+
+    def test_should_execute_produce_valid_solutions_when_crossing_two_single_variable_solutions(self):
+        pass
+
+
+class CompositeCrossoverTestCases(unittest.TestCase):
+    def test_should_constructor_raise_an_exception_if_the_parameter_list_is_None(self):
+        with self.assertRaises(NoneParameterException):
+            CompositeCrossover(None)
+
+    def test_should_constructor_raise_an_exception_if_the_parameter_list_is_Empty(self):
+        with self.assertRaises(EmptyCollectionException):
+            CompositeCrossover([])
+
+    def test_should_constructor_create_a_valid_operator_when_adding_a_single_crossover_operator(self):
+        crossover: Crossover =  SBXCrossover(0.9, 20.0)
+
+        operator = CompositeCrossover([crossover])
+        self.assertIsNotNone(operator)
+        self.assertEqual(1, len(operator.crossover_operators_list))
+
+    def test_should_constructor_create_a_valid_operator_when_adding_two_crossover_operators(self):
+        sbx_crossover = SBXCrossover(1.0, 20.0)
+        single_point_crossover = SPXCrossover(0.01)
+
+        operator = CompositeCrossover([sbx_crossover, single_point_crossover])
+
+        self.assertIsNotNone(operator)
+        self.assertEqual(2, len(operator.crossover_operators_list))
+        self.assertTrue(issubclass(operator.crossover_operators_list[0].__class__, SBXCrossover))
+        self.assertTrue(issubclass(operator.crossover_operators_list[1].__class__, SPXCrossover))
+
+    def test_should_execute_work_properly_with_a_single_crossover_operator(self):
+        operator = CompositeCrossover([SBXCrossover(0.9, 20.0)])
+
+        float_solution1 = FloatSolution([2.0], [3.9], 3)
+        float_solution1.variables = [3.0]
+        float_solution2 = FloatSolution([2.0], [3.9], 3)
+        float_solution2.variables = [4.0]
+
+        composite_solution1 = CompositeSolution([float_solution1])
+        composite_solution2 = CompositeSolution([float_solution2])
+
+        children = operator.execute([composite_solution1, composite_solution2])
+
+        self.assertIsNotNone(children)
+        self.assertEqual(2, len(children))
+        self.assertEqual(1, children[0].number_of_variables)
+        self.assertEqual(1, children[1].number_of_variables)
+
+    def test_should_execute_work_properly_with_a_two_crossover_operators(self):
+        operator = CompositeCrossover([SBXCrossover(0.9, 20.0), IntegerSBXCrossover(0.1, 20.0)])
+
+        float_solution1 = FloatSolution([2.0], [3.9], 3)
+        float_solution1.variables = [3.0]
+        float_solution2 = FloatSolution([2.0], [3.9], 3)
+        float_solution2.variables = [4.0]
+        integer_solution1 = IntegerSolution([2], [4], 3)
+        integer_solution1.variables = [3.0]
+        integer_solution2 = IntegerSolution([2], [7], 3)
+        integer_solution2.variables = [4.0]
+
+        composite_solution1 = CompositeSolution([float_solution1, integer_solution1])
+        composite_solution2 = CompositeSolution([float_solution2, integer_solution2])
+
+        children = operator.execute([composite_solution1, composite_solution2])
+
+        self.assertIsNotNone(children)
+        self.assertEqual(2, len(children))
+        self.assertEqual(2, children[0].number_of_variables)
+        self.assertEqual(2, children[1].number_of_variables)
+
+    def test_should_execute_raise_and_exception_if_the_types_of_the_solutions_do_not_match_the_operators(self):
+        operator = CompositeCrossover([SBXCrossover(1.0, 5.0), SPXCrossover(0.9)])
+
+        float_solution1 = FloatSolution([2.0], [3.9], 3)
+        float_solution1.variables = [3.0]
+        float_solution2 = FloatSolution([2.0], [3.9], 3)
+        float_solution2.variables = [4.0]
+        composite_solution1 = CompositeSolution([float_solution1, float_solution2])
+        composite_solution2 = CompositeSolution([float_solution1, float_solution2])
+
+        with self.assertRaises(InvalidConditionException):
+            operator.execute([composite_solution1, composite_solution2])
 
 
 if __name__ == '__main__':

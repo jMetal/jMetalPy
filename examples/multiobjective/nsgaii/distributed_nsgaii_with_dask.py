@@ -1,10 +1,14 @@
 from dask.distributed import Client
 from distributed import LocalCluster
 
-from examples.multiobjective.zdt1_modified import ZDT1Modified
 from jmetal.algorithm.multiobjective.nsgaii import DistributedNSGAII
 from jmetal.operator import PolynomialMutation, SBXCrossover
+from jmetal.problem.multiobjective.zdt import ZDT1Modified
 from jmetal.util.termination_criterion import StoppingByEvaluations
+
+""" 
+Distributed (asynchronous) version of NSGA-II using Dask.
+"""
 
 if __name__ == '__main__':
     problem = ZDT1Modified()
@@ -23,7 +27,7 @@ if __name__ == '__main__':
         population_size=100,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
-        termination_criterion=StoppingByEvaluations(max=max_evaluations),
+        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
         number_of_cores=ncores,
         client=client
     )

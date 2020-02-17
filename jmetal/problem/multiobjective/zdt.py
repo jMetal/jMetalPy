@@ -56,6 +56,22 @@ class ZDT1(FloatProblem):
         return 'ZDT1'
 
 
+class ZDT1Modified(ZDT1):
+    """ Problem ZDT1Modified.
+
+    .. note:: Version including a loop for increasing the computing time of the evaluation functions.
+    """
+    def __init__(self, number_of_variables = 30):
+        super(ZDT1Modified, self).__init__(number_of_variables)
+
+    def evaluate(self, solution:FloatSolution) -> FloatSolution:
+        s: float = 0.0
+        for i in range(1000):
+            for j in range(10000):
+                s += i * 0.235 / 1.234 + 1.23525 * j
+        return super().evaluate(solution)
+
+
 class ZDT2(ZDT1):
     """ Problem ZDT2.
 
