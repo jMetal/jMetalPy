@@ -27,9 +27,9 @@ class TerminationCriterion(Observer, ABC):
 
 class StoppingByEvaluations(TerminationCriterion):
 
-    def __init__(self, max: int):
+    def __init__(self, max_evaluations: int):
         super(StoppingByEvaluations, self).__init__()
-        self.max_evaluations = max
+        self.max_evaluations = max_evaluations
         self.evaluations = 0
 
     def update(self, *args, **kwargs):

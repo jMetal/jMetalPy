@@ -11,7 +11,7 @@ if __name__ == '__main__':
     algorithm = LocalSearch(
         problem=problem,
         mutation=BitFlipMutation(probability=1.0 / problem.number_of_bits),
-        termination_criterion=StoppingByEvaluations(max=max_evaluations)
+        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations)
     )
 
     algorithm.run()

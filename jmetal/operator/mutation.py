@@ -1,7 +1,9 @@
 import random
 
 from jmetal.core.operator import Mutation
-from jmetal.core.solution import BinarySolution, Solution, FloatSolution, IntegerSolution, PermutationSolution
+from jmetal.core.solution import BinarySolution, Solution, FloatSolution, IntegerSolution, PermutationSolution, \
+    CompositeSolution
+from jmetal.util.ckecking import Check
 
 """
 .. module:: mutation
@@ -30,6 +32,8 @@ class BitFlipMutation(Mutation[BinarySolution]):
         super(BitFlipMutation, self).__init__(probability=probability)
 
     def execute(self, solution: BinarySolution) -> BinarySolution:
+        Check.that(type(solution) is BinarySolution, "Solution type invalid")
+
         for i in range(solution.number_of_variables):
             for j in range(len(solution.variables[i])):
                 rand = random.random()
@@ -49,6 +53,7 @@ class PolynomialMutation(Mutation[FloatSolution]):
         self.distribution_index = distribution_index
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
+        Check.that(type(solution) is FloatSolution, "Solution type invalid")
         for i in range(solution.number_of_variables):
             rand = random.random()
 
@@ -93,6 +98,8 @@ class IntegerPolynomialMutation(Mutation[IntegerSolution]):
         self.distribution_index = distribution_index
 
     def execute(self, solution: IntegerSolution) -> IntegerSolution:
+        Check.that(type(solution) is IntegerSolution, "Solution type invalid")
+
         for i in range(solution.number_of_variables):
             if random.random() <= self.probability:
                 y = solution.variables[i]
@@ -133,6 +140,8 @@ class SimpleRandomMutation(Mutation[FloatSolution]):
         super(SimpleRandomMutation, self).__init__(probability=probability)
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
+        Check.that(type(solution) is FloatSolution, "Solution type invalid")
+
         for i in range(solution.number_of_variables):
             rand = random.random()
             if rand <= self.probability:
@@ -151,6 +160,8 @@ class UniformMutation(Mutation[FloatSolution]):
         self.perturbation = perturbation
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
+        Check.that(type(solution) is FloatSolution, "Solution type invalid")
+
         for i in range(solution.number_of_variables):
             rand = random.random()
 
@@ -180,6 +191,8 @@ class NonUniformMutation(Mutation[FloatSolution]):
         self.current_iteration = 0
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
+        Check.that(type(solution) is FloatSolution, "Solution type invalid")
+
         for i in range(solution.number_of_variables):
             if random.random() <= self.probability:
                 rand = random.random()
@@ -214,6 +227,8 @@ class NonUniformMutation(Mutation[FloatSolution]):
 class PermutationSwapMutation(Mutation[PermutationSolution]):
 
     def execute(self, solution: PermutationSolution) -> PermutationSolution:
+        Check.that(type(solution) is PermutationSolution, "Solution type invalid")
+
         rand = random.random()
 
         if rand <= self.probability:
@@ -225,6 +240,31 @@ class PermutationSwapMutation(Mutation[PermutationSolution]):
 
     def get_name(self):
         return 'Permutation Swap mutation'
+
+
+class CompositeMutation(Mutation[Solution]):
+    def __init__(self, mutation_operator_list:[Mutation]):
+        super(CompositeMutation,self).__init__(probability=1.0)
+
+        Check.is_not_none(mutation_operator_list)
+        Check.collection_is_not_empty(mutation_operator_list)
+
+        self.mutation_operators_list = []
+        for operator in mutation_operator_list:
+            Check.that(issubclass(operator.__class__, Mutation), "Object is not a subclass of Mutation")
+            self.mutation_operators_list.append(operator)
+
+    def execute(self, solution: CompositeSolution) -> CompositeSolution:
+        Check.is_not_none(solution)
+
+        mutated_solution_components = []
+        for i in range(solution.number_of_variables):
+            mutated_solution_components.append(self.mutation_operators_list[i].execute(solution.variables[i]))
+
+        return CompositeSolution(mutated_solution_components)
+
+    def get_name(self) -> str:
+        return "Composite mutation operator"
 
 
 class ScrambleMutation(Mutation[PermutationSolution]):

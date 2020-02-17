@@ -22,7 +22,7 @@ if __name__ == '__main__':
         neighbourhood_selection_probability=0.9,
         max_number_of_replaced_solutions=2,
         weight_files_path='resources/MOEAD_weights',
-        termination_criterion=StoppingByEvaluations(max=max_evaluations)
+        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations)
     )
 
     algorithm.run()

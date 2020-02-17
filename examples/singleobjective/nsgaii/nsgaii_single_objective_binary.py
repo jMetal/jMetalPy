@@ -17,7 +17,7 @@ if __name__ == '__main__':
         offspring_population_size=1,
         mutation=BitFlipMutation(probability=1.0 / binary_string_length),
         crossover=SPXCrossover(probability=1.0),
-        termination_criterion=StoppingByEvaluations(max=max_evaluations),
+        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
         dominance_comparator=DominanceComparator()
     )
 

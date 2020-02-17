@@ -5,12 +5,12 @@ from jmetal.config import store
 from jmetal.core.operator import Mutation, Crossover
 from jmetal.core.problem import Problem
 from jmetal.operator import BinaryTournamentSelection
+from jmetal.util.comparator import Comparator, MultiComparator
 from jmetal.util.density_estimator import KNearestNeighborDensityEstimator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
 from jmetal.util.ranking import StrengthRanking
 from jmetal.util.replacement import RankingAndDensityEstimatorReplacement, RemovalPolicyType
-from jmetal.util.comparator import Comparator, MultiComparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')

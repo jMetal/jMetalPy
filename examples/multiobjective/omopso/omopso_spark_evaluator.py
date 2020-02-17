@@ -1,7 +1,7 @@
-from examples.multiobjective.zdt1_modified import ZDT1Modified
 from jmetal.algorithm.multiobjective.omopso import OMOPSO
 from jmetal.operator import UniformMutation
 from jmetal.operator.mutation import NonUniformMutation
+from jmetal.problem.multiobjective.zdt import ZDT1Modified
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.evaluator import SparkEvaluator
 from jmetal.util.solution import print_function_values_to_file, print_variables_to_file, read_solutions
@@ -19,9 +19,10 @@ if __name__ == '__main__':
         swarm_size=swarm_size,
         epsilon=0.0075,
         uniform_mutation=UniformMutation(probability=mutation_probability, perturbation=0.5),
-        non_uniform_mutation=NonUniformMutation(mutation_probability, perturbation=0.5, max_iterations = max_evaluations/swarm_size),
+        non_uniform_mutation=NonUniformMutation(mutation_probability, perturbation=0.5,
+                                                max_iterations=max_evaluations / swarm_size),
         leaders=CrowdingDistanceArchive(10),
-        termination_criterion=StoppingByEvaluations(max=max_evaluations),
+        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
         swarm_evaluator=SparkEvaluator(),
     )
 
@@ -30,7 +31,7 @@ if __name__ == '__main__':
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.' + algorithm.get_name() + "." + problem.get_name())
-    print_variables_to_file(front, 'VAR.'+ algorithm.get_name() + "." + problem.get_name())
+    print_variables_to_file(front, 'VAR.' + algorithm.get_name() + "." + problem.get_name())
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())

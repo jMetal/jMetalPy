@@ -13,7 +13,7 @@ if __name__ == '__main__':
         mutation=BitFlipMutation(1.0 / problem.number_of_bits),
         crossover=SPXCrossover(1.0),
         selection=BinaryTournamentSelection(),
-        termination_criterion=StoppingByEvaluations(max=20000)
+        termination_criterion=StoppingByEvaluations(max_evaluations=20000)
     )
 
     algorithm.run()
