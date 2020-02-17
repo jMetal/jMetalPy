@@ -127,7 +127,12 @@ def generate_summary_from_experiment(input_dir: str, quality_indicators: List[Qu
                     # Add reference front if any
                     if hasattr(indicator, 'reference_front'):
                         if Path(reference_front_file).is_file():
-                            indicator.reference_front = read_solutions(reference_front_file)
+                            reference_front = []
+                            with open(filename) as file:
+                                for line in file:
+                                    reference_front.append([float(x) for x in line.split()])
+
+                            indicator.reference_front = reference_front
                         else:
                             LOGGER.warning('Reference front not found at', reference_front_file)
 
