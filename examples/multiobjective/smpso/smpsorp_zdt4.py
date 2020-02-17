@@ -34,7 +34,6 @@ if __name__ == '__main__':
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations)
     )
 
-    algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
     algorithm.observable.register(
         observer=VisualizerObserver(reference_front=problem.reference_front, reference_point=reference_point))
 
