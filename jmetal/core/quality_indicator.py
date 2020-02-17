@@ -1,18 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar, List
 
 import numpy as np
 from scipy import spatial
-
-S = TypeVar('S')
-
-"""
-.. module:: indicator
-   :platform: Unix, Windows
-   :synopsis: Quality indicators implementation.
-
-.. moduleauthor:: Antonio Benítez-Hidalgo <antonio.b@uma.es>, Simon Wessing
-"""
 
 
 class QualityIndicator(ABC):
@@ -21,20 +10,28 @@ class QualityIndicator(ABC):
         self.is_minimization = is_minimization
 
     @abstractmethod
-    def compute(self, solutions: List[S]):
+    def compute(self, solutions: np.array):
+        """
+        :param solutions: [m, n] bi-dimensional numpy array, being m the number of solutions and n the dimension of
+        each solution
+        :return: the value of the quality indicator
+        """
         pass
 
     @abstractmethod
     def get_name(self) -> str:
         pass
 
+    @abstractmethod
+    def get_short_name(self) -> str:
+        pass
+
 
 class FitnessValue(QualityIndicator):
-
     def __init__(self, is_minimization: bool = True):
         super(FitnessValue, self).__init__(is_minimization=is_minimization)
 
-    def compute(self, solutions: List[S]):
+    def compute(self, solutions: np.array):
         if self.is_minimization:
             mean = np.mean([s.objectives for s in solutions])
         else:
@@ -45,75 +42,68 @@ class FitnessValue(QualityIndicator):
     def get_name(self) -> str:
         return 'Fitness'
 
+    def get_short_name(self) -> str:
+        return 'Fitness'
+
 
 class GenerationalDistance(QualityIndicator):
-
-    def __init__(self, reference_front: List[S] = None, p: float = 2.0):
+    def __init__(self, reference_front: np.array=None):
         """
         * Van Veldhuizen, D.A., Lamont, G.B.: Multiobjective Evolutionary Algorithm Research: A History and Analysis.
           Technical Report TR-98-03, Dept. Elec. Comput. Eng., Air Force. Inst. Technol. (1998)
         """
         super(GenerationalDistance, self).__init__(is_minimization=True)
         self.reference_front = reference_front
-        self.p = p
 
-    def compute(self, solutions: List[S]):
-        if not self.reference_front:
+    def compute(self, solutions: np.array):
+        if self.reference_front is None:
             raise Exception('Reference front is none')
 
-        reference_front = [s.objectives for s in self.reference_front]
-        solutions = [s.objectives for s in solutions]
-
-        distances = spatial.distance.cdist(np.asarray(solutions), np.asarray(reference_front))
+        distances = spatial.distance.cdist(solutions, self.reference_front)
 
         return np.mean(np.min(distances, axis=1))
 
-    def get_name(self) -> str:
+    def get_short_name(self) -> str:
         return 'GD'
+
+    def get_name(self) -> str:
+        return 'Generational Distance'
 
 
 class InvertedGenerationalDistance(QualityIndicator):
-
-    def __init__(self, reference_front: List[S] = None, p: float = 2.0):
+    def __init__(self, reference_front: np.array):
         super(InvertedGenerationalDistance, self).__init__(is_minimization=True)
         self.reference_front = reference_front
-        self.p = p
 
-    def compute(self, solutions: List[S]):
-        if not self.reference_front:
+    def compute(self, solutions: np.array = None):
+        if self.reference_front is None:
             raise Exception('Reference front is none')
 
-        reference_front = [s.objectives for s in self.reference_front]
-        solutions = [s.objectives for s in solutions]
-
-        distances = spatial.distance.cdist(np.asarray(reference_front), np.asarray(solutions))
+        distances = spatial.distance.cdist(self.reference_front, solutions)
 
         return np.mean(np.min(distances, axis=1))
 
-    def get_name(self) -> str:
+    def get_short_name(self) -> str:
         return 'IGD'
+
+    def get_name(self) -> str:
+        return 'Inverted Generational Distance'
 
 
 class EpsilonIndicator(QualityIndicator):
-
-    def __init__(self, reference_front: List[S] = None):
-        """ Epsilon indicator in the paper:
-
-        * Zitzler, E. Thiele, L. Laummanns, M., Fonseca, C., and Grunert da Fonseca. V (2003): Performance Assessment of Multiobjective Optimizers: An Analysis and Review.
-        """
+    def __init__(self, reference_front: np.array = None):
         super(EpsilonIndicator, self).__init__(is_minimization=True)
         self.reference_front = reference_front
 
-    def compute(self, solutions: List[S]):
-        if not self.reference_front:
-            raise Exception('Reference front is none')
-
+    def compute(self, front: np.array) -> float:
         return max([min(
-            [max([s2.objectives[k] - s1.objectives[k] for k in range(s2.number_of_objectives)]) for s2 in
-             solutions]) for s1 in self.reference_front])
+            [max([s2[k] - s1[k] for k in range(len(s2))]) for s2 in front]) for s1 in self.reference_front])
+
+    def get_short_name(self) -> str:
+        return 'EP'
 
     def get_name(self) -> str:
-        return 'EP'
+        return "Additive Epsilon"
 
 
 class HyperVolume(QualityIndicator):
@@ -126,17 +116,17 @@ class HyperVolume(QualityIndicator):
     Minimization is implicitly assumed here!
     """
 
-    def __init__(self, reference_point: List[float]):
+    def __init__(self, reference_point: [float] = None):
         super(HyperVolume, self).__init__(is_minimization=False)
         self.referencePoint = reference_point
         self.list: MultiList = []
 
-    def compute(self, solutions: List[S]):
+    def compute(self, solutions: np.array):
         """Before the HV computation, front and reference point are translated, so that the reference point is [0, ..., 0].
 
         :return: The hypervolume that is dominated by a non-dominated front.
         """
-        front = [s.objectives for s in solutions]
+        front = solutions
 
         def weakly_dominates(point, other):
             for i in range(len(point)):
@@ -260,8 +250,11 @@ class HyperVolume(QualityIndicator):
         # write back to original list
         nodes[:] = [node for (_, node) in decorated]
 
-    def get_name(self) -> str:
+    def get_short_name(self) -> str:
         return 'HV'
+
+    def get_name(self) -> str:
+        return "Hypervolume (Fonseca et al. implementation)"
 
 
 class MultiList:
@@ -361,4 +354,3 @@ class MultiList:
             node.next[i].prev[i] = node
             if bounds[i] > node.cargo[i]:
                 bounds[i] = node.cargo[i]
-

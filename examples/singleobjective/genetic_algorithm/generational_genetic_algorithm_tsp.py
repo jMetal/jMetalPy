@@ -22,7 +22,7 @@ if __name__ == '__main__':
         selection=BinaryTournamentSelection(
             MultiComparator([FastNonDominatedRanking.get_comparator(),
                              CrowdingDistance.get_comparator()])),
-        termination_criterion=StoppingByEvaluations(max=2500000)
+        termination_criterion=StoppingByEvaluations(max_evaluations=2500000)
     )
 
     algorithm.run()

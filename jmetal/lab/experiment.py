@@ -120,22 +120,26 @@ def generate_summary_from_experiment(input_dir: str, quality_indicators: List[Qu
             if 'FUN' in filename:
                 solutions = read_solutions(os.path.join(dirname, filename))
                 run_tag = [s for s in filename.split('.') if s.isdigit()].pop()
-
                 for indicator in quality_indicators:
                     reference_front_file = os.path.join(reference_fronts, problem + '.pf')
 
                     # Add reference front if any
                     if hasattr(indicator, 'reference_front'):
                         if Path(reference_front_file).is_file():
-                            indicator.reference_front = read_solutions(reference_front_file)
+                            reference_front = []
+                            with open(reference_front_file) as file:
+                                for line in file:
+                                    reference_front.append([float(x) for x in line.split()])
+
+                            indicator.reference_front = reference_front
                         else:
                             LOGGER.warning('Reference front not found at', reference_front_file)
 
-                    result = indicator.compute(solutions)
+                    result = indicator.compute([solutions[i].objectives for i in range(len(solutions))])
 
                     # Save quality indicator value to file
                     with open('QualityIndicatorSummary.csv', 'a+') as of:
-                        of.write(','.join([algorithm, problem, run_tag, indicator.get_name(), str(result)]))
+                        of.write(','.join([algorithm, problem, run_tag, indicator.get_short_name(), str(result)]))
                         of.write('\n')
 
 

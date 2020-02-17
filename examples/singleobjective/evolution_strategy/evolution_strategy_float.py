@@ -12,7 +12,7 @@ if __name__ == '__main__':
         lambda_=10,
         elitist=True,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables),
-        termination_criterion=StoppingByEvaluations(max=25000)
+        termination_criterion=StoppingByEvaluations(max_evaluations=25000)
     )
 
     algorithm.run()

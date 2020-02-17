@@ -1,4 +1,5 @@
 from examples.multiobjective.zdt1_modified import ZDT1Modified
+
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.operator import PolynomialMutation
 from jmetal.util.archive import CrowdingDistanceArchive
@@ -17,7 +18,7 @@ if __name__ == '__main__':
         swarm_size=10,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         leaders=CrowdingDistanceArchive(10),
-        termination_criterion=StoppingByEvaluations(max=max_evaluations),
+        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
         swarm_evaluator=SparkEvaluator(),
     )
 

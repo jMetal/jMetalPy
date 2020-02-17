@@ -23,7 +23,7 @@ if __name__ == '__main__':
         swarm_size=100,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         leaders=CrowdingDistanceArchive(100),
-        termination_criterion=StoppingByEvaluations(max=max_evaluations)
+        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations)
     )
 
     algorithm.observable.register(observer=PlotFrontToFileObserver('dynamic_front_vis'))
