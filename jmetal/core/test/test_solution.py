@@ -140,13 +140,13 @@ class CompositeSolutionTestCase(unittest.TestCase):
         solution: CompositeSolution = CompositeSolution([float_solution, integer_solution])
 
         self.assertIsNotNone(solution)
-        self.assertEquals(2, solution.number_of_variables)
-        self.assertEquals(number_of_objectives, solution.number_of_objectives)
-        self.assertEquals(number_of_constraints, solution.number_of_constraints)
-        self.assertEquals(number_of_objectives, solution.variables[0].number_of_objectives)
-        self.assertEquals(number_of_objectives, solution.variables[1].number_of_objectives)
-        self.assertEquals(number_of_constraints, solution.variables[0].number_of_constraints)
-        self.assertEquals(number_of_constraints, solution.variables[1].number_of_constraints)
+        self.assertEqual(2, solution.number_of_variables)
+        self.assertEqual(number_of_objectives, solution.number_of_objectives)
+        self.assertEqual(number_of_constraints, solution.number_of_constraints)
+        self.assertEqual(number_of_objectives, solution.variables[0].number_of_objectives)
+        self.assertEqual(number_of_objectives, solution.variables[1].number_of_objectives)
+        self.assertEqual(number_of_constraints, solution.variables[0].number_of_constraints)
+        self.assertEqual(number_of_constraints, solution.variables[1].number_of_constraints)
         self.assertTrue(type(solution.variables[0] is FloatSolution))
         self.assertTrue(type(solution.variables[1] is IntegerSolution))
 
@@ -159,17 +159,17 @@ class CompositeSolutionTestCase(unittest.TestCase):
         solution: CompositeSolution = CompositeSolution([float_solution, integer_solution])
         new_solution: CompositeSolution = copy.deepcopy(solution)
 
-        self.assertEquals(solution.number_of_variables, new_solution.number_of_variables)
-        self.assertEquals(solution.number_of_objectives, new_solution.number_of_objectives)
-        self.assertEquals(solution.number_of_constraints, new_solution.number_of_constraints)
+        self.assertEqual(solution.number_of_variables, new_solution.number_of_variables)
+        self.assertEqual(solution.number_of_objectives, new_solution.number_of_objectives)
+        self.assertEqual(solution.number_of_constraints, new_solution.number_of_constraints)
 
-        self.assertEquals(solution.variables[0].number_of_variables, new_solution.variables[0].number_of_variables)
-        self.assertEquals(solution.variables[1].number_of_variables, new_solution.variables[1].number_of_variables)
-        self.assertEquals(solution.variables[0], new_solution.variables[0])
-        self.assertEquals(solution.variables[1], new_solution.variables[1])
+        self.assertEqual(solution.variables[0].number_of_variables, new_solution.variables[0].number_of_variables)
+        self.assertEqual(solution.variables[1].number_of_variables, new_solution.variables[1].number_of_variables)
+        self.assertEqual(solution.variables[0], new_solution.variables[0])
+        self.assertEqual(solution.variables[1], new_solution.variables[1])
 
-        self.assertEquals(solution.variables[0].variables, new_solution.variables[0].variables)
-        self.assertEquals(solution.variables[1].variables, new_solution.variables[1].variables)
+        self.assertEqual(solution.variables[0].variables, new_solution.variables[0].variables)
+        self.assertEqual(solution.variables[1].variables, new_solution.variables[1].variables)
 
 
 if __name__ == '__main__':

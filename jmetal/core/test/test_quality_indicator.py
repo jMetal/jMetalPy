@@ -255,7 +255,7 @@ class HyperVolumeTestCases(unittest.TestCase):
         self.assertEqual(5.0, value)
 
     def test_should_hypervolume_return_the_correct_value_when_applied_to_the_ZDT1_reference_front(self):
-        filename = 'ZDT1.pf'
+        filename = 'jmetal/core/test/ZDT1.pf'
         front = []
         if Path(filename).is_file():
             with open(filename) as file:
