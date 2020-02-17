@@ -60,7 +60,7 @@ class IntegrationTestCases(unittest.TestCase):
         front = algorithm.get_result()
 
         hv = HyperVolume(reference_point=[1, 1])
-        value = hv.compute(front)
+        value = hv.compute([front[i].objectives for i in range(len(front))])
 
         self.assertTrue(value >= 0.65)
 
@@ -79,7 +79,7 @@ class IntegrationTestCases(unittest.TestCase):
         front = algorithm.get_result()
 
         hv = HyperVolume(reference_point=[1, 1])
-        value = hv.compute(front)
+        value = hv.compute([front[i].objectives for i in range(len(front))])
 
         self.assertTrue(value >= 0.655)
 
