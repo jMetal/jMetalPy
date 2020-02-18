@@ -369,7 +369,7 @@ class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
     external to the crossover operator.
     """
 
-    def __init__(self, CR: float, F: float, K: float):
+    def __init__(self, CR: float, F: float, K: float = 0.5):
         super(DifferentialEvolutionCrossover, self).__init__(probability=1.0)
         self.CR = CR
         self.F = F

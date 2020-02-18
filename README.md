@@ -12,6 +12,7 @@ A paper introducing jMetalPy is available at: https://doi.org/10.1016/j.swevo.20
 - [Installation](#installation)
 - [Usage](#hello-world-)
 - [Features](#features)
+- [Changelog](#changelog)
 - [License](#license)
 
 ## Installation
@@ -114,6 +115,11 @@ The current release of jMetalPy (v1.5.4) contains the following components:
 | ![Scatter plot 2D](docs/source/_static/2D.gif) | ![Scatter plot 3D](docs/source/_static/3D.gif) |
 |-------------- | ----------------  |
 | ![Parallel coordinates](docs/source/_static/p-c.gif) | ![Interactive chord plot](docs/source/_static/chordplot.gif) |
+
+## Changelog
+
+* [v1.5.4] Refactored quality indicators to accept numpy array as input parameter.
+* [v1.5.4] Added [CompositeSolution](https://github.com/jMetal/jMetalPy/blob/master/jmetal/core/solution.py#L111) class to support mixed combinatorial problems. [#69](https://github.com/jMetal/jMetalPy/issues/69)
 
 ## License
 This project is licensed under the terms of the MIT - see the [LICENSE](LICENSE) file for details.

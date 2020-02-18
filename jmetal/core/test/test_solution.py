@@ -81,7 +81,6 @@ class FloatSolutionTestCase(unittest.TestCase):
         self.assertEqual(solution.attributes, new_solution.attributes)
 
 
-
 class IntegerSolutionTestCase(unittest.TestCase):
 
     def test_should_constructor_create_a_non_null_object(self) -> None:
@@ -119,6 +118,7 @@ class IntegerSolutionTestCase(unittest.TestCase):
         self.assertIs(solution.upper_bound, solution.upper_bound)
         self.assertEqual(solution.attributes, new_solution.attributes)
 
+
 class CompositeSolutionTestCase(unittest.TestCase):
     def test_should_constructor_create_a_valid_not_none_composite_solution_composed_of_a_double_solution(self):
         composite_solution = CompositeSolution([FloatSolution([1.0], [2.0], 2)])
@@ -134,7 +134,7 @@ class CompositeSolutionTestCase(unittest.TestCase):
     def test_should_constructor_create_a_valid_soltion_composed_of_a_float_and_an_integer_solutions(self):
         number_of_objectives = 3
         number_of_constraints = 1
-        float_solution: FloatSolution = FloatSolution([1.0], [3.0], number_of_objectives,  number_of_constraints)
+        float_solution: FloatSolution = FloatSolution([1.0], [3.0], number_of_objectives, number_of_constraints)
         integer_solution: IntegerSolution = IntegerSolution([2], [4], number_of_objectives, number_of_constraints)
 
         solution: CompositeSolution = CompositeSolution([float_solution, integer_solution])
@@ -153,7 +153,7 @@ class CompositeSolutionTestCase(unittest.TestCase):
     def test_should_copy_work_properly(self):
         number_of_objectives = 3
         number_of_constraints = 1
-        float_solution: FloatSolution = FloatSolution([1.0], [3.0], number_of_objectives,  number_of_constraints)
+        float_solution: FloatSolution = FloatSolution([1.0], [3.0], number_of_objectives, number_of_constraints)
         integer_solution: IntegerSolution = IntegerSolution([2], [4], number_of_objectives, number_of_constraints)
 
         solution: CompositeSolution = CompositeSolution([float_solution, integer_solution])
