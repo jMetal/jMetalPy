@@ -71,11 +71,11 @@ class GenerationalDistance(QualityIndicator):
 
 
 class InvertedGenerationalDistance(QualityIndicator):
-    def __init__(self, reference_front: np.array):
+    def __init__(self, reference_front: np.array=None):
         super(InvertedGenerationalDistance, self).__init__(is_minimization=True)
         self.reference_front = reference_front
 
-    def compute(self, solutions: np.array = None):
+    def compute(self, solutions: np.array):
         if self.reference_front is None:
             raise Exception('Reference front is none')
 

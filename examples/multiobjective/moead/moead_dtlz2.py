@@ -1,4 +1,5 @@
 from jmetal.algorithm.multiobjective.moead import MOEAD
+from jmetal.core.quality_indicator import HyperVolume, InvertedGenerationalDistance
 from jmetal.operator import PolynomialMutation, DifferentialEvolutionCrossover
 from jmetal.problem import DTLZ2
 from jmetal.util.aggregative_function import Tschebycheff
@@ -14,7 +15,7 @@ if __name__ == '__main__':
     algorithm = MOEAD(
         problem=problem,
         population_size=300,
-        crossover=DifferentialEvolutionCrossover(CR=1.0, F=0.5, K=0.5),
+        crossover=DifferentialEvolutionCrossover(CR=1.0, F=0.5),
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         aggregative_function=Tschebycheff(dimension=problem.number_of_objectives),
         neighbor_size=20,
@@ -26,6 +27,9 @@ if __name__ == '__main__':
 
     algorithm.run()
     front = algorithm.get_result()
+
+    hypervolume = HyperVolume([1.0, 1.0, 1.0])
+    print("Hypervolume: " + str(hypervolume.compute([front[i].objectives for i in range(len(front))])))
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.' + algorithm.label)
