@@ -72,7 +72,7 @@ class IBEA(GeneticAlgorithm[S, R]):
             for j in range(len(population)):
                 if j != i:
                     population[i].attributes['fitness'] += -np.exp(
-                        -EpsilonIndicator([population[i]]).compute([population[j]]) / self.kappa)
+                        -EpsilonIndicator([population[i].objectives]).compute([population[j].objectives]) / self.kappa)
         return population
 
     def create_initial_solutions(self) -> List[S]:
@@ -92,7 +92,7 @@ class IBEA(GeneticAlgorithm[S, R]):
 
             for i in range(join_population_size):
                 join_population[i].attributes['fitness'] += np.exp(
-                    - EpsilonIndicator([join_population[i]]).compute([join_population[index_worst]]) / self.kappa)
+                    - EpsilonIndicator([join_population[i].objectives]).compute([join_population[index_worst].objectives]) / self.kappa)
 
             join_population.pop(index_worst)
             join_population_size = join_population_size - 1
