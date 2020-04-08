@@ -1,4 +1,5 @@
 import unittest
+from typing import List
 
 from jmetal.core.operator import Mutation
 from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, CompositeSolution
@@ -46,8 +47,21 @@ class PolynomialMutationTestMethods(unittest.TestCase):
         operator = PolynomialMutation(1.0)
         solution = FloatSolution([-5, -5, -5], [5, 5, 5], 2)
         solution.variables = [1.0, 2.0, 3.0]
-        FloatSolution.lower_bound = [-5, -5, -5]
-        FloatSolution.upper_bound = [5, 5, 5]
+
+        mutated_solution = operator.execute(solution)
+
+        self.assertNotEqual([1.0, 2.0, 3.0], mutated_solution.variables)
+
+    def test_should_execute_work_with_a_solution_subclass_of_float_solution(self):
+        class NewFloatSolution(FloatSolution):
+            def __init__(self, lower_bound: List[float], upper_bound: List[float], number_of_objectives: int,
+                         number_of_constraints: int = 0):
+                super(NewFloatSolution, self).__init__(lower_bound, upper_bound, number_of_objectives,
+                                                       number_of_constraints)
+
+        operator = PolynomialMutation(1.0)
+        solution = NewFloatSolution([-5, -5, -5], [5, 5, 5], 2)
+        solution.variables = [1.0, 2.0, 3.0]
 
         mutated_solution = operator.execute(solution)
 
