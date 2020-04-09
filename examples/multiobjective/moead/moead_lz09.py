@@ -15,7 +15,7 @@ if __name__ == '__main__':
     algorithm = MOEAD(
         problem=problem,
         population_size=300,
-        crossover=DifferentialEvolutionCrossover(CR=1.0, F=0.5, K=0.5),
+        crossover=DifferentialEvolutionCrossover(CR=1.0, F=0.5),
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         aggregative_function=Tschebycheff(dimension=problem.number_of_objectives),
         neighbor_size=20,

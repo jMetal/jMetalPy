@@ -53,7 +53,7 @@ class PolynomialMutation(Mutation[FloatSolution]):
         self.distribution_index = distribution_index
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
-        Check.that(type(solution) is FloatSolution, "Solution type invalid")
+        Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
         for i in range(solution.number_of_variables):
             rand = random.random()
 
@@ -98,7 +98,7 @@ class IntegerPolynomialMutation(Mutation[IntegerSolution]):
         self.distribution_index = distribution_index
 
     def execute(self, solution: IntegerSolution) -> IntegerSolution:
-        Check.that(type(solution) is IntegerSolution, "Solution type invalid")
+        Check.that(issubclass(type(solution), IntegerSolution), "Solution type invalid")
 
         for i in range(solution.number_of_variables):
             if random.random() <= self.probability:

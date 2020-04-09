@@ -7,6 +7,7 @@ from jmetal.core.problem import Problem
 from jmetal.util.evaluator import Evaluator, SequentialEvaluator
 from jmetal.util.generator import Generator, RandomGenerator
 from jmetal.util.termination_criterion import TerminationCriterion
+from jmetal.util.constraint_handling import overall_constraint_violation_degree
 
 S = TypeVar('S')
 R = TypeVar('R')
@@ -78,7 +79,7 @@ class EvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         else:
             population_pool.extend(offspring_population)
 
-        population_pool.sort(key=lambda s: s.objectives[0])
+        population_pool.sort(key=lambda s: (overall_constraint_violation_degree(s), s.objectives[0]))
 
         new_population = []
         for i in range(self.mu):
