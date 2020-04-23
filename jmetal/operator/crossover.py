@@ -120,7 +120,7 @@ class CXCrossover(Crossover[PermutationSolution, PermutationSolution]):
             for j in range(len(parents[0].variables)):
                 if j in cycle:
                     offspring[0].variables[j] = parents[0].variables[j]
-                    offspring[1].variables[j] = parents[0].variables[j]
+                    offspring[1].variables[j] = parents[1].variables[j]
 
         return offspring
 
