@@ -4,8 +4,10 @@ from jmetal.config import store
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation, Crossover, Selection
 from jmetal.core.problem import Problem
+from jmetal.util.comparator import Comparator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
+from jmetal.util.ranking import FastNonDominatedRanking
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar('S')
@@ -30,7 +32,8 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
                  selection: Selection,
                  termination_criterion: TerminationCriterion = store.default_termination_criteria,
                  population_generator: Generator = store.default_generator,
-                 population_evaluator: Evaluator = store.default_evaluator):
+                 population_evaluator: Evaluator = store.default_evaluator,
+                 dominance_comparator: Comparator = store.default_comparator):
         super(GeneticAlgorithm, self).__init__(
             problem=problem,
             population_size=population_size,
@@ -41,6 +44,8 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
 
         self.population_generator = population_generator
         self.population_evaluator = population_evaluator
+
+        self.dominance_comparator = dominance_comparator
 
         self.termination_criterion = termination_criterion
         self.observable.register(termination_criterion)
@@ -96,7 +101,9 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
         population.extend(offspring_population)
 
-        population.sort(key=lambda s: s.objectives[0])
+        ranking = FastNonDominatedRanking(self.dominance_comparator)
+        ranked_population = ranking.compute_ranking(population)
+        concat_list = [j for i in ranked_population for j in i]
 
         return population[:self.population_size]
 
