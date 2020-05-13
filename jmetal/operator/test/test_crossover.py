@@ -225,24 +225,20 @@ class CXTestCases(unittest.TestCase):
             CXCrossover(-12)
 
     @mock.patch('random.randint')
-    def test_should_the_operator_work_with_two_solutions_with_two_variables(self, random_call):
+    def test_should_the_operator_work_with_two_solutions_with_same_number_of_variables(self, random_call):
         operator = CXCrossover(1.0)
-        solution1 = PermutationSolution(number_of_variables=2, number_of_objectives=1)
-        solution1.variables[0] = [1, 2, 3, 4, 7]
-        solution1.variables[1] = [2, 6, 4, 5, 3]
+        solution1 = PermutationSolution(number_of_variables=5, number_of_objectives=1)
+        solution1.variables = [1, 2, 3, 4, 7]
 
-        solution2 = PermutationSolution(number_of_variables=2, number_of_objectives=1)
-        solution2.variables[0] = [2, 3, 4, 1, 9]
-        solution2.variables[1] = [5, 3, 2, 4, 6]
+        solution2 = PermutationSolution(number_of_variables=5, number_of_objectives=1)
+        solution2.variables = [2, 3, 4, 1, 9]
 
         random_call.return_value = 0
         offspring = operator.execute([solution1, solution2])
 
-        self.assertEqual([1, 2, 3, 4, 9], offspring[0].variables[0])
-        self.assertEqual([2, 3, 4, 5, 6], offspring[0].variables[1])
+        self.assertEqual([1, 2, 3, 4, 9], offspring[0].variables)
 
-        self.assertEqual([1, 2, 3, 4, 7], offspring[1].variables[0])
-        self.assertEqual([2, 6, 4, 5, 3], offspring[1].variables[1])
+        self.assertEqual([2, 3, 4, 1, 7], offspring[1].variables)
 
 
 class SBXCrossoverTestCases(unittest.TestCase):

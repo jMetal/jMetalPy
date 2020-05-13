@@ -4,6 +4,7 @@ from .multiobjective.lz09 import LZ09_F2
 from .multiobjective.unconstrained import Kursawe, Fonseca, Schaffer, Viennet2
 from .multiobjective.zdt import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
 from .singleobjective.unconstrained import OneMax, Sphere
+from .singleobjective.tsp import TSP
 
 __all__ = [
     'Srinivas', 'Tanaka',
@@ -11,5 +12,6 @@ __all__ = [
     'DTLZ1', 'DTLZ2',
     'ZDT1', 'ZDT2', 'ZDT3', 'ZDT4', 'ZDT6',
     'LZ09_F2',
-    'OneMax', 'Sphere'
+    'OneMax', 'Sphere',
+    'TSP'
 ]
