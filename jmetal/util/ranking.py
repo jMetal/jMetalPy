@@ -63,12 +63,12 @@ class FastNonDominatedRanking(Ranking[List[S]]):
                 if dominance_test_result == -1:
                     ith_dominated[p].append(q)
                     dominating_ith[q] += 1
-                elif dominance_test_result is 1:
+                elif dominance_test_result == 1:
                     ith_dominated[q].append(p)
                     dominating_ith[p] += 1
 
         for i in range(len(solutions)):
-            if dominating_ith[i] is 0:
+            if dominating_ith[i] == 0:
                 front[0].append(i)
                 solutions[i].attributes['dominance_ranking'] = 0
 
@@ -79,7 +79,7 @@ class FastNonDominatedRanking(Ranking[List[S]]):
                 if p <= len(ith_dominated):
                     for q in ith_dominated[p]:
                         dominating_ith[q] -= 1
-                        if dominating_ith[q] is 0:
+                        if dominating_ith[q] == 0:
                             front[i].append(q)
                             solutions[q].attributes['dominance_ranking'] = i
 
