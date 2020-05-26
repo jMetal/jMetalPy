@@ -7,6 +7,16 @@ basedir = abspath(dirname(__file__))
 with open(join(basedir, 'README.md'), encoding='utf-8') as f:
     README = f.read()
 
+with open(join(basedir, "jmetal", "__init__.py"), "r") as f:
+    version_marker = "__version__ ="
+    for line in f:
+        if line.startswith(version_marker):
+            _, VERSION = line.split(version_marker)
+            VERSION = VERSION.strip().strip('"')
+            break
+    else:
+        raise RuntimeError("Version not found on __init__")
+
 install_requires = [
     'tqdm',
     'numpy>=1.16.0',
@@ -25,7 +35,7 @@ extras_require['complete'] = {v for req in extras_require.values() for v in req}
 
 setup(
     name='jmetalpy',
-    version='1.5.5',
+    version=VERSION,
     description='Python version of the jMetal framework',
     long_description=README,
     long_description_content_type='text/markdown',
@@ -41,7 +51,9 @@ setup(
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: MIT License',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
-        'Programming Language :: Python :: 3.6'
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8'
     ],
     install_requires=install_requires,
     extras_require=extras_require,

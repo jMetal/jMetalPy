@@ -5,6 +5,7 @@
 [![PyPI License](https://img.shields.io/pypi/l/jMetalPy.svg?style=flat-square)]()
 [![PyPI version](https://img.shields.io/pypi/v/jMetalPy.svg?style=flat-square)]()
 [![PyPI Python version](https://img.shields.io/pypi/pyversions/jMetalPy.svg?style=flat-square)]()
+[![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.swevo.2019.100598-blue?style=flat-square)](https://doi.org/10.1016/j.swevo.2019.100598)
 
 A paper introducing jMetalPy is available at: https://doi.org/10.1016/j.swevo.2019.100598
 
@@ -118,6 +119,7 @@ The current release of jMetalPy (v1.5.5) contains the following components:
 
 ## Changelog
 
+* [v1.5.6] Removed warnings when using Python 3.8.
 * [v1.5.5] Minor bug fixes.
 * [v1.5.4] Refactored quality indicators to accept numpy array as input parameter.
 * [v1.5.4] Added [CompositeSolution](https://github.com/jMetal/jMetalPy/blob/master/jmetal/core/solution.py#L111) class to support mixed combinatorial problems. [#69](https://github.com/jMetal/jMetalPy/issues/69)

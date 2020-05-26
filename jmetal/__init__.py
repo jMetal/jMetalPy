@@ -6,6 +6,7 @@ from jmetal import operator
 from jmetal import problem
 
 __all__ = ['core', 'algorithm', 'operator', 'problem']
+__version__ = "1.5.6"
 
 logger = logging.getLogger('jmetal')
 logger.setLevel(logging.INFO)
