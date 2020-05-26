@@ -50,7 +50,7 @@ class ProgressBarObserver(Observer):
 
 class BasicObserver(Observer):
 
-    def __init__(self, frequency: float = 1.0) -> None:
+    def __init__(self, frequency: int = 1) -> None:
         """ Show the number of evaluations, best fitness and computing time.
 
         :param frequency: Display frequency. """
@@ -76,7 +76,7 @@ class BasicObserver(Observer):
 
 class PrintObjectivesObserver(Observer):
 
-    def __init__(self, frequency: float = 1.0) -> None:
+    def __init__(self, frequency: int = 1) -> None:
         """ Show the number of evaluations, best fitness and computing time.
 
         :param frequency: Display frequency. """
