@@ -1,4 +1,5 @@
 import unittest
+from typing import List
 from unittest import mock
 
 from jmetal.core.operator import Crossover
@@ -294,6 +295,27 @@ class SBXCrossoverTestCases(unittest.TestCase):
         self.assertEqual(solution1.variables, offspring[0].variables)
         self.assertEqual(solution2.variables, offspring[1].variables)
 
+    def test_should_execute_work_with_a_solution_subclass_of_float_solution(self):
+        class NewFloatSolution(FloatSolution):
+            def __init__(self, lower_bound: List[float], upper_bound: List[float], number_of_objectives: int,
+                         number_of_constraints: int = 0):
+                super(NewFloatSolution, self).__init__(lower_bound, upper_bound, number_of_objectives,
+                                                       number_of_constraints)
+
+        solution1 = NewFloatSolution([1, 2], [2, 4], 2, 2)
+        solution2 = NewFloatSolution([1, 2], [2, 4], 2, 2)
+
+        solution1.variables = [1.5, 2.7]
+        solution2.variables = [1.7, 3.6]
+
+        crossover: SBXCrossover = SBXCrossover(0.0, 20.0)
+        offspring = crossover.execute([solution1, solution2])
+
+        self.assertEqual(2, len(offspring))
+        self.assertEqual(solution1.variables, offspring[0].variables)
+        self.assertEqual(solution2.variables, offspring[1].variables)
+
+
     def test_should_execute_produce_valid_solutions_when_crossing_two_single_variable_solutions(self):
         pass
 
@@ -308,7 +330,7 @@ class CompositeCrossoverTestCases(unittest.TestCase):
             CompositeCrossover([])
 
     def test_should_constructor_create_a_valid_operator_when_adding_a_single_crossover_operator(self):
-        crossover: Crossover =  SBXCrossover(0.9, 20.0)
+        crossover: Crossover = SBXCrossover(0.9, 20.0)
 
         operator = CompositeCrossover([crossover])
         self.assertIsNotNone(operator)

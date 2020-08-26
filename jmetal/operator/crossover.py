@@ -17,7 +17,6 @@ from jmetal.util.ckecking import Check
 
 
 class NullCrossover(Crossover[Solution, Solution]):
-
     def __init__(self):
         super(NullCrossover, self).__init__(probability=0.0)
 
@@ -38,7 +37,6 @@ class NullCrossover(Crossover[Solution, Solution]):
 
 
 class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
-
     def __init__(self, probability: float):
         super(PMXCrossover, self).__init__(probability=probability)
 
@@ -97,7 +95,6 @@ class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
 
 
 class CXCrossover(Crossover[PermutationSolution, PermutationSolution]):
-
     def __init__(self, probability: float):
         super(CXCrossover, self).__init__(probability=probability)
 
@@ -148,8 +145,8 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
             raise Exception("The distribution index is negative: " + str(distribution_index))
 
     def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
-        Check.that(type(parents[0]) is FloatSolution, "Solution type invalid: " + str(type(parents[0])))
-        Check.that(type(parents[1]) is FloatSolution, "Solution type invalid")
+        Check.that(issubclass(type(parents[0]), FloatSolution), "Solution type invalid: " + str(type(parents[0])))
+        Check.that(issubclass(type(parents[1]), FloatSolution), "Solution type invalid")
         Check.that(len(parents) == 2, 'The number of parents is not two: {}'.format(len(parents)))
 
         offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
@@ -229,8 +226,8 @@ class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
         self.distribution_index = distribution_index
 
     def execute(self, parents: List[IntegerSolution]) -> List[IntegerSolution]:
-        Check.that(type(parents[0]) is IntegerSolution, "Solution type invalid")
-        Check.that(type(parents[1]) is IntegerSolution, "Solution type invalid")
+        Check.that(issubclass(type(parents[0]), IntegerSolution), "Solution type invalid")
+        Check.that(issubclass(type(parents[1]), IntegerSolution), "Solution type invalid")
         Check.that(len(parents) == 2, 'The number of parents is not two: {}'.format(len(parents)))
 
         offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]

@@ -47,7 +47,7 @@ class FitnessValue(QualityIndicator):
 
 
 class GenerationalDistance(QualityIndicator):
-    def __init__(self, reference_front: np.array=None):
+    def __init__(self, reference_front: np.array = None):
         """
         * Van Veldhuizen, D.A., Lamont, G.B.: Multiobjective Evolutionary Algorithm Research: A History and Analysis.
           Technical Report TR-98-03, Dept. Elec. Comput. Eng., Air Force. Inst. Technol. (1998)
@@ -71,7 +71,7 @@ class GenerationalDistance(QualityIndicator):
 
 
 class InvertedGenerationalDistance(QualityIndicator):
-    def __init__(self, reference_front: np.array=None):
+    def __init__(self, reference_front: np.array = None):
         super(InvertedGenerationalDistance, self).__init__(is_minimization=True)
         self.reference_front = reference_front
 
