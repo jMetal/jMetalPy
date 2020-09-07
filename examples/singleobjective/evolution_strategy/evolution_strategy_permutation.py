@@ -3,8 +3,8 @@ from jmetal.operator.mutation import PermutationSwapMutation
 from jmetal.problem.singleobjective.tsp import TSP
 from jmetal.util.termination_criterion import StoppingByTime
 
-if __name__ == '__main__':
-    problem = TSP(instance='resources/TSP_instances/kroA100.tsp')
+if __name__ == "__main__":
+    problem = TSP(instance="resources/TSP_instances/kroA100.tsp")
 
     print(f"Solving TSP problem with {problem.number_of_cities} cities.")
 
@@ -20,8 +20,8 @@ if __name__ == '__main__':
     algorithm.run()
     result = algorithm.get_result()
 
-    print(f'Algorithm: {algorithm.get_name()}')
-    print(f'Solution: {result.variables}')
-    print(f'The shortest path length: {result.objectives[0]}')
-    print(f'Computing time: {algorithm.total_computing_time}')
-    print(f'Number of evaluations: {algorithm.evaluations}')
+    print(f"Algorithm: {algorithm.get_name()}")
+    print(f"Solution: {result.variables}")
+    print(f"The shortest path length: {result.objectives[0]}")
+    print(f"Computing time: {algorithm.total_computing_time}")
+    print(f"Number of evaluations: {algorithm.evaluations}")

@@ -2,9 +2,10 @@ import numpy as np
 import pandas as pd
 
 
-def bayesian_sign_test(data, rope_limits=[-0.01, 0.01], prior_strength=0.5, prior_place='rope', sample_size=50000,
-                       return_sample=False):
-    """ Bayesian version of the sign test.
+def bayesian_sign_test(
+    data, rope_limits=[-0.01, 0.01], prior_strength=0.5, prior_place="rope", sample_size=50000, return_sample=False
+):
+    """Bayesian version of the sign test.
 
     :param data: An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.
     :param rope_limits: array_like. Default [-0.01, 0.01]. Limits of the practical equivalence.
@@ -27,16 +28,13 @@ def bayesian_sign_test(data, rope_limits=[-0.01, 0.01], prior_strength=0.5, prio
         sample1, sample2 = data[:, 0], data[:, 1]
         n = data.shape[0]
     else:
-        raise ValueError(
-            'Initialization ERROR. Incorrect number of dimensions for axis 1')
+        raise ValueError("Initialization ERROR. Incorrect number of dimensions for axis 1")
 
     if prior_strength <= 0:
-        raise ValueError(
-            'Initialization ERROR. prior_strength mustb be a positive float')
+        raise ValueError("Initialization ERROR. prior_strength mustb be a positive float")
 
-    if prior_place not in ['left', 'rope', 'right']:
-        raise ValueError(
-            'Initialization ERROR. Incorrect value fro prior_place')
+    if prior_place not in ["left", "rope", "right"]:
+        raise ValueError("Initialization ERROR. Incorrect value fro prior_place")
 
     # Compute the differences
     Z = sample1 - sample2
@@ -53,7 +51,7 @@ def bayesian_sign_test(data, rope_limits=[-0.01, 0.01], prior_strength=0.5, prio
 
     # Parameters of the Dirichlet distribution
     alpha = np.array([Nleft, Nequiv, Nright], dtype=float) + 1e-6
-    alpha[['left', 'rope', 'right'].index(prior_place)] += prior_strength
+    alpha[["left", "rope", "right"].index(prior_place)] += prior_strength
     # Simulate dirichlet process
     Dprocess = np.random.dirichlet(alpha, sample_size)
 
@@ -69,10 +67,10 @@ def bayesian_sign_test(data, rope_limits=[-0.01, 0.01], prior_strength=0.5, prio
         return np.array([win_left, win_rope, win_rifht]) / float(sample_size)
 
 
-def bayesian_signed_rank_test(data, rope_limits=[-0.01, 0.01], prior_strength=1.0, prior_place='rope',
-                              sample_size=10000,
-                              return_sample=False):
-    """ Bayesian version of the signed rank test.
+def bayesian_signed_rank_test(
+    data, rope_limits=[-0.01, 0.01], prior_strength=1.0, prior_place="rope", sample_size=10000, return_sample=False
+):
+    """Bayesian version of the signed rank test.
 
     :param data: An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.
     :param rope_limits: array_like. Default [-0.01, 0.01]. Limits of the practical equivalence.
@@ -98,21 +96,17 @@ def bayesian_signed_rank_test(data, rope_limits=[-0.01, 0.01], prior_strength=1.
         sample1, sample2 = data[:, 0], data[:, 1]
         n = data.shape[0]
     else:
-        raise ValueError(
-            'Initialization ERROR. Incorrect number of dimensions for axis 1')
+        raise ValueError("Initialization ERROR. Incorrect number of dimensions for axis 1")
 
     if prior_strength <= 0:
-        raise ValueError(
-            'Initialization ERROR. prior_strength must be a positive float')
+        raise ValueError("Initialization ERROR. prior_strength must be a positive float")
 
-    if prior_place not in ['left', 'rope', 'right']:
-        raise ValueError(
-            'Initialization ERROR. Incorrect value for prior_place')
+    if prior_place not in ["left", "rope", "right"]:
+        raise ValueError("Initialization ERROR. Incorrect value for prior_place")
 
     # Compute the differences
     Z = sample1 - sample2
-    Z0 = [-float('Inf'), 0.0, float('Inf')][['left',
-                                             'rope', 'right'].index(prior_place)]
+    Z0 = [-float("Inf"), 0.0, float("Inf")][["left", "rope", "right"].index(prior_place)]
     Z = np.concatenate(([Z0], Z), axis=None)
 
     # compute the the probabilities that the mean difference of accuracy is in

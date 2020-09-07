@@ -4,7 +4,6 @@ from jmetal.problem.singleobjective.unconstrained import OneMax, Sphere
 
 
 class OneMaxTestCases(unittest.TestCase):
-
     def test_should_constructor_create_a_non_null_object(self) -> None:
         problem = OneMax()
         self.assertIsNotNone(problem)
@@ -41,7 +40,6 @@ class OneMaxTestCases(unittest.TestCase):
 
 
 class SphereTestCases(unittest.TestCase):
-
     def test_should_constructor_create_a_non_null_object(self):
         problem = Sphere(3)
         self.assertIsNotNone(problem)
@@ -102,5 +100,5 @@ class SphereTestCases(unittest.TestCase):
         self.assertEqual("Sphere", problem.get_name())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

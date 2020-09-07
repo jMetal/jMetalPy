@@ -3,8 +3,14 @@ import random
 from typing import List
 
 from jmetal.core.operator import Crossover
-from jmetal.core.solution import Solution, FloatSolution, BinarySolution, PermutationSolution, IntegerSolution, \
-    CompositeSolution
+from jmetal.core.solution import (
+    BinarySolution,
+    CompositeSolution,
+    FloatSolution,
+    IntegerSolution,
+    PermutationSolution,
+    Solution,
+)
 from jmetal.util.ckecking import Check
 
 """
@@ -22,7 +28,7 @@ class NullCrossover(Crossover[Solution, Solution]):
 
     def execute(self, parents: List[Solution]) -> List[Solution]:
         if len(parents) != 2:
-            raise Exception('The number of parents is not two: {}'.format(len(parents)))
+            raise Exception("The number of parents is not two: {}".format(len(parents)))
 
         return parents
 
@@ -33,7 +39,7 @@ class NullCrossover(Crossover[Solution, Solution]):
         return 2
 
     def get_name(self):
-        return 'Null crossover'
+        return "Null crossover"
 
 
 class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
@@ -42,7 +48,7 @@ class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
 
     def execute(self, parents: List[PermutationSolution]) -> List[PermutationSolution]:
         if len(parents) != 2:
-            raise Exception('The number of parents is not two: {}'.format(len(parents)))
+            raise Exception("The number of parents is not two: {}".format(len(parents)))
 
         offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
         permutation_length = offspring[0].number_of_variables
@@ -91,7 +97,7 @@ class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
         return 2
 
     def get_name(self):
-        return 'Partially Matched crossover'
+        return "Partially Matched crossover"
 
 
 class CXCrossover(Crossover[PermutationSolution, PermutationSolution]):
@@ -100,7 +106,7 @@ class CXCrossover(Crossover[PermutationSolution, PermutationSolution]):
 
     def execute(self, parents: List[PermutationSolution]) -> List[PermutationSolution]:
         if len(parents) != 2:
-            raise Exception('The number of parents is not two: {}'.format(len(parents)))
+            raise Exception("The number of parents is not two: {}".format(len(parents)))
 
         offspring = [copy.deepcopy(parents[1]), copy.deepcopy(parents[0])]
         rand = random.random()
@@ -131,7 +137,7 @@ class CXCrossover(Crossover[PermutationSolution, PermutationSolution]):
         return 2
 
     def get_name(self):
-        return 'Cycle crossover'
+        return "Cycle crossover"
 
 
 class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
@@ -146,7 +152,7 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
     def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
         Check.that(issubclass(type(parents[0]), FloatSolution), "Solution type invalid: " + str(type(parents[0])))
         Check.that(issubclass(type(parents[1]), FloatSolution), "Solution type invalid")
-        Check.that(len(parents) == 2, 'The number of parents is not two: {}'.format(len(parents)))
+        Check.that(len(parents) == 2, "The number of parents is not two: {}".format(len(parents)))
 
         offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
         rand = random.random()
@@ -214,7 +220,7 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
         return 2
 
     def get_name(self) -> str:
-        return 'SBX crossover'
+        return "SBX crossover"
 
 
 class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
@@ -227,7 +233,7 @@ class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
     def execute(self, parents: List[IntegerSolution]) -> List[IntegerSolution]:
         Check.that(issubclass(type(parents[0]), IntegerSolution), "Solution type invalid")
         Check.that(issubclass(type(parents[1]), IntegerSolution), "Solution type invalid")
-        Check.that(len(parents) == 2, 'The number of parents is not two: {}'.format(len(parents)))
+        Check.that(len(parents) == 2, "The number of parents is not two: {}".format(len(parents)))
 
         offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
         rand = random.random()
@@ -295,18 +301,17 @@ class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
         return 2
 
     def get_name(self) -> str:
-        return 'Integer SBX crossover'
+        return "Integer SBX crossover"
 
 
 class SPXCrossover(Crossover[BinarySolution, BinarySolution]):
-
     def __init__(self, probability: float):
         super(SPXCrossover, self).__init__(probability=probability)
 
     def execute(self, parents: List[BinarySolution]) -> List[BinarySolution]:
         Check.that(type(parents[0]) is BinarySolution, "Solution type invalid")
         Check.that(type(parents[1]) is BinarySolution, "Solution type invalid")
-        Check.that(len(parents) == 2, 'The number of parents is not two: {}'.format(len(parents)))
+        Check.that(len(parents) == 2, "The number of parents is not two: {}".format(len(parents)))
 
         offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
         rand = random.random()
@@ -355,11 +360,11 @@ class SPXCrossover(Crossover[BinarySolution, BinarySolution]):
         return 2
 
     def get_name(self) -> str:
-        return 'Single point crossover'
+        return "Single point crossover"
 
 
 class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
-    """ This operator receives two parameters: the current individual and an array of three parent individuals. The
+    """This operator receives two parameters: the current individual and an array of three parent individuals. The
     best and rand variants depends on the third parent, according whether it represents the current of the "best"
     individual or a random_search one. The implementation of both variants are the same, due to that the parent selection is
     external to the crossover operator.
@@ -374,10 +379,9 @@ class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
         self.current_individual: FloatSolution = None
 
     def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
-        """ Execute the differential evolution crossover ('best/1/bin' variant in jMetal).
-        """
+        """Execute the differential evolution crossover ('best/1/bin' variant in jMetal)."""
         if len(parents) != self.get_number_of_parents():
-            raise Exception('The number of parents is not {}: {}'.format(self.get_number_of_parents(), len(parents)))
+            raise Exception("The number of parents is not {}: {}".format(self.get_number_of_parents(), len(parents)))
 
         child = copy.deepcopy(self.current_individual)
 
@@ -406,13 +410,13 @@ class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
         return 1
 
     def get_name(self) -> str:
-        return 'Differential Evolution crossover'
+        return "Differential Evolution crossover"
 
 
 class CompositeCrossover(Crossover[CompositeSolution, CompositeSolution]):
     __EPS = 1.0e-14
 
-    def __init__(self, crossover_operator_list:[Crossover]):
+    def __init__(self, crossover_operator_list: [Crossover]):
         super(CompositeCrossover, self).__init__(probability=1.0)
 
         Check.is_not_none(crossover_operator_list)
@@ -447,4 +451,4 @@ class CompositeCrossover(Crossover[CompositeSolution, CompositeSolution]):
         return 2
 
     def get_name(self) -> str:
-        return 'Composite crossover'
+        return "Composite crossover"

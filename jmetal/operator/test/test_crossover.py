@@ -3,14 +3,30 @@ from typing import List
 from unittest import mock
 
 from jmetal.core.operator import Crossover
-from jmetal.core.solution import BinarySolution, PermutationSolution, FloatSolution, CompositeSolution, IntegerSolution
-from jmetal.operator.crossover import NullCrossover, SPXCrossover, CXCrossover, PMXCrossover, SBXCrossover, \
-    CompositeCrossover, IntegerSBXCrossover
-from jmetal.util.ckecking import NoneParameterException, EmptyCollectionException, InvalidConditionException
+from jmetal.core.solution import (
+    BinarySolution,
+    CompositeSolution,
+    FloatSolution,
+    IntegerSolution,
+    PermutationSolution,
+)
+from jmetal.operator.crossover import (
+    CompositeCrossover,
+    CXCrossover,
+    IntegerSBXCrossover,
+    NullCrossover,
+    PMXCrossover,
+    SBXCrossover,
+    SPXCrossover,
+)
+from jmetal.util.ckecking import (
+    EmptyCollectionException,
+    InvalidConditionException,
+    NoneParameterException,
+)
 
 
 class NullCrossoverTestCases(unittest.TestCase):
-
     def test_should_constructor_create_a_non_null_object(self):
         solution = NullCrossover()
         self.assertIsNotNone(solution)
@@ -32,7 +48,6 @@ class NullCrossoverTestCases(unittest.TestCase):
 
 
 class SinglePointTestCases(unittest.TestCase):
-
     def test_should_constructor_raises_an_exception_is_probability_is_negative(self) -> None:
         with self.assertRaises(Exception):
             SPXCrossover(-1)
@@ -68,7 +83,7 @@ class SinglePointTestCases(unittest.TestCase):
         self.assertEqual([True, False, False, True, True, False], offspring[0].variables[0])
         self.assertEqual([False, True, False, False, True, False], offspring[1].variables[0])
 
-    @mock.patch('random.randrange')
+    @mock.patch("random.randrange")
     def test_should_the_operator_work_if_the_first_bit_is_selected(self, random_call):
         operator = SPXCrossover(1.0)
         solution1 = BinarySolution(number_of_variables=1, number_of_objectives=1)
@@ -81,7 +96,7 @@ class SinglePointTestCases(unittest.TestCase):
         self.assertEqual([False, True, False, False, True, False], offspring[0].variables[0])
         self.assertEqual([True, False, False, True, True, False], offspring[1].variables[0])
 
-    @mock.patch('random.randrange')
+    @mock.patch("random.randrange")
     def test_should_the_operator_work_if_the_last_bit_is_selected(self, random_call):
         operator = SPXCrossover(1.0)
         solution1 = BinarySolution(number_of_variables=1, number_of_objectives=1)
@@ -94,7 +109,7 @@ class SinglePointTestCases(unittest.TestCase):
         self.assertEqual([True, False, False, True, True, True], offspring[0].variables[0])
         self.assertEqual([False, True, False, False, True, False], offspring[1].variables[0])
 
-    @mock.patch('random.randrange')
+    @mock.patch("random.randrange")
     def test_should_the_operator_work_if_the_third_bit_is_selected(self, random_call):
         operator = SPXCrossover(1.0)
         solution1 = BinarySolution(number_of_variables=1, number_of_objectives=1)
@@ -107,7 +122,7 @@ class SinglePointTestCases(unittest.TestCase):
         self.assertEqual([True, False, False, False, True, True], offspring[0].variables[0])
         self.assertEqual([False, True, False, True, True, False], offspring[1].variables[0])
 
-    @mock.patch('random.randrange')
+    @mock.patch("random.randrange")
     def test_should_the_operator_work_with_a_solution_with_three_binary_variables(self, random_call):
         operator = SPXCrossover(1.0)
         solution1 = BinarySolution(number_of_variables=3, number_of_objectives=1)
@@ -130,7 +145,6 @@ class SinglePointTestCases(unittest.TestCase):
 
 
 class PMXTestCases(unittest.TestCase):
-
     def test_should_constructor_raises_an_exception_is_probability_is_negative(self) -> None:
         with self.assertRaises(Exception):
             PMXCrossover(-1)
@@ -165,7 +179,7 @@ class PMXTestCases(unittest.TestCase):
         self.assertEqual([2, 3], offspring[1].variables[0])
         self.assertEqual([5, 3], offspring[1].variables[1])
 
-    @mock.patch('random.randint')
+    @mock.patch("random.randint")
     def test_should_the_operator_work_with_permutation_at_the_middle(self, random_call):
         operator = PMXCrossover(1.0)
 
@@ -181,7 +195,7 @@ class PMXTestCases(unittest.TestCase):
         self.assertEqual([0, 1, 12, 13, 4, 5, 6, 7, 8, 9], offspring[0].variables)
         self.assertEqual([10, 11, 2, 3, 14, 15, 16, 17, 18, 19], offspring[1].variables)
 
-    @mock.patch('random.randint')
+    @mock.patch("random.randint")
     def test_should_the_operator_work_with_permutation_at_the_beginning(self, random_call):
         operator = PMXCrossover(1.0)
 
@@ -199,7 +213,6 @@ class PMXTestCases(unittest.TestCase):
 
 
 class CXTestCases(unittest.TestCase):
-
     def test_should_constructor_raises_an_exception_is_probability_is_negative(self) -> None:
         with self.assertRaises(Exception):
             CXCrossover(-1)
@@ -224,7 +237,7 @@ class CXTestCases(unittest.TestCase):
         with self.assertRaises(Exception):
             CXCrossover(-12)
 
-    @mock.patch('random.randint')
+    @mock.patch("random.randint")
     def test_should_the_operator_work_with_two_solutions_with_same_number_of_variables(self, random_call):
         operator = CXCrossover(1.0)
         solution1 = PermutationSolution(number_of_variables=5, number_of_objectives=1)
@@ -293,10 +306,16 @@ class SBXCrossoverTestCases(unittest.TestCase):
 
     def test_should_execute_work_with_a_solution_subclass_of_float_solution(self):
         class NewFloatSolution(FloatSolution):
-            def __init__(self, lower_bound: List[float], upper_bound: List[float], number_of_objectives: int,
-                         number_of_constraints: int = 0):
-                super(NewFloatSolution, self).__init__(lower_bound, upper_bound, number_of_objectives,
-                                                       number_of_constraints)
+            def __init__(
+                self,
+                lower_bound: List[float],
+                upper_bound: List[float],
+                number_of_objectives: int,
+                number_of_constraints: int = 0,
+            ):
+                super(NewFloatSolution, self).__init__(
+                    lower_bound, upper_bound, number_of_objectives, number_of_constraints
+                )
 
         solution1 = NewFloatSolution([1, 2], [2, 4], 2, 2)
         solution2 = NewFloatSolution([1, 2], [2, 4], 2, 2)
@@ -310,7 +329,6 @@ class SBXCrossoverTestCases(unittest.TestCase):
         self.assertEqual(2, len(offspring))
         self.assertEqual(solution1.variables, offspring[0].variables)
         self.assertEqual(solution2.variables, offspring[1].variables)
-
 
     def test_should_execute_produce_valid_solutions_when_crossing_two_single_variable_solutions(self):
         pass
@@ -397,5 +415,5 @@ class CompositeCrossoverTestCases(unittest.TestCase):
             operator.execute([composite_solution1, composite_solution2])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

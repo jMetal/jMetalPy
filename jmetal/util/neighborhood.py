@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import TypeVar, Generic, List
+from typing import Generic, List, TypeVar
 
 import numpy
 
@@ -16,23 +16,23 @@ from jmetal.util.ckecking import Check
 .. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
 """
 
-S = TypeVar('S')
+S = TypeVar("S")
 
 
 class Neighborhood(Generic[S], ABC):
-
     @abstractmethod
     def get_neighbors(self, index: int, solution_list: List[S]) -> List[S]:
         pass
 
 
 class WeightNeighborhood(Neighborhood[Solution], ABC):
-
-    def __init__(self,
-                 number_of_weight_vectors: int,
-                 neighborhood_size: int,
-                 weight_vector_size: int = 2,
-                 weights_path: str = None):
+    def __init__(
+        self,
+        number_of_weight_vectors: int,
+        neighborhood_size: int,
+        weight_vector_size: int = 2,
+        weights_path: str = None,
+    ):
         self.number_of_weight_vectors = number_of_weight_vectors
         self.neighborhood_size = neighborhood_size
         self.weight_vector_size = weight_vector_size
@@ -43,19 +43,21 @@ class WeightNeighborhood(Neighborhood[Solution], ABC):
 
 
 class WeightVectorNeighborhood(WeightNeighborhood):
-
-    def __init__(self,
-                 number_of_weight_vectors: int,
-                 neighborhood_size: int,
-                 weight_vector_size: int = 2,
-                 weights_path: str = None):
-        super(WeightVectorNeighborhood, self).__init__(number_of_weight_vectors, neighborhood_size, weight_vector_size,
-                                                       weights_path)
+    def __init__(
+        self,
+        number_of_weight_vectors: int,
+        neighborhood_size: int,
+        weight_vector_size: int = 2,
+        weights_path: str = None,
+    ):
+        super(WeightVectorNeighborhood, self).__init__(
+            number_of_weight_vectors, neighborhood_size, weight_vector_size, weights_path
+        )
         self.__initialize_uniform_weight(weight_vector_size, number_of_weight_vectors)
         self.__initialize_neighborhood()
 
     def __initialize_uniform_weight(self, weight_vector_size: int, number_of_weight_vectors: int) -> None:
-        """ Precomputed weights from
+        """Precomputed weights from
 
         * Zhang, Multiobjective Optimization Problems With Complicated Pareto Sets, MOEA/D and NSGA-II
 
@@ -69,8 +71,8 @@ class WeightVectorNeighborhood(WeightNeighborhood):
                 self.weight_vectors[i, 0] = v
                 self.weight_vectors[i, 1] = 1 - v
         else:
-            file_name = 'W{}D_{}.dat'.format(weight_vector_size, number_of_weight_vectors)
-            file_path = self.weights_path + '/' + file_name
+            file_name = "W{}D_{}.dat".format(weight_vector_size, number_of_weight_vectors)
+            file_path = self.weights_path + "/" + file_name
 
             if Path(file_path).is_file():
                 with open(file_path) as file:
@@ -78,7 +80,7 @@ class WeightVectorNeighborhood(WeightNeighborhood):
                         vector = [float(x) for x in line.split()]
                         self.weight_vectors[index][:] = vector
             else:
-                raise FileNotFoundError('Failed to initialize weights: {} not found'.format(file_path))
+                raise FileNotFoundError("Failed to initialize weights: {} not found".format(file_path))
 
     def __initialize_neighborhood(self) -> None:
         distance = numpy.zeros((len(self.weight_vectors), len(self.weight_vectors)))
@@ -88,13 +90,13 @@ class WeightVectorNeighborhood(WeightNeighborhood):
                 distance[i][j] = numpy.linalg.norm(self.weight_vectors[i] - self.weight_vectors[j])
 
             indexes = numpy.argsort(distance[i, :])
-            self.neighborhood[i, :] = indexes[0:self.neighborhood_size]
+            self.neighborhood[i, :] = indexes[0 : self.neighborhood_size]
 
     def get_neighbors(self, index: int, solution_list: List[Solution]) -> List[Solution]:
         neighbors_indexes = self.neighborhood[index]
 
         if any(i > len(solution_list) for i in neighbors_indexes):
-            raise IndexError('Neighbor index out of range')
+            raise IndexError("Neighbor index out of range")
 
         return [solution_list[i] for i in neighbors_indexes]
 
@@ -115,7 +117,7 @@ class TwoDimensionalMesh(Neighborhood):
         self.__create_mesh()
 
     def __create_mesh(self):
-        """ Example:
+        """Example:
         if rows = 5, and columns=3, we need to fill the mesh as follows
         ----------
         |00-01-02|
@@ -194,23 +196,23 @@ class TwoDimensionalMesh(Neighborhood):
 
 class C9(TwoDimensionalMesh):
     """
-    Class defining an C9 neighborhood of a solution belonging to a list of solutions which is
-    structured as a bi-dimensional mesh. The neighbors are those solutions that are in 1-hop distance
+     Class defining an C9 neighborhood of a solution belonging to a list of solutions which is
+     structured as a bi-dimensional mesh. The neighbors are those solutions that are in 1-hop distance
 
-   Shape:
-           * * *
-           * o *
-           * * *
+    Shape:
+            * * *
+            * o *
+            * * *
 
-   Topology:
-            north      = {-1,  0}
-            south      = { 1 , 0}
-            east       = { 0 , 1}
-            west       = { 0 ,-1}
-            north_east = {-1,  1}
-            north_west = {-1, -1}
-            south_east = { 1 , 1}
-            south_west = { 1 ,-1}
+    Topology:
+             north      = {-1,  0}
+             south      = { 1 , 0}
+             east       = { 0 , 1}
+             west       = { 0 ,-1}
+             north_east = {-1,  1}
+             north_west = {-1, -1}
+             south_east = { 1 , 1}
+             south_west = { 1 ,-1}
     """
 
     def __init__(self, rows: int, columns: int):

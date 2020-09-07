@@ -6,6 +6,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/jMetalPy.svg?style=flat-square)]()
 [![PyPI Python version](https://img.shields.io/pypi/pyversions/jMetalPy.svg?style=flat-square)]()
 [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.swevo.2019.100598-blue?style=flat-square)](https://doi.org/10.1016/j.swevo.2019.100598)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
 
 A paper introducing jMetalPy is available at: https://doi.org/10.1016/j.swevo.2019.100598
 
@@ -44,7 +45,7 @@ pip install "jmetalpy[core]"
 Other supported commands are listed next:
 
 ```console
-pip install "jmetalpy[docs]"  # Install requirements for building docs
+pip install "jmetalpy[dev]"  # Install requirements for development
 pip install "jmetalpy[distributed]"  # Install requirements for parallel/distributed computing
 pip install "jmetalpy[complete]"  # Install all requirements
 ```
@@ -101,7 +102,7 @@ plot_front.plot(front, label='NSGAII-ZDT1', filename='NSGAII-ZDT1', format='png'
 <img src=docs/source/_static/NSGAII-ZDT1.png width=450 alt="Pareto front approximation">
 
 ## Features
-The current release of jMetalPy (v1.5.5) contains the following components:
+The current release of jMetalPy (v1.5.7) contains the following components:
 
 * Algorithms: local search, genetic algorithm, evolution strategy, simulated annealing, random search, NSGA-II, NSGA-III, SMPSO, OMOPSO, MOEA/D, MOEA/D-DRA, MOEA/D-IEpsilon, GDE3, SPEA2, HYPE, IBEA. Preference articulation-based algorithms (G-NSGA-II, G-GDE3, G-SPEA2, SMPSO/RP); Dynamic versions of NSGA-II, SMPSO, and GDE3.
 * Parallel computing based on Apache Spark and Dask.
@@ -119,6 +120,7 @@ The current release of jMetalPy (v1.5.5) contains the following components:
 
 ## Changelog
 
+* [v1.5.7] Use of linters for catching errors and formatters to fix style.
 * [v1.5.6] Removed warnings when using Python 3.8.
 * [v1.5.5] Minor bug fixes.
 * [v1.5.4] Refactored quality indicators to accept numpy array as input parameter.

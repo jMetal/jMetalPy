@@ -1,16 +1,16 @@
 from copy import copy
-from typing import TypeVar, List
+from typing import List, TypeVar
 
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
+from jmetal.util.constraint_handling import overall_constraint_violation_degree
 from jmetal.util.evaluator import Evaluator, SequentialEvaluator
 from jmetal.util.generator import Generator, RandomGenerator
 from jmetal.util.termination_criterion import TerminationCriterion
-from jmetal.util.constraint_handling import overall_constraint_violation_degree
 
-S = TypeVar('S')
-R = TypeVar('R')
+S = TypeVar("S")
+R = TypeVar("R")
 
 """
 .. module:: evolutionary_algorithm
@@ -22,20 +22,18 @@ R = TypeVar('R')
 
 
 class EvolutionStrategy(EvolutionaryAlgorithm[S, R]):
-
-    def __init__(self,
-                 problem: Problem,
-                 mu: int,
-                 lambda_: int,
-                 elitist: bool,
-                 mutation: Mutation,
-                 termination_criterion: TerminationCriterion,
-                 population_generator: Generator = RandomGenerator(),
-                 population_evaluator: Evaluator = SequentialEvaluator()):
-        super(EvolutionStrategy, self).__init__(
-            problem=problem,
-            population_size=mu,
-            offspring_population_size=lambda_)
+    def __init__(
+        self,
+        problem: Problem,
+        mu: int,
+        lambda_: int,
+        elitist: bool,
+        mutation: Mutation,
+        termination_criterion: TerminationCriterion,
+        population_generator: Generator = RandomGenerator(),
+        population_evaluator: Evaluator = SequentialEvaluator(),
+    ):
+        super(EvolutionStrategy, self).__init__(problem=problem, population_size=mu, offspring_population_size=lambda_)
         self.mu = mu
         self.lambda_ = lambda_
         self.elitist = elitist
@@ -49,8 +47,7 @@ class EvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         self.observable.register(termination_criterion)
 
     def create_initial_solutions(self) -> List[S]:
-        return [self.population_generator.new(self.problem)
-                for _ in range(self.population_size)]
+        return [self.population_generator.new(self.problem) for _ in range(self.population_size)]
 
     def evaluate(self, solution_list: List[S]):
         return self.population_evaluator.evaluate(solution_list, self.problem)
@@ -91,4 +88,4 @@ class EvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         return self.solutions[0]
 
     def get_name(self) -> str:
-        return 'Elitist evolution Strategy'
+        return "Elitist evolution Strategy"
