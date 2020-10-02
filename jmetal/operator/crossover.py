@@ -50,7 +50,7 @@ class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
         if len(parents) != 2:
             raise Exception("The number of parents is not two: {}".format(len(parents)))
 
-        offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
+        offspring = copy.deepcopy(parents)
         permutation_length = offspring[0].number_of_variables
 
         rand = random.random()
@@ -108,7 +108,7 @@ class CXCrossover(Crossover[PermutationSolution, PermutationSolution]):
         if len(parents) != 2:
             raise Exception("The number of parents is not two: {}".format(len(parents)))
 
-        offspring = [copy.deepcopy(parents[1]), copy.deepcopy(parents[0])]
+        offspring = copy.deepcopy(parents)
         rand = random.random()
 
         if rand <= self.probability:
@@ -154,7 +154,7 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
         Check.that(issubclass(type(parents[1]), FloatSolution), "Solution type invalid")
         Check.that(len(parents) == 2, "The number of parents is not two: {}".format(len(parents)))
 
-        offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
+        offspring = copy.deepcopy(parents)
         rand = random.random()
 
         if rand <= self.probability:
@@ -235,7 +235,7 @@ class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
         Check.that(issubclass(type(parents[1]), IntegerSolution), "Solution type invalid")
         Check.that(len(parents) == 2, "The number of parents is not two: {}".format(len(parents)))
 
-        offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
+        offspring = copy.deepcopy(parents)
         rand = random.random()
 
         if rand <= self.probability:
@@ -313,7 +313,7 @@ class SPXCrossover(Crossover[BinarySolution, BinarySolution]):
         Check.that(type(parents[1]) is BinarySolution, "Solution type invalid")
         Check.that(len(parents) == 2, "The number of parents is not two: {}".format(len(parents)))
 
-        offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
+        offspring = copy.deepcopy(parents)
         rand = random.random()
 
         if rand <= self.probability:
