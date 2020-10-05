@@ -30,10 +30,7 @@ class RandomGenerator(Generator):
 class InjectorGenerator(Generator):
     def __init__(self, solutions: List[Solution]):
         super(InjectorGenerator, self).__init__()
-        self.population = []
-
-        for solution in solutions:
-            self.population.append(copy.deepcopy(solution))
+        self.population = copy.deepcopy(solutions)
 
     def new(self, problem: Problem):
         if len(self.population) > 0:
