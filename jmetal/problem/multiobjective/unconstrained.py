@@ -1,8 +1,13 @@
 import random
-from math import sqrt, exp, pow, sin
+from math import exp, pow, sin, sqrt
 
-from jmetal.core.problem import FloatProblem, BinaryProblem, Problem
-from jmetal.core.solution import FloatSolution, BinarySolution, CompositeSolution, IntegerSolution
+from jmetal.core.problem import BinaryProblem, FloatProblem, Problem
+from jmetal.core.solution import (
+    BinarySolution,
+    CompositeSolution,
+    FloatSolution,
+    IntegerSolution,
+)
 
 """
 .. module:: constrained
@@ -23,7 +28,7 @@ class Kursawe(FloatProblem):
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f(x)', 'f(y)']
+        self.obj_labels = ["f(x)", "f(y)"]
 
         self.lower_bound = [-5.0 for _ in range(number_of_variables)]
         self.upper_bound = [5.0 for _ in range(number_of_variables)]
@@ -46,11 +51,10 @@ class Kursawe(FloatProblem):
         return solution
 
     def get_name(self):
-        return 'Kursawe'
+        return "Kursawe"
 
 
 class Fonseca(FloatProblem):
-
     def __init__(self):
         super(Fonseca, self).__init__()
         self.number_of_variables = 3
@@ -58,7 +62,7 @@ class Fonseca(FloatProblem):
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f(x)', 'f(y)']
+        self.obj_labels = ["f(x)", "f(y)"]
 
         self.lower_bound = self.number_of_variables * [-4]
         self.upper_bound = self.number_of_variables * [4]
@@ -74,11 +78,10 @@ class Fonseca(FloatProblem):
         return solution
 
     def get_name(self):
-        return 'Fonseca'
+        return "Fonseca"
 
 
 class Schaffer(FloatProblem):
-
     def __init__(self):
         super(Schaffer, self).__init__()
         self.number_of_variables = 1
@@ -86,7 +89,7 @@ class Schaffer(FloatProblem):
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f(x)', 'f(y)']
+        self.obj_labels = ["f(x)", "f(y)"]
 
         self.lower_bound = [-100000]
         self.upper_bound = [100000]
@@ -103,11 +106,10 @@ class Schaffer(FloatProblem):
         return solution
 
     def get_name(self):
-        return 'Schaffer'
+        return "Schaffer"
 
 
 class Viennet2(FloatProblem):
-
     def __init__(self):
         super(Viennet2, self).__init__()
         self.number_of_variables = 2
@@ -115,13 +117,10 @@ class Viennet2(FloatProblem):
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f(x)', 'f(y)', 'f(z)']
+        self.obj_labels = ["f(x)", "f(y)", "f(z)"]
 
         self.lower_bound = self.number_of_variables * [-4]
         self.upper_bound = self.number_of_variables * [4]
-
-        FloatSolution.lower_bound = self.lower_bound
-        FloatSolution.upper_bound = self.upper_bound
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x0 = solution.variables[0]
@@ -138,13 +137,12 @@ class Viennet2(FloatProblem):
         return solution
 
     def get_name(self):
-        return 'Viennet2'
+        return "Viennet2"
 
 
 class SubsetSum(BinaryProblem):
-
     def __init__(self, C: int, W: list):
-        """ The goal is to find a subset S of W whose elements sum is closest to (without exceeding) C.
+        """The goal is to find a subset S of W whose elements sum is closest to (without exceeding) C.
 
         :param C: Large integer.
         :param W: Set of non-negative integers."""
@@ -158,7 +156,7 @@ class SubsetSum(BinaryProblem):
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MAXIMIZE, self.MINIMIZE]
-        self.obj_labels = ['Sum', 'No. of Objects']
+        self.obj_labels = ["Sum", "No. of Objects"]
 
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
         total_sum = 0.0
@@ -181,19 +179,18 @@ class SubsetSum(BinaryProblem):
         return solution
 
     def create_solution(self) -> BinarySolution:
-        new_solution = BinarySolution(number_of_variables=self.number_of_variables,
-                                      number_of_objectives=self.number_of_objectives)
-        new_solution.variables[0] = \
-            [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
+        new_solution = BinarySolution(
+            number_of_variables=self.number_of_variables, number_of_objectives=self.number_of_objectives
+        )
+        new_solution.variables[0] = [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
 
         return new_solution
 
     def get_name(self) -> str:
-        return 'Subset Sum'
+        return "Subset Sum"
 
 
 class OneZeroMax(BinaryProblem):
-
     def __init__(self, number_of_bits: int = 256):
         super(OneZeroMax, self).__init__()
         self.number_of_bits = number_of_bits
@@ -202,7 +199,7 @@ class OneZeroMax(BinaryProblem):
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE]
-        self.obj_labels = ['Ones']
+        self.obj_labels = ["Ones"]
 
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
         counter_of_ones = 0
@@ -219,19 +216,26 @@ class OneZeroMax(BinaryProblem):
         return solution
 
     def create_solution(self) -> BinarySolution:
-        new_solution = BinarySolution(number_of_variables=self.number_of_variables,
-                                      number_of_objectives=self.number_of_objectives)
-        new_solution.variables[0] = \
-            [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
+        new_solution = BinarySolution(
+            number_of_variables=self.number_of_variables, number_of_objectives=self.number_of_objectives
+        )
+        new_solution.variables[0] = [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
         return new_solution
 
     def get_name(self) -> str:
-        return 'OneZeroMax'
+        return "OneZeroMax"
 
 
 class MixedIntegerFloatProblem(Problem):
-    def __init__(self, number_of_integer_variables=10, number_of_float_variables=10, n=100, m=-100, lower_bound=-1000,
-                 upper_bound=1000):
+    def __init__(
+        self,
+        number_of_integer_variables=10,
+        number_of_float_variables=10,
+        n=100,
+        m=-100,
+        lower_bound=-1000,
+        upper_bound=1000,
+    ):
         super(MixedIntegerFloatProblem, self).__init__()
         self.number_of_objectives = 2
         self.number_of_variables = 2
@@ -246,7 +250,7 @@ class MixedIntegerFloatProblem(Problem):
         self.int_upper_bound = [upper_bound for _ in range(number_of_integer_variables)]
 
         self.obj_directions = [self.MINIMIZE]
-        self.obj_labels = ['Ones']
+        self.obj_labels = ["Ones"]
 
     def evaluate(self, solution: CompositeSolution) -> CompositeSolution:
         distance_to_n = sum([abs(self.n - value) for value in solution.variables[0].variables])
@@ -261,23 +265,24 @@ class MixedIntegerFloatProblem(Problem):
         return solution
 
     def create_solution(self) -> CompositeSolution:
-        integer_solution = IntegerSolution(self.int_lower_bound, self.int_upper_bound, self.number_of_objectives,
-                                           self.number_of_constraints)
+        integer_solution = IntegerSolution(
+            self.int_lower_bound, self.int_upper_bound, self.number_of_objectives, self.number_of_constraints
+        )
         float_solution = FloatSolution(
-            self.float_lower_bound,
-            self.float_upper_bound,
-            self.number_of_objectives, self.number_of_constraints)
+            self.float_lower_bound, self.float_upper_bound, self.number_of_objectives, self.number_of_constraints
+        )
 
-        float_solution.variables = \
-            [random.uniform(self.float_lower_bound[i] * 1.0, self.float_upper_bound[i] * .01) for i in
-             range(len(self.int_lower_bound))]
+        float_solution.variables = [
+            random.uniform(self.float_lower_bound[i] * 1.0, self.float_upper_bound[i] * 0.01)
+            for i in range(len(self.int_lower_bound))
+        ]
 
-        integer_solution.variables = \
-            [random.uniform(self.float_lower_bound[i], self.float_upper_bound[i]) for i in
-             range(len(self.float_lower_bound))]
+        integer_solution.variables = [
+            random.uniform(self.float_lower_bound[i], self.float_upper_bound[i])
+            for i in range(len(self.float_lower_bound))
+        ]
 
         return CompositeSolution([integer_solution, float_solution])
 
     def get_name(self) -> str:
         return "Mixed Integer Float Problem"
-

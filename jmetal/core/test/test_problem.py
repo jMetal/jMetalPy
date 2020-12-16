@@ -5,7 +5,6 @@ from jmetal.core.solution import FloatSolution, IntegerSolution
 
 
 class DummyIntegerProblem(IntegerProblem):
-
     def __init__(self):
         super(DummyIntegerProblem, self).__init__()
 
@@ -17,7 +16,6 @@ class DummyIntegerProblem(IntegerProblem):
 
 
 class DummyFloatProblem(FloatProblem):
-
     def __init__(self):
         super(DummyFloatProblem, self).__init__()
 
@@ -29,8 +27,7 @@ class DummyFloatProblem(FloatProblem):
 
 
 class FloatProblemTestCases(unittest.TestCase):
-
-    def test_should_default_constructor_create_a_valid_problem(self) -> None:
+    def test_should_default_constructor_create_a_valid_problem(self):
         number_of_objectives = 2
         number_of_constraints = 0
         lower_bound = [-1.0]
@@ -49,7 +46,7 @@ class FloatProblemTestCases(unittest.TestCase):
         self.assertEqual([-1], problem.lower_bound)
         self.assertEqual([1], problem.upper_bound)
 
-    def test_should_create_solution_create_a_valid_solution(self) -> None:
+    def test_should_create_solution_create_a_valid_solution(self):
         problem = DummyFloatProblem()
         problem.number_of_variables = 2
         problem.number_of_objectives = 2
@@ -64,8 +61,7 @@ class FloatProblemTestCases(unittest.TestCase):
 
 
 class IntegerProblemTestCases(unittest.TestCase):
-
-    def test_should_default_constructor_create_a_valid_problem(self) -> None:
+    def test_should_default_constructor_create_a_valid_problem(self):
         problem = DummyIntegerProblem()
         problem.number_of_variables = 1
         problem.number_of_objectives = 2
@@ -79,7 +75,7 @@ class IntegerProblemTestCases(unittest.TestCase):
         self.assertEqual([-1], problem.lower_bound)
         self.assertEqual([1], problem.upper_bound)
 
-    def test_should_create_solution_create_a_valid_solution(self) -> None:
+    def test_should_create_solution_create_a_valid_solution(self):
         problem = DummyIntegerProblem()
         problem.number_of_variables = 2
         problem.number_of_objectives = 2
@@ -93,5 +89,5 @@ class IntegerProblemTestCases(unittest.TestCase):
         self.assertTrue(-2 <= solution.variables[1] <= 2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

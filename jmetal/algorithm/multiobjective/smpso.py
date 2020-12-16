@@ -2,22 +2,22 @@ import random
 import threading
 from copy import copy
 from math import sqrt
-from typing import TypeVar, List, Optional
+from typing import List, Optional, TypeVar
 
 import numpy
 
 from jmetal.config import store
-from jmetal.core.algorithm import ParticleSwarmOptimization, DynamicAlgorithm
+from jmetal.core.algorithm import DynamicAlgorithm, ParticleSwarmOptimization
 from jmetal.core.operator import Mutation
-from jmetal.core.problem import FloatProblem, DynamicProblem
+from jmetal.core.problem import DynamicProblem, FloatProblem
 from jmetal.core.solution import FloatSolution
-from jmetal.util.archive import BoundedArchive, ArchiveWithReferencePoint
+from jmetal.util.archive import ArchiveWithReferencePoint, BoundedArchive
 from jmetal.util.comparator import DominanceComparator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
-R = TypeVar('R')
+R = TypeVar("R")
 
 """
 .. module:: SMPSO
@@ -29,16 +29,17 @@ R = TypeVar('R')
 
 
 class SMPSO(ParticleSwarmOptimization):
-
-    def __init__(self,
-                 problem: FloatProblem,
-                 swarm_size: int,
-                 mutation: Mutation,
-                 leaders: Optional[BoundedArchive],
-                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
-                 swarm_generator: Generator = store.default_generator,
-                 swarm_evaluator: Evaluator = store.default_evaluator):
-        """ This class implements the SMPSO algorithm as described in
+    def __init__(
+        self,
+        problem: FloatProblem,
+        swarm_size: int,
+        mutation: Mutation,
+        leaders: Optional[BoundedArchive],
+        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        swarm_generator: Generator = store.default_generator,
+        swarm_evaluator: Evaluator = store.default_evaluator,
+    ):
+        """This class implements the SMPSO algorithm as described in
 
         * SMPSO: A new PSO-based metaheuristic for multi-objective optimization
         * MCDM 2009. DOI: `<http://dx.doi.org/10.1109/MCDM.2009.4938830/>`_.
@@ -52,9 +53,7 @@ class SMPSO(ParticleSwarmOptimization):
         :param mutation: Mutation operator (see :py:mod:`jmetal.operator.mutation`).
         :param leaders: Archive for leaders.
         """
-        super(SMPSO, self).__init__(
-            problem=problem,
-            swarm_size=swarm_size)
+        super(SMPSO, self).__init__(problem=problem, swarm_size=swarm_size)
         self.swarm_generator = swarm_generator
         self.swarm_evaluator = swarm_evaluator
         self.termination_criterion = termination_criterion
@@ -78,8 +77,10 @@ class SMPSO(ParticleSwarmOptimization):
         self.dominance_comparator = DominanceComparator()
 
         self.speed = numpy.zeros((self.swarm_size, self.problem.number_of_variables), dtype=float)
-        self.delta_max, self.delta_min = numpy.empty(problem.number_of_variables), \
-                                         numpy.empty(problem.number_of_variables)
+        self.delta_max, self.delta_min = (
+            numpy.empty(problem.number_of_variables),
+            numpy.empty(problem.number_of_variables),
+        )
 
     def create_initial_solutions(self) -> List[FloatSolution]:
         return [self.swarm_generator.new(self.problem) for _ in range(self.swarm_size)]
@@ -96,7 +97,7 @@ class SMPSO(ParticleSwarmOptimization):
 
     def initialize_particle_best(self, swarm: List[FloatSolution]) -> None:
         for particle in swarm:
-            particle.attributes['local_best'] = copy(particle)
+            particle.attributes["local_best"] = copy(particle)
 
     def initialize_velocity(self, swarm: List[FloatSolution]) -> None:
         for i in range(self.problem.number_of_variables):
@@ -106,7 +107,7 @@ class SMPSO(ParticleSwarmOptimization):
 
     def update_velocity(self, swarm: List[FloatSolution]) -> None:
         for i in range(self.swarm_size):
-            best_particle = copy(swarm[i].attributes['local_best'])
+            best_particle = copy(swarm[i].attributes["local_best"])
             best_global = self.select_global_best()
 
             r1 = round(random.uniform(self.r1_min, self.r1_max), 1)
@@ -117,15 +118,17 @@ class SMPSO(ParticleSwarmOptimization):
             wmin = self.min_weight
 
             for var in range(swarm[i].number_of_variables):
-                self.speed[i][var] = \
-                    self.__velocity_constriction(
-                        self.__constriction_coefficient(c1, c2) *
-                        ((self.__inertia_weight(wmax)
-                          * self.speed[i][var])
-                         + (c1 * r1 * (best_particle.variables[var] - swarm[i].variables[var]))
-                         + (c2 * r2 * (best_global.variables[var] - swarm[i].variables[var]))
-                         ),
-                        self.delta_max, self.delta_min, var)
+                self.speed[i][var] = self.__velocity_constriction(
+                    self.__constriction_coefficient(c1, c2)
+                    * (
+                        (self.__inertia_weight(wmax) * self.speed[i][var])
+                        + (c1 * r1 * (best_particle.variables[var] - swarm[i].variables[var]))
+                        + (c2 * r2 * (best_global.variables[var] - swarm[i].variables[var]))
+                    ),
+                    self.delta_max,
+                    self.delta_min,
+                    var,
+                )
 
     def update_position(self, swarm: List[FloatSolution]) -> None:
         for i in range(self.swarm_size):
@@ -148,11 +151,9 @@ class SMPSO(ParticleSwarmOptimization):
 
     def update_particle_best(self, swarm: List[FloatSolution]) -> None:
         for i in range(self.swarm_size):
-            flag = self.dominance_comparator.compare(
-                swarm[i],
-                swarm[i].attributes['local_best'])
+            flag = self.dominance_comparator.compare(swarm[i], swarm[i].attributes["local_best"])
             if flag != 1:
-                swarm[i].attributes['local_best'] = copy(swarm[i])
+                swarm[i].attributes["local_best"] = copy(swarm[i])
 
     def perturbation(self, swarm: List[FloatSolution]) -> None:
         for i in range(self.swarm_size):
@@ -208,26 +209,27 @@ class SMPSO(ParticleSwarmOptimization):
         self.leaders.compute_density_estimator()
 
         observable_data = self.get_observable_data()
-        observable_data['SOLUTIONS'] = self.leaders.solution_list
+        observable_data["SOLUTIONS"] = self.leaders.solution_list
         self.observable.notify_all(**observable_data)
 
     def get_result(self) -> List[FloatSolution]:
         return self.leaders.solution_list
 
     def get_name(self) -> str:
-        return 'SMPSO'
+        return "SMPSO"
 
 
 class DynamicSMPSO(SMPSO, DynamicAlgorithm):
-
-    def __init__(self,
-                 problem: DynamicProblem[FloatSolution],
-                 swarm_size: int,
-                 mutation: Mutation,
-                 leaders: BoundedArchive,
-                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
-                 swarm_generator: Generator = store.default_generator,
-                 swarm_evaluator: Evaluator = store.default_evaluator):
+    def __init__(
+        self,
+        problem: DynamicProblem[FloatSolution],
+        swarm_size: int,
+        mutation: Mutation,
+        leaders: BoundedArchive,
+        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        swarm_generator: Generator = store.default_generator,
+        swarm_evaluator: Evaluator = store.default_evaluator,
+    ):
         super(DynamicSMPSO, self).__init__(
             problem=problem,
             swarm_size=swarm_size,
@@ -235,7 +237,8 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
             leaders=leaders,
             termination_criterion=termination_criterion,
             swarm_generator=swarm_generator,
-            swarm_evaluator=swarm_evaluator)
+            swarm_evaluator=swarm_evaluator,
+        )
         self.completed_iterations = 0
 
     def restart(self) -> None:
@@ -264,7 +267,7 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
     def stopping_condition_is_met(self):
         if self.termination_criterion.is_met:
             observable_data = self.get_observable_data()
-            observable_data['termination_criterion_is_met'] = True
+            observable_data["termination_criterion_is_met"] = True
             self.observable.notify_all(**observable_data)
 
             self.restart()
@@ -273,17 +276,18 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
 
 
 class SMPSORP(SMPSO):
-
-    def __init__(self,
-                 problem: FloatProblem,
-                 swarm_size: int,
-                 mutation: Mutation,
-                 reference_points: List[List[float]],
-                 leaders: List[ArchiveWithReferencePoint],
-                 termination_criterion: TerminationCriterion,
-                 swarm_generator: Generator = store.default_generator,
-                 swarm_evaluator: Evaluator = store.default_evaluator):
-        """ This class implements the SMPSORP algorithm.
+    def __init__(
+        self,
+        problem: FloatProblem,
+        swarm_size: int,
+        mutation: Mutation,
+        reference_points: List[List[float]],
+        leaders: List[ArchiveWithReferencePoint],
+        termination_criterion: TerminationCriterion,
+        swarm_generator: Generator = store.default_generator,
+        swarm_evaluator: Evaluator = store.default_evaluator,
+    ):
+        """This class implements the SMPSORP algorithm.
 
         :param problem: The problem to solve.
         :param swarm_size:
@@ -298,7 +302,8 @@ class SMPSORP(SMPSO):
             leaders=None,
             swarm_generator=swarm_generator,
             swarm_evaluator=swarm_evaluator,
-            termination_criterion=termination_criterion)
+            termination_criterion=termination_criterion,
+        )
         self.leaders = leaders
         self.reference_points = reference_points
         self.lock = threading.Lock()
@@ -357,7 +362,7 @@ class SMPSORP(SMPSO):
             leader.compute_density_estimator()
 
         observable_data = self.get_observable_data()
-        observable_data['REFERENCE_POINT'] = self.get_reference_point()
+        observable_data["REFERENCE_POINT"] = self.get_reference_point()
         self.observable.notify_all(**observable_data)
 
     def update_reference_point(self, new_reference_points: list):
@@ -381,22 +386,21 @@ class SMPSORP(SMPSO):
         return result
 
     def get_name(self) -> str:
-        return 'SMPSO/RP'
+        return "SMPSO/RP"
 
 
 def _change_reference_point(algorithm: SMPSORP):
-    """ Auxiliar function to read new reference points from the keyboard for the SMPSO/RP algorithm
-    """
+    """Auxiliar function to read new reference points from the keyboard for the SMPSO/RP algorithm"""
     number_of_reference_points = len(algorithm.reference_points)
     number_of_objectives = algorithm.problem.number_of_objectives
 
     while True:
-        print(f'Enter {number_of_reference_points}-points of dimension {number_of_objectives}: ')
+        print(f"Enter {number_of_reference_points}-points of dimension {number_of_objectives}: ")
         read = [float(x) for x in input().split()]
 
         # Update reference points
         reference_points = []
         for i in range(0, len(read), number_of_objectives):
-            reference_points.append(read[i:i + number_of_objectives])
+            reference_points.append(read[i : i + number_of_objectives])
 
         algorithm.update_reference_point(reference_points)
