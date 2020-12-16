@@ -23,6 +23,7 @@ from .selection import (
     NaryRandomSolutionSelection,
     RandomSolutionSelection,
     RankingAndCrowdingDistanceSelection,
+    RouletteWheelSelection,
 )
 
 __all__ = [
@@ -40,6 +41,7 @@ __all__ = [
     "SimpleRandomMutation",
     "ScrambleMutation",
     "PermutationSwapMutation",
+    "RouletteWheelSelection",
     "BestSolutionSelection",
     "BinaryTournamentSelection",
     "BinaryTournament2Selection",
