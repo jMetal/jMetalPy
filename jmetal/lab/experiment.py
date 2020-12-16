@@ -12,12 +12,14 @@ from scipy.stats import mannwhitneyu
 
 from jmetal.core.algorithm import Algorithm
 from jmetal.core.quality_indicator import QualityIndicator
-from jmetal.logger import logger
+from jmetal.logger import get_logger
 from jmetal.util.solution import (
     print_function_values_to_file,
     print_variables_to_file,
     read_solutions,
 )
+
+logger = get_logger(__name__)
 
 """
 .. module:: laboratory

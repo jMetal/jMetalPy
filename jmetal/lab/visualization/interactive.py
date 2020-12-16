@@ -187,10 +187,6 @@ class InteractivePlot(Plot):
                     )
                 )
 
-            trace = go.Parcoords(
-                line=dict(color="#236FA4"),
-                dimensions=dimensions,
-                name=legend,
-            )
+            trace = go.Parcoords(line=dict(color="#236FA4"), dimensions=dimensions, name=legend,)
 
         return trace

@@ -7,7 +7,9 @@ from typing import Generic, List, TypeVar
 from jmetal.config import store
 from jmetal.core.problem import Problem
 from jmetal.core.solution import FloatSolution
-from jmetal.logger import logger
+from jmetal.logger import get_logger
+
+logger = get_logger(__name__)
 
 S = TypeVar("S")
 R = TypeVar("R")

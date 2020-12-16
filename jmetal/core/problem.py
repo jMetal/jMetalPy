@@ -10,7 +10,9 @@ from jmetal.core.solution import (
     IntegerSolution,
     PermutationSolution,
 )
-from jmetal.logger import logger
+from jmetal.logger import get_logger
+
+logger = get_logger(__name__)
 
 S = TypeVar("S")
 

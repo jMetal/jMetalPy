@@ -17,20 +17,14 @@ def ranks(data: np.array, descending=False):
         ranks = np.ones(data.shape)
         for i in range(data.shape[0]):
             values, indices, rep = np.unique(
-                (-1) ** s * np.sort((-1) ** s * data[i, :]),
-                return_index=True,
-                return_counts=True,
+                (-1) ** s * np.sort((-1) ** s * data[i, :]), return_index=True, return_counts=True,
             )
             for j in range(data.shape[1]):
                 ranks[i, j] += indices[values == data[i, j]] + 0.5 * (rep[values == data[i, j]] - 1)
         return ranks
     elif data.ndim == 1:
         ranks = np.ones((data.size,))
-        values, indices, rep = np.unique(
-            (-1) ** s * np.sort((-1) ** s * data),
-            return_index=True,
-            return_counts=True,
-        )
+        values, indices, rep = np.unique((-1) ** s * np.sort((-1) ** s * data), return_index=True, return_counts=True,)
         for i in range(data.size):
             ranks[i] += indices[values == data[i]] + 0.5 * (rep[values == data[i]] - 1)
         return ranks
