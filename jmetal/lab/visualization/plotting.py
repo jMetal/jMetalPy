@@ -6,7 +6,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from pandas import plotting
 
-LOGGER = logging.getLogger("jmetal")
+logger = logging.getLogger(__name__)
 
 S = TypeVar("S")
 
@@ -113,7 +113,10 @@ class Plot:
                 plt.ylabel(self.axis_labels[1])
 
         if filename:
-            plt.savefig(filename + "." + format, format=format, dpi=200)
+            _filename = filename + "." + format
+
+            plt.savefig(_filename, format=format, dpi=1000)
+            logger.info("Figure {_filename} saved to file")
         else:
             plt.show()
 
@@ -158,7 +161,10 @@ class Plot:
             ax.locator_params(nbins=4)
 
         if filename:
-            plt.savefig(filename + "." + format, format=format, dpi=1000)
+            _filename = filename + "." + format
+
+            plt.savefig(_filename, format=format, dpi=1000)
+            logger.info("Figure {_filename} saved to file")
         else:
             plt.show()
 

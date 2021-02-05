@@ -73,16 +73,21 @@ class Algorithm(Generic[S, R], threading.Thread, ABC):
         """ Execute the algorithm. """
         self.start_computing_time = time.time()
 
+        logger.debug("Creating initial set of solutions...")
         self.solutions = self.create_initial_solutions()
+
+        logger.debug("Evaluating solutions...")
         self.solutions = self.evaluate(self.solutions)
 
-        logger.debug("Initializing progress")
+        logger.debug("Initializing progress...")
         self.init_progress()
 
         logger.debug("Running main loop until termination criteria is met")
         while not self.stopping_condition_is_met():
             self.step()
             self.update_progress()
+
+        logger.debug("Finished!")
 
         self.total_computing_time = time.time() - self.start_computing_time
 

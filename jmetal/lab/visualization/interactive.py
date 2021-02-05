@@ -8,7 +8,7 @@ from plotly import offline
 
 from jmetal.lab.visualization.plotting import Plot
 
-LOGGER = logging.getLogger("jmetal")
+logger = logging.getLogger(__name__)
 
 S = TypeVar("S")
 
@@ -77,8 +77,12 @@ class InteractivePlot(Plot):
         if filename:
             if format == "HTML":
                 self.export_to_html(filename)
+                logger.info("Figure {_filename} exported to HTML file")
             else:
-                pio.write_image(self.figure, filename + "." + format)
+                _filename = filename + "." + format
+
+                pio.write_image(self.figure, _filename)
+                logger.info("Figure {_filename} saved to file")
 
     def export_to_html(self, filename: str) -> str:
         """Export the graph to an interactive HTML (solutions can be selected to show some metadata).

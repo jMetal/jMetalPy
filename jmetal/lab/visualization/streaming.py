@@ -7,7 +7,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 from jmetal.lab.visualization.plotting import Plot
 
-LOGGER = logging.getLogger("jmetal")
+logger = logging.getLogger(__name__)
 
 S = TypeVar("S")
 
@@ -112,6 +112,8 @@ class StreamingPlot:
         pause(0.01)
 
     def create_layout(self, dimension: int) -> None:
+        logger.info("Creating figure layout")
+
         self.fig.canvas.set_window_title(self.plot_title)
         self.fig.suptitle(self.plot_title, fontsize=16)
 

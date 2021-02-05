@@ -35,6 +35,6 @@ if __name__ == "__main__":
     algorithm.run()
     front = algorithm.get_result()
 
-    print("Algorithm: " + algorithm.get_name())
-    print("Problem: " + problem.get_name())
-    print("Computing time: " + str(algorithm.total_computing_time))
+    print(f"Algorithm: {algorithm.get_name()}")
+    print(f"Problem: {problem.get_name()}")
+    print(f"Computing time: {algorithm.total_computing_time}")

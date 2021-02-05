@@ -35,6 +35,6 @@ if __name__ == "__main__":
     print_function_values_to_file(front, "FUN." + algorithm.label)
     print_variables_to_file(front, "VAR." + algorithm.label)
 
-    print("Algorithm (continuous problem): " + algorithm.get_name())
-    print("Problem: " + problem.get_name())
-    print("Computing time: " + str(algorithm.total_computing_time))
+    print(f"Algorithm: {algorithm.get_name()}")
+    print(f"Problem: {problem.get_name()}")
+    print(f"Computing time: {algorithm.total_computing_time}")

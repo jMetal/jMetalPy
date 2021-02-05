@@ -26,3 +26,7 @@ if __name__ == "__main__":
     algorithm.observable.register(observer=WriteFrontToFileObserver("dynamic_front"))
 
     algorithm.run()
+
+    print(f"Algorithm: {algorithm.get_name()}")
+    print(f"Problem: {problem.get_name()}")
+    print(f"Computing time: {algorithm.total_computing_time}")

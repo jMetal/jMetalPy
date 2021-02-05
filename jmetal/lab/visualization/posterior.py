@@ -1,6 +1,10 @@
+import logging
+
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+
+logger = logging.getLogger(__name__)
 
 
 def plot_posterior(
@@ -92,5 +96,6 @@ def plot_posterior(
 
     if filename:
         plt.savefig(filename, bbox_inches="tight")
+        logger.info("Figure {filename} saved to file")
 
     plt.show()

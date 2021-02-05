@@ -6,7 +6,7 @@ from typing import List
 from jmetal.core.solution import FloatSolution, Solution
 from jmetal.util.archive import Archive, NonDominatedSolutionsArchive
 
-LOGGER = logging.getLogger("jmetal")
+logger = logging.getLogger(__name__)
 
 
 """
@@ -44,13 +44,13 @@ def read_solutions(filename: str) -> List[FloatSolution]:
 
                 front.append(solution)
     else:
-        LOGGER.warning("Reference front file was not found at {}".format(filename))
+        logger.warning("Reference front file was not found at {}".format(filename))
 
     return front
 
 
 def print_variables_to_file(solutions, filename: str):
-    LOGGER.info("Output file (variables): " + filename)
+    logger.info("Output file (variables): " + filename)
 
     try:
         os.makedirs(os.path.dirname(filename), exist_ok=True)
@@ -76,7 +76,7 @@ def print_variables_to_screen(solutions):
 
 
 def print_function_values_to_file(solutions, filename: str):
-    LOGGER.info("Output file (function values): " + filename)
+    logger.info("Output file (function values): " + filename)
 
     try:
         os.makedirs(os.path.dirname(filename), exist_ok=True)
