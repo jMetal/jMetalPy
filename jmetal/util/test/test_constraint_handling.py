@@ -1,12 +1,15 @@
 import unittest
 
 from jmetal.core.solution import Solution
-from jmetal.util.constraint_handling import is_feasible, number_of_violated_constraints, \
-    overall_constraint_violation_degree, feasibility_ratio
+from jmetal.util.constraint_handling import (
+    feasibility_ratio,
+    is_feasible,
+    number_of_violated_constraints,
+    overall_constraint_violation_degree,
+)
 
 
 class ConstraintHandlingTestCases(unittest.TestCase):
-
     def test_should_is_feasible_return_true_if_the_solution_has_no_constraints(self) -> None:
         solution = Solution(number_of_variables=2, number_of_objectives=2, number_of_constraints=0)
 
@@ -29,7 +32,9 @@ class ConstraintHandlingTestCases(unittest.TestCase):
 
         self.assertEqual(0, number_of_violated_constraints(solution))
 
-    def test_should_number_of_violated_constraints_return_zero_if_the_solution_has_not_violated_constraints(self) -> None:
+    def test_should_number_of_violated_constraints_return_zero_if_the_solution_has_not_violated_constraints(
+        self,
+    ) -> None:
         solution = Solution(number_of_variables=2, number_of_objectives=2, number_of_constraints=2)
 
         self.assertEqual(0, number_of_violated_constraints(solution))
@@ -90,8 +95,8 @@ class ConstraintHandlingTestCases(unittest.TestCase):
         solution2.constraints[0] = 0
         solution3.constraints[0] = -2
 
-        self.assertEqual(1/3, feasibility_ratio([solution1, solution2, solution3]))
+        self.assertEqual(1 / 3, feasibility_ratio([solution1, solution2, solution3]))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

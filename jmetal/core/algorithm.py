@@ -1,17 +1,18 @@
 import logging
 import threading
 import time
-from abc import abstractmethod, ABC
-from typing import TypeVar, Generic, List
+from abc import ABC, abstractmethod
+from typing import Generic, List, TypeVar
 
 from jmetal.config import store
 from jmetal.core.problem import Problem
 from jmetal.core.solution import FloatSolution
+from jmetal.logger import get_logger
 
-LOGGER = logging.getLogger('jmetal')
+logger = get_logger(__name__)
 
-S = TypeVar('S')
-R = TypeVar('R')
+S = TypeVar("S")
+R = TypeVar("R")
 
 """
 .. module:: algorithm
@@ -23,7 +24,6 @@ R = TypeVar('R')
 
 
 class Algorithm(Generic[S, R], threading.Thread, ABC):
-
     def __init__(self):
         threading.Thread.__init__(self)
 
@@ -73,16 +73,21 @@ class Algorithm(Generic[S, R], threading.Thread, ABC):
         """ Execute the algorithm. """
         self.start_computing_time = time.time()
 
+        logger.debug("Creating initial set of solutions...")
         self.solutions = self.create_initial_solutions()
+
+        logger.debug("Evaluating solutions...")
         self.solutions = self.evaluate(self.solutions)
 
-        LOGGER.debug('Initializing progress')
+        logger.debug("Initializing progress...")
         self.init_progress()
 
-        LOGGER.debug('Running main loop until termination criteria is met')
+        logger.debug("Running main loop until termination criteria is met")
         while not self.stopping_condition_is_met():
             self.step()
             self.update_progress()
+
+        logger.debug("Finished!")
 
         self.total_computing_time = time.time() - self.start_computing_time
 
@@ -96,18 +101,13 @@ class Algorithm(Generic[S, R], threading.Thread, ABC):
 
 
 class DynamicAlgorithm(Algorithm[S, R], ABC):
-
     @abstractmethod
     def restart(self) -> None:
         pass
 
 
 class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
-
-    def __init__(self,
-                 problem: Problem[S],
-                 population_size: int,
-                 offspring_population_size: int):
+    def __init__(self, problem: Problem[S], population_size: int, offspring_population_size: int):
         super(EvolutionaryAlgorithm, self).__init__()
         self.problem = problem
         self.population_size = population_size
@@ -129,10 +129,12 @@ class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
         pass
 
     def get_observable_data(self) -> dict:
-        return {'PROBLEM': self.problem,
-                'EVALUATIONS': self.evaluations,
-                'SOLUTIONS': self.get_result(),
-                'COMPUTING_TIME': time.time() - self.start_computing_time}
+        return {
+            "PROBLEM": self.problem,
+            "EVALUATIONS": self.evaluations,
+            "SOLUTIONS": self.get_result(),
+            "COMPUTING_TIME": time.time() - self.start_computing_time,
+        }
 
     def init_progress(self) -> None:
         self.evaluations = self.population_size
@@ -155,14 +157,11 @@ class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
 
     @property
     def label(self) -> str:
-        return f'{self.get_name()}.{self.problem.get_name()}'
+        return f"{self.get_name()}.{self.problem.get_name()}"
 
 
 class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], ABC):
-
-    def __init__(self,
-                 problem: Problem[S],
-                 swarm_size: int):
+    def __init__(self, problem: Problem[S], swarm_size: int):
         super(ParticleSwarmOptimization, self).__init__()
         self.problem = problem
         self.swarm_size = swarm_size
@@ -200,10 +199,12 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], A
         pass
 
     def get_observable_data(self) -> dict:
-        return {'PROBLEM': self.problem,
-                'EVALUATIONS': self.evaluations,
-                'SOLUTIONS': self.get_result(),
-                'COMPUTING_TIME': time.time() - self.start_computing_time}
+        return {
+            "PROBLEM": self.problem,
+            "EVALUATIONS": self.evaluations,
+            "SOLUTIONS": self.get_result(),
+            "COMPUTING_TIME": time.time() - self.start_computing_time,
+        }
 
     def init_progress(self) -> None:
         self.evaluations = self.swarm_size
@@ -231,4 +232,4 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], A
 
     @property
     def label(self) -> str:
-        return f'{self.get_name()}.{self.problem.get_name()}'
+        return f"{self.get_name()}.{self.problem.get_name()}"

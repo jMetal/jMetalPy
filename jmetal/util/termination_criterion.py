@@ -14,7 +14,6 @@ from jmetal.core.quality_indicator import QualityIndicator
 
 
 class TerminationCriterion(Observer, ABC):
-
     @abstractmethod
     def update(self, *args, **kwargs):
         pass
@@ -26,14 +25,13 @@ class TerminationCriterion(Observer, ABC):
 
 
 class StoppingByEvaluations(TerminationCriterion):
-
     def __init__(self, max_evaluations: int):
         super(StoppingByEvaluations, self).__init__()
         self.max_evaluations = max_evaluations
         self.evaluations = 0
 
     def update(self, *args, **kwargs):
-        self.evaluations = kwargs['EVALUATIONS']
+        self.evaluations = kwargs["EVALUATIONS"]
 
     @property
     def is_met(self):
@@ -41,14 +39,13 @@ class StoppingByEvaluations(TerminationCriterion):
 
 
 class StoppingByTime(TerminationCriterion):
-
     def __init__(self, max_seconds: int):
         super(StoppingByTime, self).__init__()
         self.max_seconds = max_seconds
         self.seconds = 0.0
 
     def update(self, *args, **kwargs):
-        self.seconds = kwargs['COMPUTING_TIME']
+        self.seconds = kwargs["COMPUTING_TIME"]
 
     @property
     def is_met(self):
@@ -56,12 +53,11 @@ class StoppingByTime(TerminationCriterion):
 
 
 def key_has_been_pressed(stopping_by_keyboard):
-    input('PRESS ANY KEY + ENTER: ')
+    input("PRESS ANY KEY + ENTER: ")
     stopping_by_keyboard.key_pressed = True
 
 
 class StoppingByKeyboard(TerminationCriterion):
-
     def __init__(self):
         super(StoppingByKeyboard, self).__init__()
         self.key_pressed = False
@@ -77,7 +73,6 @@ class StoppingByKeyboard(TerminationCriterion):
 
 
 class StoppingByQualityIndicator(TerminationCriterion):
-
     def __init__(self, quality_indicator: QualityIndicator, expected_value: float, degree: float):
         super(StoppingByQualityIndicator, self).__init__()
         self.quality_indicator = quality_indicator
@@ -86,7 +81,7 @@ class StoppingByQualityIndicator(TerminationCriterion):
         self.value = 0.0
 
     def update(self, *args, **kwargs):
-        solutions = kwargs['SOLUTIONS']
+        solutions = kwargs["SOLUTIONS"]
 
         if solutions:
             self.value = self.quality_indicator.compute(solutions)

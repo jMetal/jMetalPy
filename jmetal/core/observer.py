@@ -1,4 +1,4 @@
-from abc import abstractmethod, ABC
+from abc import ABC, abstractmethod
 
 """
 .. module:: Observable
@@ -10,16 +10,13 @@ from abc import abstractmethod, ABC
 
 
 class Observer(ABC):
-
     @abstractmethod
     def update(self, *args, **kwargs):
-        """ Update method.
-        """
+        """Update method."""
         pass
 
 
 class Observable(ABC):
-
     @abstractmethod
     def register(self, observer):
         pass
@@ -35,5 +32,3 @@ class Observable(ABC):
     @abstractmethod
     def notify_all(self, *args, **kwargs):
         pass
-
-

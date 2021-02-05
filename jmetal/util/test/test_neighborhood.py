@@ -3,12 +3,11 @@ import unittest
 import numpy
 
 from jmetal.core.solution import Solution
-from jmetal.util.ckecking import NoneParameterException, InvalidConditionException
-from jmetal.util.neighborhood import WeightVectorNeighborhood, TwoDimensionalMesh, L5
+from jmetal.util.ckecking import InvalidConditionException, NoneParameterException
+from jmetal.util.neighborhood import L5, TwoDimensionalMesh, WeightVectorNeighborhood
 
 
 class WeightVectorNeighborhoodTestCases(unittest.TestCase):
-
     def test_should_constructor_work_properly(self) -> None:
         number_of_weight_vectors = 100
         neighborhood_size = 20
@@ -25,10 +24,18 @@ class WeightVectorNeighborhoodTestCases(unittest.TestCase):
         self.assertEqual(1.0, neighborhood.weight_vectors[99][0])
         self.assertEqual(0.0, neighborhood.weight_vectors[99][1])
 
-        self.assertTrue(numpy.array_equal(numpy.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]),
-                         neighborhood.neighborhood[0]))
-        self.assertTrue(numpy.array_equal(numpy.array([69, 70, 68, 71, 67, 72, 66, 73, 65, 64, 74, 75, 63, 76, 62, 77, 61, 78, 60, 79]),
-                         neighborhood.neighborhood[69]))
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]),
+                neighborhood.neighborhood[0],
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array([69, 70, 68, 71, 67, 72, 66, 73, 65, 64, 74, 75, 63, 76, 62, 77, 61, 78, 60, 79]),
+                neighborhood.neighborhood[69],
+            )
+        )
 
     def test_should_get_neighbors_work_properly_with_two_objectives(self):
         number_of_weight_vectors = 100
@@ -225,7 +232,7 @@ class L5TestCases(unittest.TestCase):
         solution_list = []
         for i in range(rows * columns):
             solution = Solution(i, 2)
-            solution.variables = [i, i+1]
+            solution.variables = [i, i + 1]
             solution_list.append(solution)
         neighborhood = L5(rows, columns)
 
@@ -276,5 +283,5 @@ class L5TestCases(unittest.TestCase):
         self.assertEqual(2, result.count(solution_list[2]))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

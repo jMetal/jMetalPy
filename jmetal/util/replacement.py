@@ -1,10 +1,10 @@
 from enum import Enum
-from typing import TypeVar, List
+from typing import List, TypeVar
 
 from jmetal.util.density_estimator import DensityEstimator
 from jmetal.util.ranking import Ranking
 
-S = TypeVar('S')
+S = TypeVar("S")
 
 
 class RemovalPolicyType(Enum):
@@ -12,10 +12,10 @@ class RemovalPolicyType(Enum):
     ONE_SHOT = 2
 
 
-class RankingAndDensityEstimatorReplacement():
-
-    def __init__(self, ranking: Ranking, density_estimator: DensityEstimator,
-                 removal_policy=RemovalPolicyType.ONE_SHOT):
+class RankingAndDensityEstimatorReplacement:
+    def __init__(
+        self, ranking: Ranking, density_estimator: DensityEstimator, removal_policy=RemovalPolicyType.ONE_SHOT
+    ):
         self.ranking = ranking
         self.density_estimator = density_estimator
         self.removal_policy = removal_policy
@@ -39,8 +39,9 @@ class RankingAndDensityEstimatorReplacement():
 
         if len(current_ranked_solutions) < size_of_the_result_list:
             result_list.extend(self.ranking.get_subfront(ranking_id))
-            result_list.extend(self.sequential_truncation(ranking_id + 1, size_of_the_result_list - len(
-                current_ranked_solutions)))
+            result_list.extend(
+                self.sequential_truncation(ranking_id + 1, size_of_the_result_list - len(current_ranked_solutions))
+            )
         else:
             for solution in current_ranked_solutions:
                 result_list.append(solution)
@@ -61,8 +62,9 @@ class RankingAndDensityEstimatorReplacement():
 
         if len(current_ranked_solutions) < size_of_the_result_list:
             result_list.extend(self.ranking.get_subfront(ranking_id))
-            result_list.extend(self.one_shot_truncation(ranking_id + 1, size_of_the_result_list - len(
-                current_ranked_solutions)))
+            result_list.extend(
+                self.one_shot_truncation(ranking_id + 1, size_of_the_result_list - len(current_ranked_solutions))
+            )
         else:
             self.density_estimator.sort(current_ranked_solutions)
             i = 0

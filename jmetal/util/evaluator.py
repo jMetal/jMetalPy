@@ -1,7 +1,7 @@
 import functools
 from abc import ABC, abstractmethod
-from multiprocessing.pool import ThreadPool, Pool
-from typing import TypeVar, List, Generic
+from multiprocessing.pool import Pool, ThreadPool
+from typing import Generic, List, TypeVar
 
 try:
     import dask
@@ -15,11 +15,10 @@ except ImportError:
 
 from jmetal.core.problem import Problem
 
-S = TypeVar('S')
+S = TypeVar("S")
 
 
 class Evaluator(Generic[S], ABC):
-
     @abstractmethod
     def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
         pass
@@ -30,7 +29,6 @@ class Evaluator(Generic[S], ABC):
 
 
 class SequentialEvaluator(Evaluator[S]):
-
     def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
         for solution in solution_list:
             Evaluator.evaluate_solution(solution, problem)
@@ -39,7 +37,6 @@ class SequentialEvaluator(Evaluator[S]):
 
 
 class MapEvaluator(Evaluator[S]):
-
     def __init__(self, processes: int = None):
         self.pool = ThreadPool(processes)
 
@@ -69,9 +66,7 @@ class SparkEvaluator(Evaluator[S]):
     def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
         solutions_to_evaluate = self.spark_context.parallelize(solution_list)
 
-        return solutions_to_evaluate \
-            .map(lambda s: problem.evaluate(s)) \
-            .collect()
+        return solutions_to_evaluate.map(lambda s: problem.evaluate(s)).collect()
 
 
 def evaluate_solution(solution, problem):
@@ -80,11 +75,13 @@ def evaluate_solution(solution, problem):
 
 
 class DaskEvaluator(Evaluator[S]):
-    def __init__(self, scheduler='processes'):
+    def __init__(self, scheduler="processes"):
         self.scheduler = scheduler
 
     def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
         with dask.config.set(scheduler=self.scheduler):
-            return list(dask.compute(*[
-                dask.delayed(evaluate_solution)(solution=solution, problem=problem) for solution in solution_list
-            ]))
+            return list(
+                dask.compute(
+                    *[dask.delayed(evaluate_solution)(solution=solution, problem=problem) for solution in solution_list]
+                )
+            )

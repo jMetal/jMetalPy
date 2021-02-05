@@ -1,7 +1,7 @@
 import copy
 import random
 from math import ceil
-from typing import TypeVar, List, Generator
+from typing import Generator, List, TypeVar
 
 import numpy as np
 
@@ -11,33 +11,40 @@ from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
 from jmetal.operator import DifferentialEvolutionCrossover, NaryRandomSolutionSelection
 from jmetal.util.aggregative_function import AggregativeFunction
-from jmetal.util.constraint_handling import feasibility_ratio, \
-    overall_constraint_violation_degree, is_feasible
+from jmetal.util.constraint_handling import (
+    feasibility_ratio,
+    is_feasible,
+    overall_constraint_violation_degree,
+)
 from jmetal.util.density_estimator import CrowdingDistance
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.neighborhood import WeightVectorNeighborhood
 from jmetal.util.ranking import FastNonDominatedRanking
-from jmetal.util.termination_criterion import TerminationCriterion, StoppingByEvaluations
+from jmetal.util.termination_criterion import (
+    StoppingByEvaluations,
+    TerminationCriterion,
+)
 
-S = TypeVar('S')
+S = TypeVar("S")
 R = List[S]
 
 
 class MOEAD(GeneticAlgorithm):
-
-    def __init__(self,
-                 problem: Problem,
-                 population_size: int,
-                 mutation: Mutation,
-                 crossover: DifferentialEvolutionCrossover,
-                 aggregative_function: AggregativeFunction,
-                 neighbourhood_selection_probability: float,
-                 max_number_of_replaced_solutions: int,
-                 neighbor_size: int,
-                 weight_files_path: str,
-                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
-                 population_generator: Generator = store.default_generator,
-                 population_evaluator: Evaluator = store.default_evaluator):
+    def __init__(
+        self,
+        problem: Problem,
+        population_size: int,
+        mutation: Mutation,
+        crossover: DifferentialEvolutionCrossover,
+        aggregative_function: AggregativeFunction,
+        neighbourhood_selection_probability: float,
+        max_number_of_replaced_solutions: int,
+        neighbor_size: int,
+        weight_files_path: str,
+        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        population_generator: Generator = store.default_generator,
+        population_evaluator: Evaluator = store.default_evaluator,
+    ):
         """
         :param max_number_of_replaced_solutions: (eta in Zhang & Li paper).
         :param neighbourhood_selection_probability: Probability of mating with a solution in the neighborhood rather
@@ -52,7 +59,7 @@ class MOEAD(GeneticAlgorithm):
             selection=NaryRandomSolutionSelection(2),
             population_evaluator=population_evaluator,
             population_generator=population_generator,
-            termination_criterion=termination_criterion
+            termination_criterion=termination_criterion,
         )
         self.max_number_of_replaced_solutions = max_number_of_replaced_solutions
         self.fitness_function = aggregative_function
@@ -60,7 +67,7 @@ class MOEAD(GeneticAlgorithm):
             number_of_weight_vectors=population_size,
             neighborhood_size=neighbor_size,
             weight_vector_size=problem.number_of_objectives,
-            weights_path=weight_files_path
+            weights_path=weight_files_path,
         )
         self.neighbourhood_selection_probability = neighbourhood_selection_probability
         self.permutation = None
@@ -81,7 +88,7 @@ class MOEAD(GeneticAlgorithm):
         self.current_subproblem = self.permutation.get_next_value()
         self.neighbor_type = self.choose_neighbor_type()
 
-        if self.neighbor_type == 'NEIGHBOR':
+        if self.neighbor_type == "NEIGHBOR":
             neighbors = self.neighbourhood.get_neighbors(self.current_subproblem, population)
             mating_population = self.selection_operator.execute(neighbors)
         else:
@@ -128,7 +135,7 @@ class MOEAD(GeneticAlgorithm):
         return population
 
     def generate_permutation_of_neighbors(self, subproblem_id):
-        if self.neighbor_type == 'NEIGHBOR':
+        if self.neighbor_type == "NEIGHBOR":
             neighbors = self.neighbourhood.get_neighborhood()[subproblem_id]
             permuted_array = copy.deepcopy(neighbors.tolist())
         else:
@@ -140,30 +147,49 @@ class MOEAD(GeneticAlgorithm):
         rnd = random.random()
 
         if rnd < self.neighbourhood_selection_probability:
-            neighbor_type = 'NEIGHBOR'
+            neighbor_type = "NEIGHBOR"
         else:
-            neighbor_type = 'POPULATION'
+            neighbor_type = "POPULATION"
 
         return neighbor_type
 
     def get_name(self):
-        return 'MOEAD'
+        return "MOEAD"
 
     def get_result(self):
         return self.solutions
 
 
 class MOEAD_DRA(MOEAD):
-    def __init__(self, problem, population_size, mutation, crossover, aggregative_function,
-                 neighbourhood_selection_probability, max_number_of_replaced_solutions, neighbor_size,
-                 weight_files_path, termination_criterion=store.default_termination_criteria,
-                 population_generator=store.default_generator, population_evaluator=store.default_evaluator):
-        super(MOEAD_DRA, self).__init__(problem, population_size, mutation, crossover, aggregative_function,
-                                        neighbourhood_selection_probability, max_number_of_replaced_solutions,
-                                        neighbor_size, weight_files_path,
-                                        termination_criterion=termination_criterion,
-                                        population_generator=population_generator,
-                                        population_evaluator=population_evaluator)
+    def __init__(
+        self,
+        problem,
+        population_size,
+        mutation,
+        crossover,
+        aggregative_function,
+        neighbourhood_selection_probability,
+        max_number_of_replaced_solutions,
+        neighbor_size,
+        weight_files_path,
+        termination_criterion=store.default_termination_criteria,
+        population_generator=store.default_generator,
+        population_evaluator=store.default_evaluator,
+    ):
+        super(MOEAD_DRA, self).__init__(
+            problem,
+            population_size,
+            mutation,
+            crossover,
+            aggregative_function,
+            neighbourhood_selection_probability,
+            max_number_of_replaced_solutions,
+            neighbor_size,
+            weight_files_path,
+            termination_criterion=termination_criterion,
+            population_generator=population_generator,
+            population_evaluator=population_evaluator,
+        )
 
         self.saved_values = []
         self.utility = [1.0 for _ in range(population_size)]
@@ -205,7 +231,7 @@ class MOEAD_DRA(MOEAD):
 
         self.neighbor_type = self.choose_neighbor_type()
 
-        if self.neighbor_type == 'NEIGHBOR':
+        if self.neighbor_type == "NEIGHBOR":
             neighbors = self.neighbourhood.get_neighbors(self.current_subproblem, population)
             mating_population = self.selection_operator.execute(neighbors)
         else:
@@ -216,7 +242,7 @@ class MOEAD_DRA(MOEAD):
         return mating_population
 
     def get_name(self):
-        return 'MOEAD-DRA'
+        return "MOEAD-DRA"
 
     def __utility_function(self):
         for i in range(len(self.solutions)):
@@ -251,19 +277,21 @@ class MOEAD_DRA(MOEAD):
 
 
 class MOEADIEpsilon(MOEAD):
-    def __init__(self,
-                 problem: Problem,
-                 population_size: int,
-                 mutation: Mutation,
-                 crossover: DifferentialEvolutionCrossover,
-                 aggregative_function: AggregativeFunction,
-                 neighbourhood_selection_probability: float,
-                 max_number_of_replaced_solutions: int,
-                 neighbor_size: int,
-                 weight_files_path: str,
-                 termination_criterion: TerminationCriterion = StoppingByEvaluations(300000),
-                 population_generator: Generator = store.default_generator,
-                 population_evaluator: Evaluator = store.default_evaluator):
+    def __init__(
+        self,
+        problem: Problem,
+        population_size: int,
+        mutation: Mutation,
+        crossover: DifferentialEvolutionCrossover,
+        aggregative_function: AggregativeFunction,
+        neighbourhood_selection_probability: float,
+        max_number_of_replaced_solutions: int,
+        neighbor_size: int,
+        weight_files_path: str,
+        termination_criterion: TerminationCriterion = StoppingByEvaluations(300000),
+        population_generator: Generator = store.default_generator,
+        population_evaluator: Evaluator = store.default_evaluator,
+    ):
         """
         :param max_number_of_replaced_solutions: (eta in Zhang & Li paper).
         :param neighbourhood_selection_probability: Probability of mating with a solution in the neighborhood rather
@@ -281,7 +309,7 @@ class MOEADIEpsilon(MOEAD):
             weight_files_path=weight_files_path,
             population_evaluator=population_evaluator,
             population_generator=population_generator,
-            termination_criterion=termination_criterion
+            termination_criterion=termination_criterion,
         )
         self.constraints = []
         self.epsilon_k = 0
@@ -298,8 +326,9 @@ class MOEADIEpsilon(MOEAD):
 
         # for i in range(self.population_size):
         #    self.constraints[i] = get_overall_constraint_violation_degree(self.permutation[i])
-        self.constraints = [overall_constraint_violation_degree(self.solutions[i])
-                            for i in range(0, self.population_size)]
+        self.constraints = [
+            overall_constraint_violation_degree(self.solutions[i]) for i in range(0, self.population_size)
+        ]
 
         sorted(self.constraints)
         self.epsilon_zero = abs(self.constraints[int(ceil(0.05 * self.population_size))])
@@ -378,8 +407,9 @@ class MOEADIEpsilon(MOEAD):
                 crowding_distance = CrowdingDistance()
                 while len(first_rank_solutions) > self.population_size:
                     crowding_distance.compute_density_estimator(first_rank_solutions)
-                    first_rank_solutions = sorted(first_rank_solutions, key=lambda x: x.attributes['crowding_distance'],
-                                                  reverse=True)
+                    first_rank_solutions = sorted(
+                        first_rank_solutions, key=lambda x: x.attributes["crowding_distance"], reverse=True
+                    )
                     first_rank_solutions.pop()
 
                 self.archive = []
@@ -391,7 +421,6 @@ class MOEADIEpsilon(MOEAD):
 
 
 class Permutation:
-
     def __init__(self, length: int):
         self.counter = 0
         self.length = length

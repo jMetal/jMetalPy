@@ -1,27 +1,30 @@
 import time
-from typing import TypeVar, List, Generator
+from typing import Generator, List, TypeVar
 
 try:
     import dask
-    from distributed import as_completed, Client
+    from distributed import Client, as_completed
 except ImportError:
     pass
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
-from jmetal.core.algorithm import DynamicAlgorithm, Algorithm
-from jmetal.core.operator import Mutation, Crossover, Selection
-from jmetal.core.problem import Problem, DynamicProblem
+from jmetal.core.algorithm import Algorithm, DynamicAlgorithm
+from jmetal.core.operator import Crossover, Mutation, Selection
+from jmetal.core.problem import DynamicProblem, Problem
 from jmetal.operator import BinaryTournamentSelection
+from jmetal.util.comparator import Comparator, DominanceComparator, MultiComparator
 from jmetal.util.density_estimator import CrowdingDistance
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.ranking import FastNonDominatedRanking
-from jmetal.util.replacement import RankingAndDensityEstimatorReplacement, RemovalPolicyType
-from jmetal.util.comparator import DominanceComparator, Comparator, MultiComparator
+from jmetal.util.replacement import (
+    RankingAndDensityEstimatorReplacement,
+    RemovalPolicyType,
+)
 from jmetal.util.termination_criterion import TerminationCriterion
 
-S = TypeVar('S')
-R = TypeVar('R')
+S = TypeVar("S")
+R = TypeVar("R")
 
 """
 .. module:: NSGA-II
@@ -33,20 +36,21 @@ R = TypeVar('R')
 
 
 class NSGAII(GeneticAlgorithm[S, R]):
-
-    def __init__(self,
-                 problem: Problem,
-                 population_size: int,
-                 offspring_population_size: int,
-                 mutation: Mutation,
-                 crossover: Crossover,
-                 selection: Selection = BinaryTournamentSelection(
-                     MultiComparator([FastNonDominatedRanking.get_comparator(),
-                                      CrowdingDistance.get_comparator()])),
-                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
-                 population_generator: Generator = store.default_generator,
-                 population_evaluator: Evaluator = store.default_evaluator,
-                 dominance_comparator: Comparator = store.default_comparator):
+    def __init__(
+        self,
+        problem: Problem,
+        population_size: int,
+        offspring_population_size: int,
+        mutation: Mutation,
+        crossover: Crossover,
+        selection: Selection = BinaryTournamentSelection(
+            MultiComparator([FastNonDominatedRanking.get_comparator(), CrowdingDistance.get_comparator()])
+        ),
+        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        population_generator: Generator = store.default_generator,
+        population_evaluator: Evaluator = store.default_evaluator,
+        dominance_comparator: Comparator = store.default_comparator,
+    ):
         """
         NSGA-II implementation as described in
 
@@ -75,12 +79,12 @@ class NSGAII(GeneticAlgorithm[S, R]):
             selection=selection,
             termination_criterion=termination_criterion,
             population_evaluator=population_evaluator,
-            population_generator=population_generator
+            population_generator=population_generator,
         )
         self.dominance_comparator = dominance_comparator
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
-        """ This method joins the current and offspring populations to produce the population of the next generation
+        """This method joins the current and offspring populations to produce the population of the next generation
         by applying the ranking and crowding distance selection.
 
         :param population: Parent population.
@@ -99,24 +103,25 @@ class NSGAII(GeneticAlgorithm[S, R]):
         return self.solutions
 
     def get_name(self) -> str:
-        return 'NSGAII'
+        return "NSGAII"
 
 
 class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
-
-    def __init__(self,
-                 problem: DynamicProblem[S],
-                 population_size: int,
-                 offspring_population_size: int,
-                 mutation: Mutation,
-                 crossover: Crossover,
-                 selection: Selection = BinaryTournamentSelection(
-                     MultiComparator([FastNonDominatedRanking.get_comparator(),
-                                      CrowdingDistance.get_comparator()])),
-                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
-                 population_generator: Generator = store.default_generator,
-                 population_evaluator: Evaluator = store.default_evaluator,
-                 dominance_comparator: DominanceComparator = DominanceComparator()):
+    def __init__(
+        self,
+        problem: DynamicProblem[S],
+        population_size: int,
+        offspring_population_size: int,
+        mutation: Mutation,
+        crossover: Crossover,
+        selection: Selection = BinaryTournamentSelection(
+            MultiComparator([FastNonDominatedRanking.get_comparator(), CrowdingDistance.get_comparator()])
+        ),
+        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        population_generator: Generator = store.default_generator,
+        population_evaluator: Evaluator = store.default_evaluator,
+        dominance_comparator: DominanceComparator = DominanceComparator(),
+    ):
         super(DynamicNSGAII, self).__init__(
             problem=problem,
             population_size=population_size,
@@ -127,7 +132,8 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
             population_evaluator=population_evaluator,
             population_generator=population_generator,
             termination_criterion=termination_criterion,
-            dominance_comparator=dominance_comparator)
+            dominance_comparator=dominance_comparator,
+        )
         self.completed_iterations = 0
         self.start_computing_time = 0
         self.total_computing_time = 0
@@ -148,7 +154,7 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
     def stopping_condition_is_met(self):
         if self.termination_criterion.is_met:
             observable_data = self.get_observable_data()
-            observable_data['TERMINATION_CRITERIA_IS_MET'] = True
+            observable_data["TERMINATION_CRITERIA_IS_MET"] = True
             self.observable.notify_all(**observable_data)
 
             self.restart()
@@ -158,19 +164,20 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
 
 
 class DistributedNSGAII(Algorithm[S, R]):
-
-    def __init__(self,
-                 problem: Problem,
-                 population_size: int,
-                 mutation: Mutation,
-                 crossover: Crossover,
-                 number_of_cores: int,
-                 client,
-                 selection: Selection = BinaryTournamentSelection(
-                     MultiComparator([FastNonDominatedRanking.get_comparator(),
-                                      CrowdingDistance.get_comparator()])),
-                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
-                 dominance_comparator: DominanceComparator = DominanceComparator()):
+    def __init__(
+        self,
+        problem: Problem,
+        population_size: int,
+        mutation: Mutation,
+        crossover: Crossover,
+        number_of_cores: int,
+        client,
+        selection: Selection = BinaryTournamentSelection(
+            MultiComparator([FastNonDominatedRanking.get_comparator(), CrowdingDistance.get_comparator()])
+        ),
+        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        dominance_comparator: DominanceComparator = DominanceComparator(),
+    ):
         super(DistributedNSGAII, self).__init__()
         self.problem = problem
         self.population_size = population_size
@@ -197,10 +204,12 @@ class DistributedNSGAII(Algorithm[S, R]):
     def get_observable_data(self) -> dict:
         ctime = time.time() - self.start_computing_time
 
-        return {'PROBLEM': self.problem,
-                'EVALUATIONS': self.evaluations,
-                'SOLUTIONS': self.get_result(),
-                'COMPUTING_TIME': ctime}
+        return {
+            "PROBLEM": self.problem,
+            "EVALUATIONS": self.evaluations,
+            "SOLUTIONS": self.get_result(),
+            "COMPUTING_TIME": ctime,
+        }
 
     def init_progress(self) -> None:
         self.evaluations = self.number_of_cores
@@ -273,8 +282,9 @@ class DistributedNSGAII(Algorithm[S, R]):
                     mating_population.append(solution)
 
                 # Reproduction and evaluation
-                new_task = self.client.submit(reproduction, mating_population, self.problem,
-                                              self.crossover_operator, self.mutation_operator)
+                new_task = self.client.submit(
+                    reproduction, mating_population, self.problem, self.crossover_operator, self.mutation_operator
+                )
                 task_pool.add(new_task)
 
                 # update progress
@@ -296,7 +306,7 @@ class DistributedNSGAII(Algorithm[S, R]):
         return self.solutions
 
     def get_name(self) -> str:
-        return 'dNSGA-II'
+        return "dNSGA-II"
 
 
 def reproduction(mating_population: List[S], problem, crossover_operator, mutation_operator) -> S:

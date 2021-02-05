@@ -5,7 +5,7 @@ from jmetal.util.observable import TimeCounter
 from jmetal.util.observer import PlotFrontToFileObserver, WriteFrontToFileObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     problem = FDA2()
 
     time_counter = TimeCounter(delay=1)
@@ -19,10 +19,10 @@ if __name__ == '__main__':
         offspring_population_size=100,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
-        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations)
+        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
     )
 
-    algorithm.observable.register(observer=PlotFrontToFileObserver('dynamic_front_vis'))
-    algorithm.observable.register(observer=WriteFrontToFileObserver('dynamic_front'))
+    algorithm.observable.register(observer=PlotFrontToFileObserver("dynamic_front_vis"))
+    algorithm.observable.register(observer=WriteFrontToFileObserver("dynamic_front"))
 
     algorithm.run()

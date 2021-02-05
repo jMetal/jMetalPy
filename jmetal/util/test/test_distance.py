@@ -4,7 +4,6 @@ from jmetal.util.distance import EuclideanDistance
 
 
 class EuclideanDistanceTestCases(unittest.TestCase):
-
     def test_should_get_distance_work_properly_case_1(self):
         """ Case 1: [1], [1] -> distance == 0 """
         distance = EuclideanDistance()
@@ -45,5 +44,5 @@ class CosineDistanceTestCases(unittest.TestCase):
         self.assertEqual(1.0, distance.get_distance([0.0, 1.0], [1.0, 0.0]))
 """
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

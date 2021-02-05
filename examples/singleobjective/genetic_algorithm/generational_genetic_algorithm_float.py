@@ -3,7 +3,7 @@ from jmetal.operator import BinaryTournamentSelection, PolynomialMutation, SBXCr
 from jmetal.problem.singleobjective.unconstrained import Rastrigin
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     problem = Rastrigin(10)
 
     algorithm = GeneticAlgorithm(
@@ -13,14 +13,14 @@ if __name__ == '__main__':
         mutation=PolynomialMutation(1.0 / problem.number_of_variables, 20.0),
         crossover=SBXCrossover(0.9, 20.0),
         selection=BinaryTournamentSelection(),
-        termination_criterion=StoppingByEvaluations(max_evaluations=500000)
+        termination_criterion=StoppingByEvaluations(max_evaluations=500000),
     )
 
     algorithm.run()
     result = algorithm.get_result()
 
-    print('Algorithm: {}'.format(algorithm.get_name()))
-    print('Problem: {}'.format(problem.get_name()))
-    print('Solution: {}'.format(result.variables))
-    print('Fitness: {}'.format(result.objectives[0]))
-    print('Computing time: {}'.format(algorithm.total_computing_time))
+    print("Algorithm: {}".format(algorithm.get_name()))
+    print("Problem: {}".format(problem.get_name()))
+    print("Solution: {}".format(result.variables))
+    print("Fitness: {}".format(result.objectives[0]))
+    print("Computing time: {}".format(algorithm.total_computing_time))

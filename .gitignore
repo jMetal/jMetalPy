@@ -112,6 +112,5 @@ dask-worker-space
 # osx
 .DS_Store
 
-# R
-.RData
-.Rhistory
+# Github codespaces
+pythonenv3.8

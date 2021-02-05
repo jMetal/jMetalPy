@@ -1,10 +1,10 @@
-from scipy.stats import chi2, f, binom, norm
+from scipy.stats import binom, chi2, f, norm
 
 from jmetal.lab.statistical_test.apv_procedures import *
 
 
 def ranks(data: np.array, descending=False):
-    """ Computes the rank of the elements in data.
+    """Computes the rank of the elements in data.
 
     :param data: 2-D matrix
     :param descending: boolean (default False). If true, rank is sorted in descending order.
@@ -17,23 +17,21 @@ def ranks(data: np.array, descending=False):
         ranks = np.ones(data.shape)
         for i in range(data.shape[0]):
             values, indices, rep = np.unique(
-                (-1) ** s * np.sort((-1) ** s * data[i, :]), return_index=True, return_counts=True, )
+                (-1) ** s * np.sort((-1) ** s * data[i, :]), return_index=True, return_counts=True,
+            )
             for j in range(data.shape[1]):
-                ranks[i, j] += indices[values == data[i, j]] + \
-                               0.5 * (rep[values == data[i, j]] - 1)
+                ranks[i, j] += indices[values == data[i, j]] + 0.5 * (rep[values == data[i, j]] - 1)
         return ranks
     elif data.ndim == 1:
         ranks = np.ones((data.size,))
-        values, indices, rep = np.unique(
-            (-1) ** s * np.sort((-1) ** s * data), return_index=True, return_counts=True, )
+        values, indices, rep = np.unique((-1) ** s * np.sort((-1) ** s * data), return_index=True, return_counts=True,)
         for i in range(data.size):
-            ranks[i] += indices[values == data[i]] + \
-                        0.5 * (rep[values == data[i]] - 1)
+            ranks[i] += indices[values == data[i]] + 0.5 * (rep[values == data[i]] - 1)
         return ranks
 
 
 def sign_test(data):
-    """ Given the results drawn from two algorithms/methods X and Y, the sign test analyses if
+    """Given the results drawn from two algorithms/methods X and Y, the sign test analyses if
     there is a difference between X and Y.
 
     .. note:: Null Hypothesis: Pr(X<Y)= 0.5
@@ -50,8 +48,7 @@ def sign_test(data):
         X, Y = data[:, 0], data[:, 1]
         n_perf = data.shape[0]
     else:
-        raise ValueError(
-            'Initialization ERROR. Incorrect number of dimensions for axis 1')
+        raise ValueError("Initialization ERROR. Incorrect number of dimensions for axis 1")
 
     # Compute the differences
     Z = X - Y
@@ -67,12 +64,13 @@ def sign_test(data):
 
     p_value = 2 * min([p_value_minus, p_value_plus])
 
-    return pd.DataFrame(data=np.array([Wminus, Wplus, p_value]), index=['Num X<Y', 'Num X>Y', 'p-value'],
-                        columns=['Results'])
+    return pd.DataFrame(
+        data=np.array([Wminus, Wplus, p_value]), index=["Num X<Y", "Num X>Y", "p-value"], columns=["Results"]
+    )
 
 
 def friedman_test(data):
-    """ Friedman ranking test.
+    """Friedman ranking test.
 
     ..note:: Null Hypothesis: In a set of k (>=2) treaments (or tested algorithms), all the treatments are equivalent, so their average ranks should be equal.
 
@@ -88,11 +86,9 @@ def friedman_test(data):
     if data.ndim == 2:
         n_samples, k = data.shape
     else:
-        raise ValueError(
-            'Initialization ERROR. Incorrect number of array dimensions')
+        raise ValueError("Initialization ERROR. Incorrect number of array dimensions")
     if k < 2:
-        raise ValueError(
-            'Initialization Error. Incorrect number of dimensions for axis 1.')
+        raise ValueError("Initialization Error. Incorrect number of dimensions for axis 1.")
 
     # Compute ranks.
     datarank = ranks(data)
@@ -101,18 +97,18 @@ def friedman_test(data):
     avranks = np.mean(datarank, axis=0)
 
     # Get Friedman statistics
-    friedman_stat = (12.0 * n_samples) / (k * (k + 1.0)) * \
-                    (np.sum(avranks ** 2) - (k * (k + 1) ** 2) / 4.0)
+    friedman_stat = (12.0 * n_samples) / (k * (k + 1.0)) * (np.sum(avranks ** 2) - (k * (k + 1) ** 2) / 4.0)
 
     # Compute p-value
-    p_value = (1.0 - chi2.cdf(friedman_stat, df=(k - 1)))
+    p_value = 1.0 - chi2.cdf(friedman_stat, df=(k - 1))
 
-    return pd.DataFrame(data=np.array([friedman_stat, p_value]), index=['Friedman-statistic', 'p-value'],
-                        columns=['Results'])
+    return pd.DataFrame(
+        data=np.array([friedman_stat, p_value]), index=["Friedman-statistic", "p-value"], columns=["Results"]
+    )
 
 
 def friedman_aligned_rank_test(data):
-    """ Method of aligned ranks for the Friedman test.
+    """Method of aligned ranks for the Friedman test.
 
     ..note:: Null Hypothesis: In a set of k (>=2) treaments (or tested algorithms), all the treatments are equivalent, so their average ranks should be equal.
 
@@ -128,11 +124,9 @@ def friedman_aligned_rank_test(data):
     if data.ndim == 2:
         n_samples, k = data.shape
     else:
-        raise ValueError(
-            'Initialization ERROR. Incorrect number of array dimensions')
+        raise ValueError("Initialization ERROR. Incorrect number of array dimensions")
     if k < 2:
-        raise ValueError(
-            'Initialization Error. Incorrect number of dimensions for axis 1.')
+        raise ValueError("Initialization Error. Incorrect number of dimensions for axis 1.")
 
     # Compute the average value achieved by all algorithms in each problem
     control = np.mean(data, axis=1)
@@ -140,7 +134,7 @@ def friedman_aligned_rank_test(data):
     diff = [data[:, j] - control for j in range(data.shape[1])]
     # rank diff
     alignedRanks = ranks(np.ravel(diff))
-    alignedRanks = np.reshape(alignedRanks, newshape=(n_samples, k), order='F')
+    alignedRanks = np.reshape(alignedRanks, newshape=(n_samples, k), order="F")
 
     # Compute statistic
     Rhat_i = np.sum(alignedRanks, axis=1)
@@ -148,19 +142,20 @@ def friedman_aligned_rank_test(data):
     si, sj = np.sum(Rhat_i ** 2), np.sum(Rhat_j ** 2)
 
     A = sj - (k * n_samples ** 2 / 4.0) * (k * n_samples + 1) ** 2
-    B1 = (k * n_samples * (k * n_samples + 1) * (2 * k * n_samples + 1) / 6.0)
+    B1 = k * n_samples * (k * n_samples + 1) * (2 * k * n_samples + 1) / 6.0
     B2 = si / float(k)
 
     alignedRanks_stat = ((k - 1) * A) / (B1 - B2)
 
     p_value = 1 - chi2.cdf(alignedRanks_stat, df=k - 1)
 
-    return pd.DataFrame(data=np.array([alignedRanks_stat, p_value]), index=['Aligned Rank stat', 'p-value'],
-                        columns=['Results'])
+    return pd.DataFrame(
+        data=np.array([alignedRanks_stat, p_value]), index=["Aligned Rank stat", "p-value"], columns=["Results"]
+    )
 
 
 def quade_test(data):
-    """ Quade test.
+    """Quade test.
 
     ..note:: Null Hypothesis: In a set of k (>=2) treaments (or tested algorithms), all the treatments are equivalent, so their average ranks should be equal.
 
@@ -176,11 +171,9 @@ def quade_test(data):
     if data.ndim == 2:
         n_samples, k = data.shape
     else:
-        raise ValueError(
-            'Initialization ERROR. Incorrect number of array dimensions')
+        raise ValueError("Initialization ERROR. Incorrect number of array dimensions")
     if k < 2:
-        raise ValueError(
-            'Initialization Error. Incorrect number of dimensions for axis 1.')
+        raise ValueError("Initialization Error. Incorrect number of dimensions for axis 1.")
 
     # Compute ranks.
     datarank = ranks(data)
@@ -207,11 +200,11 @@ def quade_test(data):
         Fq = (n_samples - 1.0) * B / (A - B)
         p_value = 1 - f.cdf(Fq, k - 1, (k - 1) * (n_samples - 1))
 
-    return pd.DataFrame(data=np.array([Fq, p_value]), index=['Quade Test statistic', 'p-value'], columns=['Results'])
+    return pd.DataFrame(data=np.array([Fq, p_value]), index=["Quade Test statistic", "p-value"], columns=["Results"])
 
 
 def friedman_ph_test(data, control=None, apv_procedure=None):
-    """ Friedman post-hoc test.
+    """Friedman post-hoc test.
 
     :param data: An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.
     :param control: optional int or string. Default None. Index or Name of the control algorithm. If control = None all FriedmanPosHocTest considers all possible comparisons among algorithms.
@@ -233,7 +226,7 @@ def friedman_ph_test(data, control=None, apv_procedure=None):
         algorithms = data.columns
         data = data.values
     elif type(data) == np.ndarray:
-        algorithms = np.array(['Alg%d' % alg for alg in range(data.shape[1])])
+        algorithms = np.array(["Alg%d" % alg for alg in range(data.shape[1])])
 
     if control is None:
         index = algorithms
@@ -245,24 +238,29 @@ def friedman_ph_test(data, control=None, apv_procedure=None):
     if data.ndim == 2:
         n_samples, k = data.shape
     else:
-        raise ValueError(
-            'Initialization ERROR. Incorrect number of array dimensions.')
+        raise ValueError("Initialization ERROR. Incorrect number of array dimensions.")
     if k < 2:
-        raise ValueError(
-            'Initialization Error. Incorrect number of dimensions for axis 1.')
+        raise ValueError("Initialization Error. Incorrect number of dimensions for axis 1.")
 
     if control is not None:
         if type(control) == int and control >= data.shape[1]:
-            raise ValueError('Initialization ERROR. control is out of bounds')
+            raise ValueError("Initialization ERROR. control is out of bounds")
         if type(control) == str and control not in algorithms:
-            raise ValueError(
-                'Initialization ERROR. %s is not a column name of data' % control)
+            raise ValueError("Initialization ERROR. %s is not a column name of data" % control)
 
     if apv_procedure is not None:
-        if apv_procedure not in ['Bonferroni', 'Holm', 'Hochberg', 'Hommel', 'Holland', 'Finner', 'Li', 'Shaffer',
-                                 'Nemenyi']:
-            raise ValueError(
-                'Initialization ERROR. Incorrect value for APVprocedure.')
+        if apv_procedure not in [
+            "Bonferroni",
+            "Holm",
+            "Hochberg",
+            "Hommel",
+            "Holland",
+            "Finner",
+            "Li",
+            "Shaffer",
+            "Nemenyi",
+        ]:
+            raise ValueError("Initialization ERROR. Incorrect value for APVprocedure.")
 
     # Compute ranks.
     datarank = ranks(data)
@@ -294,28 +292,28 @@ def friedman_ph_test(data, control=None, apv_procedure=None):
     if apv_procedure is None:
         return zvalues_df, pvalues_df
     else:
-        if apv_procedure == 'Bonferroni':
+        if apv_procedure == "Bonferroni":
             ap_vs_df = bonferroni_dunn(pvalues_df, control=control)
-        elif apv_procedure == 'Holm':
+        elif apv_procedure == "Holm":
             ap_vs_df = holm(pvalues_df, control=control)
-        elif apv_procedure == 'Hochberg':
+        elif apv_procedure == "Hochberg":
             ap_vs_df = hochberg(pvalues_df, control=control)
-        elif apv_procedure == 'Holland':
+        elif apv_procedure == "Holland":
             ap_vs_df = holland(pvalues_df, control=control)
-        elif apv_procedure == 'Finner':
+        elif apv_procedure == "Finner":
             ap_vs_df = finner(pvalues_df, control=control)
-        elif apv_procedure == 'Li':
+        elif apv_procedure == "Li":
             ap_vs_df = li(pvalues_df, control=control)
-        elif apv_procedure == 'Shaffer':
+        elif apv_procedure == "Shaffer":
             ap_vs_df = shaffer(pvalues_df)
-        elif apv_procedure == 'Nemenyi':
+        elif apv_procedure == "Nemenyi":
             ap_vs_df = nemenyi(pvalues_df)
 
         return zvalues_df, pvalues_df, ap_vs_df
 
 
 def friedman_aligned_ph_test(data, control=None, apv_procedure=None):
-    """ Friedman Aligned Ranks post-hoc test.
+    """Friedman Aligned Ranks post-hoc test.
 
     :param data: An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.
     :param control: optional int or string. Default None. Index or Name of the control algorithm. If control = None all FriedmanPosHocTest considers all possible comparisons among algorithms.
@@ -337,7 +335,7 @@ def friedman_aligned_ph_test(data, control=None, apv_procedure=None):
         algorithms = data.columns
         data = data.values
     elif type(data) == np.ndarray:
-        algorithms = np.array(['Alg%d' % alg for alg in range(data.shape[1])])
+        algorithms = np.array(["Alg%d" % alg for alg in range(data.shape[1])])
 
     if control is None:
         index = algorithms
@@ -349,18 +347,15 @@ def friedman_aligned_ph_test(data, control=None, apv_procedure=None):
     if data.ndim == 2:
         n_samples, k = data.shape
     else:
-        raise ValueError(
-            'Initialization ERROR. Incorrect number of array dimensions.')
+        raise ValueError("Initialization ERROR. Incorrect number of array dimensions.")
     if k < 2:
-        raise ValueError(
-            'Initialization Error. Incorrect number of dimensions for axis 1.')
+        raise ValueError("Initialization Error. Incorrect number of dimensions for axis 1.")
 
     if control is not None:
         if type(control) == int and control >= data.shape[1]:
-            raise ValueError('Initialization ERROR. control is out of bounds')
+            raise ValueError("Initialization ERROR. control is out of bounds")
         if type(control) == str and control not in algorithms:
-            raise ValueError(
-                'Initialization ERROR. %s is not a column name of data' % control)
+            raise ValueError("Initialization ERROR. %s is not a column name of data" % control)
 
     # Compute the average value achieved by all algorithms in each problem
     problemmean = np.mean(data, axis=1)
@@ -399,28 +394,28 @@ def friedman_aligned_ph_test(data, control=None, apv_procedure=None):
     if apv_procedure is None:
         return zvalues_df, pvalues_df
     else:
-        if apv_procedure == 'Bonferroni':
+        if apv_procedure == "Bonferroni":
             ap_vs_df = bonferroni_dunn(pvalues_df, control=control)
-        elif apv_procedure == 'Holm':
+        elif apv_procedure == "Holm":
             ap_vs_df = holm(pvalues_df, control=control)
-        elif apv_procedure == 'Hochberg':
+        elif apv_procedure == "Hochberg":
             ap_vs_df = hochberg(pvalues_df, control=control)
-        elif apv_procedure == 'Holland':
+        elif apv_procedure == "Holland":
             ap_vs_df = holland(pvalues_df, control=control)
-        elif apv_procedure == 'Finner':
+        elif apv_procedure == "Finner":
             ap_vs_df = finner(pvalues_df, control=control)
-        elif apv_procedure == 'Li':
+        elif apv_procedure == "Li":
             ap_vs_df = li(pvalues_df, control=control)
-        elif apv_procedure == 'Shaffer':
+        elif apv_procedure == "Shaffer":
             ap_vs_df = shaffer(pvalues_df)
-        elif apv_procedure == 'Nemenyi':
+        elif apv_procedure == "Nemenyi":
             ap_vs_df = nemenyi(pvalues_df)
 
         return zvalues_df, pvalues_df, ap_vs_df
 
 
 def quade_ph_test(data, control=None, apv_procedure=None):
-    """ Quade post-hoc test.
+    """Quade post-hoc test.
 
     :param data: An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.
     :param control: optional int or string. Default None. Index or Name of the control algorithm. If control = None all FriedmanPosHocTest considers all possible comparisons among algorithms.
@@ -442,7 +437,7 @@ def quade_ph_test(data, control=None, apv_procedure=None):
         algorithms = data.columns
         data = data.values
     elif type(data) == np.ndarray:
-        algorithms = np.array(['Alg%d' % alg for alg in range(data.shape[1])])
+        algorithms = np.array(["Alg%d" % alg for alg in range(data.shape[1])])
 
     if control is None:
         index = algorithms
@@ -454,18 +449,15 @@ def quade_ph_test(data, control=None, apv_procedure=None):
     if data.ndim == 2:
         n_samples, k = data.shape
     else:
-        raise ValueError(
-            'Initialization ERROR. Incorrect number of array dimensions.')
+        raise ValueError("Initialization ERROR. Incorrect number of array dimensions.")
     if k < 2:
-        raise ValueError(
-            'Initialization Error. Incorrect number of dimensions for axis 1.')
+        raise ValueError("Initialization Error. Incorrect number of dimensions for axis 1.")
 
     if control is not None:
         if type(control) == int and control >= data.shape[1]:
-            raise ValueError('Initialization ERROR. control is out of bounds')
+            raise ValueError("Initialization ERROR. control is out of bounds")
         if type(control) == str and control not in algorithms:
-            raise ValueError(
-                'Initialization ERROR. %s is not a column name of data' % control)
+            raise ValueError("Initialization ERROR. %s is not a column name of data" % control)
 
     # Compute ranks.
     datarank = ranks(data)
@@ -480,8 +472,7 @@ def quade_ph_test(data, control=None, apv_procedure=None):
         W[i, :] = problemRank[i] * datarank[i, :]
     avranks = 2 * np.sum(W, axis=0) / (n_samples * (n_samples + 1))
     # Compute test statistics
-    aux = 1.0 / np.sqrt(k * (k + 1) * (2 * n_samples + 1) * (k - 1) /
-                        (18.0 * n_samples * (n_samples + 1)))
+    aux = 1.0 / np.sqrt(k * (k + 1) * (2 * n_samples + 1) * (k - 1) / (18.0 * n_samples * (n_samples + 1)))
     if control is None:
         z = np.zeros((k, k))
         for i in range(k):
@@ -504,21 +495,21 @@ def quade_ph_test(data, control=None, apv_procedure=None):
     if apv_procedure is None:
         return zvalues_df, pvalues_df
     else:
-        if apv_procedure == 'Bonferroni':
+        if apv_procedure == "Bonferroni":
             ap_vs_df = bonferroni_dunn(pvalues_df, control=control)
-        elif apv_procedure == 'Holm':
+        elif apv_procedure == "Holm":
             ap_vs_df = holm(pvalues_df, control=control)
-        elif apv_procedure == 'Hochberg':
+        elif apv_procedure == "Hochberg":
             ap_vs_df = hochberg(pvalues_df, control=control)
-        elif apv_procedure == 'Holland':
+        elif apv_procedure == "Holland":
             ap_vs_df = holland(pvalues_df, control=control)
-        elif apv_procedure == 'Finner':
+        elif apv_procedure == "Finner":
             ap_vs_df = finner(pvalues_df, control=control)
-        elif apv_procedure == 'Li':
+        elif apv_procedure == "Li":
             ap_vs_df = li(pvalues_df, control=control)
-        elif apv_procedure == 'Shaffer':
+        elif apv_procedure == "Shaffer":
             ap_vs_df = shaffer(pvalues_df)
-        elif apv_procedure == 'Nemenyi':
+        elif apv_procedure == "Nemenyi":
             ap_vs_df = nemenyi(pvalues_df)
 
         return zvalues_df, pvalues_df, ap_vs_df

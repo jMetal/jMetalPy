@@ -4,16 +4,15 @@ from jmetal.core.observer import Observer
 from jmetal.util.observable import DefaultObservable
 
 
+class DummyObserver(Observer):
+    def update(self, *args, **kwargs):
+        pass
+
+
 class ObservableTestCases(unittest.TestCase):
-
-    class DummyObserver(Observer):
-
-        def update(self, *args, **kwargs):
-            pass
-
     def setUp(self):
         self.observable = DefaultObservable()
-        self.observer = self.DummyObserver()
+        self.observer = DummyObserver()
 
     def test_should_register_add_one_observer(self):
         self.observable.register(self.observer)
@@ -21,7 +20,7 @@ class ObservableTestCases(unittest.TestCase):
         self.assertEqual(1, len(self.observable.observers))
 
     def test_should_register_add_two_observers(self):
-        observer_two = self.DummyObserver()
+        observer_two = DummyObserver()
 
         self.observable.register(self.observer)
         self.observable.register(observer_two)
@@ -29,7 +28,7 @@ class ObservableTestCases(unittest.TestCase):
         self.assertEqual(2, len(self.observable.observers))
 
     def test_should_deregister_remove_the_observer_if_it_is_registered(self):
-        observer_two = self.DummyObserver()
+        observer_two = DummyObserver()
 
         self.observable.register(self.observer)
         self.observable.register(observer_two)
@@ -38,7 +37,7 @@ class ObservableTestCases(unittest.TestCase):
         self.assertEqual(1, len(self.observable.observers))
 
     def test_should_deregister_not_remove_the_observer_if_it_is_not_registered(self):
-        observer_two = self.DummyObserver()
+        observer_two = DummyObserver()
 
         self.observable.register(self.observer)
         self.observable.deregister(observer_two)

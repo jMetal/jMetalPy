@@ -2,7 +2,7 @@ import copy
 import random
 import threading
 import time
-from typing import TypeVar, List
+from typing import List, TypeVar
 
 from jmetal.config import store
 from jmetal.core.algorithm import Algorithm
@@ -12,8 +12,8 @@ from jmetal.core.solution import Solution
 from jmetal.util.comparator import Comparator
 from jmetal.util.termination_criterion import TerminationCriterion
 
-S = TypeVar('S')
-R = TypeVar('R')
+S = TypeVar("S")
+R = TypeVar("R")
 
 """
 .. module:: local_search
@@ -25,12 +25,13 @@ R = TypeVar('R')
 
 
 class LocalSearch(Algorithm[S, R], threading.Thread):
-
-    def __init__(self,
-                 problem: Problem[S],
-                 mutation: Mutation,
-                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
-                 comparator: Comparator = store.default_comparator):
+    def __init__(
+        self,
+        problem: Problem[S],
+        mutation: Mutation,
+        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        comparator: Comparator = store.default_comparator,
+    ):
         super(LocalSearch, self).__init__()
         self.comparator = comparator
         self.problem = problem
@@ -73,11 +74,15 @@ class LocalSearch(Algorithm[S, R], threading.Thread):
 
     def get_observable_data(self) -> dict:
         ctime = time.time() - self.start_computing_time
-        return {'PROBLEM': self.problem, 'EVALUATIONS': self.evaluations, 'SOLUTIONS': self.get_result(),
-                'COMPUTING_TIME': ctime}
+        return {
+            "PROBLEM": self.problem,
+            "EVALUATIONS": self.evaluations,
+            "SOLUTIONS": self.get_result(),
+            "COMPUTING_TIME": ctime,
+        }
 
     def get_result(self) -> R:
         return self.solutions[0]
 
     def get_name(self) -> str:
-        return 'LS'
+        return "LS"

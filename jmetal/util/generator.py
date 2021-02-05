@@ -1,11 +1,11 @@
 import copy
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic, List
+from typing import Generic, List, TypeVar
 
 from jmetal.core.problem import Problem
 from jmetal.core.solution import Solution
 
-R = TypeVar('R')
+R = TypeVar("R")
 
 """
 .. module:: generator
@@ -17,26 +17,20 @@ R = TypeVar('R')
 
 
 class Generator(Generic[R], ABC):
-
     @abstractmethod
     def new(self, problem: Problem) -> R:
         pass
 
 
 class RandomGenerator(Generator):
-
     def new(self, problem: Problem):
         return problem.create_solution()
 
 
 class InjectorGenerator(Generator):
-
     def __init__(self, solutions: List[Solution]):
         super(InjectorGenerator, self).__init__()
-        self.population = []
-
-        for solution in solutions:
-            self.population.append(copy.deepcopy(solution))
+        self.population = copy.deepcopy(solutions)
 
     def new(self, problem: Problem):
         if len(self.population) > 0:
