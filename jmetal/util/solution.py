@@ -4,9 +4,9 @@ from pathlib import Path
 from typing import List
 
 from jmetal.core.solution import FloatSolution, Solution
-from jmetal.util.archive import NonDominatedSolutionsArchive, Archive
+from jmetal.util.archive import Archive, NonDominatedSolutionsArchive
 
-LOGGER = logging.getLogger('jmetal')
+logger = logging.getLogger(__name__)
 
 
 """
@@ -28,7 +28,7 @@ def get_non_dominated_solutions(solutions: List[Solution]) -> List[Solution]:
 
 
 def read_solutions(filename: str) -> List[FloatSolution]:
-    """ Reads a reference front from a file.
+    """Reads a reference front from a file.
 
     :param filename: File path where the front is located.
     """
@@ -44,13 +44,13 @@ def read_solutions(filename: str) -> List[FloatSolution]:
 
                 front.append(solution)
     else:
-        LOGGER.warning('Reference front file was not found at {}'.format(filename))
+        logger.warning("Reference front file was not found at {}".format(filename))
 
     return front
 
 
 def print_variables_to_file(solutions, filename: str):
-    LOGGER.info('Output file (variables): ' + filename)
+    logger.info("Output file (variables): " + filename)
 
     try:
         os.makedirs(os.path.dirname(filename), exist_ok=True)
@@ -60,7 +60,7 @@ def print_variables_to_file(solutions, filename: str):
     if type(solutions) is not list:
         solutions = [solutions]
 
-    with open(filename, 'w') as of:
+    with open(filename, "w") as of:
         for solution in solutions:
             for variables in solution.variables:
                 of.write(str(variables) + " ")
@@ -76,7 +76,7 @@ def print_variables_to_screen(solutions):
 
 
 def print_function_values_to_file(solutions, filename: str):
-    LOGGER.info('Output file (function values): ' + filename)
+    logger.info("Output file (function values): " + filename)
 
     try:
         os.makedirs(os.path.dirname(filename), exist_ok=True)
@@ -86,11 +86,11 @@ def print_function_values_to_file(solutions, filename: str):
     if type(solutions) is not list:
         solutions = [solutions]
 
-    with open(filename, 'w') as of:
+    with open(filename, "w") as of:
         for solution in solutions:
             for function_value in solution.objectives:
-                of.write(str(function_value) + ' ')
-            of.write('\n')
+                of.write(str(function_value) + " ")
+            of.write("\n")
 
 
 def print_function_values_to_screen(solutions):
@@ -98,6 +98,6 @@ def print_function_values_to_screen(solutions):
         solutions = [solutions]
 
     for solution in solutions:
-        print(str(solutions.index(solution)) + ": ", sep='  ', end='', flush=True)
-        print(solution.objectives, sep='  ', end='', flush=True)
+        print(str(solutions.index(solution)) + ": ", sep="  ", end="", flush=True)
+        print(solution.objectives, sep="  ", end="", flush=True)
         print()

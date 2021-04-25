@@ -1,39 +1,32 @@
 import unittest
-from typing import TypeVar
 
-from jmetal.core.operator import Mutation, Crossover
+from jmetal.core.operator import Crossover, Mutation
 from jmetal.core.solution import Solution
 
-S = TypeVar('S')
-R = TypeVar('R')
 
-
-class DummyMutation(Mutation[Solution]):
-
+class DummyMutation(Mutation):
     def __init__(self, probability: float):
         super(DummyMutation, self).__init__(probability=probability)
 
-    def execute(self, source: Solution) -> Solution:
-        return None
+    def execute(self, source: Solution) -> None:
+        pass
 
     def get_name(self) -> str:
-        return ""
+        pass
 
 
-class DummyCrossover(Crossover[Solution, Solution]):
-
+class DummyCrossover(Crossover):
     def __init__(self, probability: float):
         super(DummyCrossover, self).__init__(probability=probability)
 
-    def execute(self, source: Solution) -> Solution:
-        return None
+    def execute(self, source: Solution) -> None:
+        pass
 
     def get_name(self) -> str:
-        return ""
+        pass
 
 
 class OperatorTestCase(unittest.TestCase):
-
     def test_should_mutation_constructor_raises_an_exception_is_probability_is_negative(self) -> None:
         with self.assertRaises(Exception):
             DummyMutation(-1)
@@ -51,5 +44,5 @@ class OperatorTestCase(unittest.TestCase):
             DummyMutation(1.1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

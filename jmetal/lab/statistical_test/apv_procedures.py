@@ -21,14 +21,12 @@ def bonferroni_dunn(p_values, control):
         algorithms = p_values.columns
         p_values = p_values.values
     elif type(p_values) == np.ndarray:
-        algorithms = np.array(
-            ['Alg%d' % alg for alg in range(p_values.shape[1])])
+        algorithms = np.array(["Alg%d" % alg for alg in range(p_values.shape[1])])
 
     if type(control) == str:
         control = int(np.where(algorithms == control)[0])
     if control is None:
-        raise ValueError(
-            'Initialization ERROR. Incorrect value for control.')
+        raise ValueError("Initialization ERROR. Incorrect value for control.")
 
     k = p_values.shape[1]
 
@@ -38,10 +36,9 @@ def bonferroni_dunn(p_values, control):
     APVs = np.zeros((k - 1, 1))
     comparison = []
     for i in range(k - 1):
-        comparison.append(algorithms[control] +
-                          ' vs ' + algorithms[argsorted_pvals[i]])
+        comparison.append(algorithms[control] + " vs " + algorithms[argsorted_pvals[i]])
         APVs[i, 0] = np.min([(k - 1) * p_values[0, argsorted_pvals[i]], 1])
-    return pd.DataFrame(data=APVs, index=comparison, columns=['Bonferroni'])
+    return pd.DataFrame(data=APVs, index=comparison, columns=["Bonferroni"])
 
 
 def holland(p_values, control):
@@ -63,14 +60,12 @@ def holland(p_values, control):
         algorithms = p_values.columns
         p_values = p_values.values
     elif type(p_values) == np.ndarray:
-        algorithms = np.array(
-            ['Alg%d' % alg for alg in range(p_values.shape[1])])
+        algorithms = np.array(["Alg%d" % alg for alg in range(p_values.shape[1])])
 
     if type(control) == str:
         control = int(np.where(algorithms == control)[0])
     if control is None:
-        raise ValueError(
-            'Initialization ERROR. Incorrect value for control.')
+        raise ValueError("Initialization ERROR. Incorrect value for control.")
 
     # --------------------------------------------------------------------------
     # ------------------------------- Procedure --------------------------------
@@ -83,12 +78,11 @@ def holland(p_values, control):
     APVs = np.zeros((k - 1, 1))
     comparison = []
     for i in range(k - 1):
-        comparison.append(algorithms[control] +
-                          ' vs ' + algorithms[argsorted_pvals[i]])
+        comparison.append(algorithms[control] + " vs " + algorithms[argsorted_pvals[i]])
         aux = k - 1 - np.arange(i + 1)
-        v = np.max(1 - (1 - p_values[0, argsorted_pvals[:(i + 1)]]) ** aux)
+        v = np.max(1 - (1 - p_values[0, argsorted_pvals[: (i + 1)]]) ** aux)
         APVs[i, 0] = np.min([v, 1])
-    return pd.DataFrame(data=APVs, index=comparison, columns=['Holland'])
+    return pd.DataFrame(data=APVs, index=comparison, columns=["Holland"])
 
 
 def finner(p_values, control):
@@ -110,14 +104,12 @@ def finner(p_values, control):
         algorithms = p_values.columns
         p_values = p_values.values
     elif type(p_values) == np.ndarray:
-        algorithms = np.array(
-            ['Alg%d' % alg for alg in range(p_values.shape[1])])
+        algorithms = np.array(["Alg%d" % alg for alg in range(p_values.shape[1])])
 
     if type(control) == str:
         control = int(np.where(algorithms == control)[0])
     if control is None:
-        raise ValueError(
-            'Initialization ERROR. Incorrect value for control.')
+        raise ValueError("Initialization ERROR. Incorrect value for control.")
 
     k = p_values.shape[1]
 
@@ -127,12 +119,11 @@ def finner(p_values, control):
     APVs = np.zeros((k - 1, 1))
     comparison = []
     for i in range(k - 1):
-        comparison.append(algorithms[control] +
-                          ' vs ' + algorithms[argsorted_pvals[i]])
+        comparison.append(algorithms[control] + " vs " + algorithms[argsorted_pvals[i]])
         aux = float(k - 1) / (np.arange(i + 1) + 1)
-        v = np.max(1 - (1 - p_values[0, argsorted_pvals[:(i + 1)]]) ** aux)
+        v = np.max(1 - (1 - p_values[0, argsorted_pvals[: (i + 1)]]) ** aux)
         APVs[i, 0] = np.min([v, 1])
-    return pd.DataFrame(data=APVs, index=comparison, columns=['Finner'])
+    return pd.DataFrame(data=APVs, index=comparison, columns=["Finner"])
 
 
 def hochberg(p_values, control):
@@ -154,14 +145,12 @@ def hochberg(p_values, control):
         algorithms = p_values.columns
         p_values = p_values.values
     elif type(p_values) == np.ndarray:
-        algorithms = np.array(
-            ['Alg%d' % alg for alg in range(p_values.shape[1])])
+        algorithms = np.array(["Alg%d" % alg for alg in range(p_values.shape[1])])
 
     if type(control) == str:
         control = int(np.where(algorithms == control)[0])
     if control is None:
-        raise ValueError(
-            'Initialization ERROR. Incorrect value for control.')
+        raise ValueError("Initialization ERROR. Incorrect value for control.")
 
     k = p_values.shape[1]
 
@@ -171,12 +160,11 @@ def hochberg(p_values, control):
     APVs = np.zeros((k - 1, 1))
     comparison = []
     for i in range(k - 1):
-        comparison.append(algorithms[control] +
-                          ' vs ' + algorithms[argsorted_pvals[i]])
+        comparison.append(algorithms[control] + " vs " + algorithms[argsorted_pvals[i]])
         aux = np.arange(k, i, -1).astype(np.uint8)
         v = np.max(p_values[0, argsorted_pvals[aux - 1]] * (k - aux))
         APVs[i, 0] = np.min([v, 1])
-    return pd.DataFrame(data=APVs, index=comparison, columns=['Hochberg'])
+    return pd.DataFrame(data=APVs, index=comparison, columns=["Hochberg"])
 
 
 def li(p_values, control):
@@ -200,14 +188,12 @@ def li(p_values, control):
         algorithms = p_values.columns
         p_values = p_values.values
     elif type(p_values) == np.ndarray:
-        algorithms = np.array(
-            ['Alg%d' % alg for alg in range(p_values.shape[1])])
+        algorithms = np.array(["Alg%d" % alg for alg in range(p_values.shape[1])])
 
     if type(control) == str:
         control = int(np.where(algorithms == control)[0])
     if control is None:
-        raise ValueError(
-            'Initialization ERROR. Incorrect value for control.')
+        raise ValueError("Initialization ERROR. Incorrect value for control.")
 
     k = p_values.shape[1]
 
@@ -217,11 +203,15 @@ def li(p_values, control):
     APVs = np.zeros((k - 1, 1))
     comparison = []
     for i in range(k - 1):
-        comparison.append(algorithms[control] +
-                          ' vs ' + algorithms[argsorted_pvals[i]])
-        APVs[i, 0] = np.min([p_values[0, argsorted_pvals[-2]], p_values[0, argsorted_pvals[i]] / (
-                p_values[0, argsorted_pvals[i]] + 1 - p_values[0, argsorted_pvals[-2]])])
-    return pd.DataFrame(data=APVs, index=comparison, columns=['Li'])
+        comparison.append(algorithms[control] + " vs " + algorithms[argsorted_pvals[i]])
+        APVs[i, 0] = np.min(
+            [
+                p_values[0, argsorted_pvals[-2]],
+                p_values[0, argsorted_pvals[i]]
+                / (p_values[0, argsorted_pvals[i]] + 1 - p_values[0, argsorted_pvals[-2]]),
+            ]
+        )
+    return pd.DataFrame(data=APVs, index=comparison, columns=["Li"])
 
 
 def holm(p_values, control=None):
@@ -245,8 +235,7 @@ def holm(p_values, control=None):
         algorithms = p_values.columns
         p_values = p_values.values
     elif type(p_values) == np.ndarray:
-        algorithms = np.array(
-            ['Alg%d' % alg for alg in range(p_values.shape[1])])
+        algorithms = np.array(["Alg%d" % alg for alg in range(p_values.shape[1])])
 
     if type(control) == str:
         control = int(np.where(algorithms == control)[0])
@@ -261,9 +250,8 @@ def holm(p_values, control=None):
         comparison = []
         for i in range(k - 1):
             aux = k - 1 - np.arange(i + 1)
-            comparison.append(
-                algorithms[control] + ' vs ' + algorithms[argsorted_pvals[i]])
-            v = np.max(aux * p_values[0, argsorted_pvals[:(i + 1)]])
+            comparison.append(algorithms[control] + " vs " + algorithms[argsorted_pvals[i]])
+            v = np.max(aux * p_values[0, argsorted_pvals[: (i + 1)]])
             APVs[i, 0] = np.min([v, 1])
 
     elif control is None:
@@ -281,10 +269,10 @@ def holm(p_values, control=None):
         for i in range(m):
             row = pairs_index[0][pairs_sorted[i]]
             col = pairs_index[1][pairs_sorted[i]]
-            comparison.append(algorithms[row] + ' vs ' + algorithms[col])
-            v = np.max(aux[:i + 1])
+            comparison.append(algorithms[row] + " vs " + algorithms[col])
+            v = np.max(aux[: i + 1])
             APVs[i, 0] = np.min([v, 1])
-    return pd.DataFrame(data=APVs, index=comparison, columns=['Holm'])
+    return pd.DataFrame(data=APVs, index=comparison, columns=["Holm"])
 
 
 def shaffer(p_values):
@@ -320,8 +308,7 @@ def shaffer(p_values):
         TrueHset = [0]
         if k > 1:
             for j in np.arange(k, 0, -1, dtype=int):
-                TrueHset = list(set(TrueHset) | set(
-                    [binomial(j, 2) + x for x in S(k - j)]))
+                TrueHset = list(set(TrueHset) | set([binomial(j, 2) + x for x in S(k - j)]))
         return TrueHset
 
     # Initial Checking
@@ -329,15 +316,12 @@ def shaffer(p_values):
         algorithms = p_values.columns
         p_values = p_values.values
     elif type(p_values) == np.ndarray:
-        algorithms = np.array(
-            ['Alg%d' % alg for alg in range(p_values.shape[1])])
+        algorithms = np.array(["Alg%d" % alg for alg in range(p_values.shape[1])])
 
     if p_values.ndim != 2:
-        raise ValueError(
-            'Initialization ERROR. Incorrect number of array dimensions.')
+        raise ValueError("Initialization ERROR. Incorrect number of array dimensions.")
     elif p_values.shape[0] != p_values.shape[1]:
-        raise ValueError(
-            'Initialization ERROR. Incorrect number of array dimensions.')
+        raise ValueError("Initialization ERROR. Incorrect number of array dimensions.")
 
     # define parameters
     k = p_values.shape[0]
@@ -356,15 +340,15 @@ def shaffer(p_values):
 
     # Adjust p-values
     APVs = np.zeros((m, 1))
-    aux = (pairs_pvals[pairs_sorted] * t)
+    aux = pairs_pvals[pairs_sorted] * t
     comparison = []
     for i in range(m):
         row = pairs_index[0][pairs_sorted[i]]
         col = pairs_index[1][pairs_sorted[i]]
-        comparison.append(algorithms[row] + ' vs ' + algorithms[col])
-        v = np.max(aux[:i + 1])
+        comparison.append(algorithms[row] + " vs " + algorithms[col])
+        v = np.max(aux[: i + 1])
         APVs[i, 0] = np.min([v, 1])
-    return pd.DataFrame(data=APVs, index=comparison, columns=['Shaffer'])
+    return pd.DataFrame(data=APVs, index=comparison, columns=["Shaffer"])
 
 
 def nemenyi(p_values):
@@ -385,15 +369,12 @@ def nemenyi(p_values):
         algorithms = p_values.columns
         p_values = p_values.values
     elif type(p_values) == np.ndarray:
-        algorithms = np.array(
-            ['Alg%d' % alg for alg in range(p_values.shape[1])])
+        algorithms = np.array(["Alg%d" % alg for alg in range(p_values.shape[1])])
 
     if p_values.ndim != 2:
-        raise ValueError(
-            'Initialization ERROR. Incorrect number of array dimensions.')
+        raise ValueError("Initialization ERROR. Incorrect number of array dimensions.")
     elif p_values.shape[0] != p_values.shape[1]:
-        raise ValueError(
-            'Initialization ERROR. Incorrect number of array dimensions.')
+        raise ValueError("Initialization ERROR. Incorrect number of array dimensions.")
 
     # define parameters
     k = p_values.shape[0]
@@ -410,6 +391,6 @@ def nemenyi(p_values):
     for i in range(m):
         row = pairs_index[0][pairs_sorted[i]]
         col = pairs_index[1][pairs_sorted[i]]
-        comparison.append(algorithms[row] + ' vs ' + algorithms[col])
+        comparison.append(algorithms[row] + " vs " + algorithms[col])
         APVs[i, 0] = np.min([pairs_pvals[pairs_sorted[i]] * m, 1])
-    return pd.DataFrame(data=APVs, index=comparison, columns=['Nemenyi'])
+    return pd.DataFrame(data=APVs, index=comparison, columns=["Nemenyi"])

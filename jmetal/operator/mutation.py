@@ -1,8 +1,14 @@
 import random
 
 from jmetal.core.operator import Mutation
-from jmetal.core.solution import BinarySolution, Solution, FloatSolution, IntegerSolution, PermutationSolution, \
-    CompositeSolution
+from jmetal.core.solution import (
+    BinarySolution,
+    CompositeSolution,
+    FloatSolution,
+    IntegerSolution,
+    PermutationSolution,
+    Solution,
+)
 from jmetal.util.ckecking import Check
 
 """
@@ -15,7 +21,6 @@ from jmetal.util.ckecking import Check
 
 
 class NullMutation(Mutation[Solution]):
-
     def __init__(self):
         super(NullMutation, self).__init__(probability=0)
 
@@ -23,11 +28,10 @@ class NullMutation(Mutation[Solution]):
         return solution
 
     def get_name(self):
-        return 'Null mutation'
+        return "Null mutation"
 
 
 class BitFlipMutation(Mutation[BinarySolution]):
-
     def __init__(self, probability: float):
         super(BitFlipMutation, self).__init__(probability=probability)
 
@@ -43,11 +47,10 @@ class BitFlipMutation(Mutation[BinarySolution]):
         return solution
 
     def get_name(self):
-        return 'BitFlip mutation'
+        return "BitFlip mutation"
 
 
 class PolynomialMutation(Mutation[FloatSolution]):
-
     def __init__(self, probability: float, distribution_index: float = 0.20):
         super(PolynomialMutation, self).__init__(probability=probability)
         self.distribution_index = distribution_index
@@ -88,11 +91,10 @@ class PolynomialMutation(Mutation[FloatSolution]):
         return solution
 
     def get_name(self):
-        return 'Polynomial mutation'
+        return "Polynomial mutation"
 
 
 class IntegerPolynomialMutation(Mutation[IntegerSolution]):
-
     def __init__(self, probability: float, distribution_index: float = 0.20):
         super(IntegerPolynomialMutation, self).__init__(probability=probability)
         self.distribution_index = distribution_index
@@ -131,11 +133,10 @@ class IntegerPolynomialMutation(Mutation[IntegerSolution]):
         return solution
 
     def get_name(self):
-        return 'Polynomial mutation (Integer)'
+        return "Polynomial mutation (Integer)"
 
 
 class SimpleRandomMutation(Mutation[FloatSolution]):
-
     def __init__(self, probability: float):
         super(SimpleRandomMutation, self).__init__(probability=probability)
 
@@ -145,16 +146,16 @@ class SimpleRandomMutation(Mutation[FloatSolution]):
         for i in range(solution.number_of_variables):
             rand = random.random()
             if rand <= self.probability:
-                solution.variables[i] = solution.lower_bound[i] + \
-                                        (solution.upper_bound[i] - solution.lower_bound[i]) * random.random()
+                solution.variables[i] = (
+                    solution.lower_bound[i] + (solution.upper_bound[i] - solution.lower_bound[i]) * random.random()
+                )
         return solution
 
     def get_name(self):
-        return 'Simple random_search mutation'
+        return "Simple random_search mutation"
 
 
 class UniformMutation(Mutation[FloatSolution]):
-
     def __init__(self, probability: float, perturbation: float = 0.5):
         super(UniformMutation, self).__init__(probability=probability)
         self.perturbation = perturbation
@@ -179,11 +180,10 @@ class UniformMutation(Mutation[FloatSolution]):
         return solution
 
     def get_name(self):
-        return 'Uniform mutation'
+        return "Uniform mutation"
 
 
 class NonUniformMutation(Mutation[FloatSolution]):
-
     def __init__(self, probability: float, perturbation: float = 0.5, max_iterations: int = 0.5):
         super(NonUniformMutation, self).__init__(probability=probability)
         self.perturbation = perturbation
@@ -217,15 +217,18 @@ class NonUniformMutation(Mutation[FloatSolution]):
         self.current_iteration = current_iteration
 
     def __delta(self, y: float, b_mutation_parameter: float):
-        return (y * (1.0 - pow(random.random(),
-                               pow((1.0 - 1.0 * self.current_iteration / self.max_iterations), b_mutation_parameter))))
+        return y * (
+            1.0
+            - pow(
+                random.random(), pow((1.0 - 1.0 * self.current_iteration / self.max_iterations), b_mutation_parameter)
+            )
+        )
 
     def get_name(self):
-        return 'Uniform mutation'
+        return "Uniform mutation"
 
 
 class PermutationSwapMutation(Mutation[PermutationSolution]):
-
     def execute(self, solution: PermutationSolution) -> PermutationSolution:
         Check.that(type(solution) is PermutationSolution, "Solution type invalid")
 
@@ -233,18 +236,20 @@ class PermutationSwapMutation(Mutation[PermutationSolution]):
 
         if rand <= self.probability:
             pos_one, pos_two = random.sample(range(solution.number_of_variables - 1), 2)
-            solution.variables[pos_one], solution.variables[pos_two] = \
-                solution.variables[pos_two], solution.variables[pos_one]
+            solution.variables[pos_one], solution.variables[pos_two] = (
+                solution.variables[pos_two],
+                solution.variables[pos_one],
+            )
 
         return solution
 
     def get_name(self):
-        return 'Permutation Swap mutation'
+        return "Permutation Swap mutation"
 
 
 class CompositeMutation(Mutation[Solution]):
-    def __init__(self, mutation_operator_list:[Mutation]):
-        super(CompositeMutation,self).__init__(probability=1.0)
+    def __init__(self, mutation_operator_list: [Mutation]):
+        super(CompositeMutation, self).__init__(probability=1.0)
 
         Check.is_not_none(mutation_operator_list)
         Check.collection_is_not_empty(mutation_operator_list)
@@ -268,27 +273,25 @@ class CompositeMutation(Mutation[Solution]):
 
 
 class ScrambleMutation(Mutation[PermutationSolution]):
-
     def execute(self, solution: PermutationSolution) -> PermutationSolution:
-        for i in range(solution.number_of_variables):
-            rand = random.random()
+        rand = random.random()
 
-            if rand <= self.probability:
-                point1 = random.randint(0, len(solution.variables[i]))
-                point2 = random.randint(0, len(solution.variables[i]) - 1)
+        if rand <= self.probability:
+            point1 = random.randint(0, len(solution.variables))
+            point2 = random.randint(0, len(solution.variables) - 1)
 
-                if point2 >= point1:
-                    point2 += 1
-                else:
-                    point1, point2 = point2, point1
+            if point2 >= point1:
+                point2 += 1
+            else:
+                point1, point2 = point2, point1
 
-                if point2 - point1 >= 20:
-                    point2 = point1 + 20
+            if point2 - point1 >= 20:
+                point2 = point1 + 20
 
-                values = solution.variables[i][point1:point2]
-                solution.variables[i][point1:point2] = random.sample(values, len(values))
+            values = solution.variables[point1:point2]
+            solution.variables[point1:point2] = random.sample(values, len(values))
 
         return solution
 
     def get_name(self):
-        return 'Scramble'
+        return "Scramble"

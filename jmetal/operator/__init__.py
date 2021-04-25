@@ -1,13 +1,51 @@
-from .crossover import NullCrossover, SBXCrossover, SPXCrossover, DifferentialEvolutionCrossover
-from .mutation import NullMutation, BitFlipMutation, PolynomialMutation, IntegerPolynomialMutation, UniformMutation, \
-    SimpleRandomMutation, PermutationSwapMutation
-from .selection import BestSolutionSelection, BinaryTournamentSelection, BinaryTournament2Selection, \
-    RandomSolutionSelection, NaryRandomSolutionSelection, RankingAndCrowdingDistanceSelection
+from .crossover import (
+    CXCrossover,
+    DifferentialEvolutionCrossover,
+    NullCrossover,
+    PMXCrossover,
+    SBXCrossover,
+    SPXCrossover,
+)
+from .mutation import (
+    BitFlipMutation,
+    IntegerPolynomialMutation,
+    NullMutation,
+    PermutationSwapMutation,
+    PolynomialMutation,
+    ScrambleMutation,
+    SimpleRandomMutation,
+    UniformMutation,
+)
+from .selection import (
+    BestSolutionSelection,
+    BinaryTournament2Selection,
+    BinaryTournamentSelection,
+    NaryRandomSolutionSelection,
+    RandomSolutionSelection,
+    RankingAndCrowdingDistanceSelection,
+    RouletteWheelSelection,
+)
 
 __all__ = [
-    'NullCrossover', 'SBXCrossover', 'SPXCrossover', 'DifferentialEvolutionCrossover',
-    'NullMutation', 'BitFlipMutation', 'PolynomialMutation', 'IntegerPolynomialMutation', 'UniformMutation',
-    'SimpleRandomMutation','PermutationSwapMutation',
-    'BestSolutionSelection', 'BinaryTournamentSelection', 'BinaryTournament2Selection', 'RandomSolutionSelection',
-    'NaryRandomSolutionSelection', 'RankingAndCrowdingDistanceSelection',
+    "NullCrossover",
+    "SBXCrossover",
+    "SPXCrossover",
+    "DifferentialEvolutionCrossover",
+    "PMXCrossover",
+    "CXCrossover",
+    "NullMutation",
+    "BitFlipMutation",
+    "PolynomialMutation",
+    "IntegerPolynomialMutation",
+    "UniformMutation",
+    "SimpleRandomMutation",
+    "ScrambleMutation",
+    "PermutationSwapMutation",
+    "RouletteWheelSelection",
+    "BestSolutionSelection",
+    "BinaryTournamentSelection",
+    "BinaryTournament2Selection",
+    "RandomSolutionSelection",
+    "NaryRandomSolutionSelection",
+    "RankingAndCrowdingDistanceSelection",
 ]
