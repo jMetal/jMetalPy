@@ -1,0 +1,486 @@
+{
+  "type": "FeatureCollection",
+  "features": [    
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 16,
+		"location": "Calle Poeta Munoz Rojas, 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.435172080993652,
+          36.71184798875825
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 16,
+		"location": "Calle Gerona, 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.4361162185668945,
+          36.71523662662242
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 12,
+		"location": "Calle Virgen de la Estrella, 10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.442805647850036,
+          36.71509041944446
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 17,
+		"location": "Avenida Juan XXIII, 4"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.441051483154297,
+          36.70396065645106
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 13,
+		"location": "Avenida de Juan XXIII, 28"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.442853927612305,
+          36.70675615037279
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 10,
+		"location": "Calle Gongora, 14"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.430193901062012,
+          36.70949133523179
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 6,
+		"location": "Pasillo del Matadero, 17"
+      },     
+	  "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.426417350769043,
+          36.71537423312395
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 11,
+		"location": "Calle Heroe de Sostoa, 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.430612325668335,
+          36.7116415694398
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 18,
+		"location": "Calle Princesa, 47"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.438873529434204,
+          36.7017499938768
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 14,
+		"location": "Calle Orfila, 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.430751800537109,
+          36.7064120950698
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 12,
+		"location": "Paseo Antonio Machado, 34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.427597522735595,
+          36.710041800919306
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 11,
+		"location": "Pasaje Adra, 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.438077377319336,
+          36.71267133531997
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 13,
+		"location": "Calle Corregidor Nicolas Isidro, 20"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.452080726623535,
+          36.71521942579239
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 19,
+		"location": "Calle Alfarnate, 13"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.4542694091796875,
+          36.709302111740975
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 11,
+		"location": "Avenida Europa, 58"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.450793266296387,
+          36.70083818456676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 24,
+		"location": "Avenida Europa, 92"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.452853202819824,
+          36.699943568693826
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 8,
+		"location": "Calle Rio Rocio, 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.433155059814453,
+          36.703590783484614
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 12,
+		"location": "Calle Martinez Maldonado, 45"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.438905715942383,
+          36.72161786880056
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 4,
+		"location": "Calle Spengler, 9"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.455471038818359,
+          36.71783390775925
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 18,
+		"location": "Calle Iznate, 12"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.448261260986328,
+          36.709370920337015
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 4,
+		"location": "Calle de Nunez Vela, 31"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.451694488525391,
+          36.7249200824688
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 30,
+		"location": "Calle Ibrahim, 5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.441995620727539,
+          36.72952918496946
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 12,
+		"location": "Calle de Argentea, 5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.44645881652832,
+          36.72168666636679
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 12,
+		"location": "Avenida de Barcelona, 28"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.431009292602538,
+          36.725126466108804
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 30,
+		"id": 25,
+        "location": "Calle Doctor Miguel Diaz Recio, 20"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.465341567993164,
+          36.72361297320252
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 12,
+		"location": "Calle Granada, 3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.421567916870117,
+          36.72148027348321
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 12,
+		"location": "Calle Miraazucenas, 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.4405364990234375,
+          36.73173044974
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {       
+        "type": "Delivery Point",
+        "demand": 20,
+		"id": 28,
+        "location": "Calle Corregidor Fernando de Bazan, 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.467315673828125,
+          36.72574561370105
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {        
+        "type": "Delivery Point",
+        "demand": 20,
+        "location": "Calle Maestro Jimenez, 20"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.4666290283203125,
+          36.721549071172696
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Delivery Point",
+        "demand": 20,
+        "location": "Calle Miguel Carrera, 34"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.46894645690918,
+          36.72347538145932
+        ]
+      }
+    },
+	  {
+      "type": "Feature",
+       "properties": {
+        "type": "Delivery Point",
+        "demand": 9,
+		"location": "Avenida Jose Ortega y Gasset, 26"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.461307525634766,
+          36.707306635653666
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "Warehouse",
+		"location": "Paseo de los Tilos, 20"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.43223237991333,
+          36.71382614577095
+        ]
+      }
+    }
+  ]
+}

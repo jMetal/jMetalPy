@@ -3,6 +3,7 @@ import threading
 import time
 
 from jmetal.core.observer import Observable, Observer
+from jmetal.util.reader import Reader
 
 LOGGER = logging.getLogger('jmetal')
 
@@ -53,3 +54,26 @@ class TimeCounter(threading.Thread):
             self.observable.notify_all(**observable_data)
 
             counter += 1
+
+
+class FileObservable(threading.Thread):
+    def __init__(self, cost_matrix, cost_to_warehouse, file, num_vehicles, delay = 2, observable: Observable = DefaultObservable()):
+        super(FileObservable, self).__init__()
+        self.observable = observable
+        self.counter = 0   
+        self.delay = delay
+        self.cost_matrix = cost_matrix     
+        self.cost_to_warehouse = cost_to_warehouse
+        self.reader = Reader(file, num_vehicles)
+                
+    def run(self):
+        observable_data = {}
+        while True:      
+            time.sleep(self.delay)           
+            cost_matrix, cost_to_warehouse = self.reader.read_from_file()
+            self.cost_matrix = cost_matrix     
+            self.cost_to_warehouse = cost_to_warehouse  
+            observable_data["COST_MATRIX"] = self.cost_matrix
+            observable_data["COST_TO_WAREHOUSE"] = self.cost_to_warehouse
+            self.observable.notify_all(**observable_data) 
+        

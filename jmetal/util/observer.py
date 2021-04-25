@@ -9,7 +9,7 @@ from jmetal.core.observer import Observer
 from jmetal.core.problem import DynamicProblem
 from jmetal.core.quality_indicator import InvertedGenerationalDistance
 from jmetal.lab.visualization import StreamingPlot, Plot
-from jmetal.util.solution import print_function_values_to_file
+from jmetal.util.solution import print_function_values_to_file, print_variables_to_file 
 
 S = TypeVar('S')
 
@@ -218,3 +218,71 @@ class VisualizerObserver(Observer):
                     self.figure.update(solutions)
 
                 self.figure.ax.set_title('Eval: {}'.format(evaluations), fontsize=13)
+
+
+                
+class WriteFrontVariablesToFileObserver(Observer):
+
+    def __init__(self, output_directory: str) -> None:
+        """ Write function values of the front into files.
+
+        :param output_directory: Output directory. Each front will be saved on a file `FUN.x`. """
+        self.counter = 0
+        self.directory = output_directory
+
+        if Path(self.directory).is_dir():
+            LOGGER.warning('Directory {} exists. Removing contents.'.format(self.directory))
+            for file in os.listdir(self.directory):
+                os.remove('{0}/{1}'.format(self.directory, file))
+        else:
+            LOGGER.warning('Directory {} does not exist. Creating it.'.format(self.directory))
+            Path(self.directory).mkdir(parents=True)
+
+    def update(self, *args, **kwargs):
+        problem = kwargs['PROBLEM']
+        solutions = kwargs['SOLUTIONS']
+
+        if solutions:
+            if isinstance(problem, DynamicProblem):
+                termination_criterion_is_met = kwargs.get('TERMINATION_CRITERIA_IS_MET', None)
+
+                if termination_criterion_is_met:                  
+                    print_variables_to_file(solutions, '{}/VAR.{}'.format(self.directory, self.counter))
+                    self.counter += 1
+            else:
+                print_variables_to_file(solutions, '{}/VAR.{}'.format(self.directory, self.counter))
+                self.counter += 1
+
+class PlotParetoFrontToFileObserver(Observer):
+
+      def __init__(self, output_directory: str) -> None:
+        """ Write function values of the front into files.
+
+        :param output_directory: Output directory. Each front will be saved on a file `FUN.x`. """
+        self.counter = 0
+        self.directory = output_directory
+
+        if Path(self.directory).is_dir():
+            LOGGER.warning('Directory {} exists. Removing contents.'.format(self.directory))
+            for file in os.listdir(self.directory):
+                os.remove('{0}/{1}'.format(self.directory, file))
+        else:
+            LOGGER.warning('Directory {} does not exist. Creating it.'.format(self.directory))
+            Path(self.directory).mkdir(parents=True)
+
+      def update(self, *args, **kwargs):
+        problem = kwargs['PROBLEM']
+        solutions = kwargs['SOLUTIONS']
+
+        if solutions:
+            if isinstance(problem, DynamicProblem):
+                termination_criterion_is_met = kwargs.get('TERMINATION_CRITERIA_IS_MET', None)
+
+                if termination_criterion_is_met:                  
+                    plot_front = Plot(title='Pareto front approximation', axis_labels=['distance cost', 'time cost'])
+                    plot_front.plot(solutions, label='NSGAII-CVRP', filename='{}/PARETO.{}'.format(self.directory, self.counter), format='png')
+                    self.counter += 1
+            else:
+                plot_front = Plot(title='Pareto front approximation', axis_labels=['distance cost', 'time cost'])
+                plot_front.plot(solutions, label='NSGAII-CVRP', filename='{}/PARETO.{}'.format(self.directory, self.counter), format='png')
+                self.counter += 1
