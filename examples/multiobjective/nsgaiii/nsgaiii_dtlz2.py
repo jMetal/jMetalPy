@@ -1,7 +1,8 @@
 from jmetal.algorithm.multiobjective.nsgaiii import NSGAIII, UniformReferenceDirectionFactory
 from jmetal.operator import SBXCrossover, PolynomialMutation
 from jmetal.problem import DTLZ2
-from jmetal.util.solution import read_solutions, print_function_values_to_file, print_variables_to_file
+from jmetal.util.solution import read_solutions, print_function_values_to_file, print_variables_to_file, \
+    get_non_dominated_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == '__main__':
@@ -20,7 +21,7 @@ if __name__ == '__main__':
     )
 
     algorithm.run()
-    front = algorithm.get_result()
+    front = get_non_dominated_solutions(algorithm.get_result())
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.' + algorithm.label)

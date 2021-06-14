@@ -7,7 +7,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 if __name__ == '__main__':
     problem = Rastrigin(10)
 
-    max_evaluations = 250000
+    max_evaluations = 100000
 
     algorithm = SimulatedAnnealing(
         problem=problem,

@@ -1,5 +1,6 @@
 from jmetal.algorithm.multiobjective.gde3 import GDE3
 from jmetal.problem.singleobjective.unconstrained import Rastrigin
+from jmetal.util.observer import PrintObjectivesObserver
 from jmetal.util.solution import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
@@ -11,7 +12,7 @@ if __name__ == '__main__':
         population_size=100,
         cr=0.5,
         f=0.5,
-        termination_criterion=StoppingByEvaluations(50000)
+        termination_criterion=StoppingByEvaluations(100000)
     )
 
     algorithm.run()
