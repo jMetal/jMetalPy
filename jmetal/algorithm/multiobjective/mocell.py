@@ -102,7 +102,7 @@ class MOCell(GeneticAlgorithm[S, R]):
             raise Exception("Wrong number of parents")
 
         offspring_population = self.crossover_operator.execute(mating_population)
-        self.mutation_operator.execute(offspring_population[0])
+        offspring_population[0] = self.mutation_operator.execute(offspring_population[0])
 
         return [offspring_population[0]]
 
@@ -111,7 +111,7 @@ class MOCell(GeneticAlgorithm[S, R]):
 
         if result == 1:  # the offspring individual dominates the current one
             population[self.current_individual] = offspring_population[0]
-            self.archive.add(offspring_population[0])
+            self.archive.add(copy.deepcopy(offspring_population[0]))
         elif result == 0:  # the offspring and current individuals are non-dominated
             new_individual = offspring_population[0]
 
@@ -127,7 +127,7 @@ class MOCell(GeneticAlgorithm[S, R]):
             self.current_neighbors.sort(key=cmp_to_key(self.comparator.compare))
             worst_solution = self.current_neighbors[-1]
 
-            self.archive.add(new_individual)
+            self.archive.add(copy.deepcopy(new_individual))
             if worst_solution != new_individual:
                 population[self.current_individual] = new_individual
 
