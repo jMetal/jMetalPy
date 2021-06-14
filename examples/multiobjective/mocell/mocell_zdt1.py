@@ -1,13 +1,14 @@
+from jmetal.util.solution_list import (
+    print_function_values_to_file,
+    print_variables_to_file,
+)
+
 from jmetal.algorithm.multiobjective.mocell import MOCell
 from jmetal.operator import PolynomialMutation, SBXCrossover
 from jmetal.problem import ZDT1
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.neighborhood import C9
 from jmetal.util.solution import read_solutions
-from jmetal.util.solution_list import (
-    print_function_values_to_file,
-    print_variables_to_file,
-)
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":

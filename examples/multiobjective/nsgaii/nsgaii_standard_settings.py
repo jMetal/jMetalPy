@@ -8,7 +8,7 @@ from jmetal.util.solution import (
     read_solutions,
 )
 from jmetal.util.termination_criterion import StoppingByEvaluations
-import jmetal
+
 """  
 Program to  configure and run the NSGA-II algorithm configured with standard settings.
 """

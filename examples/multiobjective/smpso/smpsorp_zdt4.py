@@ -1,9 +1,9 @@
 from jmetal.algorithm.multiobjective.smpso import SMPSORP
 from jmetal.lab.visualization import InteractivePlot, Plot
 from jmetal.operator import PolynomialMutation
-from jmetal.problem import ZDT1, ZDT4
+from jmetal.problem import ZDT1
 from jmetal.util.archive import CrowdingDistanceArchiveWithReferencePoint
-from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
+from jmetal.util.observer import VisualizerObserver
 from jmetal.util.solution import (
     print_function_values_to_file,
     print_variables_to_file,

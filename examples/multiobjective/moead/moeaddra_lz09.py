@@ -1,7 +1,6 @@
 from jmetal.algorithm.multiobjective.moead import MOEAD_DRA
-from jmetal.core.quality_indicator import HyperVolume, InvertedGenerationalDistance
+from jmetal.core.quality_indicator import HyperVolume
 from jmetal.operator import DifferentialEvolutionCrossover, PolynomialMutation
-from jmetal.problem import LZ09_F2
 from jmetal.problem.multiobjective.uf import UF1
 from jmetal.util.aggregative_function import Tschebycheff
 from jmetal.util.solution import (

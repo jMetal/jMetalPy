@@ -1,7 +1,7 @@
 from jmetal.algorithm.singleobjective.local_search import LocalSearch
 from jmetal.operator import BitFlipMutation
 from jmetal.problem import OneMax
-from jmetal.util.observer import ProgressBarObserver, PrintObjectivesObserver
+from jmetal.util.observer import PrintObjectivesObserver
 from jmetal.util.solution import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 

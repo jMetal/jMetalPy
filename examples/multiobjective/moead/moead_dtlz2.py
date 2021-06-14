@@ -1,5 +1,5 @@
 from jmetal.algorithm.multiobjective.moead import MOEAD
-from jmetal.core.quality_indicator import HyperVolume, InvertedGenerationalDistance
+from jmetal.core.quality_indicator import HyperVolume
 from jmetal.operator import DifferentialEvolutionCrossover, PolynomialMutation
 from jmetal.problem import DTLZ2
 from jmetal.util.aggregative_function import Tschebycheff
