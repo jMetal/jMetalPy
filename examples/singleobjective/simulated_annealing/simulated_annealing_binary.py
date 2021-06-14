@@ -4,10 +4,10 @@ from jmetal.problem import OneMax
 from jmetal.util.solution import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
-if __name__ == "__main__":
-    problem = OneMax(number_of_bits=1024)
+if __name__ == '__main__':
+    problem = OneMax(number_of_bits=512)
 
-    max_evaluations = 20000
+    max_evaluations = 10000
 
     algorithm = SimulatedAnnealing(
         problem=problem,
