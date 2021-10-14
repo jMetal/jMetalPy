@@ -1,16 +1,16 @@
-import logging
 from abc import ABC, abstractmethod
 from functools import cmp_to_key
-from typing import TypeVar, List
+from typing import List, TypeVar
 
 import numpy
 from scipy.spatial.distance import euclidean
 
-from jmetal.util.comparator import SolutionAttributeComparator, Comparator
+from jmetal.logger import get_logger
+from jmetal.util.comparator import Comparator, SolutionAttributeComparator
 
-LOGGER = logging.getLogger('jmetal')
+logger = get_logger(__name__)
 
-S = TypeVar('S')
+S = TypeVar("S")
 
 """
 .. module:: density_estimator
@@ -22,8 +22,7 @@ S = TypeVar('S')
 
 
 class DensityEstimator(List[S], ABC):
-    """This is the interface of any density estimator algorithm.
-    """
+    """This is the interface of any density estimator algorithm."""
 
     @abstractmethod
     def compute_density_estimator(self, solutions: List[S]) -> float:
@@ -39,8 +38,7 @@ class DensityEstimator(List[S], ABC):
 
 
 class CrowdingDistance(DensityEstimator[List[S]]):
-    """This class implements a DensityEstimator based on the crowding distance of algorithm NSGA-II.
-    """
+    """This class implements a DensityEstimator based on the crowding distance of algorithm NSGA-II."""
 
     def compute_density_estimator(self, front: List[S]):
         """This function performs the computation of the crowding density estimation over the solution list.
@@ -52,18 +50,18 @@ class CrowdingDistance(DensityEstimator[List[S]]):
         """
         size = len(front)
 
-        if size is 0:
+        if size == 0:
             return
-        elif size is 1:
-            front[0].attributes['crowding_distance'] = float("inf")
+        elif size == 1:
+            front[0].attributes["crowding_distance"] = float("inf")
             return
-        elif size is 2:
-            front[0].attributes['crowding_distance'] = float("inf")
-            front[1].attributes['crowding_distance'] = float("inf")
+        elif size == 2:
+            front[0].attributes["crowding_distance"] = float("inf")
+            front[1].attributes["crowding_distance"] = float("inf")
             return
 
         for i in range(len(front)):
-            front[i].attributes['crowding_distance'] = 0.0
+            front[i].attributes["crowding_distance"] = 0.0
 
         number_of_objectives = front[0].number_of_objectives
 
@@ -74,20 +72,21 @@ class CrowdingDistance(DensityEstimator[List[S]]):
             objective_maxn = front[len(front) - 1].objectives[i]
 
             # Set de crowding distance
-            front[0].attributes['crowding_distance'] = float('inf')
-            front[size - 1].attributes['crowding_distance'] = float('inf')
+            front[0].attributes["crowding_distance"] = float("inf")
+            front[size - 1].attributes["crowding_distance"] = float("inf")
 
             for j in range(1, size - 1):
                 distance = front[j + 1].objectives[i] - front[j - 1].objectives[i]
 
                 # Check if minimum and maximum are the same (in which case do nothing)
                 if objective_maxn - objective_minn == 0:
-                    pass;  # LOGGER.warning('Minimum and maximum are the same!')
+                    pass
+                    # logger.warning('Minimum and maximum are the same!')
                 else:
                     distance = distance / (objective_maxn - objective_minn)
 
-                distance += front[j].attributes['crowding_distance']
-                front[j].attributes['crowding_distance'] = distance
+                distance += front[j].attributes["crowding_distance"]
+                front[j].attributes["crowding_distance"] = distance
 
     def sort(self, solutions: List[S]) -> List[S]:
         solutions.sort(key=cmp_to_key(self.get_comparator().compare))
@@ -98,8 +97,7 @@ class CrowdingDistance(DensityEstimator[List[S]]):
 
 
 class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
-    """This class implements a density estimator based on the distance to the k-th nearest solution.
-    """
+    """This class implements a density estimator based on the distance to the k-th nearest solution."""
 
     def __init__(self, k: int = 1):
         super().__init__()
@@ -119,15 +117,16 @@ class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
         self.distance_matrix = numpy.zeros(shape=(solutions_size, solutions_size))
         for i in range(solutions_size):
             for j in range(solutions_size):
-                self.distance_matrix[i, j] = self.distance_matrix[j, i] = euclidean(solutions[i].objectives,
-                                                                                    solutions[j].objectives)
+                self.distance_matrix[i, j] = self.distance_matrix[j, i] = euclidean(
+                    solutions[i].objectives, solutions[j].objectives
+                )
         # Gets the k-nearest distance of all the solutions
         for i in range(solutions_size):
             distances = []
             for j in range(solutions_size):
                 distances.append(self.distance_matrix[i, j])
             distances.sort()
-            solutions[i].attributes['knn_density'] = distances[self.k]
+            solutions[i].attributes["knn_density"] = distances[self.k]
 
     def sort(self, solutions: List[S]) -> List[S]:
         def compare(solution1, solution2):

@@ -1,10 +1,10 @@
 import copy
 from functools import cmp_to_key
-from typing import TypeVar, List
+from typing import List, TypeVar
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
-from jmetal.core.operator import Mutation, Crossover, Selection
+from jmetal.core.operator import Crossover, Mutation, Selection
 from jmetal.core.problem import Problem
 from jmetal.operator import BinaryTournamentSelection
 from jmetal.util.archive import BoundedArchive
@@ -16,8 +16,8 @@ from jmetal.util.neighborhood import Neighborhood
 from jmetal.util.ranking import FastNonDominatedRanking, Ranking
 from jmetal.util.termination_criterion import TerminationCriterion
 
-S = TypeVar('S')
-R = TypeVar('R')
+S = TypeVar("S")
+R = TypeVar("R")
 
 """
 .. module:: MOCell
@@ -28,21 +28,22 @@ R = TypeVar('R')
 
 
 class MOCell(GeneticAlgorithm[S, R]):
-
-    def __init__(self,
-                 problem: Problem,
-                 population_size: int,
-                 neighborhood: Neighborhood,
-                 archive: BoundedArchive,
-                 mutation: Mutation,
-                 crossover: Crossover,
-                 selection: Selection = BinaryTournamentSelection(
-                     MultiComparator([FastNonDominatedRanking.get_comparator(),
-                                      CrowdingDistance.get_comparator()])),
-                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
-                 population_generator: Generator = store.default_generator,
-                 population_evaluator: Evaluator = store.default_evaluator,
-                 dominance_comparator: Comparator = store.default_comparator):
+    def __init__(
+        self,
+        problem: Problem,
+        population_size: int,
+        neighborhood: Neighborhood,
+        archive: BoundedArchive,
+        mutation: Mutation,
+        crossover: Crossover,
+        selection: Selection = BinaryTournamentSelection(
+            MultiComparator([FastNonDominatedRanking.get_comparator(), CrowdingDistance.get_comparator()])
+        ),
+        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        population_generator: Generator = store.default_generator,
+        population_evaluator: Evaluator = store.default_evaluator,
+        dominance_comparator: Comparator = store.default_comparator,
+    ):
         """
         MOCEll implementation as described in:
 
@@ -61,7 +62,7 @@ class MOCell(GeneticAlgorithm[S, R]):
             selection=selection,
             termination_criterion=termination_criterion,
             population_evaluator=population_evaluator,
-            population_generator=population_generator
+            population_generator=population_generator,
         )
         self.dominance_comparator = dominance_comparator
         self.neighborhood = neighborhood
@@ -69,8 +70,7 @@ class MOCell(GeneticAlgorithm[S, R]):
         self.current_individual = 0
         self.current_neighbors = []
 
-        self.comparator = MultiComparator([FastNonDominatedRanking.get_comparator(),
-                                           CrowdingDistance.get_comparator()])
+        self.comparator = MultiComparator([FastNonDominatedRanking.get_comparator(), CrowdingDistance.get_comparator()])
 
     def init_progress(self) -> None:
         super().init_progress()
@@ -99,10 +99,10 @@ class MOCell(GeneticAlgorithm[S, R]):
         number_of_parents_to_combine = self.crossover_operator.get_number_of_parents()
 
         if len(mating_population) % number_of_parents_to_combine != 0:
-            raise Exception('Wrong number of parents')
+            raise Exception("Wrong number of parents")
 
         offspring_population = self.crossover_operator.execute(mating_population)
-        self.mutation_operator.execute(offspring_population[0])
+        offspring_population[0] = self.mutation_operator.execute(offspring_population[0])
 
         return [offspring_population[0]]
 
@@ -111,7 +111,7 @@ class MOCell(GeneticAlgorithm[S, R]):
 
         if result == 1:  # the offspring individual dominates the current one
             population[self.current_individual] = offspring_population[0]
-            self.archive.add(offspring_population[0])
+            self.archive.add(copy.deepcopy(offspring_population[0]))
         elif result == 0:  # the offspring and current individuals are non-dominated
             new_individual = offspring_population[0]
 
@@ -127,7 +127,7 @@ class MOCell(GeneticAlgorithm[S, R]):
             self.current_neighbors.sort(key=cmp_to_key(self.comparator.compare))
             worst_solution = self.current_neighbors[-1]
 
-            self.archive.add(new_individual)
+            self.archive.add(copy.deepcopy(new_individual))
             if worst_solution != new_individual:
                 population[self.current_individual] = new_individual
 
@@ -137,4 +137,4 @@ class MOCell(GeneticAlgorithm[S, R]):
         return self.archive.solution_list
 
     def get_name(self) -> str:
-        return 'MOCell'
+        return "MOCell"

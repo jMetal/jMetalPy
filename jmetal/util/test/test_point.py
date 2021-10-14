@@ -4,7 +4,6 @@ from jmetal.util.point import IdealPoint
 
 
 class IdealPointTestCases(unittest.TestCase):
-
     def test_should_constructor_create_a_correctly_initialized_point(self) -> None:
         point = IdealPoint(2)
 
@@ -40,5 +39,5 @@ class IdealPointTestCases(unittest.TestCase):
         self.assertEqual([0.2, 1.0, 1.5], point.point)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

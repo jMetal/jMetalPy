@@ -5,7 +5,6 @@ from jmetal.problem.multiobjective.constrained import Srinivas, Tanaka
 
 
 class SrinivasTestCases(unittest.TestCase):
-
     def test_should_constructor_create_a_non_null_object(self) -> None:
         problem = Srinivas()
         self.assertIsNotNone(problem)
@@ -35,7 +34,6 @@ class SrinivasTestCases(unittest.TestCase):
 
 
 class TanakaTestCases(unittest.TestCase):
-
     def test_should_constructor_create_a_non_null_object(self) -> None:
         problem = Tanaka()
         self.assertIsNotNone(problem)
@@ -64,5 +62,5 @@ class TanakaTestCases(unittest.TestCase):
         self.assertEqual("Tanaka", problem.get_name())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

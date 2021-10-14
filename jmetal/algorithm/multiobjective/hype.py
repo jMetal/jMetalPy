@@ -1,36 +1,36 @@
-from typing import TypeVar, List
+from typing import List, TypeVar
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
-from jmetal.core.operator import Mutation, Crossover
+from jmetal.core.operator import Crossover, Mutation
 from jmetal.core.problem import Problem
 from jmetal.core.solution import Solution
 from jmetal.operator import BinaryTournamentSelection
 from jmetal.operator.selection import RankingAndFitnessSelection
-from jmetal.util.comparator import Comparator
-from jmetal.util.comparator import SolutionAttributeComparator
+from jmetal.util.comparator import Comparator, SolutionAttributeComparator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
-S = TypeVar('S')
-R = TypeVar('R')
+S = TypeVar("S")
+R = TypeVar("R")
 
 
 class HYPE(GeneticAlgorithm[S, R]):
-
-    def __init__(self,
-                 problem: Problem,
-                 reference_point: Solution,
-                 population_size: int,
-                 offspring_population_size: int,
-                 mutation: Mutation,
-                 crossover: Crossover,
-                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
-                 population_generator: Generator = store.default_generator,
-                 population_evaluator: Evaluator = store.default_evaluator,
-                 dominance_comparator: Comparator = store.default_comparator):
-        """ This is an implementation of the Hypervolume Estimation Algorithm for Multi-objective Optimization
+    def __init__(
+        self,
+        problem: Problem,
+        reference_point: Solution,
+        population_size: int,
+        offspring_population_size: int,
+        mutation: Mutation,
+        crossover: Crossover,
+        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        population_generator: Generator = store.default_generator,
+        population_evaluator: Evaluator = store.default_evaluator,
+        dominance_comparator: Comparator = store.default_comparator,
+    ):
+        """This is an implementation of the Hypervolume Estimation Algorithm for Multi-objective Optimization
         proposed in:
 
         * J. Bader and E. Zitzler. HypE: An Algorithm for Fast Hypervolume-Based Many-Objective
@@ -49,10 +49,11 @@ class HYPE(GeneticAlgorithm[S, R]):
         """
 
         selection = BinaryTournamentSelection(
-            comparator=SolutionAttributeComparator(key='fitness', lowest_is_best=False))
-        self.ranking_fitness = RankingAndFitnessSelection(population_size,
-                                                          dominance_comparator=dominance_comparator,
-                                                          reference_point=reference_point)
+            comparator=SolutionAttributeComparator(key="fitness", lowest_is_best=False)
+        )
+        self.ranking_fitness = RankingAndFitnessSelection(
+            population_size, dominance_comparator=dominance_comparator, reference_point=reference_point
+        )
         self.reference_point = reference_point
         self.dominance_comparator = dominance_comparator
 
@@ -65,13 +66,14 @@ class HYPE(GeneticAlgorithm[S, R]):
             selection=selection,
             termination_criterion=termination_criterion,
             population_evaluator=population_evaluator,
-            population_generator=population_generator
+            population_generator=population_generator,
         )
 
     def evaluate(self, population: List[S]):
         population = self.population_evaluator.evaluate(population, self.problem)
-        population = self.ranking_fitness.compute_hypervol_fitness_values(population, self.reference_point,
-                                                                          len(population))
+        population = self.ranking_fitness.compute_hypervol_fitness_values(
+            population, self.reference_point, len(population)
+        )
         return population
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
@@ -82,4 +84,4 @@ class HYPE(GeneticAlgorithm[S, R]):
         return self.solutions
 
     def get_name(self) -> str:
-        return 'HYPE'
+        return "HYPE"

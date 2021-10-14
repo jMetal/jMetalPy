@@ -1,16 +1,21 @@
 import unittest
 
-from hamcrest import assert_that, any_of
+from hamcrest import any_of, assert_that
 
 from jmetal.core.solution import Solution
-from jmetal.operator.selection import BinaryTournamentSelection, BestSolutionSelection, RandomSolutionSelection, \
-    NaryRandomSolutionSelection, RankingAndCrowdingDistanceSelection, BinaryTournament2Selection, \
-    DifferentialEvolutionSelection
-from jmetal.util.comparator import SolutionAttributeComparator, EqualSolutionsComparator
+from jmetal.operator.selection import (
+    BestSolutionSelection,
+    BinaryTournament2Selection,
+    BinaryTournamentSelection,
+    DifferentialEvolutionSelection,
+    NaryRandomSolutionSelection,
+    RandomSolutionSelection,
+    RankingAndCrowdingDistanceSelection,
+)
+from jmetal.util.comparator import EqualSolutionsComparator, SolutionAttributeComparator
 
 
 class BinaryTournamentTestCases(unittest.TestCase):
-
     def setUp(self):
         self.selection = BinaryTournamentSelection[Solution]()
 
@@ -55,7 +60,6 @@ class BinaryTournamentTestCases(unittest.TestCase):
 
 
 class BestSolutionSelectionTestCases(unittest.TestCase):
-
     def setUp(self):
         self.selection = BestSolutionSelection[Solution]()
 
@@ -117,7 +121,6 @@ class BestSolutionSelectionTestCases(unittest.TestCase):
 
 
 class RandomSolutionSelectionTestCases(unittest.TestCase):
-
     def setUp(self):
         self.selection = RandomSolutionSelection[Solution]()
 
@@ -195,13 +198,13 @@ class DifferentialEvolutionSelectionTestCases(unittest.TestCase):
 
     def test_should_execute_raise_an_exception_if_the_list_of_solutions_is_smaller_than_required(self):
         selection = DifferentialEvolutionSelection[Solution]()
-        solution_list = [Solution(1, 1), Solution(1, 1), Solution(1,1)]
+        solution_list = [Solution(1, 1), Solution(1, 1), Solution(1, 1)]
         with self.assertRaises(Exception):
             selection.execute(solution_list)
 
     def test_should_execute_return_three_solutions_if_the_list_of_solutions_larger_than_three(self):
         selection = DifferentialEvolutionSelection[Solution]()
-        solution_list = [Solution(1, 1), Solution(1, 1), Solution(1,1), Solution(1,1)]
+        solution_list = [Solution(1, 1), Solution(1, 1), Solution(1, 1), Solution(1, 1)]
 
         self.assertEqual(3, len(selection.execute(solution_list)))
 
@@ -231,7 +234,6 @@ class DifferentialEvolutionSelectionTestCases(unittest.TestCase):
 
 
 class NaryRandomSolutionSelectionTestCases(unittest.TestCase):
-
     def test_should_constructor_create_a_non_null_object(self):
         selection = NaryRandomSolutionSelection[Solution]()
         self.assertIsNotNone(selection)
@@ -297,7 +299,6 @@ class NaryRandomSolutionSelectionTestCases(unittest.TestCase):
 
 
 class DominanceRankingTestCases(unittest.TestCase):
-
     def setUp(self):
         self.ranking_and_crowding_selection = RankingAndCrowdingDistanceSelection(5)
 
@@ -335,7 +336,6 @@ class DominanceRankingTestCases(unittest.TestCase):
 
 
 class BinaryTournament2TestCases(unittest.TestCase):
-
     def test_should_constructor_create_a_non_null_object(self):
         selection = BinaryTournament2Selection[Solution]([])
 
@@ -385,5 +385,5 @@ class BinaryTournament2TestCases(unittest.TestCase):
         self.assertTrue(1, selection1.attributes["dominance_ranking"])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
