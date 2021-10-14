@@ -445,8 +445,8 @@ def __averages_to_latex(central_tendency: pd.DataFrame, dispersion: pd.DataFrame
 
     # Write data lines
     for i in range(num_rows):
-        central_values = [v for v in central_tendency.ix[i]]
-        dispersion_values = [v for v in dispersion.ix[i]]
+        central_values = [v for v in central_tendency.iloc[i]]
+        dispersion_values = [v for v in dispersion.iloc[i]]
 
         # Sort mean/median values (the lower the better if minimization)
         # Note that mean/median values could be the same: in that case, sort by Std/IQR (the lower the better)
@@ -527,7 +527,7 @@ def __wilcoxon_to_latex(df: pd.DataFrame, caption: str, label: str, minimization
 
     # Write data lines
     for i in range(num_rows):
-        values = [val.replace('-', '\\text{--}\ ').replace('o', symbolo).replace('+', symbolplus) for val in df.ix[i]]
+        values = [val.replace('-', '\\text{--}\ ').replace('o', symbolo).replace('+', symbolplus) for val in df.iloc[i]]
         output.write('      \\textbf{{{0}}} & ${1}$ \\\\\n'.format(
             df.index[i], ' $ & $ '.join([str(val) for val in values]))
         )
