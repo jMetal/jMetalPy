@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 from typing import List, TypeVar
 
+import numpy as np
 from tqdm import tqdm
 
 from jmetal.core.observer import Observer
@@ -155,8 +156,8 @@ class PlotFrontToFileObserver(Observer):
 
                     if termination_criterion_is_met:
                         if self.counter > 0:
-                            igd = InvertedGenerationalDistance(self.last_front)
-                            igd_value = igd.compute(solutions)
+                            igd = InvertedGenerationalDistance(np.array([s.objectives for s in self.last_front]))
+                            igd_value = igd.compute(np.array([s.objectives for s in solutions]))
                         else:
                             igd_value = 1
 
