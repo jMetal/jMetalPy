@@ -38,6 +38,8 @@ class Kursawe(FloatProblem):
             xj = solution.variables[i + 1] * solution.variables[i + 1]
             aux = -0.2 * sqrt(xi + xj)
             fx[0] += -10 * exp(aux)
+            
+        for i in range(self.number_of_variables):
             fx[1] += pow(abs(solution.variables[i]), 0.8) + 5.0 * sin(pow(solution.variables[i], 3.0))
 
         solution.objectives[0] = fx[0]
