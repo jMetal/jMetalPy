@@ -80,11 +80,12 @@ def evaluate_solution(solution, problem):
 
 
 class DaskEvaluator(Evaluator[S]):
-    def __init__(self, scheduler='processes'):
+    def __init__(self, scheduler='processes', processes: int = 8):
         self.scheduler = scheduler
+        self.processes = processes
 
     def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
-        with dask.config.set(scheduler=self.scheduler):
+        with dask.config.set(scheduler=self.scheduler, num_workers=self.processes):
             return list(dask.compute(*[
                 dask.delayed(evaluate_solution)(solution=solution, problem=problem) for solution in solution_list
             ]))
