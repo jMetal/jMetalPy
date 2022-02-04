@@ -1,5 +1,8 @@
 install:
-	@python setup.py install
+	@python setup.py build install
+
+install-dependencies:
+	@python -m pip install -e .[all]
 
 clean:
 	@rm -rf build dist .eggs *.egg-info
@@ -8,10 +11,10 @@ clean:
 
 black: clean
 	@isort --profile black jmetal/ examples/
-	@black jmetal/
+	@black jmetal/ examples/
 
 lint:
-	@mypy jmetal/ --show-error-codes
+	@mypy jmetal/ examples/ --show-error-codes
 
 tests:
-	@python -m unittest discover --quiet
+	@python -m unittest discover -q

@@ -1,11 +1,9 @@
 ![jMetalPy](docs/source/jmetalpy.png)
 
 [![Build Status](https://img.shields.io/travis/jMetal/jMetalPy/master.svg?style=flat-square)](https://travis-ci.org/jMetal/jMetalPy)
-[![Documentation](https://img.shields.io/badge/docs-online-success?style=flat-square)](https://jmetal.github.io/jMetalPy/index.html)
-[![PyPI License](https://img.shields.io/pypi/l/jMetalPy.svg?style=flat-square)]()
-[![PyPI version](https://img.shields.io/pypi/v/jMetalPy.svg?style=flat-square)]()
 [![PyPI Python version](https://img.shields.io/pypi/pyversions/jMetalPy.svg?style=flat-square)]()
 [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.swevo.2019.100598-blue?style=flat-square)](https://doi.org/10.1016/j.swevo.2019.100598)
+[![PyPI License](https://img.shields.io/pypi/l/jMetalPy.svg?style=flat-square)]()
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
 
 A paper introducing jMetalPy is available at: https://doi.org/10.1016/j.swevo.2019.100598
@@ -120,11 +118,12 @@ The current release of jMetalPy (v1.5.7) contains the following components:
 
 ## Changelog
 
-* [v1.5.7] Use of linters for catching errors and formatters to fix style.
+* [v1.5.7] Use of linters for catching errors and formatters to fix style, minor bug fixes.
 * [v1.5.6] Removed warnings when using Python 3.8.
 * [v1.5.5] Minor bug fixes.
 * [v1.5.4] Refactored quality indicators to accept numpy array as input parameter.
 * [v1.5.4] Added [CompositeSolution](https://github.com/jMetal/jMetalPy/blob/master/jmetal/core/solution.py#L111) class to support mixed combinatorial problems. [#69](https://github.com/jMetal/jMetalPy/issues/69)
 
 ## License
+
 This project is licensed under the terms of the MIT - see the [LICENSE](LICENSE) file for details.
