@@ -1,10 +1,10 @@
 ![jMetalPy](docs/source/jmetalpy.png)
 
-[![Build Status](https://img.shields.io/travis/jMetal/jMetalPy/master.svg?style=flat-square)](https://travis-ci.org/jMetal/jMetalPy)
-[![PyPI Python version](https://img.shields.io/pypi/pyversions/jMetalPy.svg?style=flat-square)]()
-[![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.swevo.2019.100598-blue?style=flat-square)](https://doi.org/10.1016/j.swevo.2019.100598)
-[![PyPI License](https://img.shields.io/pypi/l/jMetalPy.svg?style=flat-square)]()
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
+[![CI](https://github.com/jMetal/jMetalPy/actions/workflows/ci.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/ci.yml)
+[![PyPI Python version](https://img.shields.io/pypi/pyversions/jMetalPy.svg)]()
+[![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.swevo.2019.100598-blue)](https://doi.org/10.1016/j.swevo.2019.100598)
+[![PyPI License](https://img.shields.io/pypi/l/jMetalPy.svg)]()
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 A paper introducing jMetalPy is available at: https://doi.org/10.1016/j.swevo.2019.100598
 
