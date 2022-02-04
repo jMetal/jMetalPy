@@ -1,18 +1,23 @@
-import logging
 import random
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar, List
+from typing import Generic, List, TypeVar
 
 from jmetal.core.observer import Observer
-from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, PermutationSolution
+from jmetal.core.solution import (
+    BinarySolution,
+    FloatSolution,
+    IntegerSolution,
+    PermutationSolution,
+)
+from jmetal.logger import get_logger
 
-LOGGER = logging.getLogger('jmetal')
+logger = get_logger(__name__)
 
-S = TypeVar('S')
+S = TypeVar("S")
 
 
 class Problem(Generic[S], ABC):
-    """ Class representing problems. """
+    """Class representing problems."""
 
     MINIMIZE = -1
     MAXIMIZE = 1
@@ -29,17 +34,17 @@ class Problem(Generic[S], ABC):
 
     @abstractmethod
     def create_solution(self) -> S:
-        """ Creates a random_search solution to the problem.
+        """Creates a random_search solution to the problem.
 
-        :return: Solution. """
+        :return: Solution."""
         pass
 
     @abstractmethod
     def evaluate(self, solution: S) -> S:
-        """ Evaluate a solution. For any new problem inheriting from :class:`Problem`, this method should be
-        replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.
+        """Evaluate a solution. For any new problem inheriting from :class:`Problem`, this method should be replaced.
+        Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.
 
-        :return: Evaluated solution. """
+        :return: Evaluated solution."""
         pass
 
     @abstractmethod
@@ -48,7 +53,6 @@ class Problem(Generic[S], ABC):
 
 
 class DynamicProblem(Problem[S], Observer, ABC):
-
     @abstractmethod
     def the_problem_has_changed(self) -> bool:
         pass
@@ -59,14 +63,14 @@ class DynamicProblem(Problem[S], Observer, ABC):
 
 
 class BinaryProblem(Problem[BinarySolution], ABC):
-    """ Class representing binary problems. """
+    """Class representing binary problems."""
 
     def __init__(self):
         super(BinaryProblem, self).__init__()
 
 
 class FloatProblem(Problem[FloatSolution], ABC):
-    """ Class representing float problems. """
+    """Class representing float problems."""
 
     def __init__(self):
         super(FloatProblem, self).__init__()
@@ -75,19 +79,18 @@ class FloatProblem(Problem[FloatSolution], ABC):
 
     def create_solution(self) -> FloatSolution:
         new_solution = FloatSolution(
-            self.lower_bound,
-            self.upper_bound,
-            self.number_of_objectives,
-            self.number_of_constraints)
-        new_solution.variables = \
-            [random.uniform(self.lower_bound[i] * 1.0, self.upper_bound[i] * 1.0) for i in
-             range(self.number_of_variables)]
+            self.lower_bound, self.upper_bound, self.number_of_objectives, self.number_of_constraints
+        )
+        new_solution.variables = [
+            random.uniform(self.lower_bound[i] * 1.0, self.upper_bound[i] * 1.0)
+            for i in range(self.number_of_variables)
+        ]
 
         return new_solution
 
 
 class IntegerProblem(Problem[IntegerSolution], ABC):
-    """ Class representing integer problems. """
+    """Class representing integer problems."""
 
     def __init__(self):
         super(IntegerProblem, self).__init__()
@@ -96,19 +99,18 @@ class IntegerProblem(Problem[IntegerSolution], ABC):
 
     def create_solution(self) -> IntegerSolution:
         new_solution = IntegerSolution(
-            self.lower_bound,
-            self.upper_bound,
-            self.number_of_objectives,
-            self.number_of_constraints)
-        new_solution.variables = \
-            [int(random.uniform(self.lower_bound[i] * 1.0, self.upper_bound[i] * 1.0))
-             for i in range(self.number_of_variables)]
+            self.lower_bound, self.upper_bound, self.number_of_objectives, self.number_of_constraints
+        )
+        new_solution.variables = [
+            round(random.uniform(self.lower_bound[i] * 1.0, self.upper_bound[i] * 1.0))
+            for i in range(self.number_of_variables)
+        ]
 
         return new_solution
 
 
 class PermutationProblem(Problem[PermutationSolution], ABC):
-    """ Class representing permutation problems. """
+    """Class representing permutation problems."""
 
     def __init__(self):
         super(PermutationProblem, self).__init__()
@@ -148,31 +150,31 @@ class OnTheFlyFloatProblem(FloatProblem):
         self.constraints = []
         self.name = None
 
-    def set_name(self, name):
+    def set_name(self, name) -> "OnTheFlyFloatProblem":
         self.name = name
 
         return self
 
-    def add_function(self, function):
+    def add_function(self, function) -> "OnTheFlyFloatProblem":
         self.functions.append(function)
         self.number_of_objectives += 1
 
         return self
 
-    def add_constraint(self, constraint):
+    def add_constraint(self, constraint) -> "OnTheFlyFloatProblem":
         self.constraints.append(constraint)
         self.number_of_constraints += 1
 
         return self
 
-    def add_variable(self, lower_bound, upper_bound):
+    def add_variable(self, lower_bound, upper_bound) -> "OnTheFlyFloatProblem":
         self.lower_bound.append(lower_bound)
         self.upper_bound.append(upper_bound)
         self.number_of_variables += 1
 
         return self
 
-    def evaluate(self, solution: FloatSolution):
+    def evaluate(self, solution: FloatSolution) -> None:
         for i in range(self.number_of_objectives):
             solution.objectives[i] = self.functions[i](solution.variables)
 

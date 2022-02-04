@@ -12,7 +12,6 @@ from jmetal.util.point import IdealPoint
 
 
 class AggregativeFunction(ABC):
-
     @abstractmethod
     def compute(self, vector: [], weight_vector: []) -> float:
         pass
@@ -23,7 +22,6 @@ class AggregativeFunction(ABC):
 
 
 class WeightedSum(AggregativeFunction):
-
     def compute(self, vector: [], weight_vector: []) -> float:
         return sum(map(lambda x, y: x * y, vector, weight_vector))
 
@@ -32,12 +30,11 @@ class WeightedSum(AggregativeFunction):
 
 
 class Tschebycheff(AggregativeFunction):
-
     def __init__(self, dimension: int):
         self.ideal_point = IdealPoint(dimension)
 
     def compute(self, vector: [], weight_vector: []) -> float:
-        max_fun = -1.0e+30
+        max_fun = -1.0e30
 
         for i in range(len(vector)):
             diff = abs(vector[i] - self.ideal_point.point[i])

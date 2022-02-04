@@ -1,10 +1,14 @@
 import unittest
 
-from jmetal.problem.multiobjective.unconstrained import Kursawe, Fonseca, Schaffer, Viennet2
+from jmetal.problem.multiobjective.unconstrained import (
+    Fonseca,
+    Kursawe,
+    Schaffer,
+    Viennet2,
+)
 
 
 class KursaweTestCases(unittest.TestCase):
-
     def test_should_constructor_create_a_non_null_object(self) -> None:
         problem = Kursawe(3)
         self.assertIsNotNone(problem)
@@ -45,7 +49,6 @@ class KursaweTestCases(unittest.TestCase):
 
 
 class FonsecaTestCases(unittest.TestCase):
-
     def test_should_constructor_create_a_non_null_object(self):
         problem = Fonseca()
         self.assertIsNotNone(problem)
@@ -94,7 +97,6 @@ class FonsecaTestCases(unittest.TestCase):
 
 
 class SchafferTestCases(unittest.TestCase):
-
     def test_should_constructor_create_a_non_null_object(self):
         problem = Schaffer()
         self.assertIsNotNone(problem)
@@ -147,7 +149,6 @@ class SchafferTestCases(unittest.TestCase):
 
 
 class Viennet2TestCases(unittest.TestCase):
-
     def test_should_constructor_create_a_non_null_object(self):
         problem = Viennet2()
         self.assertIsNotNone(problem)
@@ -194,5 +195,5 @@ class Viennet2TestCases(unittest.TestCase):
         self.assertEqual("Viennet2", problem.get_name())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

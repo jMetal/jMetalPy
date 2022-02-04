@@ -1,5 +1,5 @@
-from abc import abstractmethod, ABC
-from typing import TypeVar, List
+from abc import ABC, abstractmethod
+from typing import List, TypeVar
 
 import numpy as np
 from numpy.linalg import LinAlgError
@@ -7,7 +7,7 @@ from scipy import special
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.config import store
-from jmetal.core.operator import Mutation, Crossover, Selection
+from jmetal.core.operator import Crossover, Mutation, Selection
 from jmetal.core.problem import Problem
 from jmetal.operator import BinaryTournamentSelection
 from jmetal.util.comparator import Comparator, MultiComparator
@@ -17,8 +17,8 @@ from jmetal.util.generator import Generator
 from jmetal.util.ranking import FastNonDominatedRanking
 from jmetal.util.termination_criterion import TerminationCriterion
 
-S = TypeVar('S')
-R = TypeVar('R')
+S = TypeVar("S")
+R = TypeVar("R")
 
 """
 .. module:: NSGA-III
@@ -30,7 +30,6 @@ R = TypeVar('R')
 
 
 class ReferenceDirectionFactory(ABC):
-
     def __init__(self, n_dim: int, scaling=None) -> None:
         self.n_dim = n_dim
         self.scaling = scaling
@@ -50,7 +49,6 @@ class ReferenceDirectionFactory(ABC):
 
 
 class UniformReferenceDirectionFactory(ReferenceDirectionFactory):
-
     def __init__(self, n_dim: int, scaling=None, n_points: int = None, n_partitions: int = None) -> None:
         super().__init__(n_dim, scaling)
         if n_points is not None:
@@ -77,8 +75,7 @@ class UniformReferenceDirectionFactory(ReferenceDirectionFactory):
         else:
             for i in range(beta + 1):
                 ref_dir[depth] = 1.0 * i / (1.0 * n_partitions)
-                self.__uniform_reference_directions(ref_dirs, np.copy(ref_dir), n_partitions, beta - i,
-                                                    depth + 1)
+                self.__uniform_reference_directions(ref_dirs, np.copy(ref_dir), n_partitions, beta - i, depth + 1)
 
     @staticmethod
     def get_partition_closest_to_points(n_points, n_dim):
@@ -100,7 +97,7 @@ class UniformReferenceDirectionFactory(ReferenceDirectionFactory):
 
 
 def get_extreme_points(F, n_objs, ideal_point, extreme_points=None):
-    """ Calculate the Achievement Scalarization Function which is used for the extreme point decomposition. """
+    """Calculate the Achievement Scalarization Function which is used for the extreme point decomposition."""
     asf = np.eye(n_objs)
     asf[asf == 0] = 1e6
 
@@ -122,7 +119,7 @@ def get_extreme_points(F, n_objs, ideal_point, extreme_points=None):
 
 
 def get_nadir_point(extreme_points, ideal_point, worst_point, worst_of_front, worst_of_population):
-    """ Calculate the axis intersects for a set of individuals and its extremes (construct hyperplane). """
+    """Calculate the axis intersects for a set of individuals and its extremes (construct hyperplane)."""
     try:
         # find the intercepts using gaussian elimination
         M = extreme_points - ideal_point
@@ -181,7 +178,7 @@ def niching(pop: List[S], n_remaining: int, niche_count, niche_of_individuals, d
 
             # add the selected individual to the survivors
             mask[next_ind] = False
-            pop[next_ind].attributes['is_closest'] = is_closest
+            pop[next_ind].attributes["is_closest"] = is_closest
             survivors.append(int(next_ind))
 
             # increase the corresponding niche count
@@ -191,7 +188,7 @@ def niching(pop: List[S], n_remaining: int, niche_count, niche_of_individuals, d
 
 
 def associate_to_niches(F, niches, ideal_point, nadir_point, utopian_epsilon: float = 0.0):
-    """ Associate each solution to a reference point. """
+    """Associate each solution to a reference point."""
     utopian_point = ideal_point - utopian_epsilon
 
     denom = nadir_point - utopian_point
@@ -230,26 +227,27 @@ def compute_niche_count(n_niches: int, niche_of_individuals):
 
 
 class NSGAIII(NSGAII):
-
-    def __init__(self,
-                 reference_directions,
-                 problem: Problem,
-                 mutation: Mutation,
-                 crossover: Crossover,
-                 population_size: int = None,
-                 selection: Selection = BinaryTournamentSelection(
-                     MultiComparator([FastNonDominatedRanking.get_comparator(),
-                                      CrowdingDistance.get_comparator()])),
-                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
-                 population_generator: Generator = store.default_generator,
-                 population_evaluator: Evaluator = store.default_evaluator,
-                 dominance_comparator: Comparator = store.default_comparator):
+    def __init__(
+        self,
+        reference_directions,
+        problem: Problem,
+        mutation: Mutation,
+        crossover: Crossover,
+        population_size: int = None,
+        selection: Selection = BinaryTournamentSelection(
+            MultiComparator([FastNonDominatedRanking.get_comparator(), CrowdingDistance.get_comparator()])
+        ),
+        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        population_generator: Generator = store.default_generator,
+        population_evaluator: Evaluator = store.default_evaluator,
+        dominance_comparator: Comparator = store.default_comparator,
+    ):
         self.reference_directions = reference_directions.compute()
 
         if not population_size:
             population_size = len(self.reference_directions)
         if self.reference_directions.shape[1] != problem.number_of_objectives:
-            raise Exception('Dimensionality of reference points must be equal to the number of objectives')
+            raise Exception("Dimensionality of reference points must be equal to the number of objectives")
 
         super(NSGAIII, self).__init__(
             problem=problem,
@@ -261,7 +259,7 @@ class NSGAIII(NSGAII):
             termination_criterion=termination_criterion,
             population_evaluator=population_evaluator,
             population_generator=population_generator,
-            dominance_comparator=dominance_comparator
+            dominance_comparator=dominance_comparator,
         )
 
         self.extreme_points = None
@@ -269,7 +267,7 @@ class NSGAIII(NSGAII):
         self.worst_point = np.full(self.problem.number_of_objectives, -np.inf)
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
-        """ Implements NSGA-III environmental selection based on reference points as described in:
+        """Implements NSGA-III environmental selection based on reference points as described in:
 
         * Deb, K., & Jain, H. (2014). An Evolutionary Many-Objective Optimization
           Algorithm Using Reference-Point-Based Nondominated Sorting Approach,
@@ -290,20 +288,24 @@ class NSGAIII(NSGAII):
         fronts, non_dominated = ranking.ranked_sublists, ranking.get_subfront(0)
 
         # find the extreme points for normalization
-        self.extreme_points = get_extreme_points(F=np.array([s.objectives for s in non_dominated]),
-                                                 n_objs=self.problem.number_of_objectives,
-                                                 ideal_point=self.ideal_point,
-                                                 extreme_points=self.extreme_points)
+        self.extreme_points = get_extreme_points(
+            F=np.array([s.objectives for s in non_dominated]),
+            n_objs=self.problem.number_of_objectives,
+            ideal_point=self.ideal_point,
+            extreme_points=self.extreme_points,
+        )
 
         # find the intercepts for normalization and do backup if gaussian elimination fails
         worst_of_population = np.max(F, axis=0)
         worst_of_front = np.max(np.array([s.objectives for s in non_dominated]), axis=0)
 
-        nadir_point = get_nadir_point(extreme_points=self.extreme_points,
-                                      ideal_point=self.ideal_point,
-                                      worst_point=self.worst_point,
-                                      worst_of_population=worst_of_population,
-                                      worst_of_front=worst_of_front)
+        nadir_point = get_nadir_point(
+            extreme_points=self.extreme_points,
+            ideal_point=self.ideal_point,
+            worst_point=self.worst_point,
+            worst_of_population=worst_of_population,
+            worst_of_front=worst_of_front,
+        )
 
         #  consider only the population until we come to the splitting front
         pop = np.concatenate(ranking.ranked_sublists)
@@ -318,10 +320,9 @@ class NSGAIII(NSGAII):
         last_front = np.array(fronts[-1])
 
         # associate individuals to niches
-        niche_of_individuals, dist_to_niche = associate_to_niches(F=F,
-                                                                  niches=self.reference_directions,
-                                                                  ideal_point=self.ideal_point,
-                                                                  nadir_point=nadir_point)
+        niche_of_individuals, dist_to_niche = associate_to_niches(
+            F=F, niches=self.reference_directions, ideal_point=self.ideal_point, nadir_point=nadir_point
+        )
 
         # if we need to select individuals to survive
         if len(pop) > self.population_size:
@@ -333,15 +334,18 @@ class NSGAIII(NSGAII):
             # if some individuals already survived
             else:
                 until_last_front = np.concatenate(fronts[:-1])
-                niche_count = compute_niche_count(len(self.reference_directions),
-                                                  niche_of_individuals[until_last_front])
+                niche_count = compute_niche_count(
+                    len(self.reference_directions), niche_of_individuals[until_last_front]
+                )
                 n_remaining = self.population_size - len(until_last_front)
 
-            S_idx = niching(pop=pop[last_front],
-                            n_remaining=n_remaining,
-                            niche_count=niche_count,
-                            niche_of_individuals=niche_of_individuals[last_front],
-                            dist_to_niche=dist_to_niche[last_front])
+            S_idx = niching(
+                pop=pop[last_front],
+                n_remaining=n_remaining,
+                niche_count=niche_count,
+                niche_of_individuals=niche_of_individuals[last_front],
+                dist_to_niche=dist_to_niche[last_front],
+            )
 
             survivors_idx = np.concatenate((until_last_front, last_front[S_idx].tolist()))
             pop = pop[survivors_idx]
@@ -349,11 +353,11 @@ class NSGAIII(NSGAII):
         return list(pop)
 
     def get_result(self):
-        """ Return only non dominated solutions."""
+        """Return only non dominated solutions."""
         ranking = FastNonDominatedRanking(self.dominance_comparator)
         ranking.compute_ranking(self.solutions, k=self.population_size)
 
         return ranking.get_subfront(0)
 
     def get_name(self) -> str:
-        return 'NSGAIII'
+        return "NSGAIII"

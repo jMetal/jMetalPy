@@ -14,7 +14,6 @@ from jmetal.core.solution import BinarySolution, FloatSolution
 
 
 class OneMax(BinaryProblem):
-
     def __init__(self, number_of_bits: int = 256):
         super(OneMax, self).__init__()
         self.number_of_bits = number_of_bits
@@ -23,7 +22,7 @@ class OneMax(BinaryProblem):
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE]
-        self.obj_labels = ['Ones']
+        self.obj_labels = ["Ones"]
 
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
         counter_of_ones = 0
@@ -37,16 +36,14 @@ class OneMax(BinaryProblem):
 
     def create_solution(self) -> BinarySolution:
         new_solution = BinarySolution(number_of_variables=1, number_of_objectives=1)
-        new_solution.variables[0] = \
-            [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
+        new_solution.variables[0] = [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
         return new_solution
 
     def get_name(self) -> str:
-        return 'OneMax'
+        return "OneMax"
 
 
 class Sphere(FloatProblem):
-
     def __init__(self, number_of_variables: int = 10):
         super(Sphere, self).__init__()
         self.number_of_objectives = 1
@@ -54,7 +51,7 @@ class Sphere(FloatProblem):
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE]
-        self.obj_labels = ['f(x)']
+        self.obj_labels = ["f(x)"]
 
         self.lower_bound = [-5.12 for _ in range(number_of_variables)]
         self.upper_bound = [5.12 for _ in range(number_of_variables)]
@@ -72,11 +69,10 @@ class Sphere(FloatProblem):
         return solution
 
     def get_name(self) -> str:
-        return 'Sphere'
+        return "Sphere"
 
 
 class Rastrigin(FloatProblem):
-
     def __init__(self, number_of_variables: int = 10):
         super(Rastrigin, self).__init__()
         self.number_of_objectives = 1
@@ -84,7 +80,7 @@ class Rastrigin(FloatProblem):
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE]
-        self.obj_labels = ['f(x)']
+        self.obj_labels = ["f(x)"]
 
         self.lower_bound = [-5.12 for _ in range(number_of_variables)]
         self.upper_bound = [5.12 for _ in range(number_of_variables)]
@@ -105,13 +101,12 @@ class Rastrigin(FloatProblem):
         return solution
 
     def get_name(self) -> str:
-        return 'Rastrigin'
+        return "Rastrigin"
 
 
 class SubsetSum(BinaryProblem):
-
     def __init__(self, C: int, W: list):
-        """ The goal is to find a subset S of W whose elements sum is closest to (without exceeding) C.
+        """The goal is to find a subset S of W whose elements sum is closest to (without exceeding) C.
 
         :param C: Large integer.
         :param W: Set of non-negative integers."""
@@ -125,7 +120,7 @@ class SubsetSum(BinaryProblem):
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MAXIMIZE]
-        self.obj_labels = ['Sum']
+        self.obj_labels = ["Sum"]
 
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
         total_sum = 0.0
@@ -145,12 +140,12 @@ class SubsetSum(BinaryProblem):
         return solution
 
     def create_solution(self) -> BinarySolution:
-        new_solution = BinarySolution(number_of_variables=self.number_of_variables,
-                                      number_of_objectives=self.number_of_objectives)
-        new_solution.variables[0] = \
-            [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
+        new_solution = BinarySolution(
+            number_of_variables=self.number_of_variables, number_of_objectives=self.number_of_objectives
+        )
+        new_solution.variables[0] = [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
 
         return new_solution
 
     def get_name(self) -> str:
-        return 'Subset Sum'
+        return "Subset Sum"

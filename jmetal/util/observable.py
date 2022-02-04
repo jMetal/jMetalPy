@@ -4,7 +4,7 @@ import time
 
 from jmetal.core.observer import Observable, Observer
 
-LOGGER = logging.getLogger('jmetal')
+LOGGER = logging.getLogger("jmetal")
 
 """
 .. module:: observable
@@ -15,7 +15,6 @@ LOGGER = logging.getLogger('jmetal')
 
 
 class DefaultObservable(Observable):
-
     def __init__(self):
         self.observers = []
 

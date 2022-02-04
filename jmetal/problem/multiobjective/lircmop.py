@@ -1,11 +1,12 @@
-from math import sin, pi, cos, sqrt
+from math import cos, pi, sin, sqrt
+from typing import List
 
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 
 
 class LIRCMOP1(FloatProblem):
-    """ Class representing problem LIR-CMOP1, defined in:
+    """Class representing problem LIR-CMOP1, defined in:
 
     * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
       Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x
@@ -18,7 +19,7 @@ class LIRCMOP1(FloatProblem):
         self.number_of_constraints = 2
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f(x)', 'f(y)']
+        self.obj_labels = ["f(x)", "f(y)"]
 
         self.lower_bound = [0.0 for _ in range(self.number_of_variables)]
         self.upper_bound = [1.0 for _ in range(self.number_of_variables)]
@@ -47,14 +48,14 @@ class LIRCMOP1(FloatProblem):
 
         return solution
 
-    def g1(self, x: [float]) -> float:
+    def g1(self, x: List[float]) -> float:
         result = 0
         for i in range(2, self.number_of_variables, 2):
             result += pow(x[i] - sin(0.5 * pi * x[0]), 2.0)
 
         return result
 
-    def g2(self, x: [float]) -> float:
+    def g2(self, x: List[float]) -> float:
         result = 0
         for i in range(1, self.number_of_variables, 2):
             result += pow(x[i] - cos(0.5 * pi * x[0]), 2.0)
@@ -62,11 +63,11 @@ class LIRCMOP1(FloatProblem):
         return result
 
     def get_name(self):
-        return 'LIR-CMOP1'
+        return "LIR-CMOP1"
 
 
 class LIRCMOP2(LIRCMOP1):
-    """ Class representing problem LIR-CMOP1, defined in:
+    """Class representing problem LIR-CMOP1, defined in:
 
     * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
       Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x
@@ -86,11 +87,11 @@ class LIRCMOP2(LIRCMOP1):
         return solution
 
     def get_name(self):
-        return 'LIR-CMOP2'
+        return "LIR-CMOP2"
 
 
 class LIRCMOP3(LIRCMOP1):
-    """ Class representing problem LIR-CMOP3, defined in:
+    """Class representing problem LIR-CMOP3, defined in:
 
     * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
       Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x
@@ -116,11 +117,11 @@ class LIRCMOP3(LIRCMOP1):
         return solution
 
     def get_name(self):
-        return 'LIR-CMOP3'
+        return "LIR-CMOP3"
 
 
 class LIRCMOP4(LIRCMOP2):
-    """ Class representing problem LIR-CMOP4, defined in:
+    """Class representing problem LIR-CMOP4, defined in:
 
     * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
       Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x
@@ -146,11 +147,11 @@ class LIRCMOP4(LIRCMOP2):
         return solution
 
     def get_name(self):
-        return 'LIR-CMOP4'
+        return "LIR-CMOP4"
 
 
 class LIRCMOP5(FloatProblem):
-    """ Class representing problem LIR-CMOP5, defined in:
+    """Class representing problem LIR-CMOP5, defined in:
 
     * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
       Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x
@@ -163,7 +164,7 @@ class LIRCMOP5(FloatProblem):
         self.number_of_constraints = 2
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f(x)', 'f(y)']
+        self.obj_labels = ["f(x)", "f(y)"]
 
         self.lower_bound = [0.0 for _ in range(self.number_of_variables)]
         self.upper_bound = [1.0 for _ in range(self.number_of_variables)]
@@ -191,11 +192,11 @@ class LIRCMOP5(FloatProblem):
         f2 = solution.objectives[1]
 
         for i in range(len(x_offset)):
-            constraints[i] = pow(
-                ((f1 - x_offset[i]) * cos(theta) - (f2 - y_offset[i]) * sin(theta)) / a_array[i], 2) + \
-                             pow(
-                                 ((f1 - x_offset[i]) * sin(theta) + (f2 - y_offset[i]) * cos(theta)) / b_array[i],
-                                 2) - r
+            constraints[i] = (
+                pow(((f1 - x_offset[i]) * cos(theta) - (f2 - y_offset[i]) * sin(theta)) / a_array[i], 2)
+                + pow(((f1 - x_offset[i]) * sin(theta) + (f2 - y_offset[i]) * cos(theta)) / b_array[i], 2)
+                - r
+            )
 
         solution.constraints = constraints
 
@@ -216,11 +217,11 @@ class LIRCMOP5(FloatProblem):
         return result
 
     def get_name(self):
-        return 'LIR-CMOP5'
+        return "LIR-CMOP5"
 
 
 class LIRCMOP6(LIRCMOP5):
-    """ Class representing problem LIR-CMOP6, defined in:
+    """Class representing problem LIR-CMOP6, defined in:
 
     * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
       Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x
@@ -252,22 +253,22 @@ class LIRCMOP6(LIRCMOP5):
         f2 = solution.objectives[1]
 
         for i in range(len(x_offset)):
-            constraints[i] = pow(
-                ((f1 - x_offset[i]) * cos(theta) - (f2 - y_offset[i]) * sin(theta)) / a_array[i], 2) + \
-                             pow(
-                                 ((f1 - x_offset[i]) * sin(theta) + (f2 - y_offset[i]) * cos(theta)) / b_array[i],
-                                 2) - r
+            constraints[i] = (
+                pow(((f1 - x_offset[i]) * cos(theta) - (f2 - y_offset[i]) * sin(theta)) / a_array[i], 2)
+                + pow(((f1 - x_offset[i]) * sin(theta) + (f2 - y_offset[i]) * cos(theta)) / b_array[i], 2)
+                - r
+            )
 
         solution.constraints = constraints
 
         return solution
 
     def get_name(self):
-        return 'LIR-CMOP6'
+        return "LIR-CMOP6"
 
 
 class LIRCMOP7(LIRCMOP5):
-    """ Class representing problem LIR-CMOP7, defined in:
+    """Class representing problem LIR-CMOP7, defined in:
 
     * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
       Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x
@@ -289,22 +290,22 @@ class LIRCMOP7(LIRCMOP5):
         f2 = solution.objectives[1]
 
         for i in range(len(x_offset)):
-            constraints[i] = pow(
-                ((f1 - x_offset[i]) * cos(theta) - (f2 - y_offset[i]) * sin(theta)) / a_array[i], 2) + \
-                             pow(
-                                 ((f1 - x_offset[i]) * sin(theta) + (f2 - y_offset[i]) * cos(theta)) / b_array[i],
-                                 2) - r
+            constraints[i] = (
+                pow(((f1 - x_offset[i]) * cos(theta) - (f2 - y_offset[i]) * sin(theta)) / a_array[i], 2)
+                + pow(((f1 - x_offset[i]) * sin(theta) + (f2 - y_offset[i]) * cos(theta)) / b_array[i], 2)
+                - r
+            )
 
         solution.constraints = constraints
 
         return solution
 
     def get_name(self):
-        return 'LIR-CMOP7'
+        return "LIR-CMOP7"
 
 
 class LIRCMOP8(LIRCMOP6):
-    """ Class representing problem LIR-CMOP8, defined in:
+    """Class representing problem LIR-CMOP8, defined in:
 
     * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
       Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x
@@ -326,22 +327,22 @@ class LIRCMOP8(LIRCMOP6):
         f2 = solution.objectives[1]
 
         for i in range(len(x_offset)):
-            constraints[i] = pow(
-                ((f1 - x_offset[i]) * cos(theta) - (f2 - y_offset[i]) * sin(theta)) / a_array[i], 2) + \
-                             pow(
-                                 ((f1 - x_offset[i]) * sin(theta) + (f2 - y_offset[i]) * cos(theta)) / b_array[i],
-                                 2) - r
+            constraints[i] = (
+                pow(((f1 - x_offset[i]) * cos(theta) - (f2 - y_offset[i]) * sin(theta)) / a_array[i], 2)
+                + pow(((f1 - x_offset[i]) * sin(theta) + (f2 - y_offset[i]) * cos(theta)) / b_array[i], 2)
+                - r
+            )
 
         solution.constraints = constraints
 
         return solution
 
     def get_name(self):
-        return 'LIR-CMOP8'
+        return "LIR-CMOP8"
 
 
 class LIRCMOP9(LIRCMOP8):
-    """ Class representing problem LIR-CMOP9, defined in:
+    """Class representing problem LIR-CMOP9, defined in:
 
     * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
       Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x
@@ -369,27 +370,30 @@ class LIRCMOP9(LIRCMOP8):
         f0 = solution.objectives[0]
         f1 = solution.objectives[1]
 
-        constraints[0] = f0 * sin(theta) + f1 * cos(theta) - sin(n * pi * (f0 * cos(theta) - f1 * sin(theta))) - 2;
+        constraints[0] = f0 * sin(theta) + f1 * cos(theta) - sin(n * pi * (f0 * cos(theta) - f1 * sin(theta))) - 2
 
         x_offset = 1.40
         y_offset = 1.40
         a = 1.5
         b = 6.0
-        r = 0.1;
+        r = 0.1
 
-        constraints[1] = pow(((f0 - x_offset) * cos(theta) - (f1 - y_offset) * sin(theta)) / a, 2) + pow(
-            ((f0 - x_offset) * sin(theta) + (f1 - y_offset) * cos(theta)) / b, 2) - r
+        constraints[1] = (
+            pow(((f0 - x_offset) * cos(theta) - (f1 - y_offset) * sin(theta)) / a, 2)
+            + pow(((f0 - x_offset) * sin(theta) + (f1 - y_offset) * cos(theta)) / b, 2)
+            - r
+        )
 
         solution.constraints = constraints
 
         return solution
 
     def get_name(self):
-        return 'LIR-CMOP9'
+        return "LIR-CMOP9"
 
 
 class LIRCMOP10(LIRCMOP8):
-    """ Class representing problem LIR-CMOP10, defined in:
+    """Class representing problem LIR-CMOP10, defined in:
 
     * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
       Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x
@@ -416,27 +420,30 @@ class LIRCMOP10(LIRCMOP8):
         f0 = solution.objectives[0]
         f1 = solution.objectives[1]
 
-        constraints[0] = f0 * sin(theta) + f1 * cos(theta) - sin(n * pi * (f0 * cos(theta) - f1 * sin(theta))) - 1;
+        constraints[0] = f0 * sin(theta) + f1 * cos(theta) - sin(n * pi * (f0 * cos(theta) - f1 * sin(theta))) - 1
 
         x_offset = 1.1
         y_offset = 1.2
         a = 2.0
         b = 4.0
-        r = 0.1;
+        r = 0.1
 
-        constraints[1] = pow(((f0 - x_offset) * cos(theta) - (f1 - y_offset) * sin(theta)) / a, 2) + pow(
-            ((f0 - x_offset) * sin(theta) + (f1 - y_offset) * cos(theta)) / b, 2) - r
+        constraints[1] = (
+            pow(((f0 - x_offset) * cos(theta) - (f1 - y_offset) * sin(theta)) / a, 2)
+            + pow(((f0 - x_offset) * sin(theta) + (f1 - y_offset) * cos(theta)) / b, 2)
+            - r
+        )
 
         solution.constraints = constraints
 
         return solution
 
     def get_name(self):
-        return 'LIR-CMOP10'
+        return "LIR-CMOP10"
 
 
 class LIRCMOP11(LIRCMOP10):
-    """ Class representing problem LIR-CMOP11, defined in:
+    """Class representing problem LIR-CMOP11, defined in:
 
     * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
       Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x
@@ -453,27 +460,30 @@ class LIRCMOP11(LIRCMOP10):
         f0 = solution.objectives[0]
         f1 = solution.objectives[1]
 
-        constraints[0] = f0 * sin(theta) + f1 * cos(theta) - sin(n * pi * (f0 * cos(theta) - f1 * sin(theta))) - 2.1;
+        constraints[0] = f0 * sin(theta) + f1 * cos(theta) - sin(n * pi * (f0 * cos(theta) - f1 * sin(theta))) - 2.1
 
         x_offset = 1.2
         y_offset = 1.2
         a = 1.5
         b = 5.0
-        r = 0.1;
+        r = 0.1
 
-        constraints[1] = pow(((f0 - x_offset) * cos(theta) - (f1 - y_offset) * sin(theta)) / a, 2) + pow(
-            ((f0 - x_offset) * sin(theta) + (f1 - y_offset) * cos(theta)) / b, 2) - r
+        constraints[1] = (
+            pow(((f0 - x_offset) * cos(theta) - (f1 - y_offset) * sin(theta)) / a, 2)
+            + pow(((f0 - x_offset) * sin(theta) + (f1 - y_offset) * cos(theta)) / b, 2)
+            - r
+        )
 
         solution.constraints = constraints
 
         return solution
 
     def get_name(self):
-        return 'LIR-CMOP11'
+        return "LIR-CMOP11"
 
 
 class LIRCMOP12(LIRCMOP9):
-    """ Class representing problem LIR-CMOP9, defined in:
+    """Class representing problem LIR-CMOP9, defined in:
 
     * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
       Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x
@@ -490,27 +500,30 @@ class LIRCMOP12(LIRCMOP9):
         f0 = solution.objectives[0]
         f1 = solution.objectives[1]
 
-        constraints[0] = f0 * sin(theta) + f1 * cos(theta) - sin(n * pi * (f0 * cos(theta) - f1 * sin(theta))) - 2.5;
+        constraints[0] = f0 * sin(theta) + f1 * cos(theta) - sin(n * pi * (f0 * cos(theta) - f1 * sin(theta))) - 2.5
 
         x_offset = 1.6
         y_offset = 1.6
         a = 1.5
         b = 6.0
-        r = 0.1;
+        r = 0.1
 
-        constraints[1] = pow(((f0 - x_offset) * cos(theta) - (f1 - y_offset) * sin(theta)) / a, 2) + pow(
-            ((f0 - x_offset) * sin(theta) + (f1 - y_offset) * cos(theta)) / b, 2) - r
+        constraints[1] = (
+            pow(((f0 - x_offset) * cos(theta) - (f1 - y_offset) * sin(theta)) / a, 2)
+            + pow(((f0 - x_offset) * sin(theta) + (f1 - y_offset) * cos(theta)) / b, 2)
+            - r
+        )
 
         solution.constraints = constraints
 
         return solution
 
     def get_name(self):
-        return 'LIR-CMOP12'
+        return "LIR-CMOP12"
 
 
 class LIRCMOP13(FloatProblem):
-    """ Class representing problem LIR-CMOP13, defined in:
+    """Class representing problem LIR-CMOP13, defined in:
 
     * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
       Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x
@@ -523,7 +536,7 @@ class LIRCMOP13(FloatProblem):
         self.number_of_constraints = 2
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f(x)', 'f(y)']
+        self.obj_labels = ["f(x)", "f(y)"]
 
         self.lower_bound = [0.0 for _ in range(self.number_of_variables)]
         self.upper_bound = [1.0 for _ in range(self.number_of_variables)]
@@ -559,11 +572,11 @@ class LIRCMOP13(FloatProblem):
         return result
 
     def get_name(self):
-        return 'LIR-CMOP13'
+        return "LIR-CMOP13"
 
 
 class LIRCMOP14(LIRCMOP13):
-    """ Class representing problem LIR-CMOP14, defined in:
+    """Class representing problem LIR-CMOP14, defined in:
 
     * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.
       Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x
@@ -587,4 +600,4 @@ class LIRCMOP14(LIRCMOP13):
         return solution
 
     def get_name(self):
-        return 'LIR-CMOP14'
+        return "LIR-CMOP14"

@@ -2,11 +2,10 @@ import unittest
 
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
-from jmetal.util.evaluator import SequentialEvaluator, MapEvaluator
+from jmetal.util.evaluator import MapEvaluator, SequentialEvaluator
 
 
 class MockedProblem(FloatProblem):
-
     def __init__(self, number_of_variables: int = 3):
         super(MockedProblem, self).__init__()
         self.number_of_objectives = 2
@@ -30,7 +29,6 @@ class MockedProblem(FloatProblem):
 
 
 class SequentialEvaluatorTestCases(unittest.TestCase):
-
     def setUp(self):
         self.evaluator = SequentialEvaluator()
         self.problem = MockedProblem()
@@ -57,7 +55,6 @@ class SequentialEvaluatorTestCases(unittest.TestCase):
 
 
 class ParallelEvaluatorTestCases(unittest.TestCase):
-
     def setUp(self):
         self.evaluator = MapEvaluator()
         self.problem = MockedProblem()
