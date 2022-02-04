@@ -13,7 +13,7 @@ from jmetal.core.solution import FloatSolution
 
 
 class Srinivas(FloatProblem):
-    """ Class representing problem Srinivas. """
+    """Class representing problem Srinivas."""
 
     def __init__(self):
         super(Srinivas, self).__init__()
@@ -50,7 +50,7 @@ class Srinivas(FloatProblem):
 
 
 class Tanaka(FloatProblem):
-    """ Class representing problem Tanaka. """
+    """Class representing problem Tanaka."""
 
     def __init__(self):
         super(Tanaka, self).__init__()
@@ -90,7 +90,7 @@ class Tanaka(FloatProblem):
 
 
 class Osyczka2(FloatProblem):
-    """ Class representing problem Osyczka2. """
+    """Class representing problem Osyczka2."""
 
     def __init__(self):
         super(Osyczka2, self).__init__()
@@ -137,7 +137,7 @@ class Osyczka2(FloatProblem):
 
 
 class Binh2(FloatProblem):
-    """ Class representing problem Binh2. """
+    """Class representing problem Binh2."""
 
     def __init__(self):
         super(Binh2, self).__init__()

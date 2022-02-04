@@ -46,4 +46,3 @@ if __name__ == "__main__":
     print(f"Algorithm: {algorithm.get_name()}")
     print(f"Problem: {problem.get_name()}")
     print(f"Computing time: {algorithm.total_computing_time}")
-

@@ -1,5 +1,3 @@
-from jmetal.util.solutions.comparator import GDominanceComparator
-
 from jmetal.algorithm.multiobjective.gde3 import GDE3
 from jmetal.lab.visualization import InteractivePlot, Plot
 from jmetal.problem import ZDT2
@@ -9,6 +7,7 @@ from jmetal.util.solutions import (
     print_variables_to_file,
     read_solutions,
 )
+from jmetal.util.solutions.comparator import GDominanceComparator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":

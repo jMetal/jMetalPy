@@ -312,7 +312,7 @@ class MultiList:
         return length
 
     def append(self, node, index):
-        """ Appends a node to the end of the list at the given index."""
+        """Appends a node to the end of the list at the given index."""
         last_but_one = self.sentinel.prev[index]
         node.next[index] = self.sentinel
         node.prev[index] = last_but_one
@@ -321,7 +321,7 @@ class MultiList:
         last_but_one.next[index] = node
 
     def extend(self, nodes, index):
-        """ Extends the list at the given index with the nodes."""
+        """Extends the list at the given index with the nodes."""
         sentinel = self.sentinel
         for node in nodes:
             last_but_one = sentinel.prev[index]
@@ -332,7 +332,7 @@ class MultiList:
             last_but_one.next[index] = node
 
     def remove(self, node, index, bounds):
-        """ Removes and returns 'node' from all lists in [0, 'index'[."""
+        """Removes and returns 'node' from all lists in [0, 'index'[."""
         for i in range(index):
             predecessor = node.prev[i]
             successor = node.next[i]

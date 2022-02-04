@@ -38,7 +38,7 @@ class Ranking(List[S], ABC):
 
 
 class FastNonDominatedRanking(Ranking[List[S]]):
-    """ Class implementing the non-dominated ranking of NSGA-II proposed by Deb et al., see [Deb2002]_ """
+    """Class implementing the non-dominated ranking of NSGA-II proposed by Deb et al., see [Deb2002]_"""
 
     def __init__(self, comparator: Comparator = DominanceComparator()):
         super(FastNonDominatedRanking, self).__init__(comparator)
@@ -109,7 +109,7 @@ class FastNonDominatedRanking(Ranking[List[S]]):
 
 
 class StrengthRanking(Ranking[List[S]]):
-    """ Class implementing a ranking scheme based on the strength ranking used in SPEA2. """
+    """Class implementing a ranking scheme based on the strength ranking used in SPEA2."""
 
     def __init__(self, comparator: Comparator = DominanceComparator()):
         super(StrengthRanking, self).__init__(comparator)

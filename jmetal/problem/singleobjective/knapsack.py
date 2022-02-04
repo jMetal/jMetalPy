@@ -15,7 +15,7 @@ from jmetal.core.solution import BinarySolution
 
 
 class Knapsack(BinaryProblem):
-    """ Class representing Knapsack Problem. """
+    """Class representing Knapsack Problem."""
 
     def __init__(
         self,

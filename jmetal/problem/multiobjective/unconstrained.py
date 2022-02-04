@@ -19,7 +19,7 @@ from jmetal.core.solution import (
 
 
 class Kursawe(FloatProblem):
-    """ Class representing problem Kursawe. """
+    """Class representing problem Kursawe."""
 
     def __init__(self, number_of_variables: int = 3):
         super(Kursawe, self).__init__()
@@ -43,7 +43,7 @@ class Kursawe(FloatProblem):
             xj = solution.variables[i + 1] * solution.variables[i + 1]
             aux = -0.2 * sqrt(xi + xj)
             fx[0] += -10 * exp(aux)
-            
+
         for i in range(self.number_of_variables):
             fx[1] += pow(abs(solution.variables[i]), 0.8) + 5.0 * sin(pow(solution.variables[i], 3.0))
 
@@ -74,8 +74,8 @@ class Fonseca(FloatProblem):
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         n = self.number_of_variables
-        solution.objectives[0] = 1 - exp(-sum([(x - 1.0 / n ** 0.5) ** 2 for x in solution.variables]))
-        solution.objectives[1] = 1 - exp(-sum([(x + 1.0 / n ** 0.5) ** 2 for x in solution.variables]))
+        solution.objectives[0] = 1 - exp(-sum([(x - 1.0 / n**0.5) ** 2 for x in solution.variables]))
+        solution.objectives[1] = 1 - exp(-sum([(x + 1.0 / n**0.5) ** 2 for x in solution.variables]))
 
         return solution
 
@@ -102,7 +102,7 @@ class Schaffer(FloatProblem):
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         value = solution.variables[0]
 
-        solution.objectives[0] = value ** 2
+        solution.objectives[0] = value**2
         solution.objectives[1] = (value - 2) ** 2
 
         return solution

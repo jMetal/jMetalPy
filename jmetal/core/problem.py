@@ -17,7 +17,7 @@ S = TypeVar("S")
 
 
 class Problem(Generic[S], ABC):
-    """ Class representing problems. """
+    """Class representing problems."""
 
     MINIMIZE = -1
     MAXIMIZE = 1
@@ -63,14 +63,14 @@ class DynamicProblem(Problem[S], Observer, ABC):
 
 
 class BinaryProblem(Problem[BinarySolution], ABC):
-    """ Class representing binary problems. """
+    """Class representing binary problems."""
 
     def __init__(self):
         super(BinaryProblem, self).__init__()
 
 
 class FloatProblem(Problem[FloatSolution], ABC):
-    """ Class representing float problems. """
+    """Class representing float problems."""
 
     def __init__(self):
         super(FloatProblem, self).__init__()
@@ -90,7 +90,7 @@ class FloatProblem(Problem[FloatSolution], ABC):
 
 
 class IntegerProblem(Problem[IntegerSolution], ABC):
-    """ Class representing integer problems. """
+    """Class representing integer problems."""
 
     def __init__(self):
         super(IntegerProblem, self).__init__()
@@ -110,7 +110,7 @@ class IntegerProblem(Problem[IntegerSolution], ABC):
 
 
 class PermutationProblem(Problem[PermutationSolution], ABC):
-    """ Class representing permutation problems. """
+    """Class representing permutation problems."""
 
     def __init__(self):
         super(PermutationProblem, self).__init__()

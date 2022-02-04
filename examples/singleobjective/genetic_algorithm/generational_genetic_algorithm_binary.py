@@ -4,7 +4,7 @@ from jmetal.problem import OneMax
 from jmetal.util.observer import PrintObjectivesObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     problem = OneMax(number_of_bits=512)
 
     algorithm = GeneticAlgorithm(

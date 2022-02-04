@@ -8,7 +8,7 @@ S = TypeVar("S")
 
 
 class Solution(Generic[S], ABC):
-    """ Class representing solutions """
+    """Class representing solutions"""
 
     def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int = 0):
         self.number_of_variables = number_of_variables
@@ -31,7 +31,7 @@ class Solution(Generic[S], ABC):
 
 
 class BinarySolution(Solution[BitSet]):
-    """ Class representing float solutions """
+    """Class representing float solutions"""
 
     def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int = 0):
         super(BinarySolution, self).__init__(number_of_variables, number_of_objectives, number_of_constraints)
@@ -60,7 +60,7 @@ class BinarySolution(Solution[BitSet]):
 
 
 class FloatSolution(Solution[float]):
-    """ Class representing float solutions """
+    """Class representing float solutions"""
 
     def __init__(
         self,
@@ -87,7 +87,7 @@ class FloatSolution(Solution[float]):
 
 
 class IntegerSolution(Solution[int]):
-    """ Class representing integer solutions """
+    """Class representing integer solutions"""
 
     def __init__(
         self, lower_bound: List[int], upper_bound: List[int], number_of_objectives: int, number_of_constraints: int = 0
@@ -150,7 +150,7 @@ class CompositeSolution(Solution):
 
 
 class PermutationSolution(Solution):
-    """ Class representing permutation solutions """
+    """Class representing permutation solutions"""
 
     def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int = 0):
         super(PermutationSolution, self).__init__(number_of_variables, number_of_objectives, number_of_constraints)

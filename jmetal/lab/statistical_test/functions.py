@@ -17,14 +17,20 @@ def ranks(data: np.array, descending=False):
         ranks = np.ones(data.shape)
         for i in range(data.shape[0]):
             values, indices, rep = np.unique(
-                (-1) ** s * np.sort((-1) ** s * data[i, :]), return_index=True, return_counts=True,
+                (-1) ** s * np.sort((-1) ** s * data[i, :]),
+                return_index=True,
+                return_counts=True,
             )
             for j in range(data.shape[1]):
                 ranks[i, j] += indices[values == data[i, j]] + 0.5 * (rep[values == data[i, j]] - 1)
         return ranks
     elif data.ndim == 1:
         ranks = np.ones((data.size,))
-        values, indices, rep = np.unique((-1) ** s * np.sort((-1) ** s * data), return_index=True, return_counts=True,)
+        values, indices, rep = np.unique(
+            (-1) ** s * np.sort((-1) ** s * data),
+            return_index=True,
+            return_counts=True,
+        )
         for i in range(data.size):
             ranks[i] += indices[values == data[i]] + 0.5 * (rep[values == data[i]] - 1)
         return ranks
@@ -97,7 +103,7 @@ def friedman_test(data):
     avranks = np.mean(datarank, axis=0)
 
     # Get Friedman statistics
-    friedman_stat = (12.0 * n_samples) / (k * (k + 1.0)) * (np.sum(avranks ** 2) - (k * (k + 1) ** 2) / 4.0)
+    friedman_stat = (12.0 * n_samples) / (k * (k + 1.0)) * (np.sum(avranks**2) - (k * (k + 1) ** 2) / 4.0)
 
     # Compute p-value
     p_value = 1.0 - chi2.cdf(friedman_stat, df=(k - 1))
@@ -139,9 +145,9 @@ def friedman_aligned_rank_test(data):
     # Compute statistic
     Rhat_i = np.sum(alignedRanks, axis=1)
     Rhat_j = np.sum(alignedRanks, axis=0)
-    si, sj = np.sum(Rhat_i ** 2), np.sum(Rhat_j ** 2)
+    si, sj = np.sum(Rhat_i**2), np.sum(Rhat_j**2)
 
-    A = sj - (k * n_samples ** 2 / 4.0) * (k * n_samples + 1) ** 2
+    A = sj - (k * n_samples**2 / 4.0) * (k * n_samples + 1) ** 2
     B1 = k * n_samples * (k * n_samples + 1) * (2 * k * n_samples + 1) / 6.0
     B2 = si / float(k)
 
@@ -190,8 +196,8 @@ def quade_test(data):
     Salg = np.sum(S_stat, axis=0)
 
     # Compute Fq (Quade Test statistic) and associated p_value
-    A = np.sum(S_stat ** 2)
-    B = np.sum(Salg ** 2) / float(n_samples)
+    A = np.sum(S_stat**2)
+    B = np.sum(Salg**2) / float(n_samples)
 
     if A == B:
         Fq = np.Inf

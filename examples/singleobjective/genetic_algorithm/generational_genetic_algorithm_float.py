@@ -13,7 +13,7 @@ if __name__ == "__main__":
         mutation=PolynomialMutation(1.0 / problem.number_of_variables, 20.0),
         crossover=SBXCrossover(0.9, 5.0),
         selection=BinaryTournamentSelection(),
-        termination_criterion=StoppingByEvaluations(max_evaluations=100000)
+        termination_criterion=StoppingByEvaluations(max_evaluations=100000),
     )
 
     algorithm.run()

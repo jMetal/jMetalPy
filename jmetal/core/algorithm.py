@@ -35,41 +35,41 @@ class Algorithm(Generic[S, R], threading.Thread, ABC):
 
     @abstractmethod
     def create_initial_solutions(self) -> List[S]:
-        """ Creates the initial list of solutions of a metaheuristic. """
+        """Creates the initial list of solutions of a metaheuristic."""
         pass
 
     @abstractmethod
     def evaluate(self, solution_list: List[S]) -> List[S]:
-        """ Evaluates a solution list. """
+        """Evaluates a solution list."""
         pass
 
     @abstractmethod
     def init_progress(self) -> None:
-        """ Initialize the algorithm. """
+        """Initialize the algorithm."""
         pass
 
     @abstractmethod
     def stopping_condition_is_met(self) -> bool:
-        """ The stopping condition is met or not. """
+        """The stopping condition is met or not."""
         pass
 
     @abstractmethod
     def step(self) -> None:
-        """ Performs one iteration/step of the algorithm's loop. """
+        """Performs one iteration/step of the algorithm's loop."""
         pass
 
     @abstractmethod
     def update_progress(self) -> None:
-        """ Update the progress after each iteration. """
+        """Update the progress after each iteration."""
         pass
 
     @abstractmethod
     def get_observable_data(self) -> dict:
-        """ Get observable data, with the information that will be send to all observers each time. """
+        """Get observable data, with the information that will be send to all observers each time."""
         pass
 
     def run(self):
-        """ Execute the algorithm. """
+        """Execute the algorithm."""
         self.start_computing_time = time.time()
 
         logger.debug("Creating initial set of solutions...")
@@ -114,17 +114,17 @@ class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
 
     @abstractmethod
     def selection(self, population: List[S]) -> List[S]:
-        """ Select the best-fit individuals for reproduction (parents). """
+        """Select the best-fit individuals for reproduction (parents)."""
         pass
 
     @abstractmethod
     def reproduction(self, population: List[S]) -> List[S]:
-        """ Breed new individuals through crossover and mutation operations to give birth to offspring. """
+        """Breed new individuals through crossover and mutation operations to give birth to offspring."""
         pass
 
     @abstractmethod
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
-        """ Replace least-fit population with new individuals. """
+        """Replace least-fit population with new individuals."""
         pass
 
     def get_observable_data(self) -> dict:

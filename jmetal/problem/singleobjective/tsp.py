@@ -15,7 +15,7 @@ from jmetal.core.solution import PermutationSolution
 
 
 class TSP(PermutationProblem):
-    """ Class representing TSP Problem. """
+    """Class representing TSP Problem."""
 
     def __init__(self, instance: str = None):
         super(TSP, self).__init__()

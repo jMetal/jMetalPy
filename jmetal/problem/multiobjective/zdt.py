@@ -142,9 +142,11 @@ class ZDT6(ZDT1):
     def __init__(self, number_of_variables: int = 10):
         """:param number_of_variables: Number of decision variables of the problem."""
         super(ZDT6, self).__init__(number_of_variables=number_of_variables)
-      
-     def evaluate(self, solution: FloatSolution) -> FloatSolution:
-        solution.objectives[0] = 1.0 - exp(-4.0 * solution.variables[0]) * (sin(6.0 * pi * solution.variables[0])) ** 6.0
+
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
+        solution.objectives[0] = (
+            1.0 - exp(-4.0 * solution.variables[0]) * (sin(6.0 * pi * solution.variables[0])) ** 6.0
+        )
 
         g = self.eval_g(solution)
         h = self.eval_h(solution.objectives[0], g)

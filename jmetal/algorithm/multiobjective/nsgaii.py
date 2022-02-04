@@ -225,7 +225,7 @@ class DistributedNSGAII(Algorithm[S, R]):
         self.observable.notify_all(**observable_data)
 
     def run(self):
-        """ Execute the algorithm. """
+        """Execute the algorithm."""
         self.start_computing_time = time.time()
 
         create_solution = dask.delayed(self.problem.create_solution)

@@ -16,7 +16,7 @@ R = TypeVar("R", bound=Solution)
 
 
 class Operator(Generic[S, R], ABC):
-    """ Class representing operator """
+    """Class representing operator"""
 
     @abstractmethod
     def execute(self, source: S) -> R:
@@ -41,7 +41,7 @@ def check_valid_probability_value(func):
 
 
 class Mutation(Operator[S, S], ABC):
-    """ Class representing mutation operator. """
+    """Class representing mutation operator."""
 
     @check_valid_probability_value
     def __init__(self, probability: float):
@@ -49,7 +49,7 @@ class Mutation(Operator[S, S], ABC):
 
 
 class Crossover(Operator[List[S], List[R]], ABC):
-    """ Class representing crossover operator. """
+    """Class representing crossover operator."""
 
     @check_valid_probability_value
     def __init__(self, probability: float):
@@ -65,7 +65,7 @@ class Crossover(Operator[List[S], List[R]], ABC):
 
 
 class Selection(Operator[S, R], ABC):
-    """ Class representing selection operator. """
+    """Class representing selection operator."""
 
     def __init__(self):
         pass

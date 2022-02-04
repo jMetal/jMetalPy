@@ -97,7 +97,7 @@ class UniformReferenceDirectionFactory(ReferenceDirectionFactory):
 
 
 def get_extreme_points(F, n_objs, ideal_point, extreme_points=None):
-    """ Calculate the Achievement Scalarization Function which is used for the extreme point decomposition. """
+    """Calculate the Achievement Scalarization Function which is used for the extreme point decomposition."""
     asf = np.eye(n_objs)
     asf[asf == 0] = 1e6
 
@@ -119,7 +119,7 @@ def get_extreme_points(F, n_objs, ideal_point, extreme_points=None):
 
 
 def get_nadir_point(extreme_points, ideal_point, worst_point, worst_of_front, worst_of_population):
-    """ Calculate the axis intersects for a set of individuals and its extremes (construct hyperplane). """
+    """Calculate the axis intersects for a set of individuals and its extremes (construct hyperplane)."""
     try:
         # find the intercepts using gaussian elimination
         M = extreme_points - ideal_point
@@ -188,7 +188,7 @@ def niching(pop: List[S], n_remaining: int, niche_count, niche_of_individuals, d
 
 
 def associate_to_niches(F, niches, ideal_point, nadir_point, utopian_epsilon: float = 0.0):
-    """ Associate each solution to a reference point. """
+    """Associate each solution to a reference point."""
     utopian_point = ideal_point - utopian_epsilon
 
     denom = nadir_point - utopian_point
@@ -353,7 +353,7 @@ class NSGAIII(NSGAII):
         return list(pop)
 
     def get_result(self):
-        """ Return only non dominated solutions."""
+        """Return only non dominated solutions."""
         ranking = FastNonDominatedRanking(self.dominance_comparator)
         ranking.compute_ranking(self.solutions, k=self.population_size)
 
