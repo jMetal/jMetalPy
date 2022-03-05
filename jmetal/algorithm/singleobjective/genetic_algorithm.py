@@ -79,7 +79,7 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
             raise Exception("Wrong number of parents")
 
         offspring_population = []
-        for i in range(0, self.offspring_population_size, number_of_parents_to_combine):
+        for i in range(0, self.mating_pool_size, number_of_parents_to_combine):
             parents = []
             for j in range(number_of_parents_to_combine):
                 parents.append(mating_population[i + j])
