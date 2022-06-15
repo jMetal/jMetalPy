@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.lab.visualization import InteractivePlot, Plot
 from jmetal.operator import PolynomialMutation, SBXCrossover
-from jmetal.problem import ZDT1
+from jmetal.problem import ZDT1, ZDT6
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution import (
     print_function_values_to_file,
@@ -15,8 +15,8 @@ Program to  configure and run the NSGA-II algorithm configured with standard set
 """
 
 if __name__ == "__main__":
-    problem = ZDT1()
-    problem.reference_front = read_solutions(filename="resources/reference_front/ZDT1.pf")
+    problem = ZDT6()
+    problem.reference_front = read_solutions(filename="resources/reference_front/ZDT6.pf")
 
     max_evaluations = 25000
     algorithm = NSGAII(

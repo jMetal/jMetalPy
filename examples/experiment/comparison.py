@@ -68,7 +68,7 @@ def configure_experiment(problems: dict, n_run: int):
 
 if __name__ == "__main__":
     # Configure the experiments
-    jobs = configure_experiment(problems={"ZDT1": ZDT1(), "ZDT2": ZDT2(), "ZDT3": ZDT3()}, n_run=25)
+    jobs = configure_experiment(problems={"ZDT1": ZDT1(), "ZDT2": ZDT2(), "ZDT3": ZDT3()}, n_run=2)
 
     # Run the study
     output_directory = "data"
