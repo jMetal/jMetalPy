@@ -104,7 +104,7 @@ class InteractivePlot(Plot):
             + self.export_to_div(filename=None, include_plotlyjs=False)
             + """
                 <script>                
-                    var myPlot = document.querySelectorAll('div')[0];
+                    var myPlot = document.querySelectorAll('div')[1];
                     myPlot.on('plotly_click', function(data){
                         var pts = '';
 
