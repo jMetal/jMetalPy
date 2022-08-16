@@ -1,6 +1,18 @@
 from scipy.stats import binom, chi2, f, norm
 
-from jmetal.lab.statistical_test.apv_procedures import *
+import numpy as np
+import pandas as pd
+
+from jmetal.lab.statistical_test.apv_procedures import (
+    bonferroni_dunn,
+    holm,
+    hochberg,
+    holland,
+    finner,
+    li,
+    shaffer,
+    nemenyi,
+)
 
 
 def ranks(data: np.array, descending=False):
