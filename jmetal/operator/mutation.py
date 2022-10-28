@@ -235,7 +235,7 @@ class PermutationSwapMutation(Mutation[PermutationSolution]):
         rand = random.random()
 
         if rand <= self.probability:
-            pos_one, pos_two = random.sample(range(solution.number_of_variables - 1), 2)
+            pos_one, pos_two = random.sample(range(solution.number_of_variables), 2)
             solution.variables[pos_one], solution.variables[pos_two] = (
                 solution.variables[pos_two],
                 solution.variables[pos_one],
