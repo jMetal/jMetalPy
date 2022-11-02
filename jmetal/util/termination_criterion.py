@@ -94,3 +94,21 @@ class StoppingByQualityIndicator(TerminationCriterion):
             met = self.value * self.degree > self.expected_value
 
         return met
+
+class StoppingByEarlyStopping(TerminationCriterion):
+    def __init__(self, early_stopping_rounds: int):
+        super(StoppingByEarlyStopping, self).__init__()
+        self.early_stopping_rounds = early_stopping_rounds
+        self.prev_objectives = 0
+        self.duplicate_rounds = 0
+
+    def update(self, *args, **kwargs):
+        if self.prev_objectives == kwargs["SOLUTIONS"].objectives[0]:
+            self.duplicate_rounds += 1
+        else:
+            self.duplicate_rounds = 0
+        self.prev_objectives = kwargs["SOLUTIONS"].objectives[0]
+
+    @property
+    def is_met(self):
+        return self.duplicate_rounds >= self.early_stopping_rounds
