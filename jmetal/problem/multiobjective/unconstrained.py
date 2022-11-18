@@ -278,7 +278,6 @@ class MixedIntegerFloatProblem(Problem):
             random.uniform(self.float_lower_bound[i] * 1.0, self.float_upper_bound[i] * 1.0)
             for i in range(len(self.float_lower_bound))
         ]
-
         integer_solution.variables = [
             random.uniform(self.int_lower_bound[i], self.int_upper_bound[i])
             for i in range(len(self.int_lower_bound))
