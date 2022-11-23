@@ -483,7 +483,9 @@ def generate_median_and_wilcoxon_latex_tables(filename: str, output_dir: str = "
                 wilcoxon_data = wilcoxon_data.append(new_row, ignore_index=True)
 
     # Generate LaTeX tables
-    caption = "Median and Wilcoxon test of the {} quality indicator. The algorithm in the last column is the reference " +\
+    caption = "Median and interquartile range (IQR) of the results of the {} quality indicator. " + \
+            "Cells with dark and light gray background highlights, respectively, the best and second best indicator values. " +\
+              "The algorithm in the last column is the reference " +\
               "algorithm, and the symbols $+$, $-$ and $\\approx$ indicate that the differences with the reference " + \
               "algorithm are significatively better, worse, or there is no difference according to the Wilcoxon rank " + \
               "sum test (confidence level: 5\%)."
@@ -733,7 +735,7 @@ def __median_wilcoxon_to_latex(
         values[second_best] = "\\cellcolor{gray25} " + values[second_best]
 
         output.write(
-                  "\\textbf{{{0}}} & ${1}$ \\\\\n".format(problem, " $ & $ ".join([str(val) for val in values])
+                  "\\textbf{{{0}}} & ${1}$ \\\\\n".format(problem, " $ & $ ".join([str(val).replace("e-", "e\makebox[0.1cm]{-}").replace("e+", "e\makebox[0.1cm]{+}") for val in values])
             )
         )
 
