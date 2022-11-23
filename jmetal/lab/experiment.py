@@ -8,7 +8,7 @@ from typing import List
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from scipy.stats import mannwhitneyu
+from scipy.stats import mannwhitneyu, iqr
 
 from jmetal.core.algorithm import Algorithm
 from jmetal.core.quality_indicator import QualityIndicator
@@ -415,6 +415,91 @@ def compute_mean_indicator(filename: str, indicator_name: str):
     return df
 
 
+def generate_median_and_wilcoxon_latex_tables(filename: str, output_dir: str = "latex/statistical"):
+    """Computes a number of statistical values (mean, median, standard deviation, interquartile range).
+
+    :param filename: Input filename (summary).
+    :param output_dir: Output path.
+    """
+    data = pd.read_csv(filename, skipinitialspace=True)
+
+    if len(set(data.columns.tolist())) != 5:
+        raise Exception("Wrong number of columns")
+
+    if Path(output_dir).is_dir():
+        logger.warning("Directory {} exists. Removing contents.".format(output_dir))
+        for file in os.listdir(output_dir):
+            os.remove("{0}/{1}".format(output_dir, file))
+    else:
+        logger.warning("Directory {} does not exist. Creating it.".format(output_dir))
+        Path(output_dir).mkdir(parents=True)
+
+    algorithms = pd.unique(data["Algorithm"])
+    problems = pd.unique(data["Problem"])
+    indicators = pd.unique(data["IndicatorName"])
+
+    control_algorithm = algorithms[-1]
+
+    # Compute medians
+    medians = data.groupby(["Algorithm", "Problem", "IndicatorName"])["IndicatorValue"].median()
+    #iqrs = data.groupby(["Algorithm", "Problem", "IndicatorName"])["IndicatorValue"].quantile(0.75, interpolation='midpoint') - \
+    #       data.groupby(["Algorithm", "Problem", "IndicatorName"])["IndicatorValue"].quantile(0.25, interpolation='midpoint')
+    iqrs =data.groupby(["Algorithm", "Problem", "IndicatorName"])["IndicatorValue"].apply(lambda x: iqr(x))
+
+    # Create data frame to store the Wilcoxon test results
+    wilcoxon_data = pd.DataFrame(columns=["Indicator", "Algorithm", "Problem", "PValue", "Median", "MedianC", "TestResult"])
+
+    for indicator in indicators:
+        for algorithm in algorithms:
+            for problem in problems:
+                algorithm_data = data[(data["Problem"] == problem) & (data["Algorithm"] == algorithm) & (
+                            data["IndicatorName"] == indicator)]
+                ref_data = data[(data["Problem"] == problem) & (data["Algorithm"] == control_algorithm) & (
+                            data["IndicatorName"] == indicator)]
+                stat, p_value = mannwhitneyu(algorithm_data["IndicatorValue"], ref_data["IndicatorValue"])
+
+                test_result = ""
+                if p_value <= 0.05:
+                    if check_minimization(indicator):
+                        if medians[algorithm][problem][indicator] <= medians[control_algorithm][problem][indicator]:
+                            test_result = '+'
+                        else:
+                            test_result = '-'
+                    else:
+                        if medians[algorithm][problem][indicator] >= medians[control_algorithm][problem][indicator]:
+                            test_result = '+'
+                        else:
+                            test_result = '-'
+                else:
+                    test_result = '='
+
+
+                new_row = {'Indicator': indicator, 'Algorithm': algorithm, "Problem": problem,
+                           "PValue": p_value,
+                           "Median": medians[algorithm][problem][indicator],
+                           "IQR": iqrs[algorithm][problem][indicator],
+                           "MedianC": medians[control_algorithm][problem][indicator],
+                           "IQRC": iqrs[control_algorithm][problem][indicator],
+                           "TestResult": test_result
+                           }
+                wilcoxon_data = wilcoxon_data.append(new_row, ignore_index=True)
+
+    #print(wilcoxon_data)
+
+
+    # Generate LaTeX tables
+    for indicator_name in indicators:
+        with open(os.path.join(output_dir, "MedianIQRWilcoxon-{}.tex".format(indicator_name)), "w") as latex:
+            latex.write(
+                __median_wilcoxon_to_latex(
+                    indicator_name,
+                    wilcoxon_data,
+                    caption="Median and Wilcoxon test of the {} quality indicator.".format(indicator_name),
+                    minimization=check_minimization(indicator_name),
+                    label="table:{}".format(indicator_name),
+                )
+            )
+
 def __averages_to_latex(
     central_tendency: pd.DataFrame,
     dispersion: pd.DataFrame,
@@ -563,6 +648,115 @@ def __wilcoxon_to_latex(df: pd.DataFrame, caption: str, label: str, minimization
 
     return output.getvalue()
 
+def __median_wilcoxon_to_latex(
+        indicator_name:str,
+        wilcoxon_data:pd.DataFrame,
+        caption:str,
+        minimization:bool,
+        label):
+    indicator_data = wilcoxon_data[wilcoxon_data["Indicator"] == indicator_name]
+    print(indicator_data)
+
+    problems = pd.unique(indicator_data["Problem"])
+    num_rows = len(problems)
+
+    algorithms = pd.unique(indicator_data["Algorithm"])
+    num_columns = len(algorithms)
+    columns = algorithms
+
+    print("Rows: " + str(num_rows))
+    print("Cols: " + str(num_columns))
+    print("Columns: " + str(columns))
+
+    alignment= "c"
+    col_format = "{}|{}".format(alignment, alignment * num_columns)
+    column_labels = ["\\textbf{{{0}}}".format(label.replace("_", "\\_")) for label in columns]
+
+    output = io.StringIO()
+
+    output.write("\\documentclass{article}\n")
+
+    output.write("\\usepackage[utf8]{inputenc}\n")
+    output.write("\\usepackage{tabularx}\n")
+    output.write("\\usepackage{colortbl}\n")
+    output.write("\\usepackage[table*]{xcolor}\n")
+
+    output.write("\\xdefinecolor{gray95}{gray}{0.65}\n")
+    output.write("\\xdefinecolor{gray25}{gray}{0.8}\n")
+
+    output.write("\\title{Median and Wilcoxon}\n")
+    output.write("\\author{}\n")
+
+    output.write("\\begin{document}\n")
+    output.write("\\maketitle\n")
+
+    output.write("\\section{Table}\n")
+
+    output.write("\\begin{table}[!htp]\n")
+    output.write("  \\caption{{{}}}\n".format(caption))
+    output.write("  \\label{{{}}}\n".format(label))
+    output.write("  \\centering\n")
+    output.write("  \\begin{tiny}\n")
+    output.write("  \\begin{tabular}{%s}\n" % col_format)
+    output.write("      & {} \\\\\\hline\n".format(" & ".join(column_labels)))
+
+    counters = {}
+    for algorithm in algorithms:
+        counters[algorithm] = [0, 0, 0] # best, equal, worse
+
+    for problem in problems:
+        values = []
+
+        for algorithm in algorithms:
+            row = indicator_data[(indicator_data["Problem"] == problem) & (indicator_data["Algorithm"] == algorithm)]
+            value = "{:.2e}({:.2e})".format(row["Median"].tolist()[0], row["IQR"].tolist()[0])
+
+            if row["TestResult"].tolist()[0] == "-":
+                value = "{{{}-}}".format(value)
+                counters[algorithm][2] = counters[algorithm][2] + 1
+            elif row["TestResult"].tolist()[0] == "+":
+                value = "{{{}+}}".format(value)
+                counters[algorithm][0] = counters[algorithm][0] + 1
+            else:
+                value = "{{{}\\approx}}".format(value)
+                counters[algorithm][1] = counters[algorithm][1] + 1
+
+            values.append(value)
+
+        medians = indicator_data[(indicator_data["Problem"] == problem)]["Median"]
+        iqrs = indicator_data[(indicator_data["Problem"] == problem)]["IQR"]
+        pairs = list(zip(medians, iqrs))
+        indexes = sorted(range(len(pairs)), key = lambda x: pairs[x])
+
+        if check_minimization(indicator_name):
+            best = indexes[0]
+            second_best = indexes[1]
+        else:
+            best = indexes[-1]
+            second_best = indexes[-2]
+
+        values[best] = "\\cellcolor{gray95} " + values[best]
+        values[second_best] = "\\cellcolor{gray25} " + values[second_best]
+
+        print(values)
+
+        output.write(
+                  "\\textbf{{{0}}} & ${1}$ \\\\\n".format(problem, " $ & $ ".join([str(val) for val in values])
+            )
+        )
+
+    output.write("  \\hline\n")
+    output.write(
+        "\\textbf{{{0}}} & ${1}$ \\\\\n".format("$+/\\approx/-$", " $ & $ ".join([str(val[1][0]) + "/" + str(val[1][1]) + "/" + str(val[1][2]) for val in counters.items()])))
+
+    # Write footer
+    output.write("  \\end{tabular}\n")
+    output.write("  \\end{tiny}\n")
+    output.write("\\end{table}\n")
+
+    output.write("\\end{document}")
+
+    return output.getvalue()
 
 def check_minimization(indicator) -> bool:
     if indicator == "HV":
