@@ -418,7 +418,7 @@ def compute_mean_indicator(filename: str, indicator_name: str):
 def generate_median_and_wilcoxon_latex_tables(filename: str, output_dir: str = "latex/meansAndWilcoxon"):
     """Generate Latex tables including medians and IQRs. Additionally, the last algorithm is considered as the reference
         algorithm, and the cells include a symbol indicating whether the differences with the reference algorithm
-        are significant or not according to the Wilcoxon rank sum test. 
+        are significant or not according to the Wilcoxon rank sum test.
 
     :param filename: Input filename (summary).
     :param output_dir: Output path.
@@ -442,7 +442,7 @@ def generate_median_and_wilcoxon_latex_tables(filename: str, output_dir: str = "
 
     control_algorithm = algorithms[-1]
 
-    # Compute medians
+    # Compute medians and IQRs
     medians = data.groupby(["Algorithm", "Problem", "IndicatorName"])["IndicatorValue"].median()
     iqrs =data.groupby(["Algorithm", "Problem", "IndicatorName"])["IndicatorValue"].apply(lambda x: iqr(x))
 
@@ -691,7 +691,8 @@ def __median_wilcoxon_to_latex(
     output.write("  \\begin{tabular}{%s}\n" % col_format)
     output.write("      & {} \\\\\\hline\n".format(" & ".join(column_labels)))
 
-    counters = {} # Counts the number of times that an algorithm performs better, worse or equal than the reference algorithm
+    # Counts the number of times that an algorithm performs better, worse or equal than the reference algorithm
+    counters = {}
     for algorithm in algorithms:
         counters[algorithm] = [0, 0, 0] # best, equal, worse
 
@@ -702,7 +703,7 @@ def __median_wilcoxon_to_latex(
             row = indicator_data[(indicator_data["Problem"] == problem) & (indicator_data["Algorithm"] == algorithm)]
             value = "{:.2e}({:.2e})".format(row["Median"].tolist()[0], row["IQR"].tolist()[0])
 
-            # Include the symbol according the Wilcoxon rank sum test with the reference algorithm
+            # Include the symbol according to the Wilcoxon rank sum test with the reference algorithm
             if algorithm != algorithms[-1]:
                 if row["TestResult"].tolist()[0] == "-":
                     value = "{{{}-}}".format(value)
@@ -713,7 +714,6 @@ def __median_wilcoxon_to_latex(
                 else:
                     value = "{{{}\\approx}}".format(value)
                     counters[algorithm][1] = counters[algorithm][1] + 1
-
             values.append(value)
 
         # Find the best and second best values
