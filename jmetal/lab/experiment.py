@@ -415,8 +415,10 @@ def compute_mean_indicator(filename: str, indicator_name: str):
     return df
 
 
-def generate_median_and_wilcoxon_latex_tables(filename: str, output_dir: str = "latex/statistical"):
-    """Computes a number of statistical values (mean, median, standard deviation, interquartile range).
+def generate_median_and_wilcoxon_latex_tables(filename: str, output_dir: str = "latex/meansAndWilcoxon"):
+    """Generate Latex tables including medians and IQRs. Additionally, the last algorithm is considered as the reference
+        algorithm, and the cells include a symbol indicating whether the differences with the reference algorithm
+        are significant or not according to the Wilcoxon rank sum test. 
 
     :param filename: Input filename (summary).
     :param output_dir: Output path.
@@ -442,12 +444,10 @@ def generate_median_and_wilcoxon_latex_tables(filename: str, output_dir: str = "
 
     # Compute medians
     medians = data.groupby(["Algorithm", "Problem", "IndicatorName"])["IndicatorValue"].median()
-    #iqrs = data.groupby(["Algorithm", "Problem", "IndicatorName"])["IndicatorValue"].quantile(0.75, interpolation='midpoint') - \
-    #       data.groupby(["Algorithm", "Problem", "IndicatorName"])["IndicatorValue"].quantile(0.25, interpolation='midpoint')
     iqrs =data.groupby(["Algorithm", "Problem", "IndicatorName"])["IndicatorValue"].apply(lambda x: iqr(x))
 
     # Create data frame to store the Wilcoxon test results
-    wilcoxon_data = pd.DataFrame(columns=["Indicator", "Algorithm", "Problem", "PValue", "Median", "MedianC", "TestResult"])
+    wilcoxon_data = pd.DataFrame(columns=["Indicator", "Algorithm", "Problem", "PValue", "Median", "TestResult"])
 
     for indicator in indicators:
         for algorithm in algorithms:
@@ -478,24 +478,22 @@ def generate_median_and_wilcoxon_latex_tables(filename: str, output_dir: str = "
                            "PValue": p_value,
                            "Median": medians[algorithm][problem][indicator],
                            "IQR": iqrs[algorithm][problem][indicator],
-                           "MedianC": medians[control_algorithm][problem][indicator],
-                           "IQRC": iqrs[control_algorithm][problem][indicator],
                            "TestResult": test_result
                            }
                 wilcoxon_data = wilcoxon_data.append(new_row, ignore_index=True)
 
-    #print(wilcoxon_data)
-
-
     # Generate LaTeX tables
+    caption = "Median and Wilcoxon test of the {} quality indicator. The algorithm in the last column is the reference " +\
+              "algorithm, and the symbols $+$, $-$ and $\\approx$ indicate that the differences with the reference " + \
+              "algorithm are significatively better, worse, or there is no difference according to the Wilcoxon rank " + \
+              "sum test (confidence level: 5\%)."
     for indicator_name in indicators:
         with open(os.path.join(output_dir, "MedianIQRWilcoxon-{}.tex".format(indicator_name)), "w") as latex:
             latex.write(
                 __median_wilcoxon_to_latex(
                     indicator_name,
                     wilcoxon_data,
-                    caption="Median and Wilcoxon test of the {} quality indicator.".format(indicator_name),
-                    minimization=check_minimization(indicator_name),
+                    caption=caption.format(indicator_name),
                     label="table:{}".format(indicator_name),
                 )
             )
@@ -652,21 +650,14 @@ def __median_wilcoxon_to_latex(
         indicator_name:str,
         wilcoxon_data:pd.DataFrame,
         caption:str,
-        minimization:bool,
         label):
     indicator_data = wilcoxon_data[wilcoxon_data["Indicator"] == indicator_name]
-    print(indicator_data)
 
     problems = pd.unique(indicator_data["Problem"])
-    num_rows = len(problems)
-
     algorithms = pd.unique(indicator_data["Algorithm"])
+
     num_columns = len(algorithms)
     columns = algorithms
-
-    print("Rows: " + str(num_rows))
-    print("Cols: " + str(num_columns))
-    print("Columns: " + str(columns))
 
     alignment= "c"
     col_format = "{}|{}".format(alignment, alignment * num_columns)
@@ -700,7 +691,7 @@ def __median_wilcoxon_to_latex(
     output.write("  \\begin{tabular}{%s}\n" % col_format)
     output.write("      & {} \\\\\\hline\n".format(" & ".join(column_labels)))
 
-    counters = {}
+    counters = {} # Counts the number of times that an algorithm performs better, worse or equal than the reference algorithm
     for algorithm in algorithms:
         counters[algorithm] = [0, 0, 0] # best, equal, worse
 
@@ -711,18 +702,21 @@ def __median_wilcoxon_to_latex(
             row = indicator_data[(indicator_data["Problem"] == problem) & (indicator_data["Algorithm"] == algorithm)]
             value = "{:.2e}({:.2e})".format(row["Median"].tolist()[0], row["IQR"].tolist()[0])
 
-            if row["TestResult"].tolist()[0] == "-":
-                value = "{{{}-}}".format(value)
-                counters[algorithm][2] = counters[algorithm][2] + 1
-            elif row["TestResult"].tolist()[0] == "+":
-                value = "{{{}+}}".format(value)
-                counters[algorithm][0] = counters[algorithm][0] + 1
-            else:
-                value = "{{{}\\approx}}".format(value)
-                counters[algorithm][1] = counters[algorithm][1] + 1
+            # Include the symbol according the Wilcoxon rank sum test with the reference algorithm
+            if algorithm != algorithms[-1]:
+                if row["TestResult"].tolist()[0] == "-":
+                    value = "{{{}-}}".format(value)
+                    counters[algorithm][2] = counters[algorithm][2] + 1
+                elif row["TestResult"].tolist()[0] == "+":
+                    value = "{{{}+}}".format(value)
+                    counters[algorithm][0] = counters[algorithm][0] + 1
+                else:
+                    value = "{{{}\\approx}}".format(value)
+                    counters[algorithm][1] = counters[algorithm][1] + 1
 
             values.append(value)
 
+        # Find the best and second best values
         medians = indicator_data[(indicator_data["Problem"] == problem)]["Median"]
         iqrs = indicator_data[(indicator_data["Problem"] == problem)]["IQR"]
         pairs = list(zip(medians, iqrs))
@@ -738,16 +732,19 @@ def __median_wilcoxon_to_latex(
         values[best] = "\\cellcolor{gray95} " + values[best]
         values[second_best] = "\\cellcolor{gray25} " + values[second_best]
 
-        print(values)
-
         output.write(
                   "\\textbf{{{0}}} & ${1}$ \\\\\n".format(problem, " $ & $ ".join([str(val) for val in values])
             )
         )
 
+    # Select all but the last counter
+    counter_summary = []
+    for algorithm in algorithms[:-1]:
+        counter_summary.append(counters[algorithm])
+
     output.write("  \\hline\n")
     output.write(
-        "\\textbf{{{0}}} & ${1}$ \\\\\n".format("$+/\\approx/-$", " $ & $ ".join([str(val[1][0]) + "/" + str(val[1][1]) + "/" + str(val[1][2]) for val in counters.items()])))
+        "\\textbf{{{0}}} & ${1}$ \\\\\n".format("$+/\\approx/-$", " $ & $ ".join([str(val[0]) + "/" + str(val[1]) + "/" + str(val[2]) for val in counter_summary])))
 
     # Write footer
     output.write("  \\end{tabular}\n")
