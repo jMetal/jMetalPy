@@ -487,8 +487,8 @@ def generate_median_and_wilcoxon_latex_tables(filename: str, output_dir: str = "
             "Cells with dark and light gray background highlights, respectively, the best and second best indicator values. " +\
               "The algorithm in the last column is the reference " +\
               "algorithm, and the symbols $+$, $-$ and $\\approx$ indicate that the differences with the reference " + \
-              "algorithm are significatively better, worse, or there is no difference according to the Wilcoxon rank " + \
-              "sum test (confidence level: 5\%)."
+              "algorithm are significantly better, worse, or there is no difference according to the Wilcoxon rank " + \
+              "sum test (confidence level: 95\%)."
     for indicator_name in indicators:
         with open(os.path.join(output_dir, "MedianIQRWilcoxon-{}.tex".format(indicator_name)), "w") as latex:
             latex.write(
