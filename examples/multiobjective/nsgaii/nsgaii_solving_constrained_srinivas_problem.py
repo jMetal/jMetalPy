@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective import NSGAII
 from jmetal.operator import PolynomialMutation, SBXCrossover
-from jmetal.problem import Srinivas
-from jmetal.util.comparator import DominanceComparator
+from jmetal.problem import Srinivas, Tanaka
+from jmetal.util.comparator import DominanceComparator, DominanceWithConstraintsComparator, MultiComparator
 from jmetal.util.solution import (
     print_function_values_to_file,
     print_variables_to_file,
@@ -21,7 +21,7 @@ if __name__ == "__main__":
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
-        dominance_comparator=DominanceComparator(),
+        dominance_comparator=DominanceWithConstraintsComparator(),
     )
 
     algorithm.run()
