@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective import NSGAII
 from jmetal.operator import PolynomialMutation, SBXCrossover
-from jmetal.problem import Srinivas, Tanaka
-from jmetal.util.comparator import DominanceComparator, DominanceWithConstraintsComparator, MultiComparator
+from jmetal.problem import Srinivas
+from jmetal.util.comparator import DominanceWithConstraintsComparator
 from jmetal.util.solution import (
     print_function_values_to_file,
     print_variables_to_file,

@@ -1,6 +1,6 @@
 from jmetal.algorithm.multiobjective.mocell import MOCell
 from jmetal.operator import PolynomialMutation, SBXCrossover
-from jmetal.problem import ZDT1, ZDT4
+from jmetal.problem import ZDT1
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.neighborhood import C9
 from jmetal.util.solution import (
