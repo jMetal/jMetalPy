@@ -2,6 +2,7 @@ from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import BitFlipMutation, SPXCrossover
 from jmetal.problem import OneMax
 from jmetal.util.comparator import DominanceComparator
+from jmetal.util.observer import ProgressBarObserver
 from jmetal.util.solution import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
@@ -14,12 +15,14 @@ if __name__ == "__main__":
     algorithm = NSGAII(
         problem=problem,
         population_size=100,
-        offspring_population_size=1,
+        offspring_population_size=100,
         mutation=BitFlipMutation(probability=1.0 / binary_string_length),
         crossover=SPXCrossover(probability=1.0),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
         dominance_comparator=DominanceComparator(),
     )
+
+    algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
 
     algorithm.run()
     front = algorithm.get_result()
