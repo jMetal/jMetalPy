@@ -93,8 +93,8 @@ class Schaffer(FloatProblem):
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
 
-        self.lower_bound = [-100000]
-        self.upper_bound = [100000]
+        self.lower_bound = [-1000]
+        self.upper_bound = [1000]
 
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
