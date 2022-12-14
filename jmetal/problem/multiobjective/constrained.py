@@ -17,15 +17,19 @@ class Srinivas(FloatProblem):
 
     def __init__(self):
         super(Srinivas, self).__init__()
-        self.number_of_variables = 2
-        self.number_of_objectives = 2
-        self.number_of_constraints = 2
+        number_of_variables = 2
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
 
-        self.lower_bound = [-20.0 for _ in range(self.number_of_variables)]
-        self.upper_bound = [20.0 for _ in range(self.number_of_variables)]
+        self.lower_bound = [-20.0 for _ in range(number_of_variables)]
+        self.upper_bound = [20.0 for _ in range(number_of_variables)]
+
+    def number_of_objectives(self) -> int:
+        return 2
+
+    def number_of_constraints(self) -> int:
+        return 2
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x1 = solution.variables[0]

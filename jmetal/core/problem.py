@@ -23,14 +23,22 @@ class Problem(Generic[S], ABC):
     MAXIMIZE = 1
 
     def __init__(self):
-        self.number_of_variables: int = 0
-        self.number_of_objectives: int = 0
-        self.number_of_constraints: int = 0
-
-        self.reference_front: List[S] = []
+        #self.reference_front: List[S] = []
 
         self.directions: List[int] = []
         self.labels: List[str] = []
+
+    @abstractmethod
+    def number_of_variables(self) -> int:
+        pass
+
+    @abstractmethod
+    def number_of_objectives(self) -> int:
+        pass
+
+    @abstractmethod
+    def number_of_constraints(self) -> int:
+        pass
 
     @abstractmethod
     def create_solution(self) -> S:
@@ -77,13 +85,16 @@ class FloatProblem(Problem[FloatSolution], ABC):
         self.lower_bound = []
         self.upper_bound = []
 
+    def number_of_variables(self) -> int:
+        return len(self.lower_bound)
+
     def create_solution(self) -> FloatSolution:
         new_solution = FloatSolution(
-            self.lower_bound, self.upper_bound, self.number_of_objectives, self.number_of_constraints
+            self.lower_bound, self.upper_bound, self.number_of_objectives(), self.number_of_constraints()
         )
         new_solution.variables = [
             random.uniform(self.lower_bound[i] * 1.0, self.upper_bound[i] * 1.0)
-            for i in range(self.number_of_variables)
+            for i in range(self.number_of_variables())
         ]
 
         return new_solution
@@ -94,16 +105,19 @@ class IntegerProblem(Problem[IntegerSolution], ABC):
 
     def __init__(self):
         super(IntegerProblem, self).__init__()
-        self.lower_bound = None
-        self.upper_bound = None
+        self.lower_bound = []
+        self.upper_bound = []
+
+    def number_of_variables(self) -> int:
+        return len(self.lower_bound)
 
     def create_solution(self) -> IntegerSolution:
         new_solution = IntegerSolution(
-            self.lower_bound, self.upper_bound, self.number_of_objectives, self.number_of_constraints
+            self.lower_bound, self.upper_bound, self.number_of_objectives(), self.number_of_constraints()
         )
         new_solution.variables = [
             round(random.uniform(self.lower_bound[i] * 1.0, self.upper_bound[i] * 1.0))
-            for i in range(self.number_of_variables)
+            for i in range(self.number_of_variables())
         ]
 
         return new_solution
@@ -157,28 +171,31 @@ class OnTheFlyFloatProblem(FloatProblem):
 
     def add_function(self, function) -> "OnTheFlyFloatProblem":
         self.functions.append(function)
-        self.number_of_objectives += 1
 
         return self
 
     def add_constraint(self, constraint) -> "OnTheFlyFloatProblem":
         self.constraints.append(constraint)
-        self.number_of_constraints += 1
 
         return self
 
     def add_variable(self, lower_bound, upper_bound) -> "OnTheFlyFloatProblem":
         self.lower_bound.append(lower_bound)
         self.upper_bound.append(upper_bound)
-        self.number_of_variables += 1
 
         return self
 
+    def number_of_objectives(self) -> int:
+        return len(self.functions)
+
+    def number_of_constraints(self) -> int:
+        return len(self.constraints)
+
     def evaluate(self, solution: FloatSolution) -> None:
-        for i in range(self.number_of_objectives):
+        for i in range(self.number_of_objectives()):
             solution.objectives[i] = self.functions[i](solution.variables)
 
-        for i in range(self.number_of_constraints):
+        for i in range(self.number_of_constraints()):
             solution.constraints[i] = self.constraints[i](solution.variables)
 
     def get_name(self) -> str:
