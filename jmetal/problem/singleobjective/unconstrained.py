@@ -24,6 +24,12 @@ class OneMax(BinaryProblem):
         self.obj_directions = [self.MINIMIZE]
         self.obj_labels = ["Ones"]
 
+    def number_of_objectives(self) -> int:
+        return 1
+
+    def number_of_constraints(self) -> int:
+        return 0
+
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
         counter_of_ones = 0
         for bits in solution.variables[0]:
@@ -46,9 +52,6 @@ class OneMax(BinaryProblem):
 class Sphere(FloatProblem):
     def __init__(self, number_of_variables: int = 10):
         super(Sphere, self).__init__()
-        self.number_of_objectives = 1
-        self.number_of_variables = number_of_variables
-        self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE]
         self.obj_labels = ["f(x)"]
@@ -58,6 +61,12 @@ class Sphere(FloatProblem):
 
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
+
+    def number_of_objectives(self) -> int:
+        return 1
+
+    def number_of_constraints(self) -> int:
+        return 0
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         total = 0.0
@@ -75,9 +84,6 @@ class Sphere(FloatProblem):
 class Rastrigin(FloatProblem):
     def __init__(self, number_of_variables: int = 10):
         super(Rastrigin, self).__init__()
-        self.number_of_objectives = 1
-        self.number_of_variables = number_of_variables
-        self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE]
         self.obj_labels = ["f(x)"]
@@ -87,6 +93,12 @@ class Rastrigin(FloatProblem):
 
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
+
+    def number_of_objectives(self) -> int:
+        return 1
+
+    def number_of_constraints(self) -> int:
+        return 0
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         a = 10.0
