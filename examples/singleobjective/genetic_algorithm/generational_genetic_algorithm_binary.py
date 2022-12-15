@@ -13,7 +13,6 @@ if __name__ == "__main__":
         offspring_population_size=40,
         mutation=BitFlipMutation(1.0 / problem.number_of_bits),
         crossover=SPXCrossover(1.0),
-        selection=BinaryTournamentSelection(),
         termination_criterion=StoppingByEvaluations(max_evaluations=20000),
     )
 

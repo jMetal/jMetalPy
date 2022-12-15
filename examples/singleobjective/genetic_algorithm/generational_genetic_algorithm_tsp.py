@@ -5,6 +5,7 @@ from jmetal.operator.mutation import PermutationSwapMutation
 from jmetal.problem.singleobjective.tsp import TSP
 from jmetal.util.comparator import MultiComparator
 from jmetal.util.density_estimator import CrowdingDistance
+from jmetal.util.observer import PrintObjectivesObserver
 from jmetal.util.ranking import FastNonDominatedRanking
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
@@ -17,13 +18,12 @@ if __name__ == "__main__":
         problem=problem,
         population_size=100,
         offspring_population_size=100,
-        mutation=PermutationSwapMutation(1.0 / problem.number_of_variables),
+        mutation=PermutationSwapMutation(1.0 / problem.number_of_variables()),
         crossover=PMXCrossover(0.8),
-        selection=BinaryTournamentSelection(
-            MultiComparator([FastNonDominatedRanking.get_comparator(), CrowdingDistance.get_comparator()])
-        ),
-        termination_criterion=StoppingByEvaluations(max_evaluations=2500000),
+        termination_criterion=StoppingByEvaluations(max_evaluations=250000),
     )
+
+    algorithm.observable.register(observer=PrintObjectivesObserver(5000))
 
     algorithm.run()
     result = algorithm.get_result()
