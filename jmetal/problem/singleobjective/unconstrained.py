@@ -14,15 +14,19 @@ from jmetal.core.solution import BinarySolution, FloatSolution
 
 
 class OneMax(BinaryProblem):
+    """ The implementation of the OneMax problems defines a single binary variable. This variable
+    will contain the bit string representing the solutions.
+
+    """
     def __init__(self, number_of_bits: int = 256):
         super(OneMax, self).__init__()
         self.number_of_bits = number_of_bits
-        self.number_of_objectives = 1
-        self.number_of_variables = 1
-        self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE]
         self.obj_labels = ["Ones"]
+
+    def number_of_variables(self) -> int:
+        return 1
 
     def number_of_objectives(self) -> int:
         return 1
