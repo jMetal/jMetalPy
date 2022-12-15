@@ -171,6 +171,21 @@ class DominanceComparator(Comparator):
         return result
 
 
+class ObjectiveComparator(Comparator):
+    """ Compares two solutions according to a particular objective
+    """
+    def __init__(self, objectiveId):
+        self.objectiveId = objectiveId
+
+    def compare(self, solution1: S, solution2: S) -> int:
+        result = 0
+        if solution1.objectives[self.objectiveId] < solution2.objectives[self.objectiveId]:
+            result = -1
+        elif solution1.objectives[self.objectiveId] > solution2.objectives[self.objectiveId]:
+            result = 1
+
+        return result
+
 
 class GDominanceComparator(DominanceComparator):
     def __init__(
