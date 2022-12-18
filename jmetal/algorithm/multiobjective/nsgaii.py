@@ -68,7 +68,6 @@ class NSGAII(GeneticAlgorithm[S, R]):
         :param population_size: Size of the population.
         :param mutation: Mutation operator (see :py:mod:`jmetal.operator.mutation`).
         :param crossover: Crossover operator (see :py:mod:`jmetal.operator.crossover`).
-        :param selection: Selection operator (see :py:mod:`jmetal.operator.selection`).
         """
         super(NSGAII, self).__init__(
             problem=problem,
@@ -76,7 +75,6 @@ class NSGAII(GeneticAlgorithm[S, R]):
             offspring_population_size=offspring_population_size,
             mutation=mutation,
             crossover=crossover,
-            selection=selection,
             termination_criterion=termination_criterion,
             population_evaluator=population_evaluator,
             population_generator=population_generator,
