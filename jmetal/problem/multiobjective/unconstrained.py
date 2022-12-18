@@ -203,6 +203,10 @@ class SubsetSum(BinaryProblem):
 
 
 class OneZeroMax(BinaryProblem):
+    """ The implementation of the OneZeroMax problems defines a single binary variable. This variable
+    will contain the bit string representing the solutions.
+
+    """
     def __init__(self, number_of_bits: int = 256):
         super(OneZeroMax, self).__init__()
         self.number_of_bits = number_of_bits
