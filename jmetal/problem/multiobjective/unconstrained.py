@@ -30,11 +30,8 @@ class Kursawe(FloatProblem):
         self.lower_bound = [-5.0 for _ in range(number_of_variables)]
         self.upper_bound = [5.0 for _ in range(number_of_variables)]
 
-        FloatSolution.lower_bound = self.lower_bound
-        FloatSolution.upper_bound = self.upper_bound
-
     def number_of_objectives(self) -> int:
-        return 2
+        return len(self.obj_directions)
 
     def number_of_constraints(self) -> int:
         return 0
@@ -55,7 +52,7 @@ class Kursawe(FloatProblem):
 
         return solution
 
-    def get_name(self):
+    def name(self):
         return "Kursawe"
 
 
@@ -70,11 +67,8 @@ class Fonseca(FloatProblem):
         self.lower_bound = number_of_variables * [-4]
         self.upper_bound = number_of_variables * [4]
 
-        FloatSolution.lower_bound = self.lower_bound
-        FloatSolution.upper_bound = self.upper_bound
-
     def number_of_objectives(self) -> int:
-        return 2
+        return len(self.obj_directions)
 
     def number_of_constraints(self) -> int:
         return 0
@@ -86,7 +80,7 @@ class Fonseca(FloatProblem):
 
         return solution
 
-    def get_name(self):
+    def name(self):
         return "Fonseca"
 
 
@@ -100,11 +94,8 @@ class Schaffer(FloatProblem):
         self.lower_bound = [-1000]
         self.upper_bound = [1000]
 
-        FloatSolution.lower_bound = self.lower_bound
-        FloatSolution.upper_bound = self.upper_bound
-
     def number_of_objectives(self) -> int:
-        return 2
+        return len(self.obj_directions)
 
     def number_of_constraints(self) -> int:
         return 0
@@ -117,22 +108,26 @@ class Schaffer(FloatProblem):
 
         return solution
 
-    def get_name(self):
+    def name(self):
         return "Schaffer"
 
 
 class Viennet2(FloatProblem):
     def __init__(self):
         super(Viennet2, self).__init__()
-        self.number_of_variables = 2
-        self.number_of_objectives = 3
-        self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)", "f(z)"]
 
-        self.lower_bound = self.number_of_variables * [-4]
-        self.upper_bound = self.number_of_variables * [4]
+        number_of_variables = 2
+        self.lower_bound = number_of_variables * [-4]
+        self.upper_bound = number_of_variables * [4]
+
+    def number_of_objectives(self) -> int:
+        return len(self.obj_directions)
+
+    def number_of_constraints(self) -> int:
+        return 0
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x0 = solution.variables[0]
@@ -148,7 +143,7 @@ class Viennet2(FloatProblem):
 
         return solution
 
-    def get_name(self):
+    def name(self):
         return "Viennet2"
 
 
@@ -198,7 +193,7 @@ class SubsetSum(BinaryProblem):
 
         return new_solution
 
-    def get_name(self) -> str:
+    def name(self) -> str:
         return "Subset Sum"
 
 
@@ -244,7 +239,7 @@ class OneZeroMax(BinaryProblem):
         new_solution.variables[0] = [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
         return new_solution
 
-    def get_name(self) -> str:
+    def name(self) -> str:
         return "OneZeroMax"
 
 
@@ -305,5 +300,5 @@ class MixedIntegerFloatProblem(Problem):
 
         return CompositeSolution([integer_solution, float_solution])
 
-    def get_name(self) -> str:
+    def name(self) -> str:
         return "Mixed Integer Float Problem"
