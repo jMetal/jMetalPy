@@ -56,7 +56,7 @@ class Problem(Generic[S], ABC):
         pass
 
     @abstractmethod
-    def get_name(self) -> str:
+    def name(self) -> str:
         pass
 
 
@@ -198,5 +198,5 @@ class OnTheFlyFloatProblem(FloatProblem):
         for i in range(self.number_of_constraints()):
             solution.constraints[i] = self.constraints[i](solution.variables)
 
-    def get_name(self) -> str:
+    def name(self) -> str:
         return self.name

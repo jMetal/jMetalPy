@@ -1,4 +1,4 @@
-from math import cos, pi, pow, sin, sqrt
+from math import cos, pi, pow, sin, sqrt, exp
 
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
@@ -22,15 +22,18 @@ class ZDT1(FloatProblem):
     def __init__(self, number_of_variables: int = 30):
         """:param number_of_variables: Number of decision variables of the problem."""
         super(ZDT1, self).__init__()
-        self.number_of_variables = number_of_variables
-        self.number_of_objectives = 2
-        self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["x", "y"]
 
-        self.lower_bound = self.number_of_variables * [0.0]
-        self.upper_bound = self.number_of_variables * [1.0]
+        self.lower_bound = number_of_variables * [0.0]
+        self.upper_bound = number_of_variables * [1.0]
+
+    def number_of_objectives(self) -> int:
+        return len(self.obj_directions)
+
+    def number_of_constraints(self) -> int:
+        return 0
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         g = self.eval_g(solution)
@@ -51,7 +54,7 @@ class ZDT1(FloatProblem):
     def eval_h(self, f: float, g: float) -> float:
         return 1.0 - sqrt(f / g)
 
-    def get_name(self):
+    def name(self):
         return "ZDT1"
 
 
@@ -82,7 +85,7 @@ class ZDT2(ZDT1):
     def eval_h(self, f: float, g: float) -> float:
         return 1.0 - pow(f / g, 2.0)
 
-    def get_name(self):
+    def name(self):
         return "ZDT2"
 
 
@@ -96,7 +99,7 @@ class ZDT3(ZDT1):
     def eval_h(self, f: float, g: float) -> float:
         return 1.0 - sqrt(f / g) - (f / g) * sin(10.0 * f * pi)
 
-    def get_name(self):
+    def name(self):
         return "ZDT3"
 
 
@@ -109,9 +112,9 @@ class ZDT4(ZDT1):
 
     def __init__(self, number_of_variables: int = 10):
         """:param number_of_variables: Number of decision variables of the problem."""
-        super(ZDT4, self).__init__(number_of_variables=number_of_variables)
-        self.lower_bound = self.number_of_variables * [-5.0]
-        self.upper_bound = self.number_of_variables * [5.0]
+        super(ZDT4, self).__init__()
+        self.lower_bound = number_of_variables * [-5.0]
+        self.upper_bound = number_of_variables * [5.0]
         self.lower_bound[0] = 0.0
         self.upper_bound[0] = 1.0
 
@@ -128,7 +131,7 @@ class ZDT4(ZDT1):
     def eval_h(self, f: float, g: float) -> float:
         return 1.0 - sqrt(f / g)
 
-    def get_name(self):
+    def name(self):
         return "ZDT4"
 
 
@@ -166,5 +169,5 @@ class ZDT6(ZDT1):
     def eval_h(self, f: float, g: float) -> float:
         return 1.0 - pow(f / g, 2.0)
 
-    def get_name(self):
+    def name(self):
         return "ZDT6"
