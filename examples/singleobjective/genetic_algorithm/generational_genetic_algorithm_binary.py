@@ -22,7 +22,7 @@ if __name__ == "__main__":
     result = algorithm.get_result()
 
     print("Algorithm: {}".format(algorithm.get_name()))
-    print("Problem: {}".format(problem.get_name()))
+    print("Problem: {}".format(problem.name()))
     print("Solution: " + result.get_binary_string())
     print("Fitness:  " + str(result.objectives[0]))
     print("Computing time: {}".format(algorithm.total_computing_time))

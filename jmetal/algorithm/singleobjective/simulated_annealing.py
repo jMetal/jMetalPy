@@ -82,10 +82,10 @@ class SimulatedAnnealing(Algorithm[S, R], threading.Thread):
     def update_progress(self) -> None:
         self.evaluations += 1
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
 
-    def get_observable_data(self) -> dict:
+    def observable_data(self) -> dict:
         ctime = time.time() - self.start_computing_time
         return {
             "PROBLEM": self.problem,

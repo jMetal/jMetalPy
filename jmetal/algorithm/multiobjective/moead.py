@@ -66,7 +66,7 @@ class MOEAD(GeneticAlgorithm):
         self.neighbourhood = WeightVectorNeighborhood(
             number_of_weight_vectors=population_size,
             neighborhood_size=neighbor_size,
-            weight_vector_size=problem.number_of_objectives,
+            weight_vector_size=problem.number_of_objectives(),
             weights_path=weight_files_path,
         )
         self.neighbourhood_selection_probability = neighbourhood_selection_probability
@@ -81,7 +81,7 @@ class MOEAD(GeneticAlgorithm):
 
         self.permutation = Permutation(self.population_size)
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
 
     def selection(self, population: List[S]):
@@ -209,7 +209,7 @@ class MOEAD_DRA(MOEAD):
         self.order = self.__tour_selection(10)
         self.current_order_index = 0
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
 
     def update_progress(self):

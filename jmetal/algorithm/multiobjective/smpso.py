@@ -208,7 +208,7 @@ class SMPSO(ParticleSwarmOptimization):
         self.evaluations += self.swarm_size
         self.leaders.compute_density_estimator()
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         observable_data["SOLUTIONS"] = self.leaders.solution_list
         self.observable.notify_all(**observable_data)
 
@@ -258,7 +258,7 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
             self.restart()
             self.problem.clear_changed()
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
 
         self.evaluations += self.swarm_size
@@ -266,7 +266,7 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
 
     def stopping_condition_is_met(self):
         if self.termination_criterion.is_met:
-            observable_data = self.get_observable_data()
+            observable_data = self.observable_data()
             observable_data["termination_criterion_is_met"] = True
             self.observable.notify_all(**observable_data)
 
@@ -361,7 +361,7 @@ class SMPSORP(SMPSO):
             leader.filter()
             leader.compute_density_estimator()
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         observable_data["REFERENCE_POINT"] = self.get_reference_point()
         self.observable.notify_all(**observable_data)
 

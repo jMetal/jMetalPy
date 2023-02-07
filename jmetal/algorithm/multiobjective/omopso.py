@@ -208,7 +208,7 @@ class OMOPSO(ParticleSwarmOptimization):
         self.evaluations += self.swarm_size
         self.leaders.compute_density_estimator()
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         observable_data["SOLUTIONS"] = self.epsilon_archive.solution_list
         self.observable.notify_all(**observable_data)
 

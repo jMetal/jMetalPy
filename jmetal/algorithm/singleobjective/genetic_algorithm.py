@@ -30,7 +30,7 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         offspring_population_size: int,
         mutation: Mutation,
         crossover: Crossover,
-        solution_comparator: Comparator = ObjectiveComparator(0),
+        selection: Selection = BinaryTournamentSelection(ObjectiveComparator(0)),
         termination_criterion: TerminationCriterion = store.default_termination_criteria,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
@@ -40,9 +40,9 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         )
         self.mutation_operator = mutation
         self.crossover_operator = crossover
-        self.solutionComparator = solution_comparator
+        self.solutionComparator = ObjectiveComparator(0)
 
-        self.selection_operator = BinaryTournamentSelection(solution_comparator)
+        self.selection_operator = selection
 
         self.population_generator = population_generator
         self.population_evaluator = population_evaluator

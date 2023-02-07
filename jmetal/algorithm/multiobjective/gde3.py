@@ -137,14 +137,14 @@ class DynamicGDE3(GDE3, DynamicAlgorithm):
             self.restart()
             self.problem.clear_changed()
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
 
         self.evaluations += self.offspring_population_size
 
     def stopping_condition_is_met(self):
         if self.termination_criterion.is_met:
-            observable_data = self.get_observable_data()
+            observable_data = self.observable_data()
             self.observable.notify_all(**observable_data)
 
             self.restart()
