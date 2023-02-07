@@ -49,7 +49,7 @@ class OneMax(BinaryProblem):
         new_solution.variables[0] = [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
         return new_solution
 
-    def get_name(self) -> str:
+    def name(self) -> str:
         return "OneMax"
 
 
@@ -81,7 +81,7 @@ class Sphere(FloatProblem):
 
         return solution
 
-    def get_name(self) -> str:
+    def name(self) -> str:
         return "Sphere"
 
 
@@ -116,7 +116,7 @@ class Rastrigin(FloatProblem):
 
         return solution
 
-    def get_name(self) -> str:
+    def name(self) -> str:
         return "Rastrigin"
 
 
@@ -163,5 +163,5 @@ class SubsetSum(BinaryProblem):
 
         return new_solution
 
-    def get_name(self) -> str:
+    def  name(self) -> str:
         return "Subset Sum"

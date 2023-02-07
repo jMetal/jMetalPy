@@ -99,5 +99,5 @@ class TSP(PermutationProblem):
 
         return new_solution
 
-    def get_name(self):
+    def name(self):
         return "Symmetric TSP"
