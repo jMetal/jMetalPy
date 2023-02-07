@@ -1,286 +1,385 @@
 import unittest
 
-from jmetal.problem import DTLZ1, DTLZ2
-from jmetal.problem.multiobjective.dtlz import DTLZ3, DTLZ4, DTLZ5, DTLZ6, DTLZ7
-from jmetal.problem.multiobjective.zdt import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
+from jmetal.problem.multiobjective.lz09 import LZ09_F1, LZ09_F2, LZ09_F3, LZ09_F4, LZ09_F5, LZ09_F6, LZ09_F7, LZ09_F8, \
+    LZ09_F9
 
 
-class DTLZ1TestCases(unittest.TestCase):
+class LZ09F1TestCases(unittest.TestCase):
     def test_should_constructor_create_a_non_null_object(self) -> None:
-        problem = DTLZ1()
+        problem = LZ09_F1()
         self.assertIsNotNone(problem)
 
     def test_should_constructor_create_a_valid_problem_with_default_settings(self) -> None:
-        problem = DTLZ1()
-        self.assertEqual(7, problem.number_of_variables())
-        self.assertEqual(3, problem.number_of_objectives())
-        self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(7 * [0.0], problem.lower_bound)
-        self.assertEqual(7 * [1.0], problem.upper_bound)
-
-    def test_should_constructor_create_a_valid_problem_with_5_variables_and_4_objectives(self) -> None:
-        problem = DTLZ1(5, 4)
-        self.assertEqual(5, problem.number_of_variables())
-        self.assertEqual(4, problem.number_of_objectives())
-        self.assertEqual(0, problem.number_of_constraints())
-
-        self.assertEqual(5 * [0.0], problem.lower_bound)
-        self.assertEqual(5 * [1.0], problem.upper_bound)
-
-    def test_should_create_solution_create_a_valid_float_solution(self) -> None:
-        problem = DTLZ1()
-        solution = problem.create_solution()
-
-        self.assertEqual(7, solution.number_of_variables)
-        self.assertEqual(7, len(solution.variables))
-        self.assertEqual(3, solution.number_of_objectives)
-        self.assertEqual(3, len(solution.objectives))
-        self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(7 * [0.0], problem.lower_bound)
-        self.assertEqual(7 * [1.0], problem.upper_bound)
-        self.assertTrue(all(value >= 0.0 for value in solution.variables))
-        self.assertTrue(all(value <= 1.0 for value in solution.variables))
-
-    def test_should_get_name_return_the_right_name(self):
-        problem = ZDT1()
-        self.assertEqual("ZDT1", problem.name())
-
-
-class DTLZ2TestCases(unittest.TestCase):
-    def test_should_constructor_create_a_non_null_object(self) -> None:
-        problem = DTLZ2()
-        self.assertIsNotNone(problem)
-
-    def test_should_constructor_create_a_valid_problem_with_default_settings(self) -> None:
-        problem = DTLZ2()
-        self.assertEqual(12, problem.number_of_variables())
-        self.assertEqual(3, problem.number_of_objectives())
-        self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(12 * [0.0], problem.lower_bound)
-        self.assertEqual(12 * [1.0], problem.upper_bound)
-
-    def test_should_constructor_create_a_valid_problem_with_10_variables_and_4_objectives(self) -> None:
-        problem = DTLZ2(10, 4)
+        problem = LZ09_F1()
         self.assertEqual(10, problem.number_of_variables())
-        self.assertEqual(4, problem.number_of_objectives())
+        self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-
-        self.assertEqual(10 * [0.0], problem.lower_bound)
+        self.assertEqual(10* [0.0], problem.lower_bound)
         self.assertEqual(10 * [1.0], problem.upper_bound)
 
-    def test_should_create_solution_create_a_valid_float_solution(self) -> None:
-        problem = DTLZ2()
-        solution = problem.create_solution()
-        self.assertEqual(12, solution.number_of_variables)
-        self.assertEqual(12, len(solution.variables))
-        self.assertEqual(3, solution.number_of_objectives)
-        self.assertEqual(3, len(solution.objectives))
+    def test_should_constructor_create_a_valid_problem_with_50(self) -> None:
+        problem = LZ09_F1(50)
+
+        self.assertEqual(50, problem.number_of_variables())
+        self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(12 * [0.0], problem.lower_bound)
-        self.assertEqual(12 * [1.0], problem.upper_bound)
+
+        self.assertEqual(50 * [0.0], problem.lower_bound)
+        self.assertEqual(50 * [1.0], problem.upper_bound)
+
+    def test_should_create_solution_create_a_valid_float_solution(self) -> None:
+        problem = LZ09_F1()
+        solution = problem.create_solution()
+
+        self.assertEqual(10, solution.number_of_variables)
+        self.assertEqual(10, len(solution.variables))
+        self.assertEqual(2, solution.number_of_objectives)
+        self.assertEqual(2, len(solution.objectives))
+        self.assertEqual(0, problem.number_of_constraints())
+        self.assertEqual(10 * [0.0], problem.lower_bound)
+        self.assertEqual(10 * [1.0], problem.upper_bound)
         self.assertTrue(all(value >= 0.0 for value in solution.variables))
         self.assertTrue(all(value <= 1.0 for value in solution.variables))
 
     def test_should_get_name_return_the_right_name(self):
-        problem = DTLZ2()
-        self.assertEqual("DTLZ2", problem.name())
+        problem = LZ09_F1()
+        self.assertEqual("LZ09_F1", problem.name())
 
-class DTLZ3TestCases(unittest.TestCase):
+
+class LZ09F2TestCases(unittest.TestCase):
     def test_should_constructor_create_a_non_null_object(self) -> None:
-        problem = DTLZ3()
+        problem = LZ09_F2()
         self.assertIsNotNone(problem)
 
     def test_should_constructor_create_a_valid_problem_with_default_settings(self) -> None:
-        problem = DTLZ3()
-        self.assertEqual(12, problem.number_of_variables())
-        self.assertEqual(3, problem.number_of_objectives())
+        problem = LZ09_F2()
+        self.assertEqual(30, problem.number_of_variables())
+        self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(12 * [0.0], problem.lower_bound)
-        self.assertEqual(12 * [1.0], problem.upper_bound)
+        self.assertEqual(30* [0.0], problem.lower_bound)
+        self.assertEqual(30 * [1.0], problem.upper_bound)
 
-    def test_should_constructor_create_a_valid_problem_with_10_variables_and_4_objectives(self) -> None:
-        problem = DTLZ3(10, 4)
-        self.assertEqual(10, problem.number_of_variables())
-        self.assertEqual(4, problem.number_of_objectives())
+    def test_should_constructor_create_a_valid_problem_with_50_variables(self) -> None:
+        problem = LZ09_F2(50)
+
+        self.assertEqual(50, problem.number_of_variables())
+        self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
 
-        self.assertEqual(10 * [0.0], problem.lower_bound)
-        self.assertEqual(10 * [1.0], problem.upper_bound)
+        self.assertEqual(50 * [0.0], problem.lower_bound)
+        self.assertEqual(50 * [1.0], problem.upper_bound)
 
     def test_should_create_solution_create_a_valid_float_solution(self) -> None:
-        problem = DTLZ3()
+        problem = LZ09_F2()
         solution = problem.create_solution()
-        self.assertEqual(12, solution.number_of_variables)
-        self.assertEqual(12, len(solution.variables))
-        self.assertEqual(3, solution.number_of_objectives)
-        self.assertEqual(3, len(solution.objectives))
+
+        self.assertEqual(30, solution.number_of_variables)
+        self.assertEqual(30, len(solution.variables))
+        self.assertEqual(2, solution.number_of_objectives)
+        self.assertEqual(2, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(12 * [0.0], problem.lower_bound)
-        self.assertEqual(12 * [1.0], problem.upper_bound)
+        self.assertEqual(30 * [0.0], problem.lower_bound)
+        self.assertEqual(30 * [1.0], problem.upper_bound)
         self.assertTrue(all(value >= 0.0 for value in solution.variables))
         self.assertTrue(all(value <= 1.0 for value in solution.variables))
 
     def test_should_get_name_return_the_right_name(self):
-        problem = DTLZ3()
-        self.assertEqual("DTLZ3", problem.name())
+        problem = LZ09_F2()
+        self.assertEqual("LZ09_F2", problem.name())
 
 
-class DTLZ4TestCases(unittest.TestCase):
+class LZ09F3TestCases(unittest.TestCase):
     def test_should_constructor_create_a_non_null_object(self) -> None:
-        problem = DTLZ4()
+        problem = LZ09_F3()
         self.assertIsNotNone(problem)
 
     def test_should_constructor_create_a_valid_problem_with_default_settings(self) -> None:
-        problem = DTLZ4()
-        self.assertEqual(12, problem.number_of_variables())
-        self.assertEqual(3, problem.number_of_objectives())
+        problem = LZ09_F3()
+        self.assertEqual(30, problem.number_of_variables())
+        self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(12 * [0.0], problem.lower_bound)
-        self.assertEqual(12 * [1.0], problem.upper_bound)
+        self.assertEqual(30* [0.0], problem.lower_bound)
+        self.assertEqual(30 * [1.0], problem.upper_bound)
 
-    def test_should_constructor_create_a_valid_problem_with_10_variables_and_4_objectives(self) -> None:
-        problem = DTLZ4(10, 4)
-        self.assertEqual(10, problem.number_of_variables())
-        self.assertEqual(4, problem.number_of_objectives())
+    def test_should_constructor_create_a_valid_problem_with_50_variables(self) -> None:
+        problem = LZ09_F3(50)
+
+        self.assertEqual(50, problem.number_of_variables())
+        self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
 
-        self.assertEqual(10 * [0.0], problem.lower_bound)
-        self.assertEqual(10 * [1.0], problem.upper_bound)
+        self.assertEqual(50 * [0.0], problem.lower_bound)
+        self.assertEqual(50 * [1.0], problem.upper_bound)
 
     def test_should_create_solution_create_a_valid_float_solution(self) -> None:
-        problem = DTLZ4()
+        problem = LZ09_F3()
         solution = problem.create_solution()
-        self.assertEqual(12, solution.number_of_variables)
-        self.assertEqual(12, len(solution.variables))
-        self.assertEqual(3, solution.number_of_objectives)
-        self.assertEqual(3, len(solution.objectives))
+
+        self.assertEqual(30, solution.number_of_variables)
+        self.assertEqual(30, len(solution.variables))
+        self.assertEqual(2, solution.number_of_objectives)
+        self.assertEqual(2, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(12 * [0.0], problem.lower_bound)
-        self.assertEqual(12 * [1.0], problem.upper_bound)
+        self.assertEqual(30 * [0.0], problem.lower_bound)
+        self.assertEqual(30 * [1.0], problem.upper_bound)
         self.assertTrue(all(value >= 0.0 for value in solution.variables))
         self.assertTrue(all(value <= 1.0 for value in solution.variables))
 
     def test_should_get_name_return_the_right_name(self):
-        problem = DTLZ4()
-        self.assertEqual("DTLZ4", problem.name())
+        problem = LZ09_F3()
+        self.assertEqual("LZ09_F3", problem.name())
 
-class DTLZ5TestCases(unittest.TestCase):
+
+class LZ09F4TestCases(unittest.TestCase):
     def test_should_constructor_create_a_non_null_object(self) -> None:
-        problem = DTLZ5()
+        problem = LZ09_F4()
         self.assertIsNotNone(problem)
 
     def test_should_constructor_create_a_valid_problem_with_default_settings(self) -> None:
-        problem = DTLZ5()
-        self.assertEqual(12, problem.number_of_variables())
-        self.assertEqual(3, problem.number_of_objectives())
+        problem = LZ09_F4()
+        self.assertEqual(30, problem.number_of_variables())
+        self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(12 * [0.0], problem.lower_bound)
-        self.assertEqual(12 * [1.0], problem.upper_bound)
+        self.assertEqual(30* [0.0], problem.lower_bound)
+        self.assertEqual(30 * [1.0], problem.upper_bound)
 
-    def test_should_constructor_create_a_valid_problem_with_10_variables_and_4_objectives(self) -> None:
-        problem = DTLZ5(10, 4)
-        self.assertEqual(10, problem.number_of_variables())
-        self.assertEqual(4, problem.number_of_objectives())
+    def test_should_constructor_create_a_valid_problem_with_50_variables(self) -> None:
+        problem = LZ09_F4(50)
+
+        self.assertEqual(50, problem.number_of_variables())
+        self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
 
-        self.assertEqual(10 * [0.0], problem.lower_bound)
-        self.assertEqual(10 * [1.0], problem.upper_bound)
+        self.assertEqual(50 * [0.0], problem.lower_bound)
+        self.assertEqual(50 * [1.0], problem.upper_bound)
 
     def test_should_create_solution_create_a_valid_float_solution(self) -> None:
-        problem = DTLZ5()
+        problem = LZ09_F4()
         solution = problem.create_solution()
-        self.assertEqual(12, solution.number_of_variables)
-        self.assertEqual(12, len(solution.variables))
-        self.assertEqual(3, solution.number_of_objectives)
-        self.assertEqual(3, len(solution.objectives))
+
+        self.assertEqual(30, solution.number_of_variables)
+        self.assertEqual(30, len(solution.variables))
+        self.assertEqual(2, solution.number_of_objectives)
+        self.assertEqual(2, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(12 * [0.0], problem.lower_bound)
-        self.assertEqual(12 * [1.0], problem.upper_bound)
+        self.assertEqual(30 * [0.0], problem.lower_bound)
+        self.assertEqual(30 * [1.0], problem.upper_bound)
         self.assertTrue(all(value >= 0.0 for value in solution.variables))
         self.assertTrue(all(value <= 1.0 for value in solution.variables))
 
     def test_should_get_name_return_the_right_name(self):
-        problem = DTLZ5()
-        self.assertEqual("DTLZ5", problem.name())
+        problem = LZ09_F4()
+        self.assertEqual("LZ09_F4", problem.name())
 
 
-class DTLZ6TestCases(unittest.TestCase):
+class LZ09F5TestCases(unittest.TestCase):
     def test_should_constructor_create_a_non_null_object(self) -> None:
-        problem = DTLZ6()
+        problem = LZ09_F5()
         self.assertIsNotNone(problem)
 
     def test_should_constructor_create_a_valid_problem_with_default_settings(self) -> None:
-        problem = DTLZ6()
-        self.assertEqual(12, problem.number_of_variables())
-        self.assertEqual(3, problem.number_of_objectives())
+        problem = LZ09_F5()
+        self.assertEqual(30, problem.number_of_variables())
+        self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(12 * [0.0], problem.lower_bound)
-        self.assertEqual(12 * [1.0], problem.upper_bound)
+        self.assertEqual(30* [0.0], problem.lower_bound)
+        self.assertEqual(30 * [1.0], problem.upper_bound)
 
-    def test_should_constructor_create_a_valid_problem_with_10_variables_and_4_objectives(self) -> None:
-        problem = DTLZ6(10, 4)
-        self.assertEqual(10, problem.number_of_variables())
-        self.assertEqual(4, problem.number_of_objectives())
+    def test_should_constructor_create_a_valid_problem_with_50_variables(self) -> None:
+        problem = LZ09_F5(50)
+
+        self.assertEqual(50, problem.number_of_variables())
+        self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
 
-        self.assertEqual(10 * [0.0], problem.lower_bound)
-        self.assertEqual(10 * [1.0], problem.upper_bound)
+        self.assertEqual(50 * [0.0], problem.lower_bound)
+        self.assertEqual(50 * [1.0], problem.upper_bound)
 
     def test_should_create_solution_create_a_valid_float_solution(self) -> None:
-        problem = DTLZ6()
+        problem = LZ09_F5()
         solution = problem.create_solution()
-        self.assertEqual(12, solution.number_of_variables)
-        self.assertEqual(12, len(solution.variables))
-        self.assertEqual(3, solution.number_of_objectives)
-        self.assertEqual(3, len(solution.objectives))
+
+        self.assertEqual(30, solution.number_of_variables)
+        self.assertEqual(30, len(solution.variables))
+        self.assertEqual(2, solution.number_of_objectives)
+        self.assertEqual(2, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(12 * [0.0], problem.lower_bound)
-        self.assertEqual(12 * [1.0], problem.upper_bound)
+        self.assertEqual(30 * [0.0], problem.lower_bound)
+        self.assertEqual(30 * [1.0], problem.upper_bound)
         self.assertTrue(all(value >= 0.0 for value in solution.variables))
         self.assertTrue(all(value <= 1.0 for value in solution.variables))
 
     def test_should_get_name_return_the_right_name(self):
-        problem = DTLZ6()
-        self.assertEqual("DTLZ6", problem.name())
+        problem = LZ09_F5()
+        self.assertEqual("LZ09_F5", problem.name())
 
-class DTLZ7TestCases(unittest.TestCase):
+
+class LZ09F6TestCases(unittest.TestCase):
     def test_should_constructor_create_a_non_null_object(self) -> None:
-        problem = DTLZ7()
+        problem = LZ09_F6()
         self.assertIsNotNone(problem)
 
     def test_should_constructor_create_a_valid_problem_with_default_settings(self) -> None:
-        problem = DTLZ7()
-        self.assertEqual(22, problem.number_of_variables())
+        problem = LZ09_F6()
+        self.assertEqual(10, problem.number_of_variables())
         self.assertEqual(3, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(22 * [0.0], problem.lower_bound)
-        self.assertEqual(22 * [1.0], problem.upper_bound)
-
-    def test_should_constructor_create_a_valid_problem_with_10_variables_and_4_objectives(self) -> None:
-        problem = DTLZ7(10, 4)
-        self.assertEqual(10, problem.number_of_variables())
-        self.assertEqual(4, problem.number_of_objectives())
-        self.assertEqual(0, problem.number_of_constraints())
-
-        self.assertEqual(10 * [0.0], problem.lower_bound)
+        self.assertEqual(10* [0.0], problem.lower_bound)
         self.assertEqual(10 * [1.0], problem.upper_bound)
 
+    def test_should_constructor_create_a_valid_problem_with_50_variables(self) -> None:
+        problem = LZ09_F6(50)
+
+        self.assertEqual(50, problem.number_of_variables())
+        self.assertEqual(3, problem.number_of_objectives())
+        self.assertEqual(0, problem.number_of_constraints())
+
+        self.assertEqual(50 * [0.0], problem.lower_bound)
+        self.assertEqual(50 * [1.0], problem.upper_bound)
+
     def test_should_create_solution_create_a_valid_float_solution(self) -> None:
-        problem = DTLZ7()
+        problem = LZ09_F6()
         solution = problem.create_solution()
-        self.assertEqual(22, solution.number_of_variables)
-        self.assertEqual(22, len(solution.variables))
+
+        self.assertEqual(10, solution.number_of_variables)
+        self.assertEqual(10, len(solution.variables))
         self.assertEqual(3, solution.number_of_objectives)
         self.assertEqual(3, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(22 * [0.0], problem.lower_bound)
-        self.assertEqual(22 * [1.0], problem.upper_bound)
+        self.assertEqual(10 * [0.0], problem.lower_bound)
+        self.assertEqual(10 * [1.0], problem.upper_bound)
         self.assertTrue(all(value >= 0.0 for value in solution.variables))
         self.assertTrue(all(value <= 1.0 for value in solution.variables))
 
     def test_should_get_name_return_the_right_name(self):
-        problem = DTLZ7()
-        self.assertEqual("DTLZ7", problem.name())
+        problem = LZ09_F6()
+        self.assertEqual("LZ09_F6", problem.name())
+
+
+class LZ09F7TestCases(unittest.TestCase):
+    def test_should_constructor_create_a_non_null_object(self) -> None:
+        problem = LZ09_F7()
+        self.assertIsNotNone(problem)
+
+    def test_should_constructor_create_a_valid_problem_with_default_settings(self) -> None:
+        problem = LZ09_F7()
+        self.assertEqual(10, problem.number_of_variables())
+        self.assertEqual(2, problem.number_of_objectives())
+        self.assertEqual(0, problem.number_of_constraints())
+        self.assertEqual(10* [0.0], problem.lower_bound)
+        self.assertEqual(10 * [1.0], problem.upper_bound)
+
+    def test_should_constructor_create_a_valid_problem_with_50_variables(self) -> None:
+        problem = LZ09_F7(50)
+
+        self.assertEqual(50, problem.number_of_variables())
+        self.assertEqual(2, problem.number_of_objectives())
+        self.assertEqual(0, problem.number_of_constraints())
+
+        self.assertEqual(50 * [0.0], problem.lower_bound)
+        self.assertEqual(50 * [1.0], problem.upper_bound)
+
+    def test_should_create_solution_create_a_valid_float_solution(self) -> None:
+        problem = LZ09_F7()
+        solution = problem.create_solution()
+
+        self.assertEqual(10, solution.number_of_variables)
+        self.assertEqual(10, len(solution.variables))
+        self.assertEqual(2, solution.number_of_objectives)
+        self.assertEqual(2, len(solution.objectives))
+        self.assertEqual(0, problem.number_of_constraints())
+        self.assertEqual(10 * [0.0], problem.lower_bound)
+        self.assertEqual(10 * [1.0], problem.upper_bound)
+        self.assertTrue(all(value >= 0.0 for value in solution.variables))
+        self.assertTrue(all(value <= 1.0 for value in solution.variables))
+
+    def test_should_get_name_return_the_right_name(self):
+        problem = LZ09_F7()
+        self.assertEqual("LZ09_F7", problem.name())
+
+
+class LZ09F8TestCases(unittest.TestCase):
+    def test_should_constructor_create_a_non_null_object(self) -> None:
+        problem = LZ09_F8()
+        self.assertIsNotNone(problem)
+
+    def test_should_constructor_create_a_valid_problem_with_default_settings(self) -> None:
+        problem = LZ09_F8()
+        self.assertEqual(10, problem.number_of_variables())
+        self.assertEqual(2, problem.number_of_objectives())
+        self.assertEqual(0, problem.number_of_constraints())
+        self.assertEqual(10* [0.0], problem.lower_bound)
+        self.assertEqual(10 * [1.0], problem.upper_bound)
+
+    def test_should_constructor_create_a_valid_problem_with_50_variables(self) -> None:
+        problem = LZ09_F8(50)
+
+        self.assertEqual(50, problem.number_of_variables())
+        self.assertEqual(2, problem.number_of_objectives())
+        self.assertEqual(0, problem.number_of_constraints())
+
+        self.assertEqual(50 * [0.0], problem.lower_bound)
+        self.assertEqual(50 * [1.0], problem.upper_bound)
+
+    def test_should_create_solution_create_a_valid_float_solution(self) -> None:
+        problem = LZ09_F8()
+        solution = problem.create_solution()
+
+        self.assertEqual(10, solution.number_of_variables)
+        self.assertEqual(10, len(solution.variables))
+        self.assertEqual(2, solution.number_of_objectives)
+        self.assertEqual(2, len(solution.objectives))
+        self.assertEqual(0, problem.number_of_constraints())
+        self.assertEqual(10 * [0.0], problem.lower_bound)
+        self.assertEqual(10 * [1.0], problem.upper_bound)
+        self.assertTrue(all(value >= 0.0 for value in solution.variables))
+        self.assertTrue(all(value <= 1.0 for value in solution.variables))
+
+    def test_should_get_name_return_the_right_name(self):
+        problem = LZ09_F8()
+        self.assertEqual("LZ09_F8", problem.name())
+
+
+class LZ09F9TestCases(unittest.TestCase):
+    def test_should_constructor_create_a_non_null_object(self) -> None:
+        problem = LZ09_F9()
+        self.assertIsNotNone(problem)
+
+    def test_should_constructor_create_a_valid_problem_with_default_settings(self) -> None:
+        problem = LZ09_F9()
+        self.assertEqual(30, problem.number_of_variables())
+        self.assertEqual(2, problem.number_of_objectives())
+        self.assertEqual(0, problem.number_of_constraints())
+        self.assertEqual(30* [0.0], problem.lower_bound)
+        self.assertEqual(30 * [1.0], problem.upper_bound)
+
+    def test_should_constructor_create_a_valid_problem_with_50_variables(self) -> None:
+        problem = LZ09_F9(50)
+
+        self.assertEqual(50, problem.number_of_variables())
+        self.assertEqual(2, problem.number_of_objectives())
+        self.assertEqual(0, problem.number_of_constraints())
+
+        self.assertEqual(50 * [0.0], problem.lower_bound)
+        self.assertEqual(50 * [1.0], problem.upper_bound)
+
+    def test_should_create_solution_create_a_valid_float_solution(self) -> None:
+        problem = LZ09_F9()
+        solution = problem.create_solution()
+
+        self.assertEqual(30, solution.number_of_variables)
+        self.assertEqual(30, len(solution.variables))
+        self.assertEqual(2, solution.number_of_objectives)
+        self.assertEqual(2, len(solution.objectives))
+        self.assertEqual(0, problem.number_of_constraints())
+        self.assertEqual(30 * [0.0], problem.lower_bound)
+        self.assertEqual(30 * [1.0], problem.upper_bound)
+        self.assertTrue(all(value >= 0.0 for value in solution.variables))
+        self.assertTrue(all(value <= 1.0 for value in solution.variables))
+
+    def test_should_get_name_return_the_right_name(self):
+        problem = LZ09_F9()
+        self.assertEqual("LZ09_F9", problem.name())
 
 
 if __name__ == "__main__":
