@@ -191,9 +191,8 @@ class GDominanceComparator(DominanceComparator):
     def __init__(
         self,
         reference_point: (),
-        constraint_comparator: Comparator = SolutionAttributeComparator("overall_constraint_violation", False),
     ):
-        super(GDominanceComparator, self).__init__(constraint_comparator)
+        super(GDominanceComparator, self).__init__()
         self.reference_point = reference_point
 
     def compare(self, solution1: Solution, solution2: Solution):
