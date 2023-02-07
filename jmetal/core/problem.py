@@ -162,10 +162,10 @@ class OnTheFlyFloatProblem(FloatProblem):
         super(OnTheFlyFloatProblem, self).__init__()
         self.functions = []
         self.constraints = []
-        self.name = None
+        self.problem_name = None
 
     def set_name(self, name) -> "OnTheFlyFloatProblem":
-        self.name = name
+        self.problem_name = name
 
         return self
 
@@ -199,4 +199,4 @@ class OnTheFlyFloatProblem(FloatProblem):
             solution.constraints[i] = self.constraints[i](solution.variables)
 
     def name(self) -> str:
-        return self.name
+        return self.problem_name
