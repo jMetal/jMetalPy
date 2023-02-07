@@ -76,10 +76,10 @@ class SMPSO(ParticleSwarmOptimization):
 
         self.dominance_comparator = DominanceComparator()
 
-        self.speed = numpy.zeros((self.swarm_size, self.problem.number_of_variables), dtype=float)
+        self.speed = numpy.zeros((self.swarm_size, self.problem.number_of_variables()), dtype=float)
         self.delta_max, self.delta_min = (
-            numpy.empty(problem.number_of_variables),
-            numpy.empty(problem.number_of_variables),
+            numpy.empty(problem.number_of_variables()),
+            numpy.empty(problem.number_of_variables()),
         )
 
     def create_initial_solutions(self) -> List[FloatSolution]:
@@ -100,7 +100,7 @@ class SMPSO(ParticleSwarmOptimization):
             particle.attributes["local_best"] = copy(particle)
 
     def initialize_velocity(self, swarm: List[FloatSolution]) -> None:
-        for i in range(self.problem.number_of_variables):
+        for i in range(self.problem.number_of_variables()):
             self.delta_max[i] = (self.problem.upper_bound[i] - self.problem.lower_bound[i]) / 2.0
 
         self.delta_min = -1.0 * self.delta_max

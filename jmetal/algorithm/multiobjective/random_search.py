@@ -73,4 +73,4 @@ class RandomSearch(Algorithm[S, R]):
 
     @property
     def label(self) -> str:
-        return f"{self.get_name()}.{self.problem.get_name()}"
+        return f"{self.get_name()}.{self.problem.name()}"

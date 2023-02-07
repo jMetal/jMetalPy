@@ -13,7 +13,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":
     problem = ZDT2()
-    problem.reference_front = read_solutions(filename="resources/reference_front/{}.pf".format(problem.get_name()))
+    problem.reference_front = read_solutions(filename="resources/reference_front/{}.pf".format(problem.name()))
 
     max_evaluations = 25000
     reference_point = [0.2, 0.5]
@@ -51,5 +51,5 @@ if __name__ == "__main__":
     print_variables_to_file(front, "VAR." + algorithm.label)
 
     print(f"Algorithm: {algorithm.get_name()}")
-    print(f"Problem: {problem.get_name()}")
+    print(f"Problem: {problem.name()}")
     print(f"Computing time: {algorithm.total_computing_time}")

@@ -13,7 +13,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":
     problem = ZDT1()
-    problem.reference_front = read_solutions(filename="resources/reference_front/ZDT1.pf")
+    reference_front = read_solutions(filename="resources/reference_front/ZDT1.pf")
 
     swarm_size = 100
 
@@ -29,14 +29,14 @@ if __name__ == "__main__":
     algorithm = SMPSORP(
         problem=problem,
         swarm_size=swarm_size,
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
+        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
         reference_points=reference_point,
         leaders=archives_with_reference_points,
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
     )
 
     algorithm.observable.register(
-        observer=VisualizerObserver(reference_front=problem.reference_front, reference_point=reference_point)
+        observer=VisualizerObserver(reference_front=reference_front, reference_point=reference_point)
     )
 
     algorithm.run()
@@ -44,16 +44,16 @@ if __name__ == "__main__":
 
     # Plot front
     plot_front = Plot(
-        title="Pareto front approximation. Problem: " + problem.get_name(),
-        reference_front=problem.reference_front,
+        title="Pareto front approximation. Problem: " + problem.name(),
+        reference_front=reference_front,
         axis_labels=problem.obj_labels,
     )
     plot_front.plot(front, label=algorithm.label, filename=algorithm.get_name())
 
     # Plot interactive front
     plot_front = InteractivePlot(
-        title="Pareto front approximation. Problem: " + problem.get_name(),
-        reference_front=problem.reference_front,
+        title="Pareto front approximation. Problem: " + problem.name(),
+        reference_front=reference_front,
         axis_labels=problem.obj_labels,
     )
     plot_front.plot(front, label=algorithm.label, filename=algorithm.get_name())
@@ -63,5 +63,5 @@ if __name__ == "__main__":
     print_variables_to_file(front, "VAR." + algorithm.label)
 
     print(f"Algorithm: {algorithm.get_name()}")
-    print(f"Problem: {problem.get_name()}")
+    print(f"Problem: {problem.name()}")
     print(f"Computing time: {algorithm.total_computing_time}")

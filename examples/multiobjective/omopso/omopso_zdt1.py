@@ -14,7 +14,7 @@ if __name__ == "__main__":
     problem = ZDT1()
     problem.reference_front = read_solutions(filename="resources/reference_front/ZDT1.pf")
 
-    mutation_probability = 1.0 / problem.number_of_variables
+    mutation_probability = 1.0 / problem.number_of_variables()
     max_evaluations = 25000
     swarm_size = 100
 
@@ -38,5 +38,5 @@ if __name__ == "__main__":
     print_variables_to_file(front, "VAR." + algorithm.label)
 
     print(f"Algorithm: {algorithm.get_name()}")
-    print(f"Problem: {problem.get_name()}")
+    print(f"Problem: {problem.name()}")
     print(f"Computing time: {algorithm.total_computing_time}")
