@@ -64,8 +64,8 @@ class Algorithm(Generic[S, R], threading.Thread, ABC):
         pass
 
     @abstractmethod
-    def get_observable_data(self) -> dict:
-        """Get observable data, with the information that will be send to all observers each time."""
+    def observable_data(self) -> dict:
+        """Get observable data, with the information that will be seng to all observers each time."""
         pass
 
     def run(self):
@@ -127,7 +127,7 @@ class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
         """Replace least-fit population with new individuals."""
         pass
 
-    def get_observable_data(self) -> dict:
+    def observable_data(self) -> dict:
         return {
             "PROBLEM": self.problem,
             "EVALUATIONS": self.evaluations,
@@ -138,7 +138,7 @@ class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
     def init_progress(self) -> None:
         self.evaluations = self.population_size
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
 
     def step(self):
@@ -151,12 +151,12 @@ class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
     def update_progress(self) -> None:
         self.evaluations += self.offspring_population_size
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
 
     @property
     def label(self) -> str:
-        return f"{self.get_name()}.{self.problem.get_name()}"
+        return f"{self.get_name()}.{self.problem.name()}"
 
 
 class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], ABC):
@@ -197,7 +197,7 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], A
     def perturbation(self, swarm: List[FloatSolution]) -> None:
         pass
 
-    def get_observable_data(self) -> dict:
+    def observable_data(self) -> dict:
         return {
             "PROBLEM": self.problem,
             "EVALUATIONS": self.evaluations,
@@ -212,7 +212,7 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], A
         self.initialize_particle_best(self.solutions)
         self.initialize_global_best(self.solutions)
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
 
     def step(self):
@@ -226,9 +226,9 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], A
     def update_progress(self) -> None:
         self.evaluations += self.swarm_size
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
 
     @property
     def label(self) -> str:
-        return f"{self.get_name()}.{self.problem.get_name()}"
+        return f"{self.get_name()}.{self.problem.name()}"
