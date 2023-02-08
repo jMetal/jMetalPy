@@ -246,7 +246,7 @@ class NSGAIII(NSGAII):
 
         if not population_size:
             population_size = len(self.reference_directions)
-        if self.reference_directions.shape[1] != problem.number_of_objectives:
+        if self.reference_directions.shape[1] != problem.number_of_objectives():
             raise Exception("Dimensionality of reference points must be equal to the number of objectives")
 
         super(NSGAIII, self).__init__(
@@ -263,8 +263,8 @@ class NSGAIII(NSGAII):
         )
 
         self.extreme_points = None
-        self.ideal_point = np.full(self.problem.number_of_objectives, np.inf)
-        self.worst_point = np.full(self.problem.number_of_objectives, -np.inf)
+        self.ideal_point = np.full(self.problem.number_of_objectives(), np.inf)
+        self.worst_point = np.full(self.problem.number_of_objectives(), -np.inf)
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
         """Implements NSGA-III environmental selection based on reference points as described in:
@@ -290,7 +290,7 @@ class NSGAIII(NSGAII):
         # find the extreme points for normalization
         self.extreme_points = get_extreme_points(
             F=np.array([s.objectives for s in non_dominated]),
-            n_objs=self.problem.number_of_objectives,
+            n_objs=self.problem.number_of_objectives(),
             ideal_point=self.ideal_point,
             extreme_points=self.extreme_points,
         )

@@ -39,14 +39,16 @@ if __name__ == "__main__":
 
     problem = TSPWithConstraints(instance="resources/TSP_instances/kroA100.tsp")
 
+    solution_comparator = MultiComparator([OverallConstraintViolationComparator(), ObjectiveComparator(0)])
     algorithm = GeneticAlgorithm(
         problem=problem,
         population_size=100,
         offspring_population_size=100,
         mutation=PermutationSwapMutation(1.0 / problem.number_of_variables()),
         crossover=PMXCrossover(0.9),
+        selection=BinaryTournamentSelection(solution_comparator),
         termination_criterion=StoppingByEvaluations(max_evaluations=10000),
-        solution_comparator=MultiComparator([OverallConstraintViolationComparator(), ObjectiveComparator(0)])
+        solution_comparator=solution_comparator
     )
 
     algorithm.observable.register(observer=PrintObjectivesObserver(1000))
@@ -55,7 +57,7 @@ if __name__ == "__main__":
     result = algorithm.get_result()
 
     print("Algorithm: {}".format(algorithm.get_name()))
-    print("Problem: {}".format(problem.get_name()))
+    print("Problem: {}".format(problem.name()))
     print("Solution: {}".format(result.variables))
     print("Fitness: {}".format(result.objectives[0]))
     print("Computing time: {}".format(algorithm.total_computing_time))
