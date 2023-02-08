@@ -1,7 +1,6 @@
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
-from jmetal.operator import BinaryTournamentSelection, PolynomialMutation, SBXCrossover
+from jmetal.operator import PolynomialMutation, SBXCrossover
 from jmetal.problem.singleobjective.unconstrained import Rastrigin
-from jmetal.util.comparator import ObjectiveComparator
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":

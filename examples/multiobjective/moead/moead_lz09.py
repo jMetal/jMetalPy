@@ -1,5 +1,5 @@
 from jmetal.algorithm.multiobjective.moead import MOEAD
-from jmetal.operator import DifferentialEvolutionCrossover, PolynomialMutation, NaryRandomSolutionSelection
+from jmetal.operator import DifferentialEvolutionCrossover, PolynomialMutation
 from jmetal.problem import LZ09_F2
 from jmetal.util.aggregative_function import Tschebycheff
 from jmetal.util.solution import (

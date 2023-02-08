@@ -12,7 +12,7 @@ from jmetal.core.operator import Mutation
 from jmetal.core.problem import DynamicProblem, FloatProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.util.archive import ArchiveWithReferencePoint, BoundedArchive
-from jmetal.util.comparator import DominanceComparator, DominanceWithConstraintsComparator, Comparator
+from jmetal.util.comparator import DominanceComparator, Comparator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
 from jmetal.util.termination_criterion import TerminationCriterion

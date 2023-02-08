@@ -7,8 +7,7 @@ from typing import Generic, List, TypeVar
 from jmetal.util.comparator import (
     Comparator,
     DominanceComparator,
-    SolutionAttributeComparator, DominanceWithConstraintsComparator,
-)
+    SolutionAttributeComparator, )
 from jmetal.util.density_estimator import CrowdingDistance, DensityEstimator
 
 S = TypeVar("S")

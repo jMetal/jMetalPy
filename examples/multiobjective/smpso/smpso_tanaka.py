@@ -1,6 +1,6 @@
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.operator import PolynomialMutation
-from jmetal.problem import Srinivas, Tanaka
+from jmetal.problem import Tanaka
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.comparator import DominanceWithConstraintsComparator
 from jmetal.util.solution import (

@@ -2,7 +2,7 @@ import unittest
 
 from jmetal.problem import DTLZ1, DTLZ2
 from jmetal.problem.multiobjective.dtlz import DTLZ3, DTLZ4, DTLZ5, DTLZ6, DTLZ7
-from jmetal.problem.multiobjective.zdt import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
+from jmetal.problem.multiobjective.zdt import ZDT1
 
 
 class DTLZ1TestCases(unittest.TestCase):

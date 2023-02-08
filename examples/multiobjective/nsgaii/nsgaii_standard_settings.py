@@ -1,11 +1,10 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import PolynomialMutation, SBXCrossover
-from jmetal.problem import ZDT1, Kursawe, Fonseca
+from jmetal.problem import Fonseca
 from jmetal.util.solution import (
     get_non_dominated_solutions,
     print_function_values_to_file,
     print_variables_to_file,
-    read_solutions,
 )
 from jmetal.util.termination_criterion import StoppingByEvaluations
 

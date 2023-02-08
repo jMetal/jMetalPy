@@ -1,6 +1,5 @@
 import random
 from copy import copy
-from math import sqrt
 from typing import List, Optional, TypeVar
 
 import numpy
