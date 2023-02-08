@@ -1,22 +1,19 @@
-from jmetal.util.solutions.comparator import GDominanceComparator
 
 from jmetal.algorithm.multiobjective.gde3 import GDE3
 from jmetal.lab.visualization import InteractivePlot, Plot
 from jmetal.problem import ZDT2
 from jmetal.util.observer import VisualizerObserver
-from jmetal.util.solutions import (
-    print_function_values_to_file,
-    print_variables_to_file,
-    read_solutions,
-)
+from jmetal.util.solution import read_solutions, print_function_values_to_file, print_variables_to_file
+from jmetal.util.comparator import GDominanceComparator
+
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":
     problem = ZDT2()
-    problem.reference_front = read_solutions(filename="resources/reference_front/{}.pf".format(problem.name()))
+    reference_front = read_solutions(filename="resources/reference_front/{}.pf".format(problem.name()))
 
     max_evaluations = 25000
-    reference_point = [0.2, 0.5]
+    reference_point = [0.4, 0.6]
 
     algorithm = GDE3(
         problem=problem,
@@ -28,7 +25,7 @@ if __name__ == "__main__":
     )
 
     algorithm.observable.register(
-        observer=VisualizerObserver(reference_front=problem.reference_front, reference_point=reference_point)
+        observer=VisualizerObserver(reference_front=reference_front, reference_point=reference_point)
     )
 
     algorithm.run()
@@ -36,13 +33,13 @@ if __name__ == "__main__":
 
     # Plot front
     plot_front = Plot(
-        plot_title="Pareto front approximation", reference_front=problem.reference_front, axis_labels=problem.obj_labels
+        plot_title="Pareto front approximation", reference_front=reference_front, axis_labels=problem.obj_labels
     )
     plot_front.plot(front, label=algorithm.label, filename=algorithm.get_name())
 
     # Plot interactive front
     plot_front = InteractivePlot(
-        plot_title="Pareto front approximation", reference_front=problem.reference_front, axis_labels=problem.obj_labels
+        plot_title="Pareto front approximation", reference_front=reference_front, axis_labels=problem.obj_labels
     )
     plot_front.plot(front, label=algorithm.label, filename=algorithm.get_name())
 
