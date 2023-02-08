@@ -10,16 +10,16 @@ class OneMaxTestCases(unittest.TestCase):
 
     def test_should_constructor_create_a_valid_problem_with_default_settings(self) -> None:
         problem = OneMax()
-        self.assertEqual(1, problem.number_of_variables)
-        self.assertEqual(1, problem.number_of_objectives)
-        self.assertEqual(0, problem.number_of_constraints)
+        self.assertEqual(1, problem.number_of_variables())
+        self.assertEqual(1, problem.number_of_objectives())
+        self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(256, problem.number_of_bits)
 
     def test_should_constructor_create_a_valid_problem_with_512_bits(self) -> None:
         problem = OneMax(512)
-        self.assertEqual(1, problem.number_of_variables)
-        self.assertEqual(1, problem.number_of_objectives)
-        self.assertEqual(0, problem.number_of_constraints)
+        self.assertEqual(1, problem.number_of_variables())
+        self.assertEqual(1, problem.number_of_objectives())
+        self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(512, problem.number_of_bits)
 
     def test_should_create_solution_a_valid_binary_solution(self) -> None:
@@ -36,7 +36,7 @@ class OneMaxTestCases(unittest.TestCase):
 
     def test_should_get_name_return_the_right_name(self):
         problem = OneMax()
-        self.assertEqual("OneMax", problem.get_name())
+        self.assertEqual("OneMax", problem.name())
 
 
 class SphereTestCases(unittest.TestCase):
@@ -46,18 +46,18 @@ class SphereTestCases(unittest.TestCase):
 
     def test_should_constructor_create_a_valid_problem_with_default_settings(self):
         problem = Sphere()
-        self.assertEqual(10, problem.number_of_variables)
-        self.assertEqual(1, problem.number_of_objectives)
-        self.assertEqual(0, problem.number_of_constraints)
+        self.assertEqual(10, problem.number_of_variables())
+        self.assertEqual(1, problem.number_of_objectives())
+        self.assertEqual(0, problem.number_of_constraints())
 
         self.assertEqual([-5.12 for _ in range(10)], problem.lower_bound)
         self.assertEqual([5.12 for _ in range(10)], problem.upper_bound)
 
     def test_should_constructor_create_a_valid_problem_with_5_variables(self):
         problem = Sphere(5)
-        self.assertEqual(5, problem.number_of_variables)
-        self.assertEqual(1, problem.number_of_objectives)
-        self.assertEqual(0, problem.number_of_constraints)
+        self.assertEqual(5, problem.number_of_variables())
+        self.assertEqual(1, problem.number_of_objectives())
+        self.assertEqual(0, problem.number_of_constraints())
 
         self.assertEqual([-5.12, -5.12, -5.12, -5.12, -5.12], problem.lower_bound)
         self.assertEqual([5.12, 5.12, 5.12, 5.12, 5.12], problem.upper_bound)
@@ -70,7 +70,7 @@ class SphereTestCases(unittest.TestCase):
         self.assertEqual(3, len(solution.variables))
         self.assertEqual(1, solution.number_of_objectives)
         self.assertEqual(1, len(solution.objectives))
-        self.assertEqual(0, problem.number_of_constraints)
+        self.assertEqual(0, problem.number_of_constraints())
 
         self.assertEqual([-5.12, -5.12, -5.12], problem.lower_bound)
         self.assertEqual([5.12, 5.12, 5.12], problem.upper_bound)
@@ -87,7 +87,7 @@ class SphereTestCases(unittest.TestCase):
         self.assertEqual(3, len(solution.variables))
         self.assertEqual(1, solution.number_of_objectives)
         self.assertEqual(1, len(solution.objectives))
-        self.assertEqual(0, problem.number_of_constraints)
+        self.assertEqual(0, problem.number_of_constraints())
 
         self.assertEqual([-5.12, -5.12, -5.12], problem.lower_bound)
         self.assertEqual([5.12, 5.12, 5.12], problem.upper_bound)
@@ -97,7 +97,7 @@ class SphereTestCases(unittest.TestCase):
 
     def test_should_get_name_return_the_right_name(self):
         problem = Sphere()
-        self.assertEqual("Sphere", problem.get_name())
+        self.assertEqual("Sphere", problem.name())
 
 
 if __name__ == "__main__":
