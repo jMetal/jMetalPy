@@ -12,7 +12,7 @@ from jmetal.core.operator import Mutation
 from jmetal.core.problem import DynamicProblem, FloatProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.util.archive import ArchiveWithReferencePoint, BoundedArchive
-from jmetal.util.comparator import DominanceComparator
+from jmetal.util.comparator import DominanceComparator, DominanceWithConstraintsComparator, Comparator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
 from jmetal.util.termination_criterion import TerminationCriterion
@@ -35,6 +35,7 @@ class SMPSO(ParticleSwarmOptimization):
         swarm_size: int,
         mutation: Mutation,
         leaders: Optional[BoundedArchive],
+        dominance_comparator: Comparator = DominanceComparator(),
         termination_criterion: TerminationCriterion = store.default_termination_criteria,
         swarm_generator: Generator = store.default_generator,
         swarm_evaluator: Evaluator = store.default_evaluator,
@@ -74,7 +75,7 @@ class SMPSO(ParticleSwarmOptimization):
         self.change_velocity1 = -1
         self.change_velocity2 = -1
 
-        self.dominance_comparator = DominanceComparator()
+        self.dominance_comparator = dominance_comparator
 
         self.speed = numpy.zeros((self.swarm_size, self.problem.number_of_variables()), dtype=float)
         self.delta_max, self.delta_min = (

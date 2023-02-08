@@ -81,7 +81,7 @@ class Tanaka(FloatProblem):
         return solution
 
     def __evaluate_constraints(self, solution: FloatSolution) -> None:
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints())]
 
         x1 = solution.variables[0]
         x2 = solution.variables[1]
@@ -128,7 +128,7 @@ class Osyczka2(FloatProblem):
         return solution
 
     def __evaluate_constraints(self, solution: FloatSolution) -> None:
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints())]
 
         x = solution.variables
         constraints[0] = (x[0] + x[1]) / 2.0 - 1.0
@@ -172,7 +172,7 @@ class Binh2(FloatProblem):
         return solution
 
     def __evaluate_constraints(self, solution: FloatSolution) -> None:
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints())]
 
         x = solution.variables
         constraints[0] = -1.0 * (x[0] - 5) * (x[0] - 5) - x[1] * x[1] + 25.0

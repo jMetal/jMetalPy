@@ -1,7 +1,8 @@
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.operator import PolynomialMutation
-from jmetal.problem import Srinivas
+from jmetal.problem import Srinivas, Tanaka
 from jmetal.util.archive import CrowdingDistanceArchive
+from jmetal.util.comparator import DominanceWithConstraintsComparator
 from jmetal.util.solution import (
     print_function_values_to_file,
     print_variables_to_file,
@@ -10,15 +11,16 @@ from jmetal.util.solution import (
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":
-    problem = Srinivas()
-    problem.reference_front = read_solutions(filename="resources/reference_front/Srinivas.pf")
+    problem = Tanaka()
+    reference_front = read_solutions(filename="resources/reference_front/Tanaka.pf")
 
     max_evaluations = 25000
     algorithm = SMPSO(
         problem=problem,
         swarm_size=100,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
-        leaders=CrowdingDistanceArchive(100),
+        leaders=CrowdingDistanceArchive(100, dominance_comparator = DominanceWithConstraintsComparator()),
+        dominance_comparator=DominanceWithConstraintsComparator(),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
     )
 
