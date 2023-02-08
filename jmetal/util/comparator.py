@@ -220,13 +220,13 @@ class GDominanceComparator(DominanceComparator):
         return result
 
 
-class EpsilonDominanceComparator(DominanceComparator):
+class EpsilonDominanceComparator(Comparator):
     def __init__(
         self,
         epsilon: float,
-        constraint_comparator: Comparator = SolutionAttributeComparator("overall_constraint_violation", False),
+        constraint_comparator: Comparator = OverallConstraintViolationComparator(),
     ):
-        super(EpsilonDominanceComparator, self).__init__(constraint_comparator)
+        self.constraint_comparator = constraint_comparator
         self.epsilon = epsilon
 
     def compare(self, solution1: Solution, solution2: Solution):
