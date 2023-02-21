@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Iterable
 
 import numpy as np
 from scipy import spatial
@@ -362,19 +363,17 @@ class NormalizedHyperVolume(QualityIndicator):
     Minimization is implicitly assumed here!
     """
 
-    def __init__(self, reference_point: [float], reference_front: np.array):
-        """Fails if the HV of the reference front is zero."""
+    def __init__(self, reference_point: Iterable[float], reference_front: np.array):
+        """Delegates the computation of the HyperVolume to `jMetal.core.quality_indicator.HyperVolume`.
+
+        Fails if the HV of the reference front is zero."""
         self.reference_point = reference_point
         self._hv = HyperVolume(reference_point=reference_point)
         self._reference_hypervolume = self._hv.compute(reference_front)
 
         assert self._reference_hypervolume != 0, "Hypervolume of reference front is zero"
 
-    def compute(self, solutions: np.array):
-        """Before the HV computation, front and reference point are translated, so that the reference point is [0, ..., 0].
-
-        :return: The hypervolume that is dominated by a non-dominated front, normalized from a reference point.
-        """
+    def compute(self, solutions: np.array) -> float:
         hv = self._hv.compute(solutions=solutions)
 
         return 1 - (hv / self._reference_hypervolume)
