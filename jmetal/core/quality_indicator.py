@@ -363,14 +363,12 @@ class NormalizedHyperVolume(QualityIndicator):
     """
 
     def __init__(self, reference_point: [float], reference_front: np.array):
-        """Fails if the HV of the reference front is zero.
-        """
+        """Fails if the HV of the reference front is zero."""
         self.reference_point = reference_point
         self._hv = HyperVolume(reference_point=reference_point)
         self._reference_hypervolume = self._hv.compute(reference_front)
 
         assert self._reference_hypervolume != 0, "Hypervolume of reference front is zero"
-
 
     def compute(self, solutions: np.array):
         """Before the HV computation, front and reference point are translated, so that the reference point is [0, ..., 0].
@@ -380,7 +378,6 @@ class NormalizedHyperVolume(QualityIndicator):
         hv = self._hv.compute(solutions=solutions)
 
         return 1 - (hv / self._reference_hypervolume)
-
 
     def get_short_name(self) -> str:
         return "NHV"
