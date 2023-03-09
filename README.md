@@ -118,6 +118,7 @@ The current release of jMetalPy (v1.5.7) contains the following components:
 
 ## Changelog
 
+* [v1.6.0] Refactor class Problem, the single-objective genetic algorithm can solve constrained problems, performance improvements in NSGA-II, generation of Latex tables summarizing the results of the Wilcoxon rank sum test, added a notebook folder with examples.
 * [v1.5.7] Use of linters for catching errors and formatters to fix style, minor bug fixes.
 * [v1.5.6] Removed warnings when using Python 3.8.
 * [v1.5.5] Minor bug fixes.
