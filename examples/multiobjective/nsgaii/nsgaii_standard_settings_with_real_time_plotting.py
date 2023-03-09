@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.lab.visualization import InteractivePlot, Plot
 from jmetal.operator import PolynomialMutation, SBXCrossover
-from jmetal.problem import ZDT6
+from jmetal.problem import ZDT6, ZDT1
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution import (
     print_function_values_to_file,
@@ -15,10 +15,10 @@ Program to  configure and run the NSGA-II algorithm configured with standard set
 """
 
 if __name__ == "__main__":
-    problem = ZDT6()
+    problem = ZDT1()
     problem.reference_front = read_solutions(filename="resources/reference_front/ZDT1.pf")
 
-    max_evaluations = 25000
+    max_evaluations = 10000
     algorithm = NSGAII(
         problem=problem,
         population_size=100,
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     # Plot interactive front
     plot_front = InteractivePlot(
-        title="Pareto front approximation. Problem: " + problem.get_name(),
+        title="Pareto front approximation. Problem: " + problem.name(),
         reference_front=problem.reference_front,
         axis_labels=problem.obj_labels,
     )
