@@ -14,15 +14,25 @@ from jmetal.core.solution import BinarySolution, FloatSolution
 
 
 class OneMax(BinaryProblem):
+    """ The implementation of the OneMax problems defines a single binary variable. This variable
+    will contain the bit string representing the solutions.
+
+    """
     def __init__(self, number_of_bits: int = 256):
         super(OneMax, self).__init__()
         self.number_of_bits = number_of_bits
-        self.number_of_objectives = 1
-        self.number_of_variables = 1
-        self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE]
         self.obj_labels = ["Ones"]
+
+    def number_of_variables(self) -> int:
+        return 1
+
+    def number_of_objectives(self) -> int:
+        return 1
+
+    def number_of_constraints(self) -> int:
+        return 0
 
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
         counter_of_ones = 0
@@ -39,16 +49,13 @@ class OneMax(BinaryProblem):
         new_solution.variables[0] = [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
         return new_solution
 
-    def get_name(self) -> str:
+    def name(self) -> str:
         return "OneMax"
 
 
 class Sphere(FloatProblem):
     def __init__(self, number_of_variables: int = 10):
         super(Sphere, self).__init__()
-        self.number_of_objectives = 1
-        self.number_of_variables = number_of_variables
-        self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE]
         self.obj_labels = ["f(x)"]
@@ -58,6 +65,12 @@ class Sphere(FloatProblem):
 
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
+
+    def number_of_objectives(self) -> int:
+        return 1
+
+    def number_of_constraints(self) -> int:
+        return 0
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         total = 0.0
@@ -68,16 +81,13 @@ class Sphere(FloatProblem):
 
         return solution
 
-    def get_name(self) -> str:
+    def name(self) -> str:
         return "Sphere"
 
 
 class Rastrigin(FloatProblem):
     def __init__(self, number_of_variables: int = 10):
         super(Rastrigin, self).__init__()
-        self.number_of_objectives = 1
-        self.number_of_variables = number_of_variables
-        self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE]
         self.obj_labels = ["f(x)"]
@@ -87,6 +97,12 @@ class Rastrigin(FloatProblem):
 
         FloatSolution.lower_bound = self.lower_bound
         FloatSolution.upper_bound = self.upper_bound
+
+    def number_of_objectives(self) -> int:
+        return 1
+
+    def number_of_constraints(self) -> int:
+        return 0
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         a = 10.0
@@ -100,7 +116,7 @@ class Rastrigin(FloatProblem):
 
         return solution
 
-    def get_name(self) -> str:
+    def name(self) -> str:
         return "Rastrigin"
 
 
@@ -115,12 +131,17 @@ class SubsetSum(BinaryProblem):
         self.W = W
 
         self.number_of_bits = len(self.W)
-        self.number_of_objectives = 1
-        self.number_of_variables = 1
-        self.number_of_constraints = 0
 
         self.obj_directions = [self.MAXIMIZE]
         self.obj_labels = ["Sum"]
+
+    def number_of_variables(self) -> int:
+        return 1
+    def number_of_objectives(self) -> int:
+        return 1
+
+    def number_of_constraints(self) -> int:
+        return 0
 
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
         total_sum = 0.0
@@ -141,11 +162,11 @@ class SubsetSum(BinaryProblem):
 
     def create_solution(self) -> BinarySolution:
         new_solution = BinarySolution(
-            number_of_variables=self.number_of_variables, number_of_objectives=self.number_of_objectives
+            number_of_variables=self.number_of_variables(), number_of_objectives=self.number_of_objectives()
         )
         new_solution.variables[0] = [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
 
         return new_solution
 
-    def get_name(self) -> str:
+    def  name(self) -> str:
         return "Subset Sum"

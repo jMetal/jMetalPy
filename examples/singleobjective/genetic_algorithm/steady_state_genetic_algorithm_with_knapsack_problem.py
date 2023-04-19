@@ -20,7 +20,7 @@ if __name__ == "__main__":
     subset = algorithm.get_result()
 
     print("Algorithm: {}".format(algorithm.get_name()))
-    print("Problem: {}".format(problem.get_name()))
+    print("Problem: {}".format(problem.name()))
     print("Solution: {}".format(subset.variables))
     print("Fitness: {}".format(-subset.objectives[0]))
     print("Computing time: {}".format(algorithm.total_computing_time))

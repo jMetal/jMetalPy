@@ -18,16 +18,16 @@ reference point = [0.2, 0.5].
 
 if __name__ == "__main__":
     problem = ZDT2()
-    problem.reference_front = read_solutions(filename="resources/reference_front/ZDT2.pf")
+    reference_front = read_solutions(filename="resources/reference_front/ZDT2.pf")
 
-    reference_point = [0.2, 0.5]
+    reference_point = [0.3, 0.5]
 
     max_evaluations = 25000
     algorithm = NSGAII(
         problem=problem,
         population_size=100,
         offspring_population_size=100,
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
+        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
         dominance_comparator=GDominanceComparator(reference_point),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
     algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
     algorithm.observable.register(
-        observer=VisualizerObserver(reference_front=problem.reference_front, reference_point=reference_point)
+        observer=VisualizerObserver(reference_front=reference_front, reference_point=reference_point)
     )
 
     algorithm.run()
@@ -43,16 +43,16 @@ if __name__ == "__main__":
 
     # Plot front
     plot_front = Plot(
-        title="Pareto front approximation. Problem: " + problem.get_name(),
-        reference_front=problem.reference_front,
+        title="Pareto front approximation. Problem: " + problem.name(),
+        reference_front=reference_front,
         axis_labels=problem.obj_labels,
     )
     plot_front.plot(front, label=algorithm.label, filename=algorithm.get_name())
 
     # Plot interactive front
     plot_front = InteractivePlot(
-        title="Pareto front approximation. Problem: " + problem.get_name(),
-        reference_front=problem.reference_front,
+        title="Pareto front approximation. Problem: " + problem.name(),
+        reference_front=reference_front,
         axis_labels=problem.obj_labels,
     )
     plot_front.plot(front, label=algorithm.label, filename=algorithm.get_name())
@@ -62,5 +62,5 @@ if __name__ == "__main__":
     print_variables_to_file(front, "VAR." + algorithm.label)
 
     print(f"Algorithm: {algorithm.get_name()}")
-    print(f"Problem: {problem.get_name()}")
+    print(f"Problem: {problem.name()}")
     print(f"Computing time: {algorithm.total_computing_time}")

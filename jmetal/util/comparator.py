@@ -138,44 +138,22 @@ class OverallConstraintViolationComparator(Comparator):
         return result
 
 
-class DominanceComparator(Comparator):
+class DominanceWithConstraintsComparator(Comparator):
     def __init__(self, constraint_comparator: Comparator = OverallConstraintViolationComparator()):
         self.constraint_comparator = constraint_comparator
+        self.dominance_comparator = DominanceComparator()
 
-    def compare(self, solution1: Solution, solution2: Solution) -> int:
-        if solution1 is None:
-            raise Exception("The solution1 is None")
-        elif solution2 is None:
-            raise Exception("The solution2 is None")
-
+    def compare(self, solution1: S, solution2: S) -> int:
         result = self.constraint_comparator.compare(solution1, solution2)
         if result == 0:
-            # result = self.__dominance_test(solution1, solution2)
-            result = self.dominance_test(solution1.objectives, solution2.objectives)
+            result = self.dominance_comparator.compare(solution1, solution2)
 
         return result
 
-    def __dominance_test(self, solution1: Solution, solution2: Solution) -> float:
-        best_is_one = 0
-        best_is_two = 0
 
-        for i in range(solution1.number_of_objectives):
-            value1 = solution1.objectives[i]
-            value2 = solution2.objectives[i]
-            if value1 != value2:
-                if value1 < value2:
-                    best_is_one = 1
-                if value1 > value2:
-                    best_is_two = 1
-
-        if best_is_one > best_is_two:
-            result = -1
-        elif best_is_two > best_is_one:
-            result = 1
-        else:
-            result = 0
-
-        return result
+class DominanceComparator(Comparator):
+    def compare(self, solution1: Solution, solution2: Solution) -> int:
+        return self.dominance_test(solution1.objectives, solution2.objectives)
 
     @staticmethod
     def dominance_test(vector1: [float], vector2: [float]) -> int:
@@ -193,13 +171,28 @@ class DominanceComparator(Comparator):
         return result
 
 
+class ObjectiveComparator(Comparator):
+    """ Compares two solutions according to a particular objective
+    """
+    def __init__(self, objectiveId):
+        self.objectiveId = objectiveId
+
+    def compare(self, solution1: S, solution2: S) -> int:
+        result = 0
+        if solution1.objectives[self.objectiveId] < solution2.objectives[self.objectiveId]:
+            result = -1
+        elif solution1.objectives[self.objectiveId] > solution2.objectives[self.objectiveId]:
+            result = 1
+
+        return result
+
+
 class GDominanceComparator(DominanceComparator):
     def __init__(
         self,
         reference_point: (),
-        constraint_comparator: Comparator = SolutionAttributeComparator("overall_constraint_violation", False),
     ):
-        super(GDominanceComparator, self).__init__(constraint_comparator)
+        super(GDominanceComparator, self).__init__()
         self.reference_point = reference_point
 
     def compare(self, solution1: Solution, solution2: Solution):
@@ -227,13 +220,13 @@ class GDominanceComparator(DominanceComparator):
         return result
 
 
-class EpsilonDominanceComparator(DominanceComparator):
+class EpsilonDominanceComparator(Comparator):
     def __init__(
         self,
         epsilon: float,
-        constraint_comparator: Comparator = SolutionAttributeComparator("overall_constraint_violation", False),
+        constraint_comparator: Comparator = OverallConstraintViolationComparator(),
     ):
-        super(EpsilonDominanceComparator, self).__init__(constraint_comparator)
+        self.constraint_comparator = constraint_comparator
         self.epsilon = epsilon
 
     def compare(self, solution1: Solution, solution2: Solution):

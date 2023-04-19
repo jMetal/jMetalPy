@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.lab.visualization import InteractivePlot, Plot
 from jmetal.operator import PolynomialMutation, SBXCrossover
-from jmetal.problem import ZDT1
+from jmetal.problem import ZDT6, ZDT1
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution import (
     print_function_values_to_file,
@@ -18,12 +18,12 @@ if __name__ == "__main__":
     problem = ZDT1()
     problem.reference_front = read_solutions(filename="resources/reference_front/ZDT1.pf")
 
-    max_evaluations = 25000
+    max_evaluations = 10000
     algorithm = NSGAII(
         problem=problem,
         population_size=100,
         offspring_population_size=100,
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
+        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
     )
@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     # Plot front
     plot_front = Plot(
-        title="Pareto front approximation. Problem: " + problem.get_name(),
+        title="Pareto front approximation. Problem: " + problem.name(),
         reference_front=problem.reference_front,
         axis_labels=problem.obj_labels,
     )
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     # Plot interactive front
     plot_front = InteractivePlot(
-        title="Pareto front approximation. Problem: " + problem.get_name(),
+        title="Pareto front approximation. Problem: " + problem.name(),
         reference_front=problem.reference_front,
         axis_labels=problem.obj_labels,
     )
@@ -55,5 +55,5 @@ if __name__ == "__main__":
     print_variables_to_file(front, "VAR." + algorithm.label)
 
     print(f"Algorithm: {algorithm.get_name()}")
-    print(f"Problem: {problem.get_name()}")
+    print(f"Problem: {problem.name()}")
     print(f"Computing time: {algorithm.total_computing_time}")

@@ -33,6 +33,12 @@ class UF1(FloatProblem):
         self.lower_bound[0] = 0.0
         self.upper_bound[0] = 1.0
 
+    def number_of_objectives(self) -> int:
+        return len(self.obj_directions)
+
+    def number_of_constraints(self) -> int:
+        return 0
+
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         sum1 = 0
         sum2 = 0

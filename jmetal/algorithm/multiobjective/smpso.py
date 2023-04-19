@@ -12,7 +12,7 @@ from jmetal.core.operator import Mutation
 from jmetal.core.problem import DynamicProblem, FloatProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.util.archive import ArchiveWithReferencePoint, BoundedArchive
-from jmetal.util.comparator import DominanceComparator
+from jmetal.util.comparator import DominanceComparator, Comparator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
 from jmetal.util.termination_criterion import TerminationCriterion
@@ -35,6 +35,7 @@ class SMPSO(ParticleSwarmOptimization):
         swarm_size: int,
         mutation: Mutation,
         leaders: Optional[BoundedArchive],
+        dominance_comparator: Comparator = DominanceComparator(),
         termination_criterion: TerminationCriterion = store.default_termination_criteria,
         swarm_generator: Generator = store.default_generator,
         swarm_evaluator: Evaluator = store.default_evaluator,
@@ -74,12 +75,12 @@ class SMPSO(ParticleSwarmOptimization):
         self.change_velocity1 = -1
         self.change_velocity2 = -1
 
-        self.dominance_comparator = DominanceComparator()
+        self.dominance_comparator = dominance_comparator
 
-        self.speed = numpy.zeros((self.swarm_size, self.problem.number_of_variables), dtype=float)
+        self.speed = numpy.zeros((self.swarm_size, self.problem.number_of_variables()), dtype=float)
         self.delta_max, self.delta_min = (
-            numpy.empty(problem.number_of_variables),
-            numpy.empty(problem.number_of_variables),
+            numpy.empty(problem.number_of_variables()),
+            numpy.empty(problem.number_of_variables()),
         )
 
     def create_initial_solutions(self) -> List[FloatSolution]:
@@ -100,7 +101,7 @@ class SMPSO(ParticleSwarmOptimization):
             particle.attributes["local_best"] = copy(particle)
 
     def initialize_velocity(self, swarm: List[FloatSolution]) -> None:
-        for i in range(self.problem.number_of_variables):
+        for i in range(self.problem.number_of_variables()):
             self.delta_max[i] = (self.problem.upper_bound[i] - self.problem.lower_bound[i]) / 2.0
 
         self.delta_min = -1.0 * self.delta_max
@@ -208,7 +209,7 @@ class SMPSO(ParticleSwarmOptimization):
         self.evaluations += self.swarm_size
         self.leaders.compute_density_estimator()
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         observable_data["SOLUTIONS"] = self.leaders.solution_list
         self.observable.notify_all(**observable_data)
 
@@ -258,7 +259,7 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
             self.restart()
             self.problem.clear_changed()
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
 
         self.evaluations += self.swarm_size
@@ -266,7 +267,7 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
 
     def stopping_condition_is_met(self):
         if self.termination_criterion.is_met:
-            observable_data = self.get_observable_data()
+            observable_data = self.observable_data()
             observable_data["termination_criterion_is_met"] = True
             self.observable.notify_all(**observable_data)
 
@@ -361,7 +362,7 @@ class SMPSORP(SMPSO):
             leader.filter()
             leader.compute_density_estimator()
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         observable_data["REFERENCE_POINT"] = self.get_reference_point()
         self.observable.notify_all(**observable_data)
 

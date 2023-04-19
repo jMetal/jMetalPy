@@ -17,15 +17,19 @@ class Srinivas(FloatProblem):
 
     def __init__(self):
         super(Srinivas, self).__init__()
-        self.number_of_variables = 2
-        self.number_of_objectives = 2
-        self.number_of_constraints = 2
+        number_of_variables = 2
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
 
-        self.lower_bound = [-20.0 for _ in range(self.number_of_variables)]
-        self.upper_bound = [20.0 for _ in range(self.number_of_variables)]
+        self.lower_bound = [-20.0 for _ in range(number_of_variables)]
+        self.upper_bound = [20.0 for _ in range(number_of_variables)]
+
+    def number_of_objectives(self) -> int:
+        return len(self.obj_directions)
+
+    def number_of_constraints(self) -> int:
+        return 2
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x1 = solution.variables[0]
@@ -45,7 +49,7 @@ class Srinivas(FloatProblem):
         solution.constraints[0] = 1.0 - (x1 * x1 + x2 * x2) / 225.0
         solution.constraints[1] = (3.0 * x2 - x1) / 10.0 - 1.0
 
-    def get_name(self):
+    def name(self):
         return "Srinivas"
 
 
@@ -54,15 +58,19 @@ class Tanaka(FloatProblem):
 
     def __init__(self):
         super(Tanaka, self).__init__()
-        self.number_of_variables = 2
-        self.number_of_objectives = 2
-        self.number_of_constraints = 2
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
 
-        self.lower_bound = [10e-5 for _ in range(self.number_of_variables)]
-        self.upper_bound = [pi for _ in range(self.number_of_variables)]
+        number_of_variables = 2
+        self.lower_bound = [10e-5 for _ in range(number_of_variables)]
+        self.upper_bound = [pi for _ in range(number_of_variables)]
+
+    def number_of_objectives(self) -> int:
+        return len(self.obj_directions)
+
+    def number_of_constraints(self) -> int:
+        return 2
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         solution.objectives[0] = solution.variables[0]
@@ -73,7 +81,7 @@ class Tanaka(FloatProblem):
         return solution
 
     def __evaluate_constraints(self, solution: FloatSolution) -> None:
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints())]
 
         x1 = solution.variables[0]
         x2 = solution.variables[1]
@@ -85,7 +93,7 @@ class Tanaka(FloatProblem):
 
         # set_overall_constraint_violation_degree(solution)
 
-    def get_name(self):
+    def name(self):
         return "Tanaka"
 
 
@@ -94,9 +102,6 @@ class Osyczka2(FloatProblem):
 
     def __init__(self):
         super(Osyczka2, self).__init__()
-        self.number_of_variables = 6
-        self.number_of_objectives = 2
-        self.number_of_constraints = 6
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
@@ -104,8 +109,11 @@ class Osyczka2(FloatProblem):
         self.lower_bound = [0.0, 0.0, 1.0, 0.0, 1.0, 0.0]
         self.upper_bound = [10.0, 10.0, 5.0, 6.0, 5.0, 10.0]
 
-        FloatSolution.lower_bound = self.lower_bound
-        FloatSolution.upper_bound = self.upper_bound
+    def number_of_objectives(self) -> int:
+        return len(self.obj_directions)
+
+    def number_of_constraints(self) -> int:
+        return 6
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
@@ -120,7 +128,7 @@ class Osyczka2(FloatProblem):
         return solution
 
     def __evaluate_constraints(self, solution: FloatSolution) -> None:
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints())]
 
         x = solution.variables
         constraints[0] = (x[0] + x[1]) / 2.0 - 1.0
@@ -132,7 +140,7 @@ class Osyczka2(FloatProblem):
 
         solution.constraints = constraints
 
-    def get_name(self):
+    def name(self):
         return "Osyczka2"
 
 
@@ -141,9 +149,6 @@ class Binh2(FloatProblem):
 
     def __init__(self):
         super(Binh2, self).__init__()
-        self.number_of_variables = 2
-        self.number_of_objectives = 2
-        self.number_of_constraints = 2
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
@@ -151,8 +156,11 @@ class Binh2(FloatProblem):
         self.lower_bound = [0.0, 0.0]
         self.upper_bound = [5.0, 3.0]
 
-        FloatSolution.lower_bound = self.lower_bound
-        FloatSolution.upper_bound = self.upper_bound
+    def number_of_objectives(self) -> int:
+        return len(self.obj_directions)
+
+    def number_of_constraints(self) -> int:
+        return 2
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
@@ -164,11 +172,11 @@ class Binh2(FloatProblem):
         return solution
 
     def __evaluate_constraints(self, solution: FloatSolution) -> None:
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints())]
 
         x = solution.variables
         constraints[0] = -1.0 * (x[0] - 5) * (x[0] - 5) - x[1] * x[1] + 25.0
         constraints[1] = (x[0] - 8) * (x[0] - 8) + (x[1] + 3) * (x[1] + 3) - 7.7
 
-    def get_name(self):
+    def name(self):
         return "Binh2"

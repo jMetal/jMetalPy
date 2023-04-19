@@ -2,7 +2,7 @@ from jmetal.algorithm.multiobjective.moead import MOEAD
 from jmetal.core.quality_indicator import HyperVolume
 from jmetal.operator import DifferentialEvolutionCrossover, PolynomialMutation
 from jmetal.problem import DTLZ2
-from jmetal.util.aggregative_function import Tschebycheff
+from jmetal.util.aggregative_function import PenaltyBoundaryIntersection
 from jmetal.util.solution import (
     print_function_values_to_file,
     print_variables_to_file,
@@ -18,10 +18,10 @@ if __name__ == "__main__":
 
     algorithm = MOEAD(
         problem=problem,
-        population_size=300,
+        population_size=91,
         crossover=DifferentialEvolutionCrossover(CR=1.0, F=0.5),
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
-        aggregative_function=Tschebycheff(dimension=problem.number_of_objectives),
+        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
+        aggregative_function=PenaltyBoundaryIntersection(dimension=problem.number_of_objectives()),
         neighbor_size=20,
         neighbourhood_selection_probability=0.9,
         max_number_of_replaced_solutions=2,
@@ -40,5 +40,5 @@ if __name__ == "__main__":
     print_variables_to_file(front, "VAR." + algorithm.label)
 
     print(f"Algorithm: {algorithm.get_name()}")
-    print(f"Problem: {problem.get_name()}")
+    print(f"Problem: {problem.name()}")
     print(f"Computing time: {algorithm.total_computing_time}")

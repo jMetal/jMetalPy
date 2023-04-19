@@ -13,7 +13,7 @@ if __name__ == "__main__":
     binary_string_length = 512
     problem = OneZeroMax(binary_string_length)
 
-    max_evaluations = 50000
+    max_evaluations = 30000
     algorithm = NSGAII(
         problem=problem,
         population_size=100,
@@ -31,5 +31,5 @@ if __name__ == "__main__":
     print_variables_to_file(front, "VAR." + algorithm.label)
 
     print(f"Algorithm: {algorithm.get_name()}")
-    print(f"Problem: {problem.get_name()}")
+    print(f"Problem: {problem.name()}")
     print(f"Computing time: {algorithm.total_computing_time}")

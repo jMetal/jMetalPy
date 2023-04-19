@@ -1,9 +1,12 @@
+from functools import cmp_to_key
 from typing import List, TypeVar
 
 from jmetal.config import store
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Crossover, Mutation, Selection
 from jmetal.core.problem import Problem
+from jmetal.operator import BinaryTournamentSelection
+from jmetal.util.comparator import Comparator, ObjectiveComparator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
 from jmetal.util.termination_criterion import TerminationCriterion
@@ -27,16 +30,19 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         offspring_population_size: int,
         mutation: Mutation,
         crossover: Crossover,
-        selection: Selection,
+        selection: Selection = BinaryTournamentSelection(ObjectiveComparator(0)),
         termination_criterion: TerminationCriterion = store.default_termination_criteria,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
+            solution_comparator: Comparator = ObjectiveComparator(0)
     ):
         super(GeneticAlgorithm, self).__init__(
             problem=problem, population_size=population_size, offspring_population_size=offspring_population_size
         )
         self.mutation_operator = mutation
         self.crossover_operator = crossover
+        self.solution_comparator = solution_comparator
+
         self.selection_operator = selection
 
         self.population_generator = population_generator
@@ -66,7 +72,7 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
     def selection(self, population: List[S]):
         mating_population = []
 
-        for i in range(self.mating_pool_size):
+        for _ in range(self.mating_pool_size):
             solution = self.selection_operator.execute(population)
             mating_population.append(solution)
 
@@ -97,7 +103,7 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
         population.extend(offspring_population)
 
-        population.sort(key=lambda s: s.objectives[0])
+        population.sort(key=cmp_to_key(self.solution_comparator.compare))
 
         return population[: self.population_size]
 

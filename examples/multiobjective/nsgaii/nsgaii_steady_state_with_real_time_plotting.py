@@ -24,7 +24,7 @@ if __name__ == "__main__":
         problem=problem,
         population_size=100,
         offspring_population_size=1,
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
+        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
     )
@@ -39,7 +39,7 @@ if __name__ == "__main__":
 
     # Plot front
     plot_front = Plot(
-        title="Pareto front approximation. Problem: " + problem.get_name(),
+        title="Pareto front approximation. Problem: " + problem.name(),
         reference_front=problem.reference_front,
         axis_labels=problem.obj_labels,
     )
@@ -47,7 +47,7 @@ if __name__ == "__main__":
 
     # Plot interactive front
     plot_front = InteractivePlot(
-        title="Pareto front approximation. Problem: " + problem.get_name(),
+        title="Pareto front approximation. Problem: " + problem.name(),
         reference_front=problem.reference_front,
         axis_labels=problem.obj_labels,
     )
@@ -58,5 +58,5 @@ if __name__ == "__main__":
     print_variables_to_file(front, "VAR." + algorithm.label)
 
     print(f"Algorithm: {algorithm.get_name()}")
-    print(f"Problem: {problem.get_name()}")
+    print(f"Problem: {problem.name()}")
     print(f"Computing time: {algorithm.total_computing_time}")

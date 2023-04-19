@@ -11,9 +11,9 @@ class KnapsackTestCases(unittest.TestCase):
 
     def test_should_constructor_create_a_valid_problem_with_default_settings(self) -> None:
         problem = Knapsack()
-        self.assertEqual(1, problem.number_of_variables)
-        self.assertEqual(1, problem.number_of_objectives)
-        self.assertEqual(1, problem.number_of_constraints)
+        self.assertEqual(1, problem.number_of_variables())
+        self.assertEqual(1, problem.number_of_objectives())
+        self.assertEqual(1, problem.number_of_constraints())
         self.assertEqual(50, problem.number_of_bits)
         self.assertEqual(1000, problem.capacity)
         self.assertIsNone(problem.profits)
@@ -21,9 +21,9 @@ class KnapsackTestCases(unittest.TestCase):
 
     def test_should_constructor_create_a_valid_problem_with_500_bits(self) -> None:
         problem = Knapsack(500)
-        self.assertEqual(1, problem.number_of_variables)
-        self.assertEqual(1, problem.number_of_objectives)
-        self.assertEqual(1, problem.number_of_constraints)
+        self.assertEqual(1, problem.number_of_variables())
+        self.assertEqual(1, problem.number_of_objectives())
+        self.assertEqual(1, problem.number_of_constraints())
         self.assertEqual(500, problem.number_of_bits)
         self.assertEqual(1000, problem.capacity)
         self.assertIsNone(problem.profits)
@@ -46,11 +46,11 @@ class KnapsackTestCases(unittest.TestCase):
         )
         with mock.patch("jmetal.problem.singleobjective.knapsack.open", new=mock.mock_open(read_data=data)):
             problem = Knapsack(from_file=True, filename=filename)
-            self.assertEqual(1, problem.number_of_variables)
-            self.assertEqual(1, problem.number_of_objectives)
-            self.assertEqual(1, problem.number_of_constraints)
+            self.assertEqual(1, problem.number_of_variables())
+            self.assertEqual(1, problem.number_of_objectives())
+            self.assertEqual(1, problem.number_of_constraints())
             self.assertEqual(50, problem.number_of_bits)
 
     def test_should_get_name_return_the_right_name(self):
         problem = Knapsack()
-        self.assertEqual("Knapsack", problem.get_name())
+        self.assertEqual("Knapsack", problem.name())

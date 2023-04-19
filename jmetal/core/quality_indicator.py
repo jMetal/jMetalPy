@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Iterable
 
 import numpy as np
 from scipy import spatial
@@ -352,3 +353,33 @@ class MultiList:
             node.next[i].prev[i] = node
             if bounds[i] > node.cargo[i]:
                 bounds[i] = node.cargo[i]
+
+
+class NormalizedHyperVolume(QualityIndicator):
+    """Implementation of the normalized hypervolume, which is calculated as follows:
+
+    relative hypervolume = 1 - (HV of the front / HV of the reference front).
+
+    Minimization is implicitly assumed here!
+    """
+
+    def __init__(self, reference_point: Iterable[float], reference_front: np.array):
+        """Delegates the computation of the HyperVolume to `jMetal.core.quality_indicator.HyperVolume`.
+
+        Fails if the HV of the reference front is zero."""
+        self.reference_point = reference_point
+        self._hv = HyperVolume(reference_point=reference_point)
+        self._reference_hypervolume = self._hv.compute(reference_front)
+
+        assert self._reference_hypervolume != 0, "Hypervolume of reference front is zero"
+
+    def compute(self, solutions: np.array) -> float:
+        hv = self._hv.compute(solutions=solutions)
+
+        return 1 - (hv / self._reference_hypervolume)
+
+    def get_short_name(self) -> str:
+        return "NHV"
+
+    def get_name(self) -> str:
+        return "Normalized Hypervolume"

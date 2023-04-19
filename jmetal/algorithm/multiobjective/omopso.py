@@ -1,6 +1,5 @@
 import random
 from copy import copy
-from math import sqrt
 from typing import List, Optional, TypeVar
 
 import numpy
@@ -83,7 +82,7 @@ class OMOPSO(ParticleSwarmOptimization):
 
         self.dominance_comparator = DominanceComparator()
 
-        self.speed = numpy.zeros((self.swarm_size, self.problem.number_of_variables), dtype=float)
+        self.speed = numpy.zeros((self.swarm_size, self.problem.number_of_variables()), dtype=float)
 
     def create_initial_solutions(self) -> List[FloatSolution]:
         return [self.swarm_generator.new(self.problem) for _ in range(self.swarm_size)]
@@ -105,7 +104,7 @@ class OMOPSO(ParticleSwarmOptimization):
 
     def initialize_velocity(self, swarm: List[FloatSolution]) -> None:
         for i in range(self.swarm_size):
-            for j in range(self.problem.number_of_variables):
+            for j in range(self.problem.number_of_variables()):
                 self.speed[i][j] = 0.0
 
     def update_velocity(self, swarm: List[FloatSolution]) -> None:
@@ -175,27 +174,6 @@ class OMOPSO(ParticleSwarmOptimization):
 
         return best_global
 
-    def __velocity_constriction(self, value: float, delta_max: [], delta_min: [], variable_index: int) -> float:
-        result = value
-        if value > delta_max[variable_index]:
-            result = delta_max[variable_index]
-        if value < delta_min[variable_index]:
-            result = delta_min[variable_index]
-
-        return result
-
-    def __inertia_weight(self, wmax: float):
-        return wmax
-
-    def __constriction_coefficient(self, c1: float, c2: float) -> float:
-        rho = c1 + c2
-        if rho <= 4:
-            result = 1.0
-        else:
-            result = 2.0 / (2.0 - rho - sqrt(pow(rho, 2.0) - 4.0 * rho))
-
-        return result
-
     def init_progress(self) -> None:
         self.evaluations = self.swarm_size
         self.leaders.compute_density_estimator()
@@ -208,7 +186,7 @@ class OMOPSO(ParticleSwarmOptimization):
         self.evaluations += self.swarm_size
         self.leaders.compute_density_estimator()
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         observable_data["SOLUTIONS"] = self.epsilon_archive.solution_list
         self.observable.notify_all(**observable_data)
 

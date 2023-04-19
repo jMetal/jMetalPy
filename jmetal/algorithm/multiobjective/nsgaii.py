@@ -68,7 +68,6 @@ class NSGAII(GeneticAlgorithm[S, R]):
         :param population_size: Size of the population.
         :param mutation: Mutation operator (see :py:mod:`jmetal.operator.mutation`).
         :param crossover: Crossover operator (see :py:mod:`jmetal.operator.crossover`).
-        :param selection: Selection operator (see :py:mod:`jmetal.operator.selection`).
         """
         super(NSGAII, self).__init__(
             problem=problem,
@@ -146,14 +145,14 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
             self.restart()
             self.problem.clear_changed()
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
 
         self.evaluations += self.offspring_population_size
 
     def stopping_condition_is_met(self):
         if self.termination_criterion.is_met:
-            observable_data = self.get_observable_data()
+            observable_data = self.observable_data()
             observable_data["TERMINATION_CRITERIA_IS_MET"] = True
             self.observable.notify_all(**observable_data)
 
@@ -201,7 +200,7 @@ class DistributedNSGAII(Algorithm[S, R]):
     def stopping_condition_is_met(self) -> bool:
         return self.termination_criterion.is_met
 
-    def get_observable_data(self) -> dict:
+    def observable_data(self) -> dict:
         ctime = time.time() - self.start_computing_time
 
         return {
@@ -214,14 +213,14 @@ class DistributedNSGAII(Algorithm[S, R]):
     def init_progress(self) -> None:
         self.evaluations = self.number_of_cores
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
 
     def step(self) -> None:
         pass
 
     def update_progress(self):
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
 
     def run(self):

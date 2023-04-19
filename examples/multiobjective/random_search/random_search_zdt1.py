@@ -3,13 +3,11 @@ from jmetal.problem import ZDT1
 from jmetal.util.solution import (
     print_function_values_to_file,
     print_variables_to_file,
-    read_solutions,
 )
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":
     problem = ZDT1()
-    problem.reference_front = read_solutions(filename="resources/reference_front/ZDT1.pf")
 
     max_evaluations = 1000
     algorithm = RandomSearch(
@@ -24,5 +22,5 @@ if __name__ == "__main__":
     print_variables_to_file(front, "VAR." + algorithm.label)
 
     print(f"Algorithm: {algorithm.get_name()}")
-    print(f"Problem: {problem.get_name()}")
+    print(f"Problem: {problem.name()}")
     print(f"Computing time: {algorithm.total_computing_time}")

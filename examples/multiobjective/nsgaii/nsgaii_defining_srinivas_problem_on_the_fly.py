@@ -1,6 +1,7 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.core.problem import OnTheFlyFloatProblem
 from jmetal.operator import PolynomialMutation, SBXCrossover
+from jmetal.util.comparator import DominanceWithConstraintsComparator
 from jmetal.util.solution import (
     get_non_dominated_solutions,
     print_function_values_to_file,
@@ -45,9 +46,10 @@ if __name__ == "__main__":
         problem=problem,
         population_size=100,
         offspring_population_size=100,
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
+        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
+        dominance_comparator=DominanceWithConstraintsComparator()
     )
 
     algorithm.run()
@@ -58,5 +60,5 @@ if __name__ == "__main__":
     print_variables_to_file(front, "VAR." + algorithm.label)
 
     print(f"Algorithm: {algorithm.get_name()}")
-    print(f"Problem: {problem.get_name()}")
+    print(f"Problem: {problem.name()}")
     print(f"Computing time: {algorithm.total_computing_time}")

@@ -14,15 +14,18 @@ class LIRCMOP1(FloatProblem):
 
     def __init__(self, number_of_variables: int = 30):
         super(LIRCMOP1, self).__init__()
-        self.number_of_variables = number_of_variables
-        self.number_of_objectives = 2
-        self.number_of_constraints = 2
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
 
-        self.lower_bound = [0.0 for _ in range(self.number_of_variables)]
-        self.upper_bound = [1.0 for _ in range(self.number_of_variables)]
+        self.lower_bound = [0.0 for _ in range(number_of_variables)]
+        self.upper_bound = [1.0 for _ in range(number_of_variables)]
+
+    def number_of_objectives(self) -> int:
+        return len(self.obj_directions)
+
+    def number_of_constraints(self) -> int:
+        return 2
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
@@ -62,7 +65,7 @@ class LIRCMOP1(FloatProblem):
 
         return result
 
-    def get_name(self):
+    def name(self):
         return "LIR-CMOP1"
 
 
@@ -86,7 +89,7 @@ class LIRCMOP2(LIRCMOP1):
 
         return solution
 
-    def get_name(self):
+    def name(self):
         return "LIR-CMOP2"
 
 
@@ -100,6 +103,9 @@ class LIRCMOP3(LIRCMOP1):
     def __init__(self, number_of_variables: int = 30):
         super(LIRCMOP3, self).__init__(number_of_variables)
 
+    def number_of_constraints(self) -> int:
+        return 3
+
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
         constraints = [0.0 for _ in range(self.number_of_constraints)]
@@ -116,7 +122,7 @@ class LIRCMOP3(LIRCMOP1):
 
         return solution
 
-    def get_name(self):
+    def name(self):
         return "LIR-CMOP3"
 
 
@@ -130,6 +136,9 @@ class LIRCMOP4(LIRCMOP2):
     def __init__(self, number_of_variables: int = 30):
         super(LIRCMOP4, self).__init__(number_of_variables)
 
+    def number_of_constraints(self) -> int:
+        return 3
+
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
         constraints = [0.0 for _ in range(self.number_of_constraints)]
@@ -146,7 +155,7 @@ class LIRCMOP4(LIRCMOP2):
 
         return solution
 
-    def get_name(self):
+    def name(self):
         return "LIR-CMOP4"
 
 
@@ -159,15 +168,18 @@ class LIRCMOP5(FloatProblem):
 
     def __init__(self, number_of_variables: int = 30):
         super(LIRCMOP5, self).__init__()
-        self.number_of_variables = number_of_variables
-        self.number_of_objectives = 2
-        self.number_of_constraints = 2
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
 
-        self.lower_bound = [0.0 for _ in range(self.number_of_variables)]
-        self.upper_bound = [1.0 for _ in range(self.number_of_variables)]
+        self.lower_bound = [0.0 for _ in range(number_of_variables)]
+        self.upper_bound = [1.0 for _ in range(number_of_variables)]
+
+    def number_of_objectives(self) -> int:
+        return len(self.obj_directions)
+
+    def number_of_constraints(self) -> int:
+        return 2
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
@@ -216,7 +228,7 @@ class LIRCMOP5(FloatProblem):
 
         return result
 
-    def get_name(self):
+    def name(self):
         return "LIR-CMOP5"
 
 
@@ -241,7 +253,7 @@ class LIRCMOP6(LIRCMOP5):
         return solution
 
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints())]
 
         r = 0.1
         theta = -0.25 * pi
@@ -263,7 +275,7 @@ class LIRCMOP6(LIRCMOP5):
 
         return solution
 
-    def get_name(self):
+    def name(self):
         return "LIR-CMOP6"
 
 
@@ -278,7 +290,7 @@ class LIRCMOP7(LIRCMOP5):
         super(LIRCMOP7, self).__init__(number_of_variables)
 
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints())]
 
         r = 0.1
         theta = -0.25 * pi
@@ -300,7 +312,7 @@ class LIRCMOP7(LIRCMOP5):
 
         return solution
 
-    def get_name(self):
+    def name(self):
         return "LIR-CMOP7"
 
 
@@ -315,7 +327,7 @@ class LIRCMOP8(LIRCMOP6):
         super(LIRCMOP8, self).__init__(number_of_variables)
 
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints())]
 
         r = 0.1
         theta = -0.25 * pi
@@ -337,7 +349,7 @@ class LIRCMOP8(LIRCMOP6):
 
         return solution
 
-    def get_name(self):
+    def name(self):
         return "LIR-CMOP8"
 
 
@@ -363,7 +375,7 @@ class LIRCMOP9(LIRCMOP8):
 
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints())]
 
         theta = -0.25 * pi
         n = 4.0
@@ -388,7 +400,7 @@ class LIRCMOP9(LIRCMOP8):
 
         return solution
 
-    def get_name(self):
+    def name(self):
         return "LIR-CMOP9"
 
 
@@ -413,7 +425,7 @@ class LIRCMOP10(LIRCMOP8):
         return solution
 
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints())]
 
         theta = -0.25 * pi
         n = 4.0
@@ -438,7 +450,7 @@ class LIRCMOP10(LIRCMOP8):
 
         return solution
 
-    def get_name(self):
+    def name(self):
         return "LIR-CMOP10"
 
 
@@ -453,7 +465,7 @@ class LIRCMOP11(LIRCMOP10):
         super(LIRCMOP11, self).__init__(number_of_variables)
 
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints())]
 
         theta = -0.25 * pi
         n = 4.0
@@ -478,7 +490,7 @@ class LIRCMOP11(LIRCMOP10):
 
         return solution
 
-    def get_name(self):
+    def name(self):
         return "LIR-CMOP11"
 
 
@@ -493,7 +505,7 @@ class LIRCMOP12(LIRCMOP9):
         super(LIRCMOP12, self).__init__(number_of_variables)
 
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints())]
 
         theta = -0.25 * pi
         n = 4.0
@@ -518,7 +530,7 @@ class LIRCMOP12(LIRCMOP9):
 
         return solution
 
-    def get_name(self):
+    def name(self):
         return "LIR-CMOP12"
 
 
@@ -531,16 +543,18 @@ class LIRCMOP13(FloatProblem):
 
     def __init__(self, number_of_variables: int = 30):
         super(LIRCMOP13, self).__init__()
-        self.number_of_variables = number_of_variables
-        self.number_of_objectives = 3
-        self.number_of_constraints = 2
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
 
-        self.lower_bound = [0.0 for _ in range(self.number_of_variables)]
-        self.upper_bound = [1.0 for _ in range(self.number_of_variables)]
+        self.lower_bound = [0.0 for _ in range(number_of_variables)]
+        self.upper_bound = [1.0 for _ in range(number_of_variables)]
 
+    def number_of_objectives(self) -> int:
+        return len(self.obj_directions)
+
+    def number_of_constraints(self) -> int:
+        return 2
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
 
@@ -571,7 +585,7 @@ class LIRCMOP13(FloatProblem):
 
         return result
 
-    def get_name(self):
+    def name(self):
         return "LIR-CMOP13"
 
 
@@ -584,10 +598,15 @@ class LIRCMOP14(LIRCMOP13):
 
     def __init__(self, number_of_variables: int = 30):
         super(LIRCMOP14, self).__init__(number_of_variables)
-        self.number_of_constraints = 3
+
+    def number_of_objectives(self) -> int:
+        return len(self.obj_directions)
+
+    def number_of_constraints(self) -> int:
+        return 3
 
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints())]
 
         f = sum([pow(solution.objectives[i], 2) for i in range(solution.number_of_objectives)])
 
@@ -599,5 +618,5 @@ class LIRCMOP14(LIRCMOP13):
 
         return solution
 
-    def get_name(self):
+    def name(self):
         return "LIR-CMOP14"

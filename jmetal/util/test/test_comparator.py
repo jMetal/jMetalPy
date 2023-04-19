@@ -9,7 +9,7 @@ from jmetal.util.comparator import (
     MultiComparator,
     OverallConstraintViolationComparator,
     RankingAndCrowdingDistanceComparator,
-    SolutionAttributeComparator,
+    SolutionAttributeComparator, DominanceWithConstraintsComparator,
 )
 
 
@@ -75,7 +75,7 @@ class DominanceComparatorTestCases(unittest.TestCase):
         self.assertEqual(0, self.comparator.compare(solution, solution2))
 
     def test_should_dominance_comparator_return_one_if_the_two_solutions_have_one_objective_and_the_second_one_is_lower(
-        self,
+            self,
     ):
         solution = Solution(1, 1)
         solution2 = Solution(1, 1)
@@ -85,7 +85,7 @@ class DominanceComparatorTestCases(unittest.TestCase):
         self.assertEqual(1, self.comparator.compare(solution, solution2))
 
     def test_should_dominance_comparator_return_minus_one_if_the_two_solutions_have_one_objective_and_the_first_one_is_lower(
-        self,
+            self,
     ):
         solution = Solution(1, 1)
         solution2 = Solution(1, 1)
@@ -138,6 +138,11 @@ class DominanceComparatorTestCases(unittest.TestCase):
         solution2.objectives = [-2.0, 5.0, 10.0]
 
         self.assertEqual(0, self.comparator.compare(solution, solution2))
+
+
+class DominanceWithConstraintsComparatorTestCases(unittest.TestCase):
+    def setUp(self):
+        self.comparator = DominanceWithConstraintsComparator()
 
     def test_should_dominance_comparator_work_properly_with_constrains_case_1(self):
         """Case 1: solution1 has a higher degree of constraint violation than solution 2"""

@@ -1,6 +1,6 @@
 from jmetal.algorithm.multiobjective.mocell import MOCell
 from jmetal.operator import PolynomialMutation, SBXCrossover
-from jmetal.problem import ZDT1, ZDT4
+from jmetal.problem import ZDT1
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.neighborhood import C9
 from jmetal.util.solution import (
@@ -20,7 +20,7 @@ if __name__ == "__main__":
         population_size=100,
         neighborhood=C9(10, 10),
         archive=CrowdingDistanceArchive(100),
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
+        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
     )
@@ -33,5 +33,5 @@ if __name__ == "__main__":
     print_variables_to_file(front, "VAR." + algorithm.label)
 
     print(f"Algorithm: {algorithm.get_name()}")
-    print(f"Problem: {problem.get_name()}")
+    print(f"Problem: {problem.name()}")
     print(f"Computing time: {algorithm.total_computing_time}")

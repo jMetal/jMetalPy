@@ -4,12 +4,10 @@ from pathlib import Path
 
 import numpy as np
 
-from jmetal.core.quality_indicator import (
-    EpsilonIndicator,
-    GenerationalDistance,
-    HyperVolume,
-    InvertedGenerationalDistance,
-)
+from jmetal.core.quality_indicator import (EpsilonIndicator,
+                                           GenerationalDistance, HyperVolume,
+                                           InvertedGenerationalDistance,
+                                           NormalizedHyperVolume)
 
 DIRNAME = os.path.dirname(os.path.abspath(__file__))
 
@@ -263,6 +261,36 @@ class HyperVolumeTestCases(unittest.TestCase):
         value = hv.compute(np.array(front))
 
         self.assertAlmostEqual(0.666, value, delta=0.001)
+
+
+class NormalizedHyperVolumeTestCases(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        filepath = Path(DIRNAME, "ZDT1.pf")
+        front = []
+
+        with open(filepath) as file:
+            for line in file:
+                vector = [float(x) for x in line.split()]
+                front.append(vector)
+
+        cls._front = np.array(front)
+
+    def test_should_hypervolume_return_zero_when_providing_reference_front(self):
+        reference_point = [1, 1]
+        reference_front = self._front
+
+        hv = NormalizedHyperVolume(reference_point, reference_front=reference_front)
+        value = hv.compute(reference_front)
+
+        self.assertAlmostEqual(0, value, delta=0.001)
+
+    def test_should_raise_AssertionError_when_reference_front_hv_is_zero(self):
+        reference_point = [0, 0]
+        reference_front = self._front
+
+        with self.assertRaises(AssertionError):
+            _ = NormalizedHyperVolume(reference_point, reference_front=reference_front)
 
 
 if __name__ == "__main__":

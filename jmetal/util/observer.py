@@ -50,9 +50,9 @@ class ProgressBarObserver(Observer):
 
 class BasicObserver(Observer):
     def __init__(self, frequency: int = 1) -> None:
-        """Show the number of evaluations, best fitness and computing time.
-
+        """Show the number of evaluations, the best fitness and the computing time.
         :param frequency: Display frequency."""
+
         self.display_frequency = frequency
 
     def update(self, *args, **kwargs):

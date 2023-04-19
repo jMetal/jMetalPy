@@ -7,8 +7,7 @@ from typing import Generic, List, TypeVar
 from jmetal.util.comparator import (
     Comparator,
     DominanceComparator,
-    SolutionAttributeComparator,
-)
+    SolutionAttributeComparator, )
 from jmetal.util.density_estimator import CrowdingDistance, DensityEstimator
 
 S = TypeVar("S")
@@ -41,12 +40,13 @@ class Archive(Generic[S], ABC):
 
 
 class BoundedArchive(Archive[S]):
-    def __init__(self, maximum_size: int, comparator: Comparator[S] = None, density_estimator: DensityEstimator = None):
+    def __init__(self, maximum_size: int, comparator: Comparator[S] = None, density_estimator: DensityEstimator = None,
+                 dominance_comparator: Comparator[S] = DominanceComparator()):
         super(BoundedArchive, self).__init__()
         self.maximum_size = maximum_size
         self.comparator = comparator
         self.density_estimator = density_estimator
-        self.non_dominated_solution_archive = NonDominatedSolutionsArchive()
+        self.non_dominated_solution_archive = NonDominatedSolutionsArchive(dominance_comparator=dominance_comparator)
         self.solution_list = self.non_dominated_solution_archive.solution_list
 
     def compute_density_estimator(self):
@@ -117,21 +117,22 @@ class NonDominatedSolutionsArchive(Archive[S]):
 
 
 class CrowdingDistanceArchive(BoundedArchive[S]):
-    def __init__(self, maximum_size: int):
+    def __init__(self, maximum_size: int, dominance_comparator=DominanceComparator()):
         super(CrowdingDistanceArchive, self).__init__(
             maximum_size=maximum_size,
             comparator=SolutionAttributeComparator("crowding_distance", lowest_is_best=False),
+            dominance_comparator=dominance_comparator,
             density_estimator=CrowdingDistance(),
         )
 
 
 class ArchiveWithReferencePoint(BoundedArchive[S]):
     def __init__(
-        self,
-        maximum_size: int,
-        reference_point: List[float],
-        comparator: Comparator[S],
-        density_estimator: DensityEstimator,
+            self,
+            maximum_size: int,
+            reference_point: List[float],
+            comparator: Comparator[S],
+            density_estimator: DensityEstimator,
     ):
         super(ArchiveWithReferencePoint, self).__init__(maximum_size, comparator, density_estimator)
         self.__reference_point = reference_point
