@@ -114,7 +114,7 @@ class StreamingPlot:
     def create_layout(self, dimension: int) -> None:
         logger.info("Creating figure layout")
 
-        self.fig.canvas.set_window_title(self.plot_title)
+        self.fig.canvas.manager.set_window_title(self.plot_title)
         self.fig.suptitle(self.plot_title, fontsize=16)
 
         if dimension == 2:
