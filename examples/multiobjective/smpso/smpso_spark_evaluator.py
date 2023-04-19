@@ -1,5 +1,4 @@
 from examples.multiobjective.zdt1_modified import ZDT1Modified
-
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.operator import PolynomialMutation
 from jmetal.util.archive import CrowdingDistanceArchive
