@@ -5,6 +5,7 @@ from .crossover import (
     PMXCrossover,
     SBXCrossover,
     SPXCrossover,
+    IntegerSBXCrossover,
 )
 from .mutation import (
     BitFlipMutation,
