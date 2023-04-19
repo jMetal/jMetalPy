@@ -9,7 +9,7 @@ from jmetal.lab.visualization.plotting import Plot
 
 logger = logging.getLogger(__name__)
 
-S = TypeVar("S")
+S = TypeVar("S") 
 
 """
 .. module:: streaming
