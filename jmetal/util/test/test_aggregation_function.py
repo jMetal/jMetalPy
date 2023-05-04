@@ -1,6 +1,6 @@
 import unittest
 
-from jmetal.util.aggregative_function import WeightedSum
+from jmetal.util.aggregation_function import WeightedSum
 
 
 class WeightedSumTestCases(unittest.TestCase):

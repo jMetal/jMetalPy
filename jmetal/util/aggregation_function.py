@@ -4,7 +4,7 @@ from math import sqrt
 from jmetal.util.point import IdealPoint
 
 """
-.. module:: aggregative_function
+.. module:: aggregation_function
    :platform: Unix, Windows
    :synopsis: Implementation of aggregative (scalarizing) functions.
 
@@ -12,7 +12,7 @@ from jmetal.util.point import IdealPoint
 """
 
 
-class AggregativeFunction(ABC):
+class AggregationFunction(ABC):
     @abstractmethod
     def compute(self, vector: [], weight_vector: []) -> float:
         pass
@@ -22,7 +22,7 @@ class AggregativeFunction(ABC):
         pass
 
 
-class WeightedSum(AggregativeFunction):
+class WeightedSum(AggregationFunction):
     def compute(self, vector: [], weight_vector: []) -> float:
         return sum(map(lambda x, y: x * y, vector, weight_vector))
 
@@ -30,7 +30,7 @@ class WeightedSum(AggregativeFunction):
         pass
 
 
-class PenaltyBoundaryIntersection(AggregativeFunction):
+class PenaltyBoundaryIntersection(AggregationFunction):
     def __init__(self, dimension: int, theta: float = 5.0):
         self.ideal_point = IdealPoint(dimension)
         self.theta = theta
@@ -56,7 +56,7 @@ class PenaltyBoundaryIntersection(AggregativeFunction):
         self.ideal_point.update(vector)
 
 
-class Tschebycheff(AggregativeFunction):
+class Tschebycheff(AggregationFunction):
     def __init__(self, dimension: int):
         self.ideal_point = IdealPoint(dimension)
 

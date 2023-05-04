@@ -2,7 +2,7 @@ from jmetal.algorithm.multiobjective.moead import MOEAD_DRA
 from jmetal.core.quality_indicator import HyperVolume
 from jmetal.operator import DifferentialEvolutionCrossover, PolynomialMutation
 from jmetal.problem.multiobjective.uf import UF1
-from jmetal.util.aggregative_function import Tschebycheff
+from jmetal.util.aggregation_function import Tschebycheff
 from jmetal.util.solution import (
     print_function_values_to_file,
     print_variables_to_file,
@@ -21,7 +21,7 @@ if __name__ == "__main__":
         population_size=600,
         crossover=DifferentialEvolutionCrossover(CR=1.0, F=0.5),
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
-        aggregative_function=Tschebycheff(dimension=problem.number_of_objectives),
+        aggregation_function=Tschebycheff(dimension=problem.number_of_objectives),
         neighbor_size=20,
         neighbourhood_selection_probability=0.9,
         max_number_of_replaced_solutions=2,
