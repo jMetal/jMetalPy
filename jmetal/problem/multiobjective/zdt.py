@@ -31,6 +31,9 @@ class ZDT1(FloatProblem):
 
     def number_of_objectives(self) -> int:
         return len(self.obj_directions)
+    
+    def number_of_variables(self) -> int:
+        return len(self.lower_bound)
 
     def number_of_constraints(self) -> int:
         return 0
