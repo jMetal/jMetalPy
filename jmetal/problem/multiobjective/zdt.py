@@ -138,6 +138,39 @@ class ZDT4(ZDT1):
         return "ZDT4"
 
 
+class ZDT5(ZDT1):
+    """Problem ZDT5.
+
+    .. note:: Bi-objective unconstrained problem. The default number of variables is 30.
+    .. note:: Continuous problem having a non-convex Pareto front
+    """
+
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
+        g = self.eval_g(solution)
+        h = self.eval_h(solution.variables[0], g)
+
+        solution.objectives[0] = 1.0 + g
+        solution.objectives[1] = h * (1.0 - (solution.objectives[0] / h) ** 0.25)
+
+        return solution
+
+    def eval_g(self, solution: FloatSolution):
+        g = sum(solution.variables[1:]) / (solution.number_of_variables - 1)
+
+        g = 1.0 + 9.0 * g
+
+        return g
+
+    def eval_h(self, f: float, g: float) -> float:
+        h = 1.0 - (f / g) ** 0.5 - (f / g) * sin(10.0 * pi * f)
+
+        return h
+
+    def name(self):
+        return "ZDT5"
+
+      
+
 class ZDT6(ZDT1):
     """Problem ZDT6.
 
