@@ -549,7 +549,8 @@ def generate_kolmogorov_smirnov_latex_tables(filename: str, output_dir: str = "l
     caption = "Kolmogorov-Smirnov Test of the {} quality indicator. "\
               "The algorithm in the last column is the reference " + \
               "algorithm and each cell contain the p-value obtained when applying the test with the reference " \
-              "algorithm."
+              "algorithm. Cells with gray background highlight p-values less than 0.05 (i.e., the null hypothesis" \
+              " -- the two distributions are identical -- is rejected)."
     for indicator_name in indicators:
         with open(os.path.join(output_dir, "KolmogorovSmirnov-{}.tex".format(indicator_name)), "w") as latex:
             latex.write(
@@ -850,7 +851,7 @@ def __kolmogorov_smirnov_to_latex(indicator_name: str, test_data: pd.DataFrame, 
     output.write("\\xdefinecolor{gray95}{gray}{0.65}\n")
     output.write("\\xdefinecolor{gray25}{gray}{0.8}\n")
 
-    output.write("\\title{KS}\n")
+    output.write("\\title{Kolmogorov-Smirnov Test}\n")
     output.write("\\author{}\n")
 
     output.write("\\begin{document}\n")
@@ -873,6 +874,9 @@ def __kolmogorov_smirnov_to_latex(indicator_name: str, test_data: pd.DataFrame, 
         for algorithm in algorithms[:-1]:
             row = indicator_data[(indicator_data["Problem"] == problem) & (indicator_data["Algorithm"] == algorithm)]
             value = "{:.2e}".format(row["PValue"].tolist()[0])
+
+            if (row["PValue"].tolist()[0] < 0.05):
+                value = "\\cellcolor{gray25} " + value
 
             values.append(value)
         values.append("-")

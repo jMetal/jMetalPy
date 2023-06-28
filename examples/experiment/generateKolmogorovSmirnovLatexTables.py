@@ -1,5 +1,5 @@
 from jmetal.lab.experiment import (
-    generate_median_and_wilcoxon_latex_tables, generate_kolmogorov_smirnov_latex_tables,
+    generate_kolmogorov_smirnov_latex_tables,
 )
 
 if __name__ == "__main__":
