@@ -30,6 +30,9 @@ class DTLZ1(FloatProblem):
 
     def number_of_objectives(self) -> int:
         return len(self.obj_directions)
+    
+    def number_of_variables(self) -> int:
+        return len(self.lower_bound)
 
     def number_of_constraints(self) -> int:
         return 0
@@ -102,24 +105,24 @@ class DTLZ3(DTLZ1):
         super(DTLZ3, self).__init__(number_of_variables, number_of_objectives)
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
-        k = self.number_of_variables - self.number_of_objectives + 1
+        k = self.number_of_variables() - self.number_of_objectives() + 1
 
         g = sum(
-            [(x - 0.5) ** 2 - cos(20.0 * pi * (x - 0.5)) for x in solution.variables[self.number_of_variables - k :]]
+            [(x - 0.5) ** 2 - cos(20.0 * pi * (x - 0.5)) for x in solution.variables[self.number_of_variables() - k :]]
         )
         g = 100.0 * (k + g)
 
-        f = [1.0 + g for _ in range(self.number_of_objectives)]
+        f = [1.0 + g for _ in range(self.number_of_objectives())]
 
-        for i in range(self.number_of_objectives):
-            for j in range(self.number_of_objectives - (i + 1)):
+        for i in range(self.number_of_objectives()):
+            for j in range(self.number_of_objectives() - (i + 1)):
                 f[i] *= cos(solution.variables[j] * 0.5 * pi)
 
             if i != 0:
-                aux = self.number_of_objectives - (i + 1)
+                aux = self.number_of_objectives() - (i + 1)
                 f[i] *= sin(solution.variables[aux] * 0.5 * pi)
 
-        solution.objectives = [f[x] for x in range(self.number_of_objectives)]
+        solution.objectives = [f[x] for x in range(self.number_of_objectives())]
 
         return solution
 
@@ -139,20 +142,20 @@ class DTLZ4(DTLZ1):
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         alpha = 100.0
-        k = self.number_of_variables - self.number_of_objectives + 1
+        k = self.number_of_variables() - self.number_of_objectives() + 1
 
-        g = sum([(x - 0.5) ** 2 for x in solution.variables[self.number_of_variables - k :]])
-        f = [1.0 + g for _ in range(self.number_of_objectives)]
+        g = sum([(x - 0.5) ** 2 for x in solution.variables[self.number_of_variables() - k :]])
+        f = [1.0 + g for _ in range(self.number_of_objectives())]
 
-        for i in range(self.number_of_objectives):
-            for j in range(self.number_of_objectives - (i + 1)):
+        for i in range(self.number_of_objectives()):
+            for j in range(self.number_of_objectives() - (i + 1)):
                 f[i] *= cos(pow(solution.variables[j], alpha) * pi / 2.0)
 
             if i != 0:
-                aux = self.number_of_objectives - (i + 1)
+                aux = self.number_of_objectives() - (i + 1)
                 f[i] *= sin(pow(solution.variables[aux], alpha) * pi / 2.0)
 
-        solution.objectives = [f[x] for x in range(self.number_of_objectives)]
+        solution.objectives = [f[x] for x in range(self.number_of_objectives())]
 
         return solution
 
@@ -171,26 +174,26 @@ class DTLZ5(DTLZ1):
         super(DTLZ5, self).__init__(number_of_variables, number_of_objectives)
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
-        k = self.number_of_variables - self.number_of_objectives + 1
+        k = self.number_of_variables() - self.number_of_objectives() + 1
 
-        g = sum([(x - 0.5) ** 2 for x in solution.variables[self.number_of_variables - k :]])
+        g = sum([(x - 0.5) ** 2 for x in solution.variables[self.number_of_variables() - k :]])
         t = pi / (4.0 * (1.0 + g))
 
-        theta = [0.0] * (self.number_of_objectives - 1)
+        theta = [0.0] * (self.number_of_objectives() - 1)
         theta[0] = solution.variables[0] * pi / 2.0
-        theta[1:] = [t * (1.0 + 2.0 * g * solution.variables[i]) for i in range(1, self.number_of_objectives - 1)]
+        theta[1:] = [t * (1.0 + 2.0 * g * solution.variables[i]) for i in range(1, self.number_of_objectives() - 1)]
 
-        f = [1.0 + g for _ in range(self.number_of_objectives)]
+        f = [1.0 + g for _ in range(self.number_of_objectives())]
 
-        for i in range(self.number_of_objectives):
-            for j in range(self.number_of_objectives - (i + 1)):
+        for i in range(self.number_of_objectives()):
+            for j in range(self.number_of_objectives() - (i + 1)):
                 f[i] *= cos(theta[j])
 
             if i != 0:
-                aux = self.number_of_objectives - (i + 1)
+                aux = self.number_of_objectives() - (i + 1)
                 f[i] *= sin(theta[aux])
 
-        solution.objectives = [f[x] for x in range(self.number_of_objectives)]
+        solution.objectives = [f[x] for x in range(self.number_of_objectives())]
 
         return solution
 
@@ -209,26 +212,26 @@ class DTLZ6(DTLZ1):
         super(DTLZ6, self).__init__(number_of_variables, number_of_objectives)
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
-        k = self.number_of_variables - self.number_of_objectives + 1
+        k = self.number_of_variables() - self.number_of_objectives() + 1
 
-        g = sum([pow(x, 0.1) for x in solution.variables[self.number_of_variables - k :]])
+        g = sum([pow(x, 0.1) for x in solution.variables[self.number_of_variables() - k :]])
         t = pi / (4.0 * (1.0 + g))
 
-        theta = [0.0] * (self.number_of_objectives - 1)
+        theta = [0.0] * (self.number_of_objectives() - 1)
         theta[0] = solution.variables[0] * pi / 2.0
-        theta[1:] = [t * (1.0 + 2.0 * g * solution.variables[i]) for i in range(1, self.number_of_objectives - 1)]
+        theta[1:] = [t * (1.0 + 2.0 * g * solution.variables[i]) for i in range(1, self.number_of_objectives() - 1)]
 
-        f = [1.0 + g for _ in range(self.number_of_objectives)]
+        f = [1.0 + g for _ in range(self.number_of_objectives())]
 
-        for i in range(self.number_of_objectives):
-            for j in range(self.number_of_objectives - (i + 1)):
+        for i in range(self.number_of_objectives()):
+            for j in range(self.number_of_objectives() - (i + 1)):
                 f[i] *= cos(theta[j])
 
             if i != 0:
-                aux = self.number_of_objectives - (i + 1)
+                aux = self.number_of_objectives() - (i + 1)
                 f[i] *= sin(theta[aux])
 
-        solution.objectives = [f[x] for x in range(self.number_of_objectives)]
+        solution.objectives = [f[x] for x in range(self.number_of_objectives())]
 
         return solution
 
@@ -247,17 +250,17 @@ class DTLZ7(DTLZ1):
         super(DTLZ7, self).__init__(number_of_variables, number_of_objectives)
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
-        k = self.number_of_variables - self.number_of_objectives + 1
+        k = self.number_of_variables() - self.number_of_objectives() + 1
 
-        g = sum([x for x in solution.variables[self.number_of_variables - k :]])
+        g = sum([x for x in solution.variables[self.number_of_variables() - k :]])
         g = 1.0 + (9.0 * g) / k
 
         h = sum(
-            [(x / (1.0 + g)) * (1 + sin(3.0 * pi * x)) for x in solution.variables[: self.number_of_objectives - 1]]
+            [(x / (1.0 + g)) * (1 + sin(3.0 * pi * x)) for x in solution.variables[: self.number_of_objectives() - 1]]
         )
-        h = self.number_of_objectives - h
+        h = self.number_of_objectives() - h
 
-        solution.objectives[: self.number_of_objectives - 1] = solution.variables[: self.number_of_objectives - 1]
+        solution.objectives[: self.number_of_objectives() - 1] = solution.variables[: self.number_of_objectives() - 1]
         solution.objectives[-1] = (1.0 + g) * h
 
         return solution
