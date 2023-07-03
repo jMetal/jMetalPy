@@ -149,7 +149,7 @@ class ZDT5(BinaryProblem):
         """:param number_of_bits: Number of bits of each variable of the problem."""
         super(ZDT5, self).__init__()
 
-        self.number_of_bits_per_variable = [5 for _ in range(1, number_of_variables)]
+        self.number_of_bits_per_variable = [5 for _ in range(0, number_of_variables)]
         self.number_of_bits_per_variable[0] = 30
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
