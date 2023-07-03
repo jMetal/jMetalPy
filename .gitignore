@@ -114,3 +114,5 @@ dask-worker-space
 
 # Github codespaces
 pythonenv3.8
+
+.vscode
