@@ -20,7 +20,6 @@ class OneMax(BinaryProblem):
     """
     def __init__(self, number_of_bits: int = 256):
         super(OneMax, self).__init__()
-        self.number_of_variables = 1
         self.number_of_bits_per_variable = [number_of_bits]
 
         self.obj_directions = [self.MINIMIZE]
