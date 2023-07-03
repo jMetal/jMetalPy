@@ -206,8 +206,8 @@ class OneZeroMax(BinaryProblem):
         super(OneZeroMax, self).__init__()
         self.number_of_bits_per_variable = [number_of_bits]
 
-        self.obj_directions = [self.MINIMIZE]
-        self.obj_labels = ["Ones"]
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+        self.obj_labels = ["Zeroes", "Ones"]
 
     def number_of_variables(self) -> int:
         return 1
