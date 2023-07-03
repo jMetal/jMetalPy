@@ -1,6 +1,6 @@
 import unittest
 
-from jmetal.problem.multiobjective.zdt import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
+from jmetal.problem.multiobjective.zdt import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6, ZDT5
 
 
 class ZDT1TestCases(unittest.TestCase):
@@ -210,6 +210,29 @@ class ZDT6TestCases(unittest.TestCase):
     def test_should_get_name_return_the_right_name(self):
         problem = ZDT6()
         self.assertEqual("ZDT6", problem.name())
+
+
+class ZDT5TestCases(unittest.TestCase):
+    def test_should_constructor_create_a_non_null_object(self) -> None:
+        problem = ZDT5()
+        self.assertIsNotNone(problem)
+
+    def test_should_constructor_create_a_valid_problem_with_default_settings(self) -> None:
+        problem = ZDT5()
+        self.assertEqual(11, problem.number_of_variables())
+        self.assertEqual(2, problem.number_of_objectives())
+        self.assertEqual(0, problem.number_of_constraints())
+        self.assertEqual(30 + 5 * (problem.number_of_variables()-1), problem.total_number_of_bits())
+
+    def test_should_create_solution_a_valid_binary_solution(self) -> None:
+        problem = ZDT5()
+        solution = problem.create_solution()
+        self.assertEqual(30, len(solution.variables[0]))
+        self.assertEqual(5, len(solution.variables[1]))
+
+    def test_should_get_name_return_the_right_name(self):
+        problem = ZDT5()
+        self.assertEqual("ZDT5", problem.name())
 
 
 if __name__ == "__main__":

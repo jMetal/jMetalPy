@@ -1,5 +1,7 @@
 import unittest
 
+from jmetal.core.problem import BinaryProblem
+from jmetal.problem.multiobjective.unconstrained import OneZeroMax
 from jmetal.problem.singleobjective.unconstrained import OneMax, Sphere
 
 
@@ -13,14 +15,14 @@ class OneMaxTestCases(unittest.TestCase):
         self.assertEqual(1, problem.number_of_variables())
         self.assertEqual(1, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(256, problem.number_of_bits)
+        self.assertEqual(256, problem.total_number_of_bits())
 
     def test_should_constructor_create_a_valid_problem_with_512_bits(self) -> None:
-        problem = OneMax(512)
+        problem : BinaryProblem = OneMax(512)
         self.assertEqual(1, problem.number_of_variables())
         self.assertEqual(1, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(512, problem.number_of_bits)
+        self.assertEqual(512, problem.total_number_of_bits())
 
     def test_should_create_solution_a_valid_binary_solution(self) -> None:
         problem = OneMax(256)
@@ -30,7 +32,7 @@ class OneMaxTestCases(unittest.TestCase):
     def test_should_evaluate_work_properly_if_the_bitset_only_contains_zeroes(self) -> None:
         problem = OneMax(512)
         solution = problem.create_solution()
-        solution.variables[0] = [False for _ in range(problem.number_of_bits)]
+        solution.variables[0] = [False for _ in range(problem.total_number_of_bits())]
         problem.evaluate(solution)
         self.assertEqual(0.0, solution.objectives[0])
 
