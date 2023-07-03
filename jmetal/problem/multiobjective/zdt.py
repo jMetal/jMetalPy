@@ -1,7 +1,8 @@
 from math import cos, pi, pow, sin, sqrt, exp
+import random
 
-from jmetal.core.problem import FloatProblem
-from jmetal.core.solution import FloatSolution
+from jmetal.core.problem import FloatProblem, BinaryProblem, S
+from jmetal.core.solution import FloatSolution, BinarySolution
 
 """
 .. module:: ZDT
@@ -138,38 +139,63 @@ class ZDT4(ZDT1):
         return "ZDT4"
 
 
-class ZDT5(ZDT1):
+class ZDT5(BinaryProblem):
     """Problem ZDT5.
 
-    .. note:: Bi-objective unconstrained problem. The default number of variables is 30.
-    .. note:: Continuous problem having a non-convex Pareto front
+    .. note:: Bi-objective binary unconstrained problem. The default number of variables is 11.
     """
 
-    def evaluate(self, solution: FloatSolution) -> FloatSolution:
-        g = self.eval_g(solution)
-        h = self.eval_h(solution.variables[0], g)
+    def __init__(self, number_of_variables: int = 11):
+        """:param number_of_bits: Number of bits of each variable of the problem."""
+        super(ZDT5, self).__init__()
 
-        solution.objectives[0] = 1.0 + g
-        solution.objectives[1] = h * (1.0 - (solution.objectives[0] / h) ** 0.25)
+        self.number_of_bits_per_variable = [5 for _ in range(1, number_of_variables)]
+        self.number_of_bits_per_variable[0] = 30
+
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+        self.obj_labels = ["x", "y"]
+
+    def number_of_variables(self) -> int:
+        return len(self.number_of_bits_per_variable)
+
+    def number_of_objectives(self) -> int:
+        return 2
+
+    def number_of_constraints(self) -> int:
+        return 0
+
+    def evaluate(self, solution: BinarySolution) -> BinarySolution:
+        solution.objectives[0] = 1.0 + solution.cardinality(0)
+
+        g = self.eval_g(solution)
+        h = 1.0 / solution.objectives[0]
+
+        solution.objectives[1] = h * g
 
         return solution
 
-    def eval_g(self, solution: FloatSolution):
-        g = sum(solution.variables[1:]) / (solution.number_of_variables - 1)
+    def eval_g(self, solution: BinarySolution):
+        result = 0.0
+        for i in range(1, len(solution.variables)):
+            result = result + self.eval_v(solution.cardinality(i))
 
-        g = 1.0 + 9.0 * g
+        return result
 
-        return g
+    def eval_v(self, value):
+        if value < 5.0:
+            return 2.0 + value
+        else:
+            return 1.0
 
-    def eval_h(self, f: float, g: float) -> float:
-        h = 1.0 - (f / g) ** 0.5 - (f / g) * sin(10.0 * pi * f)
-
-        return h
+    def create_solution(self) -> BinarySolution:
+        new_solution = BinarySolution(number_of_variables=self.number_of_variables(), number_of_objectives=2)
+        for i in range(self.number_of_variables()):
+            new_solution.variables[i] = [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits_per_variable[i])]
+        return new_solution
 
     def name(self):
         return "ZDT5"
 
-      
 
 class ZDT6(ZDT1):
     """Problem ZDT6.
