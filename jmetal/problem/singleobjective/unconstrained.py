@@ -106,10 +106,10 @@ class Rastrigin(FloatProblem):
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         a = 10.0
-        result = a * solution.number_of_variables
+        result = a * len(solution.variables)
         x = solution.variables
 
-        for i in range(solution.number_of_variables):
+        for i in range(len(solution.variables)):
             result += x[i] * x[i] - a * math.cos(2 * math.pi * x[i])
 
         solution.objectives[0] = result

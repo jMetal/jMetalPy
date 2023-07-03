@@ -376,8 +376,8 @@ class CompositeCrossoverTestCases(unittest.TestCase):
 
         self.assertIsNotNone(children)
         self.assertEqual(2, len(children))
-        self.assertEqual(1, children[0].number_of_variables)
-        self.assertEqual(1, children[1].number_of_variables)
+        self.assertEqual(1, len(children[0].variables))
+        self.assertEqual(1, len(children[1].variables))
 
     def test_should_execute_work_properly_with_a_two_crossover_operators(self):
         operator = CompositeCrossover([SBXCrossover(0.9, 20.0), IntegerSBXCrossover(0.1, 20.0)])
@@ -398,8 +398,8 @@ class CompositeCrossoverTestCases(unittest.TestCase):
 
         self.assertIsNotNone(children)
         self.assertEqual(2, len(children))
-        self.assertEqual(2, children[0].number_of_variables)
-        self.assertEqual(2, children[1].number_of_variables)
+        self.assertEqual(2, len(children[0].variables))
+        self.assertEqual(2, len(children[1].variables))
 
     def test_should_execute_raise_and_exception_if_the_types_of_the_solutions_do_not_match_the_operators(self):
         operator = CompositeCrossover([SBXCrossover(1.0, 5.0), SPXCrossover(0.9)])

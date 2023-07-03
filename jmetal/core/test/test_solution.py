@@ -14,8 +14,8 @@ from jmetal.util.ckecking import InvalidConditionException
 class SolutionTestCase(unittest.TestCase):
     def test_should_default_constructor_create_a_valid_solution(self):
         solution = Solution(2, 3)
-        self.assertEqual(2, solution.number_of_variables)
-        self.assertEqual(3, solution.number_of_objectives)
+        self.assertEqual(2, len(solution.variables))
+        self.assertEqual(3, len(solution.objectives))
         self.assertEqual(0, len(solution.attributes))
         self.assertEqual(2, len(solution.variables))
         self.assertEqual(3, len(solution.objectives))
@@ -24,15 +24,15 @@ class SolutionTestCase(unittest.TestCase):
 class BinarySolutionTestCase(unittest.TestCase):
     def test_should_default_constructor_create_a_valid_solution(self):
         solution = BinarySolution(2, 3)
-        self.assertEqual(2, solution.number_of_variables)
-        self.assertEqual(3, solution.number_of_objectives)
+        self.assertEqual(2, len(solution.variables))
+        self.assertEqual(3, len(solution.objectives))
 
     def test_should_constructor_create_a_valid_solution(self):
         solution = BinarySolution(number_of_variables=2, number_of_objectives=3)
         solution.variables[0] = [True, False]
         solution.variables[1] = [False]
-        self.assertEqual(2, solution.number_of_variables)
-        self.assertEqual(3, solution.number_of_objectives)
+        self.assertEqual(2, len(solution.variables))
+        self.assertEqual(3, len(solution.objectives))
         self.assertEqual(2, len(solution.variables))
         self.assertEqual(3, len(solution.objectives))
         self.assertEqual([True, False], solution.variables[0])
@@ -57,8 +57,8 @@ class FloatSolutionTestCase(unittest.TestCase):
     def test_should_default_constructor_create_a_valid_solution(self):
         solution = FloatSolution([0.0, 0.5], [1.0, 2.0], 3)
 
-        self.assertEqual(2, solution.number_of_variables)
-        self.assertEqual(3, solution.number_of_objectives)
+        self.assertEqual(2, len(solution.variables))
+        self.assertEqual(3, len(solution.objectives))
         self.assertEqual(2, len(solution.variables))
         self.assertEqual(3, len(solution.objectives))
         self.assertEqual([0.0, 0.5], solution.lower_bound)
@@ -73,8 +73,8 @@ class FloatSolutionTestCase(unittest.TestCase):
 
         new_solution = copy.copy(solution)
 
-        self.assertEqual(solution.number_of_variables, new_solution.number_of_variables)
-        self.assertEqual(solution.number_of_objectives, new_solution.number_of_objectives)
+        self.assertEqual(len(solution.variables), len(new_solution.variables))
+        self.assertEqual(len(solution.objectives), len(new_solution.objectives))
         self.assertEqual(solution.variables, new_solution.variables)
         self.assertEqual(solution.objectives, new_solution.objectives)
         self.assertEqual(solution.lower_bound, new_solution.lower_bound)
@@ -93,8 +93,8 @@ class IntegerSolutionTestCase(unittest.TestCase):
     def test_should_default_constructor_create_a_valid_solution(self):
         solution = IntegerSolution([0, 5], [1, 2], 3, 0)
 
-        self.assertEqual(2, solution.number_of_variables)
-        self.assertEqual(3, solution.number_of_objectives)
+        self.assertEqual(2, len(solution.variables))
+        self.assertEqual(3, len(solution.objectives))
         self.assertEqual(2, len(solution.variables))
         self.assertEqual(3, len(solution.objectives))
         self.assertEqual(0, len(solution.constraints))
@@ -110,8 +110,8 @@ class IntegerSolutionTestCase(unittest.TestCase):
 
         new_solution = copy.copy(solution)
 
-        self.assertEqual(solution.number_of_variables, new_solution.number_of_variables)
-        self.assertEqual(solution.number_of_objectives, new_solution.number_of_objectives)
+        self.assertEqual(len(solution.variables), len(new_solution.variables))
+        self.assertEqual(len(solution.objectives), len(new_solution.objectives))
         self.assertEqual(solution.variables, new_solution.variables)
         self.assertEqual(solution.objectives, new_solution.objectives)
         self.assertEqual(solution.lower_bound, new_solution.lower_bound)
@@ -144,13 +144,13 @@ class CompositeSolutionTestCase(unittest.TestCase):
         solution = CompositeSolution([float_solution, integer_solution])
 
         self.assertIsNotNone(solution)
-        self.assertEqual(2, solution.number_of_variables)
-        self.assertEqual(number_of_objectives, solution.number_of_objectives)
-        self.assertEqual(number_of_constraints, solution.number_of_constraints)
-        self.assertEqual(number_of_objectives, solution.variables[0].number_of_objectives)
-        self.assertEqual(number_of_objectives, solution.variables[1].number_of_objectives)
-        self.assertEqual(number_of_constraints, solution.variables[0].number_of_constraints)
-        self.assertEqual(number_of_constraints, solution.variables[1].number_of_constraints)
+        self.assertEqual(2, len(solution.variables))
+        self.assertEqual(number_of_objectives, len(solution.objectives))
+        self.assertEqual(number_of_constraints, len(solution.constraints))
+        self.assertEqual(number_of_objectives, len(solution.variables[0].objectives))
+        self.assertEqual(number_of_objectives, len(solution.variables[1].objectives))
+        self.assertEqual(number_of_constraints, len(solution.variables[0].constraints))
+        self.assertEqual(number_of_constraints, len(solution.variables[1].constraints))
         self.assertTrue(type(solution.variables[0] is FloatSolution))
         self.assertTrue(type(solution.variables[1] is IntegerSolution))
 
@@ -163,12 +163,12 @@ class CompositeSolutionTestCase(unittest.TestCase):
         solution = CompositeSolution([float_solution, integer_solution])
         new_solution = copy.deepcopy(solution)
 
-        self.assertEqual(solution.number_of_variables, new_solution.number_of_variables)
-        self.assertEqual(solution.number_of_objectives, new_solution.number_of_objectives)
-        self.assertEqual(solution.number_of_constraints, new_solution.number_of_constraints)
+        self.assertEqual(len(solution.variables), len(new_solution.variables))
+        self.assertEqual(len(solution.objectives), len(new_solution.objectives))
+        self.assertEqual(len(solution.constraints), len(new_solution.constraints))
 
-        self.assertEqual(solution.variables[0].number_of_variables, new_solution.variables[0].number_of_variables)
-        self.assertEqual(solution.variables[1].number_of_variables, new_solution.variables[1].number_of_variables)
+        self.assertEqual(len(solution.variables[0].variables), len(new_solution.variables[0].variables))
+        self.assertEqual(len(solution.variables[1].variables), len(new_solution.variables[1].variables))
         self.assertEqual(solution.variables[0], new_solution.variables[0])
         self.assertEqual(solution.variables[1], new_solution.variables[1])
 

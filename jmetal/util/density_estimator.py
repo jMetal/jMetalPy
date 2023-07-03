@@ -63,7 +63,7 @@ class CrowdingDistance(DensityEstimator[List[S]]):
         for i in range(len(front)):
             front[i].attributes["crowding_distance"] = 0.0
 
-        number_of_objectives = front[0].number_of_objectives
+        number_of_objectives = len(front[0].objectives)
 
         for i in range(number_of_objectives):
             # Sort the population by Obj n

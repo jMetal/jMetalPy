@@ -51,7 +51,7 @@ class ZDT1(FloatProblem):
     def eval_g(self, solution: FloatSolution):
         g = sum(solution.variables) - solution.variables[0]
 
-        constant = 9.0 / (solution.number_of_variables - 1)
+        constant = 9.0 / (len(solution.variables) - 1)
 
         return constant * g + 1.0
 
@@ -125,10 +125,10 @@ class ZDT4(ZDT1):
     def eval_g(self, solution: FloatSolution):
         g = 0.0
 
-        for i in range(1, solution.number_of_variables):
+        for i in range(1, len(solution.variables)):
             g += pow(solution.variables[i], 2.0) - 10.0 * cos(4.0 * pi * solution.variables[i])
 
-        g += 1.0 + 10.0 * (solution.number_of_variables - 1)
+        g += 1.0 + 10.0 * (len(solution.variables) - 1)
 
         return g
 
@@ -221,7 +221,7 @@ class ZDT6(ZDT1):
 
     def eval_g(self, solution: FloatSolution):
         g = sum(solution.variables) - solution.variables[0]
-        g = g / (solution.number_of_variables - 1)
+        g = g / (len(solution.variables) - 1)
         g = pow(g, 0.25)
         g = 9.0 * g
         g = 1.0 + g

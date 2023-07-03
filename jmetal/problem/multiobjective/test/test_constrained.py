@@ -20,9 +20,7 @@ class SrinivasTestCases(unittest.TestCase):
     def test_should_create_solution_create_a_valid_float_solution(self) -> None:
         problem = Srinivas()
         solution = problem.create_solution()
-        self.assertEqual(2, solution.number_of_variables)
         self.assertEqual(2, len(solution.variables))
-        self.assertEqual(2, solution.number_of_objectives)
         self.assertEqual(2, len(solution.objectives))
         self.assertEqual(2, problem.number_of_constraints())
         self.assertTrue(all(variable >= -20.0 for variable in solution.variables))
@@ -49,9 +47,9 @@ class TanakaTestCases(unittest.TestCase):
     def test_should_create_solution_create_a_valid_float_solution(self) -> None:
         problem = Tanaka()
         solution = problem.create_solution()
-        self.assertEqual(2, solution.number_of_variables)
         self.assertEqual(2, len(solution.variables))
-        self.assertEqual(2, solution.number_of_objectives)
+        self.assertEqual(2, len(solution.variables))
+        self.assertEqual(2, len(solution.objectives))
         self.assertEqual(2, len(solution.objectives))
         self.assertEqual(2, problem.number_of_constraints())
         self.assertTrue(all(variable >= 10e-5 for variable in solution.variables))

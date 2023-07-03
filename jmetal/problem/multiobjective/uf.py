@@ -48,7 +48,7 @@ class UF1(FloatProblem):
         x = solution.variables
 
         for i in range(2, self.number_of_variables):
-            y = x[i - 1] - sin(6.0 * pi * x[0] + i * pi / solution.number_of_variables)
+            y = x[i - 1] - sin(6.0 * pi * x[0] + i * pi / len(solution.variables))
             y = y * y
 
             if i % 2 == 0:

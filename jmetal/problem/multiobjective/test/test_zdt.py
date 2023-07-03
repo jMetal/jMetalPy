@@ -29,9 +29,7 @@ class ZDT1TestCases(unittest.TestCase):
         problem = ZDT1()
         solution = problem.create_solution()
 
-        self.assertEqual(30, solution.number_of_variables)
         self.assertEqual(30, len(solution.variables))
-        self.assertEqual(2, solution.number_of_objectives)
         self.assertEqual(2, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(30 * [0.0], problem.lower_bound)
@@ -69,9 +67,8 @@ class ZDT2TestCases(unittest.TestCase):
     def test_should_create_solution_create_a_valid_float_solution(self) -> None:
         problem = ZDT2()
         solution = problem.create_solution()
-        self.assertEqual(30, solution.number_of_variables)
         self.assertEqual(30, len(solution.variables))
-        self.assertEqual(2, solution.number_of_objectives)
+        self.assertEqual(2, len(solution.objectives))
         self.assertEqual(2, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(30 * [0.0], problem.lower_bound)
@@ -109,9 +106,8 @@ class ZDT3TestCases(unittest.TestCase):
     def test_should_create_solution_create_a_valid_float_solution(self) -> None:
         problem = ZDT3()
         solution = problem.create_solution()
-        self.assertEqual(30, solution.number_of_variables)
         self.assertEqual(30, len(solution.variables))
-        self.assertEqual(2, solution.number_of_objectives)
+        self.assertEqual(2, len(solution.objectives))
         self.assertEqual(2, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(30 * [0.0], problem.lower_bound)
@@ -153,9 +149,7 @@ class ZDT4TestCases(unittest.TestCase):
     def test_should_create_solution_create_a_valid_float_solution(self) -> None:
         problem = ZDT4()
         solution = problem.create_solution()
-        self.assertEqual(10, solution.number_of_variables)
         self.assertEqual(10, len(solution.variables))
-        self.assertEqual(2, solution.number_of_objectives)
         self.assertEqual(2, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(0.0, problem.lower_bound[0])
@@ -197,9 +191,7 @@ class ZDT6TestCases(unittest.TestCase):
     def test_should_create_solution_create_a_valid_float_solution(self) -> None:
         problem = ZDT6()
         solution = problem.create_solution()
-        self.assertEqual(10, solution.number_of_variables)
         self.assertEqual(10, len(solution.variables))
-        self.assertEqual(2, solution.number_of_objectives)
         self.assertEqual(2, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(10 * [0.0], problem.lower_bound)

@@ -38,7 +38,7 @@ class BitFlipMutation(Mutation[BinarySolution]):
     def execute(self, solution: BinarySolution) -> BinarySolution:
         Check.that(type(solution) is BinarySolution, "Solution type invalid")
 
-        for i in range(solution.number_of_variables):
+        for i in range(len(solution.variables)):
             for j in range(len(solution.variables[i])):
                 rand = random.random()
                 if rand <= self.probability:
@@ -57,7 +57,7 @@ class PolynomialMutation(Mutation[FloatSolution]):
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
         Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
-        for i in range(solution.number_of_variables):
+        for i in range(len(solution.variables)):
             rand = random.random()
 
             if rand <= self.probability:
@@ -102,7 +102,7 @@ class IntegerPolynomialMutation(Mutation[IntegerSolution]):
     def execute(self, solution: IntegerSolution) -> IntegerSolution:
         Check.that(issubclass(type(solution), IntegerSolution), "Solution type invalid")
 
-        for i in range(solution.number_of_variables):
+        for i in range(len(solution.variables)):
             if random.random() <= self.probability:
                 y = solution.variables[i]
                 yl, yu = solution.lower_bound[i], solution.upper_bound[i]
@@ -143,7 +143,7 @@ class SimpleRandomMutation(Mutation[FloatSolution]):
     def execute(self, solution: FloatSolution) -> FloatSolution:
         Check.that(type(solution) is FloatSolution, "Solution type invalid")
 
-        for i in range(solution.number_of_variables):
+        for i in range(len(solution.variables)):
             rand = random.random()
             if rand <= self.probability:
                 solution.variables[i] = (
@@ -163,7 +163,7 @@ class UniformMutation(Mutation[FloatSolution]):
     def execute(self, solution: FloatSolution) -> FloatSolution:
         Check.that(type(solution) is FloatSolution, "Solution type invalid")
 
-        for i in range(solution.number_of_variables):
+        for i in range(len(solution.variables)):
             rand = random.random()
 
             if rand <= self.probability:
@@ -193,7 +193,7 @@ class NonUniformMutation(Mutation[FloatSolution]):
     def execute(self, solution: FloatSolution) -> FloatSolution:
         Check.that(type(solution) is FloatSolution, "Solution type invalid")
 
-        for i in range(solution.number_of_variables):
+        for i in range(len(solution.variables)):
             if random.random() <= self.probability:
                 rand = random.random()
 
@@ -235,7 +235,7 @@ class PermutationSwapMutation(Mutation[PermutationSolution]):
         rand = random.random()
 
         if rand <= self.probability:
-            pos_one, pos_two = random.sample(range(solution.number_of_variables), 2)
+            pos_one, pos_two = random.sample(range(len(solution.variables)), 2)
             solution.variables[pos_one], solution.variables[pos_two] = (
                 solution.variables[pos_two],
                 solution.variables[pos_one],
@@ -263,7 +263,7 @@ class CompositeMutation(Mutation[Solution]):
         Check.is_not_none(solution)
 
         mutated_solution_components = []
-        for i in range(solution.number_of_variables):
+        for i in range(len(solution.variables)):
             mutated_solution_components.append(self.mutation_operators_list[i].execute(solution.variables[i]))
 
         return CompositeSolution(mutated_solution_components)

@@ -118,7 +118,7 @@ class SMPSO(ParticleSwarmOptimization):
             wmax = self.max_weight
             wmin = self.min_weight
 
-            for var in range(swarm[i].number_of_variables):
+            for var in range(len(swarm[i].variables)):
                 self.speed[i][var] = self.__velocity_constriction(
                     self.__constriction_coefficient(c1, c2)
                     * (
@@ -135,7 +135,7 @@ class SMPSO(ParticleSwarmOptimization):
         for i in range(self.swarm_size):
             particle = swarm[i]
 
-            for j in range(particle.number_of_variables):
+            for j in range(len(particle.variables)):
                 particle.variables[j] += self.speed[i][j]
 
                 if particle.variables[j] < self.problem.lower_bound[j]:

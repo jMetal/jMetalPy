@@ -31,9 +31,7 @@ class DTLZ1TestCases(unittest.TestCase):
         problem = DTLZ1()
         solution = problem.create_solution()
 
-        self.assertEqual(7, solution.number_of_variables)
         self.assertEqual(7, len(solution.variables))
-        self.assertEqual(3, solution.number_of_objectives)
         self.assertEqual(3, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(7 * [0.0], problem.lower_bound)
@@ -71,9 +69,7 @@ class DTLZ2TestCases(unittest.TestCase):
     def test_should_create_solution_create_a_valid_float_solution(self) -> None:
         problem = DTLZ2()
         solution = problem.create_solution()
-        self.assertEqual(12, solution.number_of_variables)
         self.assertEqual(12, len(solution.variables))
-        self.assertEqual(3, solution.number_of_objectives)
         self.assertEqual(3, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(12 * [0.0], problem.lower_bound)
@@ -110,9 +106,7 @@ class DTLZ3TestCases(unittest.TestCase):
     def test_should_create_solution_create_a_valid_float_solution(self) -> None:
         problem = DTLZ3()
         solution = problem.create_solution()
-        self.assertEqual(12, solution.number_of_variables)
         self.assertEqual(12, len(solution.variables))
-        self.assertEqual(3, solution.number_of_objectives)
         self.assertEqual(3, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(12 * [0.0], problem.lower_bound)
@@ -150,9 +144,7 @@ class DTLZ4TestCases(unittest.TestCase):
     def test_should_create_solution_create_a_valid_float_solution(self) -> None:
         problem = DTLZ4()
         solution = problem.create_solution()
-        self.assertEqual(12, solution.number_of_variables)
         self.assertEqual(12, len(solution.variables))
-        self.assertEqual(3, solution.number_of_objectives)
         self.assertEqual(3, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(12 * [0.0], problem.lower_bound)
@@ -189,9 +181,7 @@ class DTLZ5TestCases(unittest.TestCase):
     def test_should_create_solution_create_a_valid_float_solution(self) -> None:
         problem = DTLZ5()
         solution = problem.create_solution()
-        self.assertEqual(12, solution.number_of_variables)
         self.assertEqual(12, len(solution.variables))
-        self.assertEqual(3, solution.number_of_objectives)
         self.assertEqual(3, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(12 * [0.0], problem.lower_bound)
@@ -229,9 +219,7 @@ class DTLZ6TestCases(unittest.TestCase):
     def test_should_create_solution_create_a_valid_float_solution(self) -> None:
         problem = DTLZ6()
         solution = problem.create_solution()
-        self.assertEqual(12, solution.number_of_variables)
         self.assertEqual(12, len(solution.variables))
-        self.assertEqual(3, solution.number_of_objectives)
         self.assertEqual(3, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(12 * [0.0], problem.lower_bound)
@@ -268,9 +256,7 @@ class DTLZ7TestCases(unittest.TestCase):
     def test_should_create_solution_create_a_valid_float_solution(self) -> None:
         problem = DTLZ7()
         solution = problem.create_solution()
-        self.assertEqual(22, solution.number_of_variables)
         self.assertEqual(22, len(solution.variables))
-        self.assertEqual(3, solution.number_of_objectives)
         self.assertEqual(3, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(22 * [0.0], problem.lower_bound)

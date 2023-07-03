@@ -207,13 +207,13 @@ class GDominanceComparator(DominanceComparator):
 
     def __flag(self, solution: Solution):
         result = 1
-        for i in range(solution.number_of_objectives):
+        for i in range(len(solution.objectives)):
             if solution.objectives[i] > self.reference_point[i]:
                 result = 0
 
         if result == 0:
             result = 1
-            for i in range(solution.number_of_objectives):
+            for i in range(len(solution.objectives)):
                 if solution.objectives[i] < self.reference_point[i]:
                     result = 0
 

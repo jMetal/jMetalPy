@@ -68,9 +68,7 @@ class SphereTestCases(unittest.TestCase):
         problem = Sphere(3)
         solution = problem.create_solution()
 
-        self.assertEqual(3, solution.number_of_variables)
         self.assertEqual(3, len(solution.variables))
-        self.assertEqual(1, solution.number_of_objectives)
         self.assertEqual(1, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
 
@@ -85,9 +83,7 @@ class SphereTestCases(unittest.TestCase):
         solution = problem.create_solution()
         problem.evaluate(solution)
 
-        self.assertEqual(3, solution.number_of_variables)
         self.assertEqual(3, len(solution.variables))
-        self.assertEqual(1, solution.number_of_objectives)
         self.assertEqual(1, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
 

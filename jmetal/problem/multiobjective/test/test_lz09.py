@@ -31,9 +31,7 @@ class LZ09F1TestCases(unittest.TestCase):
         problem = LZ09_F1()
         solution = problem.create_solution()
 
-        self.assertEqual(10, solution.number_of_variables)
         self.assertEqual(10, len(solution.variables))
-        self.assertEqual(2, solution.number_of_objectives)
         self.assertEqual(2, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(10 * [0.0], problem.lower_bound)
@@ -73,9 +71,7 @@ class LZ09F2TestCases(unittest.TestCase):
         problem = LZ09_F2()
         solution = problem.create_solution()
 
-        self.assertEqual(30, solution.number_of_variables)
         self.assertEqual(30, len(solution.variables))
-        self.assertEqual(2, solution.number_of_objectives)
         self.assertEqual(2, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(30 * [0.0], problem.lower_bound)
@@ -115,9 +111,7 @@ class LZ09F3TestCases(unittest.TestCase):
         problem = LZ09_F3()
         solution = problem.create_solution()
 
-        self.assertEqual(30, solution.number_of_variables)
         self.assertEqual(30, len(solution.variables))
-        self.assertEqual(2, solution.number_of_objectives)
         self.assertEqual(2, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(30 * [0.0], problem.lower_bound)
@@ -157,9 +151,7 @@ class LZ09F4TestCases(unittest.TestCase):
         problem = LZ09_F4()
         solution = problem.create_solution()
 
-        self.assertEqual(30, solution.number_of_variables)
         self.assertEqual(30, len(solution.variables))
-        self.assertEqual(2, solution.number_of_objectives)
         self.assertEqual(2, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(30 * [0.0], problem.lower_bound)
@@ -199,9 +191,7 @@ class LZ09F5TestCases(unittest.TestCase):
         problem = LZ09_F5()
         solution = problem.create_solution()
 
-        self.assertEqual(30, solution.number_of_variables)
         self.assertEqual(30, len(solution.variables))
-        self.assertEqual(2, solution.number_of_objectives)
         self.assertEqual(2, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(30 * [0.0], problem.lower_bound)
@@ -241,9 +231,7 @@ class LZ09F6TestCases(unittest.TestCase):
         problem = LZ09_F6()
         solution = problem.create_solution()
 
-        self.assertEqual(10, solution.number_of_variables)
         self.assertEqual(10, len(solution.variables))
-        self.assertEqual(3, solution.number_of_objectives)
         self.assertEqual(3, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(10 * [0.0], problem.lower_bound)
@@ -283,9 +271,7 @@ class LZ09F7TestCases(unittest.TestCase):
         problem = LZ09_F7()
         solution = problem.create_solution()
 
-        self.assertEqual(10, solution.number_of_variables)
         self.assertEqual(10, len(solution.variables))
-        self.assertEqual(2, solution.number_of_objectives)
         self.assertEqual(2, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(10 * [0.0], problem.lower_bound)
@@ -325,9 +311,7 @@ class LZ09F8TestCases(unittest.TestCase):
         problem = LZ09_F8()
         solution = problem.create_solution()
 
-        self.assertEqual(10, solution.number_of_variables)
         self.assertEqual(10, len(solution.variables))
-        self.assertEqual(2, solution.number_of_objectives)
         self.assertEqual(2, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(10 * [0.0], problem.lower_bound)
@@ -367,9 +351,7 @@ class LZ09F9TestCases(unittest.TestCase):
         problem = LZ09_F9()
         solution = problem.create_solution()
 
-        self.assertEqual(30, solution.number_of_variables)
         self.assertEqual(30, len(solution.variables))
-        self.assertEqual(2, solution.number_of_objectives)
         self.assertEqual(2, len(solution.objectives))
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(30 * [0.0], problem.lower_bound)

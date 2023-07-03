@@ -51,7 +51,7 @@ class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
             raise Exception("The number of parents is not two: {}".format(len(parents)))
 
         offspring = copy.deepcopy(parents)
-        permutation_length = offspring[0].number_of_variables
+        permutation_length = len(offspring[0].variables)
 
         rand = random.random()
         if rand <= self.probability:
@@ -158,7 +158,7 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
         rand = random.random()
 
         if rand <= self.probability:
-            for i in range(parents[0].number_of_variables):
+            for i in range(len(parents[0].variables)):
                 value_x1, value_x2 = parents[0].variables[i], parents[1].variables[i]
 
                 if random.random() <= 0.5:
@@ -239,7 +239,7 @@ class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
         rand = random.random()
 
         if rand <= self.probability:
-            for i in range(parents[0].number_of_variables):
+            for i in range(len(parents[0].variables)):
                 value_x1, value_x2 = parents[0].variables[i], parents[1].variables[i]
 
                 if random.random() <= 0.5:
@@ -347,7 +347,7 @@ class SPXCrossover(Crossover[BinarySolution, BinarySolution]):
             offspring[1].variables[variable_to_cut] = bitset2
 
             # 6. Apply the crossover to the other variables
-            for i in range(variable_to_cut + 1, parents[0].number_of_variables):
+            for i in range(variable_to_cut + 1, len(parents[0].variables)):
                 offspring[0].variables[i] = copy.deepcopy(parents[1].variables[i])
                 offspring[1].variables[i] = copy.deepcopy(parents[0].variables[i])
 
@@ -385,7 +385,7 @@ class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
 
         child = copy.deepcopy(self.current_individual)
 
-        number_of_variables = parents[0].number_of_variables
+        number_of_variables = len(parents[0].variables)
         rand = random.randint(0, number_of_variables - 1)
 
         for i in range(number_of_variables):
@@ -434,7 +434,7 @@ class CompositeCrossover(Crossover[CompositeSolution, CompositeSolution]):
         offspring1 = []
         offspring2 = []
 
-        number_of_solutions_in_composite_solution = solutions[0].number_of_variables
+        number_of_solutions_in_composite_solution = len(solutions[0].variables)
 
         for i in range(number_of_solutions_in_composite_solution):
             parents = [solutions[0].variables[i], solutions[1].variables[i]]

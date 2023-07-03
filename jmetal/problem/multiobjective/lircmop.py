@@ -39,7 +39,7 @@ class LIRCMOP1(FloatProblem):
 
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(len(solution.constraints))]
 
         a = 0.51
         b = 0.5
@@ -53,14 +53,14 @@ class LIRCMOP1(FloatProblem):
 
     def g1(self, x: List[float]) -> float:
         result = 0
-        for i in range(2, self.number_of_variables, 2):
+        for i in range(2, self.number_of_variables(), 2):
             result += pow(x[i] - sin(0.5 * pi * x[0]), 2.0)
 
         return result
 
     def g2(self, x: List[float]) -> float:
         result = 0
-        for i in range(1, self.number_of_variables, 2):
+        for i in range(1, self.number_of_variables(), 2):
             result += pow(x[i] - cos(0.5 * pi * x[0]), 2.0)
 
         return result
@@ -108,7 +108,7 @@ class LIRCMOP3(LIRCMOP1):
 
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints())]
 
         a = 0.51
         b = 0.5
@@ -141,7 +141,7 @@ class LIRCMOP4(LIRCMOP2):
 
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints())]
 
         a = 0.51
         b = 0.5
@@ -192,7 +192,7 @@ class LIRCMOP5(FloatProblem):
         return solution
 
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints())]
 
         r = 0.1
         theta = -0.25 * pi
@@ -216,14 +216,14 @@ class LIRCMOP5(FloatProblem):
 
     def g1(self, x: [float]) -> float:
         result = 0
-        for i in range(2, self.number_of_variables, 2):
+        for i in range(2, self.number_of_variables(), 2):
             result += pow(x[i] - sin(0.5 * i / len(x) * pi * x[0]), 2.0)
 
         return result
 
     def g2(self, x: [float]) -> float:
         result = 0
-        for i in range(1, self.number_of_variables, 2):
+        for i in range(1, self.number_of_variables(), 2):
             result += pow(x[i] - cos(0.5 * i / len(x) * pi * x[0]), 2.0)
 
         return result
@@ -567,9 +567,9 @@ class LIRCMOP13(FloatProblem):
         return solution
 
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
-        constraints = [0.0 for _ in range(self.number_of_constraints)]
+        constraints = [0.0 for _ in range(self.number_of_constraints())]
 
-        f = sum([pow(solution.objectives[i], 2) for i in range(solution.number_of_objectives)])
+        f = sum([pow(solution.objectives[i], 2) for i in range(len(solution.objectives))])
 
         constraints[0] = (f - 9) * (f - 4)
         constraints[1] = (f - 1.9 * 1.9) * (f - 1.8 * 1.8)
@@ -580,7 +580,7 @@ class LIRCMOP13(FloatProblem):
 
     def g1(self, x: [float]) -> float:
         result = 0
-        for i in range(2, self.number_of_variables, 2):
+        for i in range(2, self.number_of_variables(), 2):
             result += 10 * pow(x[i] - 0.5, 2.0)
 
         return result
@@ -608,7 +608,7 @@ class LIRCMOP14(LIRCMOP13):
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
         constraints = [0.0 for _ in range(self.number_of_constraints())]
 
-        f = sum([pow(solution.objectives[i], 2) for i in range(solution.number_of_objectives)])
+        f = sum([pow(solution.objectives[i], 2) for i in range(len(solution.objectives))])
 
         constraints[0] = (f - 9) * (f - 4)
         constraints[1] = (f - 1.9 * 1.9) * (f - 1.8 * 1.8)

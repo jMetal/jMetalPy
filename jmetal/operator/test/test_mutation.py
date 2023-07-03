@@ -182,7 +182,7 @@ class UniformMutationTestCases(unittest.TestCase):
         solution.variables = [-7.0, 3.0, 12.0, 13.4]
 
         mutated_solution = operator.execute(solution)
-        for i in range(solution.number_of_variables):
+        for i in range(len(solution.variables)):
             self.assertGreaterEqual(mutated_solution.variables[i], solution.lower_bound[i])
             self.assertLessEqual(mutated_solution.variables[i], solution.upper_bound[i])
 
@@ -234,7 +234,7 @@ class RandomMutationTestCases(unittest.TestCase):
         solution.variables = [-7.0, 3.0, 12.0, 13.4]
 
         mutated_solution = operator.execute(solution)
-        for i in range(solution.number_of_variables):
+        for i in range(len(solution.variables)):
             self.assertGreaterEqual(mutated_solution.variables[i], solution.lower_bound[i])
             self.assertLessEqual(mutated_solution.variables[i], solution.upper_bound[i])
 

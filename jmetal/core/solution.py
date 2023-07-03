@@ -11,12 +11,9 @@ class Solution(Generic[S], ABC):
     """Class representing solutions"""
 
     def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int = 0):
-        self.number_of_variables = number_of_variables
-        self.number_of_objectives = number_of_objectives
-        self.number_of_constraints = number_of_constraints
-        self.variables = [[] for _ in range(self.number_of_variables)]
-        self.objectives = [0.0 for _ in range(self.number_of_objectives)]
-        self.constraints = [0.0 for _ in range(self.number_of_constraints)]
+        self.variables = [[] for _ in range(number_of_variables)]
+        self.objectives = [0.0 for _ in range(number_of_objectives)]
+        self.constraints = [0.0 for _ in range(number_of_constraints)]
         self.attributes = {}
 
     def __eq__(self, solution) -> bool:
@@ -39,9 +36,10 @@ class BinarySolution(Solution[BitSet]):
         self.bits_per_variable = []
 
     def __copy__(self):
-        new_solution = BinarySolution(self.number_of_variables, self.number_of_objectives)
+        new_solution = BinarySolution(len(self.variables), len(self.objectives), len(self.constraints))
         new_solution.objectives = self.objectives[:]
         new_solution.variables = self.variables[:]
+        new_solution.constraints = self.constraints[:]
 
         new_solution.attributes = self.attributes.copy()
         new_solution.bits_per_variable = self.bits_per_variable
@@ -69,11 +67,11 @@ class FloatSolution(Solution[float]):
     """Class representing float solutions"""
 
     def __init__(
-        self,
-        lower_bound: List[float],
-        upper_bound: List[float],
-        number_of_objectives: int,
-        number_of_constraints: int = 0,
+            self,
+            lower_bound: List[float],
+            upper_bound: List[float],
+            number_of_objectives: int,
+            number_of_constraints: int = 0
     ):
         super(FloatSolution, self).__init__(len(lower_bound), number_of_objectives, number_of_constraints)
         self.lower_bound = lower_bound
@@ -81,21 +79,29 @@ class FloatSolution(Solution[float]):
 
     def __copy__(self):
         new_solution = FloatSolution(
-            self.lower_bound, self.upper_bound, self.number_of_objectives, self.number_of_constraints
+            self.lower_bound, self.upper_bound, len(self.objectives), len(self.constraints)
         )
         new_solution.objectives = self.objectives[:]
         new_solution.variables = self.variables[:]
         new_solution.constraints = self.constraints[:]
 
+        new_solution.lower_bound = self.lower_bound
+        new_solution.upper_bound = self.upper_bound
+
         new_solution.attributes = self.attributes.copy()
 
         return new_solution
+
 
 class IntegerSolution(Solution[int]):
     """Class representing integer solutions"""
 
     def __init__(
-        self, lower_bound: List[int], upper_bound: List[int], number_of_objectives: int, number_of_constraints: int = 0
+            self,
+            lower_bound: List[int],
+            upper_bound: List[int],
+            number_of_objectives: int,
+            number_of_constraints: int = 0
     ):
         super(IntegerSolution, self).__init__(len(lower_bound), number_of_objectives, number_of_constraints)
         self.lower_bound = lower_bound
@@ -103,11 +109,14 @@ class IntegerSolution(Solution[int]):
 
     def __copy__(self):
         new_solution = IntegerSolution(
-            self.lower_bound, self.upper_bound, self.number_of_objectives, self.number_of_constraints
+            self.lower_bound, self.upper_bound, len(self.objectives), len(self.constraints)
         )
         new_solution.objectives = self.objectives[:]
         new_solution.variables = self.variables[:]
         new_solution.constraints = self.constraints[:]
+
+        new_solution.lower_bound = self.lower_bound
+        new_solution.upper_bound = self.upper_bound
 
         new_solution.attributes = self.attributes.copy()
 
@@ -125,21 +134,21 @@ class CompositeSolution(Solution):
 
     def __init__(self, solutions: List[Solution]):
         super(CompositeSolution, self).__init__(
-            len(solutions), solutions[0].number_of_objectives, solutions[0].number_of_constraints
+            len(solutions), len(solutions[0].objectives), len(solutions[0].constraints)
         )
         Check.is_not_none(solutions)
         Check.collection_is_not_empty(solutions)
 
         for solution in solutions:
             Check.that(
-                solution.number_of_objectives == solutions[0].number_of_objectives,
+                len(solution.objectives) == len(solutions[0].objectives),
                 "The solutions in the list must have the same number of objectives: "
-                + str(solutions[0].number_of_objectives),
+                + str(len(solutions[0].objectives)),
             )
             Check.that(
-                solution.number_of_constraints == solutions[0].number_of_constraints,
+                len(solution.constraints) == len(solutions[0].constraints),
                 "The solutions in the list must have the same number of constraints: "
-                + str(solutions[0].number_of_constraints),
+                + str(len(solutions[0].constraints)),
             )
 
         self.variables = solutions
@@ -161,9 +170,10 @@ class PermutationSolution(Solution):
         super(PermutationSolution, self).__init__(number_of_variables, number_of_objectives, number_of_constraints)
 
     def __copy__(self):
-        new_solution = PermutationSolution(self.number_of_variables, self.number_of_objectives)
+        new_solution = PermutationSolution(len(self.variables), len(self.objectives), len(self.constraints))
         new_solution.objectives = self.objectives[:]
         new_solution.variables = self.variables[:]
+        new_solution.constraints = self.constraints[:]
 
         new_solution.attributes = self.attributes.copy()
 
