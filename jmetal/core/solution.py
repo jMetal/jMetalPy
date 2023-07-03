@@ -36,12 +36,15 @@ class BinarySolution(Solution[BitSet]):
     def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints: int = 0):
         super(BinarySolution, self).__init__(number_of_variables, number_of_objectives, number_of_constraints)
 
+        self.bits_per_variable = []
+
     def __copy__(self):
         new_solution = BinarySolution(self.number_of_variables, self.number_of_objectives)
         new_solution.objectives = self.objectives[:]
         new_solution.variables = self.variables[:]
 
         new_solution.attributes = self.attributes.copy()
+        new_solution.bits_per_variable = self.bits_per_variable
 
         return new_solution
 
@@ -57,6 +60,9 @@ class BinarySolution(Solution[BitSet]):
         for bit in self.variables[0]:
             string += "1" if bit else "0"
         return string
+
+    def cardinality(self, variable_index) -> int:
+        return sum(1 for _ in self.variables[variable_index] if _)
 
 
 class FloatSolution(Solution[float]):
@@ -84,7 +90,6 @@ class FloatSolution(Solution[float]):
         new_solution.attributes = self.attributes.copy()
 
         return new_solution
-
 
 class IntegerSolution(Solution[int]):
     """Class representing integer solutions"""

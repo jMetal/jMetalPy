@@ -76,6 +76,14 @@ class BinaryProblem(Problem[BinarySolution], ABC):
     def __init__(self):
         super(BinaryProblem, self).__init__()
 
+        self.number_of_bits_per_variable = []
+
+    def number_of_bits_per_variable_list(self):
+        return self.number_of_bits_per_variable
+
+    def total_number_of_bits(self):
+        return sum(self.number_of_bits_per_variable)
+
 
 class FloatProblem(Problem[FloatSolution], ABC):
     """Class representing float problems."""

@@ -204,7 +204,7 @@ class OneZeroMax(BinaryProblem):
     """
     def __init__(self, number_of_bits: int = 256):
         super(OneZeroMax, self).__init__()
-        self.number_of_bits = number_of_bits
+        self.number_of_bits_per_variable = [number_of_bits]
 
         self.obj_directions = [self.MINIMIZE]
         self.obj_labels = ["Ones"]
@@ -236,7 +236,7 @@ class OneZeroMax(BinaryProblem):
         new_solution = BinarySolution(
             number_of_variables=self.number_of_variables(), number_of_objectives=self.number_of_objectives()
         )
-        new_solution.variables[0] = [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
+        new_solution.variables[0] = [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits_per_variable[0])]
         return new_solution
 
     def name(self) -> str:
