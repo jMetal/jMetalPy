@@ -58,7 +58,6 @@ class Chen2015(FloatProblem):
 
     def __init__(self):
         super(Chen2015, self).__init__()
-        self.name = 'Chen2015'
 
         self.obj_directions = [self.MINIMIZE, self.MAXIMIZE, self.MAXIMIZE, self.MAXIMIZE, self.MINIMIZE]
         self.obj_labels = ['F1', 'F2', 'F3', 'F4', 'F5']
@@ -413,7 +412,7 @@ class Subasi2016(FloatProblem):
         super(Subasi2016, self).__init__()
 
         self.lower_bound = [20.0, 6.0, 20.0, 0.0, 8000.0]
-        self.upper_bound = [60.0, 15.0, 40.0, 3.0, 25000.0]
+        self.upper_bound = [60.0, 15.0, 40.0, 30.0, 25000.0]
 
         self.obj_labels = ['Nu', 'f']
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
@@ -518,7 +517,6 @@ class Xu2020(FloatProblem):
     """ Problem Xu2020 (RWA6) described in the paper "Engineering applications of multi-objective evolutionary
     algorithms: A test suite of box-constrained real-world problems". DOI: https://doi.org/10.1016/j.engappai.2023.106192
     """
-
     def __init__(self):
         super(Xu2020, self).__init__()
 
@@ -527,6 +525,12 @@ class Xu2020(FloatProblem):
 
         self.obj_labels = ['Ft', 'Ra', 'MRR']
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE, self.MAXIMIZE]
+
+    def number_of_objectives(self) -> int:
+        return len(self.obj_directions)
+
+    def number_of_constraints(self) -> int:
+        return 0
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         vc = solution.variables[0]
