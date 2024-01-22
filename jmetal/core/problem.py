@@ -11,6 +11,7 @@ from jmetal.core.solution import (
 )
 from jmetal.logger import get_logger
 
+
 logger = get_logger(__name__)
 
 S = TypeVar("S")
@@ -104,6 +105,7 @@ class FloatProblem(Problem[FloatSolution], ABC):
             random.uniform(self.lower_bound[i] * 1.0, self.upper_bound[i] * 1.0)
             for i in range(self.number_of_variables())
         ]
+
 
         return new_solution
 
