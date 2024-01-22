@@ -19,7 +19,9 @@ install_requires = [
     'plotly>=3.3.0',
     'matplotlib>=3.0.2',
     'scipy>=1.3.0',
-    'statsmodels>=0.9.0'
+    'statsmodels>=0.9.0',
+    'mockito',
+    'PyHamcrest',
 ]
 extras_require = {
     'core': install_requires,
