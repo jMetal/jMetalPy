@@ -258,8 +258,8 @@ class MOEAD_DRA(MOEAD):
             self.saved_values[i] = copy.copy(self.solutions[i])
 
     def __tour_selection(self, depth):
-        selected = [i for i in range(self.problem.number_of_objectives)]
-        candidate = [i for i in range(self.problem.number_of_objectives, self.population_size)]
+        selected = [i for i in range(self.problem.number_of_objectives())]
+        candidate = [i for i in range(self.problem.number_of_objectives(), self.population_size)]
 
         while len(selected) < int(self.population_size / 5.0):
             best_idd = int(random.random() * len(candidate))

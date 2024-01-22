@@ -63,5 +63,5 @@ class UF1(FloatProblem):
 
         return solution
 
-    def get_name(self):
+    def name(self):
         return "UF1"

@@ -19,7 +19,7 @@ if __name__ == "__main__":
     algorithm = SMPSO(
         problem=problem,
         swarm_size=10,
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
+        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
         leaders=CrowdingDistanceArchive(10),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
         swarm_evaluator=SparkEvaluator(),
@@ -33,5 +33,5 @@ if __name__ == "__main__":
     print_variables_to_file(front, "VAR." + algorithm.get_name() + "." + problem.get_name())
 
     print(f"Algorithm: {algorithm.get_name()}")
-    print(f"Problem: {problem.get_name()}")
+    print(f"Problem: {problem.name()}")
     print(f"Computing time: {algorithm.total_computing_time}")

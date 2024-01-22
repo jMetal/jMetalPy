@@ -3,7 +3,6 @@ from typing import List
 from unittest import mock
 
 from jmetal.core.operator import Crossover
-<<<<<<< HEAD
 from jmetal.core.solution import (
     BinarySolution,
     CompositeSolution,
@@ -25,12 +24,6 @@ from jmetal.util.ckecking import (
     InvalidConditionException,
     NoneParameterException,
 )
-=======
-from jmetal.core.solution import BinarySolution, PermutationSolution, FloatSolution, CompositeSolution, IntegerSolution
-from jmetal.operator.crossover import NullCrossover, SPXCrossover, CXCrossover, PMXCrossover, SBXCrossover, \
-    CompositeCrossover, IntegerSBXCrossover
-from jmetal.util.ckecking import NoneParameterException, EmptyCollectionException, InvalidConditionException
->>>>>>> 8c0a6cf (Feature/mixed solution (#73))
 
 
 class NullCrossoverTestCases(unittest.TestCase):
@@ -311,7 +304,6 @@ class SBXCrossoverTestCases(unittest.TestCase):
         self.assertEqual(solution1.variables, offspring[0].variables)
         self.assertEqual(solution2.variables, offspring[1].variables)
 
-<<<<<<< HEAD
     def test_should_execute_work_with_a_solution_subclass_of_float_solution(self):
         class NewFloatSolution(FloatSolution):
             def __init__(
@@ -338,8 +330,6 @@ class SBXCrossoverTestCases(unittest.TestCase):
         self.assertEqual(solution1.variables, offspring[0].variables)
         self.assertEqual(solution2.variables, offspring[1].variables)
 
-=======
->>>>>>> 8c0a6cf (Feature/mixed solution (#73))
     def test_should_execute_produce_valid_solutions_when_crossing_two_single_variable_solutions(self):
         pass
 
@@ -354,11 +344,7 @@ class CompositeCrossoverTestCases(unittest.TestCase):
             CompositeCrossover([])
 
     def test_should_constructor_create_a_valid_operator_when_adding_a_single_crossover_operator(self):
-<<<<<<< HEAD
         crossover: Crossover = SBXCrossover(0.9, 20.0)
-=======
-        crossover: Crossover =  SBXCrossover(0.9, 20.0)
->>>>>>> 8c0a6cf (Feature/mixed solution (#73))
 
         operator = CompositeCrossover([crossover])
         self.assertIsNotNone(operator)
@@ -390,13 +376,8 @@ class CompositeCrossoverTestCases(unittest.TestCase):
 
         self.assertIsNotNone(children)
         self.assertEqual(2, len(children))
-<<<<<<< HEAD
         self.assertEqual(1, len(children[0].variables))
         self.assertEqual(1, len(children[1].variables))
-=======
-        self.assertEqual(1, children[0].number_of_variables)
-        self.assertEqual(1, children[1].number_of_variables)
->>>>>>> 8c0a6cf (Feature/mixed solution (#73))
 
     def test_should_execute_work_properly_with_a_two_crossover_operators(self):
         operator = CompositeCrossover([SBXCrossover(0.9, 20.0), IntegerSBXCrossover(0.1, 20.0)])
@@ -417,13 +398,8 @@ class CompositeCrossoverTestCases(unittest.TestCase):
 
         self.assertIsNotNone(children)
         self.assertEqual(2, len(children))
-<<<<<<< HEAD
         self.assertEqual(2, len(children[0].variables))
         self.assertEqual(2, len(children[1].variables))
-=======
-        self.assertEqual(2, children[0].number_of_variables)
-        self.assertEqual(2, children[1].number_of_variables)
->>>>>>> 8c0a6cf (Feature/mixed solution (#73))
 
     def test_should_execute_raise_and_exception_if_the_types_of_the_solutions_do_not_match_the_operators(self):
         operator = CompositeCrossover([SBXCrossover(1.0, 5.0), SPXCrossover(0.9)])
@@ -439,9 +415,5 @@ class CompositeCrossoverTestCases(unittest.TestCase):
             operator.execute([composite_solution1, composite_solution2])
 
 
-<<<<<<< HEAD
 if __name__ == "__main__":
-=======
-if __name__ == '__main__':
->>>>>>> 8c0a6cf (Feature/mixed solution (#73))
     unittest.main()

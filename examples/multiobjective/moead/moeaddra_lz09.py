@@ -1,6 +1,7 @@
 from jmetal.algorithm.multiobjective.moead import MOEAD_DRA
 from jmetal.core.quality_indicator import HyperVolume
 from jmetal.operator import DifferentialEvolutionCrossover, PolynomialMutation
+from jmetal.problem.multiobjective.lz09 import LZ09_F1
 from jmetal.problem.multiobjective.uf import UF1
 from jmetal.util.aggregation_function import Tschebycheff
 from jmetal.util.solution import (
@@ -11,8 +12,8 @@ from jmetal.util.solution import (
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":
-    problem = UF1()
-    problem.reference_front = read_solutions(filename="resources/reference_front/UF1.pf")
+    problem = LZ09_F1()
+    problem.reference_front = read_solutions(filename="resources/reference_front/LZ09F1.pf")
 
     max_evaluations = 300000
 
@@ -20,8 +21,8 @@ if __name__ == "__main__":
         problem=problem,
         population_size=600,
         crossover=DifferentialEvolutionCrossover(CR=1.0, F=0.5),
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
-        aggregation_function=Tschebycheff(dimension=problem.number_of_objectives),
+        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
+        aggregation_function=Tschebycheff(dimension=problem.number_of_objectives()),
         neighbor_size=20,
         neighbourhood_selection_probability=0.9,
         max_number_of_replaced_solutions=2,
