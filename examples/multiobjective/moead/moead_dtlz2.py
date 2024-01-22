@@ -3,6 +3,7 @@ from jmetal.core.quality_indicator import HyperVolume
 from jmetal.operator import DifferentialEvolutionCrossover, PolynomialMutation
 from jmetal.problem import DTLZ2
 from jmetal.util.aggregation_function import PenaltyBoundaryIntersection
+
 from jmetal.util.solution import (
     print_function_values_to_file,
     print_variables_to_file,
