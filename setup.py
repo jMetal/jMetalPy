@@ -1,9 +1,10 @@
+from os.path import abspath, dirname, join
+
 import setuptools
 
-<<<<<<< HEAD
-if __name__ == "__main__":
-    setuptools.setup()
-=======
+#if __name__ == "__main__":
+#    setuptools.setup()
+
 from setuptools import find_packages, setup
 
 basedir = abspath(dirname(__file__))
@@ -55,4 +56,3 @@ setup(
         'mock'
     ]
 )
->>>>>>> 8c0a6cf (Feature/mixed solution (#73))

@@ -23,14 +23,9 @@ if __name__ == "__main__":
         swarm_size=swarm_size,
         epsilon=0.0075,
         uniform_mutation=UniformMutation(probability=mutation_probability, perturbation=0.5),
-<<<<<<< HEAD
         non_uniform_mutation=NonUniformMutation(
             mutation_probability, perturbation=0.5, max_iterations=max_evaluations / swarm_size
         ),
-=======
-        non_uniform_mutation=NonUniformMutation(mutation_probability, perturbation=0.5,
-                                                max_iterations=max_evaluations / swarm_size),
->>>>>>> 8c0a6cf (Feature/mixed solution (#73))
         leaders=CrowdingDistanceArchive(10),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
         swarm_evaluator=SparkEvaluator(),
@@ -40,13 +35,8 @@ if __name__ == "__main__":
     front = algorithm.get_result()
 
     # Save results to file
-<<<<<<< HEAD
     print_function_values_to_file(front, "FUN." + algorithm.get_name() + "." + problem.name())
     print_variables_to_file(front, "VAR." + algorithm.get_name() + "." + problem.name())
-=======
-    print_function_values_to_file(front, 'FUN.' + algorithm.get_name() + "." + problem.get_name())
-    print_variables_to_file(front, 'VAR.' + algorithm.get_name() + "." + problem.get_name())
->>>>>>> 8c0a6cf (Feature/mixed solution (#73))
 
     print(f"Algorithm: {algorithm.get_name()}")
     print(f"Problem: {problem.name()}")
