@@ -21,11 +21,7 @@ if __name__ == "__main__":
         population_size=300,
         crossover=DifferentialEvolutionCrossover(CR=1.0, F=0.5),
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
-<<<<<<< HEAD
         aggregation_function=Tschebycheff(dimension=problem.number_of_objectives()),
-=======
-        aggregative_function=Tschebycheff(dimension=problem.number_of_objectives()),
->>>>>>> main
         neighbor_size=20,
         neighbourhood_selection_probability=0.9,
         max_number_of_replaced_solutions=2,
