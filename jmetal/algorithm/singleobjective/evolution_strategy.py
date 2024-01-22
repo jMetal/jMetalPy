@@ -84,7 +84,7 @@ class EvolutionStrategy(EvolutionaryAlgorithm[S, R]):
 
         return new_population
 
-    def get_result(self) -> R:
+    def result(self) -> R:
         return self.solutions[0]
 
     def get_name(self) -> str:

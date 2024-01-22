@@ -14,7 +14,7 @@ if __name__ == "__main__":
     algorithm = GDE3(problem=problem, population_size=100, cr=0.5, f=0.5, termination_criterion=StoppingByKeyboard())
 
     algorithm.run()
-    front = algorithm.get_result()
+    front = algorithm.result()
 
     # Save results to file
     print_function_values_to_file(front, "FUN." + algorithm.label)

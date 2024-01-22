@@ -149,7 +149,7 @@ if __name__ == "__main__":
     )
 
     algorithm.run()
-    subset = algorithm.get_result()
+    subset = algorithm.result()
 
     print("Algorithm: {}".format(algorithm.get_name()))
     print("Problem: {}".format(problem.name()))

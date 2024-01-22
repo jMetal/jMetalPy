@@ -133,7 +133,7 @@ class MOCell(GeneticAlgorithm[S, R]):
 
         return population
 
-    def get_result(self) -> R:
+    def result(self) -> R:
         return self.archive.solution_list
 
     def get_name(self) -> str:

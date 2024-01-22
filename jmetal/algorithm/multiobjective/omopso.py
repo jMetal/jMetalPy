@@ -190,7 +190,7 @@ class OMOPSO(ParticleSwarmOptimization):
         observable_data["SOLUTIONS"] = self.epsilon_archive.solution_list
         self.observable.notify_all(**observable_data)
 
-    def get_result(self) -> List[FloatSolution]:
+    def result(self) -> List[FloatSolution]:
         return self.epsilon_archive.solution_list
 
     def get_name(self) -> str:

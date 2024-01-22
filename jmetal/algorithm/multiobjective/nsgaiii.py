@@ -352,7 +352,7 @@ class NSGAIII(NSGAII):
 
         return list(pop)
 
-    def get_result(self):
+    def result(self):
         """Return only non dominated solutions."""
         ranking = FastNonDominatedRanking(self.dominance_comparator)
         ranking.compute_ranking(self.solutions, k=self.population_size)

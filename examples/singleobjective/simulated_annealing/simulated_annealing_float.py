@@ -16,7 +16,7 @@ if __name__ == "__main__":
     )
 
     algorithm.run()
-    result = algorithm.get_result()
+    result = algorithm.result()
 
     # Save results to file
     print_function_values_to_file(result, "FUN." + algorithm.get_name() + "." + problem.get_name())

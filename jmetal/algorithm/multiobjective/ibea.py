@@ -106,7 +106,7 @@ class IBEA(GeneticAlgorithm[S, R]):
 
         return join_population
 
-    def get_result(self) -> R:
+    def result(self) -> R:
         return self.solutions
 
     def get_name(self) -> str:

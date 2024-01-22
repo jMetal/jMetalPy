@@ -98,7 +98,7 @@ class NSGAII(GeneticAlgorithm[S, R]):
 
         return solutions
 
-    def get_result(self) -> R:
+    def result(self) -> R:
         return self.solutions
 
     def get_name(self) -> str:
@@ -206,7 +206,7 @@ class DistributedNSGAII(Algorithm[S, R]):
         return {
             "PROBLEM": self.problem,
             "EVALUATIONS": self.evaluations,
-            "SOLUTIONS": self.get_result(),
+            "SOLUTIONS": self.result(),
             "COMPUTING_TIME": ctime,
         }
 
@@ -301,7 +301,7 @@ class DistributedNSGAII(Algorithm[S, R]):
         for future, _ in task_pool:
             future.cancel()
 
-    def get_result(self) -> R:
+    def result(self) -> R:
         return self.solutions
 
     def get_name(self) -> str:

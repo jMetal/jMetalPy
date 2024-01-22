@@ -107,7 +107,7 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
 
         return population[: self.population_size]
 
-    def get_result(self) -> R:
+    def result(self) -> R:
         return self.solutions[0]
 
     def get_name(self) -> str:

@@ -156,7 +156,7 @@ class MOEAD(GeneticAlgorithm):
     def get_name(self):
         return "MOEAD"
 
-    def get_result(self):
+    def result(self):
         return self.solutions
 
 
@@ -416,7 +416,7 @@ class MOEADIEpsilon(MOEAD):
                 for solution in first_rank_solutions:
                     self.archive.append(copy.deepcopy(solution))
 
-    def get_result(self):
+    def result(self):
         return self.archive
 
 

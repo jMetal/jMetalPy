@@ -31,7 +31,7 @@ if __name__ == "__main__":
     )
 
     algorithm.run()
-    front = algorithm.get_result()
+    front = algorithm.result()
 
     hypervolume = HyperVolume([1.0, 1.0, 1.0])
     print("Hypervolume: " + str(hypervolume.compute([front[i].objectives for i in range(len(front))])))

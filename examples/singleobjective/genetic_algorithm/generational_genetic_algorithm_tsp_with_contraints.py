@@ -52,7 +52,7 @@ if __name__ == "__main__":
     algorithm.observable.register(observer=PrintObjectivesObserver(1000))
 
     algorithm.run()
-    result = algorithm.get_result()
+    result = algorithm.result()
 
     print("Algorithm: {}".format(algorithm.get_name()))
     print("Problem: {}".format(problem.name()))

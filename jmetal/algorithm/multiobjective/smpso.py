@@ -213,7 +213,7 @@ class SMPSO(ParticleSwarmOptimization):
         observable_data["SOLUTIONS"] = self.leaders.solution_list
         self.observable.notify_all(**observable_data)
 
-    def get_result(self) -> List[FloatSolution]:
+    def result(self) -> List[FloatSolution]:
         return self.leaders.solution_list
 
     def get_name(self) -> str:
@@ -377,7 +377,7 @@ class SMPSORP(SMPSO):
         with self.lock:
             return self.reference_points
 
-    def get_result(self) -> List[FloatSolution]:
+    def result(self) -> List[FloatSolution]:
         result = []
 
         for leader in self.leaders:

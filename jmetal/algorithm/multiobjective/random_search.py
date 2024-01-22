@@ -35,7 +35,7 @@ class RandomSearch(Algorithm[S, R]):
         return {
             "PROBLEM": self.problem,
             "EVALUATIONS": self.evaluations,
-            "SOLUTIONS": self.get_result(),
+            "SOLUTIONS": self.result(),
             "COMPUTING_TIME": ctime,
         }
 
@@ -65,7 +65,7 @@ class RandomSearch(Algorithm[S, R]):
         observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
 
-    def get_result(self) -> List[S]:
+    def result(self) -> List[S]:
         return self.archive.solution_list
 
     def get_name(self) -> str:

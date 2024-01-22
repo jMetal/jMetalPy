@@ -40,7 +40,7 @@ if __name__ == "__main__":
     )
 
     algorithm.run()
-    front = algorithm.get_result()
+    front = algorithm.result()
 
     # Plot front
     plot_front = Plot(

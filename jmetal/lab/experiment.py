@@ -42,10 +42,10 @@ class Job:
 
         if output_path:
             file_name = os.path.join(output_path, "FUN.{}.tsv".format(self.run_tag))
-            print_function_values_to_file(self.algorithm.get_result(), filename=file_name)
+            print_function_values_to_file(self.algorithm.result(), filename=file_name)
 
             file_name = os.path.join(output_path, "VAR.{}.tsv".format(self.run_tag))
-            print_variables_to_file(self.algorithm.get_result(), filename=file_name)
+            print_variables_to_file(self.algorithm.result(), filename=file_name)
 
             file_name = os.path.join(output_path, "TIME.{}".format(self.run_tag))
             with open(file_name, "w+") as of:

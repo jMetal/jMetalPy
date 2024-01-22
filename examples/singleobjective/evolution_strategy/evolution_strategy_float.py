@@ -16,7 +16,7 @@ if __name__ == "__main__":
     )
 
     algorithm.run()
-    result = algorithm.get_result()
+    result = algorithm.result()
 
     print("Algorithm: " + algorithm.get_name())
     print("Problem: " + problem.get_name())

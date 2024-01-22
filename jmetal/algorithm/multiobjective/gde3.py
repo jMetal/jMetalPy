@@ -95,7 +95,7 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
     def stopping_condition_is_met(self) -> bool:
         return self.termination_criterion.is_met
 
-    def get_result(self) -> List[FloatSolution]:
+    def result(self) -> List[FloatSolution]:
         return self.solutions
 
     def get_name(self) -> str:

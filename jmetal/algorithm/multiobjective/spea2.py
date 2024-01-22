@@ -85,7 +85,7 @@ class SPEA2(GeneticAlgorithm[S, R]):
 
         return solutions
 
-    def get_result(self) -> R:
+    def result(self) -> R:
         return self.solutions
 
     def get_name(self) -> str:

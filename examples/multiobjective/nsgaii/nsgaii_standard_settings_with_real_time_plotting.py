@@ -32,7 +32,7 @@ if __name__ == "__main__":
     algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front))
 
     algorithm.run()
-    front = algorithm.get_result()
+    front = algorithm.result()
 
     # Plot front
     plot_front = Plot(

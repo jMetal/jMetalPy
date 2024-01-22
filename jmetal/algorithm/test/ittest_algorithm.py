@@ -55,7 +55,7 @@ class IntegrationTestCases(unittest.TestCase):
         )
 
         algorithm.run()
-        front = algorithm.get_result()
+        front = algorithm.result()
 
         hv = HyperVolume(reference_point=[1, 1])
         value = hv.compute([front[i].objectives for i in range(len(front))])
@@ -74,7 +74,7 @@ class IntegrationTestCases(unittest.TestCase):
         )
 
         algorithm.run()
-        front = algorithm.get_result()
+        front = algorithm.result()
 
         hv = HyperVolume(reference_point=[1, 1])
         value = hv.compute([front[i].objectives for i in range(len(front))])

@@ -91,7 +91,7 @@ class Algorithm(Generic[S, R], threading.Thread, ABC):
         self.total_computing_time = time.time() - self.start_computing_time
 
     @abstractmethod
-    def get_result(self) -> R:
+    def result(self) -> R:
         pass
 
     @abstractmethod
@@ -131,7 +131,7 @@ class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
         return {
             "PROBLEM": self.problem,
             "EVALUATIONS": self.evaluations,
-            "SOLUTIONS": self.get_result(),
+            "SOLUTIONS": self.result(),
             "COMPUTING_TIME": time.time() - self.start_computing_time,
         }
 
@@ -201,7 +201,7 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], A
         return {
             "PROBLEM": self.problem,
             "EVALUATIONS": self.evaluations,
-            "SOLUTIONS": self.get_result(),
+            "SOLUTIONS": self.result(),
             "COMPUTING_TIME": time.time() - self.start_computing_time,
         }
 

@@ -33,7 +33,7 @@ if __name__ == "__main__":
     )
 
     algorithm.run()
-    front = algorithm.get_result()
+    front = algorithm.result()
 
     print(f"Algorithm: {algorithm.get_name()}")
     print(f"Problem: {problem.get_name()}")

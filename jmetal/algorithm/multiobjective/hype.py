@@ -80,7 +80,7 @@ class HYPE(GeneticAlgorithm[S, R]):
         join_population = population + offspring_population
         return self.ranking_fitness.execute(join_population)
 
-    def get_result(self) -> R:
+    def result(self) -> R:
         return self.solutions
 
     def get_name(self) -> str:
