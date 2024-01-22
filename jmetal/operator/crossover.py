@@ -150,9 +150,9 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
             raise Exception("The distribution index is negative: " + str(distribution_index))
 
     def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
-        Check.that(issubclass(type(parents[0]), FloatSolution), "Solution type invalid: " + str(type(parents[0])))
-        Check.that(issubclass(type(parents[1]), FloatSolution), "Solution type invalid")
-        Check.that(len(parents) == 2, "The number of parents is not two: {}".format(len(parents)))
+        Check.that(type(parents[0]) is FloatSolution, "Solution type invalid: " + str(type(parents[0])))
+        Check.that(type(parents[1]) is FloatSolution, "Solution type invalid")
+        Check.that(len(parents) == 2, 'The number of parents is not two: {}'.format(len(parents)))
 
         offspring = copy.deepcopy(parents)
         rand = random.random()
@@ -302,6 +302,87 @@ class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
 
     def get_name(self) -> str:
         return "Integer SBX crossover"
+
+
+class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
+    __EPS = 1.0e-14
+
+    def __init__(self, probability: float, distribution_index: float = 20.0):
+        super(IntegerSBXCrossover, self).__init__(probability=probability)
+        self.distribution_index = distribution_index
+
+    def execute(self, parents: List[IntegerSolution]) -> List[IntegerSolution]:
+        Check.that(type(parents[0]) is IntegerSolution, "Solution type invalid")
+        Check.that(type(parents[1]) is IntegerSolution, "Solution type invalid")
+        Check.that(len(parents) == 2, 'The number of parents is not two: {}'.format(len(parents)))
+
+        offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
+        rand = random.random()
+
+        if rand <= self.probability:
+            for i in range(parents[0].number_of_variables):
+                value_x1, value_x2 = parents[0].variables[i], parents[1].variables[i]
+
+                if random.random() <= 0.5:
+                    if abs(value_x1 - value_x2) > self.__EPS:
+                        if value_x1 < value_x2:
+                            y1, y2 = value_x1, value_x2
+                        else:
+                            y1, y2 = value_x2, value_x1
+
+                        lower_bound, upper_bound = parents[0].lower_bound[i], parents[1].upper_bound[i]
+
+                        beta = 1.0 + (2.0 * (y1 - lower_bound) / (y2 - y1))
+                        alpha = 2.0 - pow(beta, -(self.distribution_index + 1.0))
+
+                        rand = random.random()
+                        if rand <= (1.0 / alpha):
+                            betaq = pow(rand * alpha, (1.0 / (self.distribution_index + 1.0)))
+                        else:
+                            betaq = pow(1.0 / (2.0 - rand * alpha), 1.0 / (self.distribution_index + 1.0))
+
+                        c1 = 0.5 * (y1 + y2 - betaq * (y2 - y1))
+                        beta = 1.0 + (2.0 * (upper_bound - y2) / (y2 - y1))
+                        alpha = 2.0 - pow(beta, -(self.distribution_index + 1.0))
+
+                        if rand <= (1.0 / alpha):
+                            betaq = pow((rand * alpha), (1.0 / (self.distribution_index + 1.0)))
+                        else:
+                            betaq = pow(1.0 / (2.0 - rand * alpha), 1.0 / (self.distribution_index + 1.0))
+
+                        c2 = 0.5 * (y1 + y2 + betaq * (y2 - y1))
+
+                        if c1 < lower_bound:
+                            c1 = lower_bound
+                        if c2 < lower_bound:
+                            c2 = lower_bound
+                        if c1 > upper_bound:
+                            c1 = upper_bound
+                        if c2 > upper_bound:
+                            c2 = upper_bound
+
+                        if random.random() <= 0.5:
+                            offspring[0].variables[i] = int(c2)
+                            offspring[1].variables[i] = int(c1)
+                        else:
+                            offspring[0].variables[i] = int(c1)
+                            offspring[1].variables[i] = int(c2)
+                    else:
+                        offspring[0].variables[i] = value_x1
+                        offspring[1].variables[i] = value_x2
+                else:
+                    offspring[0].variables[i] = value_x1
+                    offspring[1].variables[i] = value_x2
+        return offspring
+
+    def get_number_of_parents(self) -> int:
+        return 2
+
+    def get_number_of_children(self) -> int:
+        return 2
+
+    def get_name(self) -> str:
+        return 'Integer SBX crossover'
 
 
 class SPXCrossover(Crossover[BinarySolution, BinarySolution]):

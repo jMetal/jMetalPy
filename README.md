@@ -100,7 +100,11 @@ plot_front.plot(front, label='NSGAII-ZDT1', filename='NSGAII-ZDT1', format='png'
 <img src=docs/source/_static/NSGAII-ZDT1.png width=450 alt="Pareto front approximation">
 
 ## Features
+<<<<<<< HEAD
 The current release of jMetalPy (v1.5.7) contains the following components:
+=======
+The current release of jMetalPy (v1.5.4) contains the following components:
+>>>>>>> 8c0a6cf (Feature/mixed solution (#73))
 
 * Algorithms: local search, genetic algorithm, evolution strategy, simulated annealing, random search, NSGA-II, NSGA-III, SMPSO, OMOPSO, MOEA/D, MOEA/D-DRA, MOEA/D-IEpsilon, GDE3, SPEA2, HYPE, IBEA. Preference articulation-based algorithms (G-NSGA-II, G-GDE3, G-SPEA2, SMPSO/RP); Dynamic versions of NSGA-II, SMPSO, and GDE3.
 * Parallel computing based on Apache Spark and Dask.

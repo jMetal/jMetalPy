@@ -21,8 +21,8 @@ class EmptyCollectionException(RuntimeError):
 class InvalidProbabilityValueException(RuntimeError):
     def __init__(self, value: float):
         super(InvalidProbabilityValueException, self).__init__(
-            "The parameter " + str(value) + " is not a valid probability value"
-        )
+
+            "The parameter " + str(value) + " is not a valid probability value")
 
 
 class ValueOutOfRangeException(RuntimeError):
@@ -36,7 +36,6 @@ class ValueOutOfRangeException(RuntimeError):
             + str(highest_value)
             + ")"
         )
-
 
 class Check:
     @staticmethod

@@ -10,6 +10,7 @@ from jmetal.core.solution import (
 )
 from jmetal.util.ckecking import InvalidConditionException
 
+
 class SolutionTestCase(unittest.TestCase):
     def test_should_default_constructor_create_a_valid_solution(self):
         solution = Solution(2, 3)
@@ -89,10 +90,11 @@ class IntegerSolutionTestCase(unittest.TestCase):
         solution = IntegerSolution([], [], 2)
         self.assertIsNotNone(solution)
 
-
-    def test_should_default_constructor_create_a_valid_solution(self) -> None:
+    def test_should_default_constructor_create_a_valid_solution(self):
         solution = IntegerSolution([0, 5], [1, 2], 3, 0)
 
+        self.assertEqual(2, len(solution.variables))
+        self.assertEqual(3, len(solution.objectives))
         self.assertEqual(2, len(solution.variables))
         self.assertEqual(3, len(solution.objectives))
         self.assertEqual(0, len(solution.constraints))
@@ -118,6 +120,7 @@ class IntegerSolutionTestCase(unittest.TestCase):
         self.assertIs(solution.lower_bound, solution.lower_bound)
         self.assertIs(solution.upper_bound, solution.upper_bound)
         self.assertEqual(solution.attributes, new_solution.attributes)
+
 
 class CompositeSolutionTestCase(unittest.TestCase):
     def test_should_constructor_create_a_valid_not_none_composite_solution_composed_of_a_double_solution(self):
@@ -172,5 +175,6 @@ class CompositeSolutionTestCase(unittest.TestCase):
         self.assertEqual(solution.variables[0].variables, new_solution.variables[0].variables)
         self.assertEqual(solution.variables[1].variables, new_solution.variables[1].variables)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

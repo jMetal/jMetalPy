@@ -11,7 +11,8 @@ if __name__ == "__main__":
 
     max_evaluations = 1000
     algorithm = RandomSearch(
-        problem=problem, termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations)
+        problem=problem,
+        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations)
     )
 
     algorithm.run()

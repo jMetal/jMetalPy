@@ -1,4 +1,3 @@
-
 from jmetal.algorithm.multiobjective.gde3 import GDE3
 from jmetal.lab.visualization import InteractivePlot, Plot
 from jmetal.problem import ZDT2

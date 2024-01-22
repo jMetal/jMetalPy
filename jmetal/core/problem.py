@@ -24,8 +24,7 @@ class Problem(Generic[S], ABC):
     MAXIMIZE = 1
 
     def __init__(self):
-        #self.reference_front: List[S] = []
-
+        self.reference_front: List[S] = []
         self.directions: List[int] = []
         self.labels: List[str] = []
 
@@ -105,7 +104,6 @@ class FloatProblem(Problem[FloatSolution], ABC):
             random.uniform(self.lower_bound[i] * 1.0, self.upper_bound[i] * 1.0)
             for i in range(self.number_of_variables())
         ]
-
 
         return new_solution
 

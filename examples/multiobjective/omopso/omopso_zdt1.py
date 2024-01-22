@@ -27,7 +27,11 @@ if __name__ == "__main__":
             mutation_probability, perturbation=0.5, max_iterations=int(max_evaluations / swarm_size)
         ),
         leaders=CrowdingDistanceArchive(100),
+<<<<<<< HEAD
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
+=======
+        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations)
+>>>>>>> 8c0a6cf (Feature/mixed solution (#73))
     )
 
     algorithm.run()

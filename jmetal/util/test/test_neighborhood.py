@@ -283,5 +283,9 @@ class L5TestCases(unittest.TestCase):
         self.assertEqual(2, result.count(solution_list[2]))
 
 
+<<<<<<< HEAD
 if __name__ == "__main__":
+=======
+if __name__ == '__main__':
+>>>>>>> 8c0a6cf (Feature/mixed solution (#73))
     unittest.main()

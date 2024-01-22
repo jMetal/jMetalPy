@@ -180,9 +180,17 @@ class PlotFrontToFileObserver(Observer):
 
 
 class VisualizerObserver(Observer):
+<<<<<<< HEAD
     def __init__(
         self, reference_front: List[S] = None, reference_point: list = None, display_frequency: int = 1
     ) -> None:
+=======
+
+    def __init__(self,
+                 reference_front: List[S] = None,
+                 reference_point: list = None,
+                 display_frequency: int = 1) -> None:
+>>>>>>> 8c0a6cf (Feature/mixed solution (#73))
         self.figure = None
         self.display_frequency = display_frequency
 

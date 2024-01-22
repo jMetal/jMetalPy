@@ -10,10 +10,7 @@ from jmetal.util.density_estimator import KNearestNeighborDensityEstimator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
 from jmetal.util.ranking import StrengthRanking
-from jmetal.util.replacement import (
-    RankingAndDensityEstimatorReplacement,
-    RemovalPolicyType,
-)
+from jmetal.util.replacement import RankingAndDensityEstimatorReplacement, RemovalPolicyType
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar("S")

@@ -2,6 +2,7 @@ import unittest
 from typing import List
 
 from jmetal.core.operator import Mutation
+<<<<<<< HEAD
 from jmetal.core.solution import (
     BinarySolution,
     CompositeSolution,
@@ -21,6 +22,12 @@ from jmetal.util.ckecking import (
     InvalidConditionException,
     NoneParameterException,
 )
+=======
+from jmetal.core.solution import BinarySolution, FloatSolution, IntegerSolution, CompositeSolution
+from jmetal.operator.mutation import BitFlipMutation, UniformMutation, SimpleRandomMutation, PolynomialMutation, \
+    IntegerPolynomialMutation, CompositeMutation
+from jmetal.util.ckecking import NoneParameterException, EmptyCollectionException, InvalidConditionException
+>>>>>>> 8c0a6cf (Feature/mixed solution (#73))
 
 
 class PolynomialMutationTestMethods(unittest.TestCase):
@@ -294,7 +301,11 @@ class CompositeMutationTestCases(unittest.TestCase):
             CompositeMutation([])
 
     def test_should_constructor_create_a_valid_operator_when_adding_a_single_mutation_operator(self):
+<<<<<<< HEAD
         mutation: Mutation = PolynomialMutation(0.9, 20.0)
+=======
+        mutation: Mutation =  PolynomialMutation(0.9, 20.0)
+>>>>>>> 8c0a6cf (Feature/mixed solution (#73))
 
         operator = CompositeMutation([mutation])
         self.assertIsNotNone(operator)
@@ -324,5 +335,9 @@ class CompositeMutationTestCases(unittest.TestCase):
             operator.execute(composite_solution)
 
 
+<<<<<<< HEAD
 if __name__ == "__main__":
+=======
+if __name__ == '__main__':
+>>>>>>> 8c0a6cf (Feature/mixed solution (#73))
     unittest.main()

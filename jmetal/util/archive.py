@@ -4,13 +4,10 @@ from abc import ABC, abstractmethod
 from threading import Lock
 from typing import Generic, List, TypeVar
 
-from jmetal.util.comparator import (
-    Comparator,
-    DominanceComparator,
-    SolutionAttributeComparator, )
-from jmetal.util.density_estimator import CrowdingDistance, DensityEstimator
+from jmetal.util.comparator import Comparator, DominanceComparator, SolutionAttributeComparator
+from jmetal.util.density_estimator import DensityEstimator, CrowdingDistance
 
-S = TypeVar("S")
+S = TypeVar('S')
 
 """
 .. module:: archive

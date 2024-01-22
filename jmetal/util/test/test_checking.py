@@ -1,5 +1,6 @@
 import unittest
 
+<<<<<<< HEAD
 from jmetal.util.ckecking import (
     Check,
     InvalidConditionException,
@@ -10,6 +11,14 @@ from jmetal.util.ckecking import (
 
 
 class CheckingTestCases(unittest.TestCase):
+=======
+from jmetal.util.ckecking import Check, NoneParameterException, InvalidProbabilityValueException, \
+    ValueOutOfRangeException, InvalidConditionException
+
+
+class CheckingTestCases(unittest.TestCase):
+
+>>>>>>> 8c0a6cf (Feature/mixed solution (#73))
     def test_should_is_not_null_raise_an_exception(self) -> None:
         with self.assertRaises(NoneParameterException):
             Check.is_not_none(None)
@@ -35,5 +44,9 @@ class CheckingTestCases(unittest.TestCase):
             Check.that(False, "The expression is false")
 
 
+<<<<<<< HEAD
 if __name__ == "__main__":
+=======
+if __name__ == '__main__':
+>>>>>>> 8c0a6cf (Feature/mixed solution (#73))
     unittest.main()
