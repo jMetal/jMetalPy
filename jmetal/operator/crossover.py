@@ -175,18 +175,18 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
 
                         rand = random.random()
                         if rand <= (1.0 / alpha):
-                            betaq = pow(rand * alpha, (1.0 / (self.distribution_index + 1.0)))
+                            betaq = pow(abs(rand * alpha), (1.0 / (self.distribution_index + 1.0)))
                         else:
-                            betaq = pow(1.0 / (2.0 - rand * alpha), 1.0 / (self.distribution_index + 1.0))
+                            betaq = pow(abs(1.0 / (2.0 - rand * alpha)), 1.0 / (self.distribution_index + 1.0))
 
                         c1 = 0.5 * (y1 + y2 - betaq * (y2 - y1))
                         beta = 1.0 + (2.0 * (upper_bound - y2) / (y2 - y1))
                         alpha = 2.0 - pow(beta, -(self.distribution_index + 1.0))
 
                         if rand <= (1.0 / alpha):
-                            betaq = pow((rand * alpha), (1.0 / (self.distribution_index + 1.0)))
+                            betaq = pow(abs(rand * alpha), (1.0 / (self.distribution_index + 1.0)))
                         else:
-                            betaq = pow(1.0 / (2.0 - rand * alpha), 1.0 / (self.distribution_index + 1.0))
+                            betaq = pow(abs(1.0 / (2.0 - rand * alpha)), 1.0 / (self.distribution_index + 1.0))
 
                         c2 = 0.5 * (y1 + y2 + betaq * (y2 - y1))
 
