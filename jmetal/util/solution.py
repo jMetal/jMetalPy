@@ -68,11 +68,11 @@ def print_variables_to_file(solutions, filename: str):
 
 
 def print_variables_to_screen(solutions):
-    if type(solutions) is not list:
+    if not isinstance(solutions, list):
         solutions = [solutions]
 
-    for solution in solutions:
-        print(solution.variables[0])
+    for pos, ind_sol in enumerate(solutions):
+        print(f'{pos}: {ind_sol.variables}')
 
 
 def print_function_values_to_file(solutions, filename: str):
@@ -94,10 +94,8 @@ def print_function_values_to_file(solutions, filename: str):
 
 
 def print_function_values_to_screen(solutions):
-    if type(solutions) is not list:
+    if not isinstance(solutions, list):
         solutions = [solutions]
 
-    for solution in solutions:
-        print(str(solutions.index(solution)) + ": ", sep="  ", end="", flush=True)
-        print(solution.objectives, sep="  ", end="", flush=True)
-        print()
+    for pos, ind_sol in enumerate(solutions):
+        print(f'{pos}: {ind_sol.objectives}')
