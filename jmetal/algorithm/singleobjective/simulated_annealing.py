@@ -2,7 +2,7 @@ import copy
 import random
 import threading
 import time
-from typing import TypeVar, List
+from typing import List, TypeVar
 
 import numpy
 
@@ -14,8 +14,8 @@ from jmetal.core.solution import Solution
 from jmetal.util.generator import Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
-S = TypeVar('S')
-R = TypeVar('R')
+S = TypeVar("S")
+R = TypeVar("R")
 
 """
 .. module:: simulated_annealing
@@ -27,12 +27,13 @@ R = TypeVar('R')
 
 
 class SimulatedAnnealing(Algorithm[S, R], threading.Thread):
-
-    def __init__(self,
-                 problem: Problem[S],
-                 mutation: Mutation,
-                 termination_criterion: TerminationCriterion,
-                 solution_generator: Generator = store.default_generator):
+    def __init__(
+        self,
+        problem: Problem[S],
+        mutation: Mutation,
+        termination_criterion: TerminationCriterion,
+        solution_generator: Generator = store.default_generator,
+    ):
         super(SimulatedAnnealing, self).__init__()
         self.problem = problem
         self.mutation = mutation
@@ -62,9 +63,8 @@ class SimulatedAnnealing(Algorithm[S, R], threading.Thread):
         mutated_solution = self.evaluate([mutated_solution])[0]
 
         acceptance_probability = self.compute_acceptance_probability(
-            self.solutions[0].objectives[0],
-            mutated_solution.objectives[0],
-            self.temperature)
+            self.solutions[0].objectives[0], mutated_solution.objectives[0], self.temperature
+        )
 
         if acceptance_probability > random.random():
             self.solutions[0] = mutated_solution
@@ -82,16 +82,20 @@ class SimulatedAnnealing(Algorithm[S, R], threading.Thread):
     def update_progress(self) -> None:
         self.evaluations += 1
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
 
-    def get_observable_data(self) -> dict:
+    def observable_data(self) -> dict:
         ctime = time.time() - self.start_computing_time
-        return {'PROBLEM': self.problem, 'EVALUATIONS': self.evaluations, 'SOLUTIONS': self.get_result(),
-                'COMPUTING_TIME': ctime}
+        return {
+            "PROBLEM": self.problem,
+            "EVALUATIONS": self.evaluations,
+            "SOLUTIONS": self.result(),
+            "COMPUTING_TIME": ctime,
+        }
 
-    def get_result(self) -> R:
+    def result(self) -> R:
         return self.solutions[0]
 
     def get_name(self) -> str:
-        return 'Simulated Annealing'
+        return "Simulated Annealing"

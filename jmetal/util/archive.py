@@ -2,7 +2,7 @@ import copy
 import random
 from abc import ABC, abstractmethod
 from threading import Lock
-from typing import TypeVar, Generic, List
+from typing import Generic, List, TypeVar
 
 from jmetal.util.comparator import Comparator, DominanceComparator, SolutionAttributeComparator
 from jmetal.util.density_estimator import DensityEstimator, CrowdingDistance
@@ -19,7 +19,6 @@ S = TypeVar('S')
 
 
 class Archive(Generic[S], ABC):
-
     def __init__(self):
         self.solution_list: List[S] = []
 
@@ -38,16 +37,13 @@ class Archive(Generic[S], ABC):
 
 
 class BoundedArchive(Archive[S]):
-
-    def __init__(self,
-                 maximum_size: int,
-                 comparator: Comparator[S] = None,
-                 density_estimator: DensityEstimator = None):
+    def __init__(self, maximum_size: int, comparator: Comparator[S] = None, density_estimator: DensityEstimator = None,
+                 dominance_comparator: Comparator[S] = DominanceComparator()):
         super(BoundedArchive, self).__init__()
         self.maximum_size = maximum_size
         self.comparator = comparator
         self.density_estimator = density_estimator
-        self.non_dominated_solution_archive = NonDominatedSolutionsArchive()
+        self.non_dominated_solution_archive = NonDominatedSolutionsArchive(dominance_comparator=dominance_comparator)
         self.solution_list = self.non_dominated_solution_archive.solution_list
 
     def compute_density_estimator(self):
@@ -67,7 +63,7 @@ class BoundedArchive(Archive[S]):
     def __find_worst_solution(self, solution_list: List[S]) -> S:
         if solution_list is None:
             raise Exception("The solution list is None")
-        elif len(solution_list) is 0:
+        elif len(solution_list) == 0:
             raise Exception("The solution list is empty")
 
         worst_solution = solution_list[0]
@@ -82,7 +78,6 @@ class BoundedArchive(Archive[S]):
 
 
 class NonDominatedSolutionsArchive(Archive[S]):
-
     def __init__(self, dominance_comparator: Comparator = DominanceComparator()):
         super(NonDominatedSolutionsArchive, self).__init__()
         self.comparator = dominance_comparator
@@ -119,22 +114,23 @@ class NonDominatedSolutionsArchive(Archive[S]):
 
 
 class CrowdingDistanceArchive(BoundedArchive[S]):
-
-    def __init__(self,
-                 maximum_size: int):
+    def __init__(self, maximum_size: int, dominance_comparator=DominanceComparator()):
         super(CrowdingDistanceArchive, self).__init__(
             maximum_size=maximum_size,
             comparator=SolutionAttributeComparator("crowding_distance", lowest_is_best=False),
-            density_estimator=CrowdingDistance())
+            dominance_comparator=dominance_comparator,
+            density_estimator=CrowdingDistance(),
+        )
 
 
 class ArchiveWithReferencePoint(BoundedArchive[S]):
-
-    def __init__(self,
-                 maximum_size: int,
-                 reference_point: List[float],
-                 comparator: Comparator[S],
-                 density_estimator: DensityEstimator):
+    def __init__(
+            self,
+            maximum_size: int,
+            reference_point: List[float],
+            comparator: Comparator[S],
+            density_estimator: DensityEstimator,
+    ):
         super(ArchiveWithReferencePoint, self).__init__(maximum_size, comparator, density_estimator)
         self.__reference_point = reference_point
         self.__comparator = comparator
@@ -172,9 +168,9 @@ class ArchiveWithReferencePoint(BoundedArchive[S]):
     def filter(self):
         # In case of having at least a solution which is non-dominated with the reference point, filter it
         if len(self.solution_list) > 1:
-            self.solution_list[:] = \
-                [sol for sol in self.solution_list
-                 if self.__dominance_test(sol.objectives, self.__reference_point) != 0]
+            self.solution_list[:] = [
+                sol for sol in self.solution_list if self.__dominance_test(sol.objectives, self.__reference_point) != 0
+            ]
 
     def update_reference_point(self, new_reference_point) -> None:
         with self.lock:
@@ -212,12 +208,10 @@ class ArchiveWithReferencePoint(BoundedArchive[S]):
 
 
 class CrowdingDistanceArchiveWithReferencePoint(ArchiveWithReferencePoint[S]):
-
-    def __init__(self,
-                 maximum_size: int,
-                 reference_point: List[float]):
+    def __init__(self, maximum_size: int, reference_point: List[float]):
         super(CrowdingDistanceArchiveWithReferencePoint, self).__init__(
             maximum_size=maximum_size,
             reference_point=reference_point,
             comparator=SolutionAttributeComparator("crowding_distance", lowest_is_best=False),
-            density_estimator=CrowdingDistance())
+            density_estimator=CrowdingDistance(),
+        )

@@ -1,8 +1,8 @@
-from typing import TypeVar, List
+from typing import List, TypeVar
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
-from jmetal.core.operator import Mutation, Crossover
+from jmetal.core.operator import Crossover, Mutation
 from jmetal.core.problem import Problem
 from jmetal.operator import BinaryTournamentSelection
 from jmetal.util.comparator import Comparator, MultiComparator
@@ -13,8 +13,8 @@ from jmetal.util.ranking import StrengthRanking
 from jmetal.util.replacement import RankingAndDensityEstimatorReplacement, RemovalPolicyType
 from jmetal.util.termination_criterion import TerminationCriterion
 
-S = TypeVar('S')
-R = TypeVar('R')
+S = TypeVar("S")
+R = TypeVar("R")
 
 """
 .. module:: SPEA2
@@ -33,25 +33,27 @@ R = TypeVar('R')
 
 
 class SPEA2(GeneticAlgorithm[S, R]):
-
-    def __init__(self,
-                 problem: Problem,
-                 population_size: int,
-                 offspring_population_size: int,
-                 mutation: Mutation,
-                 crossover: Crossover,
-                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
-                 population_generator: Generator = store.default_generator,
-                 population_evaluator: Evaluator = store.default_evaluator,
-                 dominance_comparator: Comparator = store.default_comparator):
+    def __init__(
+        self,
+        problem: Problem,
+        population_size: int,
+        offspring_population_size: int,
+        mutation: Mutation,
+        crossover: Crossover,
+        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        population_generator: Generator = store.default_generator,
+        population_evaluator: Evaluator = store.default_evaluator,
+        dominance_comparator: Comparator = store.default_comparator,
+    ):
         """
         :param problem: The problem to solve.
         :param population_size: Size of the population.
         :param mutation: Mutation operator (see :py:mod:`jmetal.operator.mutation`).
         :param crossover: Crossover operator (see :py:mod:`jmetal.operator.crossover`).
         """
-        multi_comparator = MultiComparator([StrengthRanking.get_comparator(),
-                                            KNearestNeighborDensityEstimator.get_comparator()])
+        multi_comparator = MultiComparator(
+            [StrengthRanking.get_comparator(), KNearestNeighborDensityEstimator.get_comparator()]
+        )
         selection = BinaryTournamentSelection(comparator=multi_comparator)
 
         super(SPEA2, self).__init__(
@@ -63,12 +65,12 @@ class SPEA2(GeneticAlgorithm[S, R]):
             selection=selection,
             termination_criterion=termination_criterion,
             population_evaluator=population_evaluator,
-            population_generator=population_generator
+            population_generator=population_generator,
         )
         self.dominance_comparator = dominance_comparator
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
-        """ This method joins the current and offspring populations to produce the population of the next generation
+        """This method joins the current and offspring populations to produce the population of the next generation
         by applying the ranking and crowding distance selection.
 
         :param population: Parent population.
@@ -83,8 +85,8 @@ class SPEA2(GeneticAlgorithm[S, R]):
 
         return solutions
 
-    def get_result(self) -> R:
+    def result(self) -> R:
         return self.solutions
 
     def get_name(self) -> str:
-        return 'SPEA2'
+        return "SPEA2"

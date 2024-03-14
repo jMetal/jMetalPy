@@ -1,15 +1,18 @@
-from typing import TypeVar, List
+from functools import cmp_to_key
+from typing import List, TypeVar
 
 from jmetal.config import store
 from jmetal.core.algorithm import EvolutionaryAlgorithm
-from jmetal.core.operator import Mutation, Crossover, Selection
+from jmetal.core.operator import Crossover, Mutation, Selection
 from jmetal.core.problem import Problem
+from jmetal.operator import BinaryTournamentSelection
+from jmetal.util.comparator import Comparator, ObjectiveComparator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
-S = TypeVar('S')
-R = TypeVar('R')
+S = TypeVar("S")
+R = TypeVar("R")
 
 """
 .. module:: genetic_algorithm
@@ -20,23 +23,26 @@ R = TypeVar('R')
 
 
 class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
-
-    def __init__(self,
-                 problem: Problem,
-                 population_size: int,
-                 offspring_population_size: int,
-                 mutation: Mutation,
-                 crossover: Crossover,
-                 selection: Selection,
-                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
-                 population_generator: Generator = store.default_generator,
-                 population_evaluator: Evaluator = store.default_evaluator):
+    def __init__(
+        self,
+        problem: Problem,
+        population_size: int,
+        offspring_population_size: int,
+        mutation: Mutation,
+        crossover: Crossover,
+        selection: Selection = BinaryTournamentSelection(ObjectiveComparator(0)),
+        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        population_generator: Generator = store.default_generator,
+        population_evaluator: Evaluator = store.default_evaluator,
+            solution_comparator: Comparator = ObjectiveComparator(0)
+    ):
         super(GeneticAlgorithm, self).__init__(
-            problem=problem,
-            population_size=population_size,
-            offspring_population_size=offspring_population_size)
+            problem=problem, population_size=population_size, offspring_population_size=offspring_population_size
+        )
         self.mutation_operator = mutation
         self.crossover_operator = crossover
+        self.solution_comparator = solution_comparator
+
         self.selection_operator = selection
 
         self.population_generator = population_generator
@@ -45,16 +51,17 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         self.termination_criterion = termination_criterion
         self.observable.register(termination_criterion)
 
-        self.mating_pool_size = \
-            self.offspring_population_size * \
-            self.crossover_operator.get_number_of_parents() // self.crossover_operator.get_number_of_children()
+        self.mating_pool_size = (
+            self.offspring_population_size
+            * self.crossover_operator.get_number_of_parents()
+            // self.crossover_operator.get_number_of_children()
+        )
 
         if self.mating_pool_size < self.crossover_operator.get_number_of_children():
             self.mating_pool_size = self.crossover_operator.get_number_of_children()
 
     def create_initial_solutions(self) -> List[S]:
-        return [self.population_generator.new(self.problem)
-                for _ in range(self.population_size)]
+        return [self.population_generator.new(self.problem) for _ in range(self.population_size)]
 
     def evaluate(self, population: List[S]):
         return self.population_evaluator.evaluate(population, self.problem)
@@ -65,7 +72,7 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
     def selection(self, population: List[S]):
         mating_population = []
 
-        for i in range(self.mating_pool_size):
+        for _ in range(self.mating_pool_size):
             solution = self.selection_operator.execute(population)
             mating_population.append(solution)
 
@@ -75,7 +82,7 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         number_of_parents_to_combine = self.crossover_operator.get_number_of_parents()
 
         if len(mating_population) % number_of_parents_to_combine != 0:
-            raise Exception('Wrong number of parents')
+            raise Exception("Wrong number of parents")
 
         offspring_population = []
         for i in range(0, self.offspring_population_size, number_of_parents_to_combine):
@@ -96,12 +103,12 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
         population.extend(offspring_population)
 
-        population.sort(key=lambda s: s.objectives[0])
+        population.sort(key=cmp_to_key(self.solution_comparator.compare))
 
-        return population[:self.population_size]
+        return population[: self.population_size]
 
-    def get_result(self) -> R:
+    def result(self) -> R:
         return self.solutions[0]
 
     def get_name(self) -> str:
-        return 'Genetic algorithm'
+        return "Genetic algorithm"

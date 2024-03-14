@@ -1,10 +1,9 @@
 import unittest
 
-from jmetal.util.aggregative_function import WeightedSum
+from jmetal.util.aggregation_function import WeightedSum
 
 
 class WeightedSumTestCases(unittest.TestCase):
-
     def test_should_aggregative_sum_work_properly_with_2D_vectors(self) -> None:
         aggregative_function = WeightedSum()
 
@@ -13,5 +12,5 @@ class WeightedSumTestCases(unittest.TestCase):
         self.assertEqual(1.5 / 2.0 + 2.9 / 2.0, aggregative_function.compute([1.5, 2.9], [0.5, 0.5]))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

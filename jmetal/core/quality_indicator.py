@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
+from typing import Iterable
 
 import numpy as np
 from scipy import spatial
 
 
 class QualityIndicator(ABC):
-
     def __init__(self, is_minimization: bool):
         self.is_minimization = is_minimization
 
@@ -40,10 +40,10 @@ class FitnessValue(QualityIndicator):
         return mean
 
     def get_name(self) -> str:
-        return 'Fitness'
+        return "Fitness"
 
     def get_short_name(self) -> str:
-        return 'Fitness'
+        return "Fitness"
 
 
 class GenerationalDistance(QualityIndicator):
@@ -57,17 +57,17 @@ class GenerationalDistance(QualityIndicator):
 
     def compute(self, solutions: np.array):
         if self.reference_front is None:
-            raise Exception('Reference front is none')
+            raise Exception("Reference front is none")
 
         distances = spatial.distance.cdist(solutions, self.reference_front)
 
         return np.mean(np.min(distances, axis=1))
 
     def get_short_name(self) -> str:
-        return 'GD'
+        return "GD"
 
     def get_name(self) -> str:
-        return 'Generational Distance'
+        return "Generational Distance"
 
 
 class InvertedGenerationalDistance(QualityIndicator):
@@ -77,17 +77,17 @@ class InvertedGenerationalDistance(QualityIndicator):
 
     def compute(self, solutions: np.array):
         if self.reference_front is None:
-            raise Exception('Reference front is none')
+            raise Exception("Reference front is none")
 
         distances = spatial.distance.cdist(self.reference_front, solutions)
 
         return np.mean(np.min(distances, axis=1))
 
     def get_short_name(self) -> str:
-        return 'IGD'
+        return "IGD"
 
     def get_name(self) -> str:
-        return 'Inverted Generational Distance'
+        return "Inverted Generational Distance"
 
 
 class EpsilonIndicator(QualityIndicator):
@@ -96,18 +96,17 @@ class EpsilonIndicator(QualityIndicator):
         self.reference_front = reference_front
 
     def compute(self, front: np.array) -> float:
-        return max([min(
-            [max([s2[k] - s1[k] for k in range(len(s2))]) for s2 in front]) for s1 in self.reference_front])
+        return max([min([max([s2[k] - s1[k] for k in range(len(s2))]) for s2 in front]) for s1 in self.reference_front])
 
     def get_short_name(self) -> str:
-        return 'EP'
+        return "EP"
 
     def get_name(self) -> str:
         return "Additive Epsilon"
 
 
 class HyperVolume(QualityIndicator):
-    """ Hypervolume computation based on variant 3 of the algorithm in the paper:
+    """Hypervolume computation based on variant 3 of the algorithm in the paper:
 
     * C. M. Fonseca, L. Paquete, and M. Lopez-Ibanez. An improved dimension-sweep
       algorithm for the hypervolume indicator. In IEEE Congress on Evolutionary
@@ -192,7 +191,8 @@ class HyperVolume(QualityIndicator):
                 q = q.prev[dim_index]
             q = p.prev[dim_index]
             while length > 1 and (
-                    q.cargo[dim_index] > bounds[dim_index] or q.prev[dim_index].cargo[dim_index] >= bounds[dim_index]):
+                q.cargo[dim_index] > bounds[dim_index] or q.prev[dim_index].cargo[dim_index] >= bounds[dim_index]
+            ):
                 p = q
                 remove(p, dim_index, bounds)
                 q = p.prev[dim_index]
@@ -202,10 +202,11 @@ class HyperVolume(QualityIndicator):
             q_prev_dim_index = q.prev[dim_index]
             if length > 1:
                 hvol = q_prev_dim_index.volume[dim_index] + q_prev_dim_index.area[dim_index] * (
-                        q_cargo[dim_index] - q_prev_dim_index.cargo[dim_index])
+                    q_cargo[dim_index] - q_prev_dim_index.cargo[dim_index]
+                )
             else:
                 q_area[0] = 1
-                q_area[1:dim_index + 1] = [q_area[i] * -q_cargo[i] for i in range(dim_index)]
+                q_area[1 : dim_index + 1] = [q_area[i] * -q_cargo[i] for i in range(dim_index)]
             q.volume[dim_index] = hvol
             if q.ignore >= dim_index:
                 q_area[dim_index] = q_prev_dim_index.area[dim_index]
@@ -251,7 +252,7 @@ class HyperVolume(QualityIndicator):
         nodes[:] = [node for (_, node) in decorated]
 
     def get_short_name(self) -> str:
-        return 'HV'
+        return "HV"
 
     def get_name(self) -> str:
         return "Hypervolume (Fonseca et al. implementation)"
@@ -265,7 +266,6 @@ class MultiList:
     """
 
     class Node:
-
         def __init__(self, number_lists, cargo=None):
             self.cargo = cargo
             self.next = [None] * number_lists
@@ -278,8 +278,7 @@ class MultiList:
             return str(self.cargo)
 
     def __init__(self, number_lists):
-        """ Builds 'numberLists' doubly linked lists.
-        """
+        """Builds 'numberLists' doubly linked lists."""
         self.number_lists = number_lists
         self.sentinel = MultiList.Node(number_lists)
         self.sentinel.next = [self.sentinel] * number_lists
@@ -314,7 +313,7 @@ class MultiList:
         return length
 
     def append(self, node, index):
-        """ Appends a node to the end of the list at the given index."""
+        """Appends a node to the end of the list at the given index."""
         last_but_one = self.sentinel.prev[index]
         node.next[index] = self.sentinel
         node.prev[index] = last_but_one
@@ -323,7 +322,7 @@ class MultiList:
         last_but_one.next[index] = node
 
     def extend(self, nodes, index):
-        """ Extends the list at the given index with the nodes."""
+        """Extends the list at the given index with the nodes."""
         sentinel = self.sentinel
         for node in nodes:
             last_but_one = sentinel.prev[index]
@@ -334,7 +333,7 @@ class MultiList:
             last_but_one.next[index] = node
 
     def remove(self, node, index, bounds):
-        """ Removes and returns 'node' from all lists in [0, 'index'[."""
+        """Removes and returns 'node' from all lists in [0, 'index'[."""
         for i in range(index):
             predecessor = node.prev[i]
             successor = node.next[i]
@@ -345,7 +344,7 @@ class MultiList:
         return node
 
     def reinsert(self, node, index, bounds):
-        """ Inserts 'node' at the position it had in all lists in [0, 'index'[
+        """Inserts 'node' at the position it had in all lists in [0, 'index'[
         before it was removed. This method assumes that the next and previous
         nodes of the node that is reinserted are in the list.
         """
@@ -354,3 +353,33 @@ class MultiList:
             node.next[i].prev[i] = node
             if bounds[i] > node.cargo[i]:
                 bounds[i] = node.cargo[i]
+
+
+class NormalizedHyperVolume(QualityIndicator):
+    """Implementation of the normalized hypervolume, which is calculated as follows:
+
+    relative hypervolume = 1 - (HV of the front / HV of the reference front).
+
+    Minimization is implicitly assumed here!
+    """
+
+    def __init__(self, reference_point: Iterable[float], reference_front: np.array):
+        """Delegates the computation of the HyperVolume to `jMetal.core.quality_indicator.HyperVolume`.
+
+        Fails if the HV of the reference front is zero."""
+        self.reference_point = reference_point
+        self._hv = HyperVolume(reference_point=reference_point)
+        self._reference_hypervolume = self._hv.compute(reference_front)
+
+        assert self._reference_hypervolume != 0, "Hypervolume of reference front is zero"
+
+    def compute(self, solutions: np.array) -> float:
+        hv = self._hv.compute(solutions=solutions)
+
+        return 1 - (hv / self._reference_hypervolume)
+
+    def get_short_name(self) -> str:
+        return "NHV"
+
+    def get_name(self) -> str:
+        return "Normalized Hypervolume"

@@ -1,5 +1,5 @@
 import logging
-from typing import TypeVar, List
+from typing import List, TypeVar
 
 import matplotlib
 from matplotlib import pyplot as plt
@@ -7,9 +7,9 @@ from mpl_toolkits.mplot3d import Axes3D
 
 from jmetal.lab.visualization.plotting import Plot
 
-LOGGER = logging.getLogger('jmetal')
+logger = logging.getLogger(__name__)
 
-S = TypeVar('S')
+S = TypeVar("S") 
 
 """
 .. module:: streaming
@@ -21,12 +21,13 @@ S = TypeVar('S')
 
 
 class StreamingPlot:
-
-    def __init__(self,
-                 plot_title: str = 'Pareto front approximation',
-                 reference_front: List[S] = None,
-                 reference_point: list = None,
-                 axis_labels: list = None):
+    def __init__(
+        self,
+        plot_title: str = "Pareto front approximation",
+        reference_front: List[S] = None,
+        reference_point: list = None,
+        axis_labels: list = None,
+    ):
         """
         :param plot_title: Title of the graph.
         :param axis_labels: List of axis labels.
@@ -44,6 +45,7 @@ class StreamingPlot:
         self.dimension = None
 
         import warnings
+
         warnings.filterwarnings("ignore", ".*GUI is implemented.*")
 
         self.fig, self.ax = plt.subplots()
@@ -60,24 +62,30 @@ class StreamingPlot:
         # If any reference point, plot
         if self.reference_point:
             for point in self.reference_point:
-                self.scp, = self.ax.plot(*[[p] for p in point], c='r', ls='None', marker='*', markersize=3)
+                (self.scp,) = self.ax.plot(*[[p] for p in point], c="r", ls="None", marker="*", markersize=3)
 
         # If any reference front, plot
         if self.reference_front:
             rpoints, _ = Plot.get_points(self.reference_front)
-            self.scf, = self.ax.plot(*[rpoints[column].tolist() for column in rpoints.columns.values],
-                                     c='k', ls='None', marker='*', markersize=1)
+            (self.scf,) = self.ax.plot(
+                *[rpoints[column].tolist() for column in rpoints.columns.values],
+                c="k",
+                ls="None",
+                marker="*",
+                markersize=1
+            )
 
         # Plot data
-        self.sc, = self.ax.plot(*[points[column].tolist() for column in points.columns.values],
-                                ls='None', marker='o', markersize=4)
+        (self.sc,) = self.ax.plot(
+            *[points[column].tolist() for column in points.columns.values], ls="None", marker="o", markersize=4
+        )
 
         # Show plot
         plt.show(block=False)
 
     def update(self, front: List[S], reference_point: list = None) -> None:
         if self.sc is None:
-            raise Exception('Figure is none')
+            raise Exception("Figure is none")
 
         points, dimension = Plot.get_points(front)
 
@@ -104,30 +112,32 @@ class StreamingPlot:
         pause(0.01)
 
     def create_layout(self, dimension: int) -> None:
-        self.fig.canvas.set_window_title(self.plot_title)
+        logger.info("Creating figure layout")
+
+        self.fig.canvas.manager.set_window_title(self.plot_title)
         self.fig.suptitle(self.plot_title, fontsize=16)
 
         if dimension == 2:
             # Stylize axis
-            self.ax.spines['top'].set_visible(False)
-            self.ax.spines['right'].set_visible(False)
+            self.ax.spines["top"].set_visible(False)
+            self.ax.spines["right"].set_visible(False)
             self.ax.get_xaxis().tick_bottom()
             self.ax.get_yaxis().tick_left()
         elif dimension == 3:
             self.ax = Axes3D(self.fig)
-            self.ax.autoscale(enable=True, axis='both')
+            self.ax.autoscale(enable=True, axis="both")
         else:
-            raise Exception('Dimension must be either 2 or 3')
+            raise Exception("Dimension must be either 2 or 3")
 
         self.ax.set_autoscale_on(True)
         self.ax.autoscale_view(True, True, True)
 
         # Style options
-        self.ax.grid(color='#f0f0f5', linestyle='-', linewidth=0.5, alpha=0.5)
+        self.ax.grid(color="#f0f0f5", linestyle="-", linewidth=0.5, alpha=0.5)
 
 
 def pause(interval: float):
-    backend = plt.rcParams['backend']
+    backend = plt.rcParams["backend"]
 
     if backend in matplotlib.rcsetup.interactive_bk:
         figManager = matplotlib._pylab_helpers.Gcf.get_active()

@@ -1,16 +1,18 @@
+import os
 import unittest
-from os.path import dirname, join
 from pathlib import Path
 
 import numpy as np
-from jmetal.core.quality_indicator import GenerationalDistance, InvertedGenerationalDistance, EpsilonIndicator, \
-    HyperVolume
+
+from jmetal.core.quality_indicator import (EpsilonIndicator,
+                                           GenerationalDistance, HyperVolume,
+                                           InvertedGenerationalDistance,
+                                           NormalizedHyperVolume)
+
+DIRNAME = os.path.dirname(os.path.abspath(__file__))
 
 
 class GenerationalDistanceTestCases(unittest.TestCase):
-    """ Class including unit tests for class GenerationalDistance
-    """
-
     def test_should_constructor_create_a_non_null_object(self) -> None:
         indicator = GenerationalDistance([])
         self.assertIsNotNone(indicator)
@@ -132,9 +134,6 @@ class GenerationalDistanceTestCases(unittest.TestCase):
 
 
 class InvertedGenerationalDistanceTestCases(unittest.TestCase):
-    """ Class including unit tests for class InvertedGenerationalDistance
-    """
-
     def test_should_constructor_create_a_non_null_object(self) -> None:
         indicator = InvertedGenerationalDistance([])
         self.assertIsNotNone(indicator)
@@ -231,19 +230,12 @@ class InvertedGenerationalDistanceTestCases(unittest.TestCase):
 
 
 class EpsilonIndicatorTestCases(unittest.TestCase):
-    """ Class including unit tests for class EpsilonIndicator
-    """
-
     def test_should_constructor_create_a_non_null_object(self) -> None:
         indicator = EpsilonIndicator(np.array([[1.0, 1.0], [2.0, 2.0]]))
         self.assertIsNotNone(indicator)
 
 
 class HyperVolumeTestCases(unittest.TestCase):
-
-    def setUp(self):
-        self.file_path = dirname(join(dirname(__file__)))
-
     def test_should_hypervolume_return_5_0(self):
         reference_point = [2, 2, 2]
 
@@ -255,15 +247,13 @@ class HyperVolumeTestCases(unittest.TestCase):
         self.assertEqual(5.0, value)
 
     def test_should_hypervolume_return_the_correct_value_when_applied_to_the_ZDT1_reference_front(self):
-        filename = 'jmetal/core/test/ZDT1.pf'
+        filepath = Path(DIRNAME, "ZDT1.pf")
         front = []
-        if Path(filename).is_file():
-            with open(filename) as file:
-                for line in file:
-                    vector = [float(x) for x in line.split()]
-                    front.append(vector)
-        else:
-            print("error")
+
+        with open(filepath) as file:
+            for line in file:
+                vector = [float(x) for x in line.split()]
+                front.append(vector)
 
         reference_point = [1, 1]
 
@@ -273,5 +263,35 @@ class HyperVolumeTestCases(unittest.TestCase):
         self.assertAlmostEqual(0.666, value, delta=0.001)
 
 
-if __name__ == '__main__':
+class NormalizedHyperVolumeTestCases(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        filepath = Path(DIRNAME, "ZDT1.pf")
+        front = []
+
+        with open(filepath) as file:
+            for line in file:
+                vector = [float(x) for x in line.split()]
+                front.append(vector)
+
+        cls._front = np.array(front)
+
+    def test_should_hypervolume_return_zero_when_providing_reference_front(self):
+        reference_point = [1, 1]
+        reference_front = self._front
+
+        hv = NormalizedHyperVolume(reference_point, reference_front=reference_front)
+        value = hv.compute(reference_front)
+
+        self.assertAlmostEqual(0, value, delta=0.001)
+
+    def test_should_raise_AssertionError_when_reference_front_hv_is_zero(self):
+        reference_point = [0, 0]
+        reference_front = self._front
+
+        with self.assertRaises(AssertionError):
+            _ = NormalizedHyperVolume(reference_point, reference_front=reference_front)
+
+
+if __name__ == "__main__":
     unittest.main()

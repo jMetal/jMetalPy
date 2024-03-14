@@ -15,10 +15,17 @@ from jmetal.core.solution import BinarySolution
 
 
 class Knapsack(BinaryProblem):
-    """ Class representing Knapsack Problem. """
+    """Class representing Knapsack Problem."""
 
-    def __init__(self, number_of_items: int = 50, capacity: float = 1000, weights: list = None,
-                 profits: list = None, from_file: bool = False, filename: str = None):
+    def __init__(
+        self,
+        number_of_items: int = 50,
+        capacity: float = 1000,
+        weights: list = None,
+        profits: list = None,
+        from_file: bool = False,
+        filename: str = None,
+    ):
         super(Knapsack, self).__init__()
 
         if from_file:
@@ -29,10 +36,16 @@ class Knapsack(BinaryProblem):
             self.profits = profits
             self.number_of_bits = number_of_items
 
-        self.number_of_variables = 1
         self.obj_directions = [self.MAXIMIZE]
-        self.number_of_objectives = 1
-        self.number_of_constraints = 1
+
+    def number_of_variables(self) -> int:
+        return 1
+
+    def number_of_objectives(self) -> int:
+        return 1
+
+    def number_of_constraints(self) -> int:
+        return 1
 
     def __read_from_file(self, filename: str):
         """
@@ -48,7 +61,7 @@ class Knapsack(BinaryProblem):
         """
 
         if filename is None:
-            raise FileNotFoundError('Filename can not be None')
+            raise FileNotFoundError("Filename can not be None")
 
         with open(filename) as file:
             lines = file.readlines()
@@ -78,14 +91,13 @@ class Knapsack(BinaryProblem):
         return solution
 
     def create_solution(self) -> BinarySolution:
-        new_solution = BinarySolution(number_of_variables=self.number_of_variables,
-                                      number_of_objectives=self.number_of_objectives)
+        new_solution = BinarySolution(
+            number_of_variables=self.number_of_variables(), number_of_objectives=self.number_of_objectives()
+        )
 
-        new_solution.variables[0] = \
-            [True if random.randint(0, 1) == 0 else False for _ in range(
-                self.number_of_bits)]
+        new_solution.variables[0] = [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
 
         return new_solution
 
-    def get_name(self):
-        return 'Knapsack'
+    def name(self):
+        return "Knapsack"

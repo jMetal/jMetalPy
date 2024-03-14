@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
-from math import sqrt, pow, sin, pi, floor, cos
+from math import cos, floor, pi, pow, sin, sqrt
 
 import numpy
 
-from jmetal.core.problem import FloatProblem, DynamicProblem
+from jmetal.core.problem import DynamicProblem, FloatProblem
 from jmetal.core.solution import FloatSolution
 
 """
@@ -40,21 +40,20 @@ class FDA(DynamicProblem, FloatProblem, ABC):
 
 
 class FDA1(FDA):
-    """ Problem FDA1.
+    """Problem FDA1.
 
     .. note:: Bi-objective dynamic unconstrained problem. The default number of variables is 100.
     """
 
     def __init__(self, number_of_variables: int = 100):
-        """ :param number_of_variables: Number of decision variables of the problem.
-        """
+        """:param number_of_variables: Number of decision variables of the problem."""
         super(FDA1, self).__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f(x)', 'f(y)']
+        self.obj_labels = ["f(x)", "f(y)"]
 
         self.lower_bound = self.number_of_variables * [-1.0]
         self.upper_bound = self.number_of_variables * [1.0]
@@ -80,25 +79,24 @@ class FDA1(FDA):
         return 1.0 - sqrt(f / g)
 
     def get_name(self):
-        return 'FDA1'
+        return "FDA1"
 
 
 class FDA2(FDA):
-    """ Problem FDA2
+    """Problem FDA2
 
     .. note:: Bi-objective dynamic unconstrained problem. The default number of variables is 31.
     """
 
     def __init__(self, number_of_variables: int = 31):
-        """ :param number_of_variables: Number of decision variables of the problem.
-        """
+        """:param number_of_variables: Number of decision variables of the problem."""
         super(FDA2, self).__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f(x)', 'f(y)']
+        self.obj_labels = ["f(x)", "f(y)"]
 
         self.lower_bound = self.number_of_variables * [-1.0]
         self.upper_bound = self.number_of_variables * [1.0]
@@ -125,18 +123,17 @@ class FDA2(FDA):
         return 1.0 - pow(f / g, ht)
 
     def get_name(self):
-        return 'FDA2'
+        return "FDA2"
 
 
 class FDA3(FDA):
-    """ Problem FDA3
+    """Problem FDA3
 
     .. note:: Bi-objective dynamic unconstrained problem. The default number of variables is 30.
     """
 
     def __init__(self, number_of_variables: int = 30):
-        """ :param number_of_variables: Number of decision variables of the problem.
-        """
+        """:param number_of_variables: Number of decision variables of the problem."""
         super(FDA3, self).__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
@@ -146,7 +143,7 @@ class FDA3(FDA):
         self.limitInfII = 1
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f(x)', 'f(y)']
+        self.obj_labels = ["f(x)", "f(y)"]
 
         self.lower_bound = self.number_of_variables * [-1.0]
         self.upper_bound = self.number_of_variables * [1.0]
@@ -182,26 +179,26 @@ class FDA3(FDA):
         return h
 
     def get_name(self):
-        return 'FDA3'
+        return "FDA3"
 
 
 class FDA4(FDA):
-    """ Problem FDA4
+    """Problem FDA4
 
     .. note:: Three-objective dynamic unconstrained problem. The default number of variables is 12.
     """
+
     M = 3
 
     def __init__(self, number_of_variables: int = 12):
-        """ :param number_of_variables: Number of decision variables of the problem.
-        """
+        """:param number_of_variables: Number of decision variables of the problem."""
         super(FDA4, self).__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 3
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f(x)', 'f(y)', 'f(z)']
+        self.obj_labels = ["f(x)", "f(y)", "f(z)"]
 
         self.lower_bound = self.number_of_variables * [0.0]
         self.upper_bound = self.number_of_variables * [1.0]
@@ -223,14 +220,14 @@ class FDA4(FDA):
 
     def __eval_f1(self, solution: FloatSolution, g: float) -> float:
         f = 1.0 + g
-        mult = numpy.prod([cos(v * pi / 2.0) for v in solution.variables[:self.M - 1]])
+        mult = numpy.prod([cos(v * pi / 2.0) for v in solution.variables[: self.M - 1]])
 
         return f * mult
 
     def __eval_fk(self, solution: FloatSolution, g: float, k: int) -> float:
         f = 1.0 + g
         aux = sin((solution.variables[self.M - k] * pi) / 2.0)
-        mult = numpy.prod([cos(v * pi / 2.0) for v in solution.variables[:self.M - k]])
+        mult = numpy.prod([cos(v * pi / 2.0) for v in solution.variables[: self.M - k]])
 
         return f * mult * aux
 
@@ -241,26 +238,26 @@ class FDA4(FDA):
         return fm
 
     def get_name(self):
-        return 'FDA4'
+        return "FDA4"
 
 
 class FDA5(FDA):
-    """ Problem FDA5
+    """Problem FDA5
 
     .. note:: Three-objective dynamic unconstrained problem. The default number of variables is 12.
     """
+
     M = 3
 
     def __init__(self, number_of_variables: int = 12):
-        """ :param number_of_variables: Number of decision variables of the problem.
-        """
+        """:param number_of_variables: Number of decision variables of the problem."""
         super(FDA5, self).__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 3
         self.number_of_constraints = 0
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f(x)', 'f(y)', 'f(z)']
+        self.obj_labels = ["f(x)", "f(y)", "f(z)"]
 
         self.lower_bound = self.number_of_variables * [0.0]
         self.upper_bound = self.number_of_variables * [1.0]
@@ -283,14 +280,14 @@ class FDA5(FDA):
 
     def __eval_f1(self, solution: FloatSolution, g: float, ft: float) -> float:
         f = 1.0 + g
-        mult = numpy.prod([cos(pow(v, ft) * pi / 2.0) for v in solution.variables[:self.M - 1]])
+        mult = numpy.prod([cos(pow(v, ft) * pi / 2.0) for v in solution.variables[: self.M - 1]])
 
         return f * mult
 
     def __eval_fk(self, solution: FloatSolution, g: float, k: int, ft: float) -> float:
         f = 1.0 + g
 
-        mult = numpy.prod([cos(pow(v, ft) * pi / 2.0) for v in solution.variables[:self.M - k]])
+        mult = numpy.prod([cos(pow(v, ft) * pi / 2.0) for v in solution.variables[: self.M - k]])
         yy = pow(solution.variables[self.M - k], ft)
         mult *= sin(yy * pi / 2.0)
 
@@ -304,4 +301,4 @@ class FDA5(FDA):
         return fm * mult
 
     def get_name(self):
-        return 'FDA5'
+        return "FDA5"

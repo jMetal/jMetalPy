@@ -1,8 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic, List
+from typing import Generic, List, TypeVar
 
-S = TypeVar('S')
-R = TypeVar('R')
+from jmetal.core.solution import Solution
+
+S = TypeVar("S", bound=Solution)
+R = TypeVar("R", bound=Solution)
 
 """
 .. module:: Operator
@@ -14,7 +16,7 @@ R = TypeVar('R')
 
 
 class Operator(Generic[S, R], ABC):
-    """ Class representing operator """
+    """Class representing operator"""
 
     @abstractmethod
     def execute(self, source: S) -> R:
@@ -28,17 +30,18 @@ class Operator(Generic[S, R], ABC):
 def check_valid_probability_value(func):
     def func_wrapper(self, probability: float):
         if probability > 1.0:
-            raise Exception('The probability is greater than one: {}'.format(probability))
+            raise Exception("The probability is greater than one: {}".format(probability))
         elif probability < 0.0:
-            raise Exception('The probability is lower than zero: {}'.format(probability))
+            raise Exception("The probability is lower than zero: {}".format(probability))
 
         res = func(self, probability)
         return res
+
     return func_wrapper
 
 
 class Mutation(Operator[S, S], ABC):
-    """ Class representing mutation operator. """
+    """Class representing mutation operator."""
 
     @check_valid_probability_value
     def __init__(self, probability: float):
@@ -46,7 +49,7 @@ class Mutation(Operator[S, S], ABC):
 
 
 class Crossover(Operator[List[S], List[R]], ABC):
-    """ Class representing crossover operator. """
+    """Class representing crossover operator."""
 
     @check_valid_probability_value
     def __init__(self, probability: float):
@@ -62,7 +65,7 @@ class Crossover(Operator[List[S], List[R]], ABC):
 
 
 class Selection(Operator[S, R], ABC):
-    """ Class representing selection operator. """
+    """Class representing selection operator."""
 
     def __init__(self):
         pass

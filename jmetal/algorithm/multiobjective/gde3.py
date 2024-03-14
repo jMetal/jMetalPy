@@ -1,36 +1,39 @@
-from typing import TypeVar, List
+from typing import List, TypeVar
 
 from jmetal.config import store
-from jmetal.core.algorithm import EvolutionaryAlgorithm, DynamicAlgorithm
-from jmetal.core.problem import Problem, DynamicProblem
+from jmetal.core.algorithm import DynamicAlgorithm, EvolutionaryAlgorithm
+from jmetal.core.problem import DynamicProblem, Problem
 from jmetal.core.solution import FloatSolution
-from jmetal.operator import DifferentialEvolutionCrossover, RankingAndCrowdingDistanceSelection
+from jmetal.operator import (
+    DifferentialEvolutionCrossover,
+    RankingAndCrowdingDistanceSelection,
+)
 from jmetal.operator.selection import DifferentialEvolutionSelection
 from jmetal.util.comparator import Comparator, DominanceComparator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
-S = TypeVar('S')
+S = TypeVar("S")
 R = List[S]
 
 
 class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
-
-    def __init__(self,
-                 problem: Problem,
-                 population_size: int,
-                 cr: float,
-                 f: float,
-                 termination_criterion: TerminationCriterion = store.default_termination_criteria,
-                 k: float = 0.5,
-                 population_generator: Generator = store.default_generator,
-                 population_evaluator: Evaluator = store.default_evaluator,
-                 dominance_comparator: Comparator = store.default_comparator):
+    def __init__(
+        self,
+        problem: Problem,
+        population_size: int,
+        cr: float,
+        f: float,
+        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        k: float = 0.5,
+        population_generator: Generator = store.default_generator,
+        population_evaluator: Evaluator = store.default_evaluator,
+        dominance_comparator: Comparator = store.default_comparator,
+    ):
         super(GDE3, self).__init__(
-            problem=problem,
-            population_size=population_size,
-            offspring_population_size=population_size)
+            problem=problem, population_size=population_size, offspring_population_size=population_size
+        )
         self.dominance_comparator = dominance_comparator
         self.selection_operator = DifferentialEvolutionSelection()
         self.crossover_operator = DifferentialEvolutionCrossover(cr, f, k)
@@ -57,7 +60,7 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
 
         for solution in self.solutions:
             self.crossover_operator.current_individual = solution
-            parents = mating_pool[first_parent_index:first_parent_index + 3]
+            parents = mating_pool[first_parent_index : first_parent_index + 3]
             first_parent_index += 3
 
             offspring_population.append(self.crossover_operator.execute(parents)[0])
@@ -92,28 +95,37 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
     def stopping_condition_is_met(self) -> bool:
         return self.termination_criterion.is_met
 
-    def get_result(self) -> List[FloatSolution]:
+    def result(self) -> List[FloatSolution]:
         return self.solutions
 
     def get_name(self) -> str:
-        return 'GDE3'
+        return "GDE3"
 
 
 class DynamicGDE3(GDE3, DynamicAlgorithm):
-
-    def __init__(self,
-                 problem: DynamicProblem,
-                 population_size: int,
-                 cr: float,
-                 f: float,
-                 termination_criterion: TerminationCriterion,
-                 k: float = 0.5,
-                 population_generator: Generator = store.default_generator,
-                 population_evaluator: Evaluator = store.default_evaluator,
-                 dominance_comparator: Comparator = DominanceComparator()):
+    def __init__(
+        self,
+        problem: DynamicProblem,
+        population_size: int,
+        cr: float,
+        f: float,
+        termination_criterion: TerminationCriterion,
+        k: float = 0.5,
+        population_generator: Generator = store.default_generator,
+        population_evaluator: Evaluator = store.default_evaluator,
+        dominance_comparator: Comparator = DominanceComparator(),
+    ):
         super(DynamicGDE3, self).__init__(
-            problem, population_size, cr, f, termination_criterion, k,
-            population_generator, population_evaluator, dominance_comparator)
+            problem,
+            population_size,
+            cr,
+            f,
+            termination_criterion,
+            k,
+            population_generator,
+            population_evaluator,
+            dominance_comparator,
+        )
 
         self.completed_iterations = 0
 
@@ -125,14 +137,14 @@ class DynamicGDE3(GDE3, DynamicAlgorithm):
             self.restart()
             self.problem.clear_changed()
 
-        observable_data = self.get_observable_data()
+        observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
 
         self.evaluations += self.offspring_population_size
 
     def stopping_condition_is_met(self):
         if self.termination_criterion.is_met:
-            observable_data = self.get_observable_data()
+            observable_data = self.observable_data()
             self.observable.notify_all(**observable_data)
 
             self.restart()

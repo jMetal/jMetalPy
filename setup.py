@@ -1,5 +1,10 @@
 from os.path import abspath, dirname, join
 
+import setuptools
+
+#if __name__ == "__main__":
+#    setuptools.setup()
+
 from setuptools import find_packages, setup
 
 basedir = abspath(dirname(__file__))
@@ -14,7 +19,9 @@ install_requires = [
     'plotly>=3.3.0',
     'matplotlib>=3.0.2',
     'scipy>=1.3.0',
-    'statsmodels>=0.9.0'
+    'statsmodels>=0.9.0',
+    'mockito',
+    'PyHamcrest',
 ]
 extras_require = {
     'core': install_requires,
@@ -25,7 +32,7 @@ extras_require['complete'] = {v for req in extras_require.values() for v in req}
 
 setup(
     name='jmetalpy',
-    version='1.5.5',
+    version='1.5.4',
     description='Python version of the jMetal framework',
     long_description=README,
     long_description_content_type='text/markdown',

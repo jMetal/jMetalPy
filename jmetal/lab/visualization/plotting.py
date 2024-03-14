@@ -1,23 +1,24 @@
 import logging
-from typing import TypeVar, List, Tuple
+from typing import List, Tuple, TypeVar
 
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from pandas import plotting
 
-LOGGER = logging.getLogger('jmetal')
+logger = logging.getLogger(__name__)
 
-S = TypeVar('S')
+S = TypeVar("S")
 
 
 class Plot:
-
-    def __init__(self,
-                 title: str = 'Pareto front approximation',
-                 reference_front: List[S] = None,
-                 reference_point: list = None,
-                 axis_labels: list = None):
+    def __init__(
+        self,
+        title: str = "Pareto front approximation",
+        reference_front: List[S] = None,
+        reference_point: list = None,
+        axis_labels: list = None,
+    ):
         """
         :param title: Title of the graph.
         :param axis_labels: List of axis labels.
@@ -36,19 +37,19 @@ class Plot:
 
     @staticmethod
     def get_points(solutions: List[S]) -> Tuple[pd.DataFrame, int]:
-        """ Get points for each solution of the front.
+        """Get points for each solution of the front.
 
         :param solutions: List of solutions.
         :return: Pandas dataframe with one column for each objective and one row for each solution.
         """
         if solutions is None:
-            raise Exception('Front is none!')
+            raise Exception("Front is none!")
 
         points = pd.DataFrame(list(solution.objectives for solution in solutions))
         return points, points.shape[1]
 
-    def plot(self, front, label='', normalize: bool = False, filename: str = None, format: str = 'eps'):
-        """ Plot any arbitrary number of fronts in 2D, 3D or p-coords.
+    def plot(self, front, label="", normalize: bool = False, filename: str = None, format: str = "eps"):
+        """Plot any arbitrary number of fronts in 2D, 3D or p-coords.
 
         :param front: Pareto front or a list of them.
         :param label: Pareto front title or a list of them.
@@ -63,7 +64,7 @@ class Plot:
             label = [label]
 
         if len(front) != len(label):
-            raise Exception('Number of fronts and labels must be the same')
+            raise Exception("Number of fronts and labels must be the same")
 
         dimension = front[0][0].number_of_objectives
 
@@ -74,8 +75,8 @@ class Plot:
         else:
             self.pcoords(front, normalize, filename, format)
 
-    def two_dim(self, fronts: List[list], labels: List[str] = None, filename: str = None, format: str = 'eps'):
-        """ Plot any arbitrary number of fronts in 2D.
+    def two_dim(self, fronts: List[list], labels: List[str] = None, filename: str = None, format: str = "eps"):
+        """Plot any arbitrary number of fronts in 2D.
 
         :param fronts: List of fronts (containing solutions).
         :param labels: List of fronts title (if any).
@@ -93,33 +94,36 @@ class Plot:
             points, _ = self.get_points(fronts[i])
 
             ax = fig.add_subplot(n, n, i + 1)
-            points.plot(kind='scatter', x=0, y=1, ax=ax, s=10, color='#236FA4', alpha=1.0)
+            points.plot(kind="scatter", x=0, y=1, ax=ax, s=10, color="#236FA4", alpha=1.0)
 
             if labels:
                 ax.set_title(labels[i])
 
             if self.reference_front:
-                reference.plot(x=0, y=1, ax=ax, color='k', legend=False)
+                reference.plot(x=0, y=1, ax=ax, color="k", legend=False)
 
             if self.reference_point:
                 for point in self.reference_point:
-                    plt.plot([point[0]], [point[1]], marker='o', markersize=5, color='r')
-                    plt.axvline(x=point[0], color='r', linestyle=':')
-                    plt.axhline(y=point[1], color='r', linestyle=':')
+                    plt.plot([point[0]], [point[1]], marker="o", markersize=5, color="r")
+                    plt.axvline(x=point[0], color="r", linestyle=":")
+                    plt.axhline(y=point[1], color="r", linestyle=":")
 
             if self.axis_labels:
                 plt.xlabel(self.axis_labels[0])
                 plt.ylabel(self.axis_labels[1])
 
         if filename:
-            plt.savefig(filename + '.' + format, format=format, dpi=200)
+            _filename = filename + "." + format
+
+            plt.savefig(_filename, format=format, dpi=1000)
+            logger.info("Figure {_filename} saved to file")
         else:
             plt.show()
 
         plt.close(fig=fig)
 
-    def three_dim(self, fronts: List[list], labels: List[str] = None, filename: str = None, format: str = 'eps'):
-        """ Plot any arbitrary number of fronts in 3D.
+    def three_dim(self, fronts: List[list], labels: List[str] = None, filename: str = None, format: str = "eps"):
+        """Plot any arbitrary number of fronts in 3D.
 
         :param fronts: List of fronts (containing solutions).
         :param labels: List of fronts title (if any).
@@ -130,18 +134,22 @@ class Plot:
         fig.suptitle(self.plot_title, fontsize=16)
 
         for i, _ in enumerate(fronts):
-            ax = fig.add_subplot(n, n, i + 1, projection='3d')
-            ax.scatter([s.objectives[0] for s in fronts[i]],
-                       [s.objectives[1] for s in fronts[i]],
-                       [s.objectives[2] for s in fronts[i]])
+            ax = fig.add_subplot(n, n, i + 1, projection="3d")
+            ax.scatter(
+                [s.objectives[0] for s in fronts[i]],
+                [s.objectives[1] for s in fronts[i]],
+                [s.objectives[2] for s in fronts[i]],
+            )
 
             if labels:
                 ax.set_title(labels[i])
 
             if self.reference_front:
-                ax.scatter([s.objectives[0] for s in self.reference_front],
-                           [s.objectives[1] for s in self.reference_front],
-                           [s.objectives[2] for s in self.reference_front])
+                ax.scatter(
+                    [s.objectives[0] for s in self.reference_front],
+                    [s.objectives[1] for s in self.reference_front],
+                    [s.objectives[2] for s in self.reference_front],
+                )
 
             if self.reference_point:
                 # todo
@@ -153,14 +161,17 @@ class Plot:
             ax.locator_params(nbins=4)
 
         if filename:
-            plt.savefig(filename + '.' + format, format=format, dpi=1000)
+            _filename = filename + "." + format
+
+            plt.savefig(_filename, format=format, dpi=1000)
+            logger.info("Figure {_filename} saved to file")
         else:
             plt.show()
 
         plt.close(fig=fig)
 
-    def pcoords(self, fronts: List[list], normalize: bool = False, filename: str = None, format: str = 'eps'):
-        """ Plot any arbitrary number of fronts in parallel coordinates.
+    def pcoords(self, fronts: List[list], normalize: bool = False, filename: str = None, format: str = "eps"):
+        """Plot any arbitrary number of fronts in parallel coordinates.
 
         :param fronts: List of fronts (containing solutions).
         :param filename: Output filename.
@@ -178,8 +189,8 @@ class Plot:
             ax = fig.add_subplot(n, n, i + 1)
 
             min_, max_ = points.values.min(), points.values.max()
-            points['scale'] = np.linspace(0, 1, len(points)) * (max_ - min_) + min_
-            pd.plotting.parallel_coordinates(points, 'scale', ax=ax)
+            points["scale"] = np.linspace(0, 1, len(points)) * (max_ - min_) + min_
+            pd.plotting.parallel_coordinates(points, "scale", ax=ax)
 
             ax.get_legend().remove()
 
@@ -187,7 +198,7 @@ class Plot:
                 ax.set_xticklabels(self.axis_labels)
 
         if filename:
-            plt.savefig(filename + '.' + format, format=format, dpi=1000)
+            plt.savefig(filename + "." + format, format=format, dpi=1000)
         else:
             plt.show()
 

@@ -34,7 +34,7 @@ if __name__ == '__main__':
         observer=VisualizerObserver(reference_front=problem.reference_front, reference_point=reference_point))
 
     algorithm.run()
-    front = algorithm.get_result()
+    front = algorithm.result()
 
     # Plot front
     plot_front = Plot(title='Pareto front approximation. Problem: ' + problem.get_name(),

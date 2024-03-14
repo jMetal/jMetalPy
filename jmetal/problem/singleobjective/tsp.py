@@ -15,19 +15,22 @@ from jmetal.core.solution import PermutationSolution
 
 
 class TSP(PermutationProblem):
-    """ Class representing TSP Problem. """
+    """Class representing TSP Problem."""
 
     def __init__(self, instance: str = None):
         super(TSP, self).__init__()
 
-        distance_matrix, number_of_cities = self.__read_from_file(instance)
-
-        self.distance_matrix = distance_matrix
-
+        self.distance_matrix, self.number_of_cities = self.__read_from_file(instance)
         self.obj_directions = [self.MINIMIZE]
-        self.number_of_variables = number_of_cities
-        self.number_of_objectives = 1
-        self.number_of_constraints = 0
+
+    def number_of_variables(self) -> int:
+        return self.number_of_cities
+
+    def number_of_objectives(self) -> int:
+        return 1
+
+    def number_of_constraints(self) -> int:
+        return 0
 
     def __read_from_file(self, filename: str):
         """
@@ -38,24 +41,24 @@ class TSP(PermutationProblem):
         """
 
         if filename is None:
-            raise FileNotFoundError('Filename can not be None')
+            raise FileNotFoundError("Filename can not be None")
 
         with open(filename) as file:
             lines = file.readlines()
             data = [line.lstrip() for line in lines if line != ""]
 
-            dimension = re.compile(r'[^\d]+')
+            dimension = re.compile(r"[^\d]+")
 
             for item in data:
-                if item.startswith('DIMENSION'):
-                    dimension = int(dimension.sub('', item))
+                if item.startswith("DIMENSION"):
+                    dimension = int(dimension.sub("", item))
                     break
 
             c = [-1.0] * (2 * dimension)
 
             for item in data:
                 if item[0].isdigit():
-                    j, city_a, city_b = [int(x.strip()) for x in item.split(' ')]
+                    j, city_a, city_b = [int(x.strip()) for x in item.split(" ")]
                     c[2 * (j - 1)] = city_a
                     c[2 * (j - 1) + 1] = city_b
 
@@ -75,7 +78,7 @@ class TSP(PermutationProblem):
     def evaluate(self, solution: PermutationSolution) -> PermutationSolution:
         fitness = 0
 
-        for i in range(self.number_of_variables - 1):
+        for i in range(self.number_of_variables() - 1):
             x = solution.variables[i]
             y = solution.variables[i + 1]
 
@@ -89,15 +92,12 @@ class TSP(PermutationProblem):
         return solution
 
     def create_solution(self) -> PermutationSolution:
-        new_solution = PermutationSolution(number_of_variables=self.number_of_variables,
-                                           number_of_objectives=self.number_of_objectives)
-        new_solution.variables = random.sample(range(self.number_of_variables), k=self.number_of_variables)
+        new_solution = PermutationSolution(
+            number_of_variables=self.number_of_variables(), number_of_objectives=self.number_of_objectives()
+        )
+        new_solution.variables = random.sample(range(self.number_of_variables()), k=self.number_of_variables())
 
         return new_solution
 
-    @property
-    def number_of_cities(self):
-        return self.number_of_variables
-
-    def get_name(self):
-        return 'Symmetric TSP'
+    def name(self):
+        return "Symmetric TSP"

@@ -10,14 +10,14 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 Distributed (asynchronous) version of NSGA-II using Dask.
 """
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     problem = ZDT1Modified()
 
     # setup Dask client
     client = Client(LocalCluster(n_workers=24))
 
     ncores = sum(client.ncores().values())
-    print(f'{ncores} cores available')
+    print(f"{ncores} cores available")
 
     # creates the algorithm
     max_evaluations = 25000
@@ -29,13 +29,12 @@ if __name__ == '__main__':
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
         number_of_cores=ncores,
-        client=client
+        client=client,
     )
 
     algorithm.run()
-    front = algorithm.get_result()
+    front = algorithm.result()
 
-    print('Algorithm: ' + algorithm.get_name())
-    print('Problem: ' + problem.get_name())
-    print('Computing time: ' + str(algorithm.total_computing_time))
-
+    print(f"Algorithm: {algorithm.get_name()}")
+    print(f"Problem: {problem.get_name()}")
+    print(f"Computing time: {algorithm.total_computing_time}")
