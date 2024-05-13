@@ -1,6 +1,6 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator import PolynomialMutation, SBXCrossover
-from jmetal.problem import Fonseca, ZDT4
+from jmetal.problem import ZDT4
 from jmetal.util.solution import (
     get_non_dominated_solutions,
     print_function_values_to_file,
@@ -15,7 +15,7 @@ if __name__ == "__main__":
     problem = ZDT4()
     problem.reference_front = read_solutions(filename="resources/reference_front/ZDT4.pf")
 
-    max_evaluations = 20000
+    max_evaluations = 25000
     algorithm = NSGAII(
         problem=problem,
         population_size=100,

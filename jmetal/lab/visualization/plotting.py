@@ -4,7 +4,6 @@ from typing import List, Tuple, TypeVar
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
-from pandas import plotting
 
 logger = logging.getLogger(__name__)
 

@@ -1,7 +1,6 @@
 import unittest
 
 from jmetal.core.problem import BinaryProblem
-from jmetal.problem.multiobjective.unconstrained import OneZeroMax
 from jmetal.problem.singleobjective.unconstrained import OneMax, Sphere
 
 

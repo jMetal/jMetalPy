@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.lab.visualization import InteractivePlot, Plot
 from jmetal.operator import PolynomialMutation, SBXCrossover
-from jmetal.problem import ZDT6, ZDT1
+from jmetal.problem import ZDT1
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution import (
     print_function_values_to_file,

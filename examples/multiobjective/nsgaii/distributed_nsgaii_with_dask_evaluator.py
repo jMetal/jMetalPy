@@ -1,5 +1,4 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.operator import PolynomialMutation, SBXCrossover
 from jmetal.operator import SBXCrossover, PolynomialMutation
 from jmetal.problem.multiobjective.zdt import ZDT1Modified
 from jmetal.util.evaluator import DaskEvaluator

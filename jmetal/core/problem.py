@@ -11,7 +11,6 @@ from jmetal.core.solution import (
 )
 from jmetal.logger import get_logger
 
-
 logger = get_logger(__name__)
 
 S = TypeVar("S")

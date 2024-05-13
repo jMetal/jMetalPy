@@ -1,7 +1,7 @@
-from math import cos, pi, pow, sin, sqrt, exp
 import random
+from math import cos, pi, pow, sin, sqrt, exp
 
-from jmetal.core.problem import FloatProblem, BinaryProblem, S
+from jmetal.core.problem import FloatProblem, BinaryProblem
 from jmetal.core.solution import FloatSolution, BinarySolution
 
 """
