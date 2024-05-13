@@ -81,7 +81,7 @@ We can then proceed to explore the results:
 from jmetal.util.solution import get_non_dominated_solutions, print_function_values_to_file,
     print_variables_to_file
 
-front = get_non_dominated_solutions(algorithm.get_result())
+front = get_non_dominated_solutions(algorithm.result())
 
 # save to files
 print_function_values_to_file(front, 'FUN.NSGAII.ZDT1')
