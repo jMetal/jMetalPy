@@ -67,7 +67,7 @@ algorithm = NSGAII(
     problem=problem,
     population_size=100,
     offspring_population_size=100,
-    mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
+    mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
     crossover=SBXCrossover(probability=1.0, distribution_index=20),
     termination_criterion=StoppingByEvaluations(max_evaluations=25000)
 )
@@ -81,7 +81,7 @@ We can then proceed to explore the results:
 from jmetal.util.solution import get_non_dominated_solutions, print_function_values_to_file,
     print_variables_to_file
 
-front = get_non_dominated_solutions(algorithm.result())
+front = get_non_dominated_solutions(algorithm.get_result())
 
 # save to files
 print_function_values_to_file(front, 'FUN.NSGAII.ZDT1')
