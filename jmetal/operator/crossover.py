@@ -83,7 +83,7 @@ class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
                                 swapped[i_son][i_chromosome] = map_[1 - i_son][map_index]
                 return s1, s2
 
-            swapped = _swap(parents[0].variables, parents[1].variables, cross_points)
+            swapped = _swap(offspring[0].variables, offspring[1].variables, cross_points)
             mapped = _map(swapped, cross_points)
 
             offspring[0].variables, offspring[1].variables = mapped
