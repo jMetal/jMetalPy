@@ -96,6 +96,6 @@ def plot_posterior(
 
     if filename:
         plt.savefig(filename, bbox_inches="tight")
-        logger.info("Figure {filename} saved to file")
+        logger.info(f"Figure {filename} saved to file")
 
     plt.show()
