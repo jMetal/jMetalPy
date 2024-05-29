@@ -32,7 +32,7 @@ extras_require['complete'] = {v for req in extras_require.values() for v in req}
 
 setup(
     name='jmetalpy',
-    version='1.7.0 stat',
+    version='1.7.0',
     description='Python version of the jMetal framework',
     long_description=README,
     long_description_content_type='text/markdown',
