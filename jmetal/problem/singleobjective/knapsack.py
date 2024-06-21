@@ -70,7 +70,7 @@ class Knapsack(BinaryProblem):
             self.number_of_bits = int(data[0][0])
             self.capacity = float(data[1][0])
 
-            weights_and_profits = np.asfarray(data[2:], dtype=np.float32)
+            weights_and_profits = np.asarray(data[2:], dtype=np.float32)
 
             self.weights = weights_and_profits[:, 0]
             self.profits = weights_and_profits[:, 1]
