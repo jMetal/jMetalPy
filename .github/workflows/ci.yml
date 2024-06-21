@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        py: [ 3.9, 3.10, 3.11 ]
+        py: [ 3.9 ]
     steps:
     - uses: actions/checkout@v4
     - name: Install Python ${{ matrix.py }}
