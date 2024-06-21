@@ -65,7 +65,7 @@ class Plot:
         if len(front) != len(label):
             raise Exception("Number of fronts and labels must be the same")
 
-        dimension = front[0][0].number_of_objectives()
+        dimension = len(front[0][0].objectives)
 
         if dimension == 2:
             self.two_dim(front, label, filename, format)
