@@ -1,20 +1,26 @@
-install:
-	@python setup.py build install
+# Minimal makefile for Sphinx documentation
+#
 
-install-dependencies:
-	@python -m pip install -e .[all]
+# You can set these variables from the command line.
+SPHINXOPTS    =
+SPHINXBUILD   = sphinx-build
+SPHINXPROJ    = jMetalPy
+SOURCEDIR     = docs/source
+BUILDDIR      = build
 
-clean:
-	@rm -rf build dist .eggs *.egg-info
-	@find . -type d -name '.mypy_cache' -exec rm -rf {} +
-	@find . -type d -name '__pycache__' -exec rm -rf {} +
+# Put it first so that "make" without argument is like "make help".
+help:
+	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-black: clean
-	@isort --profile black jmetal/ examples/
-	@black jmetal/ examples/
+.PHONY: help Makefile
 
-lint:
-	@mypy jmetal/ examples/ --show-error-codes
+# "make github" option to build gh-pages
+github:
+	@make html
+	@cp -a $(BUILDDIR)/html/. docs
+	@rm -r $(BUILDDIR)
 
-tests:
-	@python -m unittest discover -q
+# Catch-all target: route all unknown targets to Sphinx using the new
+# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
+%: Makefile
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

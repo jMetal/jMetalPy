@@ -11,7 +11,7 @@ project = 'jMetalPy'
 copyright = '2019, Antonio Benítez-Hidalgo'
 author = 'Antonio Benítez-Hidalgo'
 version = ''
-release = '1.5.3'
+release = '1.7.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -33,7 +33,7 @@ extensions = [
 templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
-language = None
+language = "en"
 pygments_style = 'sphinx'
 
 # -- Options for HTML output -------------------------------------------------
