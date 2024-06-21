@@ -2,7 +2,8 @@ from dask.distributed import Client
 from distributed import LocalCluster
 
 from jmetal.algorithm.multiobjective.nsgaii import DistributedNSGAII
-from jmetal.operator import PolynomialMutation, SBXCrossover
+from jmetal.operator.mutation import PolynomialMutation
+from jmetal.operator.crossover import SBXCrossover
 from jmetal.problem.multiobjective.zdt import ZDT1Modified
 from jmetal.util.termination_criterion import StoppingByEvaluations
 

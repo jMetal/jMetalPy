@@ -4,7 +4,7 @@ from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
 from jmetal.core.operator import Crossover, Mutation
 from jmetal.core.problem import Problem
-from jmetal.operator import BinaryTournamentSelection
+from jmetal.operator.selection import BinaryTournamentSelection
 from jmetal.util.comparator import Comparator, MultiComparator
 from jmetal.util.density_estimator import KNearestNeighborDensityEstimator
 from jmetal.util.evaluator import Evaluator

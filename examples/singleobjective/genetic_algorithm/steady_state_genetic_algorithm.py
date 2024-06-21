@@ -1,5 +1,7 @@
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
-from jmetal.operator import BinaryTournamentSelection, BitFlipMutation, SPXCrossover
+from jmetal.operator.selection import BinaryTournamentSelection
+from jmetal.operator.mutation import BitFlipMutation
+from jmetal.operator.crossover import SPXCrossover
 from jmetal.problem.singleobjective.unconstrained import SubsetSum
 from jmetal.util.termination_criterion import StoppingByEvaluations
 

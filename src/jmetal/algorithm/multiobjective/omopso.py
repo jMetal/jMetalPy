@@ -8,7 +8,7 @@ from jmetal.config import store
 from jmetal.core.algorithm import ParticleSwarmOptimization
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
-from jmetal.operator import UniformMutation
+from jmetal.operator.mutation import UniformMutation
 from jmetal.operator.mutation import NonUniformMutation
 from jmetal.util.archive import BoundedArchive, NonDominatedSolutionsArchive
 from jmetal.util.comparator import DominanceComparator, EpsilonDominanceComparator

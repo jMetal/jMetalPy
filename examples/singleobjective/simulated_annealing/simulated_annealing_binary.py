@@ -1,5 +1,5 @@
 from jmetal.algorithm.singleobjective.simulated_annealing import SimulatedAnnealing
-from jmetal.operator import BitFlipMutation
+from jmetal.operator.mutation import BitFlipMutation
 from jmetal.problem import OneMax
 from jmetal.util.solution import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations

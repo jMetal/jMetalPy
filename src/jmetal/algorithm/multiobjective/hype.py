@@ -5,7 +5,7 @@ from jmetal.config import store
 from jmetal.core.operator import Crossover, Mutation
 from jmetal.core.problem import Problem
 from jmetal.core.solution import Solution
-from jmetal.operator import BinaryTournamentSelection
+from jmetal.operator.selection import BinaryTournamentSelection
 from jmetal.operator.selection import RankingAndFitnessSelection
 from jmetal.util.comparator import Comparator, SolutionAttributeComparator
 from jmetal.util.evaluator import Evaluator

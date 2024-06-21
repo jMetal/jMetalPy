@@ -1,5 +1,6 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.operator import BitFlipMutation, SPXCrossover
+from jmetal.operator.mutation import BitFlipMutation
+from jmetal.operator.crossover import SPXCrossover
 from jmetal.problem import ZDT5
 from jmetal.util.solution import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations

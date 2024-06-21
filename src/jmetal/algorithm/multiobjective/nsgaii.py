@@ -12,7 +12,7 @@ from jmetal.config import store
 from jmetal.core.algorithm import Algorithm, DynamicAlgorithm
 from jmetal.core.operator import Crossover, Mutation, Selection
 from jmetal.core.problem import DynamicProblem, Problem
-from jmetal.operator import BinaryTournamentSelection
+from jmetal.operator.selection import BinaryTournamentSelection
 from jmetal.util.comparator import Comparator, DominanceComparator, MultiComparator
 from jmetal.util.density_estimator import CrowdingDistance
 from jmetal.util.evaluator import Evaluator

@@ -1,5 +1,5 @@
 from jmetal.algorithm.singleobjective.evolution_strategy import EvolutionStrategy
-from jmetal.operator import PolynomialMutation
+from jmetal.operator.mutation import PolynomialMutation
 from jmetal.problem import Sphere
 from jmetal.util.termination_criterion import StoppingByEvaluations
 

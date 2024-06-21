@@ -1,5 +1,6 @@
 from jmetal.algorithm.multiobjective import NSGAII
-from jmetal.operator import PolynomialMutation, SBXCrossover
+from jmetal.operator.mutation import PolynomialMutation
+from jmetal.operator.crossover import SBXCrossover
 from jmetal.problem import Srinivas
 from jmetal.util.comparator import DominanceWithConstraintsComparator
 from jmetal.util.solution import (

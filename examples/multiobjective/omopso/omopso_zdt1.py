@@ -1,6 +1,5 @@
 from jmetal.algorithm.multiobjective.omopso import OMOPSO
-from jmetal.operator import UniformMutation
-from jmetal.operator.mutation import NonUniformMutation
+from jmetal.operator.mutation import UniformMutation, NonUniformMutation
 from jmetal.problem import ZDT1
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.solution import (

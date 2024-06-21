@@ -1,5 +1,6 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.operator import BitFlipMutation, SPXCrossover
+from jmetal.operator.mutation import BitFlipMutation
+from jmetal.operator.crossover import SPXCrossover
 from jmetal.problem import OneMax
 from jmetal.util.comparator import DominanceComparator
 from jmetal.util.observer import ProgressBarObserver

@@ -4,10 +4,9 @@ from jmetal.config import store
 from jmetal.core.algorithm import DynamicAlgorithm, EvolutionaryAlgorithm
 from jmetal.core.problem import DynamicProblem, Problem
 from jmetal.core.solution import FloatSolution
-from jmetal.operator import (
-    DifferentialEvolutionCrossover,
-    RankingAndCrowdingDistanceSelection,
-)
+from jmetal.operator.crossover import DifferentialEvolutionCrossover
+from jmetal.operator.selection import DifferentialEvolutionSelection
+
 from jmetal.operator.selection import DifferentialEvolutionSelection
 from jmetal.util.comparator import Comparator, DominanceComparator
 from jmetal.util.evaluator import Evaluator

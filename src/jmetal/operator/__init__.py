@@ -1,3 +1,4 @@
+"""
 from .crossover import (
     CXCrossover,
     DifferentialEvolutionCrossover,
@@ -50,3 +51,5 @@ __all__ = [
     "NaryRandomSolutionSelection",
     "RankingAndCrowdingDistanceSelection",
 ]
+
+"""

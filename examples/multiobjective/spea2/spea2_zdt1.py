@@ -1,5 +1,6 @@
 from jmetal.algorithm.multiobjective.spea2 import SPEA2
-from jmetal.operator import PolynomialMutation, SBXCrossover
+from jmetal.operator.mutation import PolynomialMutation
+from jmetal.operator.crossover import SBXCrossover
 from jmetal.problem import ZDT1
 from jmetal.util.solution import (
     print_function_values_to_file,

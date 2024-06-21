@@ -9,7 +9,8 @@ from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
-from jmetal.operator import DifferentialEvolutionCrossover, NaryRandomSolutionSelection
+from jmetal.operator.crossover import DifferentialEvolutionCrossover
+from jmetal.operator.selection import NaryRandomSolutionSelection
 from jmetal.util.aggregation_function import AggregationFunction
 from jmetal.util.constraint_handling import (
     feasibility_ratio,

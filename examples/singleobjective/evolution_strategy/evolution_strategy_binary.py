@@ -1,5 +1,5 @@
 from jmetal.algorithm.singleobjective.evolution_strategy import EvolutionStrategy
-from jmetal.operator import BitFlipMutation
+from jmetal.operator.mutation import BitFlipMutation
 from jmetal.problem import OneMax
 from jmetal.util.termination_criterion import StoppingByEvaluations
 

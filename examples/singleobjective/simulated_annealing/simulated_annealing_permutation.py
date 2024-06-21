@@ -1,5 +1,5 @@
 from jmetal.algorithm.singleobjective.simulated_annealing import SimulatedAnnealing
-from jmetal.operator import ScrambleMutation
+from jmetal.operator.mutation import ScrambleMutation
 from jmetal.problem import TSP
 from jmetal.util.termination_criterion import StoppingByTime
 
