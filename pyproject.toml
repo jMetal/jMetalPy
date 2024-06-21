@@ -48,6 +48,7 @@ core = [
     "mockito",
     "PyHamcrest"
 ]
+
 docs = [
     "tqdm",
     "numpy>=2.0.0",
@@ -61,6 +62,7 @@ docs = [
     "jupyter",
     "nbsphinx"
 ]
+
 distributed = [
     "tqdm",
     "numpy>=2.0.0",
@@ -75,6 +77,7 @@ distributed = [
     "distributed>=2024.3.0",
     "pyspark>=3.4.0"
 ]
+
 complete = [
     "tqdm",
     "numpy>=1.16.0",

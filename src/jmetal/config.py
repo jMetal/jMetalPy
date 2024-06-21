@@ -1,5 +1,5 @@
 from jmetal.core.observer import Observable
-from jmetal.operator import BitFlipMutation, PolynomialMutation
+from jmetal.operator.mutation import BitFlipMutation, PolynomialMutation
 from jmetal.util.comparator import DominanceComparator
 from jmetal.util.evaluator import Evaluator, SequentialEvaluator
 from jmetal.util.generator import RandomGenerator

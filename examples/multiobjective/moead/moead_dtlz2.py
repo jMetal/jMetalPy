@@ -1,6 +1,7 @@
 from jmetal.algorithm.multiobjective.moead import MOEAD
 from jmetal.core.quality_indicator import HyperVolume
-from jmetal.operator import DifferentialEvolutionCrossover, PolynomialMutation
+from jmetal.operator.crossover import DifferentialEvolutionCrossover
+from jmetal.operator.mutation import PolynomialMutation
 from jmetal.problem import DTLZ2
 from jmetal.util.aggregation_function import PenaltyBoundaryIntersection
 

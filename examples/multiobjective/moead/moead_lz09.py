@@ -1,5 +1,6 @@
 from jmetal.algorithm.multiobjective.moead import MOEAD
-from jmetal.operator import DifferentialEvolutionCrossover, PolynomialMutation
+from jmetal.operator.crossover import DifferentialEvolutionCrossover
+from jmetal.operator.mutation import PolynomialMutation
 from jmetal.problem import LZ09_F2
 from jmetal.util.aggregation_function import Tschebycheff
 from jmetal.util.solution import (

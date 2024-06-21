@@ -1,5 +1,5 @@
 from jmetal.algorithm.multiobjective.smpso import DynamicSMPSO
-from jmetal.operator import PolynomialMutation
+from jmetal.operator.mutation import PolynomialMutation
 from jmetal.problem.multiobjective.fda import FDA2
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.observable import TimeCounter

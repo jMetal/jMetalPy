@@ -1,6 +1,7 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.lab.visualization import InteractivePlot, Plot
-from jmetal.operator import PolynomialMutation, SBXCrossover
+from jmetal.operator.mutation import PolynomialMutation
+from jmetal.operator.crossover import SBXCrossover
 from jmetal.problem import ZDT2
 from jmetal.util.comparator import GDominanceComparator
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver

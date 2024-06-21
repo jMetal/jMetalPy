@@ -15,7 +15,7 @@ if __name__ == "__main__":
     problem = ZDT1Modified()
 
     # setup Dask client
-    client = Client(LocalCluster(n_workers=24))
+    client = Client(LocalCluster(n_workers=10))
 
     ncores = sum(client.ncores().values())
     print(f"{ncores} cores available")
