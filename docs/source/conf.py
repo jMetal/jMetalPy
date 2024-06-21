@@ -97,4 +97,4 @@ texinfo_documents = [
 
 # -- Options for intersphinx extension ---------------------------------------
 
-intersphinx_mapping = {'https://docs.python.org/': None}
+intersphinx_mapping = {'<name>': ('https://docs.python.org/', None)}
