@@ -34,4 +34,4 @@ jobs:
         python -m pip install -e .[test]
     - name: Run unittest
       shell: bash
-      run: python -m unittest discover -q
+      run: pytest

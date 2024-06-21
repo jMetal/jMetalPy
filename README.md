@@ -57,7 +57,8 @@ Examples of configuring and running all the included algorithms are located [in 
 
 ```python
 from jmetal.algorithm.multiobjective import NSGAII
-from jmetal.operator import SBXCrossover, PolynomialMutation
+from jmetal.operator.crossover import SBXCrossover
+from jmetal.operator.mutation import PolynomialMutation
 from jmetal.problem import ZDT1
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
