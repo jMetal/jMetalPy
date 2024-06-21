@@ -8,7 +8,6 @@ from jmetal.problem import ZDT1, ZDT2, ZDT3
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
-
 def configure_experiment(problems: dict, n_run: int):
     jobs = []
     max_evaluations = 25000
