@@ -1,7 +1,7 @@
 jMetalPy: Python version of the jMetal framework
 ================================================
 
-.. warning:: Documentation is work in progress!! Some information may be missing or incomplete.
+.. warning:: Documentation of jMetal 1.7.0 is a work in progress!! Some information may be missing or outdated.
 
 .. table::
 
