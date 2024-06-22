@@ -1,9 +1,10 @@
-
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   
   <!-- Licensed under the Apache 2.0 License -->
   <link rel="stylesheet" type="text/css" href="../../../_static/fonts/open-sans/stylesheet.css" />
@@ -12,18 +13,14 @@
   <link rel="stylesheet" type="text/css" href="../../../_static/css/bootstrap.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Simulated annealing &#8212; jMetalPy 1.5.3 documentation</title>
-    <link rel="stylesheet" href="../../../_static/guzzle.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <title>Simulated annealing &#8212; jMetalPy 1.7.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/guzzle.css?v=e05a0192" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9aa90875" />
+    <script src="../../../_static/documentation_options.js?v=030dc6f6"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Operators" href="../../../operators.html" />
@@ -47,8 +44,9 @@
         <li class="right" >
           <a href="local.search.html" title="Local Search"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../../singleobjective.algorithms.html" accesskey="U">Single-objective algorithms</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../singleobjective.algorithms.html" accesskey="U">Single-objective algorithms</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Simulated annealing</a></li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -59,7 +57,7 @@
   <div id="left-column">
     <div class="sphinxsidebar"><a href="
     ../../../index.html" class="text-logo">
-    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.5.3 documentation">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.7.0 documentation">
     <br>
 </a>
 
@@ -94,6 +92,32 @@
 </div>
 <div class="sidebar-block">
   <div class="sidebar-wrapper">
+    <h2>Contents</h2>
+    <div class="sidebar-localtoc">
+      <ul>
+<li><a class="reference internal" href="#">Simulated annealing</a><ul>
+<li><a class="reference internal" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing"><code class="docutils literal notranslate"><span class="pre">SimulatedAnnealing</span></code></a><ul>
+<li><a class="reference internal" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.compute_acceptance_probability"><code class="docutils literal notranslate"><span class="pre">SimulatedAnnealing.compute_acceptance_probability()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.create_initial_solutions"><code class="docutils literal notranslate"><span class="pre">SimulatedAnnealing.create_initial_solutions()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.evaluate"><code class="docutils literal notranslate"><span class="pre">SimulatedAnnealing.evaluate()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.get_name"><code class="docutils literal notranslate"><span class="pre">SimulatedAnnealing.get_name()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.init_progress"><code class="docutils literal notranslate"><span class="pre">SimulatedAnnealing.init_progress()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.observable_data"><code class="docutils literal notranslate"><span class="pre">SimulatedAnnealing.observable_data()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.result"><code class="docutils literal notranslate"><span class="pre">SimulatedAnnealing.result()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.step"><code class="docutils literal notranslate"><span class="pre">SimulatedAnnealing.step()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.stopping_condition_is_met"><code class="docutils literal notranslate"><span class="pre">SimulatedAnnealing.stopping_condition_is_met()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.update_progress"><code class="docutils literal notranslate"><span class="pre">SimulatedAnnealing.update_progress()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
     <div id="main-search">
       <form class="form-inline" action="../../../search.html" method="GET" role="form">
         <div class="input-group">
@@ -122,72 +146,72 @@
           
           <div class="document clearer body">
             
-  <div class="section" id="module-jmetal.algorithm.singleobjective.simulated_annealing">
-<span id="simulated-annealing"></span><h1>Simulated annealing<a class="headerlink" href="#module-jmetal.algorithm.singleobjective.simulated_annealing" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing">
-<em class="property">class </em><code class="sig-prename descclassname">jmetal.algorithm.singleobjective.simulated_annealing.</code><code class="sig-name descname">SimulatedAnnealing</code><span class="sig-paren">(</span><em class="sig-param">problem: jmetal.core.problem.Problem[~S][S], mutation: jmetal.core.operator.Mutation, termination_criterion: jmetal.util.termination_criterion.TerminationCriterion</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jmetal.core.algorithm.Algorithm</span></code>, <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Thread" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></a></p>
-<dl class="method">
-<dt id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.compute_acceptance_probability">
-<code class="sig-name descname">compute_acceptance_probability</code><span class="sig-paren">(</span><em class="sig-param">current: float</em>, <em class="sig-param">new: float</em>, <em class="sig-param">temperature: float</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.compute_acceptance_probability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.compute_acceptance_probability" title="Permalink to this definition">¶</a></dt>
+  <section id="module-jmetal.algorithm.singleobjective.simulated_annealing">
+<span id="simulated-annealing"></span><h1>Simulated annealing<a class="headerlink" href="#module-jmetal.algorithm.singleobjective.simulated_annealing" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.algorithm.singleobjective.simulated_annealing.</span></span><span class="sig-name descname"><span class="pre">SimulatedAnnealing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">problem:</span> <span class="pre">~jmetal.core.problem.Problem[~jmetal.algorithm.singleobjective.simulated_annealing.S],</span> <span class="pre">mutation:</span> <span class="pre">~jmetal.core.operator.Mutation,</span> <span class="pre">termination_criterion:</span> <span class="pre">~jmetal.util.termination_criterion.TerminationCriterion,</span> <span class="pre">solution_generator:</span> <span class="pre">~jmetal.util.generator.Generator</span> <span class="pre">=</span> <span class="pre">&lt;jmetal.util.generator.RandomGenerator</span> <span class="pre">object&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Algorithm</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">S</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">R</span></code>], <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Thread" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Thread</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.compute_acceptance_probability">
+<span class="sig-name descname"><span class="pre">compute_acceptance_probability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></span><a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.compute_acceptance_probability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.compute_acceptance_probability" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.create_initial_solutions">
-<code class="sig-name descname">create_initial_solutions</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[S]<a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.create_initial_solutions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.create_initial_solutions" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.create_initial_solutions">
+<span class="sig-name descname"><span class="pre">create_initial_solutions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">S</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.create_initial_solutions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.create_initial_solutions" title="Link to this definition">¶</a></dt>
 <dd><p>Creates the initial list of solutions of a metaheuristic.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">solutions: List[S]</em><span class="sig-paren">)</span> &#x2192; List[S]<a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.evaluate" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solutions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">S</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">S</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.evaluate" title="Link to this definition">¶</a></dt>
 <dd><p>Evaluates a solution list.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.get_name">
-<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.get_name" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.get_name" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.get_observable_data">
-<code class="sig-name descname">get_observable_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.get_observable_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.get_observable_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get observable data, with the information that will be send to all observers each time.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.get_result">
-<code class="sig-name descname">get_result</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; R<a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.get_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.get_result" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.init_progress">
-<code class="sig-name descname">init_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.init_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.init_progress" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.init_progress">
+<span class="sig-name descname"><span class="pre">init_progress</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.init_progress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.init_progress" title="Link to this definition">¶</a></dt>
 <dd><p>Initialize the algorithm.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.step">
-<code class="sig-name descname">step</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.step" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.observable_data">
+<span class="sig-name descname"><span class="pre">observable_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></span><a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.observable_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.observable_data" title="Link to this definition">¶</a></dt>
+<dd><p>Get observable data, with the information that will be seng to all observers each time.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.result">
+<span class="sig-name descname"><span class="pre">result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">R</span></span></span><a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.result" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.step" title="Link to this definition">¶</a></dt>
 <dd><p>Performs one iteration/step of the algorithm’s loop.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.stopping_condition_is_met">
-<code class="sig-name descname">stopping_condition_is_met</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.stopping_condition_is_met"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.stopping_condition_is_met" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.stopping_condition_is_met">
+<span class="sig-name descname"><span class="pre">stopping_condition_is_met</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.stopping_condition_is_met"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.stopping_condition_is_met" title="Link to this definition">¶</a></dt>
 <dd><p>The stopping condition is met or not.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.update_progress">
-<code class="sig-name descname">update_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.update_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.update_progress" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.update_progress">
+<span class="sig-name descname"><span class="pre">update_progress</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/jmetal/algorithm/singleobjective/simulated_annealing.html#SimulatedAnnealing.update_progress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.singleobjective.simulated_annealing.SimulatedAnnealing.update_progress" title="Link to this definition">¶</a></dt>
 <dd><p>Update the progress after each iteration.</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
           </div>
@@ -222,8 +246,9 @@
         <li class="right" >
           <a href="local.search.html" title="Local Search"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../../singleobjective.algorithms.html" >Single-objective algorithms</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../singleobjective.algorithms.html" >Single-objective algorithms</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Simulated annealing</a></li> 
       </ul>
     </div>
 <script type="text/javascript">

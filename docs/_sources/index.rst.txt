@@ -6,7 +6,7 @@ jMetalPy: Python version of the jMetal framework
 .. table::
 
    +---------------------+----------+
-   | **Target doc**      |  v1.5.3  |
+   | **Target doc**      |  v1.7.0  |
    +---------------------+----------+
 
 Content

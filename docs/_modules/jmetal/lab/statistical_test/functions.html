@@ -1,9 +1,9 @@
-
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../../../../">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <!-- Licensed under the Apache 2.0 License -->
   <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/open-sans/stylesheet.css" />
@@ -12,18 +12,14 @@
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>jmetal.lab.statistical_test.functions &#8212; jMetalPy 1.5.3 documentation</title>
-    <link rel="stylesheet" href="../../../../_static/guzzle.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <title>jmetal.lab.statistical_test.functions &#8212; jMetalPy 1.7.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css?v=e05a0192" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=9aa90875" />
+    <script src="../../../../_static/documentation_options.js?v=030dc6f6"></script>
+    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
   
@@ -39,8 +35,9 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jmetal.lab.statistical_test.functions</a></li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -51,7 +48,7 @@
   <div id="left-column">
     <div class="sphinxsidebar"><a href="
     ../../../../index.html" class="text-logo">
-    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.5.3 documentation">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.7.0 documentation">
     <br>
 </a>
 
@@ -109,13 +106,15 @@
           <div class="document clearer body">
             
   <h1>Source code for jmetal.lab.statistical_test.functions</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">binom</span><span class="p">,</span> <span class="n">norm</span>
+<span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">binom</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">norm</span>
 
 <span class="kn">from</span> <span class="nn">jmetal.lab.statistical_test.apv_procedures</span> <span class="kn">import</span> <span class="o">*</span>
 
 
-<div class="viewcode-block" id="ranks"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.ranks">[docs]</a><span class="k">def</span> <span class="nf">ranks</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Computes the rank of the elements in data.</span>
+<div class="viewcode-block" id="ranks">
+<a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.ranks">[docs]</a>
+<span class="k">def</span> <span class="nf">ranks</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the rank of the elements in data.</span>
 
 <span class="sd">    :param data: 2-D matrix</span>
 <span class="sd">    :param descending: boolean (default False). If true, rank is sorted in descending order.</span>
@@ -128,23 +127,30 @@
         <span class="n">ranks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
             <span class="n">values</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">rep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span>
-                <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">s</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">s</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]),</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="p">)</span>
+                <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">s</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">s</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]),</span>
+                <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-                <span class="n">ranks</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">indices</span><span class="p">[</span><span class="n">values</span> <span class="o">==</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]]</span> <span class="o">+</span> \
-                               <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">rep</span><span class="p">[</span><span class="n">values</span> <span class="o">==</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">ranks</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">indices</span><span class="p">[</span><span class="n">values</span> <span class="o">==</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]]</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">rep</span><span class="p">[</span><span class="n">values</span> <span class="o">==</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">ranks</span>
     <span class="k">elif</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">ranks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">data</span><span class="o">.</span><span class="n">size</span><span class="p">,))</span>
         <span class="n">values</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">rep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span>
-            <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">s</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">s</span> <span class="o">*</span> <span class="n">data</span><span class="p">),</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="p">)</span>
+            <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">s</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">s</span> <span class="o">*</span> <span class="n">data</span><span class="p">),</span>
+            <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
-            <span class="n">ranks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">indices</span><span class="p">[</span><span class="n">values</span> <span class="o">==</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+</span> \
-                        <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">rep</span><span class="p">[</span><span class="n">values</span> <span class="o">==</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">ranks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">indices</span><span class="p">[</span><span class="n">values</span> <span class="o">==</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">rep</span><span class="p">[</span><span class="n">values</span> <span class="o">==</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">ranks</span></div>
 
 
-<div class="viewcode-block" id="sign_test"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.sign_test">[docs]</a><span class="k">def</span> <span class="nf">sign_test</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Given the results drawn from two algorithms/methods X and Y, the sign test analyses if</span>
+
+<div class="viewcode-block" id="sign_test">
+<a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.sign_test">[docs]</a>
+<span class="k">def</span> <span class="nf">sign_test</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given the results drawn from two algorithms/methods X and Y, the sign test analyses if</span>
 <span class="sd">    there is a difference between X and Y.</span>
 
 <span class="sd">    .. note:: Null Hypothesis: Pr(X&lt;Y)= 0.5</span>
@@ -161,8 +167,7 @@
         <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
         <span class="n">n_perf</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s1">&#39;Initialization ERROR. Incorrect number of dimensions for axis 1&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization ERROR. Incorrect number of dimensions for axis 1&quot;</span><span class="p">)</span>
 
     <span class="c1"># Compute the differences</span>
     <span class="n">Z</span> <span class="o">=</span> <span class="n">X</span> <span class="o">-</span> <span class="n">Y</span>
@@ -178,12 +183,16 @@
 
     <span class="n">p_value</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">min</span><span class="p">([</span><span class="n">p_value_minus</span><span class="p">,</span> <span class="n">p_value_plus</span><span class="p">])</span>
 
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Wminus</span><span class="p">,</span> <span class="n">Wplus</span><span class="p">,</span> <span class="n">p_value</span><span class="p">]),</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Num X&lt;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;Num X&gt;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;p-value&#39;</span><span class="p">],</span>
-                        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Results&#39;</span><span class="p">])</span></div>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Wminus</span><span class="p">,</span> <span class="n">Wplus</span><span class="p">,</span> <span class="n">p_value</span><span class="p">]),</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Num X&lt;Y&quot;</span><span class="p">,</span> <span class="s2">&quot;Num X&gt;Y&quot;</span><span class="p">,</span> <span class="s2">&quot;p-value&quot;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Results&quot;</span><span class="p">]</span>
+    <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="friedman_test"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.friedman_test">[docs]</a><span class="k">def</span> <span class="nf">friedman_test</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Friedman ranking test.</span>
+
+<div class="viewcode-block" id="friedman_test">
+<a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.friedman_test">[docs]</a>
+<span class="k">def</span> <span class="nf">friedman_test</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Friedman ranking test.</span>
 
 <span class="sd">    ..note:: Null Hypothesis: In a set of k (&gt;=2) treaments (or tested algorithms), all the treatments are equivalent, so their average ranks should be equal.</span>
 
@@ -199,11 +208,9 @@
     <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="n">n_samples</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s1">&#39;Initialization ERROR. Incorrect number of array dimensions&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization ERROR. Incorrect number of array dimensions&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s1">&#39;Initialization Error. Incorrect number of dimensions for axis 1.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization Error. Incorrect number of dimensions for axis 1.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Compute ranks.</span>
     <span class="n">datarank</span> <span class="o">=</span> <span class="n">ranks</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -212,18 +219,21 @@
     <span class="n">avranks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">datarank</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
     <span class="c1"># Get Friedman statistics</span>
-    <span class="n">friedman_stat</span> <span class="o">=</span> <span class="p">(</span><span class="mf">12.0</span> <span class="o">*</span> <span class="n">n_samples</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span> <span class="o">*</span> \
-                    <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">avranks</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">4.0</span><span class="p">)</span>
+    <span class="n">friedman_stat</span> <span class="o">=</span> <span class="p">(</span><span class="mf">12.0</span> <span class="o">*</span> <span class="n">n_samples</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">avranks</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">4.0</span><span class="p">)</span>
 
     <span class="c1"># Compute p-value</span>
-    <span class="n">p_value</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">chi2</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">friedman_stat</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span>
+    <span class="n">p_value</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">chi2</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">friedman_stat</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
 
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">friedman_stat</span><span class="p">,</span> <span class="n">p_value</span><span class="p">]),</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Friedman-statistic&#39;</span><span class="p">,</span> <span class="s1">&#39;p-value&#39;</span><span class="p">],</span>
-                        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Results&#39;</span><span class="p">])</span></div>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">friedman_stat</span><span class="p">,</span> <span class="n">p_value</span><span class="p">]),</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Friedman-statistic&quot;</span><span class="p">,</span> <span class="s2">&quot;p-value&quot;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Results&quot;</span><span class="p">]</span>
+    <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="friedman_aligned_rank_test"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.friedman_aligned_rank_test">[docs]</a><span class="k">def</span> <span class="nf">friedman_aligned_rank_test</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Method of aligned ranks for the Friedman test.</span>
+
+<div class="viewcode-block" id="friedman_aligned_rank_test">
+<a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.friedman_aligned_rank_test">[docs]</a>
+<span class="k">def</span> <span class="nf">friedman_aligned_rank_test</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Method of aligned ranks for the Friedman test.</span>
 
 <span class="sd">    ..note:: Null Hypothesis: In a set of k (&gt;=2) treaments (or tested algorithms), all the treatments are equivalent, so their average ranks should be equal.</span>
 
@@ -239,11 +249,9 @@
     <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="n">n_samples</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s1">&#39;Initialization ERROR. Incorrect number of array dimensions&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization ERROR. Incorrect number of array dimensions&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s1">&#39;Initialization Error. Incorrect number of dimensions for axis 1.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization Error. Incorrect number of dimensions for axis 1.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Compute the average value achieved by all algorithms in each problem</span>
     <span class="n">control</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -251,27 +259,31 @@
     <span class="n">diff</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">control</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
     <span class="c1"># rank diff</span>
     <span class="n">alignedRanks</span> <span class="o">=</span> <span class="n">ranks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">diff</span><span class="p">))</span>
-    <span class="n">alignedRanks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">alignedRanks</span><span class="p">,</span> <span class="n">newshape</span><span class="o">=</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">k</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+    <span class="n">alignedRanks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">alignedRanks</span><span class="p">,</span> <span class="n">newshape</span><span class="o">=</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">k</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
 
     <span class="c1"># Compute statistic</span>
     <span class="n">Rhat_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">alignedRanks</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">Rhat_j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">alignedRanks</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">si</span><span class="p">,</span> <span class="n">sj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Rhat_i</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Rhat_j</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">si</span><span class="p">,</span> <span class="n">sj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Rhat_i</span><span class="o">**</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Rhat_j</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
-    <span class="n">A</span> <span class="o">=</span> <span class="n">sj</span> <span class="o">-</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">n_samples</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="mf">4.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">n_samples</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
-    <span class="n">B1</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">n_samples</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">n_samples</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">k</span> <span class="o">*</span> <span class="n">n_samples</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">6.0</span><span class="p">)</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">sj</span> <span class="o">-</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">n_samples</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mf">4.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">n_samples</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">B1</span> <span class="o">=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">n_samples</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">n_samples</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">k</span> <span class="o">*</span> <span class="n">n_samples</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">6.0</span>
     <span class="n">B2</span> <span class="o">=</span> <span class="n">si</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
 
     <span class="n">alignedRanks_stat</span> <span class="o">=</span> <span class="p">((</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">A</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">B1</span> <span class="o">-</span> <span class="n">B2</span><span class="p">)</span>
 
     <span class="n">p_value</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">chi2</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">alignedRanks_stat</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">alignedRanks_stat</span><span class="p">,</span> <span class="n">p_value</span><span class="p">]),</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Aligned Rank stat&#39;</span><span class="p">,</span> <span class="s1">&#39;p-value&#39;</span><span class="p">],</span>
-                        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Results&#39;</span><span class="p">])</span></div>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">alignedRanks_stat</span><span class="p">,</span> <span class="n">p_value</span><span class="p">]),</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Aligned Rank stat&quot;</span><span class="p">,</span> <span class="s2">&quot;p-value&quot;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Results&quot;</span><span class="p">]</span>
+    <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="quade_test"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.quade_test">[docs]</a><span class="k">def</span> <span class="nf">quade_test</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Quade test.</span>
+
+<div class="viewcode-block" id="quade_test">
+<a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.quade_test">[docs]</a>
+<span class="k">def</span> <span class="nf">quade_test</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Quade test.</span>
 
 <span class="sd">    ..note:: Null Hypothesis: In a set of k (&gt;=2) treaments (or tested algorithms), all the treatments are equivalent, so their average ranks should be equal.</span>
 
@@ -287,11 +299,9 @@
     <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="n">n_samples</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s1">&#39;Initialization ERROR. Incorrect number of array dimensions&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization ERROR. Incorrect number of array dimensions&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s1">&#39;Initialization Error. Incorrect number of dimensions for axis 1.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization Error. Incorrect number of dimensions for axis 1.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Compute ranks.</span>
     <span class="n">datarank</span> <span class="o">=</span> <span class="n">ranks</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -308,8 +318,8 @@
     <span class="n">Salg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">S_stat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
     <span class="c1"># Compute Fq (Quade Test statistic) and associated p_value</span>
-    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">S_stat</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Salg</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">S_stat</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Salg</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">A</span> <span class="o">==</span> <span class="n">B</span><span class="p">:</span>
         <span class="n">Fq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">Inf</span>
@@ -318,11 +328,14 @@
         <span class="n">Fq</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_samples</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">B</span> <span class="o">/</span> <span class="p">(</span><span class="n">A</span> <span class="o">-</span> <span class="n">B</span><span class="p">)</span>
         <span class="n">p_value</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">f</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">Fq</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_samples</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
 
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Fq</span><span class="p">,</span> <span class="n">p_value</span><span class="p">]),</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Quade Test statistic&#39;</span><span class="p">,</span> <span class="s1">&#39;p-value&#39;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Results&#39;</span><span class="p">])</span></div>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Fq</span><span class="p">,</span> <span class="n">p_value</span><span class="p">]),</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Quade Test statistic&quot;</span><span class="p">,</span> <span class="s2">&quot;p-value&quot;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Results&quot;</span><span class="p">])</span></div>
 
 
-<div class="viewcode-block" id="friedman_ph_test"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.friedman_ph_test">[docs]</a><span class="k">def</span> <span class="nf">friedman_ph_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">apv_procedure</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Friedman post-hoc test.</span>
+
+<div class="viewcode-block" id="friedman_ph_test">
+<a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.friedman_ph_test">[docs]</a>
+<span class="k">def</span> <span class="nf">friedman_ph_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">apv_procedure</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Friedman post-hoc test.</span>
 
 <span class="sd">    :param data: An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.</span>
 <span class="sd">    :param control: optional int or string. Default None. Index or Name of the control algorithm. If control = None all FriedmanPosHocTest considers all possible comparisons among algorithms.</span>
@@ -344,7 +357,7 @@
         <span class="n">algorithms</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">values</span>
     <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;Alg</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">alg</span> <span class="k">for</span> <span class="n">alg</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;Alg</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">alg</span> <span class="k">for</span> <span class="n">alg</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
 
     <span class="k">if</span> <span class="n">control</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">index</span> <span class="o">=</span> <span class="n">algorithms</span>
@@ -356,24 +369,29 @@
     <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="n">n_samples</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s1">&#39;Initialization ERROR. Incorrect number of array dimensions.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization ERROR. Incorrect number of array dimensions.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s1">&#39;Initialization Error. Incorrect number of dimensions for axis 1.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization Error. Incorrect number of dimensions for axis 1.&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">control</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">control</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span> <span class="ow">and</span> <span class="n">control</span> <span class="o">&gt;=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Initialization ERROR. control is out of bounds&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization ERROR. control is out of bounds&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">control</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span> <span class="ow">and</span> <span class="n">control</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">algorithms</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s1">&#39;Initialization ERROR. </span><span class="si">%s</span><span class="s1"> is not a column name of data&#39;</span> <span class="o">%</span> <span class="n">control</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization ERROR. </span><span class="si">%s</span><span class="s2"> is not a column name of data&quot;</span> <span class="o">%</span> <span class="n">control</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">apv_procedure</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">apv_procedure</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Bonferroni&#39;</span><span class="p">,</span> <span class="s1">&#39;Holm&#39;</span><span class="p">,</span> <span class="s1">&#39;Hochberg&#39;</span><span class="p">,</span> <span class="s1">&#39;Hommel&#39;</span><span class="p">,</span> <span class="s1">&#39;Holland&#39;</span><span class="p">,</span> <span class="s1">&#39;Finner&#39;</span><span class="p">,</span> <span class="s1">&#39;Li&#39;</span><span class="p">,</span> <span class="s1">&#39;Shaffer&#39;</span><span class="p">,</span>
-                                 <span class="s1">&#39;Nemenyi&#39;</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s1">&#39;Initialization ERROR. Incorrect value for APVprocedure.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">apv_procedure</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="s2">&quot;Bonferroni&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Holm&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Hochberg&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Hommel&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Holland&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Finner&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Li&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Shaffer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Nemenyi&quot;</span><span class="p">,</span>
+        <span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization ERROR. Incorrect value for APVprocedure.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Compute ranks.</span>
     <span class="n">datarank</span> <span class="o">=</span> <span class="n">ranks</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -405,28 +423,31 @@
     <span class="k">if</span> <span class="n">apv_procedure</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">zvalues_df</span><span class="p">,</span> <span class="n">pvalues_df</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Bonferroni&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Bonferroni&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">bonferroni_dunn</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Holm&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Holm&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">holm</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Hochberg&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Hochberg&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">hochberg</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Holland&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Holland&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">holland</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Finner&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Finner&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">finner</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Li&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Li&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">li</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Shaffer&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Shaffer&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">shaffer</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Nemenyi&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Nemenyi&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">nemenyi</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">zvalues_df</span><span class="p">,</span> <span class="n">pvalues_df</span><span class="p">,</span> <span class="n">ap_vs_df</span></div>
 
 
-<div class="viewcode-block" id="friedman_aligned_ph_test"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.friedman_aligned_ph_test">[docs]</a><span class="k">def</span> <span class="nf">friedman_aligned_ph_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">apv_procedure</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Friedman Aligned Ranks post-hoc test.</span>
+
+<div class="viewcode-block" id="friedman_aligned_ph_test">
+<a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.friedman_aligned_ph_test">[docs]</a>
+<span class="k">def</span> <span class="nf">friedman_aligned_ph_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">apv_procedure</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Friedman Aligned Ranks post-hoc test.</span>
 
 <span class="sd">    :param data: An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.</span>
 <span class="sd">    :param control: optional int or string. Default None. Index or Name of the control algorithm. If control = None all FriedmanPosHocTest considers all possible comparisons among algorithms.</span>
@@ -448,7 +469,7 @@
         <span class="n">algorithms</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">values</span>
     <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;Alg</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">alg</span> <span class="k">for</span> <span class="n">alg</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;Alg</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">alg</span> <span class="k">for</span> <span class="n">alg</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
 
     <span class="k">if</span> <span class="n">control</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">index</span> <span class="o">=</span> <span class="n">algorithms</span>
@@ -460,18 +481,15 @@
     <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="n">n_samples</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s1">&#39;Initialization ERROR. Incorrect number of array dimensions.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization ERROR. Incorrect number of array dimensions.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s1">&#39;Initialization Error. Incorrect number of dimensions for axis 1.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization Error. Incorrect number of dimensions for axis 1.&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">control</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">control</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span> <span class="ow">and</span> <span class="n">control</span> <span class="o">&gt;=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Initialization ERROR. control is out of bounds&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization ERROR. control is out of bounds&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">control</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span> <span class="ow">and</span> <span class="n">control</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">algorithms</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s1">&#39;Initialization ERROR. </span><span class="si">%s</span><span class="s1"> is not a column name of data&#39;</span> <span class="o">%</span> <span class="n">control</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization ERROR. </span><span class="si">%s</span><span class="s2"> is not a column name of data&quot;</span> <span class="o">%</span> <span class="n">control</span><span class="p">)</span>
 
     <span class="c1"># Compute the average value achieved by all algorithms in each problem</span>
     <span class="n">problemmean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -510,28 +528,31 @@
     <span class="k">if</span> <span class="n">apv_procedure</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">zvalues_df</span><span class="p">,</span> <span class="n">pvalues_df</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Bonferroni&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Bonferroni&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">bonferroni_dunn</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Holm&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Holm&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">holm</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Hochberg&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Hochberg&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">hochberg</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Holland&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Holland&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">holland</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Finner&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Finner&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">finner</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Li&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Li&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">li</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Shaffer&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Shaffer&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">shaffer</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Nemenyi&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Nemenyi&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">nemenyi</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">zvalues_df</span><span class="p">,</span> <span class="n">pvalues_df</span><span class="p">,</span> <span class="n">ap_vs_df</span></div>
 
 
-<div class="viewcode-block" id="quade_ph_test"><a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.quade_ph_test">[docs]</a><span class="k">def</span> <span class="nf">quade_ph_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">apv_procedure</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Quade post-hoc test.</span>
+
+<div class="viewcode-block" id="quade_ph_test">
+<a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.quade_ph_test">[docs]</a>
+<span class="k">def</span> <span class="nf">quade_ph_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">apv_procedure</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Quade post-hoc test.</span>
 
 <span class="sd">    :param data: An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.</span>
 <span class="sd">    :param control: optional int or string. Default None. Index or Name of the control algorithm. If control = None all FriedmanPosHocTest considers all possible comparisons among algorithms.</span>
@@ -553,7 +574,7 @@
         <span class="n">algorithms</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">values</span>
     <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;Alg</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">alg</span> <span class="k">for</span> <span class="n">alg</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;Alg</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">alg</span> <span class="k">for</span> <span class="n">alg</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
 
     <span class="k">if</span> <span class="n">control</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">index</span> <span class="o">=</span> <span class="n">algorithms</span>
@@ -565,18 +586,15 @@
     <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="n">n_samples</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s1">&#39;Initialization ERROR. Incorrect number of array dimensions.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization ERROR. Incorrect number of array dimensions.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s1">&#39;Initialization Error. Incorrect number of dimensions for axis 1.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization Error. Incorrect number of dimensions for axis 1.&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">control</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">control</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span> <span class="ow">and</span> <span class="n">control</span> <span class="o">&gt;=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Initialization ERROR. control is out of bounds&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization ERROR. control is out of bounds&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">control</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span> <span class="ow">and</span> <span class="n">control</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">algorithms</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s1">&#39;Initialization ERROR. </span><span class="si">%s</span><span class="s1"> is not a column name of data&#39;</span> <span class="o">%</span> <span class="n">control</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initialization ERROR. </span><span class="si">%s</span><span class="s2"> is not a column name of data&quot;</span> <span class="o">%</span> <span class="n">control</span><span class="p">)</span>
 
     <span class="c1"># Compute ranks.</span>
     <span class="n">datarank</span> <span class="o">=</span> <span class="n">ranks</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -591,8 +609,7 @@
         <span class="n">W</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">problemRank</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">datarank</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
     <span class="n">avranks</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n_samples</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_samples</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
     <span class="c1"># Compute test statistics</span>
-    <span class="n">aux</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n_samples</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span>
-                        <span class="p">(</span><span class="mf">18.0</span> <span class="o">*</span> <span class="n">n_samples</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_samples</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)))</span>
+    <span class="n">aux</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n_samples</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">18.0</span> <span class="o">*</span> <span class="n">n_samples</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_samples</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)))</span>
     <span class="k">if</span> <span class="n">control</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
@@ -615,24 +632,25 @@
     <span class="k">if</span> <span class="n">apv_procedure</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">zvalues_df</span><span class="p">,</span> <span class="n">pvalues_df</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Bonferroni&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Bonferroni&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">bonferroni_dunn</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Holm&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Holm&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">holm</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Hochberg&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Hochberg&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">hochberg</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Holland&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Holland&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">holland</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Finner&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Finner&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">finner</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Li&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Li&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">li</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Shaffer&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Shaffer&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">shaffer</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s1">&#39;Nemenyi&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">apv_procedure</span> <span class="o">==</span> <span class="s2">&quot;Nemenyi&quot;</span><span class="p">:</span>
             <span class="n">ap_vs_df</span> <span class="o">=</span> <span class="n">nemenyi</span><span class="p">(</span><span class="n">pvalues_df</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">zvalues_df</span><span class="p">,</span> <span class="n">pvalues_df</span><span class="p">,</span> <span class="n">ap_vs_df</span></div>
+
 </pre></div>
 
           </div>
@@ -649,8 +667,9 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jmetal.lab.statistical_test.functions</a></li> 
       </ul>
     </div>
 <script type="text/javascript">

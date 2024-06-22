@@ -1,9 +1,9 @@
-
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../../../../">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <!-- Licensed under the Apache 2.0 License -->
   <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/open-sans/stylesheet.css" />
@@ -12,18 +12,14 @@
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>jmetal.problem.multiobjective.lz09 &#8212; jMetalPy 1.5.3 documentation</title>
-    <link rel="stylesheet" href="../../../../_static/guzzle.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <title>jmetal.problem.multiobjective.lz09 &#8212; jMetalPy 1.7.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css?v=e05a0192" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=9aa90875" />
+    <script src="../../../../_static/documentation_options.js?v=030dc6f6"></script>
+    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
   
@@ -39,8 +35,9 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jmetal.problem.multiobjective.lz09</a></li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -51,7 +48,7 @@
   <div id="left-column">
     <div class="sphinxsidebar"><a href="
     ../../../../index.html" class="text-logo">
-    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.5.3 documentation">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.7.0 documentation">
     <br>
 </a>
 
@@ -124,48 +121,53 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="LZ09"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09">[docs]</a><span class="k">class</span> <span class="nc">LZ09</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
+<div class="viewcode-block" id="LZ09">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09">[docs]</a>
+<span class="k">class</span> <span class="nc">LZ09</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
 
     <span class="n">__metaclass__</span> <span class="o">=</span> <span class="n">ABCMeta</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                 <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                 <span class="n">number_of_objectives</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                 <span class="n">number_of_constraints</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                 <span class="n">ptype</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                 <span class="n">dtype</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                 <span class="n">ltype</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; LZ09 benchmark family as defined in:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">ptype</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">ltype</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;LZ09 benchmark family as defined in:</span>
 
 <span class="sd">        * H. Li and Q. Zhang. Multiobjective optimization problems with complicated pareto sets, MOEA/D and NSGA-II.</span>
 <span class="sd">        IEEE Transactions on Evolutionary Computation, 12(2):284-302, April 2009.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LZ09</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">=</span> <span class="n">number_of_variables</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span> <span class="o">=</span> <span class="n">number_of_objectives</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span> <span class="o">=</span> <span class="n">number_of_constraints</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">obj_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;f(x)&#39;</span><span class="p">,</span> <span class="s1">&#39;f(y)&#39;</span><span class="p">,</span> <span class="s1">&#39;f(z)&#39;</span><span class="p">]</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">*</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">*</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="n">number_of_variables</span> <span class="o">*</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span> <span class="o">=</span> <span class="n">number_of_variables</span> <span class="o">*</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ptype</span> <span class="o">=</span> <span class="n">ptype</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ltype</span> <span class="o">=</span> <span class="n">ltype</span>
 
-<div class="viewcode-block" id="LZ09.evaluate"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+<div class="viewcode-block" id="LZ09.number_of_constraints">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09.number_of_constraints">[docs]</a>
+    <span class="k">def</span> <span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="LZ09.evaluate">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09.evaluate">[docs]</a>
+    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span>
         <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">objective</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">()):</span>
             <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">solution</span></div>
 
+
     <span class="k">def</span> <span class="nf">__ps_func2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">css</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot; Control the PS shapes of 2-D instances.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Control the PS shapes of 2-D instances.</span>
 
 <span class="sd">        :param type: The type of the curve.</span>
 <span class="sd">        :param css: The class of the index.</span>
@@ -175,13 +177,13 @@
 
         <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="mi">21</span><span class="p">:</span>
             <span class="n">xy</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
-            <span class="n">beta</span> <span class="o">=</span> <span class="n">xy</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">dim</span> <span class="o">-</span> <span class="mi">8</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">beta</span> <span class="o">=</span> <span class="n">xy</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">()</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">dim</span> <span class="o">-</span> <span class="mi">8</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">()</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
         <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="mi">22</span><span class="p">:</span>
-            <span class="n">theta</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">+</span> <span class="n">dim</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">+</span> <span class="n">dim</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">()</span>
             <span class="n">xy</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
             <span class="n">beta</span> <span class="o">=</span> <span class="n">xy</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="mi">23</span><span class="p">:</span>
-            <span class="n">theta</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">+</span> <span class="n">dim</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">+</span> <span class="n">dim</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">()</span>
             <span class="n">ra</span> <span class="o">=</span> <span class="mf">0.8</span> <span class="o">*</span> <span class="n">t1</span>
             <span class="n">xy</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">css</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -189,7 +191,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">beta</span> <span class="o">=</span> <span class="n">xy</span> <span class="o">-</span> <span class="n">ra</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="mi">24</span><span class="p">:</span>
-            <span class="n">theta</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">+</span> <span class="n">dim</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">+</span> <span class="n">dim</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">()</span>
             <span class="n">xy</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
             <span class="n">ra</span> <span class="o">=</span> <span class="mf">0.8</span> <span class="o">*</span> <span class="n">t1</span>
             <span class="k">if</span> <span class="n">css</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -199,7 +201,7 @@
         <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="mi">25</span><span class="p">:</span>
             <span class="n">rho</span> <span class="o">=</span> <span class="mf">0.8</span>
             <span class="n">phi</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t1</span>
-            <span class="n">theta</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">+</span> <span class="n">dim</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">+</span> <span class="n">dim</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">()</span>
             <span class="n">xy</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">css</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">beta</span> <span class="o">=</span> <span class="n">xy</span> <span class="o">-</span> <span class="n">rho</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
@@ -208,7 +210,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">beta</span> <span class="o">=</span> <span class="n">xy</span> <span class="o">-</span> <span class="n">rho</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="mi">26</span><span class="p">:</span>
-            <span class="n">theta</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">+</span> <span class="n">dim</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">+</span> <span class="n">dim</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">()</span>
             <span class="n">ra</span> <span class="o">=</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">*</span> <span class="p">(</span><span class="n">t1</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">theta</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
             <span class="n">xy</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">css</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -219,26 +221,25 @@
         <span class="k">return</span> <span class="n">beta</span>
 
     <span class="k">def</span> <span class="nf">__ps_func3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Control the PS shapes of 3-D instances.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Control the PS shapes of 3-D instances.</span>
 <span class="sd">        :param type: The type of curve.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">beta</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="n">dim</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="mi">31</span><span class="p">:</span>
-            <span class="n">xy</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="o">.</span><span class="mi">5</span><span class="p">)</span>
-            <span class="n">rate</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">dim</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span>
+            <span class="n">xy</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
+            <span class="n">rate</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">dim</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">()</span>
             <span class="n">beta</span> <span class="o">=</span> <span class="n">xy</span> <span class="o">-</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">t1</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">*</span> <span class="n">rate</span> <span class="o">+</span> <span class="n">t2</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">rate</span><span class="p">))</span> <span class="o">+</span> <span class="mi">2</span>
         <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
-            <span class="n">theta</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">+</span> <span class="n">dim</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span>
-            <span class="n">xy</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="o">.</span><span class="mi">5</span><span class="p">)</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t1</span> <span class="o">+</span> <span class="n">dim</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">()</span>
+            <span class="n">xy</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
             <span class="n">beta</span> <span class="o">=</span> <span class="n">xy</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">t2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">beta</span>
 
     <span class="k">def</span> <span class="nf">__alpha_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot; Control the PF shape.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Control the PF shape.&quot;&quot;&quot;</span>
         <span class="n">alpha</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="n">dim</span>
 
         <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
@@ -275,8 +276,7 @@
         <span class="k">return</span> <span class="n">alpha</span>
 
     <span class="k">def</span> <span class="nf">__beta_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot; Control the distance.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Control the distance.&quot;&quot;&quot;</span>
         <span class="n">beta</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
@@ -294,7 +294,7 @@
             <span class="nb">sum</span><span class="p">,</span> <span class="n">xx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
                 <span class="n">xx</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="nb">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="n">xx</span> <span class="o">*</span> <span class="n">xx</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">xx</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="nb">sum</span> <span class="o">+=</span> <span class="n">xx</span> <span class="o">*</span> <span class="n">xx</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">xx</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="n">beta</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="nb">sum</span> <span class="o">/</span> <span class="n">dim</span>
         <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
             <span class="nb">sum</span><span class="p">,</span> <span class="n">prod</span><span class="p">,</span> <span class="n">xx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span>
@@ -306,16 +306,18 @@
 
         <span class="k">return</span> <span class="n">beta</span>
 
-<div class="viewcode-block" id="LZ09.objective"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09.objective">[docs]</a>    <span class="k">def</span> <span class="nf">objective</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_variables</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<div class="viewcode-block" id="LZ09.objective">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09.objective">[docs]</a>
+    <span class="k">def</span> <span class="nf">objective</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_variables</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
         <span class="n">aa</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">bb</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">cc</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="n">y_objectives</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span>
+        <span class="n">y_objectives</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ltype</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">26</span><span class="p">]:</span>
-                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">()):</span>
                     <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                         <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ps_func2</span><span class="p">(</span><span class="n">x_variables</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">x_variables</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ltype</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
                         <span class="n">aa</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
@@ -331,7 +333,7 @@
                 <span class="n">y_objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">h</span>
                 <span class="n">y_objectives</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">g</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ltype</span> <span class="o">==</span> <span class="mi">25</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">()):</span>
                     <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                         <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ps_func2</span><span class="p">(</span><span class="n">x_variables</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">x_variables</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ltype</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
                         <span class="n">aa</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
@@ -353,10 +355,10 @@
                 <span class="n">y_objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">h</span>
                 <span class="n">y_objectives</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">g</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">()</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ltype</span> <span class="o">==</span> <span class="mi">31</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">ltype</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
 
-                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">()):</span>
                     <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ps_func3</span><span class="p">(</span><span class="n">x_variables</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">x_variables</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_variables</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ltype</span><span class="p">)</span>
 
                     <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -378,98 +380,232 @@
 
         <span class="k">return</span> <span class="n">y_objectives</span></div>
 
-<div class="viewcode-block" id="LZ09.get_name"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;LZ09&#39;</span></div></div>
+
+<div class="viewcode-block" id="LZ09.get_name">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09.get_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;LZ09&quot;</span></div>
+</div>
 
 
-<div class="viewcode-block" id="LZ09_F1"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F1">[docs]</a><span class="k">class</span> <span class="nc">LZ09_F1</span><span class="p">(</span><span class="n">LZ09</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LZ09_F1</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">number_of_objectives</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">number_of_constraints</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                                      <span class="n">dtype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ltype</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">ptype</span><span class="o">=</span><span class="mi">21</span><span class="p">)</span>
+<div class="viewcode-block" id="LZ09_F1">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F1">[docs]</a>
+<span class="k">class</span> <span class="nc">LZ09_F1</span><span class="p">(</span><span class="n">LZ09</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LZ09_F1</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">number_of_variables</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ltype</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">ptype</span><span class="o">=</span><span class="mi">21</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;f(x)&quot;</span><span class="p">,</span> <span class="s2">&quot;f(y)&quot;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="LZ09_F1.get_name"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F1.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;LZ09_F1&#39;</span></div></div>
-
-
-<div class="viewcode-block" id="LZ09_F2"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F2">[docs]</a><span class="k">class</span> <span class="nc">LZ09_F2</span><span class="p">(</span><span class="n">LZ09</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LZ09_F2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">number_of_objectives</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">number_of_constraints</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                                      <span class="n">dtype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ltype</span><span class="o">=</span><span class="mi">22</span><span class="p">,</span> <span class="n">ptype</span><span class="o">=</span><span class="mi">21</span><span class="p">)</span>
-
-<div class="viewcode-block" id="LZ09_F2.get_name"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F2.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;LZ09_F2&#39;</span></div></div>
+<div class="viewcode-block" id="LZ09_F1.number_of_objectives">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F1.number_of_objectives">[docs]</a>
+    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="LZ09_F3"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F3">[docs]</a><span class="k">class</span> <span class="nc">LZ09_F3</span><span class="p">(</span><span class="n">LZ09</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LZ09_F3</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">number_of_objectives</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">number_of_constraints</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                                      <span class="n">dtype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ltype</span><span class="o">=</span><span class="mi">23</span><span class="p">,</span> <span class="n">ptype</span><span class="o">=</span><span class="mi">21</span><span class="p">)</span>
-
-<div class="viewcode-block" id="LZ09_F3.get_name"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F3.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;LZ09_F3&#39;</span></div></div>
+<div class="viewcode-block" id="LZ09_F1.name">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F1.name">[docs]</a>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;LZ09_F1&quot;</span></div>
+</div>
 
 
-<div class="viewcode-block" id="LZ09_F4"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F4">[docs]</a><span class="k">class</span> <span class="nc">LZ09_F4</span><span class="p">(</span><span class="n">LZ09</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LZ09_F4</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">number_of_objectives</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">number_of_constraints</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                                      <span class="n">dtype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ltype</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">ptype</span><span class="o">=</span><span class="mi">21</span><span class="p">)</span>
+<div class="viewcode-block" id="LZ09_F2">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F2">[docs]</a>
+<span class="k">class</span> <span class="nc">LZ09_F2</span><span class="p">(</span><span class="n">LZ09</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LZ09_F2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">number_of_variables</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ltype</span><span class="o">=</span><span class="mi">22</span><span class="p">,</span> <span class="n">ptype</span><span class="o">=</span><span class="mi">21</span>
+        <span class="p">)</span>
 
-<div class="viewcode-block" id="LZ09_F4.get_name"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F4.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;LZ09_F4&#39;</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;f(x)&quot;</span><span class="p">,</span> <span class="s2">&quot;f(y)&quot;</span><span class="p">]</span>
 
-
-<div class="viewcode-block" id="LZ09_F5"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F5">[docs]</a><span class="k">class</span> <span class="nc">LZ09_F5</span><span class="p">(</span><span class="n">LZ09</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LZ09_F5</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">number_of_objectives</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">number_of_constraints</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                                      <span class="n">dtype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ltype</span><span class="o">=</span><span class="mi">26</span><span class="p">,</span> <span class="n">ptype</span><span class="o">=</span><span class="mi">21</span><span class="p">)</span>
-
-<div class="viewcode-block" id="LZ09_F5.get_name"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F5.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;LZ09_F5&#39;</span></div></div>
+<div class="viewcode-block" id="LZ09_F2.number_of_objectives">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F2.number_of_objectives">[docs]</a>
+    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="LZ09_F6"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F6">[docs]</a><span class="k">class</span> <span class="nc">LZ09_F6</span><span class="p">(</span><span class="n">LZ09</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LZ09_F6</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">number_of_objectives</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">number_of_constraints</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                                      <span class="n">dtype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ltype</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">ptype</span><span class="o">=</span><span class="mi">31</span><span class="p">)</span>
-
-<div class="viewcode-block" id="LZ09_F6.get_name"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F6.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;LZ09_F6&#39;</span></div></div>
+<div class="viewcode-block" id="LZ09_F2.name">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F2.name">[docs]</a>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;LZ09_F2&quot;</span></div>
+</div>
 
 
-<div class="viewcode-block" id="LZ09_F7"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F7">[docs]</a><span class="k">class</span> <span class="nc">LZ09_F7</span><span class="p">(</span><span class="n">LZ09</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LZ09_F7</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">number_of_objectives</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">number_of_constraints</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                                      <span class="n">dtype</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">ltype</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">ptype</span><span class="o">=</span><span class="mi">21</span><span class="p">)</span>
+<div class="viewcode-block" id="LZ09_F3">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F3">[docs]</a>
+<span class="k">class</span> <span class="nc">LZ09_F3</span><span class="p">(</span><span class="n">LZ09</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LZ09_F3</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">number_of_variables</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ltype</span><span class="o">=</span><span class="mi">23</span><span class="p">,</span> <span class="n">ptype</span><span class="o">=</span><span class="mi">21</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;f(x)&quot;</span><span class="p">,</span> <span class="s2">&quot;f(y)&quot;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="LZ09_F7.get_name"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F7.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;LZ09_F7&#39;</span></div></div>
-
-
-<div class="viewcode-block" id="LZ09_F8"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F8">[docs]</a><span class="k">class</span> <span class="nc">LZ09_F8</span><span class="p">(</span><span class="n">LZ09</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LZ09_F8</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">number_of_objectives</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">number_of_constraints</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                                      <span class="n">dtype</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">ltype</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">ptype</span><span class="o">=</span><span class="mi">21</span><span class="p">)</span>
-
-<div class="viewcode-block" id="LZ09_F8.get_name"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F8.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;LZ09_F8&#39;</span></div></div>
+<div class="viewcode-block" id="LZ09_F3.number_of_objectives">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F3.number_of_objectives">[docs]</a>
+    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="LZ09_F9"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F9">[docs]</a><span class="k">class</span> <span class="nc">LZ09_F9</span><span class="p">(</span><span class="n">LZ09</span><span class="p">):</span>
+<div class="viewcode-block" id="LZ09_F3.name">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F3.name">[docs]</a>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;LZ09_F3&quot;</span></div>
+</div>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LZ09_F9</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">number_of_objectives</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">number_of_constraints</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                                      <span class="n">dtype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ltype</span><span class="o">=</span><span class="mi">22</span><span class="p">,</span> <span class="n">ptype</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
 
-<div class="viewcode-block" id="LZ09_F9.get_name"><a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F9.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;LZ09_F9&#39;</span></div></div>
+
+<div class="viewcode-block" id="LZ09_F4">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F4">[docs]</a>
+<span class="k">class</span> <span class="nc">LZ09_F4</span><span class="p">(</span><span class="n">LZ09</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LZ09_F4</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">number_of_variables</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ltype</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">ptype</span><span class="o">=</span><span class="mi">21</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;f(x)&quot;</span><span class="p">,</span> <span class="s2">&quot;f(y)&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="LZ09_F4.number_of_objectives">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F4.number_of_objectives">[docs]</a>
+    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LZ09_F4.name">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F4.name">[docs]</a>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;LZ09_F4&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="LZ09_F5">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F5">[docs]</a>
+<span class="k">class</span> <span class="nc">LZ09_F5</span><span class="p">(</span><span class="n">LZ09</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LZ09_F5</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">number_of_variables</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ltype</span><span class="o">=</span><span class="mi">26</span><span class="p">,</span> <span class="n">ptype</span><span class="o">=</span><span class="mi">21</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;f(x)&quot;</span><span class="p">,</span> <span class="s2">&quot;f(y)&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="LZ09_F5.number_of_objectives">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F5.number_of_objectives">[docs]</a>
+    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LZ09_F5.name">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F5.name">[docs]</a>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;LZ09_F5&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="LZ09_F6">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F6">[docs]</a>
+<span class="k">class</span> <span class="nc">LZ09_F6</span><span class="p">(</span><span class="n">LZ09</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LZ09_F6</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">number_of_variables</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ltype</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">ptype</span><span class="o">=</span><span class="mi">31</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;f(x)&quot;</span><span class="p">,</span> <span class="s2">&quot;f(y)&quot;</span><span class="p">,</span> <span class="s2">&quot;f(z)&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="LZ09_F6.number_of_objectives">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F6.number_of_objectives">[docs]</a>
+    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LZ09_F6.name">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F6.name">[docs]</a>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;LZ09_F6&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="LZ09_F7">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F7">[docs]</a>
+<span class="k">class</span> <span class="nc">LZ09_F7</span><span class="p">(</span><span class="n">LZ09</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LZ09_F7</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">number_of_variables</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">ltype</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">ptype</span><span class="o">=</span><span class="mi">21</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;f(x)&quot;</span><span class="p">,</span> <span class="s2">&quot;f(y)&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="LZ09_F7.number_of_objectives">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F7.number_of_objectives">[docs]</a>
+    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LZ09_F7.name">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F7.name">[docs]</a>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;LZ09_F7&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="LZ09_F8">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F8">[docs]</a>
+<span class="k">class</span> <span class="nc">LZ09_F8</span><span class="p">(</span><span class="n">LZ09</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LZ09_F8</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">number_of_variables</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">ltype</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">ptype</span><span class="o">=</span><span class="mi">21</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;f(x)&quot;</span><span class="p">,</span> <span class="s2">&quot;f(y)&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="LZ09_F8.number_of_objectives">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F8.number_of_objectives">[docs]</a>
+    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LZ09_F8.name">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F8.name">[docs]</a>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;LZ09_F8&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="LZ09_F9">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F9">[docs]</a>
+<span class="k">class</span> <span class="nc">LZ09_F9</span><span class="p">(</span><span class="n">LZ09</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LZ09_F9</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">number_of_variables</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ltype</span><span class="o">=</span><span class="mi">22</span><span class="p">,</span> <span class="n">ptype</span><span class="o">=</span><span class="mi">22</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;f(x)&quot;</span><span class="p">,</span> <span class="s2">&quot;f(y)&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="LZ09_F9.number_of_objectives">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F9.number_of_objectives">[docs]</a>
+    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LZ09_F9.name">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lz09.LZ09_F9.name">[docs]</a>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;LZ09_F9&quot;</span></div>
+</div>
+
 </pre></div>
 
           </div>
@@ -486,8 +622,9 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jmetal.problem.multiobjective.lz09</a></li> 
       </ul>
     </div>
 <script type="text/javascript">

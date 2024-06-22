@@ -1,9 +1,9 @@
-
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <!-- Licensed under the Apache 2.0 License -->
   <link rel="stylesheet" type="text/css" href="../../../_static/fonts/open-sans/stylesheet.css" />
@@ -12,18 +12,14 @@
   <link rel="stylesheet" type="text/css" href="../../../_static/css/bootstrap.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>jmetal.core.problem &#8212; jMetalPy 1.5.3 documentation</title>
-    <link rel="stylesheet" href="../../../_static/guzzle.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <title>jmetal.core.problem &#8212; jMetalPy 1.7.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/guzzle.css?v=e05a0192" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9aa90875" />
+    <script src="../../../_static/documentation_options.js?v=030dc6f6"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   
@@ -39,8 +35,9 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jmetal.core.problem</a></li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -51,7 +48,7 @@
   <div id="left-column">
     <div class="sphinxsidebar"><a href="
     ../../../index.html" class="text-logo">
-    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.5.3 documentation">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.7.0 documentation">
     <br>
 </a>
 
@@ -109,123 +106,209 @@
           <div class="document clearer body">
             
   <h1>Source code for jmetal.core.problem</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">random</span>
+<span></span><span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">TypeVar</span>
 
 <span class="kn">from</span> <span class="nn">jmetal.core.observer</span> <span class="kn">import</span> <span class="n">Observer</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="kn">import</span> <span class="n">BinarySolution</span><span class="p">,</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">IntegerSolution</span><span class="p">,</span> <span class="n">PermutationSolution</span>
+<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BinarySolution</span><span class="p">,</span>
+    <span class="n">FloatSolution</span><span class="p">,</span>
+    <span class="n">IntegerSolution</span><span class="p">,</span>
+    <span class="n">PermutationSolution</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">jmetal.logger</span> <span class="kn">import</span> <span class="n">get_logger</span>
 
-<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jmetal&#39;</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-<span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+<span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Problem"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.Problem">[docs]</a><span class="k">class</span> <span class="nc">Problem</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">ABC</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Class representing problems. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Problem">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.Problem">[docs]</a>
+<span class="k">class</span> <span class="nc">Problem</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problems.&quot;&quot;&quot;</span>
 
     <span class="n">MINIMIZE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
     <span class="n">MAXIMIZE</span> <span class="o">=</span> <span class="mi">1</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">reference_front</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">reference_front</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">directions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="Problem.create_solution"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.Problem.create_solution">[docs]</a>    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="Problem.number_of_variables">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.Problem.number_of_variables">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">number_of_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Problem.number_of_objectives">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.Problem.number_of_objectives">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Problem.number_of_constraints">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.Problem.number_of_constraints">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Problem.create_solution">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.Problem.create_solution">[docs]</a>
+    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">create_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot; Creates a random_search solution to the problem.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a random_search solution to the problem.</span>
 
-<span class="sd">        :return: Solution. &quot;&quot;&quot;</span>
+<span class="sd">        :return: Solution.&quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="Problem.evaluate"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.Problem.evaluate">[docs]</a>    <span class="nd">@abstractmethod</span>
+
+<div class="viewcode-block" id="Problem.evaluate">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.Problem.evaluate">[docs]</a>
+    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">S</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot; Evaluate a solution. For any new problem inheriting from :class:`Problem`, this method should be</span>
-<span class="sd">        replaced. Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Evaluate a solution. For any new problem inheriting from :class:`Problem`, this method should be replaced.</span>
+<span class="sd">        Note that this framework ASSUMES minimization, thus solutions must be evaluated in consequence.</span>
 
-<span class="sd">        :return: Evaluated solution. &quot;&quot;&quot;</span>
+<span class="sd">        :return: Evaluated solution.&quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="Problem.get_name"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.Problem.get_name">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">pass</span></div></div>
+
+<div class="viewcode-block" id="Problem.name">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.Problem.name">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+</div>
 
 
-<div class="viewcode-block" id="DynamicProblem"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.DynamicProblem">[docs]</a><span class="k">class</span> <span class="nc">DynamicProblem</span><span class="p">(</span><span class="n">Problem</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">Observer</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
 
-<div class="viewcode-block" id="DynamicProblem.the_problem_has_changed"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.DynamicProblem.the_problem_has_changed">[docs]</a>    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="DynamicProblem">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.DynamicProblem">[docs]</a>
+<span class="k">class</span> <span class="nc">DynamicProblem</span><span class="p">(</span><span class="n">Problem</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">Observer</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
+<div class="viewcode-block" id="DynamicProblem.the_problem_has_changed">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.DynamicProblem.the_problem_has_changed">[docs]</a>
+    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">the_problem_has_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="DynamicProblem.clear_changed"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.DynamicProblem.clear_changed">[docs]</a>    <span class="nd">@abstractmethod</span>
+
+<div class="viewcode-block" id="DynamicProblem.clear_changed">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.DynamicProblem.clear_changed">[docs]</a>
+    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">clear_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">pass</span></div></div>
+        <span class="k">pass</span></div>
+</div>
 
 
-<div class="viewcode-block" id="BinaryProblem"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.BinaryProblem">[docs]</a><span class="k">class</span> <span class="nc">BinaryProblem</span><span class="p">(</span><span class="n">Problem</span><span class="p">[</span><span class="n">BinarySolution</span><span class="p">],</span> <span class="n">ABC</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Class representing binary problems. &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BinaryProblem">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.BinaryProblem">[docs]</a>
+<span class="k">class</span> <span class="nc">BinaryProblem</span><span class="p">(</span><span class="n">Problem</span><span class="p">[</span><span class="n">BinarySolution</span><span class="p">],</span> <span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing binary problems.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">BinaryProblem</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BinaryProblem</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits_per_variable</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="BinaryProblem.number_of_bits_per_variable_list">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.BinaryProblem.number_of_bits_per_variable_list">[docs]</a>
+    <span class="k">def</span> <span class="nf">number_of_bits_per_variable_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits_per_variable</span></div>
 
 
-<div class="viewcode-block" id="FloatProblem"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.FloatProblem">[docs]</a><span class="k">class</span> <span class="nc">FloatProblem</span><span class="p">(</span><span class="n">Problem</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">],</span> <span class="n">ABC</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Class representing float problems. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="BinaryProblem.total_number_of_bits">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.BinaryProblem.total_number_of_bits">[docs]</a>
+    <span class="k">def</span> <span class="nf">total_number_of_bits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits_per_variable</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="FloatProblem">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.FloatProblem">[docs]</a>
+<span class="k">class</span> <span class="nc">FloatProblem</span><span class="p">(</span><span class="n">Problem</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">],</span> <span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing float problems.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="FloatProblem.create_solution"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.FloatProblem.create_solution">[docs]</a>    <span class="k">def</span> <span class="nf">create_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+<div class="viewcode-block" id="FloatProblem.number_of_variables">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.FloatProblem.number_of_variables">[docs]</a>
+    <span class="k">def</span> <span class="nf">number_of_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FloatProblem.create_solution">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.FloatProblem.create_solution">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">new_solution</span> <span class="o">=</span> <span class="n">FloatSolution</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">)</span>
-        <span class="n">new_solution</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> \
-            <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="mf">1.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="mf">1.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">new_solution</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">())</span>
+        <span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">new_solution</span></div></div>
+        <span class="k">return</span> <span class="n">new_solution</span></div>
+</div>
 
 
-<div class="viewcode-block" id="IntegerProblem"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.IntegerProblem">[docs]</a><span class="k">class</span> <span class="nc">IntegerProblem</span><span class="p">(</span><span class="n">Problem</span><span class="p">[</span><span class="n">IntegerSolution</span><span class="p">],</span> <span class="n">ABC</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Class representing integer problems. &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="IntegerProblem">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.IntegerProblem">[docs]</a>
+<span class="k">class</span> <span class="nc">IntegerProblem</span><span class="p">(</span><span class="n">Problem</span><span class="p">[</span><span class="n">IntegerSolution</span><span class="p">],</span> <span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing integer problems.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">IntegerProblem</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="IntegerProblem.create_solution"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.IntegerProblem.create_solution">[docs]</a>    <span class="k">def</span> <span class="nf">create_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegerSolution</span><span class="p">:</span>
+<div class="viewcode-block" id="IntegerProblem.number_of_variables">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.IntegerProblem.number_of_variables">[docs]</a>
+    <span class="k">def</span> <span class="nf">number_of_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IntegerProblem.create_solution">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.IntegerProblem.create_solution">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegerSolution</span><span class="p">:</span>
         <span class="n">new_solution</span> <span class="o">=</span> <span class="n">IntegerSolution</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">)</span>
-        <span class="n">new_solution</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> \
-            <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="mf">1.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="mf">1.0</span><span class="p">))</span>
-             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">new_solution</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1.0</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">())</span>
+        <span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">new_solution</span></div></div>
+        <span class="k">return</span> <span class="n">new_solution</span></div>
+</div>
 
 
-<div class="viewcode-block" id="PermutationProblem"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.PermutationProblem">[docs]</a><span class="k">class</span> <span class="nc">PermutationProblem</span><span class="p">(</span><span class="n">Problem</span><span class="p">[</span><span class="n">PermutationSolution</span><span class="p">],</span> <span class="n">ABC</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Class representing permutation problems. &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PermutationProblem">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.PermutationProblem">[docs]</a>
+<span class="k">class</span> <span class="nc">PermutationProblem</span><span class="p">(</span><span class="n">Problem</span><span class="p">[</span><span class="n">PermutationSolution</span><span class="p">],</span> <span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing permutation problems.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PermutationProblem</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="OnTheFlyFloatProblem"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.OnTheFlyFloatProblem">[docs]</a><span class="k">class</span> <span class="nc">OnTheFlyFloatProblem</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Class for defining float problems on the fly.</span>
+
+<div class="viewcode-block" id="OnTheFlyFloatProblem">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.OnTheFlyFloatProblem">[docs]</a>
+<span class="k">class</span> <span class="nc">OnTheFlyFloatProblem</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Class for defining float problems on the fly.</span>
 
 <span class="sd">        Example:</span>
 
@@ -251,45 +334,74 @@
 <span class="sd">            .add_constraint(c1)\</span>
 <span class="sd">            .add_constraint(c2)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">OnTheFlyFloatProblem</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">functions</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="OnTheFlyFloatProblem.set_name"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.OnTheFlyFloatProblem.set_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+<div class="viewcode-block" id="OnTheFlyFloatProblem.set_name">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.OnTheFlyFloatProblem.set_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;OnTheFlyFloatProblem&quot;</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span> <span class="o">=</span> <span class="n">name</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="OnTheFlyFloatProblem.add_function"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.OnTheFlyFloatProblem.add_function">[docs]</a>    <span class="k">def</span> <span class="nf">add_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="p">):</span>
+
+<div class="viewcode-block" id="OnTheFlyFloatProblem.add_function">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.OnTheFlyFloatProblem.add_function">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;OnTheFlyFloatProblem&quot;</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">functions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">function</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="OnTheFlyFloatProblem.add_constraint"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.OnTheFlyFloatProblem.add_constraint">[docs]</a>    <span class="k">def</span> <span class="nf">add_constraint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraint</span><span class="p">):</span>
+
+<div class="viewcode-block" id="OnTheFlyFloatProblem.add_constraint">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.OnTheFlyFloatProblem.add_constraint">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_constraint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraint</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;OnTheFlyFloatProblem&quot;</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">constraint</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="OnTheFlyFloatProblem.add_variable"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.OnTheFlyFloatProblem.add_variable">[docs]</a>    <span class="k">def</span> <span class="nf">add_variable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">):</span>
+
+<div class="viewcode-block" id="OnTheFlyFloatProblem.add_variable">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.OnTheFlyFloatProblem.add_variable">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_variable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;OnTheFlyFloatProblem&quot;</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">upper_bound</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="OnTheFlyFloatProblem.evaluate"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.OnTheFlyFloatProblem.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">):</span>
+
+<div class="viewcode-block" id="OnTheFlyFloatProblem.number_of_objectives">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.OnTheFlyFloatProblem.number_of_objectives">[docs]</a>
+    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">functions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="OnTheFlyFloatProblem.number_of_constraints">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.OnTheFlyFloatProblem.number_of_constraints">[docs]</a>
+    <span class="k">def</span> <span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="OnTheFlyFloatProblem.evaluate">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.OnTheFlyFloatProblem.evaluate">[docs]</a>
+    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">()):</span>
             <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">functions</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">()):</span>
             <span class="n">solution</span><span class="o">.</span><span class="n">constraints</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="OnTheFlyFloatProblem.get_name"><a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.OnTheFlyFloatProblem.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span></div></div>
+
+<div class="viewcode-block" id="OnTheFlyFloatProblem.name">
+<a class="viewcode-back" href="../../../tutorials/problem.html#jmetal.core.problem.OnTheFlyFloatProblem.name">[docs]</a>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span></div>
+</div>
+
 </pre></div>
 
           </div>
@@ -306,8 +418,9 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jmetal.core.problem</a></li> 
       </ul>
     </div>
 <script type="text/javascript">

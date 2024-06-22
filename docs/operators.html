@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="_static/css/bootstrap.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Operators &#8212; jMetalPy 1.7.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/guzzle.css?v=e05a0192" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=9aa90875" />
+    <script src="_static/documentation_options.js?v=030dc6f6"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Crossover" href="api/operator/crossover.html" />
+    <link rel="prev" title="Simulated annealing" href="api/algorithm/singleobjective/simulated.annealing.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api/operator/crossover.html" title="Crossover"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="api/algorithm/singleobjective/simulated.annealing.html" title="Simulated annealing"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Operators</a></li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    index.html" class="text-logo">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.7.0 documentation">
+    <br>
+</a>
+
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    Python version of the jMetal framework
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Operators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/crossover.html">Crossover</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/mutation.html">Mutation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/selection.html">Selection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="problems.html">Problems</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="index.html">Docs</a></li>
+              
+              <li class="breadcrumb-item">Operators</li>
+            </ol>
+          </nav>
+          
+          <div class="document clearer body">
+            
+  <section id="operators">
+<h1>Operators<a class="headerlink" href="#operators" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">List of genetic operators:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/operator/crossover.html">Crossover</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/crossover.html#jmetal.operator.crossover.CXCrossover"><code class="docutils literal notranslate"><span class="pre">CXCrossover</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/crossover.html#jmetal.operator.crossover.CompositeCrossover"><code class="docutils literal notranslate"><span class="pre">CompositeCrossover</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/crossover.html#jmetal.operator.crossover.DifferentialEvolutionCrossover"><code class="docutils literal notranslate"><span class="pre">DifferentialEvolutionCrossover</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/crossover.html#jmetal.operator.crossover.IntegerSBXCrossover"><code class="docutils literal notranslate"><span class="pre">IntegerSBXCrossover</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/crossover.html#jmetal.operator.crossover.NullCrossover"><code class="docutils literal notranslate"><span class="pre">NullCrossover</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/crossover.html#jmetal.operator.crossover.PMXCrossover"><code class="docutils literal notranslate"><span class="pre">PMXCrossover</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/crossover.html#jmetal.operator.crossover.SBXCrossover"><code class="docutils literal notranslate"><span class="pre">SBXCrossover</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/crossover.html#jmetal.operator.crossover.SPXCrossover"><code class="docutils literal notranslate"><span class="pre">SPXCrossover</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/operator/mutation.html">Mutation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/mutation.html#jmetal.operator.mutation.BitFlipMutation"><code class="docutils literal notranslate"><span class="pre">BitFlipMutation</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/mutation.html#jmetal.operator.mutation.CompositeMutation"><code class="docutils literal notranslate"><span class="pre">CompositeMutation</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/mutation.html#jmetal.operator.mutation.IntegerPolynomialMutation"><code class="docutils literal notranslate"><span class="pre">IntegerPolynomialMutation</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/mutation.html#jmetal.operator.mutation.NonUniformMutation"><code class="docutils literal notranslate"><span class="pre">NonUniformMutation</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/mutation.html#jmetal.operator.mutation.NullMutation"><code class="docutils literal notranslate"><span class="pre">NullMutation</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/mutation.html#jmetal.operator.mutation.PermutationSwapMutation"><code class="docutils literal notranslate"><span class="pre">PermutationSwapMutation</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/mutation.html#jmetal.operator.mutation.PolynomialMutation"><code class="docutils literal notranslate"><span class="pre">PolynomialMutation</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/mutation.html#jmetal.operator.mutation.ScrambleMutation"><code class="docutils literal notranslate"><span class="pre">ScrambleMutation</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/mutation.html#jmetal.operator.mutation.SimpleRandomMutation"><code class="docutils literal notranslate"><span class="pre">SimpleRandomMutation</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/mutation.html#jmetal.operator.mutation.UniformMutation"><code class="docutils literal notranslate"><span class="pre">UniformMutation</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/operator/selection.html">Selection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/selection.html#jmetal.operator.selection.BestSolutionSelection"><code class="docutils literal notranslate"><span class="pre">BestSolutionSelection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/selection.html#jmetal.operator.selection.BinaryTournament2Selection"><code class="docutils literal notranslate"><span class="pre">BinaryTournament2Selection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/selection.html#jmetal.operator.selection.BinaryTournamentSelection"><code class="docutils literal notranslate"><span class="pre">BinaryTournamentSelection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/selection.html#jmetal.operator.selection.DifferentialEvolutionSelection"><code class="docutils literal notranslate"><span class="pre">DifferentialEvolutionSelection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/selection.html#jmetal.operator.selection.NaryRandomSolutionSelection"><code class="docutils literal notranslate"><span class="pre">NaryRandomSolutionSelection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/selection.html#jmetal.operator.selection.RandomSolutionSelection"><code class="docutils literal notranslate"><span class="pre">RandomSolutionSelection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/selection.html#jmetal.operator.selection.RankingAndCrowdingDistanceSelection"><code class="docutils literal notranslate"><span class="pre">RankingAndCrowdingDistanceSelection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/selection.html#jmetal.operator.selection.RankingAndFitnessSelection"><code class="docutils literal notranslate"><span class="pre">RankingAndFitnessSelection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/selection.html#jmetal.operator.selection.RouletteWheelSelection"><code class="docutils literal notranslate"><span class="pre">RouletteWheelSelection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/operator/selection.html#jmetal.operator.selection.S"><code class="docutils literal notranslate"><span class="pre">S</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="float-left">
+        <a class="btn btn-outline btn-sm" href="api/algorithm/singleobjective/simulated.annealing.html" title="previous chapter (use the left arrow)">← Simulated annealing</a>
+      </div>
+    
+      <div class="float-right">
+        <a class="btn btn-outline btn-sm" href="api/operator/crossover.html" title="next chapter (use the right arrow)">Crossover →</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api/operator/crossover.html" title="Crossover"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="api/algorithm/singleobjective/simulated.annealing.html" title="Simulated annealing"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Operators</a></li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

@@ -1,9 +1,10 @@
-
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   
   <!-- Licensed under the Apache 2.0 License -->
   <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
@@ -12,18 +13,14 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Experiments &#8212; jMetalPy 1.5.3 documentation</title>
-    <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <title>Experiments &#8212; jMetalPy 1.7.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/guzzle.css?v=e05a0192" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=9aa90875" />
+    <script src="../_static/documentation_options.js?v=030dc6f6"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Statistical analysis" href="statistics.html" />
@@ -47,8 +44,9 @@
         <li class="right" >
           <a href="visualization.html" title="Front visualization"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Getting started</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Getting started</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Experiments</a></li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -59,7 +57,7 @@
   <div id="left-column">
     <div class="sphinxsidebar"><a href="
     ../index.html" class="text-logo">
-    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.5.3 documentation">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.7.0 documentation">
     <br>
 </a>
 
@@ -102,7 +100,22 @@
 <li><a class="reference internal" href="#">Experiments</a><ul>
 <li><a class="reference internal" href="#running-the-experiment">Running the experiment</a></li>
 <li><a class="reference internal" href="#summary-file">Summary file</a></li>
-<li><a class="reference internal" href="#module-jmetal.lab.experiment">API</a></li>
+<li><a class="reference internal" href="#module-jmetal.lab.experiment">API</a><ul>
+<li><a class="reference internal" href="#jmetal.lab.experiment.Experiment"><code class="docutils literal notranslate"><span class="pre">Experiment</span></code></a><ul>
+<li><a class="reference internal" href="#jmetal.lab.experiment.Experiment.run"><code class="docutils literal notranslate"><span class="pre">Experiment.run()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jmetal.lab.experiment.Job"><code class="docutils literal notranslate"><span class="pre">Job</span></code></a><ul>
+<li><a class="reference internal" href="#jmetal.lab.experiment.Job.execute"><code class="docutils literal notranslate"><span class="pre">Job.execute()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.lab.experiment.Job.get_algorithm_data"><code class="docutils literal notranslate"><span class="pre">Job.get_algorithm_data()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jmetal.lab.experiment.generate_kolmogorov_smirnov_latex_tables"><code class="docutils literal notranslate"><span class="pre">generate_kolmogorov_smirnov_latex_tables()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.lab.experiment.generate_median_and_wilcoxon_latex_tables"><code class="docutils literal notranslate"><span class="pre">generate_median_and_wilcoxon_latex_tables()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.lab.experiment.generate_summary_from_experiment"><code class="docutils literal notranslate"><span class="pre">generate_summary_from_experiment()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.lab.experiment.logger"><code class="docutils literal notranslate"><span class="pre">logger</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -140,10 +153,10 @@
           
           <div class="document clearer body">
             
-  <div class="section" id="experiments">
-<h1>Experiments<a class="headerlink" href="#experiments" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="running-the-experiment">
-<h2>Running the experiment<a class="headerlink" href="#running-the-experiment" title="Permalink to this headline">¶</a></h2>
+  <section id="experiments">
+<h1>Experiments<a class="headerlink" href="#experiments" title="Link to this heading">¶</a></h1>
+<section id="running-the-experiment">
+<h2>Running the experiment<a class="headerlink" href="#running-the-experiment" title="Link to this heading">¶</a></h2>
 <p>This is an example of an experimental study based on solving three problems of the ZDT family with three
 different algorithms: NSGA-II, GDE3 and SMPSO.</p>
 <p>The hypervolume, generational distance and epsilon indicators are used for performance assessment.</p>
@@ -223,9 +236,9 @@ different algorithms: NSGA-II, GDE3 and SMPSO.</p>
     <span class="n">experiment</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="summary-file">
-<h2>Summary file<a class="headerlink" href="#summary-file" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="summary-file">
+<h2>Summary file<a class="headerlink" href="#summary-file" title="Link to this heading">¶</a></h2>
 <p>The results of this experiment can be summarized to a CSV file as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="c1"># experiment = ...</span>
@@ -240,41 +253,81 @@ different algorithms: NSGA-II, GDE3 and SMPSO.</p>
 </div>
 <p>This file contains all the information of the quality indicator values, for each configuration and run.
 The summary file is the input of all the statistical tests, so that they can be applied to <strong>any valid file having the proper format</strong>.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> head QualityIndicatorSummary.csv
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>head<span class="w"> </span>QualityIndicatorSummary.csv
 <span class="go">Algorithm,Problem,IndicatorName,ExecutionId,IndicatorValue</span>
 <span class="go">NSGAII,ZDT1,EP,0,0.015705992620067832</span>
 <span class="go">NSGAII,ZDT1,EP,1,0.012832504015918067</span>
 <span class="go">...</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="module-jmetal.lab.experiment">
-<span id="api"></span><h2>API<a class="headerlink" href="#module-jmetal.lab.experiment" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="jmetal.lab.experiment.Experiment">
-<em class="property">class </em><code class="sig-prename descclassname">jmetal.lab.experiment.</code><code class="sig-name descname">Experiment</code><span class="sig-paren">(</span><em class="sig-param">output_dir: str, jobs: List[jmetal.lab.experiment.Job], m_workers: int = 6</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/experiment.html#Experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.experiment.Experiment" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="method">
-<dt id="jmetal.lab.experiment.Experiment.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/jmetal/lab/experiment.html#Experiment.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.experiment.Experiment.run" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="module-jmetal.lab.experiment">
+<span id="api"></span><h2>API<a class="headerlink" href="#module-jmetal.lab.experiment" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="jmetal.lab.experiment.Experiment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.lab.experiment.</span></span><span class="sig-name descname"><span class="pre">Experiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#jmetal.lab.experiment.Job" title="jmetal.lab.experiment.Job"><span class="pre">Job</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/experiment.html#Experiment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.lab.experiment.Experiment" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.lab.experiment.Experiment.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/jmetal/lab/experiment.html#Experiment.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.lab.experiment.Experiment.run" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="class">
-<dt id="jmetal.lab.experiment.Job">
-<em class="property">class </em><code class="sig-prename descclassname">jmetal.lab.experiment.</code><code class="sig-name descname">Job</code><span class="sig-paren">(</span><em class="sig-param">algorithm: jmetal.core.algorithm.Algorithm</em>, <em class="sig-param">algorithm_tag: str</em>, <em class="sig-param">problem_tag: str</em>, <em class="sig-param">run: int</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/experiment.html#Job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.experiment.Job" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="method">
-<dt id="jmetal.lab.experiment.Job.execute">
-<code class="sig-name descname">execute</code><span class="sig-paren">(</span><em class="sig-param">output_path: str = ''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/experiment.html#Job.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.experiment.Job.execute" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="jmetal.lab.experiment.Job">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.lab.experiment.</span></span><span class="sig-name descname"><span class="pre">Job</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Algorithm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm_tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/experiment.html#Job"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.lab.experiment.Job" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.lab.experiment.Job.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/experiment.html#Job.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.lab.experiment.Job.execute" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.lab.experiment.Job.get_algorithm_data">
+<span class="sig-name descname"><span class="pre">get_algorithm_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/experiment.html#Job.get_algorithm_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.lab.experiment.Job.get_algorithm_data" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="function">
-<dt id="jmetal.lab.experiment.generate_summary_from_experiment">
-<code class="sig-prename descclassname">jmetal.lab.experiment.</code><code class="sig-name descname">generate_summary_from_experiment</code><span class="sig-paren">(</span><em class="sig-param">input_dir: str, quality_indicators: List[jmetal.core.quality_indicator.QualityIndicator], reference_fronts: str = ''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/experiment.html#generate_summary_from_experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jmetal.lab.experiment.generate_summary_from_experiment" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="jmetal.lab.experiment.generate_kolmogorov_smirnov_latex_tables">
+<span class="sig-prename descclassname"><span class="pre">jmetal.lab.experiment.</span></span><span class="sig-name descname"><span class="pre">generate_kolmogorov_smirnov_latex_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'latex/KolmogorovSmirnov'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/experiment.html#generate_kolmogorov_smirnov_latex_tables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.lab.experiment.generate_kolmogorov_smirnov_latex_tables" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Generate Latex tables with the results of the Kolmogorov-Smirnov test. The last algorithm is considered as</dt><dd><p>the reference algorithm, and the cells include a symbol with the p-value &lt; 0.05.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – Input filename (summary).</p></li>
+<li><p><strong>output_dir</strong> – Output path.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="jmetal.lab.experiment.generate_median_and_wilcoxon_latex_tables">
+<span class="sig-prename descclassname"><span class="pre">jmetal.lab.experiment.</span></span><span class="sig-name descname"><span class="pre">generate_median_and_wilcoxon_latex_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'latex/meansAndWilcoxon'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/experiment.html#generate_median_and_wilcoxon_latex_tables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.lab.experiment.generate_median_and_wilcoxon_latex_tables" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Generate Latex tables including medians and IQRs. Additionally, the last algorithm is considered as the reference</dt><dd><p>algorithm, and the cells include a symbol indicating whether the differences with the reference algorithm
+are significant or not according to the Wilcoxon rank sum test.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – Input filename (summary).</p></li>
+<li><p><strong>output_dir</strong> – Output path.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="jmetal.lab.experiment.generate_summary_from_experiment">
+<span class="sig-prename descclassname"><span class="pre">jmetal.lab.experiment.</span></span><span class="sig-name descname"><span class="pre">generate_summary_from_experiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">quality_indicators</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">QualityIndicator</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_fronts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/jmetal/lab/experiment.html#generate_summary_from_experiment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.lab.experiment.generate_summary_from_experiment" title="Link to this definition">¶</a></dt>
 <dd><p>Compute a list of quality indicators. The input data directory <em>must</em> met the following structure (this is generated
 automatically by the Experiment class):</p>
 <ul class="simple">
@@ -297,21 +350,26 @@ automatically by the Experiment class):</p>
 </li>
 </ul>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_dir</strong> – Directory where all the input data is found (function values and variables).</p></li>
 <li><p><strong>reference_fronts</strong> – Directory where reference fronts are found.</p></li>
 <li><p><strong>quality_indicators</strong> – List of quality indicators to compute.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>None.</p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="jmetal.lab.experiment.logger">
+<span class="sig-prename descclassname"><span class="pre">jmetal.lab.experiment.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Logger</span> <span class="pre">jmetal.lab.experiment</span> <span class="pre">(DEBUG)&gt;</span></em><a class="headerlink" href="#jmetal.lab.experiment.logger" title="Link to this definition">¶</a></dt>
+<dd><span class="target" id="module-laboratory"></span></dd></dl>
+
+</section>
+</section>
 
 
           </div>
@@ -346,8 +404,9 @@ automatically by the Experiment class):</p>
         <li class="right" >
           <a href="visualization.html" title="Front visualization"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../tutorials.html" >Getting started</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../tutorials.html" >Getting started</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Experiments</a></li> 
       </ul>
     </div>
 <script type="text/javascript">

@@ -1,9 +1,9 @@
-
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../../../../">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <!-- Licensed under the Apache 2.0 License -->
   <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/open-sans/stylesheet.css" />
@@ -12,18 +12,14 @@
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>jmetal.algorithm.multiobjective.moead &#8212; jMetalPy 1.5.3 documentation</title>
-    <link rel="stylesheet" href="../../../../_static/guzzle.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <title>jmetal.algorithm.multiobjective.moead &#8212; jMetalPy 1.7.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css?v=e05a0192" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=9aa90875" />
+    <script src="../../../../_static/documentation_options.js?v=030dc6f6"></script>
+    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
   
@@ -39,8 +35,9 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jmetal.algorithm.multiobjective.moead</a></li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -51,7 +48,7 @@
   <div id="left-column">
     <div class="sphinxsidebar"><a href="
     ../../../../index.html" class="text-logo">
-    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.5.3 documentation">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.7.0 documentation">
     <br>
 </a>
 
@@ -112,7 +109,7 @@
 <span></span><span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">ceil</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Generator</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">TypeVar</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -120,36 +117,46 @@
 <span class="kn">from</span> <span class="nn">jmetal.config</span> <span class="kn">import</span> <span class="n">store</span>
 <span class="kn">from</span> <span class="nn">jmetal.core.operator</span> <span class="kn">import</span> <span class="n">Mutation</span>
 <span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="kn">import</span> <span class="n">Problem</span>
-<span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="kn">import</span> <span class="n">DifferentialEvolutionCrossover</span><span class="p">,</span> <span class="n">NaryRandomSolutionSelection</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.aggregative_function</span> <span class="kn">import</span> <span class="n">AggregativeFunction</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.constraint_handling</span> <span class="kn">import</span> <span class="n">feasibility_ratio</span><span class="p">,</span> \
-    <span class="n">overall_constraint_violation_degree</span><span class="p">,</span> <span class="n">is_feasible</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator.crossover</span> <span class="kn">import</span> <span class="n">DifferentialEvolutionCrossover</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator.selection</span> <span class="kn">import</span> <span class="n">NaryRandomSolutionSelection</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.aggregation_function</span> <span class="kn">import</span> <span class="n">AggregationFunction</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.constraint_handling</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">feasibility_ratio</span><span class="p">,</span>
+    <span class="n">is_feasible</span><span class="p">,</span>
+    <span class="n">overall_constraint_violation_degree</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">jmetal.util.density_estimator</span> <span class="kn">import</span> <span class="n">CrowdingDistance</span>
 <span class="kn">from</span> <span class="nn">jmetal.util.evaluator</span> <span class="kn">import</span> <span class="n">Evaluator</span>
 <span class="kn">from</span> <span class="nn">jmetal.util.neighborhood</span> <span class="kn">import</span> <span class="n">WeightVectorNeighborhood</span>
 <span class="kn">from</span> <span class="nn">jmetal.util.ranking</span> <span class="kn">import</span> <span class="n">FastNonDominatedRanking</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">TerminationCriterion</span><span class="p">,</span> <span class="n">StoppingByEvaluations</span>
+<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">StoppingByEvaluations</span><span class="p">,</span>
+    <span class="n">TerminationCriterion</span><span class="p">,</span>
+<span class="p">)</span>
 
-<span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+<span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">)</span>
 <span class="n">R</span> <span class="o">=</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="MOEAD"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD">[docs]</a><span class="k">class</span> <span class="nc">MOEAD</span><span class="p">(</span><span class="n">GeneticAlgorithm</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                 <span class="n">problem</span><span class="p">:</span> <span class="n">Problem</span><span class="p">,</span>
-                 <span class="n">population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                 <span class="n">mutation</span><span class="p">:</span> <span class="n">Mutation</span><span class="p">,</span>
-                 <span class="n">crossover</span><span class="p">:</span> <span class="n">DifferentialEvolutionCrossover</span><span class="p">,</span>
-                 <span class="n">aggregative_function</span><span class="p">:</span> <span class="n">AggregativeFunction</span><span class="p">,</span>
-                 <span class="n">neighbourhood_selection_probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-                 <span class="n">max_number_of_replaced_solutions</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                 <span class="n">neighbor_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                 <span class="n">weight_files_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-                 <span class="n">termination_criterion</span><span class="p">:</span> <span class="n">TerminationCriterion</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_termination_criteria</span><span class="p">,</span>
-                 <span class="n">population_generator</span><span class="p">:</span> <span class="n">Generator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_generator</span><span class="p">,</span>
-                 <span class="n">population_evaluator</span><span class="p">:</span> <span class="n">Evaluator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_evaluator</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="MOEAD">
+<a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD">[docs]</a>
+<span class="k">class</span> <span class="nc">MOEAD</span><span class="p">(</span><span class="n">GeneticAlgorithm</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">problem</span><span class="p">:</span> <span class="n">Problem</span><span class="p">,</span>
+        <span class="n">population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">mutation</span><span class="p">:</span> <span class="n">Mutation</span><span class="p">,</span>
+        <span class="n">crossover</span><span class="p">:</span> <span class="n">DifferentialEvolutionCrossover</span><span class="p">,</span>
+        <span class="n">aggregation_function</span><span class="p">:</span> <span class="n">AggregationFunction</span><span class="p">,</span>
+        <span class="n">neighbourhood_selection_probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">max_number_of_replaced_solutions</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">neighbor_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">weight_files_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">termination_criterion</span><span class="p">:</span> <span class="n">TerminationCriterion</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_termination_criteria</span><span class="p">,</span>
+        <span class="n">population_generator</span><span class="p">:</span> <span class="n">Generator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_generator</span><span class="p">,</span>
+        <span class="n">population_evaluator</span><span class="p">:</span> <span class="n">Evaluator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_evaluator</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param max_number_of_replaced_solutions: (eta in Zhang &amp; Li paper).</span>
 <span class="sd">        :param neighbourhood_selection_probability: Probability of mating with a solution in the neighborhood rather</span>
 <span class="sd">               than the entire population (Delta in Zhang &amp; Li paper).</span>
@@ -163,36 +170,41 @@
             <span class="n">selection</span><span class="o">=</span><span class="n">NaryRandomSolutionSelection</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
             <span class="n">population_evaluator</span><span class="o">=</span><span class="n">population_evaluator</span><span class="p">,</span>
             <span class="n">population_generator</span><span class="o">=</span><span class="n">population_generator</span><span class="p">,</span>
-            <span class="n">termination_criterion</span><span class="o">=</span><span class="n">termination_criterion</span>
+            <span class="n">termination_criterion</span><span class="o">=</span><span class="n">termination_criterion</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_number_of_replaced_solutions</span> <span class="o">=</span> <span class="n">max_number_of_replaced_solutions</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fitness_function</span> <span class="o">=</span> <span class="n">aggregative_function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitness_function</span> <span class="o">=</span> <span class="n">aggregation_function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">neighbourhood</span> <span class="o">=</span> <span class="n">WeightVectorNeighborhood</span><span class="p">(</span>
             <span class="n">number_of_weight_vectors</span><span class="o">=</span><span class="n">population_size</span><span class="p">,</span>
             <span class="n">neighborhood_size</span><span class="o">=</span><span class="n">neighbor_size</span><span class="p">,</span>
-            <span class="n">weight_vector_size</span><span class="o">=</span><span class="n">problem</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">,</span>
-            <span class="n">weights_path</span><span class="o">=</span><span class="n">weight_files_path</span>
+            <span class="n">weight_vector_size</span><span class="o">=</span><span class="n">problem</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">(),</span>
+            <span class="n">weights_path</span><span class="o">=</span><span class="n">weight_files_path</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">neighbourhood_selection_probability</span> <span class="o">=</span> <span class="n">neighbourhood_selection_probability</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">permutation</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_subproblem</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">neighbor_type</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="MOEAD.init_progress"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.init_progress">[docs]</a>    <span class="k">def</span> <span class="nf">init_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="MOEAD.init_progress">
+<a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.init_progress">[docs]</a>
+    <span class="k">def</span> <span class="nf">init_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_size</span>
         <span class="k">for</span> <span class="n">solution</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fitness_function</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">permutation</span> <span class="o">=</span> <span class="n">Permutation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">population_size</span><span class="p">)</span>
 
-        <span class="n">observable_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_observable_data</span><span class="p">()</span>
+        <span class="n">observable_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observable_data</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">notify_all</span><span class="p">(</span><span class="o">**</span><span class="n">observable_data</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MOEAD.selection"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.selection">[docs]</a>    <span class="k">def</span> <span class="nf">selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
+
+<div class="viewcode-block" id="MOEAD.selection">
+<a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.selection">[docs]</a>
+    <span class="k">def</span> <span class="nf">selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_subproblem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">permutation</span><span class="o">.</span><span class="n">get_next_value</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">neighbor_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">choose_neighbor_type</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbor_type</span> <span class="o">==</span> <span class="s1">&#39;NEIGHBOR&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbor_type</span> <span class="o">==</span> <span class="s2">&quot;NEIGHBOR&quot;</span><span class="p">:</span>
             <span class="n">neighbors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbourhood</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_subproblem</span><span class="p">,</span> <span class="n">population</span><span class="p">)</span>
             <span class="n">mating_population</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_operator</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">neighbors</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -202,7 +214,10 @@
 
         <span class="k">return</span> <span class="n">mating_population</span></div>
 
-<div class="viewcode-block" id="MOEAD.reproduction"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.reproduction">[docs]</a>    <span class="k">def</span> <span class="nf">reproduction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mating_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="MOEAD.reproduction">
+<a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.reproduction">[docs]</a>
+    <span class="k">def</span> <span class="nf">reproduction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mating_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">crossover_operator</span><span class="o">.</span><span class="n">current_individual</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_subproblem</span><span class="p">]</span>
 
         <span class="n">offspring_population</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crossover_operator</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">mating_population</span><span class="p">)</span>
@@ -210,7 +225,10 @@
 
         <span class="k">return</span> <span class="n">offspring_population</span></div>
 
-<div class="viewcode-block" id="MOEAD.replacement"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.replacement">[docs]</a>    <span class="k">def</span> <span class="nf">replacement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">offspring_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="MOEAD.replacement">
+<a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.replacement">[docs]</a>
+    <span class="k">def</span> <span class="nf">replacement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">offspring_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
         <span class="n">new_solution</span> <span class="o">=</span> <span class="n">offspring_population</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fitness_function</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">)</span>
@@ -219,7 +237,10 @@
 
         <span class="k">return</span> <span class="n">new_population</span></div>
 
-<div class="viewcode-block" id="MOEAD.update_current_subproblem_neighborhood"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.update_current_subproblem_neighborhood">[docs]</a>    <span class="k">def</span> <span class="nf">update_current_subproblem_neighborhood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_solution</span><span class="p">,</span> <span class="n">population</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MOEAD.update_current_subproblem_neighborhood">
+<a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.update_current_subproblem_neighborhood">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_current_subproblem_neighborhood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_solution</span><span class="p">,</span> <span class="n">population</span><span class="p">):</span>
         <span class="n">permuted_neighbors_indexes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_permutation_of_neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_subproblem</span><span class="p">)</span>
         <span class="n">replacements</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -238,8 +259,11 @@
 
         <span class="k">return</span> <span class="n">population</span></div>
 
-<div class="viewcode-block" id="MOEAD.generate_permutation_of_neighbors"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.generate_permutation_of_neighbors">[docs]</a>    <span class="k">def</span> <span class="nf">generate_permutation_of_neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subproblem_id</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbor_type</span> <span class="o">==</span> <span class="s1">&#39;NEIGHBOR&#39;</span><span class="p">:</span>
+
+<div class="viewcode-block" id="MOEAD.generate_permutation_of_neighbors">
+<a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.generate_permutation_of_neighbors">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate_permutation_of_neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subproblem_id</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbor_type</span> <span class="o">==</span> <span class="s2">&quot;NEIGHBOR&quot;</span><span class="p">:</span>
             <span class="n">neighbors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbourhood</span><span class="o">.</span><span class="n">get_neighborhood</span><span class="p">()[</span><span class="n">subproblem_id</span><span class="p">]</span>
             <span class="n">permuted_array</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">neighbors</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
@@ -247,34 +271,64 @@
 
         <span class="k">return</span> <span class="n">permuted_array</span></div>
 
-<div class="viewcode-block" id="MOEAD.choose_neighbor_type"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.choose_neighbor_type">[docs]</a>    <span class="k">def</span> <span class="nf">choose_neighbor_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MOEAD.choose_neighbor_type">
+<a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.choose_neighbor_type">[docs]</a>
+    <span class="k">def</span> <span class="nf">choose_neighbor_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">rnd</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">rnd</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbourhood_selection_probability</span><span class="p">:</span>
-            <span class="n">neighbor_type</span> <span class="o">=</span> <span class="s1">&#39;NEIGHBOR&#39;</span>
+            <span class="n">neighbor_type</span> <span class="o">=</span> <span class="s2">&quot;NEIGHBOR&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">neighbor_type</span> <span class="o">=</span> <span class="s1">&#39;POPULATION&#39;</span>
+            <span class="n">neighbor_type</span> <span class="o">=</span> <span class="s2">&quot;POPULATION&quot;</span>
 
         <span class="k">return</span> <span class="n">neighbor_type</span></div>
 
-<div class="viewcode-block" id="MOEAD.get_name"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;MOEAD&#39;</span></div>
 
-<div class="viewcode-block" id="MOEAD.get_result"><a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.get_result">[docs]</a>    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span></div></div>
+<div class="viewcode-block" id="MOEAD.get_name">
+<a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.get_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;MOEAD&quot;</span></div>
+
+
+<div class="viewcode-block" id="MOEAD.result">
+<a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/moead.html#jmetal.algorithm.multiobjective.moead.MOEAD.result">[docs]</a>
+    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span></div>
+</div>
+
 
 
 <span class="k">class</span> <span class="nc">MOEAD_DRA</span><span class="p">(</span><span class="n">MOEAD</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">population_size</span><span class="p">,</span> <span class="n">mutation</span><span class="p">,</span> <span class="n">crossover</span><span class="p">,</span> <span class="n">aggregative_function</span><span class="p">,</span>
-                 <span class="n">neighbourhood_selection_probability</span><span class="p">,</span> <span class="n">max_number_of_replaced_solutions</span><span class="p">,</span> <span class="n">neighbor_size</span><span class="p">,</span>
-                 <span class="n">weight_files_path</span><span class="p">,</span> <span class="n">termination_criterion</span><span class="o">=</span><span class="n">store</span><span class="o">.</span><span class="n">default_termination_criteria</span><span class="p">,</span>
-                 <span class="n">population_generator</span><span class="o">=</span><span class="n">store</span><span class="o">.</span><span class="n">default_generator</span><span class="p">,</span> <span class="n">population_evaluator</span><span class="o">=</span><span class="n">store</span><span class="o">.</span><span class="n">default_evaluator</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">MOEAD_DRA</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">problem</span><span class="p">,</span> <span class="n">population_size</span><span class="p">,</span> <span class="n">mutation</span><span class="p">,</span> <span class="n">crossover</span><span class="p">,</span> <span class="n">aggregative_function</span><span class="p">,</span>
-                                        <span class="n">neighbourhood_selection_probability</span><span class="p">,</span> <span class="n">max_number_of_replaced_solutions</span><span class="p">,</span>
-                                        <span class="n">neighbor_size</span><span class="p">,</span> <span class="n">weight_files_path</span><span class="p">,</span>
-                                        <span class="n">termination_criterion</span><span class="o">=</span><span class="n">termination_criterion</span><span class="p">,</span>
-                                        <span class="n">population_generator</span><span class="o">=</span><span class="n">population_generator</span><span class="p">,</span>
-                                        <span class="n">population_evaluator</span><span class="o">=</span><span class="n">population_evaluator</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">problem</span><span class="p">,</span>
+        <span class="n">population_size</span><span class="p">,</span>
+        <span class="n">mutation</span><span class="p">,</span>
+        <span class="n">crossover</span><span class="p">,</span>
+        <span class="n">aggregation_function</span><span class="p">,</span>
+        <span class="n">neighbourhood_selection_probability</span><span class="p">,</span>
+        <span class="n">max_number_of_replaced_solutions</span><span class="p">,</span>
+        <span class="n">neighbor_size</span><span class="p">,</span>
+        <span class="n">weight_files_path</span><span class="p">,</span>
+        <span class="n">termination_criterion</span><span class="o">=</span><span class="n">store</span><span class="o">.</span><span class="n">default_termination_criteria</span><span class="p">,</span>
+        <span class="n">population_generator</span><span class="o">=</span><span class="n">store</span><span class="o">.</span><span class="n">default_generator</span><span class="p">,</span>
+        <span class="n">population_evaluator</span><span class="o">=</span><span class="n">store</span><span class="o">.</span><span class="n">default_evaluator</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MOEAD_DRA</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">problem</span><span class="p">,</span>
+            <span class="n">population_size</span><span class="p">,</span>
+            <span class="n">mutation</span><span class="p">,</span>
+            <span class="n">crossover</span><span class="p">,</span>
+            <span class="n">aggregation_function</span><span class="p">,</span>
+            <span class="n">neighbourhood_selection_probability</span><span class="p">,</span>
+            <span class="n">max_number_of_replaced_solutions</span><span class="p">,</span>
+            <span class="n">neighbor_size</span><span class="p">,</span>
+            <span class="n">weight_files_path</span><span class="p">,</span>
+            <span class="n">termination_criterion</span><span class="o">=</span><span class="n">termination_criterion</span><span class="p">,</span>
+            <span class="n">population_generator</span><span class="o">=</span><span class="n">population_generator</span><span class="p">,</span>
+            <span class="n">population_evaluator</span><span class="o">=</span><span class="n">population_evaluator</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">saved_values</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">utility</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">population_size</span><span class="p">)]</span>
@@ -294,7 +348,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tour_selection</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_order_index</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="n">observable_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_observable_data</span><span class="p">()</span>
+        <span class="n">observable_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observable_data</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">notify_all</span><span class="p">(</span><span class="o">**</span><span class="n">observable_data</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">update_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -316,7 +370,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">neighbor_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">choose_neighbor_type</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbor_type</span> <span class="o">==</span> <span class="s1">&#39;NEIGHBOR&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbor_type</span> <span class="o">==</span> <span class="s2">&quot;NEIGHBOR&quot;</span><span class="p">:</span>
             <span class="n">neighbors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbourhood</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_subproblem</span><span class="p">,</span> <span class="n">population</span><span class="p">)</span>
             <span class="n">mating_population</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_operator</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">neighbors</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -327,7 +381,7 @@
         <span class="k">return</span> <span class="n">mating_population</span>
 
     <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;MOEAD-DRA&#39;</span>
+        <span class="k">return</span> <span class="s2">&quot;MOEAD-DRA&quot;</span>
 
     <span class="k">def</span> <span class="nf">__utility_function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">)):</span>
@@ -343,8 +397,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">saved_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">__tour_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depth</span><span class="p">):</span>
-        <span class="n">selected</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">)]</span>
-        <span class="n">candidate</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_size</span><span class="p">)]</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">())]</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_size</span><span class="p">)]</span>
 
         <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">population_size</span> <span class="o">/</span> <span class="mf">5.0</span><span class="p">):</span>
             <span class="n">best_idd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidate</span><span class="p">))</span>
@@ -362,20 +416,22 @@
 
 
 <span class="k">class</span> <span class="nc">MOEADIEpsilon</span><span class="p">(</span><span class="n">MOEAD</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                 <span class="n">problem</span><span class="p">:</span> <span class="n">Problem</span><span class="p">,</span>
-                 <span class="n">population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                 <span class="n">mutation</span><span class="p">:</span> <span class="n">Mutation</span><span class="p">,</span>
-                 <span class="n">crossover</span><span class="p">:</span> <span class="n">DifferentialEvolutionCrossover</span><span class="p">,</span>
-                 <span class="n">aggregative_function</span><span class="p">:</span> <span class="n">AggregativeFunction</span><span class="p">,</span>
-                 <span class="n">neighbourhood_selection_probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-                 <span class="n">max_number_of_replaced_solutions</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                 <span class="n">neighbor_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                 <span class="n">weight_files_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-                 <span class="n">termination_criterion</span><span class="p">:</span> <span class="n">TerminationCriterion</span> <span class="o">=</span> <span class="n">StoppingByEvaluations</span><span class="p">(</span><span class="mi">300000</span><span class="p">),</span>
-                 <span class="n">population_generator</span><span class="p">:</span> <span class="n">Generator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_generator</span><span class="p">,</span>
-                 <span class="n">population_evaluator</span><span class="p">:</span> <span class="n">Evaluator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_evaluator</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">problem</span><span class="p">:</span> <span class="n">Problem</span><span class="p">,</span>
+        <span class="n">population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">mutation</span><span class="p">:</span> <span class="n">Mutation</span><span class="p">,</span>
+        <span class="n">crossover</span><span class="p">:</span> <span class="n">DifferentialEvolutionCrossover</span><span class="p">,</span>
+        <span class="n">aggregation_function</span><span class="p">:</span> <span class="n">AggregationFunction</span><span class="p">,</span>
+        <span class="n">neighbourhood_selection_probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">max_number_of_replaced_solutions</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">neighbor_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">weight_files_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">termination_criterion</span><span class="p">:</span> <span class="n">TerminationCriterion</span> <span class="o">=</span> <span class="n">StoppingByEvaluations</span><span class="p">(</span><span class="mi">300000</span><span class="p">),</span>
+        <span class="n">population_generator</span><span class="p">:</span> <span class="n">Generator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_generator</span><span class="p">,</span>
+        <span class="n">population_evaluator</span><span class="p">:</span> <span class="n">Evaluator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_evaluator</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param max_number_of_replaced_solutions: (eta in Zhang &amp; Li paper).</span>
 <span class="sd">        :param neighbourhood_selection_probability: Probability of mating with a solution in the neighborhood rather</span>
 <span class="sd">               than the entire population (Delta in Zhang &amp; Li paper).</span>
@@ -385,14 +441,14 @@
             <span class="n">population_size</span><span class="o">=</span><span class="n">population_size</span><span class="p">,</span>
             <span class="n">mutation</span><span class="o">=</span><span class="n">mutation</span><span class="p">,</span>
             <span class="n">crossover</span><span class="o">=</span><span class="n">crossover</span><span class="p">,</span>
-            <span class="n">aggregative_function</span><span class="o">=</span><span class="n">aggregative_function</span><span class="p">,</span>
+            <span class="n">aggregation_function</span><span class="o">=</span><span class="n">aggregation_function</span><span class="p">,</span>
             <span class="n">neighbourhood_selection_probability</span><span class="o">=</span><span class="n">neighbourhood_selection_probability</span><span class="p">,</span>
             <span class="n">max_number_of_replaced_solutions</span><span class="o">=</span><span class="n">max_number_of_replaced_solutions</span><span class="p">,</span>
             <span class="n">neighbor_size</span><span class="o">=</span><span class="n">neighbor_size</span><span class="p">,</span>
             <span class="n">weight_files_path</span><span class="o">=</span><span class="n">weight_files_path</span><span class="p">,</span>
             <span class="n">population_evaluator</span><span class="o">=</span><span class="n">population_evaluator</span><span class="p">,</span>
             <span class="n">population_generator</span><span class="o">=</span><span class="n">population_generator</span><span class="p">,</span>
-            <span class="n">termination_criterion</span><span class="o">=</span><span class="n">termination_criterion</span>
+            <span class="n">termination_criterion</span><span class="o">=</span><span class="n">termination_criterion</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_k</span> <span class="o">=</span> <span class="mi">0</span>
@@ -409,8 +465,9 @@
 
         <span class="c1"># for i in range(self.population_size):</span>
         <span class="c1">#    self.constraints[i] = get_overall_constraint_violation_degree(self.permutation[i])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="n">overall_constraint_violation_degree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-                            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_size</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">overall_constraint_violation_degree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_size</span><span class="p">)</span>
+        <span class="p">]</span>
 
         <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">epsilon_zero</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="mf">0.05</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_size</span><span class="p">))])</span>
@@ -489,20 +546,20 @@
                 <span class="n">crowding_distance</span> <span class="o">=</span> <span class="n">CrowdingDistance</span><span class="p">()</span>
                 <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">first_rank_solutions</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_size</span><span class="p">:</span>
                     <span class="n">crowding_distance</span><span class="o">.</span><span class="n">compute_density_estimator</span><span class="p">(</span><span class="n">first_rank_solutions</span><span class="p">)</span>
-                    <span class="n">first_rank_solutions</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">first_rank_solutions</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;crowding_distance&#39;</span><span class="p">],</span>
-                                                  <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="n">first_rank_solutions</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+                        <span class="n">first_rank_solutions</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;crowding_distance&quot;</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="p">)</span>
                     <span class="n">first_rank_solutions</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">archive</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">solution</span> <span class="ow">in</span> <span class="n">first_rank_solutions</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">archive</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">solution</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">archive</span>
 
 
 <span class="k">class</span> <span class="nc">Permutation</span><span class="p">:</span>
-
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="n">length</span>
@@ -536,8 +593,9 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.5.3 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jmetal.algorithm.multiobjective.moead</a></li> 
       </ul>
     </div>
 <script type="text/javascript">
