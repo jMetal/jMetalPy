@@ -53,7 +53,7 @@ pip install "jmetalpy[complete]"  # Install all requirements
 
 ## Hello, world! 👋
 
-Examples of configuring and running all the included algorithms are located [in the documentation](https://jmetal.github.io/jMetalPy/multiobjective.algorithms.html).
+Examples of configuring and running all the included algorithms are located [in the documentation](https://jmetal.github.io/jMetalPy).
 
 ```python
 from jmetal.algorithm.multiobjective import NSGAII
