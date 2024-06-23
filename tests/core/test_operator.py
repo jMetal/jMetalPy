@@ -4,44 +4,40 @@ from jmetal.core.operator import Crossover, Mutation
 from jmetal.core.solution import Solution
 
 
-class DummyMutation(Mutation):
+class FakeMutation(Mutation):
+    """
+    Fake class used only for testing purposes.
+    """
+
     def __init__(self, probability: float):
-        super(DummyMutation, self).__init__(probability=probability)
-
-    def execute(self, source: Solution) -> None:
-        pass
-
-    def get_name(self) -> str:
-        pass
+        super(FakeMutation, self).__init__(probability=probability)
 
 
-class DummyCrossover(Crossover):
+class FakeCrossover(Crossover):
+    """
+    Fake class used only for testing purposes.
+    """
+
     def __init__(self, probability: float):
-        super(DummyCrossover, self).__init__(probability=probability)
-
-    def execute(self, source: Solution) -> None:
-        pass
-
-    def get_name(self) -> str:
-        pass
+        super(FakeCrossover, self).__init__(probability=probability)
 
 
 class OperatorTestCase(unittest.TestCase):
     def test_should_mutation_constructor_raises_an_exception_is_probability_is_negative(self) -> None:
         with self.assertRaises(Exception):
-            DummyMutation(-1)
+            FakeMutation(-1)
 
     def test_should_mutation_constructor_raises_an_exception_is_probability_is_higher_than_one(self) -> None:
         with self.assertRaises(Exception):
-            DummyMutation(1.1)
+            FakeMutation(1.1)
 
     def test_should_crossover_constructor_raises_an_exception_is_probability_is_negative(self) -> None:
         with self.assertRaises(Exception):
-            DummyCrossover(-1)
+            FakeCrossover(-1)
 
     def test_should_crossover_constructor_raises_an_exception_is_probability_is_higher_than_one(self) -> None:
         with self.assertRaises(Exception):
-            DummyMutation(1.1)
+            FakeCrossover(1.1)
 
 
 if __name__ == "__main__":

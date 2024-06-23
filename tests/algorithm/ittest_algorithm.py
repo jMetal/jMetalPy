@@ -61,7 +61,7 @@ class IntegrationTestCases(unittest.TestCase):
         hv = HyperVolume(reference_point=[1, 1])
         value = hv.compute([front[i].objectives for i in range(len(front))])
 
-        self.assertTrue(value >= 0.65)
+        self.assertGreater(value, 0.65)
 
     def test_should_SMPSO_work_when_solving_problem_ZDT1_with_standard_settings(self):
         problem = ZDT1()

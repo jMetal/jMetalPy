@@ -4,9 +4,13 @@ from jmetal.core.problem import FloatProblem, IntegerProblem
 from jmetal.core.solution import FloatSolution, IntegerSolution
 
 
-class DummyIntegerProblem(IntegerProblem):
+class FakeIntegerProblem(IntegerProblem):
+    """
+    Fake class used only for testing purposes.
+    """
+
     def __init__(self):
-        super(DummyIntegerProblem, self).__init__()
+        super(FakeIntegerProblem, self).__init__()
 
     def number_of_objectives(self) -> int:
         return 2
@@ -21,9 +25,13 @@ class DummyIntegerProblem(IntegerProblem):
         return "Dummy integer problem"
 
 
-class DummyFloatProblem(FloatProblem):
+class FakeFloatProblem(FloatProblem):
+    """
+    Fake class used only for testing purposes.
+    """
+
     def __init__(self):
-        super(DummyFloatProblem, self).__init__()
+        super(FakeFloatProblem, self).__init__()
 
     def number_of_objectives(self) -> int:
         return 2
@@ -43,7 +51,7 @@ class FloatProblemTestCases(unittest.TestCase):
         lower_bound = [-1.0]
         upper_bound = [1.0]
 
-        problem = DummyFloatProblem()
+        problem = FakeFloatProblem()
         problem.lower_bound = lower_bound
         problem.upper_bound = upper_bound
 
@@ -54,20 +62,20 @@ class FloatProblemTestCases(unittest.TestCase):
         self.assertEqual([1], problem.upper_bound)
 
     def test_should_create_solution_create_a_valid_solution(self):
-        problem = DummyFloatProblem()
+        problem = FakeFloatProblem()
 
         problem.lower_bound = [-1.0, -2.0]
         problem.upper_bound = [1.0, 2.0]
 
         solution = problem.create_solution()
-        self.assertNotEqual(None, solution)
+        self.assertIsNotNone(solution)
         self.assertTrue(-1.0 <= solution.variables[0] <= 1.0)
         self.assertTrue(-2.0 <= solution.variables[1] <= 2.0)
 
 
 class IntegerProblemTestCases(unittest.TestCase):
     def test_should_default_constructor_create_a_valid_problem(self):
-        problem = DummyIntegerProblem()
+        problem = FakeIntegerProblem()
 
         problem.lower_bound = [-1]
         problem.upper_bound = [1]
@@ -79,7 +87,7 @@ class IntegerProblemTestCases(unittest.TestCase):
         self.assertEqual([1], problem.upper_bound)
 
     def test_should_create_solution_create_a_valid_solution(self):
-        problem = DummyIntegerProblem()
+        problem = FakeIntegerProblem()
 
         problem.lower_bound = [-1, -2]
         problem.upper_bound = [1, 2]
@@ -87,7 +95,7 @@ class IntegerProblemTestCases(unittest.TestCase):
         print(problem.number_of_variables())
 
         solution = problem.create_solution()
-        self.assertNotEqual(None, solution)
+        self.assertIsNotNone(solution)
         self.assertTrue(-1 <= solution.variables[0] <= 1)
         self.assertTrue(-2 <= solution.variables[1] <= 2)
 
