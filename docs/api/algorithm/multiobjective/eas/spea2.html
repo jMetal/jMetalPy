@@ -154,12 +154,13 @@
 <h1>SPEA2<a class="headerlink" href="#SPEA2" title="Link to this heading">¶</a></h1>
 <section id="Example">
 <h2>Example<a class="headerlink" href="#Example" title="Link to this heading">¶</a></h2>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jmetal.algorithm.multiobjective.spea2</span> <span class="kn">import</span> <span class="n">SPEA2</span>
-<span class="kn">from</span> <span class="nn">jmetal.operator</span> <span class="kn">import</span> <span class="n">SBXCrossover</span><span class="p">,</span> <span class="n">PolynomialMutation</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator.crossover</span> <span class="kn">import</span> <span class="n">SBXCrossover</span>
+<span class="kn">from</span> <span class="nn">jmetal.operator.mutation</span> <span class="kn">import</span> <span class="n">PolynomialMutation</span>
 <span class="kn">from</span> <span class="nn">jmetal.problem</span> <span class="kn">import</span> <span class="n">ZDT1</span>
 <span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">StoppingByEvaluations</span>
 
@@ -181,9 +182,33 @@
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[1], line 15</span>
+<span class="ansi-green-intense-fg ansi-bold">      7</span> problem <span style="color: rgb(98,98,98)">=</span> ZDT1()
+<span class="ansi-green-intense-fg ansi-bold">      9</span> max_evaluations <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(98,98,98)">20000</span>
+<span class="ansi-green-intense-fg ansi-bold">     11</span> algorithm <span style="color: rgb(98,98,98)">=</span> SPEA2(
+<span class="ansi-green-intense-fg ansi-bold">     12</span>     problem<span style="color: rgb(98,98,98)">=</span>problem,
+<span class="ansi-green-intense-fg ansi-bold">     13</span>     population_size<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">40</span>,
+<span class="ansi-green-intense-fg ansi-bold">     14</span>     offspring_population_size<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">40</span>,
+<span class="ansi-green-fg">---&gt; 15</span>     mutation<span style="color: rgb(98,98,98)">=</span>PolynomialMutation(probability<span style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">1.0</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">/</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">problem</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">number_of_variables</span>, distribution_index<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">20</span>),
+<span class="ansi-green-intense-fg ansi-bold">     16</span>     crossover<span style="color: rgb(98,98,98)">=</span>SBXCrossover(probability<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">1.0</span>, distribution_index<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">20</span>),
+<span class="ansi-green-intense-fg ansi-bold">     17</span>     termination_criterion<span style="color: rgb(98,98,98)">=</span>StoppingByEvaluations(<span style="color: rgb(0,135,0)">max</span><span style="color: rgb(98,98,98)">=</span>max_evaluations)
+<span class="ansi-green-intense-fg ansi-bold">     18</span> )
+<span class="ansi-green-intense-fg ansi-bold">     20</span> algorithm<span style="color: rgb(98,98,98)">.</span>run()
+<span class="ansi-green-intense-fg ansi-bold">     21</span> solutions <span style="color: rgb(98,98,98)">=</span> algorithm<span style="color: rgb(98,98,98)">.</span>get_result()
+
+<span class="ansi-red-fg">TypeError</span>: unsupported operand type(s) for /: &#39;float&#39; and &#39;method&#39;
+</pre></div></div>
+</div>
 <p>We can now visualize the Pareto front approximation:</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jmetal.lab.visualization.plotting</span> <span class="kn">import</span> <span class="n">Plot</span>
@@ -194,13 +219,6 @@
 <span class="n">plot_front</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span><span class="n">plot_title</span><span class="o">=</span><span class="s1">&#39;Pareto front approximation&#39;</span><span class="p">,</span> <span class="n">axis_labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span>
 <span class="n">plot_front</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">front</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;SPEA2-ZDT1&#39;</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../../_images/api_algorithm_multiobjective_eas_spea2_5_0.png" src="../../../../_images/api_algorithm_multiobjective_eas_spea2_5_0.png" />
 </div>
 </div>
 </section>

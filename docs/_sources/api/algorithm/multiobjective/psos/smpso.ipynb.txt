@@ -35,7 +35,7 @@
    "outputs": [],
    "source": [
     "from jmetal.algorithm.multiobjective.smpso import SMPSO\n",
-    "from jmetal.operator import PolynomialMutation\n",
+    "from jmetal.operator.mutation import PolynomialMutation\n",
     "from jmetal.problem import ZDT4\n",
     "from jmetal.util.archive import CrowdingDistanceArchive\n",
     "from jmetal.util.termination_criterion import StoppingByEvaluations\n",

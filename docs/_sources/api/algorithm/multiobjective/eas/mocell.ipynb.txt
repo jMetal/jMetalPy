@@ -35,7 +35,8 @@
    "outputs": [],
    "source": [
     "from jmetal.algorithm.multiobjective.mocell import MOCell\n",
-    "from jmetal.operator import SBXCrossover, PolynomialMutation\n",
+    "from jmetal.operator.crossover import SBXCrossover\n",
+    "from jmetal.operator.mutation import PolynomialMutation\n",
     "from jmetal.problem import ZDT4\n",
     "from jmetal.util.archive import CrowdingDistanceArchive\n",
     "from jmetal.util.neighborhood import C9\n",

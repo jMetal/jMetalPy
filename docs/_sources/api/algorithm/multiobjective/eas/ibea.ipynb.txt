@@ -35,7 +35,8 @@
    "outputs": [],
    "source": [
     "from jmetal.algorithm.multiobjective.ibea import IBEA\n",
-    "from jmetal.operator import SBXCrossover, PolynomialMutation\n",
+    "from jmetal.operator.crossover import SBXCrossover\n",
+    "from jmetal.operator.mutation import PolynomialMutation\n",
     "from jmetal.problem import ZDT1\n",
     "from jmetal.util.termination_criterion import StoppingByEvaluations\n",
     "\n",
