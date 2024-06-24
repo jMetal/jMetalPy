@@ -40,23 +40,23 @@ class BinaryTournamentTestCases(unittest.TestCase):
 
     def test_should_execute_work_if_the_solution_list_contains_two_non_dominated_solutions(self):
         solution1 = Solution(2, 2)
-        solution1.variables = [1.0, 2.0]
+        solution1.objectives = [1.0, 2.0]
         solution2 = Solution(2, 2)
-        solution2.variables = [0.0, 3.0]
+        solution2.objectives = [0.0, 3.0]
 
         solution_list = [solution1, solution2]
 
-        assert_that(any_of(solution1, solution2), self.selection.execute(solution_list))
+        self.assertTrue(solution1 == self.selection.execute(solution_list) or solution2 == self.selection.execute(solution_list))
 
     def test_should_execute_work_if_the_solution_list_contains_two_solutions_and_one_them_is_dominated(self):
         solution1 = Solution(2, 2)
-        solution1.variables = [1.0, 4.0]
+        solution1.objectives = [1.0, 4.0]
         solution2 = Solution(2, 2)
-        solution2.variables = [0.0, 3.0]
+        solution2.objectives = [0.0, 3.0]
 
         solution_list = [solution1, solution2]
 
-        assert_that(solution2, self.selection.execute(solution_list))
+        self.assertEqual(solution2, self.selection.execute(solution_list))
 
 
 class BestSolutionSelectionTestCases(unittest.TestCase):
@@ -91,7 +91,7 @@ class BestSolutionSelectionTestCases(unittest.TestCase):
 
         solution_list = [solution1, solution2]
 
-        self.assertTrue(self.selection.execute(solution_list) in solution_list)
+        self.assertIn(self.selection.execute(solution_list), solution_list)
 
     def test_should_execute_work_if_the_solution_list_contains_two_solutions_and_one_them_is_dominated(self):
         solution1 = Solution(2, 2)
@@ -151,7 +151,7 @@ class RandomSolutionSelectionTestCases(unittest.TestCase):
 
         solution_list = [solution1, solution2]
 
-        self.assertTrue(self.selection.execute(solution_list) in solution_list)
+        self.assertIn(self.selection.execute(solution_list), solution_list)
 
     def test_should_execute_work_if_the_solution_list_contains_two_solutions_and_one_them_is_dominated(self):
         solution1 = Solution(2, 2)
@@ -161,7 +161,7 @@ class RandomSolutionSelectionTestCases(unittest.TestCase):
 
         solution_list = [solution1, solution2]
 
-        self.assertTrue(self.selection.execute(solution_list) in solution_list)
+        self.assertIn(self.selection.execute(solution_list), solution_list)
 
     def test_should_execute_work_if_the_solution_list_contains_five_solutions_and_one_them_is_dominated(self):
         solution1 = Solution(2, 2)
@@ -176,7 +176,7 @@ class RandomSolutionSelectionTestCases(unittest.TestCase):
         solution5.objectives = [0.2, 4.4]
 
         solution_list = [solution1, solution2, solution3, solution4, solution5]
-        self.assertTrue(self.selection.execute(solution_list) in solution_list)
+        self.assertIn(self.selection.execute(solution_list), solution_list)
 
 
 class DifferentialEvolutionSelectionTestCases(unittest.TestCase):
@@ -224,13 +224,13 @@ class DifferentialEvolutionSelectionTestCases(unittest.TestCase):
         selected_solutions = selection.execute(solution_list)
 
         self.assertEqual(3, len(selected_solutions))
-        self.assertTrue(solution1 not in selected_solutions)
+        self.assertNotIn(solution1, selected_solutions)
 
         selection.set_index_to_exclude(3)
         selected_solutions = selection.execute(solution_list)
 
         self.assertEqual(3, len(selected_solutions))
-        self.assertTrue(solution4 not in selected_solutions)
+        self.assertNotIn(solution4, selected_solutions)
 
 
 class NaryRandomSolutionSelectionTestCases(unittest.TestCase):
@@ -277,8 +277,8 @@ class NaryRandomSolutionSelectionTestCases(unittest.TestCase):
         solution_list = [solution1, solution2]
 
         selection_result = selection.execute(solution_list)
-        self.assertTrue(selection_result[0] in solution_list)
-        self.assertTrue(selection_result[1] in solution_list)
+        self.assertIn(selection_result[0], solution_list)
+        self.assertIn(selection_result[1], solution_list)
 
     def test_should_execute_work_if_the_solution_list_contains_five_solutions_and_one_them_is_dominated(self):
         selection = NaryRandomSolutionSelection[Solution](1)
@@ -295,7 +295,7 @@ class NaryRandomSolutionSelectionTestCases(unittest.TestCase):
 
         solution_list = [solution1, solution2, solution3, solution4, solution5]
 
-        self.assertTrue(selection.execute(solution_list)[0] in solution_list)
+        self.assertIn(selection.execute(solution_list)[0], solution_list)
 
 
 class DominanceRankingTestCases(unittest.TestCase):

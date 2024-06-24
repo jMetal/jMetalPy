@@ -1,7 +1,6 @@
 import unittest
 
 from jmetal.core.operator import Crossover, Mutation
-from jmetal.core.solution import Solution
 
 
 class FakeMutation(Mutation):
