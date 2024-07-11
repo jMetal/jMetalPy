@@ -219,7 +219,7 @@ def associate_to_niches(F, niches, ideal_point, nadir_point, utopian_epsilon: fl
 
 
 def compute_niche_count(n_niches: int, niche_of_individuals):
-    niche_count = np.zeros(n_niches, dtype=np.int)
+    niche_count = np.zeros(n_niches, dtype=int)
     index, count = np.unique(niche_of_individuals, return_counts=True)
     niche_count[index] = count
 
@@ -328,8 +328,8 @@ class NSGAIII(NSGAII):
         if len(pop) > self.population_size:
             # if there is only one front
             if len(fronts) == 1:
-                until_last_front = np.array([], dtype=np.int)
-                niche_count = np.zeros(len(self.reference_directions), dtype=np.int)
+                until_last_front = np.array([], dtype=int)
+                niche_count = np.zeros(len(self.reference_directions), dtype=int)
                 n_remaining = self.population_size
             # if some individuals already survived
             else:
