@@ -75,8 +75,8 @@ class Fonseca(FloatProblem):
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         n = self.number_of_variables()
-        solution.objectives[0] = 1 - exp(-sum([(x - 1.0 / n**0.5) ** 2 for x in solution.variables]))
-        solution.objectives[1] = 1 - exp(-sum([(x + 1.0 / n**0.5) ** 2 for x in solution.variables]))
+        solution.objectives[0] = 1 - exp(-sum([(x - 1.0 / n ** 0.5) ** 2 for x in solution.variables]))
+        solution.objectives[1] = 1 - exp(-sum([(x + 1.0 / n ** 0.5) ** 2 for x in solution.variables]))
 
         return solution
 
@@ -103,7 +103,7 @@ class Schaffer(FloatProblem):
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         value = solution.variables[0]
 
-        solution.objectives[0] = value**2
+        solution.objectives[0] = value ** 2
         solution.objectives[1] = (value - 2) ** 2
 
         return solution
@@ -202,6 +202,7 @@ class OneZeroMax(BinaryProblem):
     will contain the bit string representing the solutions.
 
     """
+
     def __init__(self, number_of_bits: int = 256):
         super(OneZeroMax, self).__init__()
         self.number_of_bits_per_variable = [number_of_bits]
@@ -236,7 +237,8 @@ class OneZeroMax(BinaryProblem):
         new_solution = BinarySolution(
             number_of_variables=self.number_of_variables(), number_of_objectives=self.number_of_objectives()
         )
-        new_solution.variables[0] = [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits_per_variable[0])]
+        new_solution.variables[0] = [True if random.randint(0, 1) == 0 else False for _ in
+                                     range(self.number_of_bits_per_variable[0])]
         return new_solution
 
     def name(self) -> str:
@@ -245,17 +247,17 @@ class OneZeroMax(BinaryProblem):
 
 class MixedIntegerFloatProblem(Problem):
     def __init__(
-        self,
-        number_of_integer_variables=10,
-        number_of_float_variables=10,
-        n=100,
-        m=-100,
-        lower_bound=-1000,
-        upper_bound=1000,
+            self,
+            number_of_integer_variables=10,
+            number_of_float_variables=10,
+            n=100,
+            m=-100,
+            lower_bound=-1000,
+            upper_bound=1000,
     ):
         super(MixedIntegerFloatProblem, self).__init__()
         self.number_of_objectives = 2
-        self.number_of_variables = 2
+        self.number_of_variables = number_of_float_variables + number_of_integer_variables ;
         self.number_of_constraints = 0
 
         self.n = n
@@ -268,6 +270,15 @@ class MixedIntegerFloatProblem(Problem):
 
         self.obj_directions = [self.MINIMIZE]
         self.obj_labels = ["Ones"]
+
+    def number_of_constraints(self) -> int:
+        return self.number_of_constraints
+
+    def number_of_objectives(self) -> int:
+        return self.number_of_objectives
+
+    def number_of_variables(self) -> int:
+        return self.number_of_variables
 
     def evaluate(self, solution: CompositeSolution) -> CompositeSolution:
         distance_to_n = sum([abs(self.n - value) for value in solution.variables[0].variables])
