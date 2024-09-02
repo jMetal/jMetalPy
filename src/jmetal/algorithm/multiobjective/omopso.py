@@ -118,7 +118,7 @@ class OMOPSO(ParticleSwarmOptimization):
             c2 = round(random.uniform(self.c2_min, self.c2_max), 1)
             w = round(random.uniform(self.weight_min, self.weight_max), 1)
 
-            for var in range(swarm[i].number_of_variables):
+            for var in range(len(swarm[i].variables)):
                 self.speed[i][var] = (
                     w * self.speed[i][var]
                     + (c1 * r1 * (best_particle.variables[var] - swarm[i].variables[var]))
@@ -129,7 +129,7 @@ class OMOPSO(ParticleSwarmOptimization):
         for i in range(self.swarm_size):
             particle = swarm[i]
 
-            for j in range(particle.number_of_variables):
+            for j in range(len(particle.variables)):
                 particle.variables[j] += self.speed[i][j]
 
                 if particle.variables[j] < self.problem.lower_bound[j]:
