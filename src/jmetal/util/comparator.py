@@ -239,7 +239,7 @@ class EpsilonDominanceComparator(Comparator):
     def __dominance_test(self, solution1: Solution, solution2: Solution):
         best_is_one = False
         best_is_two = False
-        for i in range(solution1.number_of_objectives):
+        for i in range(len(solution1.objectives)):
             value1 = math.floor(solution1.objectives[i] / self.epsilon)
             value2 = math.floor(solution2.objectives[i] / self.epsilon)
 
@@ -256,7 +256,7 @@ class EpsilonDominanceComparator(Comparator):
             dist1 = 0.0
             dist2 = 0.0
 
-            for i in range(solution1.number_of_objectives):
+            for i in range(len(solution1.objectives)):
                 index1 = math.floor(solution1.objectives[i] / self.epsilon)
                 index2 = math.floor(solution2.objectives[i] / self.epsilon)
 
