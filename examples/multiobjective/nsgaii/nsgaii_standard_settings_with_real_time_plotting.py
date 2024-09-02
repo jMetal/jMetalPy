@@ -17,7 +17,7 @@ Program to  configure and run the NSGA-II algorithm configured with standard set
 
 if __name__ == "__main__":
     problem = ZDT1()
-    problem.reference_front = read_solutions(filename="resources/reference_front/ZDT1.pf")
+    reference_front = read_solutions(filename="resources/reference_front/ZDT1.pf")
 
     max_evaluations = 10000
     algorithm = NSGAII(
@@ -30,7 +30,7 @@ if __name__ == "__main__":
     )
 
     algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
-    algorithm.observable.register(observer=VisualizerObserver(reference_front=problem.reference_front))
+    algorithm.observable.register(observer=VisualizerObserver(reference_front=reference_front))
 
     algorithm.run()
     front = algorithm.result()
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     # Plot interactive front
     plot_front = InteractivePlot(
         title="Pareto front approximation. Problem: " + problem.name(),
-        reference_front=problem.reference_front,
+        reference_front=reference_front,
         axis_labels=problem.obj_labels,
     )
     plot_front.plot(front, label=algorithm.label, filename=algorithm.get_name())

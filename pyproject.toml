@@ -84,8 +84,8 @@ distributed = [
 
 complete = [
     "tqdm",
-    "numpy>=1.16.0",
-    "pandas>=0.24.2",
+    "numpy>=2.0.0",
+    "pandas>=2.2.0",
     "plotly>=3.3.0",
     "matplotlib>=3.0.2",
     "scipy>=1.3.0",

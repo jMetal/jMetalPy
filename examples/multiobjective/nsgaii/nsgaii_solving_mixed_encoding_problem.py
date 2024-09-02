@@ -4,6 +4,7 @@ from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.mutation import CompositeMutation
 from jmetal.operator.mutation import IntegerPolynomialMutation, PolynomialMutation
 from jmetal.problem.multiobjective.unconstrained import MixedIntegerFloatProblem
+from jmetal.util.observer import VisualizerObserver
 from jmetal.util.solution import (
     get_non_dominated_solutions,
     print_function_values_to_file,
@@ -12,7 +13,7 @@ from jmetal.util.solution import (
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":
-    problem = MixedIntegerFloatProblem(10, 10, 100, -100, -1000, 1000)
+    problem = MixedIntegerFloatProblem(60, 20, 100, -100, -1000, 1000)
 
     max_evaluations = 25000
     algorithm = NSGAII(
@@ -28,6 +29,8 @@ if __name__ == "__main__":
         ),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
     )
+
+    algorithm.observable.register(observer=VisualizerObserver())
 
     algorithm.run()
     front = get_non_dominated_solutions(algorithm.result())
