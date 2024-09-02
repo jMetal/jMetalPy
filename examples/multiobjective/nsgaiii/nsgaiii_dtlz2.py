@@ -2,8 +2,8 @@ from jmetal.algorithm.multiobjective.nsgaiii import (
     NSGAIII,
     UniformReferenceDirectionFactory,
 )
-from jmetal.operator.mutation import PolynomialMutation
 from jmetal.operator.crossover import SBXCrossover
+from jmetal.operator.mutation import PolynomialMutation
 from jmetal.problem import DTLZ2
 from jmetal.util.solution import (
     get_non_dominated_solutions,

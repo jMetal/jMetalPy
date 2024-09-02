@@ -1,6 +1,6 @@
 from jmetal.algorithm.multiobjective.ibea import IBEA
-from jmetal.operator.mutation import PolynomialMutation
 from jmetal.operator.crossover import SBXCrossover
+from jmetal.operator.mutation import PolynomialMutation
 from jmetal.problem import ZDT1
 from jmetal.util.solution import (
     print_function_values_to_file,

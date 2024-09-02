@@ -1,6 +1,6 @@
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
-from jmetal.operator.mutation import PolynomialMutation
 from jmetal.operator.crossover import SBXCrossover
+from jmetal.operator.mutation import PolynomialMutation
 from jmetal.problem.singleobjective.unconstrained import Rastrigin
 from jmetal.util.termination_criterion import StoppingByEvaluations
 

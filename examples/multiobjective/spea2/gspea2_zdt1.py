@@ -1,6 +1,6 @@
 from jmetal.algorithm.multiobjective.spea2 import SPEA2
-from jmetal.operator.mutation import PolynomialMutation
 from jmetal.operator.crossover import SBXCrossover
+from jmetal.operator.mutation import PolynomialMutation
 from jmetal.problem import ZDT1
 from jmetal.util.comparator import GDominanceComparator
 from jmetal.util.solution import (

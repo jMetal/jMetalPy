@@ -1,6 +1,6 @@
 from jmetal.algorithm.multiobjective.nsgaii import DynamicNSGAII
-from jmetal.operator.mutation import PolynomialMutation
 from jmetal.operator.crossover import SBXCrossover
+from jmetal.operator.mutation import PolynomialMutation
 from jmetal.problem.multiobjective.fda import FDA2
 from jmetal.util.observable import TimeCounter
 from jmetal.util.observer import PlotFrontToFileObserver, WriteFrontToFileObserver

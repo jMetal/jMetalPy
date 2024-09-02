@@ -1,8 +1,8 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.operator.mutation import IntegerPolynomialMutation, PolynomialMutation
-from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.crossover import CompositeCrossover, IntegerSBXCrossover
+from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.mutation import CompositeMutation
+from jmetal.operator.mutation import IntegerPolynomialMutation, PolynomialMutation
 from jmetal.problem.multiobjective.unconstrained import MixedIntegerFloatProblem
 from jmetal.util.solution import (
     get_non_dominated_solutions,

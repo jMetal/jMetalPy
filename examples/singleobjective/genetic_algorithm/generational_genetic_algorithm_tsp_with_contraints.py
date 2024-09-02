@@ -1,8 +1,8 @@
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.core.solution import PermutationSolution
-from jmetal.operator.selection import BinaryTournamentSelection
 from jmetal.operator.crossover import PMXCrossover
 from jmetal.operator.mutation import PermutationSwapMutation
+from jmetal.operator.selection import BinaryTournamentSelection
 from jmetal.problem.singleobjective.tsp import TSP
 from jmetal.util.comparator import MultiComparator, OverallConstraintViolationComparator, ObjectiveComparator
 from jmetal.util.observer import PrintObjectivesObserver

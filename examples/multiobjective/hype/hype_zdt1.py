@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.hype import HYPE
 from jmetal.core.solution import FloatSolution
-from jmetal.operator.mutation import PolynomialMutation
 from jmetal.operator.crossover import SBXCrossover
+from jmetal.operator.mutation import PolynomialMutation
 from jmetal.problem import ZDT1
 from jmetal.util.solution import (
     print_function_values_to_file,

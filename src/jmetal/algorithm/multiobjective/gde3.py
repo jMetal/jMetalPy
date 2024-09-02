@@ -6,8 +6,6 @@ from jmetal.core.problem import DynamicProblem, Problem
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import DifferentialEvolutionCrossover
 from jmetal.operator.selection import DifferentialEvolutionSelection
-
-from jmetal.operator.selection import DifferentialEvolutionSelection
 from jmetal.util.comparator import Comparator, DominanceComparator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator

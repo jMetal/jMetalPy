@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.core.problem import OnTheFlyFloatProblem
-from jmetal.operator.mutation import PolynomialMutation
 from jmetal.operator.crossover import SBXCrossover
+from jmetal.operator.mutation import PolynomialMutation
 from jmetal.util.solution import (
     get_non_dominated_solutions,
     print_function_values_to_file,

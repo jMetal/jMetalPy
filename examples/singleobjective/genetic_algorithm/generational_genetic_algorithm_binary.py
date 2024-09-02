@@ -1,6 +1,6 @@
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
-from jmetal.operator.mutation import BitFlipMutation
 from jmetal.operator.crossover import SPXCrossover
+from jmetal.operator.mutation import BitFlipMutation
 from jmetal.problem import OneMax
 from jmetal.util.observer import PrintObjectivesObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
