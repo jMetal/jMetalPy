@@ -14,7 +14,7 @@ from jmetal.core.solution import (
    :platform: Unix, Windows
    :synopsis: Unconstrained test problems for multi-objective optimization
 
-.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>
+.. moduleauthor:: Antonio J. Nebro <ajnebro@uma.es>
 """
 
 
@@ -257,7 +257,7 @@ class MixedIntegerFloatProblem(Problem):
     ):
         super(MixedIntegerFloatProblem, self).__init__()
         self.number_of_objectives = 2
-        self.number_of_variables = number_of_float_variables + number_of_integer_variables ;
+        self.number_of_variables = number_of_float_variables + number_of_integer_variables
         self.number_of_constraints = 0
 
         self.n = n
