@@ -12,7 +12,7 @@ from jmetal.util.solution import (
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 """  
-Program to  configure and run the NSGA-II algorithm configured with standard settings.
+Program to  configure and run the NSGA-II algorithm to optimize a constrained problem.
 """
 
 if __name__ == "__main__":
