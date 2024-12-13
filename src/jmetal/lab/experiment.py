@@ -839,7 +839,7 @@ def __kolmogorov_smirnov_to_latex(indicator_name: str, test_data: pd.DataFrame, 
     num_columns = len(algorithms)
     columns = algorithms
 
-    alignment = "c"
+    alignment = "c" 
     col_format = "{}|{}".format(alignment, alignment * num_columns)
     column_labels = ["\\textbf{{{0}}}".format(label.replace("_", "\\_")) for label in columns]
 
