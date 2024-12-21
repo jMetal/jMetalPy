@@ -2,6 +2,7 @@ import functools
 from abc import ABC, abstractmethod
 from multiprocessing.pool import Pool, ThreadPool
 from typing import Generic, List, TypeVar
+from concurrent.futures import ThreadPoolExecutor
 
 try:
     import dask
@@ -75,11 +76,12 @@ def evaluate_solution(solution, problem):
 
 
 class DaskEvaluator(Evaluator[S]):
-    def __init__(self, scheduler="processes"):
+    def __init__(self, scheduler="processes", number_of_cores=4):
         self.scheduler = scheduler
+        self.number_of_cores = number_of_cores
 
     def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
-        with dask.config.set(scheduler=self.scheduler):
+        with dask.config.set(scheduler=self.scheduler, pool=ThreadPoolExecutor(self.number_of_cores)):
             return list(
                 dask.compute(
                     *[dask.delayed(evaluate_solution)(solution=solution, problem=problem) for solution in solution_list]
