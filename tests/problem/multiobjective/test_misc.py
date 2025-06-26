@@ -2,14 +2,12 @@
 # -*- coding: utf-8-"""
 
 import unittest
-import numpy as np
-from numpy.testing import assert_allclose
-import math
 
-from jmetal.problem.multiobjective.cinv import (
+from numpy.testing import assert_allclose
+
+from jmetal.problem.multiobjective.misc import (
     CONV2, CONV3_4, CONV3, CONV4_2F, DENT, SYM_PART
 )
-from jmetal.core.solution import FloatSolution
 
 
 class CONV2Test(unittest.TestCase):

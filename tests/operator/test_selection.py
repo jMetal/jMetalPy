@@ -1,7 +1,5 @@
 import unittest
 
-from hamcrest import any_of, assert_that
-
 from jmetal.core.solution import Solution
 from jmetal.operator.selection import (
     BestSolutionSelection,

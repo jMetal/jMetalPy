@@ -1,8 +1,10 @@
-from jmetal.core.problem import FloatProblem
-from jmetal.core.solution import FloatSolution
-import numpy as np
 import math
 from math import ceil, fabs, copysign
+
+import numpy as np
+
+from jmetal.core.problem import FloatProblem
+from jmetal.core.solution import FloatSolution
 
 
 class CONV2(FloatProblem):

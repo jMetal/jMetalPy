@@ -1,8 +1,8 @@
 import functools
 from abc import ABC, abstractmethod
+from concurrent.futures import ThreadPoolExecutor
 from multiprocessing.pool import Pool, ThreadPool
 from typing import Generic, List, TypeVar, Set
-from concurrent.futures import ThreadPoolExecutor
 
 try:
     import dask
