@@ -317,3 +317,147 @@ class SYM_PART(FloatProblem):
 
     def number_of_constraints(self):
         return self._number_of_constraints
+
+class SSW(FloatProblem):
+    def __init__(self):
+        super().__init__()
+
+        # Fixed number of decision variables (n = 3)
+        self._number_of_variables = 3
+        self._number_of_objectives = 2
+        self._number_of_constraints = 0
+
+        # Search space: [0, 40]^3
+        self.lower_bound = [0.0] * 3
+        self.upper_bound = [40.0] * 3
+
+        # Objective directions: minimization
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+        self.obj_labels = ['f1', 'f2']
+
+    # Evaluate a single solution using the SSW formulation
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
+        x = solution.variables
+
+        f1 = sum(x)
+
+        product_term = 1.0
+        for j in range(len(x)):
+            if j in [0, 1]:
+                wj = 0.01 * math.exp(-(x[j] / 20) ** 2.5)
+            else:
+                wj = 0.01 * math.exp(-x[j] / 15)
+            product_term *= (1 - wj)
+
+        f2 = 1 - product_term
+
+        solution.objectives[0] = f1
+        solution.objectives[1] = f2
+        return solution
+
+    def name(self) -> str:
+        return 'SSW'
+
+    # Accessor methods
+    def number_of_variables(self):
+        return self._number_of_variables
+
+    def number_of_objectives(self):
+        return self._number_of_objectives
+
+    def number_of_constraints(self):
+        return self._number_of_constraints
+
+
+class TWO_ON_ONE(FloatProblem):
+    def __init__(self):
+        super().__init__()
+
+        # Fixed number of decision variables (n = 2)
+        self._number_of_variables = 2
+        self._number_of_objectives = 2
+        self._number_of_constraints = 0
+
+        # Search space: [-3, 3]^2
+        self.lower_bound = [-3.0] * 2
+        self.upper_bound = [3.0] * 2
+
+        # Objective directions: minimization
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+        self.obj_labels = ['f1', 'f2']
+
+    # Evaluate a single solution using the TWO_ON_ONE formulation
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
+        x = solution.variables
+
+        k = 0
+        l = 1
+        c = 10
+        d = 0.25
+
+        x1 = x[0]
+        x2 = x[1]
+
+
+        f1 = x1**4 + x2**4 - x1**2 + x2**2 - c * x1 * x2 + d * x1 + 20
+        f2 = (x1 - k)**2 + (x2 - l)**2
+
+        solution.objectives[0] = f1
+        solution.objectives[1] = f2
+        return solution
+
+    def name(self) -> str:
+        return 'TWO_ON_ONE'
+
+    # Accessor methods
+    def number_of_variables(self):
+        return self._number_of_variables
+
+    def number_of_objectives(self):
+        return self._number_of_objectives
+
+    def number_of_constraints(self):
+        return self._number_of_constraints
+
+
+class OMNI_TEST(FloatProblem):
+    def __init__(self, number_of_variables: int = 3):
+        super().__init__()
+
+        # Number of decision variables (default 3, can be changed)
+        self._number_of_variables = number_of_variables
+        self._number_of_objectives = 2
+        self._number_of_constraints = 0
+
+        # Search space: [0, 6]^n
+        self.lower_bound = [0.0] * number_of_variables
+        self.upper_bound = [6.0] * number_of_variables
+
+        # Objective directions: minimization
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+        self.obj_labels = ['f1', 'f2']
+
+    # Evaluate a single solution using the OMNI-TEST formulation
+    def evaluate(self, solution: FloatSolution) -> FloatSolution:
+        x = solution.variables
+
+
+        f1 = sum(math.sin(math.pi * xi) for xi in x)
+        f2 = sum(math.cos(math.pi * xi) for xi in x)
+
+        solution.objectives[0] = f1
+        solution.objectives[1] = f2
+        return solution
+
+    def name(self) -> str:
+        return 'OMNI_TEST'
+
+    # Accessor methods
+    def number_of_variables(self):
+        return self._number_of_variables
+
+    def number_of_objectives(self):
+        return self._number_of_objectives
+
+    def number_of_constraints(self):
+        return self._number_of_constraints
