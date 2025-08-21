@@ -42,7 +42,7 @@ if __name__ == "__main__":
     print(f"Computing time: {algorithm.total_computing_time}")
 
 
-    reference_front = read_solutions(filename="resources/reference_front/ZDT1.pf")
+    reference_front = read_solutions(filename="resources/reference_fronts/ZDT1.pf")
     reference_point = np.max([solutions.objectives for solutions in reference_front], axis=0)
 
     hv = HyperVolume(reference_point=reference_point)

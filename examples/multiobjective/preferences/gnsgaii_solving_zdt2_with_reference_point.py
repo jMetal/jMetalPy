@@ -19,7 +19,7 @@ reference point = [0.2, 0.5].
 
 if __name__ == "__main__":
     problem = ZDT2()
-    reference_front = read_solutions(filename="resources/reference_front/ZDT2.pf")
+    reference_front = read_solutions(filename="resources/reference_fronts/ZDT2.pf")
 
     reference_point = [0.3, 0.5]
 

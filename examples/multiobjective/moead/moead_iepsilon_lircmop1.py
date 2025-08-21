@@ -13,7 +13,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 if __name__ == "__main__":
     problem = LIRCMOP2()
 
-    problem.reference_front = read_solutions(filename="resources/reference_front/LIRCMOP2.pf")
+    problem.reference_front = read_solutions(filename="resources/reference_fronts/LIRCMOP2.pf")
 
     max_evaluations = 300000
 

@@ -17,7 +17,7 @@ Program to  configure and run the NSGA-II algorithm configured with standard set
 
 if __name__ == "__main__":
     problem = ZDT1()
-    reference_front = read_solutions(filename="resources/reference_front/ZDT1.pf")
+    reference_front = read_solutions(filename="resources/reference_fronts/ZDT1.pf")
 
     max_evaluations = 10000
     algorithm = NSGAII(

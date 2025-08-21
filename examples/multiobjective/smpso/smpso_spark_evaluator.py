@@ -14,7 +14,7 @@ from src.jmetal.problem.multiobjective.zdt import ZDT1Modified
 
 if __name__ == "__main__":
     problem = ZDT1Modified()
-    problem.reference_front = read_solutions(filename="resources/reference_front/ZDT1.pf")
+    problem.reference_front = read_solutions(filename="resources/reference_fronts/ZDT1.pf")
 
     max_evaluations = 100
     algorithm = SMPSO(

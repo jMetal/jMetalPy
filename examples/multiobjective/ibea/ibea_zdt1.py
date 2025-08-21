@@ -11,7 +11,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":
     problem = ZDT1()
-    problem.reference_front = read_solutions(filename="resources/reference_front/ZDT1.pf")
+    problem.reference_front = read_solutions(filename="resources/reference_fronts/ZDT1.pf")
 
     algorithm = IBEA(
         problem=problem,

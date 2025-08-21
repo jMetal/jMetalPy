@@ -40,7 +40,7 @@ if __name__ == "__main__":
         .add_constraint(c2)
     )
 
-    problem.reference_front = read_solutions(filename="resources/reference_front/Srinivas.pf")
+    problem.reference_front = read_solutions(filename="resources/reference_fronts/Srinivas.pf")
 
     max_evaluations = 25000
     algorithm = NSGAII(

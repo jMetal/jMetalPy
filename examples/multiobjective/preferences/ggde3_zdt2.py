@@ -8,7 +8,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":
     problem = ZDT2()
-    reference_front = read_solutions(filename="resources/reference_front/{}.pf".format(problem.name()))
+    reference_front = read_solutions(filename="resources/reference_fronts/{}.pf".format(problem.name()))
 
     max_evaluations = 25000
     reference_point = [0.4, 0.6]

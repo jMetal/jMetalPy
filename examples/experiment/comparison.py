@@ -80,6 +80,6 @@ if __name__ == "__main__":
     # Generate summary file
     generate_summary_from_experiment(
         input_dir=output_directory,
-        reference_fronts="resources/reference_front",
+        reference_fronts="resources/reference_fronts",
         quality_indicators=[GenerationalDistance(), EpsilonIndicator(), HyperVolume([1.0, 1.0])],
     )

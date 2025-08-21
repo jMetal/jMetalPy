@@ -13,7 +13,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":
     problem = LZ09_F1()
-    problem.reference_front = read_solutions(filename="resources/reference_front/LZ09_F1.pf")
+    problem.reference_front = read_solutions(filename="resources/reference_fronts/LZ09_F1.pf")
 
     max_evaluations = 300000
 

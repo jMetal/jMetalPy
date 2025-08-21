@@ -18,7 +18,7 @@ update frequency is set to 100 evaluations.
 
 if __name__ == "__main__":
     problem = ZDT1()
-    problem.reference_front = read_solutions(filename="resources/reference_front/ZDT1.pf")
+    problem.reference_front = read_solutions(filename="resources/reference_fronts/ZDT1.pf")
 
     max_evaluations = 25000
     algorithm = NSGAII(

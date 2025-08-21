@@ -132,7 +132,7 @@ def generate_summary_from_experiment(
                     reference_front_file = os.path.join(reference_fronts, problem + ".pf")
 
                     # Add reference front if any
-                    if hasattr(indicator, "reference_front"):
+                    if hasattr(indicator, "reference_fronts"):
                         if Path(reference_front_file).is_file():
                             reference_front = []
                             with open(reference_front_file) as file:
