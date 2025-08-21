@@ -120,9 +120,9 @@ The current release of jMetalPy (v1.7.0) contains the following components:
 
 * [Current development version] 
   * Add new bencharmk problems:
-    * [eqdtlz.py](https://github.com/jMetal/jMetalPy/blob/main/src/jmetal/problem/multiobjective/eqdtlz.py).
-    * [misc.py](https://github.com/jMetal/jMetalPy/blob/main/src/jmetal/problem/multiobjective/misc.py).
-    * Their refenced fronts have been obtained with `Reference Set Generator (DOI: https://doi.org/10.3390/math13101626) <https://doi.org/10.3390/math13101626>`_  method
+    * [eqdtlz.py](https://github.com/jMetal/jMetalPy/blob/main/src/jmetal/problem/multiobjective/eqdtlz.py)
+    * [misc.py](https://github.com/jMetal/jMetalPy/blob/main/src/jmetal/problem/multiobjective/misc.py)
+    * Their refenced fronts have been obtained with [Reference Set Generator](https://doi.org/10.3390/math13101626)  method
   * The project structure has been changed from [flat to src](https://www.pyopensci.org/python-package-guide/package-structure-code/python-package-structure.html). 
   * The Hypervolume quality indicator implementation relies now on the [moocore project](https://multi-objective.github.io/moocore/python/).
 * [v1.7.0] Add RWA benchmark, refactor classes BinarySolution and BinaryProblem.
