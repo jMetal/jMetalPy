@@ -36,7 +36,7 @@ class BitFlipMutation(Mutation[BinarySolution]):
         super(BitFlipMutation, self).__init__(probability=probability)
 
     def execute(self, solution: BinarySolution) -> BinarySolution:
-        Check.that(type(solution) is BinarySolution, "Solution type invalid")
+        Check.that(issubclass(type(solution), BinarySolution), "Solution type invalid")
 
         for i in range(len(solution.variables)):
             for j in range(len(solution.variables[i])):
@@ -51,7 +51,12 @@ class BitFlipMutation(Mutation[BinarySolution]):
 
 
 class PolynomialMutation(Mutation[FloatSolution]):
-    def __init__(self, probability: float, distribution_index: float = 0.20):
+    """Polynomial mutation for real-valued decision variables.
+
+    - probability: Per-variable mutation probability.
+    - distribution_index: Controls mutation spread. Typical values ~20.0 for fine-grained moves; lower values increase exploration.
+    """
+    def __init__(self, probability: float, distribution_index: float = 20.0):
         super(PolynomialMutation, self).__init__(probability=probability)
         self.distribution_index = distribution_index
 
@@ -95,7 +100,12 @@ class PolynomialMutation(Mutation[FloatSolution]):
 
 
 class IntegerPolynomialMutation(Mutation[IntegerSolution]):
-    def __init__(self, probability: float, distribution_index: float = 0.20):
+    """Polynomial mutation adapted to integer-valued decision variables.
+
+    - probability: Per-variable mutation probability.
+    - distribution_index: Controls mutation spread. Typical values ~20.0 for fine-grained moves; lower values increase exploration.
+    """
+    def __init__(self, probability: float, distribution_index: float = 20.0):
         super(IntegerPolynomialMutation, self).__init__(probability=probability)
         self.distribution_index = distribution_index
 
@@ -141,7 +151,7 @@ class SimpleRandomMutation(Mutation[FloatSolution]):
         super(SimpleRandomMutation, self).__init__(probability=probability)
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
-        Check.that(type(solution) is FloatSolution, "Solution type invalid")
+        Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
 
         for i in range(len(solution.variables)):
             rand = random.random()
@@ -161,7 +171,7 @@ class UniformMutation(Mutation[FloatSolution]):
         self.perturbation = perturbation
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
-        Check.that(type(solution) is FloatSolution, "Solution type invalid")
+        Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
 
         for i in range(len(solution.variables)):
             rand = random.random()
@@ -191,7 +201,7 @@ class NonUniformMutation(Mutation[FloatSolution]):
         self.current_iteration = 0
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
-        Check.that(type(solution) is FloatSolution, "Solution type invalid")
+        Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
 
         for i in range(len(solution.variables)):
             if random.random() <= self.probability:
@@ -225,12 +235,12 @@ class NonUniformMutation(Mutation[FloatSolution]):
         )
 
     def get_name(self):
-        return "Uniform mutation"
+        return "Non-uniform mutation"
 
 
 class PermutationSwapMutation(Mutation[PermutationSolution]):
     def execute(self, solution: PermutationSolution) -> PermutationSolution:
-        Check.that(type(solution) is PermutationSolution, "Solution type invalid")
+        Check.that(issubclass(type(solution), PermutationSolution), "Solution type invalid")
 
         rand = random.random()
 
@@ -274,6 +284,7 @@ class CompositeMutation(Mutation[Solution]):
 
 class ScrambleMutation(Mutation[PermutationSolution]):
     def execute(self, solution: PermutationSolution) -> PermutationSolution:
+        Check.that(issubclass(type(solution), PermutationSolution), "Solution type invalid")
         rand = random.random()
 
         if rand <= self.probability:

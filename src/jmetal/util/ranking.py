@@ -121,8 +121,8 @@ class StrengthRanking(Ranking[List[S]]):
         :param solutions: Solution list.
         :param k: Number of individuals.
         """
-        strength: [int] = [0 for _ in range(len(solutions))]
-        raw_fitness: [int] = [0 for _ in range(len(solutions))]
+        strength: List[int] = [0 for _ in range(len(solutions))]
+        raw_fitness: List[int] = [0 for _ in range(len(solutions))]
 
         # strength(i) = | {j | j < - SolutionSet and i dominate j} |
         for i in range(len(solutions)):
