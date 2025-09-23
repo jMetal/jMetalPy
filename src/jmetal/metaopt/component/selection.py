@@ -2,7 +2,7 @@ import random
 from abc import ABC, abstractmethod
 from typing import List, TypeVar, Generic, Callable, Optional
 from jmetal.core.solution import Solution
-from jmetal.util.comparator import Comparator
+from jmetal.util.comparator import Comparator, DominanceComparator
 
 S = TypeVar('S', bound=Solution)
 
@@ -101,7 +101,7 @@ class RandomSelection(Selection[S]):
         )
 
 
-class NTournamentSelection(Selection[S]):
+class NaryTournamentSelection(Selection[S]):
     """
     N-ary tournament selection operator that selects solutions through tournament competitions.
     
@@ -135,7 +135,7 @@ class NTournamentSelection(Selection[S]):
             
         self.number_of_solutions_to_select = number_of_solutions_to_select
         self.tournament_size = tournament_size
-        self.comparator = comparator if comparator is not None else Comparator()
+        self.comparator = comparator if comparator is not None else DominanceComparator()
     
     def select(self, solution_list: List[S]) -> List[S]:
         """
@@ -166,7 +166,7 @@ class NTournamentSelection(Selection[S]):
             # Select tournament participants randomly without replacement
             participants = random.sample(solution_list, self.tournament_size)
             
-            # Find the winner (best solution according to the comparator)
+            # Find the winner (the best solution according to the comparator)
             winner = participants[0]
             for participant in participants[1:]:
                 if self.comparator.compare(participant, winner) < 0:
