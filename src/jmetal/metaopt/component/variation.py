@@ -3,14 +3,14 @@ This module contains the Variation interface and its implementations for evoluti
 """
 import math
 from abc import ABC, abstractmethod
-from typing import List, TypeVar, Generic, Optional, Tuple
+from typing import List, TypeVar, Generic, Dict, Any
 from jmetal.core.solution import Solution
-from jmetal.core.operator import Crossover, Mutation, Variation as CoreVariation
+from jmetal.core.operator import Crossover, Mutation
 
 S = TypeVar('S', bound=Solution)
 
 
-class Variation(CoreVariation[S], ABC):
+class Variation(Generic[S], ABC):
     """
     Interface representing variation operations in evolutionary algorithms.
     
@@ -20,7 +20,7 @@ class Variation(CoreVariation[S], ABC):
     Type Parameters:
         S: Type of the solutions to be varied. Must extend Solution.
     """
-    
+
     @abstractmethod
     def variate(self, solution_list: List[S], mating_pool: List[S]) -> List[S]:
         """Perform the variation operation on the given solutions.
@@ -39,7 +39,7 @@ class Variation(CoreVariation[S], ABC):
                       mating_pool_size() or if any parameter is invalid.
         """
         pass
-    
+
     @abstractmethod
     def mating_pool_size(self) -> int:
         """Get the number of solutions required for the variation operation.
@@ -54,7 +54,7 @@ class Variation(CoreVariation[S], ABC):
             int: The number of solutions needed for variation.
         """
         pass
-    
+
     @abstractmethod
     def offspring_population_size(self) -> int:
         """Get the number of solutions produced by the variation operation.
@@ -69,7 +69,7 @@ class Variation(CoreVariation[S], ABC):
             int: The number of solutions produced by each variation operation.
         """
         pass
-    
+
     def get_attributes(self) -> dict:
         """Get a dictionary containing the operator's attributes.
         
@@ -90,7 +90,7 @@ class Variation(CoreVariation[S], ABC):
             'mating_pool_size': self.mating_pool_size(),
             'offspring_population_size': self.offspring_population_size()
         }
-    
+
     def __str__(self) -> str:
         """Return a string representation of the variation operator.
         
@@ -108,7 +108,7 @@ class Variation(CoreVariation[S], ABC):
         attrs = self.get_attributes()
         return (f"{attrs['name']} "
                 f"(mating_pool={attrs['mating_pool_size']}, "
-                f"offspring={attrs['offspring_population_size']})"
+                f"offspring={attrs['offspring_population_size']})")
 
 
 class CrossoverAndMutationVariation(Variation[S]):
@@ -120,38 +120,52 @@ class CrossoverAndMutationVariation(Variation[S]):
     by the crossover operator.
     
     Args:
-        offspring_population_size: The desired number of offspring solutions.
         crossover: The crossover operator to use.
         mutation: The mutation operator to apply to each offspring.
+        offspring_population_size: The desired number of offspring solutions.
         
     Raises:
         ValueError: If any argument is None or if the offspring population size is not positive.
     """
-    
+
     def __init__(
-        self,
-        offspring_population_size: int,
-        crossover: Crossover[S],
-        mutation: Mutation[S]
+            self,
+            crossover: Crossover[S, S],
+            mutation: Mutation[S],
+            offspring_population_size: int
     ) -> None:
-        if offspring_population_size <= 0:
-            raise ValueError("Offspring population size must be positive")
+        """Initialize the variation operator with crossover, mutation, and population size.
+        
+        Args:
+            crossover: The crossover operator to use for creating offspring.
+            mutation: The mutation operator to apply to each offspring.
+            offspring_population_size: The number of offspring to generate.
+            
+        Raises:
+            ValueError: If any argument is invalid.
+        """
         if not crossover:
             raise ValueError("Crossover operator cannot be None")
         if not mutation:
             raise ValueError("Mutation operator cannot be None")
-            
+        if offspring_population_size <= 0:
+            raise ValueError("Offspring population size must be positive")
+
+        super().__init__()
         self.crossover = crossover
         self.mutation = mutation
         self.offspring_population_size = offspring_population_size
-        
+
         # Calculate the required mating pool size
-        self._mating_pool_size = crossover.number_of_required_parents() * math.ceil(
-            offspring_population_size / crossover.number_of_generated_children()
+        self._mating_pool_size = crossover.get_number_of_parents() * math.ceil(
+            offspring_population_size / crossover.get_number_of_children()
         )
-    
+
     def variate(self, solution_list: List[S], mating_pool: List[S]) -> List[S]:
         """Perform the variation operation by applying crossover and mutation.
+        
+        This method creates offspring by applying crossover and then mutation to the mating pool.
+        It ensures the exact number of requested offspring is produced.
         
         Args:
             solution_list: The current population of solutions (unused in this implementation).
@@ -161,41 +175,47 @@ class CrossoverAndMutationVariation(Variation[S]):
             List[S]: A new list containing the offspring solutions.
             
         Raises:
-            ValueError: If the number of parents is not compatible with the crossover operator.
+            ValueError: If the number of parents is not compatible with the crossover operator
+                      or if the offspring population size cannot be achieved.
         """
-        number_of_parents = self.crossover.number_of_required_parents()
+        if not mating_pool:
+            return []
+
+        number_of_parents = self.crossover.get_number_of_parents()
         self._check_number_of_parents(mating_pool, number_of_parents)
-        
+
         offspring_population = []
-        
-        for i in range(0, self._mating_pool_size, number_of_parents):
+        num_parents = len(mating_pool)
+        i = 0
+
+        # Continue until we have enough offspring or run out of parents
+        while (len(offspring_population) < self.offspring_population_size and
+               i + number_of_parents <= num_parents):
+            
             # Get the next set of parents
             parents = mating_pool[i:i + number_of_parents]
+            i += number_of_parents
             
-            # Apply crossover
+            # Apply crossover to get new offspring
             offspring = self.crossover.execute(parents)
-            
+            if not offspring:  # Handle case where no offspring are produced
+                continue
+                
             # Apply mutation to each offspring
             for solution in offspring:
+                if len(offspring_population) >= self.offspring_population_size:
+                    break
                 self.mutation.execute(solution)
                 offspring_population.append(solution)
-                
-                # Stop if we've reached the desired population size
-                if len(offspring_population) == self.offspring_population_size:
-                    break
-            
-            # Exit the loop if we've reached the desired population size
-            if len(offspring_population) == self.offspring_population_size:
-                break
-        
+
         if len(offspring_population) != self.offspring_population_size:
             raise ValueError(
-                f"The size of the offspring population is not correct: "
-                f"{len(offspring_population)} instead of {self.offspring_population_size}"
+                f"Could not generate the required number of offspring. "
+                f"Generated {len(offspring_population)} out of {self.offspring_population_size}"
             )
-        
+
         return offspring_population
-    
+
     def _check_number_of_parents(self, population: List[S], required_parents: int) -> None:
         """Check if the number of parents is compatible with the crossover operator.
         
@@ -211,7 +231,7 @@ class CrossoverAndMutationVariation(Variation[S]):
                 f"Wrong number of parents: the population size ({len(population)}) "
                 f"must be a multiple of {required_parents}"
             )
-    
+
     def mating_pool_size(self) -> int:
         """Get the number of solutions required for the variation operation.
         
@@ -219,7 +239,7 @@ class CrossoverAndMutationVariation(Variation[S]):
             int: The number of solutions needed for variation.
         """
         return self._mating_pool_size
-    
+
     def offspring_population_size(self) -> int:
         """Get the number of solutions produced by the variation operation.
         
@@ -227,7 +247,7 @@ class CrossoverAndMutationVariation(Variation[S]):
             int: The number of solutions produced.
         """
         return self.offspring_population_size
-    
+
     def get_attributes(self) -> dict:
         """Get a dictionary containing the operator's attributes.
         
@@ -239,4 +259,4 @@ class CrossoverAndMutationVariation(Variation[S]):
             'crossover': str(self.crossover),
             'mutation': str(self.mutation)
         })
-        return attrs)
+        return attrs
