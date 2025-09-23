@@ -1,7 +1,8 @@
 import random
 from abc import ABC, abstractmethod
-from typing import List, TypeVar, Generic
+from typing import List, TypeVar, Generic, Callable, Optional
 from jmetal.core.solution import Solution
+from jmetal.util.comparator import Comparator
 
 S = TypeVar('S', bound=Solution)
 
@@ -96,5 +97,89 @@ class RandomSelection(Selection[S]):
             f"RandomSelection("
             f"number_of_solutions_to_select={self.number_of_solutions_to_select}, "
             f"with_replacement={self.with_replacement}"
+            f")"
+        )
+
+
+class NTournamentSelection(Selection[S]):
+    """
+    N-ary tournament selection operator that selects solutions through tournament competitions.
+    
+    This implementation selects solutions by running tournaments among 'tournament_size' 
+    randomly chosen solutions from the population. The best solution from each tournament 
+    (determined by the provided comparator) is selected.
+    
+    Args:
+        number_of_solutions_to_select: The number of solutions to select. Must be positive.
+        tournament_size: The number of solutions that participate in each tournament.
+                        Must be between 2 and 10 (inclusive).
+        comparator: The comparator used to determine the winner of each tournament.
+                   Defaults to a comparator that prefers solutions with better fitness.
+                   
+    Raises:
+        ValueError: If number_of_solutions_to_select is not a positive integer.
+        ValueError: If tournament_size is not between 2 and 10 (inclusive).
+    """
+    
+    def __init__(
+        self, 
+        number_of_solutions_to_select: int, 
+        tournament_size: int = 2,
+        comparator: Optional[Comparator] = None
+    ):
+        if not isinstance(number_of_solutions_to_select, int) or number_of_solutions_to_select <= 0:
+            raise ValueError("Number of solutions to select must be a positive integer")
+            
+        if not (2 <= tournament_size <= 10):
+            raise ValueError("Tournament size must be between 2 and 10 (inclusive)")
+            
+        self.number_of_solutions_to_select = number_of_solutions_to_select
+        self.tournament_size = tournament_size
+        self.comparator = comparator if comparator is not None else Comparator()
+    
+    def select(self, solution_list: List[S]) -> List[S]:
+        """
+        Select solutions using tournament selection.
+        
+        Args:
+            solution_list: The list of solutions to select from. Should not be modified.
+            
+        Returns:
+            List[S]: A new list containing the selected solutions.
+            
+        Raises:
+            ValueError: If solution_list is empty or None.
+            ValueError: If the tournament size is larger than the solution list size.
+        """
+        if not solution_list:
+            raise ValueError("Cannot select from an empty or None solution list")
+            
+        if self.tournament_size > len(solution_list):
+            raise ValueError(
+                f"Tournament size ({self.tournament_size}) cannot be larger than "
+                f"the number of available solutions ({len(solution_list)})"
+            )
+        
+        selected_solutions = []
+        
+        for _ in range(self.number_of_solutions_to_select):
+            # Select tournament participants randomly without replacement
+            participants = random.sample(solution_list, self.tournament_size)
+            
+            # Find the winner (best solution according to the comparator)
+            winner = participants[0]
+            for participant in participants[1:]:
+                if self.comparator.compare(participant, winner) < 0:
+                    winner = participant
+            
+            selected_solutions.append(winner)
+        
+        return selected_solutions
+    
+    def __str__(self) -> str:
+        return (
+            f"NTournamentSelection("
+            f"number_of_solutions_to_select={self.number_of_solutions_to_select}, "
+            f"tournament_size={self.tournament_size}"
             f")"
         )
