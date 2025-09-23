@@ -25,14 +25,23 @@ class TestDefaultSolutionsCreation:
     
     def test_initialization_with_none_problem(self):
         """Test that initializing with None problem raises ValueError."""
+        # Arrange
+        problem = None
+        number_of_solutions = 10
+
+        # Act & Assert
         with pytest.raises(ValueError, match="Problem cannot be None"):
-            DefaultSolutionsCreation(problem=None, number_of_solutions_to_create=10)
+            DefaultSolutionsCreation(problem=problem, number_of_solutions_to_create=number_of_solutions)
     
     @pytest.mark.parametrize("invalid_size", [0, -1, "10", 3.14, None])
     def test_initialization_with_invalid_number_of_solutions(self, mock_problem, invalid_size):
         """Test that initializing with invalid number of solutions raises ValueError."""
+        # Arrange
+        problem = mock_problem
+        
+        # Act & Assert
         with pytest.raises(ValueError, match="Number of solutions to create must be a positive integer"):
-            DefaultSolutionsCreation(problem=mock_problem, number_of_solutions_to_create=invalid_size)
+            DefaultSolutionsCreation(problem=problem, number_of_solutions_to_create=invalid_size)
     
     def test_create_returns_correct_number_of_solutions(self, default_creator, mock_problem):
         """Test that create() returns the correct number of solutions."""
@@ -45,14 +54,18 @@ class TestDefaultSolutionsCreation:
     
     def test_create_returns_unique_solution_instances(self, default_creator, mock_problem):
         """Test that create() returns unique solution instances."""
-        # Arrange - Reset the mock to return unique mocks each time
-        mock_problem.create_solution.side_effect = [Mock(spec=Solution) for _ in range(10)]
+        # Arrange
+        expected_count = 10
+        mock_problem.create_solution.side_effect = [Mock(spec=Solution) for _ in range(expected_count)]
         
         # Act
         solutions = default_creator.create()
         
-        # Assert all solutions are unique instances
-        assert len(solutions) == len(set(id(sol) for sol in solutions))
+        # Assert
+        solution_ids = [id(sol) for sol in solutions]
+        unique_solution_ids = set(solution_ids)
+        assert len(solutions) == expected_count
+        assert len(solution_ids) == len(unique_solution_ids)
     
     def test_create_uses_problem_create_solution(self, default_creator, mock_problem):
         """Test that create() uses the problem's create_solution method."""
@@ -64,22 +77,26 @@ class TestDefaultSolutionsCreation:
         for solution in solutions:
             assert isinstance(solution, Mock)
     
-    def test_create_with_different_sizes(self, mock_problem):
+    @pytest.mark.parametrize("size", [1, 5, 100])
+    def test_create_with_different_sizes(self, mock_problem, size):
         """Test create() with different population sizes."""
-        for size in [1, 5, 100]:
-            # Arrange
-            creator = DefaultSolutionsCreation(problem=mock_problem, number_of_solutions_to_create=size)
-            mock_problem.create_solution.reset_mock()
-            
-            # Act
-            solutions = creator.create()
-            
-            # Assert
-            assert len(solutions) == size
-            assert mock_problem.create_solution.call_count == size
+        # Arrange
+        mock_problem.create_solution.reset_mock()
+        creator = DefaultSolutionsCreation(problem=mock_problem, number_of_solutions_to_create=size)
+        
+        # Act
+        solutions = creator.create()
+        
+        # Assert
+        assert len(solutions) == size
+        assert mock_problem.create_solution.call_count == size
     
     def test_solutions_creation_implements_interface(self, default_creator):
         """Test that DefaultSolutionsCreation properly implements the SolutionsCreation interface."""
-        assert isinstance(default_creator, SolutionsCreation)
-        assert hasattr(default_creator, 'create')
-        assert callable(getattr(default_creator, 'create'))
+        # Arrange
+        creator = default_creator
+        
+        # Act & Assert
+        assert isinstance(creator, SolutionsCreation), "Should be an instance of SolutionsCreation"
+        assert hasattr(creator, 'create'), "Should have a 'create' method"
+        assert callable(getattr(creator, 'create')), "'create' should be callable"
