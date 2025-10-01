@@ -2,9 +2,6 @@
 requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
 
-#requires = ["hatchling"]
-#build-backend = "hatchling.build"
-
 [project]
 name = "jmetalpy"
 version = "1.7.1"
