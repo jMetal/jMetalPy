@@ -80,6 +80,21 @@ distributed = [
     "pyspark>=3.4.0"
 ]
 
+test = [
+    "tqdm",
+    "numpy>=2.2.5",
+    "pandas>=2.2.3",
+    "plotly>=5.22.0",
+    "matplotlib>=3.0.2",
+    "scipy>=1.15.3",
+    "statsmodels>=0.9.0",
+    "mockito",
+    "PyHamcrest",
+    "moocore>=0.1.4",
+    "pytest>=7.0",
+    "pytest-cov>=4.0"
+]
+
 complete = [
     "tqdm",
     "numpy>=2.2.5",
