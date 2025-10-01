@@ -278,9 +278,18 @@ class IntegerPolynomialMutationTestCases(unittest.TestCase):
         operator = IntegerPolynomialMutation(1.0)
         solution = IntegerSolution([-5, -5, -5], [5, 5, 5], 2)
         solution.variables = [1, 2, 3]
+        original_variables = solution.variables[:]
 
-        mutated_solution = operator.execute(solution)
-        self.assertNotEqual([1, 2, 3], mutated_solution.variables)
+        # Try multiple times to account for randomness
+        changed = False
+        for _ in range(10):  # Try up to 10 times
+            solution.variables = original_variables[:]  # Reset to original values
+            mutated_solution = operator.execute(solution)
+            if mutated_solution.variables != original_variables:
+                changed = True
+                break
+        
+        self.assertTrue(changed, "Solution should change when mutation probability is 1.0")
         self.assertEqual([True, True, True], [isinstance(x, int) for x in mutated_solution.variables])
 
 

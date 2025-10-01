@@ -1,4 +1,4 @@
-from jmetal import algorithm, core, operator, problem
+from jmetal import algorithm, core, operator, problem, metaopt
 from jmetal.logger import configure_logging
 
 configure_logging()
