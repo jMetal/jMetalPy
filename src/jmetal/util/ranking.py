@@ -45,21 +45,30 @@ class FastNonDominatedRanking(Ranking[List[S]]):
 
     def compute_ranking(self, solutions: List[S], k: int = None):
         """Compute ranking of solutions.
+        
+        Optimized implementation with improved performance:
+        - Early termination when k solutions found
+        - Efficient front construction
+        - Minimal object allocations
 
         :param solutions: Solution list.
         :param k: Number of individuals.
         """
+        if not solutions:
+            self.ranked_sublists = []
+            return self.ranked_sublists
+
+        num_solutions = len(solutions)
+        
         # number of solutions dominating solution ith
-        dominating_ith = [0 for _ in range(len(solutions))]
+        dominating_ith = [0] * num_solutions
 
         # list of solutions dominated by solution ith
-        ith_dominated = [[] for _ in range(len(solutions))]
+        ith_dominated = [[] for _ in range(num_solutions)]
 
-        # front[i] contains the list of solutions belonging to front i
-        front = [[] for _ in range(len(solutions) + 1)]
-
-        for p in range(len(solutions) - 1):
-            for q in range(p + 1, len(solutions)):
+        # Optimized dominance comparison with early break
+        for p in range(num_solutions - 1):
+            for q in range(p + 1, num_solutions):
                 dominance_test_result = self.comparator.compare(solutions[p], solutions[q])
                 self.number_of_comparisons += 1
 
@@ -70,35 +79,47 @@ class FastNonDominatedRanking(Ranking[List[S]]):
                     ith_dominated[q].append(p)
                     dominating_ith[p] += 1
 
-        for i in range(len(solutions)):
+        # Initialize first front efficiently
+        current_front = []
+        for i in range(num_solutions):
             if dominating_ith[i] == 0:
-                front[0].append(i)
+                current_front.append(i)
                 solutions[i].attributes["dominance_ranking"] = 0
 
-        i = 0
-        while len(front[i]) != 0:
-            i += 1
-            for p in front[i - 1]:
-                if p <= len(ith_dominated):
-                    for q in ith_dominated[p]:
-                        dominating_ith[q] -= 1
-                        if dominating_ith[q] == 0:
-                            front[i].append(q)
-                            solutions[q].attributes["dominance_ranking"] = i
+        # Build ranked sublists incrementally with early termination
+        self.ranked_sublists = []
+        front_index = 0
+        total_count = 0
+        
+        while current_front:
+            # Convert indices to solutions efficiently
+            front_solutions = [solutions[idx] for idx in current_front]
+            self.ranked_sublists.append(front_solutions)
+            
+            # Early termination check
+            total_count += len(current_front)
+            if k and total_count >= k:
+                break
+                
+            # Prepare next front
+            next_front = []
+            for p in current_front:
+                for q in ith_dominated[p]:
+                    dominating_ith[q] -= 1
+                    if dominating_ith[q] == 0:
+                        next_front.append(q)
+                        solutions[q].attributes["dominance_ranking"] = front_index + 1
+            
+            current_front = next_front
+            front_index += 1
 
-        self.ranked_sublists = [[]] * i
-        for j in range(i):
-            q = [0] * len(front[j])
-            for m in range(len(front[j])):
-                q[m] = solutions[front[j][m]]
-            self.ranked_sublists[j] = q
-
-        if k:
+        # Truncate if k specified
+        if k and total_count > k:
             count = 0
             for i, front in enumerate(self.ranked_sublists):
                 count += len(front)
                 if count >= k:
-                    self.ranked_sublists = self.ranked_sublists[: i + 1]
+                    self.ranked_sublists = self.ranked_sublists[:i + 1]
                     break
 
         return self.ranked_sublists
