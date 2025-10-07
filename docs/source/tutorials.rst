@@ -2,7 +2,7 @@ Getting started
 ==================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: First steps:
 
    tutorials/problem
@@ -11,14 +11,14 @@ Getting started
    tutorials/visualization
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Laboratory:
 
    tutorials/experiment
    tutorials/statistics
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Tools:
 
    tutorials/quality_indicators_cli

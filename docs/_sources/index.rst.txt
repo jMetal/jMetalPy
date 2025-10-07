@@ -1,12 +1,20 @@
 jMetalPy: Python version of the jMetal framework
 ================================================
 
-.. warning:: Documentation of jMetal 1.7.0 is a work in progress!! Some information may be missing or outdated.
+jMetalPy is a Python framework for multi-objective optimization with metaheuristics. 
+It provides a comprehensive set of algorithms, problems, and utilities for solving 
+complex optimization problems.
+
+.. note:: 
+   📚 **New to jMetalPy?** Start with the :doc:`getting-started` guide for a quick introduction.
+
+.. warning:: 
+   Documentation of jMetal 1.7.1 is a work in progress! Some information may be missing or outdated.
 
 .. table::
 
    +---------------------+----------+
-   | **Target doc**      |  v1.7.0  |
+   | **Target doc**      |  v1.7.1  |
    +---------------------+----------+
 
 Content
@@ -15,52 +23,53 @@ Content
 .. toctree::
    :maxdepth: 1
 
-   tutorials
-   multiobjective.algorithms
-   singleobjective.algorithms
-   operators
-   problems
+   getting-started
+   user-guide
+   api-reference
+   advanced-topics
    contributing
    about
 
-Installation steps
+Key Features
 ------------------------
 
-Via pip:
+jMetalPy (v1.7.1) provides:
 
-.. code-block:: console
+**Algorithms**
+   Local search, genetic algorithms, evolution strategies, simulated annealing, NSGA-II, NSGA-III, 
+   SMPSO, OMOPSO, MOEA/D, GDE3, SPEA2, HYPE, IBEA, and preference-based variants.
 
-    $ pip install jmetalpy  # or "jmetalpy[distributed]"
+**Problem Types**
+   Benchmark problems (ZDT, DTLZ, FDA, LZ09), real-world problems, constrained and unconstrained optimization.
 
-.. note:: Alternatively, you can use one of these instead:
+**Analysis Tools**
+   Quality indicators (hypervolume, IGD, IGD+, epsilon), statistical testing, visualization, 
+   and experimental frameworks.
 
-    .. code-block:: console
+**Advanced Features**
+   Parallel computing (Apache Spark, Dask), real-time plotting, dynamic algorithms, 
+   and integration with jMetal.
 
-        $ pip install "jmetalpy[core]"  # Install core components of the framework (equivalent to `pip install jmetalpy`)
-        $ pip install "jmetalpy[docs]"  # Install requirements for building docs
-        $ pip install "jmetalpy[distributed]"  # Install requirements for parallel/distributed computing
-        $ pip install "jmetalpy[complete]"  # Install all dependencies
+Quick Example
+-------------
 
-Via source code:
+.. code-block:: python
 
-.. code-block:: console
+   from jmetal.algorithm.multiobjective.nsgaii import NSGAII
+   from jmetal.problem import ZDT1
+   
+   problem = ZDT1()
+   algorithm = NSGAII(problem=problem, population_size=100)
+   algorithm.run()
+   solutions = algorithm.get_result()
 
-    $ git clone https://github.com/jMetal/jMetalPy.git
-    $ python setup.py install
+Community & Support
+-------------------
 
-Summary of features
-------------------------
-The current release of jMetalPy (v1.7.0) contains the following components:
-
-* Algorithms: local search, genetic algorithm, evolution strategy, simulated annealing, random search, NSGA-II, NSGA-III, SMPSO, OMOPSO, MOEA/D, MOEA/D-DRA, MOEA/D-IEpsilon, GDE3, SPEA2, HYPE, IBEA. Preference articulation-based algorithms (G-NSGA-II, G-GDE3, G-SPEA2, SMPSO/RP); Dynamic versions of NSGA-II, SMPSO, and GDE3.
-* Parallel computing based on Apache Spark and Dask.
-* Benchmark problems: ZDT1-6, DTLZ1-2, FDA, LZ09, RE, LIR-CMOP, RWA, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2), constrained (Srinivas, Tanaka).
-* Encodings: real, binary, permutations.
-* Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random).
-* Quality indicators: hypervolume, additive epsilon, GD, IGD, IGD+.
-* Pareto front approximation plotting in real-time, static or interactive.
-* Experiment class for performing studies either alone or alongside jMetal.
-* Pairwise and multiple hypothesis testing for statistical analysis, including several frequentist and Bayesian testing methods, critical distance plots and posterior diagrams.
+- 📖 **Documentation**: Comprehensive guides and API reference
+- 💬 **Issues**: Report bugs and request features on GitHub
+- 🤝 **Contributing**: Help improve jMetalPy - see :doc:`contributing`
+- 📄 **Citation**: If you use jMetalPy in research, please cite our paper
 
 
 Cite us

@@ -26,7 +26,7 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Getting started" href="tutorials.html" />
+    <link rel="next" title="Getting Started" href="getting-started.html" />
   
    
 
@@ -41,7 +41,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorials.html" title="Getting started"
+          <a href="getting-started.html" title="Getting Started"
              accesskey="N">next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">jMetalPy 1.7.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">jMetalPy: Python version of the jMetal framework</a></li> 
@@ -72,11 +72,10 @@
     
     
       <ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="multiobjective.algorithms.html">Multi-objective algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="singleobjective.algorithms.html">Single-objective algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="operators.html">Operators</a></li>
-<li class="toctree-l1"><a class="reference internal" href="problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced-topics.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
 </ul>
@@ -91,8 +90,9 @@
       <ul>
 <li><a class="reference internal" href="#">jMetalPy: Python version of the jMetal framework</a><ul>
 <li><a class="reference internal" href="#content">Content</a></li>
-<li><a class="reference internal" href="#installation-steps">Installation steps</a></li>
-<li><a class="reference internal" href="#summary-of-features">Summary of features</a></li>
+<li><a class="reference internal" href="#key-features">Key Features</a></li>
+<li><a class="reference internal" href="#quick-example">Quick Example</a></li>
+<li><a class="reference internal" href="#community-support">Community &amp; Support</a></li>
 <li><a class="reference internal" href="#cite-us">Cite us</a></li>
 </ul>
 </li>
@@ -131,14 +131,21 @@
             
   <section id="jmetalpy-python-version-of-the-jmetal-framework">
 <h1>jMetalPy: Python version of the jMetal framework<a class="headerlink" href="#jmetalpy-python-version-of-the-jmetal-framework" title="Link to this heading">¶</a></h1>
+<p>jMetalPy is a Python framework for multi-objective optimization with metaheuristics.
+It provides a comprehensive set of algorithms, problems, and utilities for solving
+complex optimization problems.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>📚 <strong>New to jMetalPy?</strong> Start with the <a class="reference internal" href="getting-started.html"><span class="doc">Getting Started</span></a> guide for a quick introduction.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Documentation of jMetal 1.7.0 is a work in progress!! Some information may be missing or outdated.</p>
+<p>Documentation of jMetal 1.7.1 is a work in progress! Some information may be missing or outdated.</p>
 </div>
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><strong>Target doc</strong></p></td>
-<td><p>v1.7.0</p></td>
+<td><p>v1.7.1</p></td>
 </tr>
 </tbody>
 </table>
@@ -146,51 +153,51 @@
 <h2>Content<a class="headerlink" href="#content" title="Link to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="multiobjective.algorithms.html">Multi-objective algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="singleobjective.algorithms.html">Single-objective algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="operators.html">Operators</a></li>
-<li class="toctree-l1"><a class="reference internal" href="problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced-topics.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
 </ul>
 </div>
 </section>
-<section id="installation-steps">
-<h2>Installation steps<a class="headerlink" href="#installation-steps" title="Link to this heading">¶</a></h2>
-<p>Via pip:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>jmetalpy<span class="w">  </span><span class="c1"># or &quot;jmetalpy[distributed]&quot;</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Alternatively, you can use one of these instead:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;jmetalpy[core]&quot;</span><span class="w">  </span><span class="c1"># Install core components of the framework (equivalent to `pip install jmetalpy`)</span>
-<span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;jmetalpy[docs]&quot;</span><span class="w">  </span><span class="c1"># Install requirements for building docs</span>
-<span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;jmetalpy[distributed]&quot;</span><span class="w">  </span><span class="c1"># Install requirements for parallel/distributed computing</span>
-<span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;jmetalpy[complete]&quot;</span><span class="w">  </span><span class="c1"># Install all dependencies</span>
-</pre></div>
-</div>
-</div>
-<p>Via source code:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/jMetal/jMetalPy.git
-<span class="gp">$ </span>python<span class="w"> </span>setup.py<span class="w"> </span>install
+<section id="key-features">
+<h2>Key Features<a class="headerlink" href="#key-features" title="Link to this heading">¶</a></h2>
+<p>jMetalPy (v1.7.1) provides:</p>
+<dl class="simple">
+<dt><strong>Algorithms</strong></dt><dd><p>Local search, genetic algorithms, evolution strategies, simulated annealing, NSGA-II, NSGA-III,
+SMPSO, OMOPSO, MOEA/D, GDE3, SPEA2, HYPE, IBEA, and preference-based variants.</p>
+</dd>
+<dt><strong>Problem Types</strong></dt><dd><p>Benchmark problems (ZDT, DTLZ, FDA, LZ09), real-world problems, constrained and unconstrained optimization.</p>
+</dd>
+<dt><strong>Analysis Tools</strong></dt><dd><p>Quality indicators (hypervolume, IGD, IGD+, epsilon), statistical testing, visualization,
+and experimental frameworks.</p>
+</dd>
+<dt><strong>Advanced Features</strong></dt><dd><p>Parallel computing (Apache Spark, Dask), real-time plotting, dynamic algorithms,
+and integration with jMetal.</p>
+</dd>
+</dl>
+</section>
+<section id="quick-example">
+<h2>Quick Example<a class="headerlink" href="#quick-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.algorithm.multiobjective.nsgaii</span><span class="w"> </span><span class="kn">import</span> <span class="n">NSGAII</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZDT1</span>
+
+<span class="n">problem</span> <span class="o">=</span> <span class="n">ZDT1</span><span class="p">()</span>
+<span class="n">algorithm</span> <span class="o">=</span> <span class="n">NSGAII</span><span class="p">(</span><span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">,</span> <span class="n">population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="n">solutions</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
-<section id="summary-of-features">
-<h2>Summary of features<a class="headerlink" href="#summary-of-features" title="Link to this heading">¶</a></h2>
-<p>The current release of jMetalPy (v1.7.0) contains the following components:</p>
+<section id="community-support">
+<h2>Community &amp; Support<a class="headerlink" href="#community-support" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p>Algorithms: local search, genetic algorithm, evolution strategy, simulated annealing, random search, NSGA-II, NSGA-III, SMPSO, OMOPSO, MOEA/D, MOEA/D-DRA, MOEA/D-IEpsilon, GDE3, SPEA2, HYPE, IBEA. Preference articulation-based algorithms (G-NSGA-II, G-GDE3, G-SPEA2, SMPSO/RP); Dynamic versions of NSGA-II, SMPSO, and GDE3.</p></li>
-<li><p>Parallel computing based on Apache Spark and Dask.</p></li>
-<li><p>Benchmark problems: ZDT1-6, DTLZ1-2, FDA, LZ09, RE, LIR-CMOP, RWA, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2), constrained (Srinivas, Tanaka).</p></li>
-<li><p>Encodings: real, binary, permutations.</p></li>
-<li><p>Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random).</p></li>
-<li><p>Quality indicators: hypervolume, additive epsilon, GD, IGD, IGD+.</p></li>
-<li><p>Pareto front approximation plotting in real-time, static or interactive.</p></li>
-<li><p>Experiment class for performing studies either alone or alongside jMetal.</p></li>
-<li><p>Pairwise and multiple hypothesis testing for statistical analysis, including several frequentist and Bayesian testing methods, critical distance plots and posterior diagrams.</p></li>
+<li><p>📖 <strong>Documentation</strong>: Comprehensive guides and API reference</p></li>
+<li><p>💬 <strong>Issues</strong>: Report bugs and request features on GitHub</p></li>
+<li><p>🤝 <strong>Contributing</strong>: Help improve jMetalPy - see <a class="reference internal" href="contributing.html"><span class="doc">Contributing</span></a></p></li>
+<li><p>📄 <strong>Citation</strong>: If you use jMetalPy in research, please cite our paper</p></li>
 </ul>
 </section>
 <section id="cite-us">
@@ -217,7 +224,7 @@
   <div class="footer-relations">
     
       <div class="float-right">
-        <a class="btn btn-outline btn-sm" href="tutorials.html" title="next chapter (use the right arrow)">Getting started →</a>
+        <a class="btn btn-outline btn-sm" href="getting-started.html" title="next chapter (use the right arrow)">Getting Started →</a>
       </div>
     </div>
     <div class="clearer"></div>
@@ -235,7 +242,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorials.html" title="Getting started"
+          <a href="getting-started.html" title="Getting Started"
              >next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">jMetalPy 1.7.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">jMetalPy: Python version of the jMetal framework</a></li> 
