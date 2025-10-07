@@ -78,39 +78,96 @@ class BoundedArchive(Archive[S]):
 
 
 class NonDominatedSolutionsArchive(Archive[S]):
-    def __init__(self, dominance_comparator: Comparator = DominanceComparator()):
+    """
+    Archive that maintains only non-dominated solutions using Pareto dominance.
+    
+    This implementation efficiently manages a collection of solutions by:
+    - Adding new non-dominated solutions
+    - Removing solutions dominated by new ones
+    - Preventing duplicate solutions based on objectives
+    
+    Time Complexity: O(n) per insertion, where n is archive size
+    Space Complexity: O(n) for storing solutions
+    """
+    
+    def __init__(self, dominance_comparator: Comparator = DominanceComparator(), 
+                 objective_tolerance: float = 1e-10):
+        """
+        Initialize the non-dominated solutions archive.
+        
+        Args:
+            dominance_comparator: Comparator to determine dominance relationships
+            objective_tolerance: Tolerance for comparing floating-point objectives
+        """
         super(NonDominatedSolutionsArchive, self).__init__()
         self.comparator = dominance_comparator
+        self.objective_tolerance = objective_tolerance
+
+    def _objectives_equal(self, solution1: S, solution2: S) -> bool:
+        """
+        Check if two solutions have equal objectives within tolerance.
+        
+        Args:
+            solution1: First solution to compare
+            solution2: Second solution to compare
+            
+        Returns:
+            True if objectives are equal within tolerance, False otherwise
+        """
+        if len(solution1.objectives) != len(solution2.objectives):
+            return False
+            
+        for obj1, obj2 in zip(solution1.objectives, solution2.objectives):
+            if abs(obj1 - obj2) > self.objective_tolerance:
+                return False
+        return True
 
     def add(self, solution: S) -> bool:
-        is_dominated = False
-        is_contained = False
-
-        if len(self.solution_list) == 0:
-            self.solution_list.append(solution)
-            return True
-        else:
-            number_of_deleted_solutions = 0
-
-            # New copy of list and enumerate
-            for index, current_solution in enumerate(list(self.solution_list)):
-                is_dominated_flag = self.comparator.compare(solution, current_solution)
-                if is_dominated_flag == -1:
-                    del self.solution_list[index - number_of_deleted_solutions]
-                    number_of_deleted_solutions += 1
-                elif is_dominated_flag == 1:
-                    is_dominated = True
-                    break
-                elif is_dominated_flag == 0:
-                    if solution.objectives == current_solution.objectives:
-                        is_contained = True
-                        break
-
-        if not is_dominated and not is_contained:
+        """
+        Add a solution to the archive if it's non-dominated and not duplicate.
+        
+        This method efficiently handles the archive by:
+        1. Checking if the new solution is dominated by existing ones
+        2. Removing existing solutions dominated by the new one
+        3. Preventing addition of duplicate solutions
+        
+        Args:
+            solution: Solution to add to the archive
+            
+        Returns:
+            True if solution was added, False if rejected (dominated or duplicate)
+            
+        Time Complexity: O(n) where n is the number of solutions in archive
+        """
+        # Handle empty archive case
+        if not self.solution_list:
             self.solution_list.append(solution)
             return True
 
-        return False
+        # Check dominance against all existing solutions
+        remaining_solutions = []
+        
+        for current_solution in self.solution_list:
+            dominance_flag = self.comparator.compare(solution, current_solution)
+            
+            if dominance_flag == 1:
+                # New solution is dominated by current -> reject immediately
+                return False
+            elif dominance_flag == 0:
+                # No dominance relationship -> check for duplicates
+                if self._objectives_equal(solution, current_solution):
+                    # Duplicate found -> reject
+                    return False
+                # Keep the current solution as it's not dominated
+                remaining_solutions.append(current_solution)
+            # dominance_flag == -1: current solution is dominated -> don't add to remaining
+
+        # Update archive with non-dominated solutions and add new one
+        # IMPORTANT: Modify list in-place to maintain references from BoundedArchive
+        self.solution_list.clear()
+        self.solution_list.extend(remaining_solutions)
+        self.solution_list.append(solution)
+        return True
 
 
 class CrowdingDistanceArchive(BoundedArchive[S]):
