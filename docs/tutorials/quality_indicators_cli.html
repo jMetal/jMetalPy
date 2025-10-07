@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Quality Indicator CLI &#8212; jMetalPy 1.7.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/guzzle.css?v=e05a0192" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=9aa90875" />
+    <script src="../_static/documentation_options.js?v=030dc6f6"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Multi-objective algorithms" href="../multiobjective.algorithms.html" />
+    <link rel="prev" title="Statistical analysis" href="statistics.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../multiobjective.algorithms.html" title="Multi-objective algorithms"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="statistics.html" title="Statistical analysis"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Getting started</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Quality Indicator CLI</a></li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../index.html" class="text-logo">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.7.0 documentation">
+    <br>
+</a>
+
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    Python version of the jMetal framework
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Getting started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="problem.html">Defining new problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="observer.html">Extending algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluator.html">Evaluate solutions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization.html">Front visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="experiment.html">Experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="statistics.html">Statistical analysis</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Quality Indicator CLI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../singleobjective.algorithms.html">Single-objective algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Contents</h2>
+    <div class="sidebar-localtoc">
+      <ul>
+<li><a class="reference internal" href="#">Quality Indicator CLI</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#basic-usage">Basic Usage</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#file-format">File Format</a></li>
+<li><a class="reference internal" href="#output">Output</a><ul>
+<li><a class="reference internal" href="#text-format-default">Text Format (default)</a></li>
+<li><a class="reference internal" href="#json-format">JSON Format</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#important-notes">Important Notes</a><ul>
+<li><a class="reference internal" href="#reference-points">Reference Points</a></li>
+<li><a class="reference internal" href="#normalization">Normalization</a></li>
+<li><a class="reference internal" href="#normalized-hypervolume-nhv">Normalized Hypervolume (NHV)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#error-handling">Error Handling</a></li>
+<li><a class="reference internal" href="#integration-with-jmetalpy">Integration with jMetalPy</a></li>
+<li><a class="reference internal" href="#practical-example">Practical Example</a></li>
+<li><a class="reference internal" href="#technical-implementation">Technical Implementation</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="../index.html">Docs</a></li>
+              
+              <li class="breadcrumb-item"><a href="../tutorials.html">Getting started</a></li>
+              
+              <li class="breadcrumb-item">Quality Indicator CLI</li>
+            </ol>
+          </nav>
+          
+          <div class="document clearer body">
+            
+  <section id="quality-indicator-cli">
+<h1>Quality Indicator CLI<a class="headerlink" href="#quality-indicator-cli" title="Link to this heading">¶</a></h1>
+<p>The Quality Indicator CLI is a command-line interface for computing quality indicators between two fronts (solution front and reference front). This tool provides an easy way to evaluate the performance of multi-objective optimization algorithms.</p>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading">¶</a></h2>
+<p>This CLI tool supports the following quality indicators:</p>
+<ul class="simple">
+<li><p><strong>Additive Epsilon (epsilon)</strong>: Measures the minimum additive factor needed to weakly dominate the reference front</p></li>
+<li><p><strong>Inverted Generational Distance (igd)</strong>: Measures the average distance from reference points to the nearest solution</p></li>
+<li><p><strong>Inverted Generational Distance Plus (igdplus)</strong>: IGD variant using dominance-based distance calculation</p></li>
+<li><p><strong>Hypervolume (hv)</strong>: Volume of objective space dominated by the front</p></li>
+<li><p><strong>Normalized Hypervolume (nhv)</strong>: Hypervolume normalized by the reference front’s hypervolume</p></li>
+<li><p><strong>All indicators</strong>: Compute all indicators at once</p></li>
+</ul>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<p>The CLI is included with jMetalPy. No additional installation is required.</p>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<section id="basic-usage">
+<h3>Basic Usage<a class="headerlink" href="#basic-usage" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>jmetal.util.quality_indicator_cli<span class="w"> </span>&lt;front.csv&gt;<span class="w"> </span>&lt;reference.csv&gt;<span class="w"> </span>&lt;indicator&gt;<span class="w"> </span><span class="o">[</span>options<span class="o">]</span>
+</pre></div>
+</div>
+</section>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h3>
+<p><strong>Compute IGD between two fronts:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>jmetal.util.quality_indicator_cli<span class="w"> </span>front.csv<span class="w"> </span>reference.csv<span class="w"> </span>igd
+</pre></div>
+</div>
+<p><strong>Compute all indicators with custom reference point:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>jmetal.util.quality_indicator_cli<span class="w"> </span>front.csv<span class="w"> </span>reference.csv<span class="w"> </span>all<span class="w"> </span>--ref-point<span class="w"> </span><span class="m">2</span>.0,2.0
+</pre></div>
+</div>
+<p><strong>Normalize fronts and output as JSON:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>jmetal.util.quality_indicator_cli<span class="w"> </span>front.csv<span class="w"> </span>reference.csv<span class="w"> </span>all<span class="w"> </span>--normalize<span class="w"> </span>--format<span class="w"> </span>json
+</pre></div>
+</div>
+<p><strong>Compute epsilon indicator only:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>jmetal.util.quality_indicator_cli<span class="w"> </span>front.csv<span class="w"> </span>reference.csv<span class="w"> </span>epsilon
+</pre></div>
+</div>
+</section>
+<section id="options">
+<h3>Options<a class="headerlink" href="#options" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--normalize</span></code>: Normalize both fronts using reference_only strategy</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--ref-point</span> <span class="pre">V1,V2,...</span></code>: Custom reference point for HV/NHV (overrides auto-generation)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--format</span> <span class="pre">{text,json}</span></code>: Output format (default: text)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--margin</span> <span class="pre">M</span></code>: Margin added when auto-building reference point (default: 0.1)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-h,</span> <span class="pre">--help</span></code>: Show help message</p></li>
+</ul>
+</section>
+</section>
+<section id="file-format">
+<h2>File Format<a class="headerlink" href="#file-format" title="Link to this heading">¶</a></h2>
+<p>CSV files should contain numeric data with one solution per row and one objective per column.</p>
+<p><strong>Example front.csv:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>0.0,1.0
+0.2,0.8
+0.4,0.6
+0.6,0.4
+0.8,0.2
+1.0,0.0
+</pre></div>
+</div>
+<p><strong>Example reference.csv:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>0.1,0.9
+0.3,0.7
+0.5,0.5
+0.7,0.3
+0.9,0.1
+</pre></div>
+</div>
+</section>
+<section id="output">
+<h2>Output<a class="headerlink" href="#output" title="Link to this heading">¶</a></h2>
+<section id="text-format-default">
+<h3>Text Format (default)<a class="headerlink" href="#text-format-default" title="Link to this heading">¶</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Result (epsilon): 0.1
+Result (igd): 0.1414213562373095
+Result (igdplus): 0.1
+Result (hv): 0.84
+Result (nhv): -0.037037037037037
+</pre></div>
+</div>
+</section>
+<section id="json-format">
+<h3>JSON Format<a class="headerlink" href="#json-format" title="Link to this heading">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;epsilon&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;igd&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1414213562373095</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;igdplus&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;hv&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.84</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;nhv&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.037037037037037</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="important-notes">
+<h2>Important Notes<a class="headerlink" href="#important-notes" title="Link to this heading">¶</a></h2>
+<section id="reference-points">
+<h3>Reference Points<a class="headerlink" href="#reference-points" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>HV and NHV</strong> require a reference point that is dominated by all solutions in the front</p></li>
+<li><p>If no reference point is provided, one is automatically generated using the maximum values of the reference front plus a margin</p></li>
+<li><p>For normalized data, the default reference point is <code class="docutils literal notranslate"><span class="pre">[1.1,</span> <span class="pre">1.1,</span> <span class="pre">...]</span></code></p></li>
+</ul>
+</section>
+<section id="normalization">
+<h3>Normalization<a class="headerlink" href="#normalization" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Uses “reference_only” strategy: normalizes both fronts based on the bounds of the reference front</p></li>
+<li><p>Useful when fronts have different scales or when you want to focus on relative performance</p></li>
+</ul>
+</section>
+<section id="normalized-hypervolume-nhv">
+<h3>Normalized Hypervolume (NHV)<a class="headerlink" href="#normalized-hypervolume-nhv" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Calculated as: <code class="docutils literal notranslate"><span class="pre">NHV</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">-</span> <span class="pre">HV(front)</span> <span class="pre">/</span> <span class="pre">HV(reference)</span></code></p></li>
+<li><p>Can be negative if the solution front dominates the reference front</p></li>
+<li><p>Values closer to 0 indicate better performance</p></li>
+</ul>
+</section>
+</section>
+<section id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading">¶</a></h2>
+<p>The CLI provides informative error messages for common issues:</p>
+<ul class="simple">
+<li><p>File not found</p></li>
+<li><p>Invalid CSV format</p></li>
+<li><p>Dimension mismatches between fronts</p></li>
+<li><p>Invalid reference point format</p></li>
+<li><p>Missing reference points for HV/NHV indicators</p></li>
+</ul>
+</section>
+<section id="integration-with-jmetalpy">
+<h2>Integration with jMetalPy<a class="headerlink" href="#integration-with-jmetalpy" title="Link to this heading">¶</a></h2>
+<p>This CLI tool is built on top of jMetalPy’s quality indicator implementations and can be used:</p>
+<ul class="simple">
+<li><p>As a standalone tool for evaluating algorithm results</p></li>
+<li><p>In experimental pipelines and scripts</p></li>
+<li><p>For comparing different optimization runs</p></li>
+<li><p>In continuous integration systems for performance monitoring</p></li>
+</ul>
+</section>
+<section id="practical-example">
+<h2>Practical Example<a class="headerlink" href="#practical-example" title="Link to this heading">¶</a></h2>
+<p>Let’s walk through a complete example using the CLI:</p>
+<ol class="arabic simple">
+<li><p><strong>Generate sample data files:</strong></p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Create a sample solution front</span>
+<span class="n">front</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s1">&#39;my_front.csv&#39;</span><span class="p">,</span> <span class="n">front</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+
+<span class="c1"># Create a reference front (e.g., true Pareto front)</span>
+<span class="n">reference</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="s1">&#39;reference_front.csv&#39;</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>Compute all quality indicators:</strong></p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>jmetal.util.quality_indicator_cli<span class="w"> </span>my_front.csv<span class="w"> </span>reference_front.csv<span class="w"> </span>all<span class="w"> </span>--format<span class="w"> </span>json
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p><strong>Expected output:</strong></p></li>
+</ol>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;epsilon&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;igd&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1414213562373095</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;igdplus&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;hv&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.84</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;nhv&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.15</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This provides a comprehensive evaluation of your algorithm’s performance compared to the reference front.</p>
+</section>
+<section id="technical-implementation">
+<h2>Technical Implementation<a class="headerlink" href="#technical-implementation" title="Link to this heading">¶</a></h2>
+<p>The CLI tool implements the exact same algorithms as jMetal for consistency and compatibility:</p>
+<ul class="simple">
+<li><p><strong>IGD formula</strong>: <code class="docutils literal notranslate"><span class="pre">IGD</span> <span class="pre">=</span> <span class="pre">(Σ(d^pow))^(1/pow)</span> <span class="pre">/</span> <span class="pre">N</span></code> where <code class="docutils literal notranslate"><span class="pre">d</span></code> is the minimum distance from each reference point to the solution front</p></li>
+<li><p><strong>Hypervolume</strong>: Uses the WFG algorithm for efficient computation</p></li>
+<li><p><strong>Epsilon indicator</strong>: Implements the additive epsilon metric for convergence assessment</p></li>
+</ul>
+<p>This ensures that results are directly comparable with other tools in the multi-objective optimization community.</p>
+</section>
+</section>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="float-left">
+        <a class="btn btn-outline btn-sm" href="statistics.html" title="previous chapter (use the left arrow)">← Statistical analysis</a>
+      </div>
+    
+      <div class="float-right">
+        <a class="btn btn-outline btn-sm" href="../multiobjective.algorithms.html" title="next chapter (use the right arrow)">Multi-objective algorithms →</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../multiobjective.algorithms.html" title="Multi-objective algorithms"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="statistics.html" title="Statistical analysis"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../tutorials.html" >Getting started</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Quality Indicator CLI</a></li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>
