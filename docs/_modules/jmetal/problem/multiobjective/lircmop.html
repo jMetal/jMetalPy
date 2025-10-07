@@ -13,11 +13,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <title>jmetal.problem.multiobjective.lircmop &#8212; jMetalPy 1.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css?v=e05a0192" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=9aa90875" />
     <script src="../../../../_static/documentation_options.js?v=030dc6f6"></script>
-    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -27,7 +27,7 @@
    
 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -109,23 +109,23 @@
           <div class="document clearer body">
             
   <h1>Source code for jmetal.problem.multiobjective.lircmop</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">cos</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">sqrt</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">cos</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">sqrt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
 
-<span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="kn">import</span> <span class="n">FloatProblem</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="kn">import</span> <span class="n">FloatSolution</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">FloatProblem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.solution</span><span class="w"> </span><span class="kn">import</span> <span class="n">FloatSolution</span>
 
 
 <div class="viewcode-block" id="LIRCMOP1">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP1">[docs]</a>
-<span class="k">class</span> <span class="nc">LIRCMOP1</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIRCMOP1</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problem LIR-CMOP1, defined in:</span>
 
 <span class="sd">    * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.</span>
 <span class="sd">      Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LIRCMOP1</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
@@ -136,19 +136,19 @@
 
 <div class="viewcode-block" id="LIRCMOP1.number_of_objectives">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP1.number_of_objectives">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="LIRCMOP1.number_of_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP1.number_of_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="LIRCMOP1.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP1.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span>
 
         <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">g1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -161,7 +161,7 @@
 
 <div class="viewcode-block" id="LIRCMOP1.evaluate_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP1.evaluate_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span>
         <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">constraints</span><span class="p">))]</span>
 
@@ -178,7 +178,7 @@
 
 <div class="viewcode-block" id="LIRCMOP1.g1">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP1.g1">[docs]</a>
-    <span class="k">def</span> <span class="nf">g1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">g1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">(),</span> <span class="mi">2</span><span class="p">):</span>
             <span class="n">result</span> <span class="o">+=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">sin</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="mf">2.0</span><span class="p">)</span>
@@ -188,7 +188,7 @@
 
 <div class="viewcode-block" id="LIRCMOP1.g2">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP1.g2">[docs]</a>
-    <span class="k">def</span> <span class="nf">g2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">g2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">(),</span> <span class="mi">2</span><span class="p">):</span>
             <span class="n">result</span> <span class="o">+=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">cos</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="mf">2.0</span><span class="p">)</span>
@@ -198,7 +198,7 @@
 
 <div class="viewcode-block" id="LIRCMOP1.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP1.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;LIR-CMOP1&quot;</span></div>
 </div>
 
@@ -206,19 +206,19 @@
 
 <div class="viewcode-block" id="LIRCMOP2">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP2">[docs]</a>
-<span class="k">class</span> <span class="nc">LIRCMOP2</span><span class="p">(</span><span class="n">LIRCMOP1</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIRCMOP2</span><span class="p">(</span><span class="n">LIRCMOP1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problem LIR-CMOP1, defined in:</span>
 
 <span class="sd">    * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.</span>
 <span class="sd">      Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LIRCMOP2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="p">)</span>
 
 <div class="viewcode-block" id="LIRCMOP2.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP2.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span>
 
         <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">g1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -231,7 +231,7 @@
 
 <div class="viewcode-block" id="LIRCMOP2.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP2.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;LIR-CMOP2&quot;</span></div>
 </div>
 
@@ -239,25 +239,25 @@
 
 <div class="viewcode-block" id="LIRCMOP3">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP3">[docs]</a>
-<span class="k">class</span> <span class="nc">LIRCMOP3</span><span class="p">(</span><span class="n">LIRCMOP1</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIRCMOP3</span><span class="p">(</span><span class="n">LIRCMOP1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problem LIR-CMOP3, defined in:</span>
 
 <span class="sd">    * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.</span>
 <span class="sd">      Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LIRCMOP3</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="p">)</span>
 
 <div class="viewcode-block" id="LIRCMOP3.number_of_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP3.number_of_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">3</span></div>
 
 
 <div class="viewcode-block" id="LIRCMOP3.evaluate_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP3.evaluate_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span>
         <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">())]</span>
 
@@ -276,7 +276,7 @@
 
 <div class="viewcode-block" id="LIRCMOP3.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP3.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;LIR-CMOP3&quot;</span></div>
 </div>
 
@@ -284,25 +284,25 @@
 
 <div class="viewcode-block" id="LIRCMOP4">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP4">[docs]</a>
-<span class="k">class</span> <span class="nc">LIRCMOP4</span><span class="p">(</span><span class="n">LIRCMOP2</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIRCMOP4</span><span class="p">(</span><span class="n">LIRCMOP2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problem LIR-CMOP4, defined in:</span>
 
 <span class="sd">    * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.</span>
 <span class="sd">      Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LIRCMOP4</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="p">)</span>
 
 <div class="viewcode-block" id="LIRCMOP4.number_of_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP4.number_of_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">3</span></div>
 
 
 <div class="viewcode-block" id="LIRCMOP4.evaluate_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP4.evaluate_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span>
         <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">())]</span>
 
@@ -321,7 +321,7 @@
 
 <div class="viewcode-block" id="LIRCMOP4.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP4.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;LIR-CMOP4&quot;</span></div>
 </div>
 
@@ -329,14 +329,14 @@
 
 <div class="viewcode-block" id="LIRCMOP5">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP5">[docs]</a>
-<span class="k">class</span> <span class="nc">LIRCMOP5</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIRCMOP5</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problem LIR-CMOP5, defined in:</span>
 
 <span class="sd">    * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.</span>
 <span class="sd">      Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LIRCMOP5</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
@@ -347,19 +347,19 @@
 
 <div class="viewcode-block" id="LIRCMOP5.number_of_objectives">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP5.number_of_objectives">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="LIRCMOP5.number_of_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP5.number_of_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="LIRCMOP5.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP5.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span>
 
         <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">10</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">g1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.7057</span>
@@ -372,7 +372,7 @@
 
 <div class="viewcode-block" id="LIRCMOP5.evaluate_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP5.evaluate_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">())]</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="mf">0.1</span>
@@ -398,7 +398,7 @@
 
 <div class="viewcode-block" id="LIRCMOP5.g1">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP5.g1">[docs]</a>
-    <span class="k">def</span> <span class="nf">g1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">g1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">(),</span> <span class="mi">2</span><span class="p">):</span>
             <span class="n">result</span> <span class="o">+=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">sin</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="mf">2.0</span><span class="p">)</span>
@@ -408,7 +408,7 @@
 
 <div class="viewcode-block" id="LIRCMOP5.g2">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP5.g2">[docs]</a>
-    <span class="k">def</span> <span class="nf">g2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">g2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">(),</span> <span class="mi">2</span><span class="p">):</span>
             <span class="n">result</span> <span class="o">+=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">cos</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="mf">2.0</span><span class="p">)</span>
@@ -418,7 +418,7 @@
 
 <div class="viewcode-block" id="LIRCMOP5.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP5.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;LIR-CMOP5&quot;</span></div>
 </div>
 
@@ -426,19 +426,19 @@
 
 <div class="viewcode-block" id="LIRCMOP6">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP6">[docs]</a>
-<span class="k">class</span> <span class="nc">LIRCMOP6</span><span class="p">(</span><span class="n">LIRCMOP5</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIRCMOP6</span><span class="p">(</span><span class="n">LIRCMOP5</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problem LIR-CMOP6, defined in:</span>
 
 <span class="sd">    * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.</span>
 <span class="sd">      Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LIRCMOP6</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="p">)</span>
 
 <div class="viewcode-block" id="LIRCMOP6.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP6.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span>
 
         <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">10</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">g1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.7057</span>
@@ -451,7 +451,7 @@
 
 <div class="viewcode-block" id="LIRCMOP6.evaluate_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP6.evaluate_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">())]</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="mf">0.1</span>
@@ -477,7 +477,7 @@
 
 <div class="viewcode-block" id="LIRCMOP6.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP6.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;LIR-CMOP6&quot;</span></div>
 </div>
 
@@ -485,19 +485,19 @@
 
 <div class="viewcode-block" id="LIRCMOP7">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP7">[docs]</a>
-<span class="k">class</span> <span class="nc">LIRCMOP7</span><span class="p">(</span><span class="n">LIRCMOP5</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIRCMOP7</span><span class="p">(</span><span class="n">LIRCMOP5</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problem LIR-CMOP7, defined in:</span>
 
 <span class="sd">    * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.</span>
 <span class="sd">      Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LIRCMOP7</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="p">)</span>
 
 <div class="viewcode-block" id="LIRCMOP7.evaluate_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP7.evaluate_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">())]</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="mf">0.1</span>
@@ -523,7 +523,7 @@
 
 <div class="viewcode-block" id="LIRCMOP7.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP7.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;LIR-CMOP7&quot;</span></div>
 </div>
 
@@ -531,19 +531,19 @@
 
 <div class="viewcode-block" id="LIRCMOP8">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP8">[docs]</a>
-<span class="k">class</span> <span class="nc">LIRCMOP8</span><span class="p">(</span><span class="n">LIRCMOP6</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIRCMOP8</span><span class="p">(</span><span class="n">LIRCMOP6</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problem LIR-CMOP8, defined in:</span>
 
 <span class="sd">    * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.</span>
 <span class="sd">      Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LIRCMOP8</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="p">)</span>
 
 <div class="viewcode-block" id="LIRCMOP8.evaluate_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP8.evaluate_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">())]</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="mf">0.1</span>
@@ -569,7 +569,7 @@
 
 <div class="viewcode-block" id="LIRCMOP8.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP8.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;LIR-CMOP8&quot;</span></div>
 </div>
 
@@ -577,19 +577,19 @@
 
 <div class="viewcode-block" id="LIRCMOP9">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP9">[docs]</a>
-<span class="k">class</span> <span class="nc">LIRCMOP9</span><span class="p">(</span><span class="n">LIRCMOP8</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIRCMOP9</span><span class="p">(</span><span class="n">LIRCMOP8</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problem LIR-CMOP9, defined in:</span>
 
 <span class="sd">    * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.</span>
 <span class="sd">      Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LIRCMOP9</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="p">)</span>
 
 <div class="viewcode-block" id="LIRCMOP9.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP9.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span>
 
         <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.7057</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">g1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
@@ -602,7 +602,7 @@
 
 <div class="viewcode-block" id="LIRCMOP9.evaluate_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP9.evaluate_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span>
         <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">())]</span>
 
@@ -632,7 +632,7 @@
 
 <div class="viewcode-block" id="LIRCMOP9.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP9.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;LIR-CMOP9&quot;</span></div>
 </div>
 
@@ -640,19 +640,19 @@
 
 <div class="viewcode-block" id="LIRCMOP10">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP10">[docs]</a>
-<span class="k">class</span> <span class="nc">LIRCMOP10</span><span class="p">(</span><span class="n">LIRCMOP8</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIRCMOP10</span><span class="p">(</span><span class="n">LIRCMOP8</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problem LIR-CMOP10, defined in:</span>
 
 <span class="sd">    * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.</span>
 <span class="sd">      Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LIRCMOP10</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="p">)</span>
 
 <div class="viewcode-block" id="LIRCMOP10.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP10.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span>
 
         <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.7057</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">g1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
@@ -665,7 +665,7 @@
 
 <div class="viewcode-block" id="LIRCMOP10.evaluate_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP10.evaluate_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">())]</span>
 
         <span class="n">theta</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.25</span> <span class="o">*</span> <span class="n">pi</span>
@@ -694,7 +694,7 @@
 
 <div class="viewcode-block" id="LIRCMOP10.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP10.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;LIR-CMOP10&quot;</span></div>
 </div>
 
@@ -702,19 +702,19 @@
 
 <div class="viewcode-block" id="LIRCMOP11">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP11">[docs]</a>
-<span class="k">class</span> <span class="nc">LIRCMOP11</span><span class="p">(</span><span class="n">LIRCMOP10</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIRCMOP11</span><span class="p">(</span><span class="n">LIRCMOP10</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problem LIR-CMOP11, defined in:</span>
 
 <span class="sd">    * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.</span>
 <span class="sd">      Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LIRCMOP11</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="p">)</span>
 
 <div class="viewcode-block" id="LIRCMOP11.evaluate_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP11.evaluate_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">())]</span>
 
         <span class="n">theta</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.25</span> <span class="o">*</span> <span class="n">pi</span>
@@ -743,7 +743,7 @@
 
 <div class="viewcode-block" id="LIRCMOP11.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP11.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;LIR-CMOP11&quot;</span></div>
 </div>
 
@@ -751,19 +751,19 @@
 
 <div class="viewcode-block" id="LIRCMOP12">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP12">[docs]</a>
-<span class="k">class</span> <span class="nc">LIRCMOP12</span><span class="p">(</span><span class="n">LIRCMOP9</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIRCMOP12</span><span class="p">(</span><span class="n">LIRCMOP9</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problem LIR-CMOP9, defined in:</span>
 
 <span class="sd">    * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.</span>
 <span class="sd">      Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LIRCMOP12</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="p">)</span>
 
 <div class="viewcode-block" id="LIRCMOP12.evaluate_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP12.evaluate_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">())]</span>
 
         <span class="n">theta</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.25</span> <span class="o">*</span> <span class="n">pi</span>
@@ -792,7 +792,7 @@
 
 <div class="viewcode-block" id="LIRCMOP12.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP12.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;LIR-CMOP12&quot;</span></div>
 </div>
 
@@ -800,14 +800,14 @@
 
 <div class="viewcode-block" id="LIRCMOP13">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP13">[docs]</a>
-<span class="k">class</span> <span class="nc">LIRCMOP13</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIRCMOP13</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problem LIR-CMOP13, defined in:</span>
 
 <span class="sd">    * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.</span>
 <span class="sd">      Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LIRCMOP13</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
@@ -818,18 +818,18 @@
 
 <div class="viewcode-block" id="LIRCMOP13.number_of_objectives">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP13.number_of_objectives">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="LIRCMOP13.number_of_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP13.number_of_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 <div class="viewcode-block" id="LIRCMOP13.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP13.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span>
 
         <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.7057</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">g1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -843,7 +843,7 @@
 
 <div class="viewcode-block" id="LIRCMOP13.evaluate_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP13.evaluate_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">())]</span>
 
         <span class="n">f</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">pow</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">))])</span>
@@ -858,7 +858,7 @@
 
 <div class="viewcode-block" id="LIRCMOP13.g1">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP13.g1">[docs]</a>
-    <span class="k">def</span> <span class="nf">g1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">g1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">(),</span> <span class="mi">2</span><span class="p">):</span>
             <span class="n">result</span> <span class="o">+=</span> <span class="mi">10</span> <span class="o">*</span> <span class="nb">pow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
@@ -868,7 +868,7 @@
 
 <div class="viewcode-block" id="LIRCMOP13.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP13.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;LIR-CMOP13&quot;</span></div>
 </div>
 
@@ -876,31 +876,31 @@
 
 <div class="viewcode-block" id="LIRCMOP14">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP14">[docs]</a>
-<span class="k">class</span> <span class="nc">LIRCMOP14</span><span class="p">(</span><span class="n">LIRCMOP13</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LIRCMOP14</span><span class="p">(</span><span class="n">LIRCMOP13</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problem LIR-CMOP14, defined in:</span>
 
 <span class="sd">    * An Improved epsilon-constrained Method in MOEA/D for CMOPs with Large Infeasible Regions.</span>
 <span class="sd">      Fan, Z., Li, W., Cai, X. et al. Soft Comput (2019). https://doi.org/10.1007/s00500-019-03794-x</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LIRCMOP14</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">number_of_variables</span><span class="p">)</span>
 
 <div class="viewcode-block" id="LIRCMOP14.number_of_objectives">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP14.number_of_objectives">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="LIRCMOP14.number_of_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP14.number_of_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">3</span></div>
 
 
 <div class="viewcode-block" id="LIRCMOP14.evaluate_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP14.evaluate_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">())]</span>
 
         <span class="n">f</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">pow</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">))])</span>
@@ -916,7 +916,7 @@
 
 <div class="viewcode-block" id="LIRCMOP14.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.lircmop.LIRCMOP14.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;LIR-CMOP14&quot;</span></div>
 </div>
 
@@ -927,7 +927,7 @@
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">

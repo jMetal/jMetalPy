@@ -13,11 +13,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <title>jmetal.problem.multiobjective.constrained &#8212; jMetalPy 1.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css?v=e05a0192" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=9aa90875" />
     <script src="../../../../_static/documentation_options.js?v=030dc6f6"></script>
-    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -27,7 +27,7 @@
    
 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -109,10 +109,10 @@
           <div class="document clearer body">
             
   <h1>Source code for jmetal.problem.multiobjective.constrained</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">atan</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">pi</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">atan</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">pi</span>
 
-<span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="kn">import</span> <span class="n">FloatProblem</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="kn">import</span> <span class="n">FloatSolution</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">FloatProblem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.solution</span><span class="w"> </span><span class="kn">import</span> <span class="n">FloatSolution</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">.. module:: constrained</span>
@@ -125,10 +125,10 @@
 
 <div class="viewcode-block" id="Srinivas">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Srinivas">[docs]</a>
-<span class="k">class</span> <span class="nc">Srinivas</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Srinivas</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problem Srinivas.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Srinivas</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="n">number_of_variables</span> <span class="o">=</span> <span class="mi">2</span>
 
@@ -140,19 +140,19 @@
 
 <div class="viewcode-block" id="Srinivas.number_of_objectives">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Srinivas.number_of_objectives">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Srinivas.number_of_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Srinivas.number_of_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="Srinivas.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Srinivas.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">x1</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">x2</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -164,7 +164,7 @@
         <span class="k">return</span> <span class="n">solution</span></div>
 
 
-    <span class="k">def</span> <span class="nf">__evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">x1</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">x2</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -173,7 +173,7 @@
 
 <div class="viewcode-block" id="Srinivas.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Srinivas.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Srinivas&quot;</span></div>
 </div>
 
@@ -181,10 +181,10 @@
 
 <div class="viewcode-block" id="Tanaka">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Tanaka">[docs]</a>
-<span class="k">class</span> <span class="nc">Tanaka</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Tanaka</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problem Tanaka.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Tanaka</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
@@ -196,19 +196,19 @@
 
 <div class="viewcode-block" id="Tanaka.number_of_objectives">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Tanaka.number_of_objectives">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Tanaka.number_of_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Tanaka.number_of_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="Tanaka.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Tanaka.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -217,7 +217,7 @@
         <span class="k">return</span> <span class="n">solution</span></div>
 
 
-    <span class="k">def</span> <span class="nf">__evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">())]</span>
 
         <span class="n">x1</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -232,7 +232,7 @@
 
 <div class="viewcode-block" id="Tanaka.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Tanaka.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Tanaka&quot;</span></div>
 </div>
 
@@ -240,10 +240,10 @@
 
 <div class="viewcode-block" id="Osyczka2">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Osyczka2">[docs]</a>
-<span class="k">class</span> <span class="nc">Osyczka2</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Osyczka2</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problem Osyczka2.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Osyczka2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
@@ -254,19 +254,19 @@
 
 <div class="viewcode-block" id="Osyczka2.number_of_objectives">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Osyczka2.number_of_objectives">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Osyczka2.number_of_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Osyczka2.number_of_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">6</span></div>
 
 
 <div class="viewcode-block" id="Osyczka2.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Osyczka2.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span>
         <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span>
             <span class="mf">25.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="mf">4.0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
@@ -279,7 +279,7 @@
         <span class="k">return</span> <span class="n">solution</span></div>
 
 
-    <span class="k">def</span> <span class="nf">__evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">())]</span>
 
         <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span>
@@ -294,7 +294,7 @@
 
 <div class="viewcode-block" id="Osyczka2.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Osyczka2.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Osyczka2&quot;</span></div>
 </div>
 
@@ -302,10 +302,10 @@
 
 <div class="viewcode-block" id="Binh2">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Binh2">[docs]</a>
-<span class="k">class</span> <span class="nc">Binh2</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Binh2</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing problem Binh2.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Binh2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
@@ -316,19 +316,19 @@
 
 <div class="viewcode-block" id="Binh2.number_of_objectives">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Binh2.number_of_objectives">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Binh2.number_of_constraints">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Binh2.number_of_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="Binh2.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Binh2.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span>
         <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">4.0</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">5.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">5.0</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">5.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">5.0</span><span class="p">)</span>
@@ -338,7 +338,7 @@
         <span class="k">return</span> <span class="n">solution</span></div>
 
 
-    <span class="k">def</span> <span class="nf">__evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__evaluate_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">())]</span>
 
         <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span>
@@ -347,7 +347,7 @@
 
 <div class="viewcode-block" id="Binh2.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.constrained.Binh2.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Binh2&quot;</span></div>
 </div>
 
@@ -358,7 +358,7 @@
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">

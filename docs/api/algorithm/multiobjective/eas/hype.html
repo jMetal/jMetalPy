@@ -14,12 +14,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <title>HYPE &#8212; jMetalPy 1.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css?v=e05a0192" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=9aa90875" />
     <script src="../../../../_static/documentation_options.js?v=030dc6f6"></script>
-    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -33,7 +33,7 @@
    
 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -159,30 +159,30 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jmetal.algorithm.multiobjective.hype</span> <span class="kn">import</span> <span class="n">HYPE</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="kn">import</span> <span class="n">FloatSolution</span>
-<span class="kn">from</span> <span class="nn">jmetal.operator.crossover</span> <span class="kn">import</span> <span class="n">SBXCrossover</span>
-<span class="kn">from</span> <span class="nn">jmetal.operator.mutation</span> <span class="kn">import</span> <span class="n">PolynomialMutation</span>
-<span class="kn">from</span> <span class="nn">jmetal.problem</span> <span class="kn">import</span> <span class="n">ZDT1</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">StoppingByEvaluations</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from jmetal.algorithm.multiobjective.hype import HYPE
+from jmetal.core.solution import FloatSolution
+from jmetal.operator.crossover import SBXCrossover
+from jmetal.operator.mutation import PolynomialMutation
+from jmetal.problem import ZDT1
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
-<span class="n">problem</span> <span class="o">=</span> <span class="n">ZDT1</span><span class="p">()</span>
+problem = ZDT1()
 
-<span class="n">reference_point</span> <span class="o">=</span> <span class="n">FloatSolution</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">problem</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">,</span> <span class="p">)</span>
-<span class="n">reference_point</span><span class="o">.</span><span class="n">objectives</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]</span>  <span class="c1"># Mandatory for HYPE</span>
+reference_point = FloatSolution([0], [1], problem.number_of_objectives, )
+reference_point.objectives = [1., 1.]  # Mandatory for HYPE
 
-<span class="n">algorithm</span> <span class="o">=</span> <span class="n">HYPE</span><span class="p">(</span>
-    <span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">,</span>
-    <span class="n">reference_point</span><span class="o">=</span><span class="n">reference_point</span><span class="p">,</span>
-    <span class="n">population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">offspring_population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">mutation</span><span class="o">=</span><span class="n">PolynomialMutation</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">problem</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">,</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
-    <span class="n">crossover</span><span class="o">=</span><span class="n">SBXCrossover</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
-    <span class="n">termination_criterion</span><span class="o">=</span><span class="n">StoppingByEvaluations</span><span class="p">(</span><span class="mi">2500</span><span class="p">)</span>
-<span class="p">)</span>
+algorithm = HYPE(
+    problem=problem,
+    reference_point=reference_point,
+    population_size=100,
+    offspring_population_size=100,
+    mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
+    crossover=SBXCrossover(probability=1.0, distribution_index=20),
+    termination_criterion=StoppingByEvaluations(2500)
+)
 
-<span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-<span class="n">solutions</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
+algorithm.run()
+solutions = algorithm.get_result()
 </pre></div>
 </div>
 </div>
@@ -231,13 +231,13 @@ File <span class="ansi-green-fg">~/anaconda3/envs/jmetalpy/lib/python3.9/site-pa
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jmetal.lab.visualization.plotting</span> <span class="kn">import</span> <span class="n">Plot</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.solution</span> <span class="kn">import</span> <span class="n">get_non_dominated_solutions</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from jmetal.lab.visualization.plotting import Plot
+from jmetal.util.solution import get_non_dominated_solutions
 
-<span class="n">front</span> <span class="o">=</span> <span class="n">get_non_dominated_solutions</span><span class="p">(</span><span class="n">solutions</span><span class="p">)</span>
+front = get_non_dominated_solutions(solutions)
 
-<span class="n">plot_front</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span><span class="n">plot_title</span><span class="o">=</span><span class="s1">&#39;Pareto front approximation&#39;</span><span class="p">,</span> <span class="n">axis_labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span>
-<span class="n">plot_front</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">front</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;HYPE-ZDT1&#39;</span><span class="p">)</span>
+plot_front = Plot(plot_title=&#39;Pareto front approximation&#39;, axis_labels=[&#39;x&#39;, &#39;y&#39;])
+plot_front.plot(front, label=&#39;HYPE-ZDT1&#39;)
 </pre></div>
 </div>
 </div>
@@ -250,18 +250,18 @@ File <span class="ansi-green-fg">~/anaconda3/envs/jmetalpy/lib/python3.9/site-pa
 <dd><p>Bases: <a class="reference internal" href="../../singleobjective/genetic.algorithm.html#jmetal.algorithm.singleobjective.genetic_algorithm.GeneticAlgorithm" title="jmetal.algorithm.singleobjective.genetic_algorithm.GeneticAlgorithm"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeneticAlgorithm</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">S</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">R</span></code>]</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="jmetal.algorithm.multiobjective.hype.HYPE.evaluate">
-<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">population</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">S</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/hype.html#HYPE.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.hype.HYPE.evaluate" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">population</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">S</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/hype.html#HYPE.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.hype.HYPE.evaluate" title="Link to this definition">¶</a></dt>
 <dd><p>Evaluates a solution list.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jmetal.algorithm.multiobjective.hype.HYPE.get_name">
-<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/hype.html#HYPE.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.hype.HYPE.get_name" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/hype.html#HYPE.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.hype.HYPE.get_name" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jmetal.algorithm.multiobjective.hype.HYPE.replacement">
-<span class="sig-name descname"><span class="pre">replacement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">population</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">S</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offspring_population</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">S</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">S</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/hype.html#HYPE.replacement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.hype.HYPE.replacement" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">replacement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">population</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">S</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offspring_population</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">S</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">S</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/hype.html#HYPE.replacement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.hype.HYPE.replacement" title="Link to this definition">¶</a></dt>
 <dd><p>Replace least-fit population with new individuals.</p>
 </dd></dl>
 
@@ -293,7 +293,7 @@ File <span class="ansi-green-fg">~/anaconda3/envs/jmetalpy/lib/python3.9/site-pa
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">

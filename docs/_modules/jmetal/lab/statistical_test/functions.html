@@ -13,11 +13,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <title>jmetal.lab.statistical_test.functions &#8212; jMetalPy 1.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css?v=e05a0192" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=9aa90875" />
     <script src="../../../../_static/documentation_options.js?v=030dc6f6"></script>
-    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -27,7 +27,7 @@
    
 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -109,14 +109,14 @@
           <div class="document clearer body">
             
   <h1>Source code for jmetal.lab.statistical_test.functions</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">binom</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">norm</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">binom</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">norm</span>
 
-<span class="kn">from</span> <span class="nn">jmetal.lab.statistical_test.apv_procedures</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.lab.statistical_test.apv_procedures</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
 
 
 <div class="viewcode-block" id="ranks">
 <a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.ranks">[docs]</a>
-<span class="k">def</span> <span class="nf">ranks</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ranks</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the rank of the elements in data.</span>
 
 <span class="sd">    :param data: 2-D matrix</span>
@@ -152,7 +152,7 @@
 
 <div class="viewcode-block" id="sign_test">
 <a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.sign_test">[docs]</a>
-<span class="k">def</span> <span class="nf">sign_test</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sign_test</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Given the results drawn from two algorithms/methods X and Y, the sign test analyses if</span>
 <span class="sd">    there is a difference between X and Y.</span>
 
@@ -194,7 +194,7 @@
 
 <div class="viewcode-block" id="friedman_test">
 <a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.friedman_test">[docs]</a>
-<span class="k">def</span> <span class="nf">friedman_test</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">friedman_test</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Friedman ranking test.</span>
 
 <span class="sd">    ..note:: Null Hypothesis: In a set of k (&gt;=2) treaments (or tested algorithms), all the treatments are equivalent, so their average ranks should be equal.</span>
@@ -235,7 +235,7 @@
 
 <div class="viewcode-block" id="friedman_aligned_rank_test">
 <a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.friedman_aligned_rank_test">[docs]</a>
-<span class="k">def</span> <span class="nf">friedman_aligned_rank_test</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">friedman_aligned_rank_test</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Method of aligned ranks for the Friedman test.</span>
 
 <span class="sd">    ..note:: Null Hypothesis: In a set of k (&gt;=2) treaments (or tested algorithms), all the treatments are equivalent, so their average ranks should be equal.</span>
@@ -285,7 +285,7 @@
 
 <div class="viewcode-block" id="quade_test">
 <a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.quade_test">[docs]</a>
-<span class="k">def</span> <span class="nf">quade_test</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">quade_test</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Quade test.</span>
 
 <span class="sd">    ..note:: Null Hypothesis: In a set of k (&gt;=2) treaments (or tested algorithms), all the treatments are equivalent, so their average ranks should be equal.</span>
@@ -337,7 +337,7 @@
 
 <div class="viewcode-block" id="friedman_ph_test">
 <a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.friedman_ph_test">[docs]</a>
-<span class="k">def</span> <span class="nf">friedman_ph_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">apv_procedure</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">friedman_ph_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">apv_procedure</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Friedman post-hoc test.</span>
 
 <span class="sd">    :param data: An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.</span>
@@ -449,7 +449,7 @@
 
 <div class="viewcode-block" id="friedman_aligned_ph_test">
 <a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.friedman_aligned_ph_test">[docs]</a>
-<span class="k">def</span> <span class="nf">friedman_aligned_ph_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">apv_procedure</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">friedman_aligned_ph_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">apv_procedure</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Friedman Aligned Ranks post-hoc test.</span>
 
 <span class="sd">    :param data: An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.</span>
@@ -554,7 +554,7 @@
 
 <div class="viewcode-block" id="quade_ph_test">
 <a class="viewcode-back" href="../../../../api/jmetal.lab.statistical_test.html#jmetal.lab.statistical_test.functions.quade_ph_test">[docs]</a>
-<span class="k">def</span> <span class="nf">quade_ph_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">apv_procedure</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">quade_ph_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">apv_procedure</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Quade post-hoc test.</span>
 
 <span class="sd">    :param data: An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.</span>
@@ -661,7 +661,7 @@
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">

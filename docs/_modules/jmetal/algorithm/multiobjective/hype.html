@@ -13,11 +13,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <title>jmetal.algorithm.multiobjective.hype &#8212; jMetalPy 1.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css?v=e05a0192" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=9aa90875" />
     <script src="../../../../_static/documentation_options.js?v=030dc6f6"></script>
-    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -27,7 +27,7 @@
    
 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -109,19 +109,19 @@
           <div class="document clearer body">
             
   <h1>Source code for jmetal.algorithm.multiobjective.hype</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">TypeVar</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">TypeVar</span>
 
-<span class="kn">from</span> <span class="nn">jmetal.algorithm.singleobjective.genetic_algorithm</span> <span class="kn">import</span> <span class="n">GeneticAlgorithm</span>
-<span class="kn">from</span> <span class="nn">jmetal.config</span> <span class="kn">import</span> <span class="n">store</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.operator</span> <span class="kn">import</span> <span class="n">Crossover</span><span class="p">,</span> <span class="n">Mutation</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="kn">import</span> <span class="n">Problem</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="kn">import</span> <span class="n">Solution</span>
-<span class="kn">from</span> <span class="nn">jmetal.operator.selection</span> <span class="kn">import</span> <span class="n">BinaryTournamentSelection</span>
-<span class="kn">from</span> <span class="nn">jmetal.operator.selection</span> <span class="kn">import</span> <span class="n">RankingAndFitnessSelection</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.comparator</span> <span class="kn">import</span> <span class="n">Comparator</span><span class="p">,</span> <span class="n">SolutionAttributeComparator</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.evaluator</span> <span class="kn">import</span> <span class="n">Evaluator</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.generator</span> <span class="kn">import</span> <span class="n">Generator</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">TerminationCriterion</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.algorithm.singleobjective.genetic_algorithm</span><span class="w"> </span><span class="kn">import</span> <span class="n">GeneticAlgorithm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">store</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.operator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Crossover</span><span class="p">,</span> <span class="n">Mutation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">Problem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.solution</span><span class="w"> </span><span class="kn">import</span> <span class="n">Solution</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.operator.selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">BinaryTournamentSelection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.operator.selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">RankingAndFitnessSelection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.comparator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Comparator</span><span class="p">,</span> <span class="n">SolutionAttributeComparator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.evaluator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evaluator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.generator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.termination_criterion</span><span class="w"> </span><span class="kn">import</span> <span class="n">TerminationCriterion</span>
 
 <span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">)</span>
 <span class="n">R</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;R&quot;</span><span class="p">)</span>
@@ -129,8 +129,8 @@
 
 <div class="viewcode-block" id="HYPE">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/hype.html#jmetal.algorithm.multiobjective.hype.HYPE">[docs]</a>
-<span class="k">class</span> <span class="nc">HYPE</span><span class="p">(</span><span class="n">GeneticAlgorithm</span><span class="p">[</span><span class="n">S</span><span class="p">,</span> <span class="n">R</span><span class="p">]):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">HYPE</span><span class="p">(</span><span class="n">GeneticAlgorithm</span><span class="p">[</span><span class="n">S</span><span class="p">,</span> <span class="n">R</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">problem</span><span class="p">:</span> <span class="n">Problem</span><span class="p">,</span>
         <span class="n">reference_point</span><span class="p">:</span> <span class="n">Solution</span><span class="p">,</span>
@@ -184,7 +184,7 @@
 
 <div class="viewcode-block" id="HYPE.evaluate">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/hype.html#jmetal.algorithm.multiobjective.hype.HYPE.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
         <span class="n">population</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">)</span>
         <span class="n">population</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranking_fitness</span><span class="o">.</span><span class="n">compute_hypervol_fitness_values</span><span class="p">(</span>
             <span class="n">population</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_point</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">population</span><span class="p">)</span>
@@ -194,20 +194,20 @@
 
 <div class="viewcode-block" id="HYPE.replacement">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/hype.html#jmetal.algorithm.multiobjective.hype.HYPE.replacement">[docs]</a>
-    <span class="k">def</span> <span class="nf">replacement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">offspring_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">replacement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">offspring_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]]:</span>
         <span class="n">join_population</span> <span class="o">=</span> <span class="n">population</span> <span class="o">+</span> <span class="n">offspring_population</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranking_fitness</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">join_population</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="HYPE.result">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/hype.html#jmetal.algorithm.multiobjective.hype.HYPE.result">[docs]</a>
-    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">R</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">R</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span></div>
 
 
 <div class="viewcode-block" id="HYPE.get_name">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/hype.html#jmetal.algorithm.multiobjective.hype.HYPE.get_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;HYPE&quot;</span></div>
 </div>
 
@@ -218,7 +218,7 @@
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">

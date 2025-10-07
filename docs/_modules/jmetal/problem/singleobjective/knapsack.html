@@ -13,11 +13,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <title>jmetal.problem.singleobjective.knapsack &#8212; jMetalPy 1.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css?v=e05a0192" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=9aa90875" />
     <script src="../../../../_static/documentation_options.js?v=030dc6f6"></script>
-    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -27,7 +27,7 @@
    
 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -109,12 +109,12 @@
           <div class="document clearer body">
             
   <h1>Source code for jmetal.problem.singleobjective.knapsack</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">random</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="kn">import</span> <span class="n">BinaryProblem</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="kn">import</span> <span class="n">BinarySolution</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">BinaryProblem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.solution</span><span class="w"> </span><span class="kn">import</span> <span class="n">BinarySolution</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">.. module:: knapsack</span>
@@ -127,10 +127,10 @@
 
 <div class="viewcode-block" id="Knapsack">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.knapsack.Knapsack">[docs]</a>
-<span class="k">class</span> <span class="nc">Knapsack</span><span class="p">(</span><span class="n">BinaryProblem</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Knapsack</span><span class="p">(</span><span class="n">BinaryProblem</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class representing Knapsack Problem.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">number_of_items</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
         <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
@@ -153,23 +153,23 @@
 
 <div class="viewcode-block" id="Knapsack.number_of_variables">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.knapsack.Knapsack.number_of_variables">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">1</span></div>
 
 
 <div class="viewcode-block" id="Knapsack.number_of_objectives">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.knapsack.Knapsack.number_of_objectives">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">1</span></div>
 
 
 <div class="viewcode-block" id="Knapsack.number_of_constraints">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.knapsack.Knapsack.number_of_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">1</span></div>
 
 
-    <span class="k">def</span> <span class="nf">__read_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__read_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function reads a Knapsack Problem instance from a file.</span>
 <span class="sd">        It expects the following format:</span>
@@ -199,7 +199,7 @@
 
 <div class="viewcode-block" id="Knapsack.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.knapsack.Knapsack.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">BinarySolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">BinarySolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
         <span class="n">total_profits</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="n">total_weigths</span> <span class="o">=</span> <span class="mf">0.0</span>
 
@@ -217,7 +217,7 @@
 
 <div class="viewcode-block" id="Knapsack.create_solution">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.knapsack.Knapsack.create_solution">[docs]</a>
-    <span class="k">def</span> <span class="nf">create_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
         <span class="n">new_solution</span> <span class="o">=</span> <span class="n">BinarySolution</span><span class="p">(</span>
             <span class="n">number_of_variables</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">(),</span> <span class="n">number_of_objectives</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">()</span>
         <span class="p">)</span>
@@ -229,7 +229,7 @@
 
 <div class="viewcode-block" id="Knapsack.name">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.knapsack.Knapsack.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Knapsack&quot;</span></div>
 </div>
 
@@ -240,7 +240,7 @@
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">

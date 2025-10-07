@@ -13,11 +13,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <title>jmetal.lab.experiment &#8212; jMetalPy 1.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/guzzle.css?v=e05a0192" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9aa90875" />
     <script src="../../../_static/documentation_options.js?v=030dc6f6"></script>
-    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="author" title="About these documents" href="../../../about.html" />
@@ -27,7 +27,7 @@
    
 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -109,22 +109,22 @@
           <div class="document clearer body">
             
   <h1>Source code for jmetal.lab.experiment</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">io</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ProcessPoolExecutor</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">statistics</span> <span class="kn">import</span> <span class="n">median</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">concurrent.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProcessPoolExecutor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">statistics</span><span class="w"> </span><span class="kn">import</span> <span class="n">median</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">mannwhitneyu</span><span class="p">,</span> <span class="n">iqr</span><span class="p">,</span> <span class="n">ks_2samp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">mannwhitneyu</span><span class="p">,</span> <span class="n">iqr</span><span class="p">,</span> <span class="n">ks_2samp</span>
 
-<span class="kn">from</span> <span class="nn">jmetal.core.algorithm</span> <span class="kn">import</span> <span class="n">Algorithm</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.quality_indicator</span> <span class="kn">import</span> <span class="n">QualityIndicator</span>
-<span class="kn">from</span> <span class="nn">jmetal.logger</span> <span class="kn">import</span> <span class="n">get_logger</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.solution</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.algorithm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Algorithm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.quality_indicator</span><span class="w"> </span><span class="kn">import</span> <span class="n">QualityIndicator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.solution</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">print_function_values_to_file</span><span class="p">,</span>
     <span class="n">print_variables_to_file</span><span class="p">,</span>
     <span class="n">read_solutions</span><span class="p">,</span>
@@ -143,8 +143,8 @@
 
 <div class="viewcode-block" id="Job">
 <a class="viewcode-back" href="../../../tutorials/experiment.html#jmetal.lab.experiment.Job">[docs]</a>
-<span class="k">class</span> <span class="nc">Job</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">:</span> <span class="n">Algorithm</span><span class="p">,</span> <span class="n">algorithm_tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">problem_tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">run</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Job</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">:</span> <span class="n">Algorithm</span><span class="p">,</span> <span class="n">algorithm_tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">problem_tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">run</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span> <span class="o">=</span> <span class="n">algorithm</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">algorithm_tag</span> <span class="o">=</span> <span class="n">algorithm_tag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">problem_tag</span> <span class="o">=</span> <span class="n">problem_tag</span>
@@ -152,7 +152,7 @@
 
 <div class="viewcode-block" id="Job.execute">
 <a class="viewcode-back" href="../../../tutorials/experiment.html#jmetal.lab.experiment.Job.execute">[docs]</a>
-    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">output_path</span><span class="p">:</span>
@@ -169,7 +169,7 @@
 
 <div class="viewcode-block" id="Job.get_algorithm_data">
 <a class="viewcode-back" href="../../../tutorials/experiment.html#jmetal.lab.experiment.Job.get_algorithm_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_algorithm_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_algorithm_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">observable_data</span><span class="p">()</span></div>
 </div>
 
@@ -177,8 +177,8 @@
 
 <div class="viewcode-block" id="Experiment">
 <a class="viewcode-back" href="../../../tutorials/experiment.html#jmetal.lab.experiment.Experiment">[docs]</a>
-<span class="k">class</span> <span class="nc">Experiment</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">jobs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Job</span><span class="p">],</span> <span class="n">m_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Experiment</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">jobs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Job</span><span class="p">],</span> <span class="n">m_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run an experiment to execute a list of jobs.</span>
 
 <span class="sd">        :param output_dir: Base directory where each job will save its results.</span>
@@ -192,7 +192,7 @@
 
 <div class="viewcode-block" id="Experiment.run">
 <a class="viewcode-back" href="../../../tutorials/experiment.html#jmetal.lab.experiment.Experiment.run">[docs]</a>
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">ProcessPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">m_workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobs</span><span class="p">:</span>
                 <span class="n">output_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">algorithm_tag</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">problem_tag</span><span class="p">)</span>
@@ -204,7 +204,7 @@
 
 <div class="viewcode-block" id="generate_summary_from_experiment">
 <a class="viewcode-back" href="../../../tutorials/experiment.html#jmetal.lab.experiment.generate_summary_from_experiment">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_summary_from_experiment</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_summary_from_experiment</span><span class="p">(</span>
         <span class="n">input_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">quality_indicators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">QualityIndicator</span><span class="p">],</span> <span class="n">reference_fronts</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute a list of quality indicators. The input data directory *must* met the following structure (this is generated</span>
@@ -260,7 +260,7 @@
                     <span class="n">reference_front_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">reference_fronts</span><span class="p">,</span> <span class="n">problem</span> <span class="o">+</span> <span class="s2">&quot;.pf&quot;</span><span class="p">)</span>
 
                     <span class="c1"># Add reference front if any</span>
-                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">indicator</span><span class="p">,</span> <span class="s2">&quot;reference_front&quot;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">indicator</span><span class="p">,</span> <span class="s2">&quot;reference_fronts&quot;</span><span class="p">):</span>
                         <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">reference_front_file</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
                             <span class="n">reference_front</span> <span class="o">=</span> <span class="p">[]</span>
                             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">reference_front_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
@@ -280,7 +280,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">generate_boxplot</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;boxplot&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_boxplot</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;boxplot&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate boxplot diagrams.</span>
 
 <span class="sd">    :param filename: Input filename (summary).</span>
@@ -331,7 +331,7 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">generate_latex_tables</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;latex/statistical&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_latex_tables</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;latex/statistical&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes a number of statistical values (mean, median, standard deviation, interquartile range).</span>
 
 <span class="sd">    :param filename: Input filename (summary).</span>
@@ -430,7 +430,7 @@
             <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">compute_wilcoxon</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;latex/wilcoxon&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_wilcoxon</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;latex/wilcoxon&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    :param filename: Input filename (summary).</span>
 <span class="sd">    :param output_dir: Output path.</span>
@@ -514,7 +514,7 @@
             <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">compute_mean_indicator</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">indicator_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_mean_indicator</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">indicator_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the mean values of an indicator.</span>
 <span class="sd">    :param filename:</span>
 <span class="sd">    :param indicator_name: Quality indicator name.</span>
@@ -551,7 +551,7 @@
 
 <div class="viewcode-block" id="generate_median_and_wilcoxon_latex_tables">
 <a class="viewcode-back" href="../../../tutorials/experiment.html#jmetal.lab.experiment.generate_median_and_wilcoxon_latex_tables">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_median_and_wilcoxon_latex_tables</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;latex/meansAndWilcoxon&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_median_and_wilcoxon_latex_tables</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;latex/meansAndWilcoxon&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate Latex tables including medians and IQRs. Additionally, the last algorithm is considered as the reference</span>
 <span class="sd">        algorithm, and the cells include a symbol indicating whether the differences with the reference algorithm</span>
 <span class="sd">        are significant or not according to the Wilcoxon rank sum test.</span>
@@ -639,7 +639,7 @@
 
 <div class="viewcode-block" id="generate_kolmogorov_smirnov_latex_tables">
 <a class="viewcode-back" href="../../../tutorials/experiment.html#jmetal.lab.experiment.generate_kolmogorov_smirnov_latex_tables">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_kolmogorov_smirnov_latex_tables</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;latex/KolmogorovSmirnov&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_kolmogorov_smirnov_latex_tables</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;latex/KolmogorovSmirnov&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate Latex tables with the results of the Kolmogorov-Smirnov test. The last algorithm is considered as</span>
 <span class="sd">        the reference algorithm, and the cells include a symbol with the p-value &lt; 0.05.</span>
 
@@ -704,7 +704,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">__averages_to_latex</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">__averages_to_latex</span><span class="p">(</span>
         <span class="n">central_tendency</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
         <span class="n">dispersion</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
         <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -792,7 +792,7 @@
     <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
 
 
-<span class="k">def</span> <span class="nf">__wilcoxon_to_latex</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">minimization</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alignment</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;c&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">__wilcoxon_to_latex</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">minimization</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alignment</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;c&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a pandas DataFrame to a LaTeX tabular. Prints labels in bold and does use math mode.</span>
 
 <span class="sd">    :param df: Pandas dataframe.</span>
@@ -853,7 +853,7 @@
     <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
 
 
-<span class="k">def</span> <span class="nf">__median_wilcoxon_to_latex</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">__median_wilcoxon_to_latex</span><span class="p">(</span>
         <span class="n">indicator_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">wilcoxon_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
         <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -965,7 +965,7 @@
     <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
 
 
-<span class="k">def</span> <span class="nf">__kolmogorov_smirnov_to_latex</span><span class="p">(</span><span class="n">indicator_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">test_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">__kolmogorov_smirnov_to_latex</span><span class="p">(</span><span class="n">indicator_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">test_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
     <span class="n">indicator_data</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="n">test_data</span><span class="p">[</span><span class="s2">&quot;Indicator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">indicator_name</span><span class="p">]</span>
 
     <span class="n">problems</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">indicator_data</span><span class="p">[</span><span class="s2">&quot;Problem&quot;</span><span class="p">])</span>
@@ -974,7 +974,7 @@
     <span class="n">num_columns</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">algorithms</span><span class="p">)</span>
     <span class="n">columns</span> <span class="o">=</span> <span class="n">algorithms</span>
 
-    <span class="n">alignment</span> <span class="o">=</span> <span class="s2">&quot;c&quot;</span>
+    <span class="n">alignment</span> <span class="o">=</span> <span class="s2">&quot;c&quot;</span> 
     <span class="n">col_format</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">|</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">alignment</span><span class="p">,</span> <span class="n">alignment</span> <span class="o">*</span> <span class="n">num_columns</span><span class="p">)</span>
     <span class="n">column_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">textbf{{</span><span class="si">{0}</span><span class="s2">}}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">_&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">]</span>
 
@@ -1037,7 +1037,7 @@
     <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
 
 
-<span class="k">def</span> <span class="nf">check_minimization</span><span class="p">(</span><span class="n">indicator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_minimization</span><span class="p">(</span><span class="n">indicator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">indicator</span> <span class="o">==</span> <span class="s2">&quot;HV&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
     <span class="k">else</span><span class="p">:</span>
@@ -1049,7 +1049,7 @@
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">

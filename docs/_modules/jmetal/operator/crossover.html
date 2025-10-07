@@ -13,11 +13,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <title>jmetal.operator.crossover &#8212; jMetalPy 1.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/guzzle.css?v=e05a0192" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9aa90875" />
     <script src="../../../_static/documentation_options.js?v=030dc6f6"></script>
-    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="author" title="About these documents" href="../../../about.html" />
@@ -27,7 +27,7 @@
    
 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -109,12 +109,12 @@
           <div class="document clearer body">
             
   <h1>Source code for jmetal.operator.crossover</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
 
-<span class="kn">from</span> <span class="nn">jmetal.core.operator</span> <span class="kn">import</span> <span class="n">Crossover</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.operator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Crossover</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.solution</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">BinarySolution</span><span class="p">,</span>
     <span class="n">CompositeSolution</span><span class="p">,</span>
     <span class="n">FloatSolution</span><span class="p">,</span>
@@ -122,7 +122,7 @@
     <span class="n">PermutationSolution</span><span class="p">,</span>
     <span class="n">Solution</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.ckecking</span> <span class="kn">import</span> <span class="n">Check</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.ckecking</span><span class="w"> </span><span class="kn">import</span> <span class="n">Check</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">.. module:: crossover</span>
@@ -135,13 +135,13 @@
 
 <div class="viewcode-block" id="NullCrossover">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.NullCrossover">[docs]</a>
-<span class="k">class</span> <span class="nc">NullCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">Solution</span><span class="p">,</span> <span class="n">Solution</span><span class="p">]):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NullCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">Solution</span><span class="p">,</span> <span class="n">Solution</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NullCrossover</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
 
 <div class="viewcode-block" id="NullCrossover.execute">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.NullCrossover.execute">[docs]</a>
-    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Solution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Solution</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Solution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Solution</span><span class="p">]:</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The number of parents is not two: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)))</span>
 
@@ -150,19 +150,19 @@
 
 <div class="viewcode-block" id="NullCrossover.get_number_of_parents">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.NullCrossover.get_number_of_parents">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="NullCrossover.get_number_of_children">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.NullCrossover.get_number_of_children">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="NullCrossover.get_name">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.NullCrossover.get_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Null crossover&quot;</span></div>
 </div>
 
@@ -170,13 +170,13 @@
 
 <div class="viewcode-block" id="PMXCrossover">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.PMXCrossover">[docs]</a>
-<span class="k">class</span> <span class="nc">PMXCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">PermutationSolution</span><span class="p">,</span> <span class="n">PermutationSolution</span><span class="p">]):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PMXCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">PermutationSolution</span><span class="p">,</span> <span class="n">PermutationSolution</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PMXCrossover</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
 
 <div class="viewcode-block" id="PMXCrossover.execute">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.PMXCrossover.execute">[docs]</a>
-    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PermutationSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PermutationSolution</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PermutationSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PermutationSolution</span><span class="p">]:</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The number of parents is not two: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)))</span>
 
@@ -187,20 +187,20 @@
         <span class="k">if</span> <span class="n">rand</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">:</span>
             <span class="n">cross_points</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">permutation_length</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)])</span>
 
-            <span class="k">def</span> <span class="nf">_repeated</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">collection</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">_repeated</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">collection</span><span class="p">):</span>
                 <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
                 <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">collection</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">e</span> <span class="o">==</span> <span class="n">element</span><span class="p">:</span>
                         <span class="n">c</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="k">return</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="mi">1</span>
 
-            <span class="k">def</span> <span class="nf">_swap</span><span class="p">(</span><span class="n">data_a</span><span class="p">,</span> <span class="n">data_b</span><span class="p">,</span> <span class="n">cross_points</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">_swap</span><span class="p">(</span><span class="n">data_a</span><span class="p">,</span> <span class="n">data_b</span><span class="p">,</span> <span class="n">cross_points</span><span class="p">):</span>
                 <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span> <span class="o">=</span> <span class="n">cross_points</span>
                 <span class="n">new_a</span> <span class="o">=</span> <span class="n">data_a</span><span class="p">[:</span><span class="n">c1</span><span class="p">]</span> <span class="o">+</span> <span class="n">data_b</span><span class="p">[</span><span class="n">c1</span><span class="p">:</span><span class="n">c2</span><span class="p">]</span> <span class="o">+</span> <span class="n">data_a</span><span class="p">[</span><span class="n">c2</span><span class="p">:]</span>
                 <span class="n">new_b</span> <span class="o">=</span> <span class="n">data_b</span><span class="p">[:</span><span class="n">c1</span><span class="p">]</span> <span class="o">+</span> <span class="n">data_a</span><span class="p">[</span><span class="n">c1</span><span class="p">:</span><span class="n">c2</span><span class="p">]</span> <span class="o">+</span> <span class="n">data_b</span><span class="p">[</span><span class="n">c2</span><span class="p">:]</span>
                 <span class="k">return</span> <span class="n">new_a</span><span class="p">,</span> <span class="n">new_b</span>
 
-            <span class="k">def</span> <span class="nf">_map</span><span class="p">(</span><span class="n">swapped</span><span class="p">,</span> <span class="n">cross_points</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">_map</span><span class="p">(</span><span class="n">swapped</span><span class="p">,</span> <span class="n">cross_points</span><span class="p">):</span>
                 <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">swapped</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                 <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span> <span class="o">=</span> <span class="n">cross_points</span>
                 <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="o">=</span> <span class="n">swapped</span>
@@ -223,19 +223,19 @@
 
 <div class="viewcode-block" id="PMXCrossover.get_number_of_parents">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.PMXCrossover.get_number_of_parents">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="PMXCrossover.get_number_of_children">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.PMXCrossover.get_number_of_children">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="PMXCrossover.get_name">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.PMXCrossover.get_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Partially Matched crossover&quot;</span></div>
 </div>
 
@@ -243,13 +243,13 @@
 
 <div class="viewcode-block" id="CXCrossover">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.CXCrossover">[docs]</a>
-<span class="k">class</span> <span class="nc">CXCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">PermutationSolution</span><span class="p">,</span> <span class="n">PermutationSolution</span><span class="p">]):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CXCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">PermutationSolution</span><span class="p">,</span> <span class="n">PermutationSolution</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CXCrossover</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
 
 <div class="viewcode-block" id="CXCrossover.execute">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.CXCrossover.execute">[docs]</a>
-    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PermutationSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PermutationSolution</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PermutationSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PermutationSolution</span><span class="p">]:</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The number of parents is not two: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)))</span>
 
@@ -278,19 +278,19 @@
 
 <div class="viewcode-block" id="CXCrossover.get_number_of_parents">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.CXCrossover.get_number_of_parents">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="CXCrossover.get_number_of_children">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.CXCrossover.get_number_of_children">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="CXCrossover.get_name">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.CXCrossover.get_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Cycle crossover&quot;</span></div>
 </div>
 
@@ -298,10 +298,10 @@
 
 <div class="viewcode-block" id="SBXCrossover">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.SBXCrossover">[docs]</a>
-<span class="k">class</span> <span class="nc">SBXCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">,</span> <span class="n">FloatSolution</span><span class="p">]):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SBXCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">,</span> <span class="n">FloatSolution</span><span class="p">]):</span>
     <span class="n">__EPS</span> <span class="o">=</span> <span class="mf">1.0e-14</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">distribution_index</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">distribution_index</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SBXCrossover</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">=</span> <span class="n">distribution_index</span>
         <span class="k">if</span> <span class="n">distribution_index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -309,7 +309,7 @@
 
 <div class="viewcode-block" id="SBXCrossover.execute">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.SBXCrossover.execute">[docs]</a>
-    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
         <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">FloatSolution</span><span class="p">),</span> <span class="s2">&quot;Solution type invalid: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
         <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">FloatSolution</span><span class="p">),</span> <span class="s2">&quot;Solution type invalid&quot;</span><span class="p">)</span>
         <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;The number of parents is not two: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)))</span>
@@ -376,19 +376,19 @@
 
 <div class="viewcode-block" id="SBXCrossover.get_number_of_parents">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.SBXCrossover.get_number_of_parents">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="SBXCrossover.get_number_of_children">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.SBXCrossover.get_number_of_children">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="SBXCrossover.get_name">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.SBXCrossover.get_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;SBX crossover&quot;</span></div>
 </div>
 
@@ -396,16 +396,16 @@
 
 <div class="viewcode-block" id="IntegerSBXCrossover">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.IntegerSBXCrossover">[docs]</a>
-<span class="k">class</span> <span class="nc">IntegerSBXCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">IntegerSolution</span><span class="p">,</span> <span class="n">IntegerSolution</span><span class="p">]):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IntegerSBXCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">IntegerSolution</span><span class="p">,</span> <span class="n">IntegerSolution</span><span class="p">]):</span>
     <span class="n">__EPS</span> <span class="o">=</span> <span class="mf">1.0e-14</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">distribution_index</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">distribution_index</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">IntegerSBXCrossover</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">=</span> <span class="n">distribution_index</span>
 
 <div class="viewcode-block" id="IntegerSBXCrossover.execute">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.IntegerSBXCrossover.execute">[docs]</a>
-    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">IntegerSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">IntegerSolution</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">IntegerSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">IntegerSolution</span><span class="p">]:</span>
         <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">IntegerSolution</span><span class="p">),</span> <span class="s2">&quot;Solution type invalid&quot;</span><span class="p">)</span>
         <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">IntegerSolution</span><span class="p">),</span> <span class="s2">&quot;Solution type invalid&quot;</span><span class="p">)</span>
         <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;The number of parents is not two: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)))</span>
@@ -472,19 +472,19 @@
 
 <div class="viewcode-block" id="IntegerSBXCrossover.get_number_of_parents">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.IntegerSBXCrossover.get_number_of_parents">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="IntegerSBXCrossover.get_number_of_children">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.IntegerSBXCrossover.get_number_of_children">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="IntegerSBXCrossover.get_name">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.IntegerSBXCrossover.get_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;Integer SBX crossover&quot;</span></div>
 </div>
 
@@ -492,13 +492,13 @@
 
 <div class="viewcode-block" id="SPXCrossover">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.SPXCrossover">[docs]</a>
-<span class="k">class</span> <span class="nc">SPXCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">BinarySolution</span><span class="p">,</span> <span class="n">BinarySolution</span><span class="p">]):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SPXCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">BinarySolution</span><span class="p">,</span> <span class="n">BinarySolution</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SPXCrossover</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SPXCrossover.execute">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.SPXCrossover.execute">[docs]</a>
-    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">BinarySolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">BinarySolution</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">BinarySolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">BinarySolution</span><span class="p">]:</span>
         <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">is</span> <span class="n">BinarySolution</span><span class="p">,</span> <span class="s2">&quot;Solution type invalid&quot;</span><span class="p">)</span>
         <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">is</span> <span class="n">BinarySolution</span><span class="p">,</span> <span class="s2">&quot;Solution type invalid&quot;</span><span class="p">)</span>
         <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;The number of parents is not two: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)))</span>
@@ -546,19 +546,19 @@
 
 <div class="viewcode-block" id="SPXCrossover.get_number_of_parents">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.SPXCrossover.get_number_of_parents">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="SPXCrossover.get_number_of_children">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.SPXCrossover.get_number_of_children">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="SPXCrossover.get_name">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.SPXCrossover.get_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;Single point crossover&quot;</span></div>
 </div>
 
@@ -566,14 +566,14 @@
 
 <div class="viewcode-block" id="DifferentialEvolutionCrossover">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.DifferentialEvolutionCrossover">[docs]</a>
-<span class="k">class</span> <span class="nc">DifferentialEvolutionCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">,</span> <span class="n">FloatSolution</span><span class="p">]):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DifferentialEvolutionCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">,</span> <span class="n">FloatSolution</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;This operator receives two parameters: the current individual and an array of three parent individuals. The</span>
 <span class="sd">    best and rand variants depends on the third parent, according whether it represents the current of the &quot;best&quot;</span>
 <span class="sd">    individual or a random_search one. The implementation of both variants are the same, due to that the parent selection is</span>
 <span class="sd">    external to the crossover operator.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">CR</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">F</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">K</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">CR</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">F</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">K</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DifferentialEvolutionCrossover</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">CR</span> <span class="o">=</span> <span class="n">CR</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="o">=</span> <span class="n">F</span>
@@ -583,7 +583,7 @@
 
 <div class="viewcode-block" id="DifferentialEvolutionCrossover.execute">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.DifferentialEvolutionCrossover.execute">[docs]</a>
-    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute the differential evolution crossover (&#39;best/1/bin&#39; variant in jMetal).&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_number_of_parents</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The number of parents is not </span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_number_of_parents</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)))</span>
@@ -611,19 +611,19 @@
 
 <div class="viewcode-block" id="DifferentialEvolutionCrossover.get_number_of_parents">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.DifferentialEvolutionCrossover.get_number_of_parents">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">3</span></div>
 
 
 <div class="viewcode-block" id="DifferentialEvolutionCrossover.get_number_of_children">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.DifferentialEvolutionCrossover.get_number_of_children">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">1</span></div>
 
 
 <div class="viewcode-block" id="DifferentialEvolutionCrossover.get_name">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.DifferentialEvolutionCrossover.get_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;Differential Evolution crossover&quot;</span></div>
 </div>
 
@@ -631,10 +631,10 @@
 
 <div class="viewcode-block" id="CompositeCrossover">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.CompositeCrossover">[docs]</a>
-<span class="k">class</span> <span class="nc">CompositeCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">CompositeSolution</span><span class="p">,</span> <span class="n">CompositeSolution</span><span class="p">]):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CompositeCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">CompositeSolution</span><span class="p">,</span> <span class="n">CompositeSolution</span><span class="p">]):</span>
     <span class="n">__EPS</span> <span class="o">=</span> <span class="mf">1.0e-14</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crossover_operator_list</span><span class="p">:</span> <span class="p">[</span><span class="n">Crossover</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crossover_operator_list</span><span class="p">:</span> <span class="p">[</span><span class="n">Crossover</span><span class="p">]):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CompositeCrossover</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 
         <span class="n">Check</span><span class="o">.</span><span class="n">is_not_none</span><span class="p">(</span><span class="n">crossover_operator_list</span><span class="p">)</span>
@@ -647,7 +647,7 @@
 
 <div class="viewcode-block" id="CompositeCrossover.execute">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.CompositeCrossover.execute">[docs]</a>
-    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solutions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">CompositeSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">CompositeSolution</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solutions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">CompositeSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">CompositeSolution</span><span class="p">]:</span>
         <span class="n">Check</span><span class="o">.</span><span class="n">is_not_none</span><span class="p">(</span><span class="n">solutions</span><span class="p">)</span>
         <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solutions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;The number of parents is not two: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solutions</span><span class="p">)))</span>
 
@@ -667,19 +667,19 @@
 
 <div class="viewcode-block" id="CompositeCrossover.get_number_of_parents">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.CompositeCrossover.get_number_of_parents">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="CompositeCrossover.get_number_of_children">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.CompositeCrossover.get_number_of_children">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="CompositeCrossover.get_name">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.CompositeCrossover.get_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;Composite crossover&quot;</span></div>
 </div>
 
@@ -690,7 +690,7 @@
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">

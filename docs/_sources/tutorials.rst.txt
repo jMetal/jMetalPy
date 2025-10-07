@@ -16,3 +16,9 @@ Getting started
 
    tutorials/experiment
    tutorials/statistics
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Tools:
+
+   tutorials/quality_indicators_cli

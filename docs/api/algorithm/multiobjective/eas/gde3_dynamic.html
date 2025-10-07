@@ -14,12 +14,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <title>Dynamic GDE3 &#8212; jMetalPy 1.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css?v=e05a0192" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=9aa90875" />
     <script src="../../../../_static/documentation_options.js?v=030dc6f6"></script>
-    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -31,7 +31,7 @@
    
 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -140,30 +140,30 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jmetal.algorithm.multiobjective.gde3</span> <span class="kn">import</span> <span class="n">DynamicGDE3</span>
-<span class="kn">from</span> <span class="nn">jmetal.problem.multiobjective.fda</span> <span class="kn">import</span> <span class="n">FDA2</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.observable</span> <span class="kn">import</span> <span class="n">TimeCounter</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.observer</span> <span class="kn">import</span> <span class="n">PlotFrontToFileObserver</span><span class="p">,</span> <span class="n">WriteFrontToFileObserver</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">StoppingByEvaluations</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from jmetal.algorithm.multiobjective.gde3 import DynamicGDE3
+from jmetal.problem.multiobjective.fda import FDA2
+from jmetal.util.observable import TimeCounter
+from jmetal.util.observer import PlotFrontToFileObserver, WriteFrontToFileObserver
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
-<span class="n">problem</span> <span class="o">=</span> <span class="n">FDA2</span><span class="p">()</span>
+problem = FDA2()
 
-<span class="n">time_counter</span> <span class="o">=</span> <span class="n">TimeCounter</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">time_counter</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">problem</span><span class="p">)</span>
-<span class="n">time_counter</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+time_counter = TimeCounter(delay=1)
+time_counter.observable.register(problem)
+time_counter.start()
 
-<span class="n">algorithm</span> <span class="o">=</span> <span class="n">DynamicGDE3</span><span class="p">(</span>
-    <span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">,</span>
-    <span class="n">population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">cr</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-    <span class="n">f</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-    <span class="n">termination_criterion</span><span class="o">=</span><span class="n">StoppingByEvaluations</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
-<span class="p">)</span>
+algorithm = DynamicGDE3(
+    problem=problem,
+    population_size=100,
+    cr=0.5,
+    f=0.5,
+    termination_criterion=StoppingByEvaluations(max=500)
+)
 
-<span class="n">algorithm</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">observer</span><span class="o">=</span><span class="n">PlotFrontToFileObserver</span><span class="p">(</span><span class="s1">&#39;front_plot&#39;</span><span class="p">))</span>
-<span class="n">algorithm</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">observer</span><span class="o">=</span><span class="n">WriteFrontToFileObserver</span><span class="p">(</span><span class="s1">&#39;front_files&#39;</span><span class="p">))</span>
+algorithm.observable.register(observer=PlotFrontToFileObserver(&#39;front_plot&#39;))
+algorithm.observable.register(observer=WriteFrontToFileObserver(&#39;front_files&#39;))
 
-<span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+algorithm.run()
 </pre></div>
 </div>
 </div>
@@ -176,7 +176,7 @@
 <dd><p>Bases: <a class="reference internal" href="gde3.html#jmetal.algorithm.multiobjective.gde3.GDE3" title="jmetal.algorithm.multiobjective.gde3.GDE3"><code class="xref py py-class docutils literal notranslate"><span class="pre">GDE3</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DynamicAlgorithm</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="jmetal.algorithm.multiobjective.gde3.DynamicGDE3.restart">
-<span class="sig-name descname"><span class="pre">restart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/gde3.html#DynamicGDE3.restart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.gde3.DynamicGDE3.restart" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">restart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../../_modules/jmetal/algorithm/multiobjective/gde3.html#DynamicGDE3.restart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.algorithm.multiobjective.gde3.DynamicGDE3.restart" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -202,7 +202,7 @@
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">

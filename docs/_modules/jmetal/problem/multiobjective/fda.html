@@ -13,11 +13,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <title>jmetal.problem.multiobjective.fda &#8212; jMetalPy 1.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css?v=e05a0192" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=9aa90875" />
     <script src="../../../../_static/documentation_options.js?v=030dc6f6"></script>
-    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -27,7 +27,7 @@
    
 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -109,13 +109,13 @@
           <div class="document clearer body">
             
   <h1>Source code for jmetal.problem.multiobjective.fda</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
-<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">cos</span><span class="p">,</span> <span class="n">floor</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="nb">pow</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">sqrt</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">cos</span><span class="p">,</span> <span class="n">floor</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="nb">pow</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">sqrt</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 
-<span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="kn">import</span> <span class="n">DynamicProblem</span><span class="p">,</span> <span class="n">FloatProblem</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="kn">import</span> <span class="n">FloatSolution</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">DynamicProblem</span><span class="p">,</span> <span class="n">FloatProblem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.solution</span><span class="w"> </span><span class="kn">import</span> <span class="n">FloatSolution</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">.. module:: FDA</span>
@@ -128,8 +128,8 @@
 
 <div class="viewcode-block" id="FDA">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA">[docs]</a>
-<span class="k">class</span> <span class="nc">FDA</span><span class="p">(</span><span class="n">DynamicProblem</span><span class="p">,</span> <span class="n">FloatProblem</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FDA</span><span class="p">(</span><span class="n">DynamicProblem</span><span class="p">,</span> <span class="n">FloatProblem</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FDA</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tau_T</span> <span class="o">=</span> <span class="mi">5</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nT</span> <span class="o">=</span> <span class="mi">10</span>
@@ -138,7 +138,7 @@
 
 <div class="viewcode-block" id="FDA.update">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA.update">[docs]</a>
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">counter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;COUNTER&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nT</span><span class="p">)</span> <span class="o">*</span> <span class="n">floor</span><span class="p">(</span><span class="n">counter</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau_T</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">problem_modified</span> <span class="o">=</span> <span class="kc">True</span></div>
@@ -146,20 +146,20 @@
 
 <div class="viewcode-block" id="FDA.the_problem_has_changed">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA.the_problem_has_changed">[docs]</a>
-    <span class="k">def</span> <span class="nf">the_problem_has_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">the_problem_has_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem_modified</span></div>
 
 
 <div class="viewcode-block" id="FDA.clear_changed">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA.clear_changed">[docs]</a>
-    <span class="k">def</span> <span class="nf">clear_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">problem_modified</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 
 <div class="viewcode-block" id="FDA.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA.evaluate">[docs]</a>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">):</span>
         <span class="k">pass</span></div>
 </div>
 
@@ -167,13 +167,13 @@
 
 <div class="viewcode-block" id="FDA1">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA1">[docs]</a>
-<span class="k">class</span> <span class="nc">FDA1</span><span class="p">(</span><span class="n">FDA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FDA1</span><span class="p">(</span><span class="n">FDA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Problem FDA1.</span>
 
 <span class="sd">    .. note:: Bi-objective dynamic unconstrained problem. The default number of variables is 100.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;:param number_of_variables: Number of decision variables of the problem.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FDA1</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">=</span> <span class="n">number_of_variables</span>
@@ -190,7 +190,7 @@
 
 <div class="viewcode-block" id="FDA1.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA1.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__eval_g</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
         <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__eval_h</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">g</span><span class="p">)</span>
 
@@ -200,18 +200,18 @@
         <span class="k">return</span> <span class="n">solution</span></div>
 
 
-    <span class="k">def</span> <span class="nf">__eval_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__eval_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">):</span>
         <span class="n">gT</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
         <span class="n">g</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">pow</span><span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">gT</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">1</span><span class="p">:]])</span>
 
         <span class="k">return</span> <span class="n">g</span>
 
-    <span class="k">def</span> <span class="nf">__eval_h</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__eval_h</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">f</span> <span class="o">/</span> <span class="n">g</span><span class="p">)</span>
 
 <div class="viewcode-block" id="FDA1.get_name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA1.get_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;FDA1&quot;</span></div>
 </div>
 
@@ -219,13 +219,13 @@
 
 <div class="viewcode-block" id="FDA2">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA2">[docs]</a>
-<span class="k">class</span> <span class="nc">FDA2</span><span class="p">(</span><span class="n">FDA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FDA2</span><span class="p">(</span><span class="n">FDA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Problem FDA2</span>
 
 <span class="sd">    .. note:: Bi-objective dynamic unconstrained problem. The default number of variables is 31.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">31</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">31</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;:param number_of_variables: Number of decision variables of the problem.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FDA2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">=</span> <span class="n">number_of_variables</span>
@@ -242,7 +242,7 @@
 
 <div class="viewcode-block" id="FDA2.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA2.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__eval_g</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">))</span>
         <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__eval_h</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">g</span><span class="p">)</span>
 
@@ -252,19 +252,19 @@
         <span class="k">return</span> <span class="n">solution</span></div>
 
 
-    <span class="k">def</span> <span class="nf">__eval_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">lower_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">upper_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__eval_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">lower_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">upper_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="n">g</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">pow</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">lower_limit</span><span class="p">:</span><span class="n">upper_limit</span><span class="p">]])</span>
         <span class="n">g</span> <span class="o">+=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">pow</span><span class="p">(</span><span class="n">v</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">upper_limit</span><span class="p">:]])</span>
 
         <span class="k">return</span> <span class="n">g</span>
 
-    <span class="k">def</span> <span class="nf">__eval_h</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__eval_h</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">ht</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="o">+</span> <span class="mf">4.8</span> <span class="o">*</span> <span class="nb">pow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
         <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="nb">pow</span><span class="p">(</span><span class="n">f</span> <span class="o">/</span> <span class="n">g</span><span class="p">,</span> <span class="n">ht</span><span class="p">)</span>
 
 <div class="viewcode-block" id="FDA2.get_name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA2.get_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;FDA2&quot;</span></div>
 </div>
 
@@ -272,13 +272,13 @@
 
 <div class="viewcode-block" id="FDA3">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA3">[docs]</a>
-<span class="k">class</span> <span class="nc">FDA3</span><span class="p">(</span><span class="n">FDA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FDA3</span><span class="p">(</span><span class="n">FDA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Problem FDA3</span>
 
 <span class="sd">    .. note:: Bi-objective dynamic unconstrained problem. The default number of variables is 30.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;:param number_of_variables: Number of decision variables of the problem.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FDA3</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">=</span> <span class="n">number_of_variables</span>
@@ -298,7 +298,7 @@
 
 <div class="viewcode-block" id="FDA3.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA3.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__eval_g</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">limitInfII</span><span class="p">)</span>
         <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__eval_h</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">g</span><span class="p">)</span>
 
@@ -308,7 +308,7 @@
         <span class="k">return</span> <span class="n">solution</span></div>
 
 
-    <span class="k">def</span> <span class="nf">__eval_f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">lower_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">upper_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__eval_f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">lower_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">upper_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="n">f</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="n">aux</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
         <span class="n">ft</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">aux</span><span class="p">)</span>
@@ -316,20 +316,20 @@
 
         <span class="k">return</span> <span class="n">f</span>
 
-    <span class="k">def</span> <span class="nf">__eval_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">lower_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__eval_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">lower_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="n">gt</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">))</span>
         <span class="n">g</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">pow</span><span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">gt</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">lower_limit</span><span class="p">:]])</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">g</span> <span class="o">+</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">gt</span>
 
         <span class="k">return</span> <span class="n">g</span>
 
-    <span class="k">def</span> <span class="nf">__eval_h</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__eval_h</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">h</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">f</span> <span class="o">/</span> <span class="n">g</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">h</span>
 
 <div class="viewcode-block" id="FDA3.get_name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA3.get_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;FDA3&quot;</span></div>
 </div>
 
@@ -337,7 +337,7 @@
 
 <div class="viewcode-block" id="FDA4">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA4">[docs]</a>
-<span class="k">class</span> <span class="nc">FDA4</span><span class="p">(</span><span class="n">FDA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FDA4</span><span class="p">(</span><span class="n">FDA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Problem FDA4</span>
 
 <span class="sd">    .. note:: Three-objective dynamic unconstrained problem. The default number of variables is 12.</span>
@@ -345,7 +345,7 @@
 
     <span class="n">M</span> <span class="o">=</span> <span class="mi">3</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">12</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">12</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;:param number_of_variables: Number of decision variables of the problem.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FDA4</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">=</span> <span class="n">number_of_variables</span>
@@ -360,7 +360,7 @@
 
 <div class="viewcode-block" id="FDA4.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA4.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__eval_g</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__eval_f1</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
@@ -370,26 +370,26 @@
         <span class="k">return</span> <span class="n">solution</span></div>
 
 
-    <span class="k">def</span> <span class="nf">__eval_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">lower_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__eval_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">lower_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="n">gt</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">))</span>
         <span class="n">g</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">pow</span><span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">gt</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">lower_limit</span><span class="p">:]])</span>
 
         <span class="k">return</span> <span class="n">g</span>
 
-    <span class="k">def</span> <span class="nf">__eval_f1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__eval_f1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">f</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">g</span>
         <span class="n">mult</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">prod</span><span class="p">([</span><span class="n">cos</span><span class="p">(</span><span class="n">v</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]])</span>
 
         <span class="k">return</span> <span class="n">f</span> <span class="o">*</span> <span class="n">mult</span>
 
-    <span class="k">def</span> <span class="nf">__eval_fk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__eval_fk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">f</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">g</span>
         <span class="n">aux</span> <span class="o">=</span> <span class="n">sin</span><span class="p">((</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">-</span> <span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">pi</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
         <span class="n">mult</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">prod</span><span class="p">([</span><span class="n">cos</span><span class="p">(</span><span class="n">v</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">-</span> <span class="n">k</span><span class="p">]])</span>
 
         <span class="k">return</span> <span class="n">f</span> <span class="o">*</span> <span class="n">mult</span> <span class="o">*</span> <span class="n">aux</span>
 
-    <span class="k">def</span> <span class="nf">__eval_fm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__eval_fm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">fm</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">g</span>
         <span class="n">fm</span> <span class="o">*=</span> <span class="n">sin</span><span class="p">((</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">pi</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
 
@@ -397,7 +397,7 @@
 
 <div class="viewcode-block" id="FDA4.get_name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA4.get_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;FDA4&quot;</span></div>
 </div>
 
@@ -405,7 +405,7 @@
 
 <div class="viewcode-block" id="FDA5">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA5">[docs]</a>
-<span class="k">class</span> <span class="nc">FDA5</span><span class="p">(</span><span class="n">FDA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FDA5</span><span class="p">(</span><span class="n">FDA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Problem FDA5</span>
 
 <span class="sd">    .. note:: Three-objective dynamic unconstrained problem. The default number of variables is 12.</span>
@@ -413,7 +413,7 @@
 
     <span class="n">M</span> <span class="o">=</span> <span class="mi">3</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">12</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">12</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;:param number_of_variables: Number of decision variables of the problem.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FDA5</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">=</span> <span class="n">number_of_variables</span>
@@ -428,7 +428,7 @@
 
 <div class="viewcode-block" id="FDA5.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA5.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__eval_g</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">ft</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">100.0</span> <span class="o">*</span> <span class="nb">pow</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">),</span> <span class="mf">4.0</span><span class="p">)</span>
 
@@ -439,19 +439,19 @@
         <span class="k">return</span> <span class="n">solution</span></div>
 
 
-    <span class="k">def</span> <span class="nf">__eval_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">lower_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__eval_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">lower_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="n">gt</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">))</span>
         <span class="n">g</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">pow</span><span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">gt</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">lower_limit</span><span class="p">:]])</span>
 
         <span class="k">return</span> <span class="n">g</span>
 
-    <span class="k">def</span> <span class="nf">__eval_f1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ft</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__eval_f1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ft</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">f</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">g</span>
         <span class="n">mult</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">prod</span><span class="p">([</span><span class="n">cos</span><span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">ft</span><span class="p">)</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]])</span>
 
         <span class="k">return</span> <span class="n">f</span> <span class="o">*</span> <span class="n">mult</span>
 
-    <span class="k">def</span> <span class="nf">__eval_fk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">ft</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__eval_fk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">ft</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">f</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">g</span>
 
         <span class="n">mult</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">prod</span><span class="p">([</span><span class="n">cos</span><span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">ft</span><span class="p">)</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">-</span> <span class="n">k</span><span class="p">]])</span>
@@ -460,7 +460,7 @@
 
         <span class="k">return</span> <span class="n">f</span> <span class="o">*</span> <span class="n">mult</span>
 
-    <span class="k">def</span> <span class="nf">__eval_fm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ft</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__eval_fm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ft</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">fm</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">g</span>
         <span class="n">y_1</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ft</span><span class="p">)</span>
         <span class="n">mult</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">y_1</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
@@ -469,7 +469,7 @@
 
 <div class="viewcode-block" id="FDA5.get_name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.fda.FDA5.get_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;FDA5&quot;</span></div>
 </div>
 
@@ -480,7 +480,7 @@
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">

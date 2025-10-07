@@ -13,11 +13,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <title>jmetal.problem.singleobjective.unconstrained &#8212; jMetalPy 1.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css?v=e05a0192" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=9aa90875" />
     <script src="../../../../_static/documentation_options.js?v=030dc6f6"></script>
-    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -27,7 +27,7 @@
    
 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -109,11 +109,11 @@
           <div class="document clearer body">
             
   <h1>Source code for jmetal.problem.singleobjective.unconstrained</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">random</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
 
-<span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="kn">import</span> <span class="n">BinaryProblem</span><span class="p">,</span> <span class="n">FloatProblem</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="kn">import</span> <span class="n">BinarySolution</span><span class="p">,</span> <span class="n">FloatSolution</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">BinaryProblem</span><span class="p">,</span> <span class="n">FloatProblem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.solution</span><span class="w"> </span><span class="kn">import</span> <span class="n">BinarySolution</span><span class="p">,</span> <span class="n">FloatSolution</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">.. module:: unconstrained</span>
@@ -126,12 +126,12 @@
 
 <div class="viewcode-block" id="OneMax">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.OneMax">[docs]</a>
-<span class="k">class</span> <span class="nc">OneMax</span><span class="p">(</span><span class="n">BinaryProblem</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OneMax</span><span class="p">(</span><span class="n">BinaryProblem</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; The implementation of the OneMax problems defines a single binary variable. This variable</span>
 <span class="sd">    will contain the bit string representing the solutions.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_bits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_bits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">OneMax</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits_per_variable</span> <span class="o">=</span> <span class="p">[</span><span class="n">number_of_bits</span><span class="p">]</span>
 
@@ -140,25 +140,25 @@
 
 <div class="viewcode-block" id="OneMax.number_of_variables">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.OneMax.number_of_variables">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">1</span></div>
 
 
 <div class="viewcode-block" id="OneMax.number_of_objectives">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.OneMax.number_of_objectives">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">1</span></div>
 
 
 <div class="viewcode-block" id="OneMax.number_of_constraints">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.OneMax.number_of_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span></div>
 
 
 <div class="viewcode-block" id="OneMax.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.OneMax.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">BinarySolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">BinarySolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
         <span class="n">counter_of_ones</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">bits</span> <span class="ow">in</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="k">if</span> <span class="n">bits</span><span class="p">:</span>
@@ -171,7 +171,7 @@
 
 <div class="viewcode-block" id="OneMax.create_solution">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.OneMax.create_solution">[docs]</a>
-    <span class="k">def</span> <span class="nf">create_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
         <span class="n">new_solution</span> <span class="o">=</span> <span class="n">BinarySolution</span><span class="p">(</span><span class="n">number_of_variables</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">number_of_objectives</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">new_solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span> <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits_per_variable</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
         <span class="k">return</span> <span class="n">new_solution</span></div>
@@ -179,7 +179,7 @@
 
 <div class="viewcode-block" id="OneMax.name">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.OneMax.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;OneMax&quot;</span></div>
 </div>
 
@@ -187,8 +187,8 @@
 
 <div class="viewcode-block" id="Sphere">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.Sphere">[docs]</a>
-<span class="k">class</span> <span class="nc">Sphere</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Sphere</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Sphere</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
@@ -202,19 +202,19 @@
 
 <div class="viewcode-block" id="Sphere.number_of_objectives">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.Sphere.number_of_objectives">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">1</span></div>
 
 
 <div class="viewcode-block" id="Sphere.number_of_constraints">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.Sphere.number_of_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span></div>
 
 
 <div class="viewcode-block" id="Sphere.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.Sphere.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">total</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">:</span>
             <span class="n">total</span> <span class="o">+=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span>
@@ -226,7 +226,7 @@
 
 <div class="viewcode-block" id="Sphere.name">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.Sphere.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;Sphere&quot;</span></div>
 </div>
 
@@ -234,8 +234,8 @@
 
 <div class="viewcode-block" id="Rastrigin">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.Rastrigin">[docs]</a>
-<span class="k">class</span> <span class="nc">Rastrigin</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Rastrigin</span><span class="p">(</span><span class="n">FloatProblem</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Rastrigin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
@@ -249,19 +249,19 @@
 
 <div class="viewcode-block" id="Rastrigin.number_of_objectives">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.Rastrigin.number_of_objectives">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">1</span></div>
 
 
 <div class="viewcode-block" id="Rastrigin.number_of_constraints">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.Rastrigin.number_of_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span></div>
 
 
 <div class="viewcode-block" id="Rastrigin.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.Rastrigin.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">a</span> <span class="o">=</span> <span class="mf">10.0</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span>
@@ -276,7 +276,7 @@
 
 <div class="viewcode-block" id="Rastrigin.name">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.Rastrigin.name">[docs]</a>
-    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;Rastrigin&quot;</span></div>
 </div>
 
@@ -284,8 +284,8 @@
 
 <div class="viewcode-block" id="SubsetSum">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.SubsetSum">[docs]</a>
-<span class="k">class</span> <span class="nc">SubsetSum</span><span class="p">(</span><span class="n">BinaryProblem</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">W</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SubsetSum</span><span class="p">(</span><span class="n">BinaryProblem</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">W</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The goal is to find a subset S of W whose elements sum is closest to (without exceeding) C.</span>
 
 <span class="sd">        :param C: Large integer.</span>
@@ -301,24 +301,24 @@
 
 <div class="viewcode-block" id="SubsetSum.number_of_variables">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.SubsetSum.number_of_variables">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">1</span></div>
 
 <div class="viewcode-block" id="SubsetSum.number_of_objectives">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.SubsetSum.number_of_objectives">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">1</span></div>
 
 
 <div class="viewcode-block" id="SubsetSum.number_of_constraints">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.SubsetSum.number_of_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span></div>
 
 
 <div class="viewcode-block" id="SubsetSum.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.SubsetSum.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">BinarySolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">BinarySolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
         <span class="n">total_sum</span> <span class="o">=</span> <span class="mf">0.0</span>
 
         <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">bits</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
@@ -338,7 +338,7 @@
 
 <div class="viewcode-block" id="SubsetSum.create_solution">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.SubsetSum.create_solution">[docs]</a>
-    <span class="k">def</span> <span class="nf">create_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
         <span class="n">new_solution</span> <span class="o">=</span> <span class="n">BinarySolution</span><span class="p">(</span>
             <span class="n">number_of_variables</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">(),</span> <span class="n">number_of_objectives</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">()</span>
         <span class="p">)</span>
@@ -349,7 +349,7 @@
 
 <div class="viewcode-block" id="SubsetSum.name">
 <a class="viewcode-back" href="../../../../api/problem/singleobjective.html#jmetal.problem.singleobjective.unconstrained.SubsetSum.name">[docs]</a>
-    <span class="k">def</span>  <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w">  </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;Subset Sum&quot;</span></div>
 </div>
 
@@ -360,7 +360,7 @@
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">

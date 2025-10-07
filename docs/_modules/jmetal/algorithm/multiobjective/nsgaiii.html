@@ -13,11 +13,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <title>jmetal.algorithm.multiobjective.nsgaiii &#8212; jMetalPy 1.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css?v=e05a0192" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=9aa90875" />
     <script src="../../../../_static/documentation_options.js?v=030dc6f6"></script>
-    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -27,7 +27,7 @@
    
 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -109,24 +109,24 @@
           <div class="document clearer body">
             
   <h1>Source code for jmetal.algorithm.multiobjective.nsgaiii</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">TypeVar</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">TypeVar</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">LinAlgError</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">special</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.linalg</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinAlgError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">special</span>
 
-<span class="kn">from</span> <span class="nn">jmetal.algorithm.multiobjective.nsgaii</span> <span class="kn">import</span> <span class="n">NSGAII</span>
-<span class="kn">from</span> <span class="nn">jmetal.config</span> <span class="kn">import</span> <span class="n">store</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.operator</span> <span class="kn">import</span> <span class="n">Crossover</span><span class="p">,</span> <span class="n">Mutation</span><span class="p">,</span> <span class="n">Selection</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="kn">import</span> <span class="n">Problem</span>
-<span class="kn">from</span> <span class="nn">jmetal.operator.selection</span> <span class="kn">import</span> <span class="n">BinaryTournamentSelection</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.comparator</span> <span class="kn">import</span> <span class="n">Comparator</span><span class="p">,</span> <span class="n">MultiComparator</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.density_estimator</span> <span class="kn">import</span> <span class="n">CrowdingDistance</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.evaluator</span> <span class="kn">import</span> <span class="n">Evaluator</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.generator</span> <span class="kn">import</span> <span class="n">Generator</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.ranking</span> <span class="kn">import</span> <span class="n">FastNonDominatedRanking</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">TerminationCriterion</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.algorithm.multiobjective.nsgaii</span><span class="w"> </span><span class="kn">import</span> <span class="n">NSGAII</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">store</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.operator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Crossover</span><span class="p">,</span> <span class="n">Mutation</span><span class="p">,</span> <span class="n">Selection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">Problem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.operator.selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">BinaryTournamentSelection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.comparator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Comparator</span><span class="p">,</span> <span class="n">MultiComparator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.density_estimator</span><span class="w"> </span><span class="kn">import</span> <span class="n">CrowdingDistance</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.evaluator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evaluator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.generator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.ranking</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastNonDominatedRanking</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.termination_criterion</span><span class="w"> </span><span class="kn">import</span> <span class="n">TerminationCriterion</span>
 
 <span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">)</span>
 <span class="n">R</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;R&quot;</span><span class="p">)</span>
@@ -140,12 +140,12 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 
-<span class="k">class</span> <span class="nc">ReferenceDirectionFactory</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ReferenceDirectionFactory</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">=</span> <span class="n">n_dim</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scaling</span> <span class="o">=</span> <span class="n">scaling</span>
 
-    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">]])</span>
         <span class="k">else</span><span class="p">:</span>
@@ -155,12 +155,12 @@
             <span class="k">return</span> <span class="n">ref_dirs</span>
 
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">_compute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
 
 
-<span class="k">class</span> <span class="nc">UniformReferenceDirectionFactory</span><span class="p">(</span><span class="n">ReferenceDirectionFactory</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_points</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">n_partitions</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">UniformReferenceDirectionFactory</span><span class="p">(</span><span class="n">ReferenceDirectionFactory</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_points</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">n_partitions</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">n_dim</span><span class="p">,</span> <span class="n">scaling</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">n_points</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n_partitions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_partition_closest_to_points</span><span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">)</span>
@@ -170,16 +170,16 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">n_partitions</span> <span class="o">=</span> <span class="n">n_partitions</span>
 
-    <span class="k">def</span> <span class="nf">_compute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">uniform_reference_directions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_partitions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">uniform_reference_directions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_partitions</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">uniform_reference_directions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_partitions</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="n">ref_dirs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">ref_dir</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">n_dim</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__uniform_reference_directions</span><span class="p">(</span><span class="n">ref_dirs</span><span class="p">,</span> <span class="n">ref_dir</span><span class="p">,</span> <span class="n">n_partitions</span><span class="p">,</span> <span class="n">n_partitions</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">ref_dirs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__uniform_reference_directions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref_dirs</span><span class="p">,</span> <span class="n">ref_dir</span><span class="p">,</span> <span class="n">n_partitions</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">beta</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__uniform_reference_directions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref_dirs</span><span class="p">,</span> <span class="n">ref_dir</span><span class="p">,</span> <span class="n">n_partitions</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">beta</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">depth</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">ref_dir</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">ref_dir</span><span class="p">[</span><span class="n">depth</span><span class="p">]</span> <span class="o">=</span> <span class="n">beta</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">*</span> <span class="n">n_partitions</span><span class="p">)</span>
             <span class="n">ref_dirs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ref_dir</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span>
@@ -189,7 +189,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__uniform_reference_directions</span><span class="p">(</span><span class="n">ref_dirs</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">ref_dir</span><span class="p">),</span> <span class="n">n_partitions</span><span class="p">,</span> <span class="n">beta</span> <span class="o">-</span> <span class="n">i</span><span class="p">,</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_partition_closest_to_points</span><span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_partition_closest_to_points</span><span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">):</span>
         <span class="c1"># in this case the do method will always return one values anyway</span>
         <span class="k">if</span> <span class="n">n_dim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span>
@@ -203,11 +203,11 @@
         <span class="k">return</span> <span class="n">n_partitions</span> <span class="o">-</span> <span class="mi">1</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_n_points</span><span class="p">(</span><span class="n">n_partitions</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_n_points</span><span class="p">(</span><span class="n">n_partitions</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">special</span><span class="o">.</span><span class="n">binom</span><span class="p">(</span><span class="n">n_dim</span> <span class="o">+</span> <span class="n">n_partitions</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_partitions</span><span class="p">))</span>
 
 
-<span class="k">def</span> <span class="nf">get_extreme_points</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">n_objs</span><span class="p">,</span> <span class="n">ideal_point</span><span class="p">,</span> <span class="n">extreme_points</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_extreme_points</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">n_objs</span><span class="p">,</span> <span class="n">ideal_point</span><span class="p">,</span> <span class="n">extreme_points</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the Achievement Scalarization Function which is used for the extreme point decomposition.&quot;&quot;&quot;</span>
     <span class="n">asf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n_objs</span><span class="p">)</span>
     <span class="n">asf</span><span class="p">[</span><span class="n">asf</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e6</span>
@@ -229,7 +229,7 @@
     <span class="k">return</span> <span class="n">extreme_points</span>
 
 
-<span class="k">def</span> <span class="nf">get_nadir_point</span><span class="p">(</span><span class="n">extreme_points</span><span class="p">,</span> <span class="n">ideal_point</span><span class="p">,</span> <span class="n">worst_point</span><span class="p">,</span> <span class="n">worst_of_front</span><span class="p">,</span> <span class="n">worst_of_population</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_nadir_point</span><span class="p">(</span><span class="n">extreme_points</span><span class="p">,</span> <span class="n">ideal_point</span><span class="p">,</span> <span class="n">worst_point</span><span class="p">,</span> <span class="n">worst_of_front</span><span class="p">,</span> <span class="n">worst_of_population</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the axis intersects for a set of individuals and its extremes (construct hyperplane).&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="c1"># find the intercepts using gaussian elimination</span>
@@ -251,7 +251,7 @@
     <span class="k">return</span> <span class="n">nadir_point</span>
 
 
-<span class="k">def</span> <span class="nf">niching</span><span class="p">(</span><span class="n">pop</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">n_remaining</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">niche_count</span><span class="p">,</span> <span class="n">niche_of_individuals</span><span class="p">,</span> <span class="n">dist_to_niche</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">niching</span><span class="p">(</span><span class="n">pop</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">n_remaining</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">niche_count</span><span class="p">,</span> <span class="n">niche_of_individuals</span><span class="p">,</span> <span class="n">dist_to_niche</span><span class="p">):</span>
     <span class="n">survivors</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># boolean array of elements that are considered for each iteration</span>
@@ -298,7 +298,7 @@
     <span class="k">return</span> <span class="n">survivors</span>
 
 
-<span class="k">def</span> <span class="nf">associate_to_niches</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">niches</span><span class="p">,</span> <span class="n">ideal_point</span><span class="p">,</span> <span class="n">nadir_point</span><span class="p">,</span> <span class="n">utopian_epsilon</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">associate_to_niches</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">niches</span><span class="p">,</span> <span class="n">ideal_point</span><span class="p">,</span> <span class="n">nadir_point</span><span class="p">,</span> <span class="n">utopian_epsilon</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Associate each solution to a reference point.&quot;&quot;&quot;</span>
     <span class="n">utopian_point</span> <span class="o">=</span> <span class="n">ideal_point</span> <span class="o">-</span> <span class="n">utopian_epsilon</span>
 
@@ -308,7 +308,7 @@
     <span class="c1"># normalize by ideal point and intercepts</span>
     <span class="n">N</span> <span class="o">=</span> <span class="p">(</span><span class="n">F</span> <span class="o">-</span> <span class="n">utopian_point</span><span class="p">)</span> <span class="o">/</span> <span class="n">denom</span>
 
-    <span class="k">def</span> <span class="nf">compute_perpendicular_distance</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">ref_dirs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_perpendicular_distance</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">ref_dirs</span><span class="p">):</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">ref_dirs</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ref_dirs</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
@@ -329,8 +329,8 @@
     <span class="k">return</span> <span class="n">niche_of_individuals</span><span class="p">,</span> <span class="n">dist_to_niche</span>
 
 
-<span class="k">def</span> <span class="nf">compute_niche_count</span><span class="p">(</span><span class="n">n_niches</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">niche_of_individuals</span><span class="p">):</span>
-    <span class="n">niche_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_niches</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_niche_count</span><span class="p">(</span><span class="n">n_niches</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">niche_of_individuals</span><span class="p">):</span>
+    <span class="n">niche_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_niches</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
     <span class="n">index</span><span class="p">,</span> <span class="n">count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">niche_of_individuals</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">niche_count</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">count</span>
 
@@ -339,8 +339,8 @@
 
 <div class="viewcode-block" id="NSGAIII">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaiii.html#jmetal.algorithm.multiobjective.nsgaiii.NSGAIII">[docs]</a>
-<span class="k">class</span> <span class="nc">NSGAIII</span><span class="p">(</span><span class="n">NSGAII</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NSGAIII</span><span class="p">(</span><span class="n">NSGAII</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">reference_directions</span><span class="p">,</span>
         <span class="n">problem</span><span class="p">:</span> <span class="n">Problem</span><span class="p">,</span>
@@ -381,7 +381,7 @@
 
 <div class="viewcode-block" id="NSGAIII.replacement">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaiii.html#jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.replacement">[docs]</a>
-    <span class="k">def</span> <span class="nf">replacement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">offspring_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">replacement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">offspring_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Implements NSGA-III environmental selection based on reference points as described in:</span>
 
 <span class="sd">        * Deb, K., &amp; Jain, H. (2014). An Evolutionary Many-Objective Optimization</span>
@@ -443,8 +443,8 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_size</span><span class="p">:</span>
             <span class="c1"># if there is only one front</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fronts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">until_last_front</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
-                <span class="n">niche_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_directions</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+                <span class="n">until_last_front</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+                <span class="n">niche_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_directions</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
                 <span class="n">n_remaining</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_size</span>
             <span class="c1"># if some individuals already survived</span>
             <span class="k">else</span><span class="p">:</span>
@@ -470,7 +470,7 @@
 
 <div class="viewcode-block" id="NSGAIII.result">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaiii.html#jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.result">[docs]</a>
-    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return only non dominated solutions.&quot;&quot;&quot;</span>
         <span class="n">ranking</span> <span class="o">=</span> <span class="n">FastNonDominatedRanking</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dominance_comparator</span><span class="p">)</span>
         <span class="n">ranking</span><span class="o">.</span><span class="n">compute_ranking</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">population_size</span><span class="p">)</span>
@@ -480,7 +480,7 @@
 
 <div class="viewcode-block" id="NSGAIII.get_name">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/nsgaiii.html#jmetal.algorithm.multiobjective.nsgaiii.NSGAIII.get_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;NSGAIII&quot;</span></div>
 </div>
 
@@ -491,7 +491,7 @@
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">

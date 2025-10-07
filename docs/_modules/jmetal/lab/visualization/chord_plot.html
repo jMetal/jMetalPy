@@ -13,11 +13,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <title>jmetal.lab.visualization.chord_plot &#8212; jMetalPy 1.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css?v=e05a0192" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=9aa90875" />
     <script src="../../../../_static/documentation_options.js?v=030dc6f6"></script>
-    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -27,7 +27,7 @@
    
 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -109,28 +109,28 @@
           <div class="document clearer body">
             
   <h1>Source code for jmetal.lab.visualization.chord_plot</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">colorsys</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">colorsys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">patches</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">from</span> <span class="nn">matplotlib.path</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">patches</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
 
-<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="kn">import</span> <span class="n">FloatSolution</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.solution</span><span class="w"> </span><span class="kn">import</span> <span class="n">FloatSolution</span>
 
 
 <div class="viewcode-block" id="polar_to_cartesian">
 <a class="viewcode-back" href="../../../../tutorials/visualization.html#jmetal.lab.visualization.chord_plot.polar_to_cartesian">[docs]</a>
-<span class="k">def</span> <span class="nf">polar_to_cartesian</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">polar_to_cartesian</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)])</span></div>
 
 
 
 <div class="viewcode-block" id="draw_sector">
 <a class="viewcode-back" href="../../../../tutorials/visualization.html#jmetal.lab.visualization.chord_plot.draw_sector">[docs]</a>
-<span class="k">def</span> <span class="nf">draw_sector</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">draw_sector</span><span class="p">(</span>
     <span class="n">start_angle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_angle</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">ec</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">z_order</span><span class="o">=</span><span class="mi">1</span>
 <span class="p">):</span>
     <span class="k">if</span> <span class="n">start_angle</span> <span class="o">&gt;</span> <span class="n">end_angle</span><span class="p">:</span>
@@ -178,7 +178,7 @@
 
 <div class="viewcode-block" id="draw_chord">
 <a class="viewcode-back" href="../../../../tutorials/visualization.html#jmetal.lab.visualization.chord_plot.draw_chord">[docs]</a>
-<span class="k">def</span> <span class="nf">draw_chord</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">draw_chord</span><span class="p">(</span>
     <span class="n">start_angle1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">end_angle1</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
     <span class="n">start_angle2</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
@@ -246,7 +246,7 @@
 
 <div class="viewcode-block" id="hover_over_bin">
 <a class="viewcode-back" href="../../../../tutorials/visualization.html#jmetal.lab.visualization.chord_plot.hover_over_bin">[docs]</a>
-<span class="k">def</span> <span class="nf">hover_over_bin</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">handle_tickers</span><span class="p">,</span> <span class="n">handle_plots</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">fig</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">hover_over_bin</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">handle_tickers</span><span class="p">,</span> <span class="n">handle_plots</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">fig</span><span class="p">):</span>
     <span class="n">is_found</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">for</span> <span class="n">iobj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">handle_tickers</span><span class="p">)):</span>
@@ -271,7 +271,7 @@
 
 <div class="viewcode-block" id="chord_diagram">
 <a class="viewcode-back" href="../../../../tutorials/visualization.html#jmetal.lab.visualization.chord_plot.chord_diagram">[docs]</a>
-<span class="k">def</span> <span class="nf">chord_diagram</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">chord_diagram</span><span class="p">(</span>
     <span class="n">solutions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">],</span>
     <span class="n">nbins</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -506,7 +506,7 @@
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">

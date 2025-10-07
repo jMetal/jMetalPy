@@ -13,11 +13,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <title>jmetal.algorithm.multiobjective.gde3 &#8212; jMetalPy 1.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css?v=e05a0192" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=9aa90875" />
     <script src="../../../../_static/documentation_options.js?v=030dc6f6"></script>
-    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -27,7 +27,7 @@
    
 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -109,20 +109,18 @@
           <div class="document clearer body">
             
   <h1>Source code for jmetal.algorithm.multiobjective.gde3</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">TypeVar</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">TypeVar</span>
 
-<span class="kn">from</span> <span class="nn">jmetal.config</span> <span class="kn">import</span> <span class="n">store</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.algorithm</span> <span class="kn">import</span> <span class="n">DynamicAlgorithm</span><span class="p">,</span> <span class="n">EvolutionaryAlgorithm</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="kn">import</span> <span class="n">DynamicProblem</span><span class="p">,</span> <span class="n">Problem</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.solution</span> <span class="kn">import</span> <span class="n">FloatSolution</span>
-<span class="kn">from</span> <span class="nn">jmetal.operator.crossover</span> <span class="kn">import</span> <span class="n">DifferentialEvolutionCrossover</span>
-<span class="kn">from</span> <span class="nn">jmetal.operator.selection</span> <span class="kn">import</span> <span class="n">DifferentialEvolutionSelection</span>
-
-<span class="kn">from</span> <span class="nn">jmetal.operator.selection</span> <span class="kn">import</span> <span class="n">DifferentialEvolutionSelection</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.comparator</span> <span class="kn">import</span> <span class="n">Comparator</span><span class="p">,</span> <span class="n">DominanceComparator</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.evaluator</span> <span class="kn">import</span> <span class="n">Evaluator</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.generator</span> <span class="kn">import</span> <span class="n">Generator</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">TerminationCriterion</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">store</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.algorithm</span><span class="w"> </span><span class="kn">import</span> <span class="n">DynamicAlgorithm</span><span class="p">,</span> <span class="n">EvolutionaryAlgorithm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">DynamicProblem</span><span class="p">,</span> <span class="n">Problem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.solution</span><span class="w"> </span><span class="kn">import</span> <span class="n">FloatSolution</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.operator.crossover</span><span class="w"> </span><span class="kn">import</span> <span class="n">DifferentialEvolutionCrossover</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.operator.selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">DifferentialEvolutionSelection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.comparator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Comparator</span><span class="p">,</span> <span class="n">DominanceComparator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.evaluator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evaluator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.generator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.termination_criterion</span><span class="w"> </span><span class="kn">import</span> <span class="n">TerminationCriterion</span>
 
 <span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">)</span>
 <span class="n">R</span> <span class="o">=</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]</span>
@@ -130,8 +128,8 @@
 
 <div class="viewcode-block" id="GDE3">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3.html#jmetal.algorithm.multiobjective.gde3.GDE3">[docs]</a>
-<span class="k">class</span> <span class="nc">GDE3</span><span class="p">(</span><span class="n">EvolutionaryAlgorithm</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">,</span> <span class="n">FloatSolution</span><span class="p">]):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GDE3</span><span class="p">(</span><span class="n">EvolutionaryAlgorithm</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">,</span> <span class="n">FloatSolution</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">problem</span><span class="p">:</span> <span class="n">Problem</span><span class="p">,</span>
         <span class="n">population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -158,7 +156,7 @@
 
 <div class="viewcode-block" id="GDE3.selection">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3.html#jmetal.algorithm.multiobjective.gde3.GDE3.selection">[docs]</a>
-    <span class="k">def</span> <span class="nf">selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
         <span class="n">mating_pool</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">population_size</span><span class="p">):</span>
@@ -171,7 +169,7 @@
 
 <div class="viewcode-block" id="GDE3.reproduction">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3.html#jmetal.algorithm.multiobjective.gde3.GDE3.reproduction">[docs]</a>
-    <span class="k">def</span> <span class="nf">reproduction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mating_pool</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reproduction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mating_pool</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
         <span class="n">offspring_population</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">first_parent_index</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -187,7 +185,7 @@
 
 <div class="viewcode-block" id="GDE3.replacement">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3.html#jmetal.algorithm.multiobjective.gde3.GDE3.replacement">[docs]</a>
-    <span class="k">def</span> <span class="nf">replacement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">offspring_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">replacement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">offspring_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]]:</span>
         <span class="n">tmp_list</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">solution1</span><span class="p">,</span> <span class="n">solution2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">,</span> <span class="n">offspring_population</span><span class="p">):</span>
@@ -209,31 +207,31 @@
 
 <div class="viewcode-block" id="GDE3.create_initial_solutions">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3.html#jmetal.algorithm.multiobjective.gde3.GDE3.create_initial_solutions">[docs]</a>
-    <span class="k">def</span> <span class="nf">create_initial_solutions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_initial_solutions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">population_generator</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">population_size</span><span class="p">)]</span></div>
 
 
 <div class="viewcode-block" id="GDE3.evaluate">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3.html#jmetal.algorithm.multiobjective.gde3.GDE3.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">solution_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="GDE3.stopping_condition_is_met">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3.html#jmetal.algorithm.multiobjective.gde3.GDE3.stopping_condition_is_met">[docs]</a>
-    <span class="k">def</span> <span class="nf">stopping_condition_is_met</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stopping_condition_is_met</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">termination_criterion</span><span class="o">.</span><span class="n">is_met</span></div>
 
 
 <div class="viewcode-block" id="GDE3.result">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3.html#jmetal.algorithm.multiobjective.gde3.GDE3.result">[docs]</a>
-    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span></div>
 
 
 <div class="viewcode-block" id="GDE3.get_name">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3.html#jmetal.algorithm.multiobjective.gde3.GDE3.get_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;GDE3&quot;</span></div>
 </div>
 
@@ -241,8 +239,8 @@
 
 <div class="viewcode-block" id="DynamicGDE3">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3_dynamic.html#jmetal.algorithm.multiobjective.gde3.DynamicGDE3">[docs]</a>
-<span class="k">class</span> <span class="nc">DynamicGDE3</span><span class="p">(</span><span class="n">GDE3</span><span class="p">,</span> <span class="n">DynamicAlgorithm</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DynamicGDE3</span><span class="p">(</span><span class="n">GDE3</span><span class="p">,</span> <span class="n">DynamicAlgorithm</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">problem</span><span class="p">:</span> <span class="n">DynamicProblem</span><span class="p">,</span>
         <span class="n">population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -270,13 +268,13 @@
 
 <div class="viewcode-block" id="DynamicGDE3.restart">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3_dynamic.html#jmetal.algorithm.multiobjective.gde3.DynamicGDE3.restart">[docs]</a>
-    <span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">pass</span></div>
 
 
 <div class="viewcode-block" id="DynamicGDE3.update_progress">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3_dynamic.html#jmetal.algorithm.multiobjective.gde3.DynamicGDE3.update_progress">[docs]</a>
-    <span class="k">def</span> <span class="nf">update_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">the_problem_has_changed</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">clear_changed</span><span class="p">()</span>
@@ -289,7 +287,7 @@
 
 <div class="viewcode-block" id="DynamicGDE3.stopping_condition_is_met">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/gde3_dynamic.html#jmetal.algorithm.multiobjective.gde3.DynamicGDE3.stopping_condition_is_met">[docs]</a>
-    <span class="k">def</span> <span class="nf">stopping_condition_is_met</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stopping_condition_is_met</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">termination_criterion</span><span class="o">.</span><span class="n">is_met</span><span class="p">:</span>
             <span class="n">observable_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observable_data</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">observable</span><span class="o">.</span><span class="n">notify_all</span><span class="p">(</span><span class="o">**</span><span class="n">observable_data</span><span class="p">)</span>
@@ -307,7 +305,7 @@
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">

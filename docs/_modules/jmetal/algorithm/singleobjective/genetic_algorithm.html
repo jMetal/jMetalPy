@@ -13,11 +13,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <title>jmetal.algorithm.singleobjective.genetic_algorithm &#8212; jMetalPy 1.7.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css?v=e05a0192" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=9aa90875" />
     <script src="../../../../_static/documentation_options.js?v=030dc6f6"></script>
-    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="author" title="About these documents" href="../../../../about.html" />
@@ -27,7 +27,7 @@
    
 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -109,18 +109,18 @@
           <div class="document clearer body">
             
   <h1>Source code for jmetal.algorithm.singleobjective.genetic_algorithm</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cmp_to_key</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">TypeVar</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cmp_to_key</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">TypeVar</span>
 
-<span class="kn">from</span> <span class="nn">jmetal.config</span> <span class="kn">import</span> <span class="n">store</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.algorithm</span> <span class="kn">import</span> <span class="n">EvolutionaryAlgorithm</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.operator</span> <span class="kn">import</span> <span class="n">Crossover</span><span class="p">,</span> <span class="n">Mutation</span><span class="p">,</span> <span class="n">Selection</span>
-<span class="kn">from</span> <span class="nn">jmetal.core.problem</span> <span class="kn">import</span> <span class="n">Problem</span>
-<span class="kn">from</span> <span class="nn">jmetal.operator.selection</span> <span class="kn">import</span> <span class="n">BinaryTournamentSelection</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.comparator</span> <span class="kn">import</span> <span class="n">Comparator</span><span class="p">,</span> <span class="n">ObjectiveComparator</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.evaluator</span> <span class="kn">import</span> <span class="n">Evaluator</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.generator</span> <span class="kn">import</span> <span class="n">Generator</span>
-<span class="kn">from</span> <span class="nn">jmetal.util.termination_criterion</span> <span class="kn">import</span> <span class="n">TerminationCriterion</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">store</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.algorithm</span><span class="w"> </span><span class="kn">import</span> <span class="n">EvolutionaryAlgorithm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.operator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Crossover</span><span class="p">,</span> <span class="n">Mutation</span><span class="p">,</span> <span class="n">Selection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">Problem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.operator.selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">BinaryTournamentSelection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.comparator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Comparator</span><span class="p">,</span> <span class="n">ObjectiveComparator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.evaluator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evaluator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.generator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.termination_criterion</span><span class="w"> </span><span class="kn">import</span> <span class="n">TerminationCriterion</span>
 
 <span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">)</span>
 <span class="n">R</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;R&quot;</span><span class="p">)</span>
@@ -135,8 +135,8 @@
 
 <div class="viewcode-block" id="GeneticAlgorithm">
 <a class="viewcode-back" href="../../../../api/algorithm/singleobjective/genetic.algorithm.html#jmetal.algorithm.singleobjective.genetic_algorithm.GeneticAlgorithm">[docs]</a>
-<span class="k">class</span> <span class="nc">GeneticAlgorithm</span><span class="p">(</span><span class="n">EvolutionaryAlgorithm</span><span class="p">[</span><span class="n">S</span><span class="p">,</span> <span class="n">R</span><span class="p">]):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GeneticAlgorithm</span><span class="p">(</span><span class="n">EvolutionaryAlgorithm</span><span class="p">[</span><span class="n">S</span><span class="p">,</span> <span class="n">R</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">problem</span><span class="p">:</span> <span class="n">Problem</span><span class="p">,</span>
         <span class="n">population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -175,25 +175,25 @@
 
 <div class="viewcode-block" id="GeneticAlgorithm.create_initial_solutions">
 <a class="viewcode-back" href="../../../../api/algorithm/singleobjective/genetic.algorithm.html#jmetal.algorithm.singleobjective.genetic_algorithm.GeneticAlgorithm.create_initial_solutions">[docs]</a>
-    <span class="k">def</span> <span class="nf">create_initial_solutions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_initial_solutions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">population_generator</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">population_size</span><span class="p">)]</span></div>
 
 
 <div class="viewcode-block" id="GeneticAlgorithm.evaluate">
 <a class="viewcode-back" href="../../../../api/algorithm/singleobjective/genetic.algorithm.html#jmetal.algorithm.singleobjective.genetic_algorithm.GeneticAlgorithm.evaluate">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="GeneticAlgorithm.stopping_condition_is_met">
 <a class="viewcode-back" href="../../../../api/algorithm/singleobjective/genetic.algorithm.html#jmetal.algorithm.singleobjective.genetic_algorithm.GeneticAlgorithm.stopping_condition_is_met">[docs]</a>
-    <span class="k">def</span> <span class="nf">stopping_condition_is_met</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stopping_condition_is_met</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">termination_criterion</span><span class="o">.</span><span class="n">is_met</span></div>
 
 
 <div class="viewcode-block" id="GeneticAlgorithm.selection">
 <a class="viewcode-back" href="../../../../api/algorithm/singleobjective/genetic.algorithm.html#jmetal.algorithm.singleobjective.genetic_algorithm.GeneticAlgorithm.selection">[docs]</a>
-    <span class="k">def</span> <span class="nf">selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
         <span class="n">mating_population</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mating_pool_size</span><span class="p">):</span>
@@ -205,7 +205,7 @@
 
 <div class="viewcode-block" id="GeneticAlgorithm.reproduction">
 <a class="viewcode-back" href="../../../../api/algorithm/singleobjective/genetic.algorithm.html#jmetal.algorithm.singleobjective.genetic_algorithm.GeneticAlgorithm.reproduction">[docs]</a>
-    <span class="k">def</span> <span class="nf">reproduction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mating_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reproduction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mating_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
         <span class="n">number_of_parents_to_combine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crossover_operator</span><span class="o">.</span><span class="n">get_number_of_parents</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mating_population</span><span class="p">)</span> <span class="o">%</span> <span class="n">number_of_parents_to_combine</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
@@ -230,7 +230,7 @@
 
 <div class="viewcode-block" id="GeneticAlgorithm.replacement">
 <a class="viewcode-back" href="../../../../api/algorithm/singleobjective/genetic.algorithm.html#jmetal.algorithm.singleobjective.genetic_algorithm.GeneticAlgorithm.replacement">[docs]</a>
-    <span class="k">def</span> <span class="nf">replacement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">offspring_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">replacement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">offspring_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
         <span class="n">population</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">offspring_population</span><span class="p">)</span>
 
         <span class="n">population</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">cmp_to_key</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solution_comparator</span><span class="o">.</span><span class="n">compare</span><span class="p">))</span>
@@ -240,13 +240,13 @@
 
 <div class="viewcode-block" id="GeneticAlgorithm.result">
 <a class="viewcode-back" href="../../../../api/algorithm/singleobjective/genetic.algorithm.html#jmetal.algorithm.singleobjective.genetic_algorithm.GeneticAlgorithm.result">[docs]</a>
-    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">R</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">R</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solutions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="GeneticAlgorithm.get_name">
 <a class="viewcode-back" href="../../../../api/algorithm/singleobjective/genetic.algorithm.html#jmetal.algorithm.singleobjective.genetic_algorithm.GeneticAlgorithm.get_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;Genetic algorithm&quot;</span></div>
 </div>
 
@@ -257,7 +257,7 @@
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
