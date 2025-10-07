@@ -120,6 +120,7 @@ The current release of jMetalPy (v1.7.0) contains the following components:
 ## Changelog
 
 * [Current development version] 
+  * Add the IGD+ quality indicator
   * Add new bencharmk problems:
     * [eqdtlz.py](https://github.com/jMetal/jMetalPy/blob/main/src/jmetal/problem/multiobjective/eqdtlz.py)
     * [misc.py](https://github.com/jMetal/jMetalPy/blob/main/src/jmetal/problem/multiobjective/misc.py)
