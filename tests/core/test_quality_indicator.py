@@ -167,13 +167,15 @@ class InvertedGenerationalDistanceTestCases(unittest.TestCase):
         self.assertAlmostEqual(0.0, result, delta=EPSILON_TEST_ATOL)
 
     def test_uniform_shift_2d(self):
-        """Uniform shift in 2D: distances = sqrt(0.1^2 + 0.1^2) = 0.1414..."""
+        """Uniform shift in 2D using corrected IGD formula (L2 norm)"""
         shifted_fronts = np.array([[0.2, 0.3], [0.4, 0.5]])
         shifted_reference = np.array([[0.1, 0.2], [0.3, 0.4]])
         indicator = InvertedGenerationalDistance(shifted_reference)
         result = indicator.compute(shifted_fronts)
+        # Using L2 norm formula: sqrt(sum(d²))/N
         # Each distance = sqrt(0.1^2 + 0.1^2) = sqrt(0.02) ≈ 0.1414213562373095
-        expected = np.sqrt(0.1**2 + 0.1**2)
+        # IGD = sqrt(2 * 0.02) / 2 = sqrt(0.04) / 2 = 0.2 / 2 = 0.1
+        expected = 0.1
         self.assertAlmostEqual(expected, result, delta=EPSILON_TEST_ATOL)
 
     def test_single_point_fronts_2d(self):
@@ -194,14 +196,14 @@ class InvertedGenerationalDistanceTestCases(unittest.TestCase):
         self.assertAlmostEqual(0.0, result, delta=EPSILON_TEST_ATOL)
 
     def test_shifted_three_objective_fronts(self):
-        """Shifted three-objective fronts"""
+        """Shifted three-objective fronts using corrected IGD formula"""
         shifted_three_obj_fronts = np.array([[0.2, 0.3, 0.4], [0.5, 0.6, 0.7]])
         shifted_three_obj_reference = np.array([[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]])
         indicator = InvertedGenerationalDistance(shifted_three_obj_reference)
         result = indicator.compute(shifted_three_obj_fronts)
         # Each reference point distance = sqrt(3 * 0.1^2) = sqrt(0.03) = 0.1732...
-        # IGD = mean = 0.1732...
-        expected = np.sqrt(3 * 0.1**2)
+        # IGD = sqrt(sum(d²))/N = sqrt(0.03 + 0.03) / 2 = sqrt(0.06) / 2 = 0.1224...
+        expected = np.sqrt(2 * 3 * 0.1**2) / 2
         self.assertAlmostEqual(expected, result, delta=EPSILON_TEST_ATOL)
 
     def test_perfect_match_2d(self):
@@ -213,37 +215,40 @@ class InvertedGenerationalDistanceTestCases(unittest.TestCase):
         self.assertAlmostEqual(0.0, result, delta=EPSILON_TEST_ATOL)
 
     def test_uniformly_shifted_solutions_2d(self):
-        """Uniformly shifted solutions in 2D"""
+        """Uniformly shifted solutions in 2D using corrected IGD formula"""
         uniform_shifted_fronts = np.array([[0.1, 0.1], [0.6, 0.6], [1.1, 1.1]])
         uniform_shifted_reference = np.array([[0.0, 0.0], [0.5, 0.5], [1.0, 1.0]])
         indicator = InvertedGenerationalDistance(uniform_shifted_reference)
         result = indicator.compute(uniform_shifted_fronts)
         # Distance for each point = sqrt(0.1^2 + 0.1^2) = sqrt(0.02) = 0.1414...
-        expected = np.sqrt(0.1**2 + 0.1**2)
+        # IGD = sqrt(3 * 0.02) / 3 = sqrt(0.06) / 3 = 0.08164...
+        expected = np.sqrt(3 * 0.02) / 3
         self.assertAlmostEqual(expected, result, delta=EPSILON_TEST_ATOL)
 
     def test_partial_coverage_2d(self):
-        """Partial coverage of the front in 2D"""
+        """Partial coverage of the front in 2D using corrected IGD formula"""
         partial_coverage_fronts = np.array([[0.0, 0.0], [1.0, 0.0]])
         partial_coverage_reference = np.array([[0.0, 0.0], [0.0, 1.0], [1.0, 0.0], [1.0, 1.0]])
         indicator = InvertedGenerationalDistance(partial_coverage_reference)
         result = indicator.compute(partial_coverage_fronts)
-        # Distances: 0, 1, 0, 1 -> mean = 0.5
-        expected = 0.5
+        # Distances: 0, 1, 0, 1 using L2 norm formula: sqrt(sum(d²))/N
+        # IGD = sqrt(0² + 1² + 0² + 1²) / 4 = sqrt(2) / 4 = 1.414... / 4 = 0.3535...
+        expected = np.sqrt(2) / 4
         self.assertAlmostEqual(expected, result, delta=EPSILON_TEST_ATOL)
 
     def test_sparse_approximation_2d(self):
-        """Sparse approximation of continuous front in 2D"""
+        """Sparse approximation of continuous front in 2D using corrected IGD formula"""
         sparse_fronts = np.array([[0.0, 1.0], [0.5, 0.5], [1.0, 0.0]])
         sparse_reference = np.array([[0.0, 1.0], [0.25, 0.75], [0.5, 0.5], [0.75, 0.25], [1.0, 0.0]])
         indicator = InvertedGenerationalDistance(sparse_reference)
         result = indicator.compute(sparse_fronts)
+        # Using L2 norm formula: sqrt(sum(d²))/N
         # Distances: 0, sqrt((0.25-0.5)^2 + (0.75-0.5)^2), 0, sqrt((0.75-0.5)^2 + (0.25-0.5)^2), 0
         # = 0, sqrt(0.0625 + 0.0625), 0, sqrt(0.0625 + 0.0625), 0
         # = 0, sqrt(0.125), 0, sqrt(0.125), 0 = 0, 0.3535..., 0, 0.3535..., 0
-        # mean = 2 * 0.3535... / 5 = 0.1414...
+        # IGD = sqrt(0 + 0.125 + 0 + 0.125 + 0) / 5 = sqrt(0.25) / 5 = 0.5 / 5 = 0.1
         distance_middle = np.sqrt((0.25-0.5)**2 + (0.75-0.5)**2)  # For [0.25, 0.75] and [0.75, 0.25]
-        expected = 2 * distance_middle / 5
+        expected = np.sqrt(2 * distance_middle**2) / 5  # Using L2 norm formula
         self.assertAlmostEqual(expected, result, delta=EPSILON_TEST_ATOL)
 
     def test_single_objective(self):
@@ -280,28 +285,26 @@ class InvertedGenerationalDistanceTestCases(unittest.TestCase):
         with self.assertRaises(ValueError):
             InvertedGenerationalDistance(np.array([]).reshape(0, 2))
 
-    def test_power_parameters(self):
-        """Test different power parameters for Lp norms"""
-        test_fronts = np.array([[0.0, 0.0]])
-        test_reference = np.array([[0.1, 0.1], [2.0, 2.0]])
-
-        # Test L1, L2, L3 norms
-        indicator_l1 = InvertedGenerationalDistance(test_reference, pow=1.0)
-        indicator_l2 = InvertedGenerationalDistance(test_reference, pow=2.0)
-        indicator_l3 = InvertedGenerationalDistance(test_reference, pow=3.0)
-
-        igd_l1 = indicator_l1.compute(test_fronts)
-        igd_l2 = indicator_l2.compute(test_fronts)
-        igd_l3 = indicator_l3.compute(test_fronts)
-
-        # All should be positive
-        self.assertGreater(igd_l1, 0.0)
-        self.assertGreater(igd_l2, 0.0)
-        self.assertGreater(igd_l3, 0.0)
-
-        # Generally L1 >= L2 >= L3 for jMetal IGD definition
-        self.assertGreaterEqual(igd_l1, igd_l2 - EPSILON_TEST_ATOL)
-        self.assertGreaterEqual(igd_l2, igd_l3 - EPSILON_TEST_ATOL)
+    def test_igd_with_power_parameter(self):
+        """Test IGD with different power parameters"""
+        igd_fronts = np.array([[0.0, 1.0], [1.0, 0.0]])
+        igd_reference = np.array([[0.0, 0.0], [0.0, 1.0], [1.0, 0.0], [1.0, 1.0]])
+        
+        # pow=1: Taxicab distance, summed then divided by N
+        # Distances: 1, 0, 0, 1
+        # IGD = (1 + 0 + 0 + 1) / 4 = 0.5
+        indicator_pow1 = InvertedGenerationalDistance(igd_reference, pow=1.0)
+        result_pow1 = indicator_pow1.compute(igd_fronts)
+        expected_pow1 = 0.5
+        self.assertAlmostEqual(expected_pow1, result_pow1, delta=EPSILON_TEST_ATOL)
+        
+        # pow=2: L2 norm formula: sqrt(sum(d²))/N
+        # Distances squared: 1, 0, 0, 1
+        # IGD = sqrt(1 + 0 + 0 + 1) / 4 = sqrt(2) / 4
+        indicator_pow2 = InvertedGenerationalDistance(igd_reference, pow=2.0)
+        result_pow2 = indicator_pow2.compute(igd_fronts)
+        expected_pow2 = np.sqrt(2) / 4
+        self.assertAlmostEqual(expected_pow2, result_pow2, delta=EPSILON_TEST_ATOL)
 
     def test_case1(self):
         """Legacy test case 1 - kept for backwards compatibility"""
@@ -329,22 +332,26 @@ class InvertedGenerationalDistanceTestCases(unittest.TestCase):
         self.assertEqual((distance_of_first_point + distance_of_second_point) / 2.0, result)
 
     def test_case4(self):
-        """Legacy test case 4 - kept for backwards compatibility"""
+        """Legacy test case 4 - updated for corrected IGD formula"""
         indicator = InvertedGenerationalDistance(np.array([[1.0, 1.0], [2.1, 2.1]]))
         front = np.array([[1.5, 1.5], [2.2, 2.2]])
         result = indicator.compute(front)
         distance_of_first_point = np.sqrt(pow(1.0 - 1.5, 2) + pow(1.0 - 1.5, 2))
         distance_of_second_point = np.sqrt(pow(2.1 - 2.2, 2) + pow(2.1 - 2.2, 2))
-        self.assertEqual((distance_of_first_point + distance_of_second_point) / 2.0, result)
+        # Using corrected L2 norm formula: sqrt(sum(d²))/N
+        expected = np.sqrt(distance_of_first_point**2 + distance_of_second_point**2) / 2.0
+        self.assertAlmostEqual(expected, result, delta=EPSILON_TEST_ATOL)
 
     def test_case5(self):
-        """Legacy test case 5 - kept for backwards compatibility"""
+        """Legacy test case 5 - updated for corrected IGD formula"""
         indicator = InvertedGenerationalDistance(np.array([[1.0, 1.0], [2.0, 2.0]]))
         front = np.array([[1.5, 1.5], [2.2, 2.2], [1.9, 1.9]])
         result = indicator.compute(front)
         distance_of_first_point = np.sqrt(pow(1.0 - 1.5, 2) + pow(1.0 - 1.5, 2))
         distance_of_second_point = np.sqrt(pow(2.0 - 1.9, 2) + pow(2.0 - 1.9, 2))
-        self.assertEqual((distance_of_first_point + distance_of_second_point) / 2.0, result)
+        # Using corrected L2 norm formula: sqrt(sum(d²))/N
+        expected = np.sqrt(distance_of_first_point**2 + distance_of_second_point**2) / 2.0
+        self.assertAlmostEqual(expected, result, delta=EPSILON_TEST_ATOL)
 
 
 class InvertedGenerationalDistancePlusTestCases(unittest.TestCase):

@@ -127,18 +127,12 @@ class InvertedGenerationalDistance(QualityIndicator):
         distances = spatial.distance.cdist(self.reference_front, solutions)
         min_distances = np.min(distances, axis=1)
         
-        # Apply power and compute mean
-        if self.pow == 1.0:
-            # L1 norm case
-            return np.mean(min_distances)
-        elif self.pow == 2.0:
-            # L2 norm case (Euclidean) - most common
-            return np.mean(min_distances)
-        else:
-            # General Lp norm case
-            powered_distances = np.power(min_distances, self.pow)
-            sum_root = np.power(np.sum(powered_distances), 1.0 / self.pow)
-            return sum_root / len(self.reference_front)
+        # Apply jMetal's IGD formula: IGD = (Σ(d^pow))^(1/pow) / N
+        # where d is the minimum distance from each reference point to the solution front
+        # This implementation matches exactly with jMetal's invertedGenerationalDistance method
+        powered_distances = np.power(min_distances, self.pow)
+        sum_root = np.power(np.sum(powered_distances), 1.0 / self.pow)
+        return sum_root / len(self.reference_front)
 
     def get_short_name(self) -> str:
         return "IGD"
