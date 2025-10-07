@@ -1,0 +1,41 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\usepackage[table*]{xcolor}
+\xdefinecolor{gray95}{gray}{0.65}
+\xdefinecolor{gray25}{gray}{0.8}
+\title{Median and Wilcoxon}
+\author{}
+\begin{document}
+\maketitle
+\section{Table}
+\begin{table}[!htp]
+  \caption{Median and interquartile range (IQR) of the results of the SP quality indicator. Cells with dark and light gray background highlights, respectively, the best and second best indicator values. The algorithm in the last column is the reference algorithm, and the symbols $+$, $-$ and $\approx$ indicate that the differences with the reference algorithm are significantly better, worse, or there is no difference according to the Wilcoxon rank sum test (confidence level: 95\%).}
+  \label{table:SP}
+  \centering
+  \begin{tiny}
+  \begin{tabular}{c|ccc}
+      & \textbf{NSGAII} & \textbf{SMPSO} & \textbf{AutoNSGAII} \\\hline
+\textbf{WFG1} & $\cellcolor{gray25} {7.20e\makebox[0.1cm]{-}01(4.52e\makebox[0.1cm]{-}02)-} $ & $ {1.02e\makebox[0.1cm]{+}00(4.23e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray95} 1.18e\makebox[0.1cm]{-}01(9.60e\makebox[0.1cm]{-}03)$ \\
+\textbf{WFG2} & $\cellcolor{gray25} {7.81e\makebox[0.1cm]{-}01(1.04e\makebox[0.1cm]{-}02)-} $ & $ {8.03e\makebox[0.1cm]{-}01(3.36e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray95} 7.58e\makebox[0.1cm]{-}01(1.22e\makebox[0.1cm]{-}03)$ \\
+\textbf{WFG3} & ${3.35e\makebox[0.1cm]{-}01(3.27e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray25} {6.91e\makebox[0.1cm]{-}02(6.39e\makebox[0.1cm]{-}03)-} $ & $ \cellcolor{gray95} 4.63e\makebox[0.1cm]{-}02(7.10e\makebox[0.1cm]{-}03)$ \\
+\textbf{WFG4} & $\cellcolor{gray25} {3.69e\makebox[0.1cm]{-}01(3.94e\makebox[0.1cm]{-}02)-} $ & $ {4.56e\makebox[0.1cm]{-}01(3.36e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray95} 1.31e\makebox[0.1cm]{-}01(2.23e\makebox[0.1cm]{-}02)$ \\
+\textbf{WFG5} & ${3.94e\makebox[0.1cm]{-}01(3.02e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray25} {1.36e\makebox[0.1cm]{-}01(1.43e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray95} 1.25e\makebox[0.1cm]{-}01(2.34e\makebox[0.1cm]{-}02)$ \\
+\textbf{WFG6} & ${3.41e\makebox[0.1cm]{-}01(3.45e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray25} {1.48e\makebox[0.1cm]{-}01(1.84e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray95} 9.51e\makebox[0.1cm]{-}02(2.24e\makebox[0.1cm]{-}02)$ \\
+\textbf{WFG7} & ${3.54e\makebox[0.1cm]{-}01(2.36e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray25} {1.49e\makebox[0.1cm]{-}01(1.75e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray95} 9.69e\makebox[0.1cm]{-}02(1.30e\makebox[0.1cm]{-}02)$ \\
+\textbf{WFG8} & $\cellcolor{gray25} {6.13e\makebox[0.1cm]{-}01(3.81e\makebox[0.1cm]{-}02)-} $ & $ {7.50e\makebox[0.1cm]{-}01(1.21e\makebox[0.1cm]{-}01)-} $ & $ \cellcolor{gray95} 5.54e\makebox[0.1cm]{-}01(5.47e\makebox[0.1cm]{-}02)$ \\
+\textbf{WFG9} & ${3.84e\makebox[0.1cm]{-}01(2.59e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray25} {2.11e\makebox[0.1cm]{-}01(1.56e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray95} 1.39e\makebox[0.1cm]{-}01(2.15e\makebox[0.1cm]{-}02)$ \\
+\textbf{DTLZ1} & $\cellcolor{gray25} {3.50e\makebox[0.1cm]{-}01(2.93e\makebox[0.1cm]{-}02)+} $ & $ \cellcolor{gray95} {6.78e\makebox[0.1cm]{-}02(9.91e\makebox[0.1cm]{-}03)+} $ & $ 5.48e\makebox[0.1cm]{-}01(1.36e\makebox[0.1cm]{-}01)$ \\
+\textbf{DTLZ2} & ${3.39e\makebox[0.1cm]{-}01(2.83e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray25} {1.27e\makebox[0.1cm]{-}01(1.47e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray95} 1.08e\makebox[0.1cm]{-}01(1.78e\makebox[0.1cm]{-}02)$ \\
+\textbf{DTLZ3} & ${8.63e\makebox[0.1cm]{-}01(3.21e\makebox[0.1cm]{-}01)-} $ & $ \cellcolor{gray95} {1.30e\makebox[0.1cm]{-}01(9.97e\makebox[0.1cm]{-}02)+} $ & $ \cellcolor{gray25} 6.40e\makebox[0.1cm]{-}01(2.01e\makebox[0.1cm]{-}01)$ \\
+\textbf{DTLZ4} & ${3.57e\makebox[0.1cm]{-}01(3.93e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray25} {1.10e\makebox[0.1cm]{-}01(1.17e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray95} 1.01e\makebox[0.1cm]{-}01(1.44e\makebox[0.1cm]{-}02)$ \\
+\textbf{DTLZ5} & ${3.41e\makebox[0.1cm]{-}01(2.83e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray25} {1.28e\makebox[0.1cm]{-}01(1.37e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray95} 1.06e\makebox[0.1cm]{-}01(2.37e\makebox[0.1cm]{-}02)$ \\
+\textbf{DTLZ6} & ${4.94e\makebox[0.1cm]{-}01(1.95e\makebox[0.1cm]{-}01)-} $ & $ \cellcolor{gray25} {1.15e\makebox[0.1cm]{-}01(2.12e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray95} 1.02e\makebox[0.1cm]{-}01(2.21e\makebox[0.1cm]{-}02)$ \\
+\textbf{DTLZ7} & ${6.18e\makebox[0.1cm]{-}01(2.44e\makebox[0.1cm]{-}02)-} $ & $ \cellcolor{gray25} {5.25e\makebox[0.1cm]{-}01(1.61e\makebox[0.1cm]{-}03)\approx} $ & $ \cellcolor{gray95} 5.25e\makebox[0.1cm]{-}01(1.52e\makebox[0.1cm]{-}03)$ \\
+  \hline
+\textbf{$+/\approx/-$} & $1/0/15 $ & $ 2/1/13$ \\
+  \end{tabular}
+  \end{tiny}
+\end{table}
+\end{document}

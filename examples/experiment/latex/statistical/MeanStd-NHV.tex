@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\usepackage[table*]{xcolor}
+\xdefinecolor{gray95}{gray}{0.65}
+\xdefinecolor{gray25}{gray}{0.8}
+\title{Median and IQR}
+\author{}
+\begin{document}
+\maketitle
+\section{Table}
+\begin{table}[!htp]
+  \caption{Mean and Standard Deviation of the NHV quality indicator.}
+  \label{table:NHV}
+  \centering
+  \begin{scriptsize}
+  \begin{tabular}{c|ccc}
+      & \textbf{NSGAII} & \textbf{SMPSO} & \textbf{AutoNSGAII} \\\hline
+      \textbf{DTLZ1} & $\cellcolor{gray95} 2.30e-02_{9.65e-03} $ & $ \cellcolor{gray25} 4.93e-02_{1.35e-01} $ & $ 9.21e-01_{2.74e-01}$ \\
+      \textbf{DTLZ2} & $2.21e-02_{1.11e-03} $ & $ \cellcolor{gray25} 1.70e-02_{4.41e-04} $ & $ \cellcolor{gray95} 1.50e-02_{1.13e-04}$ \\
+      \textbf{DTLZ3} & $\cellcolor{gray25} 8.63e-01_{2.66e-01} $ & $ \cellcolor{gray95} 1.51e-01_{2.43e-01} $ & $ 1.00e+00_{0.00e+00}$ \\
+      \textbf{DTLZ4} & $1.01e-01_{2.71e-01} $ & $ \cellcolor{gray25} 1.77e-02_{3.98e-04} $ & $ \cellcolor{gray95} 1.61e-02_{1.67e-04}$ \\
+      \textbf{DTLZ5} & $1.53e-02_{8.12e-04} $ & $ \cellcolor{gray25} 1.07e-02_{4.77e-04} $ & $ \cellcolor{gray95} 8.65e-03_{9.04e-05}$ \\
+      \textbf{DTLZ6} & $1.72e-01_{1.12e-01} $ & $ \cellcolor{gray25} 9.25e-03_{2.23e-04} $ & $ \cellcolor{gray95} 8.61e-03_{1.43e-04}$ \\
+      \textbf{DTLZ7} & $-4.71e-04_{3.64e-04} $ & $ \cellcolor{gray25} -2.79e-03_{2.03e-04} $ & $ \cellcolor{gray95} -3.05e-03_{1.47e-04}$ \\
+      \textbf{WFG1} & $\cellcolor{gray25} 2.85e-01_{1.84e-01} $ & $ 8.15e-01_{1.35e-02} $ & $ \cellcolor{gray95} 3.77e-03_{3.00e-05}$ \\
+      \textbf{WFG2} & $\cellcolor{gray25} 4.73e-03_{2.09e-03} $ & $ 5.25e-03_{1.18e-03} $ & $ \cellcolor{gray95} -3.75e-05_{1.42e-03}$ \\
+      \textbf{WFG3} & $1.09e-02_{1.16e-03} $ & $ \cellcolor{gray25} 9.85e-03_{6.70e-04} $ & $ \cellcolor{gray95} 5.28e-03_{1.25e-04}$ \\
+      \textbf{WFG4} & $\cellcolor{gray95} 2.05e-02_{1.36e-03} $ & $ 9.22e-02_{9.58e-03} $ & $ \cellcolor{gray25} 2.11e-02_{5.21e-03}$ \\
+      \textbf{WFG5} & $1.68e-01_{9.83e-04} $ & $ \cellcolor{gray95} 1.62e-01_{1.56e-04} $ & $ \cellcolor{gray25} 1.62e-01_{1.69e-04}$ \\
+      \textbf{WFG6} & $5.12e-02_{4.16e-02} $ & $ \cellcolor{gray95} 1.48e-02_{1.42e-03} $ & $ \cellcolor{gray25} 3.90e-02_{3.72e-02}$ \\
+      \textbf{WFG7} & $2.29e-02_{1.23e-03} $ & $ \cellcolor{gray25} 2.25e-02_{1.14e-03} $ & $ \cellcolor{gray95} 1.52e-02_{9.93e-05}$ \\
+      \textbf{WFG8} & $\cellcolor{gray25} 3.02e-01_{4.14e-02} $ & $ \cellcolor{gray95} 2.97e-01_{1.48e-02} $ & $ 3.57e-01_{7.71e-03}$ \\
+      \textbf{WFG9} & $\cellcolor{gray25} 3.54e-02_{6.15e-03} $ & $ 4.19e-02_{1.89e-03} $ & $ \cellcolor{gray95} 3.11e-02_{8.54e-03}$ \\
+  \end{tabular}
+  \end{scriptsize}
+\end{table}
+\end{document}

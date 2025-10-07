@@ -417,9 +417,9 @@ def _distance_based_selection(solution_list: List[S], subset_size: int, distance
     return selected_solutions
 
 
-class BestSolutionsArchive(BoundedArchive[S]):
+class DistanceBasedArchive(BoundedArchive[S]):
     """
-    Archive that maintains the best solutions using distance-based subset selection.
+    Archive that maintains solutions using adaptive distance-based subset selection.
     
     This archive extends BoundedArchive to use a sophisticated selection mechanism:
     - For 2 objectives: Uses crowding distance selection
@@ -430,7 +430,7 @@ class BestSolutionsArchive(BoundedArchive[S]):
     
     def __init__(self, maximum_size: int, distance_measure=None, dominance_comparator=None):
         """
-        Initialize the best solutions archive.
+        Initialize the distance-based archive.
         
         Args:
             maximum_size: Maximum number of solutions to maintain
@@ -444,7 +444,7 @@ class BestSolutionsArchive(BoundedArchive[S]):
             
         # Initialize parent with dummy comparator and density estimator
         # We'll override the selection mechanism in our custom add method
-        super(BestSolutionsArchive, self).__init__(
+        super(DistanceBasedArchive, self).__init__(
             maximum_size=maximum_size,
             comparator=SolutionAttributeComparator("dummy", lowest_is_best=True),
             density_estimator=CrowdingDistance(),

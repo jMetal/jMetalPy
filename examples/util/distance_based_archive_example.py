@@ -1,13 +1,13 @@
 """
-Example demonstrating the BestSolutionsArchive usage.
+Example demonstrating the DistanceBasedArchive usage.
 
-This script shows how to use the new BestSolutionsArchive class with both
+This script shows how to use the new DistanceBasedArchive class with both
 2-objective and many-objective optimization problems.
 """
 
 import random
 from jmetal.core.solution import FloatSolution
-from jmetal.util.archive import BestSolutionsArchive
+from jmetal.util.archive import DistanceBasedArchive
 from jmetal.util.distance import EuclideanDistance
 
 
@@ -39,11 +39,11 @@ def create_many_objective_solutions(num_solutions: int = 20, num_objectives: int
 
 
 def demonstrate_2d_archive():
-    """Demonstrate BestSolutionsArchive with 2-objective problems (uses crowding distance)."""
+    """Demonstrate DistanceBasedArchive with 2-objective problems (uses crowding distance)."""
     print("=== 2-Objective Problem Demo ===")
     
     # Create archive with maximum size of 5
-    archive = BestSolutionsArchive(maximum_size=5)
+    archive = DistanceBasedArchive(maximum_size=5)
     
     # Generate 10 solutions on a Pareto front
     solutions = create_2d_pareto_front_solutions(10)
@@ -66,11 +66,11 @@ def demonstrate_2d_archive():
 
 
 def demonstrate_many_objective_archive():
-    """Demonstrate BestSolutionsArchive with many-objective problems (uses distance-based selection)."""
+    """Demonstrate DistanceBasedArchive with many-objective problems (uses distance-based selection)."""
     print("\n=== Many-Objective Problem Demo ===")
     
     # Create archive with maximum size of 5
-    archive = BestSolutionsArchive(maximum_size=5, distance_measure=EuclideanDistance())
+    archive = DistanceBasedArchive(maximum_size=5, distance_measure=EuclideanDistance())
     
     # Generate 15 solutions in 4-objective space
     random.seed(42)  # For reproducible results
@@ -94,11 +94,11 @@ def demonstrate_many_objective_archive():
 
 
 def demonstrate_custom_distance():
-    """Demonstrate using BestSolutionsArchive with custom distance measure."""
+    """Demonstrate using DistanceBasedArchive with custom distance measure."""
     print("\n=== Custom Distance Measure Demo ===")
     
     # Create archive with EuclideanDistance explicitly
-    archive = BestSolutionsArchive(maximum_size=3, distance_measure=EuclideanDistance())
+    archive = DistanceBasedArchive(maximum_size=3, distance_measure=EuclideanDistance())
     
     # Create solutions that are best in each objective
     solutions = []
@@ -134,7 +134,7 @@ def demonstrate_custom_distance():
 
 
 if __name__ == "__main__":
-    print("BestSolutionsArchive Example")
+    print("DistanceBasedArchive Example")
     print("=" * 40)
     
     demonstrate_2d_archive()

@@ -4,14 +4,14 @@ import numpy as np
 from unittest.mock import Mock
 
 from jmetal.core.solution import FloatSolution
-from jmetal.util.archive import BestSolutionsArchive, distance_based_subset_selection
+from jmetal.util.archive import DistanceBasedArchive, distance_based_subset_selection
 from jmetal.util.distance import EuclideanDistance
 
 
-class BestSolutionsArchiveTestCase(unittest.TestCase):
+class DistanceBasedArchiveTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.archive = BestSolutionsArchive(maximum_size=5)
+        self.archive = DistanceBasedArchive(maximum_size=5)
 
     def test_should_create_archive_with_correct_maximum_size(self):
         self.assertEqual(5, self.archive.maximum_size)
@@ -80,7 +80,7 @@ class BestSolutionsArchiveTestCase(unittest.TestCase):
 
     def test_should_work_with_many_objectives(self):
         # Test with 5 objectives
-        archive = BestSolutionsArchive(maximum_size=3)
+        archive = DistanceBasedArchive(maximum_size=3)
         
         # Add non-dominated solutions
         for i in range(5):
@@ -108,7 +108,7 @@ class BestSolutionsArchiveTestCase(unittest.TestCase):
 
     def test_should_use_custom_distance_measure(self):
         # Test using a different distance measure
-        archive = BestSolutionsArchive(maximum_size=3, distance_measure=EuclideanDistance())
+        archive = DistanceBasedArchive(maximum_size=3, distance_measure=EuclideanDistance())
         
         # Add non-dominated solutions (each best in one objective)
         for i in range(5):
