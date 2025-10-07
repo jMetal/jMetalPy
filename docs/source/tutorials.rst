@@ -22,3 +22,4 @@ Getting started
    :caption: Tools:
 
    tutorials/quality_indicators_cli
+   tutorials/distance-based-archive
