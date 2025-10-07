@@ -1,11 +1,14 @@
 import copy
 import random
+import numpy as np
 from abc import ABC, abstractmethod
 from threading import Lock
 from typing import Generic, List, TypeVar
 
-from jmetal.util.comparator import Comparator, DominanceComparator, SolutionAttributeComparator
+from jmetal.util.comparator import Comparator, DominanceComparator, SolutionAttributeComparator, ObjectiveComparator
 from jmetal.util.density_estimator import DensityEstimator, CrowdingDistance
+from jmetal.util.distance import EuclideanDistance
+from jmetal.util.normalization import normalize_fronts
 
 S = TypeVar('S')
 
@@ -272,3 +275,216 @@ class CrowdingDistanceArchiveWithReferencePoint(ArchiveWithReferencePoint[S]):
             comparator=SolutionAttributeComparator("crowding_distance", lowest_is_best=False),
             density_estimator=CrowdingDistance(),
         )
+
+
+def distance_based_subset_selection(solution_list: List[S], subset_size: int, distance_measure=None) -> List[S]:
+    """
+    Selects a subset of solutions using distance-based selection.
+    
+    This function implements the algorithm from Java jMetal BestSolutionsArchive:
+    1. For 2 objectives: Uses crowding distance selection
+    2. For >2 objectives: Uses distance-based subset selection with normalization
+    
+    Args:
+        solution_list: List of solutions to select from
+        subset_size: Number of solutions to select
+        distance_measure: Distance function to use (default: EuclideanDistance)
+        
+    Returns:
+        List of selected solutions
+        
+    Raises:
+        ValueError: If subset_size is larger than solution_list size or invalid parameters
+    """
+    if not solution_list:
+        return []
+        
+    if subset_size <= 0:
+        raise ValueError("Subset size must be positive")
+        
+    if subset_size >= len(solution_list):
+        return solution_list[:]
+        
+    if distance_measure is None:
+        distance_measure = EuclideanDistance()
+    
+    # Get number of objectives from first solution
+    num_objectives = len(solution_list[0].objectives)
+    
+    # For 2 objectives, use crowding distance
+    if num_objectives == 2:
+        return _crowding_distance_selection(solution_list, subset_size)
+    
+    # For >2 objectives, use distance-based selection
+    return _distance_based_selection(solution_list, subset_size, distance_measure)
+
+
+def _crowding_distance_selection(solution_list: List[S], subset_size: int) -> List[S]:
+    """
+    Selects solutions using crowding distance for 2-objective problems.
+    """
+    # Create a temporary archive to calculate crowding distances
+    archive = CrowdingDistanceArchive(len(solution_list))
+    
+    # Add all solutions to calculate crowding distances
+    for solution in solution_list:
+        archive.add(copy.deepcopy(solution))
+    
+    # Sort by crowding distance (descending)
+    sorted_solutions = sorted(
+        archive.solution_list,
+        key=lambda sol: sol.attributes.get("crowding_distance", 0.0),
+        reverse=True
+    )
+    
+    return sorted_solutions[:subset_size]
+
+
+def _distance_based_selection(solution_list: List[S], subset_size: int, distance_measure) -> List[S]:
+    """
+    Selects solutions using distance-based selection for >2 objective problems.
+    
+    Algorithm:
+    1. Normalize objectives to [0,1] range
+    2. Select random objective and sort solutions by that objective
+    3. Select most extreme solutions first
+    4. For remaining selections, choose solution with maximum minimum distance to selected ones
+    """
+    # Convert solutions to matrix for normalization
+    objectives_matrix = np.array([sol.objectives for sol in solution_list])
+    
+    # Normalize objectives to [0,1] range using min-max normalization
+    min_vals = np.min(objectives_matrix, axis=0)
+    max_vals = np.max(objectives_matrix, axis=0)
+    
+    # Avoid division by zero for constant objectives
+    ranges = max_vals - min_vals
+    ranges[ranges == 0] = 1.0
+    
+    normalized_matrix = (objectives_matrix - min_vals) / ranges
+    
+    # Create list of (solution, normalized_objectives) pairs
+    solution_data = [(solution_list[i], normalized_matrix[i]) for i in range(len(solution_list))]
+    
+    # Select random objective for initial sorting
+    random_objective = random.randint(0, len(min_vals) - 1)
+    
+    # Sort by random objective using ObjectiveComparator
+    comparator = ObjectiveComparator(random_objective)
+    solution_data.sort(key=lambda x: x[0].objectives[random_objective])
+    
+    selected_solutions = []
+    selected_normalized = []
+    
+    # Select first solution (best in random objective)
+    selected_solutions.append(solution_data[0][0])
+    selected_normalized.append(solution_data[0][1])
+    
+    # If we need more than one solution, select the last one too (worst in random objective)
+    if subset_size > 1:
+        selected_solutions.append(solution_data[-1][0])
+        selected_normalized.append(solution_data[-1][1])
+    
+    # Select remaining solutions using maximum minimum distance criterion
+    remaining_data = solution_data[1:-1]  # Exclude first and last already selected
+    
+    while len(selected_solutions) < subset_size and remaining_data:
+        max_min_distance = -1
+        best_candidate_idx = 0
+        
+        # Find candidate with maximum minimum distance to selected solutions
+        for i, (candidate_sol, candidate_norm) in enumerate(remaining_data):
+            min_distance = float('inf')
+            
+            # Calculate minimum distance to all selected solutions
+            for selected_norm in selected_normalized:
+                dist = distance_measure.get_distance(candidate_norm, selected_norm)
+                min_distance = min(min_distance, dist)
+            
+            # Update best candidate if this one has larger minimum distance
+            if min_distance > max_min_distance:
+                max_min_distance = min_distance
+                best_candidate_idx = i
+        
+        # Add best candidate to selected solutions
+        best_candidate = remaining_data[best_candidate_idx]
+        selected_solutions.append(best_candidate[0])
+        selected_normalized.append(best_candidate[1])
+        
+        # Remove selected candidate from remaining
+        remaining_data.pop(best_candidate_idx)
+    
+    return selected_solutions
+
+
+class BestSolutionsArchive(BoundedArchive[S]):
+    """
+    Archive that maintains the best solutions using distance-based subset selection.
+    
+    This archive extends BoundedArchive to use a sophisticated selection mechanism:
+    - For 2 objectives: Uses crowding distance selection
+    - For >2 objectives: Uses distance-based subset selection with normalization
+    
+    The implementation follows the Java jMetal BestSolutionsArchive algorithm.
+    """
+    
+    def __init__(self, maximum_size: int, distance_measure=None, dominance_comparator=None):
+        """
+        Initialize the best solutions archive.
+        
+        Args:
+            maximum_size: Maximum number of solutions to maintain
+            distance_measure: Distance function for subset selection (default: EuclideanDistance)
+            dominance_comparator: Comparator for dominance (default: DominanceComparator)
+        """
+        if distance_measure is None:
+            distance_measure = EuclideanDistance()
+        if dominance_comparator is None:
+            dominance_comparator = DominanceComparator()
+            
+        # Initialize parent with dummy comparator and density estimator
+        # We'll override the selection mechanism in our custom add method
+        super(BestSolutionsArchive, self).__init__(
+            maximum_size=maximum_size,
+            comparator=SolutionAttributeComparator("dummy", lowest_is_best=True),
+            density_estimator=CrowdingDistance(),
+            dominance_comparator=dominance_comparator
+        )
+        
+        self.distance_measure = distance_measure
+        
+    def add(self, solution: S) -> bool:
+        """
+        Add a solution to the archive using non-dominated sorting and distance-based selection.
+        
+        Args:
+            solution: Solution to add
+            
+        Returns:
+            True if solution was added or archive was modified, False otherwise
+        """
+        # First, add to non-dominated archive (this handles dominance)
+        success = self.non_dominated_solution_archive.add(solution)
+        
+        if success and self.size() > self.maximum_size:
+            # Apply distance-based subset selection
+            selected_solutions = distance_based_subset_selection(
+                self.solution_list, 
+                self.maximum_size, 
+                self.distance_measure
+            )
+            
+            # Update solution list with selected solutions
+            # IMPORTANT: Clear and extend to maintain reference from parent class
+            self.solution_list.clear()
+            self.solution_list.extend(selected_solutions)
+        
+        return success
+    
+    def compute_density_estimator(self):
+        """
+        Override parent method since we use distance-based selection instead.
+        This method is called by parent class but we don't need density estimation.
+        """
+        # Do nothing - we use distance-based selection instead of density estimation
+        pass
