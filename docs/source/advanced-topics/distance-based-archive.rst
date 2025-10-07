@@ -232,6 +232,6 @@ See Also
 --------
 
 * :doc:`../api/util/archive` - Full API reference
-* :doc:`../api/util/distance` - Distance measures
-* :doc:`multiobjective-algorithms` - Algorithms that use archives
-* :doc:`quality-indicators` - Measuring solution quality
+* :doc:`../api/util/distance` - Distance measures  
+* :doc:`../multiobjective.algorithms` - Algorithms that use archives
+* :doc:`../tutorials/quality_indicators_cli` - Measuring solution quality
