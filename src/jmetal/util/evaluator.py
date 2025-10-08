@@ -1,4 +1,5 @@
 import functools
+import copy
 from abc import ABC, abstractmethod
 from concurrent.futures import ThreadPoolExecutor
 from multiprocessing.pool import Pool, ThreadPool
@@ -15,6 +16,7 @@ except ImportError:
     pass
 
 from jmetal.core.problem import Problem
+from jmetal.util.archive import Archive
 
 S = TypeVar("S")
 
@@ -35,6 +37,80 @@ class SequentialEvaluator(Evaluator[S]):
             Evaluator.evaluate_solution(solution, problem)
 
         return solution_list
+
+
+class SequentialEvaluatorWithArchive(SequentialEvaluator[S]):
+    """
+    Sequential evaluator that maintains an archive of evaluated solutions.
+    
+    This evaluator extends SequentialEvaluator by automatically storing copies
+    of evaluated solutions in an archive. This is useful for:
+    - Maintaining a history of all evaluated solutions
+    - Collecting best solutions found during optimization
+    - Post-processing analysis of the optimization process
+    
+    Args:
+        archive: Archive instance to store evaluated solutions
+        
+    Example:
+        >>> from jmetal.util.archive import NonDominatedSolutionsArchive
+        >>> from jmetal.util.evaluator import SequentialEvaluatorWithArchive
+        >>> 
+        >>> archive = NonDominatedSolutionsArchive()
+        >>> evaluator = SequentialEvaluatorWithArchive(archive)
+        >>> 
+        >>> # Use with optimization algorithm
+        >>> algorithm = NSGAII(
+        ...     problem=problem,
+        ...     population_size=100,
+        ...     offspring_population_size=100,
+        ...     mutation=mutation,
+        ...     crossover=crossover,
+        ...     selection=selection,
+        ...     evaluator=evaluator
+        ... )
+        >>> 
+        >>> # After optimization, access collected solutions
+        >>> best_solutions = evaluator.archive.solution_list
+    """
+    
+    def __init__(self, archive: Archive[S]):
+        """
+        Initialize evaluator with archive.
+        
+        Args:
+            archive: Archive instance to store evaluated solutions
+        """
+        self.archive = archive
+    
+    def evaluate(self, solution_list: List[S], problem: Problem) -> List[S]:
+        """
+        Evaluate solutions and store copies in the archive.
+        
+        Args:
+            solution_list: List of solutions to evaluate
+            problem: Problem instance used for evaluation
+            
+        Returns:
+            List of evaluated solutions (same as input list)
+        """
+        # Evaluate solutions using parent implementation
+        evaluated_solutions = super().evaluate(solution_list, problem)
+        
+        # Add copies of evaluated solutions to archive
+        for solution in evaluated_solutions:
+            self.archive.add(copy.deepcopy(solution))
+        
+        return evaluated_solutions
+    
+    def get_archive(self) -> Archive[S]:
+        """
+        Get the archive containing evaluated solutions.
+        
+        Returns:
+            Archive instance with stored solutions
+        """
+        return self.archive
 
 
 class MapEvaluator(Evaluator[S]):

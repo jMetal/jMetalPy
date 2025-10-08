@@ -1,13 +1,14 @@
 import copy
 import random
 import numpy as np
+import threading
 from abc import ABC, abstractmethod
 from threading import Lock
-from typing import Generic, List, TypeVar
+from typing import Generic, List, TypeVar, Optional, Literal
 
 from jmetal.util.comparator import Comparator, DominanceComparator, SolutionAttributeComparator, ObjectiveComparator
 from jmetal.util.density_estimator import DensityEstimator, CrowdingDistance
-from jmetal.util.distance import EuclideanDistance
+from jmetal.util.distance import EuclideanDistance, DistanceMetric, DistanceCalculator
 from jmetal.util.normalization import normalize_fronts
 
 S = TypeVar('S')
@@ -277,24 +278,33 @@ class CrowdingDistanceArchiveWithReferencePoint(ArchiveWithReferencePoint[S]):
         )
 
 
-def distance_based_subset_selection(solution_list: List[S], subset_size: int, distance_measure=None) -> List[S]:
+def distance_based_subset_selection_robust(solution_list: List[S], subset_size: int, 
+                                          metric: DistanceMetric = DistanceMetric.L2_SQUARED,
+                                          weights: Optional[np.ndarray] = None,
+                                          random_seed: Optional[int] = None,
+                                          use_vectorized: bool = True) -> List[S]:
     """
-    Selects a subset of solutions using distance-based selection.
+    Robust distance-based subset selection with multiple metrics and improved normalization.
     
-    This function implements the algorithm from Java jMetal BestSolutionsArchive:
-    1. For 2 objectives: Uses crowding distance selection
-    2. For >2 objectives: Uses distance-based subset selection with normalization
+    This implementation follows the SafeBestSolutionsArchive approach:
+    - For 2 objectives: Uses crowding distance selection (fast and standard)
+    - For >2 objectives: Uses robust distance-based selection with smart normalization
+    - Only normalizes dimensions with non-zero range to avoid division by zero
+    - Supports multiple distance metrics for performance and flexibility
     
     Args:
         solution_list: List of solutions to select from
         subset_size: Number of solutions to select
-        distance_measure: Distance function to use (default: EuclideanDistance)
+        metric: Distance metric to use (default: L2_SQUARED)
+        weights: Optional weights for TCHEBY_WEIGHTED metric
+        random_seed: Optional seed for reproducible results
+        use_vectorized: Whether to use vectorized implementation (default: True)
         
     Returns:
         List of selected solutions
         
     Raises:
-        ValueError: If subset_size is larger than solution_list size or invalid parameters
+        ValueError: If parameters are invalid
     """
     if not solution_list:
         return []
@@ -304,19 +314,246 @@ def distance_based_subset_selection(solution_list: List[S], subset_size: int, di
         
     if subset_size >= len(solution_list):
         return solution_list[:]
-        
-    if distance_measure is None:
-        distance_measure = EuclideanDistance()
+    
+    # Set random seed if provided for reproducibility
+    if random_seed is not None:
+        np.random.seed(random_seed)
+        random.seed(random_seed)
     
     # Get number of objectives from first solution
     num_objectives = len(solution_list[0].objectives)
     
-    # For 2 objectives, use crowding distance
+    # For 2 objectives, use crowding distance (fast and standard in jMetal)
     if num_objectives == 2:
         return _crowding_distance_selection(solution_list, subset_size)
     
-    # For >2 objectives, use distance-based selection
-    return _distance_based_selection(solution_list, subset_size, distance_measure)
+    # For >2 objectives, use robust distance-based selection
+    return _robust_distance_based_selection(solution_list, subset_size, metric, weights, use_vectorized)
+
+
+def _identify_valid_dimensions(objectives_matrix: np.ndarray) -> np.ndarray:
+    """
+    Identify dimensions with non-zero range to avoid normalization issues.
+    
+    Args:
+        objectives_matrix: Matrix of objectives (n_solutions x n_objectives)
+        
+    Returns:
+        Array of valid dimension indices (those with max > min)
+    """
+    min_vals = np.min(objectives_matrix, axis=0)
+    max_vals = np.max(objectives_matrix, axis=0)
+    
+    # Find dimensions where max > min (non-constant objectives)
+    valid_dims = np.where(max_vals > min_vals)[0]
+    return valid_dims
+
+
+def _robust_distance_based_selection(solution_list: List[S], subset_size: int,
+                                    metric: DistanceMetric, weights: Optional[np.ndarray] = None,
+                                    use_vectorized: bool = True) -> List[S]:
+    """
+    Robust distance-based selection for >2 objective problems.
+    
+    Algorithm improvements:
+    1. Identify valid dimensions (non-zero range) for normalization
+    2. Fallback to crowding distance if all dimensions are constant
+    3. Use best solution in random objective as seed (not extremes)
+    4. Apply efficient distance calculations with selectable metrics
+    5. Choose between vectorized and original implementations
+    
+    Args:
+        solution_list: List of solutions to select from
+        subset_size: Number of solutions to select
+        metric: Distance metric to use
+        weights: Optional weights for TCHEBY_WEIGHTED metric
+        use_vectorized: Whether to use vectorized implementation
+    """
+    # Convert solutions to matrix
+    objectives_matrix = np.array([sol.objectives for sol in solution_list])
+    n_solutions, n_objectives = objectives_matrix.shape
+    
+    # Identify valid dimensions (non-zero range)
+    valid_dims = _identify_valid_dimensions(objectives_matrix)
+    
+    if len(valid_dims) == 0:
+        # All objectives are constant -> fallback to crowding distance
+        return _crowding_distance_selection(solution_list, subset_size)
+    
+    # Normalize only valid dimensions
+    normalized_matrix = np.zeros((n_solutions, len(valid_dims)))
+    min_vals = np.min(objectives_matrix[:, valid_dims], axis=0)
+    max_vals = np.max(objectives_matrix[:, valid_dims], axis=0)
+    ranges = max_vals - min_vals
+    
+    for i in range(n_solutions):
+        normalized_matrix[i] = (objectives_matrix[i, valid_dims] - min_vals) / ranges
+    
+    # Project weights to valid dimensions if using weighted metric
+    projected_weights = None
+    if metric == DistanceMetric.TCHEBY_WEIGHTED:
+        if weights is None:
+            projected_weights = np.ones(len(valid_dims))
+        else:
+            if len(weights) != n_objectives:
+                raise ValueError(f"Weights length ({len(weights)}) must match number of objectives ({n_objectives})")
+            projected_weights = weights[valid_dims]
+    
+    # Seed selection: best solution in a random valid objective
+    random_objective_idx = random.randint(0, len(valid_dims) - 1)
+    random_objective = valid_dims[random_objective_idx]
+    
+    # Find best (minimum) value in the random objective
+    seed_idx = np.argmin(objectives_matrix[:, random_objective])
+    
+    # Choose implementation based on parameter
+    if use_vectorized:
+        return _vectorized_subset_selection(solution_list, normalized_matrix, subset_size, 
+                                           seed_idx, metric, projected_weights)
+    else:
+        return _original_subset_selection(solution_list, normalized_matrix, subset_size, 
+                                         seed_idx, metric, projected_weights)
+
+
+def _original_subset_selection(solution_list: List[S], normalized_matrix: np.ndarray,
+                              subset_size: int, seed_idx: int, metric: DistanceMetric,
+                              weights: Optional[np.ndarray] = None) -> List[S]:
+    """
+    Original (non-vectorized) implementation of subset selection for higher quality results.
+    
+    This function uses the original iterative approach which may be slower but can provide
+    higher quality diversity selection in some cases.
+    
+    Args:
+        solution_list: List of solutions to select from
+        normalized_matrix: Normalized objective matrix
+        subset_size: Number of solutions to select
+        seed_idx: Index of seed solution
+        metric: Distance metric to use
+        weights: Optional weights for weighted metrics
+        
+    Returns:
+        List[S]: Selected solutions
+    """
+    n_solutions = len(solution_list)
+    
+    # Initialize selection
+    selected_indices = [seed_idx]
+    selected_mask = np.zeros(n_solutions, dtype=bool)
+    selected_mask[seed_idx] = True
+    
+    # Track minimum distances to selected solutions
+    min_distances = np.full(n_solutions, np.inf)
+    _update_min_distances_legacy(normalized_matrix, min_distances, selected_mask, seed_idx, metric, weights)
+    
+    # Iteratively select solutions with maximum minimum distance
+    while len(selected_indices) < subset_size:
+        # Find unselected solution with maximum minimum distance
+        candidates = np.where(~selected_mask)[0]
+        if len(candidates) == 0:
+            break
+            
+        candidate_distances = min_distances[candidates]
+        best_candidate_local_idx = np.argmax(candidate_distances)
+        best_candidate_idx = candidates[best_candidate_local_idx]
+        
+        # Add to selection
+        selected_indices.append(best_candidate_idx)
+        selected_mask[best_candidate_idx] = True
+        
+        # Update minimum distances
+        _update_min_distances_legacy(normalized_matrix, min_distances, selected_mask, best_candidate_idx, metric, weights)
+    
+    # Return selected solutions
+    return [solution_list[i] for i in selected_indices]
+
+
+def _vectorized_subset_selection(solution_list: List[S], normalized_matrix: np.ndarray,
+                               subset_size: int, seed_idx: int, metric: DistanceMetric,
+                               weights: Optional[np.ndarray] = None) -> List[S]:
+    """
+    Vectorized implementation of subset selection using optimized distance calculations.
+    
+    This function uses the new vectorized distance calculation methods to significantly
+    improve performance when selecting subsets from large solution sets.
+    
+    Args:
+        solution_list: List of solutions to select from
+        normalized_matrix: Normalized objective matrix
+        subset_size: Number of solutions to select
+        seed_idx: Index of seed solution
+        metric: Distance metric to use
+        weights: Optional weights for weighted metrics
+        
+    Returns:
+        List[S]: Selected solutions
+    """
+    n_solutions = len(solution_list)
+    
+    # Initialize selection with seed
+    selected_indices = [seed_idx]
+    
+    # Iteratively select solutions with maximum minimum distance
+    while len(selected_indices) < subset_size:
+        # Calculate minimum distances using vectorized operations
+        min_distances = DistanceCalculator.calculate_min_distances_vectorized(
+            normalized_matrix, selected_indices, metric, weights
+        )
+        
+        # Find unselected solution with maximum minimum distance
+        # (selected solutions already have infinite distance)
+        best_candidate_idx = np.argmax(min_distances[np.isfinite(min_distances)])
+        
+        # Convert to actual index (since argmax works on finite subset)
+        finite_indices = np.where(np.isfinite(min_distances))[0]
+        if len(finite_indices) == 0:
+            # All remaining solutions are already selected
+            break
+            
+        best_candidate_idx = finite_indices[np.argmax(min_distances[finite_indices])]
+            
+        # Add to selection
+        selected_indices.append(best_candidate_idx)
+    
+    # Return selected solutions
+    return [solution_list[i] for i in selected_indices]
+
+
+def _update_min_distances_legacy(normalized_matrix: np.ndarray, min_distances: np.ndarray, 
+                         selected_mask: np.ndarray, new_selected_idx: int,
+                         metric: DistanceMetric, weights: Optional[np.ndarray] = None):
+    """
+    Legacy function for updating minimum distances (kept for compatibility).
+    
+    Note: This function is now deprecated in favor of vectorized operations.
+    Use DistanceCalculator.calculate_min_distances_vectorized() instead.
+    
+    Args:
+        normalized_matrix: Normalized objective matrix
+        min_distances: Array of minimum distances to selected solutions
+        selected_mask: Boolean mask of selected solutions
+        new_selected_idx: Index of newly selected solution
+        metric: Distance metric to use
+        weights: Optional weights for weighted metrics
+    """
+    new_solution = normalized_matrix[new_selected_idx]
+    
+    for i in range(len(min_distances)):
+        if selected_mask[i]:  # Skip already selected solutions
+            continue
+            
+        # Calculate distance to new selected solution
+        distance = DistanceCalculator.calculate_distance(
+            normalized_matrix[i], new_solution, metric, weights
+        )
+        
+        # Update minimum distance if this is closer
+        if distance < min_distances[i]:
+            min_distances[i] = distance
+
+
+# Maintain backward compatibility
+_update_min_distances = _update_min_distances_legacy
 
 
 def _crowding_distance_selection(solution_list: List[S], subset_size: int) -> List[S]:
@@ -340,81 +577,26 @@ def _crowding_distance_selection(solution_list: List[S], subset_size: int) -> Li
     return sorted_solutions[:subset_size]
 
 
-def _distance_based_selection(solution_list: List[S], subset_size: int, distance_measure) -> List[S]:
+# Backward compatibility alias
+def distance_based_subset_selection(solution_list: List[S], subset_size: int, distance_measure=None,
+                                   metric: DistanceMetric = DistanceMetric.L2_SQUARED,
+                                   weights: Optional[np.ndarray] = None,
+                                   random_seed: Optional[int] = None) -> List[S]:
     """
-    Selects solutions using distance-based selection for >2 objective problems.
+    Backward compatibility wrapper for distance_based_subset_selection_robust.
     
-    Algorithm:
-    1. Normalize objectives to [0,1] range
-    2. Select random objective and sort solutions by that objective
-    3. Select most extreme solutions first
-    4. For remaining selections, choose solution with maximum minimum distance to selected ones
+    Args:
+        solution_list: List of solutions to select from
+        subset_size: Number of solutions to select  
+        distance_measure: Deprecated parameter (ignored)
+        metric: Distance metric to use
+        weights: Optional weights for TCHEBY_WEIGHTED metric
+        random_seed: Optional seed for reproducible results
+        
+    Returns:
+        List of selected solutions
     """
-    # Convert solutions to matrix for normalization
-    objectives_matrix = np.array([sol.objectives for sol in solution_list])
-    
-    # Normalize objectives to [0,1] range using min-max normalization
-    min_vals = np.min(objectives_matrix, axis=0)
-    max_vals = np.max(objectives_matrix, axis=0)
-    
-    # Avoid division by zero for constant objectives
-    ranges = max_vals - min_vals
-    ranges[ranges == 0] = 1.0
-    
-    normalized_matrix = (objectives_matrix - min_vals) / ranges
-    
-    # Create list of (solution, normalized_objectives) pairs
-    solution_data = [(solution_list[i], normalized_matrix[i]) for i in range(len(solution_list))]
-    
-    # Select random objective for initial sorting
-    random_objective = random.randint(0, len(min_vals) - 1)
-    
-    # Sort by random objective using ObjectiveComparator
-    comparator = ObjectiveComparator(random_objective)
-    solution_data.sort(key=lambda x: x[0].objectives[random_objective])
-    
-    selected_solutions = []
-    selected_normalized = []
-    
-    # Select first solution (best in random objective)
-    selected_solutions.append(solution_data[0][0])
-    selected_normalized.append(solution_data[0][1])
-    
-    # If we need more than one solution, select the last one too (worst in random objective)
-    if subset_size > 1:
-        selected_solutions.append(solution_data[-1][0])
-        selected_normalized.append(solution_data[-1][1])
-    
-    # Select remaining solutions using maximum minimum distance criterion
-    remaining_data = solution_data[1:-1]  # Exclude first and last already selected
-    
-    while len(selected_solutions) < subset_size and remaining_data:
-        max_min_distance = -1
-        best_candidate_idx = 0
-        
-        # Find candidate with maximum minimum distance to selected solutions
-        for i, (candidate_sol, candidate_norm) in enumerate(remaining_data):
-            min_distance = float('inf')
-            
-            # Calculate minimum distance to all selected solutions
-            for selected_norm in selected_normalized:
-                dist = distance_measure.get_distance(candidate_norm, selected_norm)
-                min_distance = min(min_distance, dist)
-            
-            # Update best candidate if this one has larger minimum distance
-            if min_distance > max_min_distance:
-                max_min_distance = min_distance
-                best_candidate_idx = i
-        
-        # Add best candidate to selected solutions
-        best_candidate = remaining_data[best_candidate_idx]
-        selected_solutions.append(best_candidate[0])
-        selected_normalized.append(best_candidate[1])
-        
-        # Remove selected candidate from remaining
-        remaining_data.pop(best_candidate_idx)
-    
-    return selected_solutions
+    return distance_based_subset_selection_robust(solution_list, subset_size, metric, weights, random_seed)
 
 
 class DistanceBasedArchive(BoundedArchive[S]):
@@ -423,22 +605,28 @@ class DistanceBasedArchive(BoundedArchive[S]):
     
     This archive extends BoundedArchive to use a sophisticated selection mechanism:
     - For 2 objectives: Uses crowding distance selection
-    - For >2 objectives: Uses distance-based subset selection with normalization
+    - For >2 objectives: Uses robust distance-based subset selection with normalization
     
-    The implementation follows the Java jMetal BestSolutionsArchive algorithm.
+    The implementation follows the Java jMetal SafeBestSolutionsArchive algorithm.
     """
     
-    def __init__(self, maximum_size: int, distance_measure=None, dominance_comparator=None):
+    def __init__(self, maximum_size: int, 
+                 metric: DistanceMetric = DistanceMetric.L2_SQUARED,
+                 weights: Optional[np.ndarray] = None,
+                 random_seed: Optional[int] = None,
+                 dominance_comparator=None,
+                 use_vectorized: bool = True):
         """
         Initialize the distance-based archive.
         
         Args:
             maximum_size: Maximum number of solutions to maintain
-            distance_measure: Distance function for subset selection (default: EuclideanDistance)
+            metric: Distance metric to use (default: L2_SQUARED)
+            weights: Optional weights for TCHEBY_WEIGHTED metric
+            random_seed: Optional seed for reproducible results
             dominance_comparator: Comparator for dominance (default: DominanceComparator)
+            use_vectorized: Whether to use vectorized implementation (default: True)
         """
-        if distance_measure is None:
-            distance_measure = EuclideanDistance()
         if dominance_comparator is None:
             dominance_comparator = DominanceComparator()
             
@@ -451,11 +639,18 @@ class DistanceBasedArchive(BoundedArchive[S]):
             dominance_comparator=dominance_comparator
         )
         
-        self.distance_measure = distance_measure
+        self.metric = metric
+        self.weights = weights
+        self.random_seed = random_seed
+        self.use_vectorized = use_vectorized
+        
+        # Thread safety for concurrent access
+        self._lock = threading.Lock()
         
     def add(self, solution: S) -> bool:
         """
         Add a solution to the archive using non-dominated sorting and distance-based selection.
+        Thread-safe implementation for concurrent use.
         
         Args:
             solution: Solution to add
@@ -463,23 +658,27 @@ class DistanceBasedArchive(BoundedArchive[S]):
         Returns:
             True if solution was added or archive was modified, False otherwise
         """
-        # First, add to non-dominated archive (this handles dominance)
-        success = self.non_dominated_solution_archive.add(solution)
-        
-        if success and self.size() > self.maximum_size:
-            # Apply distance-based subset selection
-            selected_solutions = distance_based_subset_selection(
-                self.solution_list, 
-                self.maximum_size, 
-                self.distance_measure
-            )
+        with self._lock:
+            # First, add to non-dominated archive (this handles dominance)
+            success = self.non_dominated_solution_archive.add(solution)
             
-            # Update solution list with selected solutions
-            # IMPORTANT: Clear and extend to maintain reference from parent class
-            self.solution_list.clear()
-            self.solution_list.extend(selected_solutions)
-        
-        return success
+            if success and self.size() > self.maximum_size:
+                # Apply distance-based subset selection
+                selected_solutions = distance_based_subset_selection_robust(
+                    self.solution_list, 
+                    self.maximum_size,
+                    self.metric,
+                    self.weights,
+                    self.random_seed,
+                    self.use_vectorized
+                )
+                
+                # Update solution list with selected solutions
+                # IMPORTANT: Clear and extend to maintain reference from parent class
+                self.solution_list.clear()
+                self.solution_list.extend(selected_solutions)
+            
+            return success
     
     def compute_density_estimator(self):
         """
