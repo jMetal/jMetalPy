@@ -6,11 +6,9 @@ from jmetal.util.ranking import Ranking
 
 S = TypeVar("S")
 
-
 class RemovalPolicyType(Enum):
     SEQUENTIAL = 1
     ONE_SHOT = 2
-
 
 class RankingAndDensityEstimatorReplacement:
     def __init__(

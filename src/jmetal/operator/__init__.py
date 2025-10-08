@@ -28,6 +28,10 @@ from .selection import (
     RouletteWheelSelection,
 )
 
+from .replacement import (
+    RankingAndCrowdingDistanceReplacement,
+)
+
 __all__ = [
     "NullCrossover",
     "SBXCrossover",
@@ -48,8 +52,8 @@ __all__ = [
     "BinaryTournamentSelection",
     "BinaryTournament2Selection",
     "RandomSelection",
-    "NaryRandomSolutionSelection",
-    "RankingAndCrowdingDistanceSelection",
+        "NaryRandomSolutionSelection",
+        "RankingAndCrowdingDistanceSelection",
 ]
 
 """

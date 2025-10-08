@@ -17,7 +17,7 @@ from jmetal.util.comparator import Comparator, DominanceComparator, MultiCompara
 from jmetal.util.density_estimator import CrowdingDistance
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.ranking import FastNonDominatedRanking
-from jmetal.util.replacement import (
+from jmetal.operator.replacement import (
     RankingAndDensityEstimatorReplacement,
     RemovalPolicyType,
 )
