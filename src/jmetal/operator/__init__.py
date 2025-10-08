@@ -23,7 +23,7 @@ from .selection import (
     BinaryTournament2Selection,
     BinaryTournamentSelection,
     NaryRandomSolutionSelection,
-    RandomSolutionSelection,
+    RandomSelection,
     RankingAndCrowdingDistanceSelection,
     RouletteWheelSelection,
 )
@@ -47,7 +47,7 @@ __all__ = [
     "BestSolutionSelection",
     "BinaryTournamentSelection",
     "BinaryTournament2Selection",
-    "RandomSolutionSelection",
+    "RandomSelection",
     "NaryRandomSolutionSelection",
     "RankingAndCrowdingDistanceSelection",
 ]

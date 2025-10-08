@@ -153,9 +153,9 @@ class DifferentialEvolutionSelection(Selection[List[S], List[S]]):
         return "Differential evolution selection"
 
 
-class RandomSolutionSelection(Selection[List[S], S]):
+class RandomSelection(Selection[List[S], S]):
     def __init__(self):
-        super(RandomSolutionSelection, self).__init__()
+        super(RandomSelection, self).__init__()
 
     def execute(self, front: List[S]) -> S:
         if front is None:

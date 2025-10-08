@@ -7,7 +7,7 @@ from jmetal.operator.selection import (
     BinaryTournamentSelection,
     DifferentialEvolutionSelection,
     NaryRandomSolutionSelection,
-    RandomSolutionSelection,
+    RandomSelection,
     RankingAndCrowdingDistanceSelection,
 )
 from jmetal.util.comparator import EqualSolutionsComparator, SolutionAttributeComparator
@@ -120,7 +120,7 @@ class BestSolutionSelectionTestCases(unittest.TestCase):
 
 class RandomSolutionSelectionTestCases(unittest.TestCase):
     def setUp(self):
-        self.selection = RandomSolutionSelection[Solution]()
+        self.selection = RandomSelection[Solution]()
 
     def test_should_constructor_create_a_non_null_object(self):
         self.assertIsNotNone(self.selection)
