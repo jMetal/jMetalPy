@@ -6,7 +6,7 @@ import numpy as np
 from jmetal.core.operator import Selection
 from jmetal.core.solution import Solution
 from jmetal.util.comparator import Comparator, DominanceComparator
-from jmetal.util.density_estimator import CrowdingDistance
+from jmetal.util.density_estimator import CrowdingDistanceDensityEstimator
 from jmetal.util.ranking import FastNonDominatedRanking
 
 S = TypeVar("S", bound=Solution)
@@ -182,7 +182,7 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
             raise Exception("The front is empty")
 
         ranking = FastNonDominatedRanking(self.dominance_comparator)
-        crowding_distance = CrowdingDistance()
+        crowding_distance = CrowdingDistanceDensityEstimator()
         ranking.compute_ranking(front)
 
         ranking_index = 0

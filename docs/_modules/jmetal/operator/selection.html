@@ -117,7 +117,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.operator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Selection</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.solution</span><span class="w"> </span><span class="kn">import</span> <span class="n">Solution</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.comparator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Comparator</span><span class="p">,</span> <span class="n">DominanceComparator</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.density_estimator</span><span class="w"> </span><span class="kn">import</span> <span class="n">CrowdingDistance</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.density_estimator</span><span class="w"> </span><span class="kn">import</span> <span class="n">CrowdingDistanceDensityEstimator</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.ranking</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastNonDominatedRanking</span>
 
 <span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Solution</span><span class="p">)</span>
@@ -354,7 +354,7 @@
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
 
         <span class="n">ranking</span> <span class="o">=</span> <span class="n">FastNonDominatedRanking</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dominance_comparator</span><span class="p">)</span>
-        <span class="n">crowding_distance</span> <span class="o">=</span> <span class="n">CrowdingDistance</span><span class="p">()</span>
+        <span class="n">crowding_distance</span> <span class="o">=</span> <span class="n">CrowdingDistanceDensityEstimator</span><span class="p">()</span>
         <span class="n">ranking</span><span class="o">.</span><span class="n">compute_ranking</span><span class="p">(</span><span class="n">front</span><span class="p">)</span>
 
         <span class="n">ranking_index</span> <span class="o">=</span> <span class="mi">0</span>

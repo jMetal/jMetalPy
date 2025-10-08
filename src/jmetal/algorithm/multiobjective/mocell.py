@@ -9,7 +9,7 @@ from jmetal.core.problem import Problem
 from jmetal.operator.selection import BinaryTournamentSelection
 from jmetal.util.archive import BoundedArchive
 from jmetal.util.comparator import Comparator, MultiComparator
-from jmetal.util.density_estimator import CrowdingDistance, DensityEstimator
+from jmetal.util.density_estimator import CrowdingDistanceDensityEstimator, DensityEstimator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
 from jmetal.util.neighborhood import Neighborhood
@@ -37,7 +37,7 @@ class MOCell(GeneticAlgorithm[S, R]):
         mutation: Mutation,
         crossover: Crossover,
         selection: Selection = BinaryTournamentSelection(
-            MultiComparator([FastNonDominatedRanking.get_comparator(), CrowdingDistance.get_comparator()])
+            MultiComparator([FastNonDominatedRanking.get_comparator(), CrowdingDistanceDensityEstimator.get_comparator()])
         ),
         termination_criterion: TerminationCriterion = store.default_termination_criteria,
         population_generator: Generator = store.default_generator,
@@ -70,7 +70,7 @@ class MOCell(GeneticAlgorithm[S, R]):
         self.current_individual = 0
         self.current_neighbors = []
 
-        self.comparator = MultiComparator([FastNonDominatedRanking.get_comparator(), CrowdingDistance.get_comparator()])
+        self.comparator = MultiComparator([FastNonDominatedRanking.get_comparator(), CrowdingDistanceDensityEstimator.get_comparator()])
 
     def init_progress(self) -> None:
         super().init_progress()
@@ -120,7 +120,7 @@ class MOCell(GeneticAlgorithm[S, R]):
             ranking: Ranking = FastNonDominatedRanking()
             ranking.compute_ranking(self.current_neighbors)
 
-            density_estimator: DensityEstimator = CrowdingDistance()
+            density_estimator: DensityEstimator = CrowdingDistanceDensityEstimator()
             for i in range(ranking.get_number_of_subfronts()):
                 density_estimator.compute_density_estimator(ranking.get_subfront(i))
 

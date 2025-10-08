@@ -3,14 +3,14 @@ from math import sqrt
 
 from jmetal.core.solution import Solution
 from jmetal.util.density_estimator import (
-    CrowdingDistance,
+    CrowdingDistanceDensityEstimator,
     KNearestNeighborDensityEstimator,
 )
 
 
 class CrowdingDistanceTestCases(unittest.TestCase):
     def setUp(self):
-        self.crowding = CrowdingDistance()
+        self.crowding = CrowdingDistanceDensityEstimator()
 
     def test_should_the_crowding_distance_of_an_empty_set_do_nothing(self):
         solution_list = []

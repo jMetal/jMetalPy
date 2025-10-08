@@ -8,6 +8,8 @@ from scipy.spatial.distance import euclidean
 from jmetal.logger import get_logger
 from jmetal.util.comparator import Comparator, SolutionAttributeComparator
 
+from moocore import hv_contributions
+
 logger = get_logger(__name__)
 
 S = TypeVar("S")
@@ -37,7 +39,7 @@ class DensityEstimator(List[S], ABC):
         pass
 
 
-class CrowdingDistance(DensityEstimator[List[S]]):
+class CrowdingDistanceDensityEstimator(DensityEstimator[List[S]]):
     """This class implements a DensityEstimator based on the crowding distance of algorithm NSGA-II."""
 
     def compute_density_estimator(self, front: List[S]):
@@ -109,10 +111,6 @@ class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
         if solutions_size <= self.k:
             return
 
-        points = []
-        for i in range(solutions_size):
-            points.append(solutions[i].objectives)
-
         # Compute distance matrix
         self.distance_matrix = numpy.zeros(shape=(solutions_size, solutions_size))
         for i in range(solutions_size):
@@ -120,42 +118,60 @@ class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
                 self.distance_matrix[i, j] = self.distance_matrix[j, i] = euclidean(
                     solutions[i].objectives, solutions[j].objectives
                 )
-        # Gets the k-nearest distance of all the solutions
+        # Assign knn_density attribute
         for i in range(solutions_size):
-            distances = []
-            for j in range(solutions_size):
-                distances.append(self.distance_matrix[i, j])
+            distances = list(self.distance_matrix[i])
             distances.sort()
             solutions[i].attributes["knn_density"] = distances[self.k]
 
     def sort(self, solutions: List[S]) -> List[S]:
-        def compare(solution1, solution2):
-            distances1 = solution1.attributes["distances_"]
-            distances2 = solution2.attributes["distances_"]
-
-            tmp_k = self.k
-            if distances1[tmp_k] > distances2[tmp_k]:
-                return -1
-            elif distances1[tmp_k] < distances2[tmp_k]:
-                return 1
-            else:
-                while tmp_k < (len(distances1) - 1):
-                    tmp_k += 1
-                    if distances1[tmp_k] > distances2[tmp_k]:
-                        return -1
-                    elif distances1[tmp_k] < distances2[tmp_k]:
-                        return 1
-            return 0
-
-        for i in range(len(solutions)):
-            distances = []
-            for j in range(len(solutions)):
-                distances.append(self.distance_matrix[i, j])
-            distances.sort()
-            solutions[i].attributes["distances_"] = distances
-
-        solutions.sort(key=cmp_to_key(compare))
+        """
+        Sort solutions by knn_density (highest first).
+        """
+        solutions.sort(key=lambda s: s.attributes.get("knn_density", float("inf")), reverse=True)
 
     @classmethod
     def get_comparator(cls) -> Comparator:
         return SolutionAttributeComparator("knn_density", lowest_is_best=False)
+
+class HypervolumeContributionDensityEstimator(DensityEstimator[List[S]]):
+    """Density estimator based on the hypervolume contribution of each solution."""
+
+    def __init__(self, reference_point=None):
+        super().__init__()
+        if reference_point is None:
+            raise ValueError("reference_point for hypervolume contribution cannot be None.")
+        if isinstance(reference_point, (list, tuple, numpy.ndarray)) and len(reference_point) == 0:
+            raise ValueError("reference_point for hypervolume contribution cannot be empty.")
+        self.reference_point = reference_point
+
+    def compute_density_estimator(self, solutions: List[S]):
+        """
+        Computes the hypervolume contribution for each solution in the list.
+        Stores the value in solution.attributes["hv_contribution"].
+        """
+        if not solutions:
+            return
+
+        # Extract objective values from solutions
+        objectives = [solution.objectives for solution in solutions]
+
+        # Compute contributions
+        contributions = hv_contributions(objectives, ref=self.reference_point)
+
+        # Assign contribution to each solution
+        for sol, hv in zip(solutions, contributions):
+            sol.attributes["hv_contribution"] = hv
+
+    def sort(self, solutions: List[S]) -> List[S]:
+        """
+        Sorts solutions by their hypervolume contribution (highest first).
+        """
+        solutions.sort(key=lambda s: s.attributes.get("hv_contribution", float('-inf')), reverse=True)
+
+    @classmethod
+    def get_comparator(cls) -> Comparator:
+        """
+        Returns a comparator for the "hv_contribution" attribute.
+        """
+        return SolutionAttributeComparator("hv_contribution", lowest_is_best=False)

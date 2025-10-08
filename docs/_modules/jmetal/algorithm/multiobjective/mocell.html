@@ -120,7 +120,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.operator.selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">BinaryTournamentSelection</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.archive</span><span class="w"> </span><span class="kn">import</span> <span class="n">BoundedArchive</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.comparator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Comparator</span><span class="p">,</span> <span class="n">MultiComparator</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.density_estimator</span><span class="w"> </span><span class="kn">import</span> <span class="n">CrowdingDistance</span><span class="p">,</span> <span class="n">DensityEstimator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.density_estimator</span><span class="w"> </span><span class="kn">import</span> <span class="n">CrowdingDistanceDensityEstimator</span><span class="p">,</span> <span class="n">DensityEstimator</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.evaluator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evaluator</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.generator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generator</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.neighborhood</span><span class="w"> </span><span class="kn">import</span> <span class="n">Neighborhood</span>
@@ -150,7 +150,7 @@
         <span class="n">mutation</span><span class="p">:</span> <span class="n">Mutation</span><span class="p">,</span>
         <span class="n">crossover</span><span class="p">:</span> <span class="n">Crossover</span><span class="p">,</span>
         <span class="n">selection</span><span class="p">:</span> <span class="n">Selection</span> <span class="o">=</span> <span class="n">BinaryTournamentSelection</span><span class="p">(</span>
-            <span class="n">MultiComparator</span><span class="p">([</span><span class="n">FastNonDominatedRanking</span><span class="o">.</span><span class="n">get_comparator</span><span class="p">(),</span> <span class="n">CrowdingDistance</span><span class="o">.</span><span class="n">get_comparator</span><span class="p">()])</span>
+            <span class="n">MultiComparator</span><span class="p">([</span><span class="n">FastNonDominatedRanking</span><span class="o">.</span><span class="n">get_comparator</span><span class="p">(),</span> <span class="n">CrowdingDistanceDensityEstimator</span><span class="o">.</span><span class="n">get_comparator</span><span class="p">()])</span>
         <span class="p">),</span>
         <span class="n">termination_criterion</span><span class="p">:</span> <span class="n">TerminationCriterion</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_termination_criteria</span><span class="p">,</span>
         <span class="n">population_generator</span><span class="p">:</span> <span class="n">Generator</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">default_generator</span><span class="p">,</span>
@@ -183,7 +183,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">current_individual</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_neighbors</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">comparator</span> <span class="o">=</span> <span class="n">MultiComparator</span><span class="p">([</span><span class="n">FastNonDominatedRanking</span><span class="o">.</span><span class="n">get_comparator</span><span class="p">(),</span> <span class="n">CrowdingDistance</span><span class="o">.</span><span class="n">get_comparator</span><span class="p">()])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comparator</span> <span class="o">=</span> <span class="n">MultiComparator</span><span class="p">([</span><span class="n">FastNonDominatedRanking</span><span class="o">.</span><span class="n">get_comparator</span><span class="p">(),</span> <span class="n">CrowdingDistanceDensityEstimator</span><span class="o">.</span><span class="n">get_comparator</span><span class="p">()])</span>
 
 <div class="viewcode-block" id="MOCell.init_progress">
 <a class="viewcode-back" href="../../../../api/algorithm/multiobjective/eas/mocell.html#jmetal.algorithm.multiobjective.mocell.MOCell.init_progress">[docs]</a>
@@ -247,7 +247,7 @@
             <span class="n">ranking</span><span class="p">:</span> <span class="n">Ranking</span> <span class="o">=</span> <span class="n">FastNonDominatedRanking</span><span class="p">()</span>
             <span class="n">ranking</span><span class="o">.</span><span class="n">compute_ranking</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_neighbors</span><span class="p">)</span>
 
-            <span class="n">density_estimator</span><span class="p">:</span> <span class="n">DensityEstimator</span> <span class="o">=</span> <span class="n">CrowdingDistance</span><span class="p">()</span>
+            <span class="n">density_estimator</span><span class="p">:</span> <span class="n">DensityEstimator</span> <span class="o">=</span> <span class="n">CrowdingDistanceDensityEstimator</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ranking</span><span class="o">.</span><span class="n">get_number_of_subfronts</span><span class="p">()):</span>
                 <span class="n">density_estimator</span><span class="o">.</span><span class="n">compute_density_estimator</span><span class="p">(</span><span class="n">ranking</span><span class="o">.</span><span class="n">get_subfront</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
 

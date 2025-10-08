@@ -7,7 +7,7 @@ from threading import Lock
 from typing import Generic, List, TypeVar, Optional, Literal
 
 from jmetal.util.comparator import Comparator, DominanceComparator, SolutionAttributeComparator, ObjectiveComparator
-from jmetal.util.density_estimator import DensityEstimator, CrowdingDistance
+from jmetal.util.density_estimator import DensityEstimator, CrowdingDistanceDensityEstimator
 from jmetal.util.distance import EuclideanDistance, DistanceMetric, DistanceCalculator
 from jmetal.util.normalization import normalize_fronts
 
@@ -180,7 +180,7 @@ class CrowdingDistanceArchive(BoundedArchive[S]):
             maximum_size=maximum_size,
             comparator=SolutionAttributeComparator("crowding_distance", lowest_is_best=False),
             dominance_comparator=dominance_comparator,
-            density_estimator=CrowdingDistance(),
+            density_estimator=CrowdingDistanceDensityEstimator(),
         )
 
 
@@ -274,7 +274,7 @@ class CrowdingDistanceArchiveWithReferencePoint(ArchiveWithReferencePoint[S]):
             maximum_size=maximum_size,
             reference_point=reference_point,
             comparator=SolutionAttributeComparator("crowding_distance", lowest_is_best=False),
-            density_estimator=CrowdingDistance(),
+            density_estimator=CrowdingDistanceDensityEstimator(),
         )
 
 
@@ -635,7 +635,7 @@ class DistanceBasedArchive(BoundedArchive[S]):
         super(DistanceBasedArchive, self).__init__(
             maximum_size=maximum_size,
             comparator=SolutionAttributeComparator("dummy", lowest_is_best=True),
-            density_estimator=CrowdingDistance(),
+            density_estimator=CrowdingDistanceDensityEstimator(),
             dominance_comparator=dominance_comparator
         )
         

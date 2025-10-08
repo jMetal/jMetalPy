@@ -17,7 +17,7 @@ from jmetal.util.constraint_handling import (
     is_feasible,
     overall_constraint_violation_degree,
 )
-from jmetal.util.density_estimator import CrowdingDistance
+from jmetal.util.density_estimator import CrowdingDistanceDensityEstimator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.neighborhood import WeightVectorNeighborhood
 from jmetal.util.ranking import FastNonDominatedRanking
@@ -405,7 +405,7 @@ class MOEADIEpsilon(MOEAD):
                 for solution in first_rank_solutions:
                     self.archive.append(copy.deepcopy(solution))
             else:
-                crowding_distance = CrowdingDistance()
+                crowding_distance = CrowdingDistanceDensityEstimator()
                 while len(first_rank_solutions) > self.population_size:
                     crowding_distance.compute_density_estimator(first_rank_solutions)
                     first_rank_solutions = sorted(
