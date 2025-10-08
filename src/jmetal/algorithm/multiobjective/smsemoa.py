@@ -73,7 +73,7 @@ class SMSEMOA(GeneticAlgorithm[S, R]):
         self.dominance_comparator = dominance_comparator
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
-        """SMS-EMOA replacement: follows the jMetal logic, using HV contribution only for the last subfront."""
+        """SMS-EMOA replacement: sigue la lógica de jMetal, usando la contribución HV solo para el último subfrente."""
         merged_population = population + offspring_population
 
         # Compute non-dominated ranking and subfronts
