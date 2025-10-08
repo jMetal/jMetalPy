@@ -7,6 +7,10 @@ try:
 except ImportError:
     pass
 
+from jmetal.util.normalization import normalize_solution_fronts, solutions_to_matrix
+import numpy as np
+
+
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
 from jmetal.core.algorithm import Algorithm, DynamicAlgorithm
@@ -23,6 +27,8 @@ from jmetal.operator.replacement import (
     RemovalPolicyType,
 )
 from jmetal.util.termination_criterion import TerminationCriterion
+from jmetal.util.density_estimator import HypervolumeContributionDensityEstimator
+
 
 S = TypeVar("S")
 R = TypeVar("R")
@@ -66,21 +72,66 @@ class SMSEMOA(GeneticAlgorithm[S, R]):
         )
         self.dominance_comparator = dominance_comparator
 
-    def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
-        """This method joins the current and offspring populations to produce the population of the next generation
-        by applying the ranking and crowding distance selection.
+    def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
+        """SMS-EMOA replacement: follows the jMetal logic, using HV contribution only for the last subfront."""
+        merged_population = population + offspring_population
 
-        :param population: Parent population.
-        :param offspring_population: Offspring population.
-        :return: New population after ranking and crowding distance selection is applied.
-        """
+        # Compute non-dominated ranking and subfronts
         ranking = FastNonDominatedRanking(self.dominance_comparator)
-        density_estimator = CrowdingDistanceDensityEstimator()
+        ranking.compute_ranking(merged_population)
+        num_subfronts = ranking.get_number_of_subfronts()
 
-        r = RankingAndDensityEstimatorReplacement(ranking, density_estimator, RemovalPolicyType.ONE_SHOT)
-        solutions = r.replace(population, offspring_population)
+        # Collect all subfronts except the last
+        result_population: List[S] = []
+        for i in range(num_subfronts - 1):
+            result_population.extend(ranking.get_subfront(i))
 
-        return solutions
+        # Normalize merged_population and last subfront
+        last_subfront = ranking.get_subfront(num_subfronts - 1)
+        norm_merged, _ = normalize_solution_fronts(merged_population, merged_population, method="reference_only")
+        norm_last, _ = normalize_solution_fronts(last_subfront, merged_population, method="reference_only")
+
+        # Compute normalized reference point
+        epsilon = 1e-6
+        reference_point = np.max(norm_merged, axis=0) + epsilon
+
+        # Compute HV contribution on normalized last subfront
+        # Create temporary normalized solutions for HV calculation
+        from copy import deepcopy
+        norm_solutions = deepcopy(last_subfront)
+        for sol, norm_obj in zip(norm_solutions, norm_last):
+            sol.objectives = norm_obj.tolist()
+
+        hv_estimator = HypervolumeContributionDensityEstimator(reference_point=reference_point)
+        hv_estimator.compute_density_estimator(norm_solutions)
+        # Transfer hv_contribution attributes to original solutions
+        for orig, norm in zip(last_subfront, norm_solutions):
+            orig.attributes["hv_contribution"] = norm.attributes["hv_contribution"]
+
+        # Sort and truncate last subfront by HV contribution
+        sorted_last_subfront = sorted(last_subfront, key=lambda s: s.attributes["hv_contribution"], reverse=True)
+        result_population.extend(sorted_last_subfront[:len(last_subfront) - 1])
+
+        # Compute non-dominated ranking
+        ranking = FastNonDominatedRanking(self.dominance_comparator)
+        ranking.compute_ranking(merged_population)
+        num_subfronts = ranking.get_number_of_subfronts()
+
+        # Collect all subfronts except the last
+        result_population: List[S] = []
+        for i in range(num_subfronts - 1):
+            result_population.extend(ranking.get_subfront(i))
+
+        # Truncate the last subfront using HV contribution
+        last_subfront = ranking.get_subfront(num_subfronts - 1)
+        hv_estimator = HypervolumeContributionDensityEstimator(reference_point=reference_point)
+        hv_estimator.compute_density_estimator(last_subfront)
+        # Sort by HV contribution (descending: keep largest contributions)
+        sorted_last_subfront = sorted(last_subfront, key=lambda s: s.attributes["hv_contribution"], reverse=True)
+        # Add all but one from the last subfront
+        result_population.extend(sorted_last_subfront[:len(last_subfront) - 1])
+
+        return result_population
 
     def result(self) -> R:
         return self.solutions

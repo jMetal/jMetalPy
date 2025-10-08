@@ -1,3 +1,5 @@
+from jmetal.util.ranking import FastNonDominatedRanking
+from jmetal.util.density_estimator import HypervolumeContributionDensityEstimator
 from enum import Enum
 from typing import List, TypeVar
 
@@ -71,3 +73,32 @@ class RankingAndDensityEstimatorReplacement:
                 i += 1
 
         return result_list
+
+class SMSEMOAReplacement:
+    """
+    Replacement operator for SMS-EMOA. Removes the solution with the smallest hypervolume contribution from the first front.
+    """
+    def __init__(self, reference_point):
+        self.reference_point = reference_point
+
+    def replace(self, solution_list: List[S], offspring_list: List[S]) -> List[S]:
+        # Merge populations
+        population = solution_list + offspring_list
+
+        # Compute non-dominated ranking
+        ranking = FastNonDominatedRanking()
+        ranking.compute_ranking(population)
+        first_front = ranking.get_subfront(0)
+
+        # Compute hypervolume contributions for first front
+        hv_estimator = HypervolumeContributionDensityEstimator(reference_point=self.reference_point)
+        hv_estimator.compute_density_estimator(first_front)
+
+        # Find solution with minimum hypervolume contribution
+        min_hv_solution = min(first_front, key=lambda s: s.attributes["hv_contribution"])
+
+        # Remove the solution with minimum contribution from population
+        population.remove(min_hv_solution)
+
+        # Return truncated population
+        return population
