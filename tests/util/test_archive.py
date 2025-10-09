@@ -1,4 +1,8 @@
 import unittest
+import time
+import random
+
+import unittest
 
 from jmetal.core.solution import Solution
 from jmetal.util.archive import (
@@ -112,6 +116,35 @@ class NonDominatedSolutionListArchiveTestCases(unittest.TestCase):
         self.assertEqual(2, self.archive.size())
         self.assertFalse(result)
         self.assertTrue(solution1 in self.archive.solution_list or solution3 in self.archive.solution_list)
+
+    def test_should_add_high_dimensional_solutions(self):
+        """Test behavior with solutions having more than 2 objectives. Only one solution should remain due to dominance logic."""
+        archive = NonDominatedSolutionsArchive()
+        s1 = Solution(1, 5)
+        s1.objectives = [0.0, 1.0, 2.0, 3.0, 4.0]
+        s2 = Solution(1, 5)
+        s2.objectives = [1.0, 2.0, 3.0, 4.0, 5.0]
+        s3 = Solution(1, 5)
+        s3.objectives = [0.5, 1.5, 2.5, 3.5, 4.5]
+        archive.add(s1)
+        archive.add(s2)
+        archive.add(s3)
+        # Only one solution should remain, as the dominance logic removes dominated solutions
+        self.assertEqual(1, archive.size())
+        self.assertTrue(s1 in archive.solution_list or s2 in archive.solution_list or s3 in archive.solution_list)
+
+    def test_should_add_with_numerical_tolerance(self):
+        """Test adding nearly identical solutions (numerical tolerance). Only one should be kept if they are equal within tolerance."""
+        archive = NonDominatedSolutionsArchive(objective_tolerance=1e-5)
+        s1 = Solution(1, 2)
+        s1.objectives = [1.000000, 2.000000]
+        s2 = Solution(1, 2)
+        s2.objectives = [1.000001, 2.000001]
+        archive.add(s1)
+        archive.add(s2)
+        # Only one solution should be kept, as they are equal within the tolerance
+        self.assertEqual(1, archive.size())
+        self.assertTrue(s1 in archive.solution_list or s2 in archive.solution_list)
 
 
 class CrowdingDistanceArchiveTestCases(unittest.TestCase):

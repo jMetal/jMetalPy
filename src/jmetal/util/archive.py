@@ -1,3 +1,26 @@
+from typing import TypeVar, Generic, List, Optional
+from abc import ABC, abstractmethod
+from scipy.spatial import cKDTree
+
+S = TypeVar('S')
+
+class Archive(Generic[S], ABC):
+    def __init__(self):
+        self.solution_list: List[S] = []
+
+    @abstractmethod
+    def add(self, solution: S) -> bool:
+        pass
+
+    def get(self, index: int) -> S:
+        return self.solution_list[index]
+
+    def size(self) -> int:
+        return len(self.solution_list)
+
+    def get_name(self) -> str:
+        return self.__class__.__name__
+
 import copy
 import random
 import threading
