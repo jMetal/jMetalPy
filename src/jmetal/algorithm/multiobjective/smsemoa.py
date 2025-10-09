@@ -1,4 +1,5 @@
 import time
+from copy import deepcopy
 from typing import Generator, List, TypeVar
 
 try:
@@ -72,49 +73,50 @@ class SMSEMOA(GeneticAlgorithm[S, R]):
         )
         self.dominance_comparator = dominance_comparator
 
+    from copy import deepcopy
+    from typing import List
+    import numpy as np
+    from jmetal.core.solution import Solution
+    from jmetal.util.ranking import FastNonDominatedRanking
+    from jmetal.util.density_estimator import HypervolumeContributionDensityEstimator
+
+    from copy import deepcopy
+    from typing import List
+    import numpy as np
+    from jmetal.core.solution import Solution
+    from jmetal.util.ranking import FastNonDominatedRanking
+    from jmetal.util.density_estimator import HypervolumeContributionDensityEstimator
+
+    from typing import List
+    import numpy as np
+    from jmetal.core.solution import Solution
+    from jmetal.util.ranking import FastNonDominatedRanking
+    from jmetal.util.density_estimator import HypervolumeContributionDensityEstimator
+
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
-        """SMS-EMOA replacement: sigue la lógica de jMetal, usando la contribución HV solo para el último subfrente."""
+        """
+        SMS-EMOA replacement strategy.
+
+        Implements replacement according to SMS-EMOA algorithm:
+        1. Merge current population with offspring
+        2. Compute non-dominated ranking
+        3. Fill new population by fronts
+        4. In the last front, remove solution with smallest HV contribution
+
+        Args:
+            population: Current population
+            offspring_population: Offspring population (typically 1 solution)
+
+        Returns:
+            New population of size self.population_size
+        """
+        # Merge populations
         merged_population = population + offspring_population
-
-        # Compute non-dominated ranking and subfronts
-        ranking = FastNonDominatedRanking(self.dominance_comparator)
-        ranking.compute_ranking(merged_population)
-        num_subfronts = ranking.get_number_of_subfronts()
-
-        # Collect all subfronts except the last
-        result_population: List[S] = []
-        for i in range(num_subfronts - 1):
-            result_population.extend(ranking.get_subfront(i))
-
-        # Normalize merged_population and last subfront
-        last_subfront = ranking.get_subfront(num_subfronts - 1)
-        norm_merged, _ = normalize_solution_fronts(merged_population, merged_population, method="reference_only")
-        norm_last, _ = normalize_solution_fronts(last_subfront, merged_population, method="reference_only")
-
-        # Compute normalized reference point
-        epsilon = 1e-6
-        reference_point = np.max(norm_merged, axis=0) + epsilon
-
-        # Compute HV contribution on normalized last subfront
-        # Create temporary normalized solutions for HV calculation
-        from copy import deepcopy
-        norm_solutions = deepcopy(last_subfront)
-        for sol, norm_obj in zip(norm_solutions, norm_last):
-            sol.objectives = norm_obj.tolist()
-
-        hv_estimator = HypervolumeContributionDensityEstimator(reference_point=reference_point)
-        hv_estimator.compute_density_estimator(norm_solutions)
-        # Transfer hv_contribution attributes to original solutions
-        for orig, norm in zip(last_subfront, norm_solutions):
-            orig.attributes["hv_contribution"] = norm.attributes["hv_contribution"]
-
-        # Sort and truncate last subfront by HV contribution
-        sorted_last_subfront = sorted(last_subfront, key=lambda s: s.attributes["hv_contribution"], reverse=True)
-        result_population.extend(sorted_last_subfront[:len(last_subfront) - 1])
 
         # Compute non-dominated ranking
         ranking = FastNonDominatedRanking(self.dominance_comparator)
         ranking.compute_ranking(merged_population)
+
         num_subfronts = ranking.get_number_of_subfronts()
 
         # Collect all subfronts except the last
@@ -122,13 +124,38 @@ class SMSEMOA(GeneticAlgorithm[S, R]):
         for i in range(num_subfronts - 1):
             result_population.extend(ranking.get_subfront(i))
 
-        # Truncate the last subfront using HV contribution
+        # Get the last subfront
         last_subfront = ranking.get_subfront(num_subfronts - 1)
-        hv_estimator = HypervolumeContributionDensityEstimator(reference_point=reference_point)
+
+        # If the entire last subfront fits, add it and return
+        if len(result_population) + len(last_subfront) <= self.population_size:
+            result_population.extend(last_subfront)
+            return result_population
+
+        # Otherwise, we need to truncate the last subfront using HV contribution
+        # Calculate reference point in objective space (not normalized)
+        # Use worst values from merged population
+        objectives_array = np.array([s.objectives for s in merged_population])
+
+        # Reference point should be worse than all solutions
+        # For minimization: use maximum values + offset
+        offset = 1.0  # Offset to ensure reference point is dominated by all solutions
+        reference_point = np.max(objectives_array, axis=0) + offset
+
+        # Compute HV contribution directly on last subfront (without normalization)
+        hv_estimator = HypervolumeContributionDensityEstimator(
+            reference_point=reference_point.tolist()
+        )
         hv_estimator.compute_density_estimator(last_subfront)
-        # Sort by HV contribution (descending: keep largest contributions)
-        sorted_last_subfront = sorted(last_subfront, key=lambda s: s.attributes["hv_contribution"], reverse=True)
-        # Add all but one from the last subfront
+
+        # Sort by HV contribution (descending: largest contributions first)
+        sorted_last_subfront = sorted(
+            last_subfront,
+            key=lambda s: s.attributes["hv_contribution"],
+            reverse=True
+        )
+
+        # Add all but one from the last subfront (remove the worst)
         result_population.extend(sorted_last_subfront[:len(last_subfront) - 1])
 
         return result_population

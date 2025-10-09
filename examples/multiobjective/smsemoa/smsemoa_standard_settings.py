@@ -14,12 +14,12 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
  Programa para configurar y ejecutar el algoritmo SMS-EMOA con parámetros estándar.
 """
 if __name__ == "__main__":
-    problem = DTLZ1()
+    problem = DTLZ3()
 
-    max_evaluations = 25000
+    max_evaluations = 40000
     algorithm = SMSEMOA(
         problem=problem,
-        population_size=50,
+        population_size=100,
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     front = get_non_dominated_solutions(algorithm.result())
 
-    # Guardar resultados en fichero
+    # Store results to files
     print_function_values_to_file(front, "FUN." + algorithm.label)
     print_variables_to_file(front, "VAR." + algorithm.label)
 
