@@ -1,4 +1,8 @@
 import unittest
+from jmetal.operator.mutation import PowerLawMutation
+
+import unittest
+import random
 from typing import List
 
 from jmetal.core.operator import Mutation
@@ -15,6 +19,7 @@ from jmetal.operator.mutation import (
     PolynomialMutation,
     SimpleRandomMutation,
     UniformMutation,
+    LevyFlightMutation,
 )
 from jmetal.util.ckecking import (
     EmptyCollectionException,
@@ -69,11 +74,11 @@ class PolynomialMutationTestMethods(unittest.TestCase):
     def test_should_execute_work_with_a_solution_subclass_of_float_solution(self):
         class NewFloatSolution(FloatSolution):
             def __init__(
-                self,
-                lower_bound: List[float],
-                upper_bound: List[float],
-                number_of_objectives: int,
-                number_of_constraints: int = 0,
+                    self,
+                    lower_bound: List[float],
+                    upper_bound: List[float],
+                    number_of_objectives: int,
+                    number_of_constraints: int = 0,
             ):
                 super(NewFloatSolution, self).__init__(
                     lower_bound, upper_bound, number_of_objectives, number_of_constraints
@@ -288,7 +293,7 @@ class IntegerPolynomialMutationTestCases(unittest.TestCase):
             if mutated_solution.variables != original_variables:
                 changed = True
                 break
-        
+
         self.assertTrue(changed, "Solution should change when mutation probability is 1.0")
         self.assertEqual([True, True, True], [isinstance(x, int) for x in mutated_solution.variables])
 
@@ -332,6 +337,132 @@ class CompositeMutationTestCases(unittest.TestCase):
         with self.assertRaises(InvalidConditionException):
             operator.execute(composite_solution)
 
+
+class LevyFlightMutationTestCases(unittest.TestCase):
+    def setUp(self):
+        self.lower = [0.0, -5.0, 10.0]
+        self.upper = [1.0, 5.0, 20.0]
+        self.solution = FloatSolution(self.lower, self.upper, 1)
+        self.solution.variables = [0.5, 0.0, 15.0]
+
+    def test_mutation_probability_zero(self):
+        mutation = LevyFlightMutation(mutation_probability=0.0)
+        mutated = mutation.execute(self.solution)
+        self.assertEqual(mutated.variables, [0.5, 0.0, 15.0])
+
+    def test_mutation_probability_one(self):
+        mutation = LevyFlightMutation(mutation_probability=1.0)
+        mutated = mutation.execute(self.solution)
+        # All variables should be mutated (values should change, but remain in bounds)
+        for i in range(3):
+            self.assertTrue(self.lower[i] <= mutated.variables[i] <= self.upper[i])
+            self.assertNotEqual(mutated.variables[i], [0.5, 0.0, 15.0][i])
+
+    def test_beta_parameter(self):
+        mutation = LevyFlightMutation(mutation_probability=1.0, beta=1.9)
+        mutated = mutation.execute(self.solution)
+        for i in range(3):
+            self.assertTrue(self.lower[i] <= mutated.variables[i] <= self.upper[i])
+
+    def test_step_size_parameter(self):
+        mutation = LevyFlightMutation(mutation_probability=1.0, step_size=0.1)
+        mutated = mutation.execute(self.solution)
+        for i in range(3):
+            self.assertTrue(self.lower[i] <= mutated.variables[i] <= self.upper[i])
+
+    def test_repair_operator(self):
+        # Forzar mutación fuera de límites y reparar
+        def repair(val, low, up):
+            return max(min(val, up), low)
+
+        mutation = LevyFlightMutation(mutation_probability=1.0, step_size=10.0, repair_operator=repair)
+        mutated = mutation.execute(self.solution)
+        for i in range(3):
+            self.assertTrue(self.lower[i] <= mutated.variables[i] <= self.upper[i])
+
+    def test_to_string(self):
+        mutation = LevyFlightMutation(mutation_probability=0.5, beta=1.5, step_size=0.01)
+        self.assertIn("LevyFlightMutation", str(mutation))
+
+
+class PowerLawMutationTestCases(unittest.TestCase):
+    def setUp(self):
+        random.seed(42)
+        lower = [0.0, 0.0]
+        upper = [10.0, 5.0]
+        from jmetal.core.solution import FloatSolution
+        self.solution = FloatSolution(lower, upper, number_of_objectives=1)
+        self.solution.variables = [5.0, 2.5]
+
+    def test_default_constructor(self):
+        mutation = PowerLawMutation()
+        self.assertEqual(mutation.probability, 0.01)
+        self.assertEqual(mutation.delta, 1.0)
+
+    def test_custom_parameters(self):
+        mutation = PowerLawMutation(0.05, 2.0)
+        self.assertEqual(mutation.probability, 0.05)
+        self.assertEqual(mutation.delta, 2.0)
+
+    def test_invalid_probability(self):
+        with self.assertRaises(Exception):
+            PowerLawMutation(-0.1, 1.0)
+        with self.assertRaises(Exception):
+            PowerLawMutation(1.1, 1.0)
+
+    def test_invalid_delta(self):
+        with self.assertRaises(ValueError):
+            PowerLawMutation(0.01, 0.0)
+        with self.assertRaises(ValueError):
+            PowerLawMutation(0.01, -1.0)
+
+    def test_execute_returns_solution(self):
+        mutation = PowerLawMutation(0.0, 1.0)
+        result = mutation.execute(self.solution)
+        self.assertIs(result, self.solution)
+
+    def test_execute_zero_probability(self):
+        mutation = PowerLawMutation(0.0, 1.0)
+        original = self.solution.variables.copy()
+        mutation.execute(self.solution)
+        self.assertEqual(self.solution.variables, original)
+
+    def test_execute_always_mutate(self):
+        mutation = PowerLawMutation(1.0, 1.0)
+        original = self.solution.variables.copy()
+        mutation.execute(self.solution)
+        self.assertNotEqual(self.solution.variables, original)
+
+    def test_extreme_random_values(self):
+        mutation = PowerLawMutation(1.0, 1.0)
+        orig_random = random.random
+        random.random = lambda: 1e-15
+        mutation.execute(self.solution)
+        random.random = lambda: 1.0 - 1e-15
+        mutation.execute(self.solution)
+        random.random = orig_random
+
+    def test_repair_operator(self):
+        def repair(val, low, up):
+            return low if val < low else up if val > up else val
+
+        mutation = PowerLawMutation(1.0, 1.0, repair_operator=repair)
+        mutation.execute(self.solution)
+
+    def test_multiple_variables(self):
+        mutation = PowerLawMutation(1.0, 1.0)
+        from jmetal.core.solution import FloatSolution
+        lower = [0.0, 0.0, 0.0]
+        upper = [10.0, 10.0, 10.0]
+        sol = FloatSolution(lower, upper, number_of_objectives=1)
+        sol.variables = [5.0, 3.0, 7.0]
+        mutation.execute(sol)
+        self.assertEqual(len(sol.variables), 3)
+
+    def test_str(self):
+        mutation = PowerLawMutation(0.05, 2.0)
+        self.assertIn("Power Law mutation", mutation.get_name())
+        
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,4 +1,7 @@
 import random
+import numpy as np
+import math
+from typing import Callable, Optional
 
 from jmetal.core.operator import Mutation
 from jmetal.core.solution import (
@@ -306,3 +309,79 @@ class ScrambleMutation(Mutation[PermutationSolution]):
 
     def get_name(self):
         return "Scramble"
+
+
+class LevyFlightMutation(Mutation[FloatSolution]):
+    def __init__(self, mutation_probability=0.01, beta=1.5, step_size=0.01, repair_operator=None):
+        super().__init__(probability=mutation_probability)
+        self.beta = beta
+        self.step_size = step_size
+        self.repair_operator = repair_operator
+
+    def execute(self, solution: FloatSolution) -> FloatSolution:
+        for i in range(len(solution.variables)):
+            if np.random.rand() <= self.probability:
+                current_value = solution.variables[i]
+                lower_bound = solution.lower_bound[i]
+                upper_bound = solution.upper_bound[i]
+
+                # Lévy flight step (Mantegna algorithm)
+                levy_step = self._generate_levy_step()
+                perturbation = levy_step * self.step_size * (upper_bound - lower_bound)
+                new_value = current_value + perturbation
+
+                # Repair if out of bounds
+                if self.repair_operator:
+                    new_value = self.repair_operator(new_value, lower_bound, upper_bound)
+                else:
+                    new_value = min(max(new_value, lower_bound), upper_bound)
+
+                solution.variables[i] = new_value
+        return solution
+
+    def _generate_levy_step(self):
+        # Mantegna algorithm
+        sigma_u = self._sigma_u(self.beta)
+        u = np.random.normal(0, sigma_u)
+        v = np.random.normal(0, 1)
+        return u / (abs(v) ** (1 / self.beta))
+
+    def _sigma_u(self, beta):
+        import math
+        numerator = math.gamma(1 + beta) * math.sin(math.pi * beta / 2)
+        denominator = math.gamma((1 + beta) / 2) * beta * (2 ** ((beta - 1) / 2))
+        return (numerator / denominator) ** (1 / beta)
+
+    def get_name(self):
+        return "Levy Flight mutation"
+
+
+class PowerLawMutation(Mutation[FloatSolution]):
+    def __init__(self, probability: float = 0.01, delta: float = 1.0, repair_operator: Optional[Callable[[float, float, float], float]] = None):
+        super().__init__(probability=probability)
+        if delta <= 0:
+            raise ValueError("Delta parameter must be positive")
+        self.delta = delta
+        self.repair_operator = repair_operator if repair_operator is not None else self._default_repair
+
+    def execute(self, solution: FloatSolution) -> FloatSolution:
+        Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
+        for i in range(len(solution.variables)):
+            if random.random() <= self.probability:
+                current_value = solution.variables[i]
+                lower_bound = solution.lower_bound[i]
+                upper_bound = solution.upper_bound[i]
+                rnd = random.random()
+                rnd = min(max(rnd, 1e-10), 1 - 1e-10)
+                temp_delta = math.pow(rnd, -self.delta)
+                deltaq = 0.5 * (rnd - 0.5) * (1 - temp_delta)
+                new_value = current_value + deltaq * (upper_bound - lower_bound)
+                new_value = self.repair_operator(new_value, lower_bound, upper_bound)
+                solution.variables[i] = new_value
+        return solution
+
+    def _default_repair(self, value, lower, upper):
+        return max(min(value, upper), lower)
+
+    def get_name(self):
+        return f"Power Law mutation (delta={self.delta})"
