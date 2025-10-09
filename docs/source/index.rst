@@ -9,12 +9,12 @@ complex optimization problems.
    📚 **New to jMetalPy?** Start with the :doc:`getting-started` guide for a quick introduction.
 
 .. warning:: 
-   Documentation of jMetal 1.7.1 is a work in progress! Some information may be missing or outdated.
+   Documentation of jMetal 1.8.0 is a work in progress! Some information may be missing or outdated.
 
 .. table::
 
    +---------------------+----------+
-   | **Target doc**      |  v1.7.1  |
+   | **Target doc**      |  v1.8.0  |
    +---------------------+----------+
 
 Content
@@ -33,7 +33,7 @@ Content
 Key Features
 ------------------------
 
-jMetalPy (v1.7.1) provides:
+jMetalPy (v1.8.0) provides:
 
 **Algorithms**
    Local search, genetic algorithms, evolution strategies, simulated annealing, NSGA-II, NSGA-III, 
