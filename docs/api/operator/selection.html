@@ -24,7 +24,7 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Problems" href="../../problems.html" />
+    <link rel="next" title="Archives" href="../util/archive.html" />
     <link rel="prev" title="Mutation" href="mutation.html" />
   
    
@@ -40,13 +40,14 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../problems.html" title="Problems"
+          <a href="../util/archive.html" title="Archives"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="mutation.html" title="Mutation"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../operators.html" accesskey="U">Operators</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../api-reference.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../operators.html" accesskey="U">Operators</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Selection</a></li> 
       </ul>
     </div>
@@ -75,16 +76,17 @@
     
     
       <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../../operators.html">Operators</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="crossover.html">Crossover</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mutation.html">Mutation</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Selection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user-guide.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../api-reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../api-reference.html#algorithms">Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api-reference.html#problem-definitions">Problem Definitions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../api-reference.html#operators">Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api-reference.html#core-components">Core Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api-reference.html#utilities">Utilities</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced-topics.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
 </ul>
@@ -124,9 +126,9 @@
 <li><a class="reference internal" href="#jmetal.operator.selection.NaryRandomSolutionSelection.get_name"><code class="docutils literal notranslate"><span class="pre">NaryRandomSolutionSelection.get_name()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#jmetal.operator.selection.RandomSolutionSelection"><code class="docutils literal notranslate"><span class="pre">RandomSelection</span></code></a><ul>
-<li><a class="reference internal" href="#jmetal.operator.selection.RandomSolutionSelection.execute"><code class="docutils literal notranslate"><span class="pre">RandomSelection.execute()</span></code></a></li>
-<li><a class="reference internal" href="#jmetal.operator.selection.RandomSolutionSelection.get_name"><code class="docutils literal notranslate"><span class="pre">RandomSelection.get_name()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.operator.selection.RandomSelection"><code class="docutils literal notranslate"><span class="pre">RandomSelection</span></code></a><ul>
+<li><a class="reference internal" href="#jmetal.operator.selection.RandomSelection.execute"><code class="docutils literal notranslate"><span class="pre">RandomSelection.execute()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.operator.selection.RandomSelection.get_name"><code class="docutils literal notranslate"><span class="pre">RandomSelection.get_name()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#jmetal.operator.selection.RankingAndCrowdingDistanceSelection"><code class="docutils literal notranslate"><span class="pre">RankingAndCrowdingDistanceSelection</span></code></a><ul>
@@ -175,6 +177,8 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="../../index.html">Docs</a></li>
+              
+              <li class="breadcrumb-item"><a href="../../api-reference.html">API Reference</a></li>
               
               <li class="breadcrumb-item"><a href="../../operators.html">Operators</a></li>
               
@@ -272,17 +276,17 @@
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="jmetal.operator.selection.RandomSolutionSelection">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.selection.</span></span><span class="sig-name descname"><span class="pre">RandomSelection</span></span><a class="reference internal" href="../../_modules/jmetal/operator/selection.html#RandomSolutionSelection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.selection.RandomSolutionSelection" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jmetal.operator.selection.RandomSelection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.selection.</span></span><span class="sig-name descname"><span class="pre">RandomSelection</span></span><a class="reference internal" href="../../_modules/jmetal/operator/selection.html#RandomSelection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.selection.RandomSelection" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Selection</span></code>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="#jmetal.operator.selection.S" title="jmetal.operator.selection.S"><code class="xref py py-obj docutils literal notranslate"><span class="pre">S</span></code></a>], <a class="reference internal" href="#jmetal.operator.selection.S" title="jmetal.operator.selection.S"><code class="xref py py-obj docutils literal notranslate"><span class="pre">S</span></code></a>]</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="jmetal.operator.selection.RandomSolutionSelection.execute">
-<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">front</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#jmetal.operator.selection.S" title="jmetal.operator.selection.S"><span class="pre">S</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#jmetal.operator.selection.S" title="jmetal.operator.selection.S"><span class="pre">S</span></a></span></span><a class="reference internal" href="../../_modules/jmetal/operator/selection.html#RandomSolutionSelection.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.selection.RandomSolutionSelection.execute" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jmetal.operator.selection.RandomSelection.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">front</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#jmetal.operator.selection.S" title="jmetal.operator.selection.S"><span class="pre">S</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#jmetal.operator.selection.S" title="jmetal.operator.selection.S"><span class="pre">S</span></a></span></span><a class="reference internal" href="../../_modules/jmetal/operator/selection.html#RandomSelection.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.selection.RandomSelection.execute" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="jmetal.operator.selection.RandomSolutionSelection.get_name">
-<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../_modules/jmetal/operator/selection.html#RandomSolutionSelection.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.selection.RandomSolutionSelection.get_name" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jmetal.operator.selection.RandomSelection.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../_modules/jmetal/operator/selection.html#RandomSelection.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.selection.RandomSelection.get_name" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -364,7 +368,7 @@
       </div>
     
       <div class="float-right">
-        <a class="btn btn-outline btn-sm" href="../../problems.html" title="next chapter (use the right arrow)">Problems →</a>
+        <a class="btn btn-outline btn-sm" href="../util/archive.html" title="next chapter (use the right arrow)">Archives →</a>
       </div>
     </div>
     <div class="clearer"></div>
@@ -382,13 +386,14 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../problems.html" title="Problems"
+          <a href="../util/archive.html" title="Archives"
              >next</a> |</li>
         <li class="right" >
           <a href="mutation.html" title="Mutation"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../operators.html" >Operators</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../api-reference.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../operators.html" >Operators</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Selection</a></li> 
       </ul>
     </div>

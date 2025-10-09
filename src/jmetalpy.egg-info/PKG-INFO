@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: jmetalpy
-Version: 1.7.1
+Version: 1.8.0
 Summary: Python version of the jMetal framework
 Author-email: "Antonio J. Nebro" <ajnebro@uma.es>, Antonio Benítez <antonio.b@uma.es>
 Maintainer-email: "Antonio J. Nebro" <ajnebro@uma.es>
@@ -8,7 +8,10 @@ Classifier: Development Status :: 5 - Production/Stable
 Classifier: Intended Audience :: Science/Research
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
 Requires-Python: >=3.10
 Description-Content-Type: text/markdown
 License-File: LICENSE
@@ -31,6 +34,7 @@ Requires-Dist: matplotlib>=3.0.2; extra == "core"
 Requires-Dist: scipy>=1.15.3; extra == "core"
 Requires-Dist: statsmodels>=0.9.0; extra == "core"
 Requires-Dist: mockito; extra == "core"
+Requires-Dist: moocore>=0.1.8; extra == "core"
 Provides-Extra: docs
 Requires-Dist: tqdm; extra == "docs"
 Requires-Dist: numpy>=2.2.5; extra == "docs"
@@ -64,7 +68,7 @@ Requires-Dist: scipy>=1.15.3; extra == "test"
 Requires-Dist: statsmodels>=0.9.0; extra == "test"
 Requires-Dist: mockito; extra == "test"
 Requires-Dist: PyHamcrest; extra == "test"
-Requires-Dist: moocore>=0.1.4; extra == "test"
+Requires-Dist: moocore>=0.1.8; extra == "test"
 Requires-Dist: pytest>=7.0; extra == "test"
 Requires-Dist: pytest-cov>=4.0; extra == "test"
 Provides-Extra: complete
@@ -86,9 +90,10 @@ Dynamic: license-file
 ![jMetalPy](docs/source/jmetalpy.png)
 
 [![CI](https://github.com/jMetal/jMetalPy/actions/workflows/ci.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/ci.yml)
-[![PyPI Python version](https://img.shields.io/pypi/pyversions/jMetalPy.svg)]()
+[![Python Version](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://www.python.org/downloads/)
+[![PyPI Version](https://img.shields.io/pypi/v/jMetalPy.svg)](https://pypi.org/project/jMetalPy/)
 [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.swevo.2019.100598-blue)](https://doi.org/10.1016/j.swevo.2019.100598)
-[![PyPI License](https://img.shields.io/pypi/l/jMetalPy.svg)]()
+[![PyPI License](https://img.shields.io/pypi/l/jMetalPy.svg)](https://pypi.org/project/jMetalPy/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 A paper introducing jMetalPy is available at: https://doi.org/10.1016/j.swevo.2019.100598
@@ -185,14 +190,14 @@ plot_front.plot(front, label='NSGAII-ZDT1', filename='NSGAII-ZDT1', format='png'
 <img src=docs/source/_static/NSGAII-ZDT1.png width=450 alt="Pareto front approximation">
 
 ## Features
-The current release of jMetalPy (v1.7.0) contains the following components:
+The current release of jMetalPy (v1.8.0) contains the following components:
 
-* Algorithms: local search, genetic algorithm, evolution strategy, simulated annealing, random search, NSGA-II, NSGA-III, SMPSO, OMOPSO, MOEA/D, MOEA/D-DRA, MOEA/D-IEpsilon, GDE3, SPEA2, HYPE, IBEA. Preference articulation-based algorithms (G-NSGA-II, G-GDE3, G-SPEA2, SMPSO/RP); Dynamic versions of NSGA-II, SMPSO, and GDE3.
+* Algorithms: local search, genetic algorithm, evolution strategy, simulated annealing, random search, NSGA-II, NSGA-III, SMPSO, OMOPSO, MOEA/D, SMS-EMOA, MOEA/D-DRA, MOEA/D-IEpsilon, GDE3, SPEA2, HYPE, IBEA. Preference articulation-based algorithms (G-NSGA-II, G-GDE3, G-SPEA2, SMPSO/RP); Dynamic versions of NSGA-II, SMPSO, and GDE3.
 * Parallel computing based on Apache Spark and Dask.
-* Benchmark problems: ZDT1-6, DTLZ1-2, FDA, LZ09, LIR-CMOP, RWA, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2), constrained (Srinivas, Tanaka).
+* Benchmark problems: ZDT1-6, DTLZ1-2, FDA, LZ09, LIR-CMOP, RWA, RE, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2), constrained (Srinivas, Tanaka).
 * Encodings: real, binary, permutations.
 * Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random).
-* Quality indicators: hypervolume, additive epsilon, GD, IGD.
+* Quality indicators: hypervolume, additive epsilon, GD, IGD, IGD+.
 * Pareto front approximation plotting in real-time, static or interactive.
 * Experiment class for performing studies either alone or alongside [jMetal](https://github.com/jMetal/jMetal).
 * Pairwise and multiple hypothesis testing for statistical analysis, including several frequentist and Bayesian testing methods, critical distance plots and posterior diagrams.
@@ -203,7 +208,9 @@ The current release of jMetalPy (v1.7.0) contains the following components:
 
 ## Changelog
 
-* [Current development version] 
+* [v.1.8.0] 
+  * Add the SMS-EMOA algorithm (based on [moocore](https://multi-objective.github.io/moocore/python/).) 
+  * Add the IGD+ quality indicator
   * Add new bencharmk problems:
     * [eqdtlz.py](https://github.com/jMetal/jMetalPy/blob/main/src/jmetal/problem/multiobjective/eqdtlz.py)
     * [misc.py](https://github.com/jMetal/jMetalPy/blob/main/src/jmetal/problem/multiobjective/misc.py)

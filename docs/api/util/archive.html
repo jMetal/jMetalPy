@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Archives &#8212; jMetalPy 1.7.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css?v=e05a0192" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=9aa90875" />
+    <script src="../../_static/documentation_options.js?v=030dc6f6"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Distance Metrics" href="distance.html" />
+    <link rel="prev" title="Selection" href="../operator/selection.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="distance.html" title="Distance Metrics"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../operator/selection.html" title="Selection"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../api-reference.html" accesskey="U">API Reference</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Archives</a></li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../../index.html" class="text-logo">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.7.0 documentation">
+    <br>
+</a>
+
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    Python version of the jMetal framework
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user-guide.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../api-reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../api-reference.html#algorithms">Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api-reference.html#problem-definitions">Problem Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api-reference.html#operators">Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api-reference.html#core-components">Core Components</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../api-reference.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced-topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Contents</h2>
+    <div class="sidebar-localtoc">
+      <ul>
+<li><a class="reference internal" href="#">Archives</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#distancebasedarchive">DistanceBasedArchive</a><ul>
+<li><a class="reference internal" href="#jmetal.util.archive.DistanceBasedArchive"><code class="docutils literal notranslate"><span class="pre">DistanceBasedArchive</span></code></a><ul>
+<li><a class="reference internal" href="#jmetal.util.archive.DistanceBasedArchive.add"><code class="docutils literal notranslate"><span class="pre">DistanceBasedArchive.add()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.util.archive.DistanceBasedArchive.compute_density_estimator"><code class="docutils literal notranslate"><span class="pre">DistanceBasedArchive.compute_density_estimator()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#distance-based-subset-selection">Distance-Based Subset Selection</a><ul>
+<li><a class="reference internal" href="#jmetal.util.archive.distance_based_subset_selection"><code class="docutils literal notranslate"><span class="pre">distance_based_subset_selection()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#other-archive-classes">Other Archive Classes</a><ul>
+<li><a class="reference internal" href="#jmetal.util.archive.Archive"><code class="docutils literal notranslate"><span class="pre">Archive</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.util.archive.BoundedArchive"><code class="docutils literal notranslate"><span class="pre">BoundedArchive</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.util.archive.NonDominatedSolutionsArchive"><code class="docutils literal notranslate"><span class="pre">NonDominatedSolutionsArchive</span></code></a><ul>
+<li><a class="reference internal" href="#jmetal.util.archive.NonDominatedSolutionsArchive.add"><code class="docutils literal notranslate"><span class="pre">NonDominatedSolutionsArchive.add()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jmetal.util.archive.CrowdingDistanceArchive"><code class="docutils literal notranslate"><span class="pre">CrowdingDistanceArchive</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.util.archive.ArchiveWithReferencePoint"><code class="docutils literal notranslate"><span class="pre">ArchiveWithReferencePoint</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#performance-considerations">Performance Considerations</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="../../index.html">Docs</a></li>
+              
+              <li class="breadcrumb-item"><a href="../../api-reference.html">API Reference</a></li>
+              
+              <li class="breadcrumb-item">Archives</li>
+            </ol>
+          </nav>
+          
+          <div class="document clearer body">
+            
+  <section id="archives">
+<h1>Archives<a class="headerlink" href="#archives" title="Link to this heading">¶</a></h1>
+<p>Archives are data structures for storing and managing collections of solutions during the optimization process.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>jMetalPy provides several archive implementations for different use cases:</p>
+<ul class="simple">
+<li><p><strong>Archive</strong>: Base abstract class for all archives</p></li>
+<li><p><strong>BoundedArchive</strong>: Archive with size limits</p></li>
+<li><p><strong>NonDominatedSolutionsArchive</strong>: Maintains only non-dominated solutions</p></li>
+<li><p><strong>CrowdingDistanceArchive</strong>: Uses crowding distance for diversity</p></li>
+<li><p><strong>DistanceBasedArchive</strong>: Adaptive distance-based selection</p></li>
+</ul>
+</section>
+<section id="distancebasedarchive">
+<h2>DistanceBasedArchive<a class="headerlink" href="#distancebasedarchive" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="jmetal.util.archive.DistanceBasedArchive">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.util.archive.</span></span><span class="sig-name descname"><span class="pre">DistanceBasedArchive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="distance.html#jmetal.util.distance.DistanceMetric" title="jmetal.util.distance.DistanceMetric"><span class="pre">DistanceMetric</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">DistanceMetric.L2_SQUARED</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dominance_comparator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_vectorized</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/util/archive.html#DistanceBasedArchive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.archive.DistanceBasedArchive" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.util.archive.BoundedArchive" title="jmetal.util.archive.BoundedArchive"><code class="xref py py-class docutils literal notranslate"><span class="pre">BoundedArchive</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">S</span></code>]</p>
+<p>Archive that maintains solutions using adaptive distance-based subset selection.</p>
+<p>This archive extends BoundedArchive to use a sophisticated selection mechanism:
+- For 2 objectives: Uses crowding distance selection
+- For &gt;2 objectives: Uses robust distance-based subset selection with normalization</p>
+<p>The implementation follows the Java jMetal SafeBestSolutionsArchive algorithm.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">DistanceBasedArchive</span></code> class provides adaptive selection strategies based on the number of objectives:</p>
+<ul class="simple">
+<li><p><strong>2 objectives</strong>: Uses crowding distance selection for optimal diversity along Pareto fronts</p></li>
+<li><p><strong>&gt;2 objectives</strong>: Uses distance-based subset selection with normalization</p></li>
+</ul>
+<p><strong>Key Features:</strong></p>
+<ul class="simple">
+<li><p>Automatic strategy adaptation based on problem dimensionality</p></li>
+<li><p>Robust normalization handling constant objectives</p></li>
+<li><p>Support for custom distance measures</p></li>
+<li><p>Non-dominated solution filtering using Pareto dominance</p></li>
+<li><p>Memory-efficient in-place list modifications</p></li>
+</ul>
+<p><strong>Algorithm for Many-Objective Problems:</strong></p>
+<ol class="arabic simple">
+<li><p>Normalize objectives to [0,1] range using min-max normalization</p></li>
+<li><p>Select random objective for initial sorting</p></li>
+<li><p>Choose extreme solutions (best and worst in random objective)</p></li>
+<li><p>Select remaining solutions using maximum minimum distance criterion</p></li>
+</ol>
+<p><strong>Example Usage:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.archive</span><span class="w"> </span><span class="kn">import</span> <span class="n">DistanceBasedArchive</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">EuclideanDistance</span>
+
+<span class="c1"># Create archive with custom distance measure</span>
+<span class="n">archive</span> <span class="o">=</span> <span class="n">DistanceBasedArchive</span><span class="p">(</span>
+    <span class="n">maximum_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">distance_measure</span><span class="o">=</span><span class="n">EuclideanDistance</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="c1"># Add solutions - automatically adapts strategy</span>
+<span class="k">for</span> <span class="n">solution</span> <span class="ow">in</span> <span class="n">solutions</span><span class="p">:</span>
+    <span class="n">archive</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.util.archive.DistanceBasedArchive.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">S</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../../_modules/jmetal/util/archive.html#DistanceBasedArchive.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.archive.DistanceBasedArchive.add" title="Link to this definition">¶</a></dt>
+<dd><p>Add a solution to the archive using non-dominated sorting and distance-based selection.
+Thread-safe implementation for concurrent use.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>solution: Solution to add</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if solution was added or archive was modified, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.util.archive.DistanceBasedArchive.compute_density_estimator">
+<span class="sig-name descname"><span class="pre">compute_density_estimator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/util/archive.html#DistanceBasedArchive.compute_density_estimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.archive.DistanceBasedArchive.compute_density_estimator" title="Link to this definition">¶</a></dt>
+<dd><p>Override parent method since we use distance-based selection instead.
+This method is called by parent class but we don’t need density estimation.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="distance-based-subset-selection">
+<h2>Distance-Based Subset Selection<a class="headerlink" href="#distance-based-subset-selection" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="jmetal.util.archive.distance_based_subset_selection">
+<span class="sig-prename descclassname"><span class="pre">jmetal.util.archive.</span></span><span class="sig-name descname"><span class="pre">distance_based_subset_selection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solution_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">S</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subset_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_measure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="distance.html#jmetal.util.distance.DistanceMetric" title="jmetal.util.distance.DistanceMetric"><span class="pre">DistanceMetric</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">DistanceMetric.L2_SQUARED</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">S</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/jmetal/util/archive.html#distance_based_subset_selection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.archive.distance_based_subset_selection" title="Link to this definition">¶</a></dt>
+<dd><p>Backward compatibility wrapper for distance_based_subset_selection_robust.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>solution_list: List of solutions to select from
+subset_size: Number of solutions to select  
+distance_measure: Deprecated parameter (ignored)
+metric: Distance metric to use
+weights: Optional weights for TCHEBY_WEIGHTED metric
+random_seed: Optional seed for reproducible results</p>
+</dd>
+<dt>Returns:</dt><dd><p>List of selected solutions</p>
+</dd>
+</dl>
+<p>Standalone function for distance-based subset selection that can be used independently of the archive.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">solution_list</span></code>: List of solutions to select from</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">subset_size</span></code>: Number of solutions to select</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">distance_measure</span></code>: Distance function (default: EuclideanDistance)</p></li>
+</ul>
+<p><strong>Selection Strategy:</strong></p>
+<ul class="simple">
+<li><p>For 2 objectives: Delegates to crowding distance selection</p></li>
+<li><p>For &gt;2 objectives: Uses distance-based algorithm with normalization</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.archive</span><span class="w"> </span><span class="kn">import</span> <span class="n">distance_based_subset_selection</span>
+
+<span class="c1"># Select 5 best solutions from a larger set</span>
+<span class="n">selected</span> <span class="o">=</span> <span class="n">distance_based_subset_selection</span><span class="p">(</span>
+    <span class="n">solution_list</span><span class="o">=</span><span class="n">all_solutions</span><span class="p">,</span>
+    <span class="n">subset_size</span><span class="o">=</span><span class="mi">5</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="other-archive-classes">
+<h2>Other Archive Classes<a class="headerlink" href="#other-archive-classes" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="jmetal.util.archive.Archive">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.util.archive.</span></span><span class="sig-name descname"><span class="pre">Archive</span></span><a class="reference internal" href="../../_modules/jmetal/util/archive.html#Archive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.archive.Archive" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Generic" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">S</span></code>], <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="jmetal.util.archive.BoundedArchive">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.util.archive.</span></span><span class="sig-name descname"><span class="pre">BoundedArchive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_size:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comparator:</span> <span class="pre">~jmetal.util.comparator.Comparator[~jmetal.util.archive.S]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_estimator:</span> <span class="pre">~jmetal.util.density_estimator.DensityEstimator</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dominance_comparator:</span> <span class="pre">~jmetal.util.comparator.Comparator[~jmetal.util.archive.S]</span> <span class="pre">=</span> <span class="pre">&lt;jmetal.util.comparator.DominanceComparator</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/util/archive.html#BoundedArchive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.archive.BoundedArchive" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.util.archive.Archive" title="jmetal.util.archive.Archive"><code class="xref py py-class docutils literal notranslate"><span class="pre">Archive</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">S</span></code>]</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="jmetal.util.archive.NonDominatedSolutionsArchive">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.util.archive.</span></span><span class="sig-name descname"><span class="pre">NonDominatedSolutionsArchive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dominance_comparator:</span> <span class="pre">~jmetal.util.comparator.Comparator</span> <span class="pre">=</span> <span class="pre">&lt;jmetal.util.comparator.DominanceComparator</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objective_tolerance:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1e-10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/util/archive.html#NonDominatedSolutionsArchive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.archive.NonDominatedSolutionsArchive" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.util.archive.Archive" title="jmetal.util.archive.Archive"><code class="xref py py-class docutils literal notranslate"><span class="pre">Archive</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">S</span></code>]</p>
+<p>Archive that maintains only non-dominated solutions using Pareto dominance.</p>
+<p>This implementation efficiently manages a collection of solutions by:
+- Adding new non-dominated solutions
+- Removing solutions dominated by new ones
+- Preventing duplicate solutions based on objectives</p>
+<p>Time Complexity: O(n) per insertion, where n is archive size
+Space Complexity: O(n) for storing solutions</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.util.archive.NonDominatedSolutionsArchive.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">S</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../../_modules/jmetal/util/archive.html#NonDominatedSolutionsArchive.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.archive.NonDominatedSolutionsArchive.add" title="Link to this definition">¶</a></dt>
+<dd><p>Add a solution to the archive if it’s non-dominated and not duplicate.</p>
+<p>This method efficiently handles the archive by:
+1. Checking if the new solution is dominated by existing ones
+2. Removing existing solutions dominated by the new one
+3. Preventing addition of duplicate solutions</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>solution: Solution to add to the archive</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if solution was added, False if rejected (dominated or duplicate)</p>
+</dd>
+</dl>
+<p>Time Complexity: O(n) where n is the number of solutions in archive</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="jmetal.util.archive.CrowdingDistanceArchive">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.util.archive.</span></span><span class="sig-name descname"><span class="pre">CrowdingDistanceArchive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_size:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dominance_comparator=&lt;jmetal.util.comparator.DominanceComparator</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/util/archive.html#CrowdingDistanceArchive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.archive.CrowdingDistanceArchive" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.util.archive.BoundedArchive" title="jmetal.util.archive.BoundedArchive"><code class="xref py py-class docutils literal notranslate"><span class="pre">BoundedArchive</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">S</span></code>]</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="jmetal.util.archive.ArchiveWithReferencePoint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.util.archive.</span></span><span class="sig-name descname"><span class="pre">ArchiveWithReferencePoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comparator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Comparator</span><span class="p"><span class="pre">[</span></span><span class="pre">S</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_estimator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DensityEstimator</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/util/archive.html#ArchiveWithReferencePoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.archive.ArchiveWithReferencePoint" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jmetal.util.archive.BoundedArchive" title="jmetal.util.archive.BoundedArchive"><code class="xref py py-class docutils literal notranslate"><span class="pre">BoundedArchive</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">S</span></code>]</p>
+</dd></dl>
+
+</section>
+<section id="performance-considerations">
+<h2>Performance Considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading">¶</a></h2>
+<p><strong>Time Complexity:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DistanceBasedArchive.add()</span></code>: O(n²) for &gt;2 objectives, O(n log n) for 2 objectives</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">distance_based_subset_selection()</span></code>: O(n²) worst case</p></li>
+</ul>
+<p><strong>Space Complexity:</strong> O(n) for all archive implementations</p>
+<p><strong>Scalability:</strong> Efficient for typical archive sizes (&lt; 1000 solutions)</p>
+<p><strong>Recommendations:</strong></p>
+<ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">CrowdingDistanceArchive</span></code> for 2-objective problems requiring only crowding distance</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">DistanceBasedArchive</span></code> for mixed or many-objective problems</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">NonDominatedSolutionsArchive</span></code> when size limits are not needed</p></li>
+</ul>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><span class="xref std std-doc">../distance</span> - Distance measures and metrics</p></li>
+<li><p><span class="xref std std-doc">../comparator</span> - Solution comparison utilities</p></li>
+<li><p><span class="xref std std-doc">../normalization</span> - Objective normalization functions</p></li>
+<li><p><span class="xref std std-doc">../../algorithm/multiobjective</span> - Multi-objective algorithms using archives</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="float-left">
+        <a class="btn btn-outline btn-sm" href="../operator/selection.html" title="previous chapter (use the left arrow)">← Selection</a>
+      </div>
+    
+      <div class="float-right">
+        <a class="btn btn-outline btn-sm" href="distance.html" title="next chapter (use the right arrow)">Distance Metrics →</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="distance.html" title="Distance Metrics"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../operator/selection.html" title="Selection"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../api-reference.html" >API Reference</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Archives</a></li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

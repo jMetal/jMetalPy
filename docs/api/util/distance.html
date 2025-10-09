@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Distance Metrics &#8212; jMetalPy 1.7.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css?v=e05a0192" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=9aa90875" />
+    <script src="../../_static/documentation_options.js?v=030dc6f6"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Advanced Topics" href="../../advanced-topics.html" />
+    <link rel="prev" title="Archives" href="archive.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../advanced-topics.html" title="Advanced Topics"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="archive.html" title="Archives"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../api-reference.html" accesskey="U">API Reference</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Distance Metrics</a></li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../../index.html" class="text-logo">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.7.0 documentation">
+    <br>
+</a>
+
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    Python version of the jMetal framework
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user-guide.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../api-reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../api-reference.html#algorithms">Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api-reference.html#problem-definitions">Problem Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api-reference.html#operators">Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api-reference.html#core-components">Core Components</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../api-reference.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced-topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Contents</h2>
+    <div class="sidebar-localtoc">
+      <ul>
+<li><a class="reference internal" href="#">Distance Metrics</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#distance-metrics-enumeration">Distance Metrics Enumeration</a><ul>
+<li><a class="reference internal" href="#jmetal.util.distance.DistanceMetric"><code class="docutils literal notranslate"><span class="pre">DistanceMetric</span></code></a><ul>
+<li><a class="reference internal" href="#jmetal.util.distance.DistanceMetric.L2_SQUARED"><code class="docutils literal notranslate"><span class="pre">DistanceMetric.L2_SQUARED</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.util.distance.DistanceMetric.LINF"><code class="docutils literal notranslate"><span class="pre">DistanceMetric.LINF</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.util.distance.DistanceMetric.TCHEBY_WEIGHTED"><code class="docutils literal notranslate"><span class="pre">DistanceMetric.TCHEBY_WEIGHTED</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#distance-calculator">Distance Calculator</a><ul>
+<li><a class="reference internal" href="#jmetal.util.distance.DistanceCalculator"><code class="docutils literal notranslate"><span class="pre">DistanceCalculator</span></code></a><ul>
+<li><a class="reference internal" href="#jmetal.util.distance.DistanceCalculator.calculate_distance"><code class="docutils literal notranslate"><span class="pre">DistanceCalculator.calculate_distance()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.util.distance.DistanceCalculator.calculate_distance_matrix"><code class="docutils literal notranslate"><span class="pre">DistanceCalculator.calculate_distance_matrix()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.util.distance.DistanceCalculator.calculate_min_distances_vectorized"><code class="docutils literal notranslate"><span class="pre">DistanceCalculator.calculate_min_distances_vectorized()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#traditional-distance-classes">Traditional Distance Classes</a><ul>
+<li><a class="reference internal" href="#jmetal.util.distance.EuclideanDistance"><code class="docutils literal notranslate"><span class="pre">EuclideanDistance</span></code></a><ul>
+<li><a class="reference internal" href="#jmetal.util.distance.EuclideanDistance.get_distance"><code class="docutils literal notranslate"><span class="pre">EuclideanDistance.get_distance()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jmetal.util.distance.CosineDistance"><code class="docutils literal notranslate"><span class="pre">CosineDistance</span></code></a><ul>
+<li><a class="reference internal" href="#jmetal.util.distance.CosineDistance.get_distance"><code class="docutils literal notranslate"><span class="pre">CosineDistance.get_distance()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.util.distance.CosineDistance.get_similarity"><code class="docutils literal notranslate"><span class="pre">CosineDistance.get_similarity()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="../../index.html">Docs</a></li>
+              
+              <li class="breadcrumb-item"><a href="../../api-reference.html">API Reference</a></li>
+              
+              <li class="breadcrumb-item">Distance Metrics</li>
+            </ol>
+          </nav>
+          
+          <div class="document clearer body">
+            
+  <section id="distance-metrics">
+<h1>Distance Metrics<a class="headerlink" href="#distance-metrics" title="Link to this heading">¶</a></h1>
+<p>Distance calculation utilities for multi-objective optimization problems.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The distance module provides various distance metrics and calculation utilities optimized for different use cases in multi-objective optimization:</p>
+<ul class="simple">
+<li><p><strong>DistanceMetric</strong>: Enumeration of available distance metrics</p></li>
+<li><p><strong>DistanceCalculator</strong>: High-performance distance calculation utility</p></li>
+<li><p><strong>EuclideanDistance</strong>: Standard Euclidean distance implementation</p></li>
+<li><p><strong>CosineDistance</strong>: Cosine distance with reference point translation</p></li>
+</ul>
+</section>
+<section id="distance-metrics-enumeration">
+<h2>Distance Metrics Enumeration<a class="headerlink" href="#distance-metrics-enumeration" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="jmetal.util.distance.DistanceMetric">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.util.distance.</span></span><span class="sig-name descname"><span class="pre">DistanceMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/util/distance.html#DistanceMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.distance.DistanceMetric" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></a></p>
+<p>Enumeration of available distance metrics for optimized distance calculations.</p>
+<p>Each metric is optimized for specific use cases:
+- L2_SQUARED: Fastest, avoids sqrt computation for relative distance comparisons
+- LINF: Efficient for high-dimensional spaces, emphasizes maximum difference
+- TCHEBY_WEIGHTED: Flexible weighted distance allowing preference specification</p>
+<p>Available distance metrics:</p>
+<ul class="simple">
+<li><p><strong>L2_SQUARED</strong>: Squared Euclidean distance (fastest, avoids sqrt computation)</p></li>
+<li><p><strong>LINF</strong>: L-infinity (Chebyshev) distance (efficient for high dimensions)</p></li>
+<li><p><strong>TCHEBY_WEIGHTED</strong>: Weighted Chebyshev distance (supports preferences)</p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jmetal.util.distance.DistanceMetric.L2_SQUARED">
+<span class="sig-name descname"><span class="pre">L2_SQUARED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'l2_squared'</span></em><a class="headerlink" href="#jmetal.util.distance.DistanceMetric.L2_SQUARED" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jmetal.util.distance.DistanceMetric.LINF">
+<span class="sig-name descname"><span class="pre">LINF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'linf'</span></em><a class="headerlink" href="#jmetal.util.distance.DistanceMetric.LINF" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jmetal.util.distance.DistanceMetric.TCHEBY_WEIGHTED">
+<span class="sig-name descname"><span class="pre">TCHEBY_WEIGHTED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'tcheby_weighted'</span></em><a class="headerlink" href="#jmetal.util.distance.DistanceMetric.TCHEBY_WEIGHTED" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="distance-calculator">
+<h2>Distance Calculator<a class="headerlink" href="#distance-calculator" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="jmetal.util.distance.DistanceCalculator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.util.distance.</span></span><span class="sig-name descname"><span class="pre">DistanceCalculator</span></span><a class="reference internal" href="../../_modules/jmetal/util/distance.html#DistanceCalculator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.distance.DistanceCalculator" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>High-performance distance calculator supporting multiple metrics.</p>
+<p>This utility class provides optimized implementations for different distance
+metrics commonly used in multi-objective optimization. All methods are static
+for efficiency and support numpy array operations for vectorized performance.</p>
+<p>High-performance static utility class for distance calculations. Supports multiple
+optimized metrics for different optimization scenarios.</p>
+<p><strong>Performance Characteristics:</strong></p>
+<ul class="simple">
+<li><p><strong>L2_SQUARED</strong>: ~15-20% faster than standard Euclidean distance</p></li>
+<li><p><strong>LINF</strong>: Efficient for high-dimensional objective spaces</p></li>
+<li><p><strong>TCHEBY_WEIGHTED</strong>: Flexible preference-based distance calculation</p></li>
+</ul>
+<p><strong>Usage Examples:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">DistanceCalculator</span><span class="p">,</span> <span class="n">DistanceMetric</span>
+
+<span class="n">point1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">])</span>
+<span class="n">point2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span>
+
+<span class="c1"># L2 squared distance (fastest)</span>
+<span class="n">dist_l2</span> <span class="o">=</span> <span class="n">DistanceCalculator</span><span class="o">.</span><span class="n">calculate_distance</span><span class="p">(</span>
+    <span class="n">point1</span><span class="p">,</span> <span class="n">point2</span><span class="p">,</span> <span class="n">DistanceMetric</span><span class="o">.</span><span class="n">L2_SQUARED</span>
+<span class="p">)</span>
+
+<span class="c1"># Chebyshev distance</span>
+<span class="n">dist_linf</span> <span class="o">=</span> <span class="n">DistanceCalculator</span><span class="o">.</span><span class="n">calculate_distance</span><span class="p">(</span>
+    <span class="n">point1</span><span class="p">,</span> <span class="n">point2</span><span class="p">,</span> <span class="n">DistanceMetric</span><span class="o">.</span><span class="n">LINF</span>
+<span class="p">)</span>
+
+<span class="c1"># Weighted Chebyshev distance</span>
+<span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">])</span>
+<span class="n">dist_weighted</span> <span class="o">=</span> <span class="n">DistanceCalculator</span><span class="o">.</span><span class="n">calculate_distance</span><span class="p">(</span>
+    <span class="n">point1</span><span class="p">,</span> <span class="n">point2</span><span class="p">,</span> <span class="n">DistanceMetric</span><span class="o">.</span><span class="n">TCHEBY_WEIGHTED</span><span class="p">,</span> <span class="n">weights</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.util.distance.DistanceCalculator.calculate_distance">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#jmetal.util.distance.DistanceMetric" title="jmetal.util.distance.DistanceMetric"><span class="pre">DistanceMetric</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></span><a class="reference internal" href="../../_modules/jmetal/util/distance.html#DistanceCalculator.calculate_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.distance.DistanceCalculator.calculate_distance" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate distance between two points using the specified metric.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>point1: First point as numpy array
+point2: Second point as numpy array  
+metric: Distance metric to use
+weights: Optional weights for TCHEBY_WEIGHTED metric</p>
+</dd>
+<dt>Returns:</dt><dd><p>float: Distance between points according to specified metric</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If metric is invalid or weights are required but not provided</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.util.distance.DistanceCalculator.calculate_distance_matrix">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_distance_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#jmetal.util.distance.DistanceMetric" title="jmetal.util.distance.DistanceMetric"><span class="pre">DistanceMetric</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../_modules/jmetal/util/distance.html#DistanceCalculator.calculate_distance_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.distance.DistanceCalculator.calculate_distance_matrix" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate pairwise distance matrix between all points using vectorized operations.</p>
+<p>This is significantly faster than calculating distances individually,
+especially for large numbers of points. Uses optimized NumPy operations
+for maximum performance.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>points: 2D array where each row is a point (n_points, n_dimensions)
+metric: Distance metric to use
+weights: Optional weights for TCHEBY_WEIGHTED metric</p>
+</dd>
+<dt>Returns:</dt><dd><p>numpy.ndarray: Symmetric distance matrix (n_points, n_points)</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If metric is invalid or weights are required but not provided</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.util.distance.DistanceCalculator.calculate_min_distances_vectorized">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_min_distances_vectorized</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_indices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#jmetal.util.distance.DistanceMetric" title="jmetal.util.distance.DistanceMetric"><span class="pre">DistanceMetric</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../_modules/jmetal/util/distance.html#DistanceCalculator.calculate_min_distances_vectorized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.distance.DistanceCalculator.calculate_min_distances_vectorized" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate minimum distances from each point to the selected points using vectorized operations.</p>
+<p>This is optimized for the subset selection process where we need to find
+the minimum distance from each candidate point to any already selected point.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>points: 2D array of all points (n_points, n_dimensions)
+selected_indices: List of indices of already selected points
+metric: Distance metric to use
+weights: Optional weights for TCHEBY_WEIGHTED metric</p>
+</dd>
+<dt>Returns:</dt><dd><p>numpy.ndarray: Array of minimum distances for each point</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="traditional-distance-classes">
+<h2>Traditional Distance Classes<a class="headerlink" href="#traditional-distance-classes" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="jmetal.util.distance.EuclideanDistance">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.util.distance.</span></span><span class="sig-name descname"><span class="pre">EuclideanDistance</span></span><a class="reference internal" href="../../_modules/jmetal/util/distance.html#EuclideanDistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.distance.EuclideanDistance" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Distance</span></code></p>
+<p>Euclidean distance implementation with enhanced type safety and validation.</p>
+<p>Supports both Python lists and numpy arrays as input.
+Provides comprehensive input validation for robust operation.</p>
+<p>Enhanced Euclidean distance implementation with comprehensive input validation
+and support for both Python lists and numpy arrays.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.util.distance.EuclideanDistance.get_distance">
+<span class="sig-name descname"><span class="pre">get_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></span><a class="reference internal" href="../../_modules/jmetal/util/distance.html#EuclideanDistance.get_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.distance.EuclideanDistance.get_distance" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the Euclidean distance between two points.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>list1: First point as list or numpy array
+list2: Second point as list or numpy array</p>
+</dd>
+<dt>Returns:</dt><dd><p>float: Euclidean distance between the points</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If inputs have different dimensions or are empty
+TypeError: If inputs cannot be converted to numeric arrays</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="jmetal.util.distance.CosineDistance">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.util.distance.</span></span><span class="sig-name descname"><span class="pre">CosineDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/util/distance.html#CosineDistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.distance.CosineDistance" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Distance</span></code></p>
+<p>Cosine distance implementation with reference point translation.</p>
+<p>This class computes the cosine distance between two points after translating them
+relative to a reference point. The cosine distance is defined as:
+distance = 1 - cosine_similarity</p>
+<p>Where cosine_similarity = (a·b) / (||a|| * ||b||)</p>
+<p>The distance ranges from 0 (identical direction) to 2 (opposite directions).</p>
+<p>Performance optimizations:
+- Cached reference point norm for efficiency
+- Vectorized numpy operations 
+- Robust input validation and error handling</p>
+<p>Cosine distance implementation with reference point translation for specialized
+use cases in multi-objective optimization.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.util.distance.CosineDistance.get_distance">
+<span class="sig-name descname"><span class="pre">get_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></span><a class="reference internal" href="../../_modules/jmetal/util/distance.html#CosineDistance.get_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.distance.CosineDistance.get_distance" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the cosine distance between two points relative to the reference point.</p>
+<p>The computation follows these steps:
+1. Translate both points by subtracting the reference point
+2. Compute cosine similarity of the translated vectors
+3. Return cosine distance = 1 - cosine_similarity</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>list1: First point as list or numpy array
+list2: Second point as list or numpy array</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>float: Cosine distance in range [0, 2]</dt><dd><p>0 = vectors point in same direction
+1 = vectors are orthogonal  
+2 = vectors point in opposite directions</p>
+</dd>
+</dl>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If inputs have different dimensions than reference point or are empty
+TypeError: If inputs cannot be converted to numeric arrays</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.util.distance.CosineDistance.get_similarity">
+<span class="sig-name descname"><span class="pre">get_similarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></span><a class="reference internal" href="../../_modules/jmetal/util/distance.html#CosineDistance.get_similarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.util.distance.CosineDistance.get_similarity" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the cosine similarity between two points relative to the reference point.</p>
+<p>This is a convenience method that returns the similarity instead of distance.</p>
+<dl>
+<dt>Args:</dt><dd><p>list1: First point as list or numpy array
+list2: Second point as list or numpy array</p>
+</dd>
+<dt>Returns:</dt><dd><dl>
+<dt>float: Cosine similarity in range [-1, 1]</dt><dd><blockquote>
+<div><p>1 = vectors point in same direction
+0 = vectors are orthogonal</p>
+</div></blockquote>
+<p>-1 = vectors point in opposite directions</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><span class="xref std std-doc">../archive</span> - Archive implementations that use distance metrics</p></li>
+<li><p><a class="reference internal" href="../../advanced-topics/distance-based-archive.html"><span class="doc">Distance-Based Archive Tutorial</span></a> - Tutorial on distance-based selection</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="float-left">
+        <a class="btn btn-outline btn-sm" href="archive.html" title="previous chapter (use the left arrow)">← Archives</a>
+      </div>
+    
+      <div class="float-right">
+        <a class="btn btn-outline btn-sm" href="../../advanced-topics.html" title="next chapter (use the right arrow)">Advanced Topics →</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../advanced-topics.html" title="Advanced Topics"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="archive.html" title="Archives"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../api-reference.html" >API Reference</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Distance Metrics</a></li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

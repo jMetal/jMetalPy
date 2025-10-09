@@ -51,6 +51,7 @@ Utilities
    :caption: Helper Tools:
 
    api/util/archive
+   api/util/distance
    api/util/observer
    api/util/evaluator
    api/util/termination_criterion

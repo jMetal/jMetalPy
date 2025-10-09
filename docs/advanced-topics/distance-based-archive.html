@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Distance-Based Archive Tutorial &#8212; jMetalPy 1.7.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/guzzle.css?v=e05a0192" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=9aa90875" />
+    <script src="../_static/documentation_options.js?v=030dc6f6"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Custom Archives" href="custom-archives.html" />
+    <link rel="prev" title="Advanced Topics" href="../advanced-topics.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="custom-archives.html" title="Custom Archives"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../advanced-topics.html" title="Advanced Topics"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../advanced-topics.html" accesskey="U">Advanced Topics</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Distance-Based Archive Tutorial</a></li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../index.html" class="text-logo">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.7.0 documentation">
+    <br>
+</a>
+
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    Python version of the jMetal framework
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api-reference.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../advanced-topics.html">Advanced Topics</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../advanced-topics.html#advanced-utilities">Advanced Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced-topics.html#distributed-computing">Distributed Computing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced-topics.html#custom-development">Custom Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced-topics.html#integration">Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced-topics.html#research-applications">Research Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced-topics.html#performance-optimization">Performance Optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Contents</h2>
+    <div class="sidebar-localtoc">
+      <ul>
+<li><a class="reference internal" href="#">Distance-Based Archive Tutorial</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#basic-usage">Basic Usage</a><ul>
+<li><a class="reference internal" href="#creating-and-using-an-archive">Creating and Using an Archive</a></li>
+<li><a class="reference internal" href="#custom-distance-metrics">Custom Distance Metrics</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#advanced-examples">Advanced Examples</a><ul>
+<li><a class="reference internal" href="#two-objective-problems">Two-Objective Problems</a></li>
+<li><a class="reference internal" href="#many-objective-problems">Many-Objective Problems</a></li>
+<li><a class="reference internal" href="#standalone-subset-selection">Standalone Subset Selection</a></li>
+<li><a class="reference internal" href="#independent-usage-of-selection-functions">Independent Usage of Selection Functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#integration-with-algorithms">Integration with Algorithms</a></li>
+<li><a class="reference internal" href="#performance-tips">Performance Tips</a></li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="../index.html">Docs</a></li>
+              
+              <li class="breadcrumb-item"><a href="../advanced-topics.html">Advanced Topics</a></li>
+              
+              <li class="breadcrumb-item">Distance-Based Archive Tutorial</li>
+            </ol>
+          </nav>
+          
+          <div class="document clearer body">
+            
+  <section id="distance-based-archive-tutorial">
+<h1>Distance-Based Archive Tutorial<a class="headerlink" href="#distance-based-archive-tutorial" title="Link to this heading">¶</a></h1>
+<p>This tutorial demonstrates how to use the <code class="docutils literal notranslate"><span class="pre">DistanceBasedArchive</span></code> class for maintaining diverse solution sets in multi-objective optimization problems.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">DistanceBasedArchive</span></code> is an adaptive archive that automatically selects the best strategy based on the number of objectives:</p>
+<ul class="simple">
+<li><p><strong>2 objectives</strong>: Uses crowding distance selection</p></li>
+<li><p><strong>&gt;2 objectives</strong>: Uses distance-based subset selection with normalization</p></li>
+</ul>
+<p>This makes it particularly useful for problems where you don’t know in advance how many objectives you’ll be dealing with, or when working with both bi-objective and many-objective variants of the same problem.</p>
+</section>
+<section id="basic-usage">
+<h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Link to this heading">¶</a></h2>
+<section id="creating-and-using-an-archive">
+<h3>Creating and Using an Archive<a class="headerlink" href="#creating-and-using-an-archive" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.archive</span><span class="w"> </span><span class="kn">import</span> <span class="n">DistanceBasedArchive</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.solution</span><span class="w"> </span><span class="kn">import</span> <span class="n">FloatSolution</span>
+
+<span class="c1"># Create archive with maximum size of 10</span>
+<span class="n">archive</span> <span class="o">=</span> <span class="n">DistanceBasedArchive</span><span class="p">(</span><span class="n">maximum_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Create some example solutions</span>
+<span class="n">solutions</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+    <span class="n">solution</span> <span class="o">=</span> <span class="n">FloatSolution</span><span class="p">([],</span> <span class="p">[],</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># 2 objectives</span>
+    <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">/</span><span class="mf">20.0</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">i</span><span class="o">/</span><span class="mf">20.0</span><span class="p">]</span>  <span class="c1"># Trade-off front</span>
+    <span class="n">solutions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+
+<span class="c1"># Add solutions to archive</span>
+<span class="k">for</span> <span class="n">solution</span> <span class="ow">in</span> <span class="n">solutions</span><span class="p">:</span>
+    <span class="n">was_added</span> <span class="o">=</span> <span class="n">archive</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Solution </span><span class="si">{</span><span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="si">}</span><span class="s2"> added: </span><span class="si">{</span><span class="n">was_added</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Final archive size: </span><span class="si">{</span><span class="n">archive</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Selected solutions:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">archive</span><span class="o">.</span><span class="n">size</span><span class="p">()):</span>
+    <span class="n">sol</span> <span class="o">=</span> <span class="n">archive</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">sol</span><span class="o">.</span><span class="n">objectives</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="custom-distance-metrics">
+<h3>Custom Distance Metrics<a class="headerlink" href="#custom-distance-metrics" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">DistanceBasedArchive</span></code> supports multiple distance metrics for enhanced performance and flexibility:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">DistanceMetric</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.archive</span><span class="w"> </span><span class="kn">import</span> <span class="n">DistanceBasedArchive</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># L2 squared distance (fastest, default)</span>
+<span class="n">archive_l2</span> <span class="o">=</span> <span class="n">DistanceBasedArchive</span><span class="p">(</span>
+    <span class="n">maximum_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">metric</span><span class="o">=</span><span class="n">DistanceMetric</span><span class="o">.</span><span class="n">L2_SQUARED</span>
+<span class="p">)</span>
+
+<span class="c1"># Chebyshev distance (L-infinity)</span>
+<span class="n">archive_linf</span> <span class="o">=</span> <span class="n">DistanceBasedArchive</span><span class="p">(</span>
+    <span class="n">maximum_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">metric</span><span class="o">=</span><span class="n">DistanceMetric</span><span class="o">.</span><span class="n">LINF</span>
+<span class="p">)</span>
+
+<span class="c1"># Weighted Chebyshev distance (for preference-based selection)</span>
+<span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">])</span>  <span class="c1"># Higher weight = more important</span>
+<span class="n">archive_weighted</span> <span class="o">=</span> <span class="n">DistanceBasedArchive</span><span class="p">(</span>
+    <span class="n">maximum_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">metric</span><span class="o">=</span><span class="n">DistanceMetric</span><span class="o">.</span><span class="n">TCHEBY_WEIGHTED</span><span class="p">,</span>
+    <span class="n">weights</span><span class="o">=</span><span class="n">weights</span>
+<span class="p">)</span>
+
+<span class="c1"># Deterministic results with fixed seed</span>
+<span class="n">archive_reproducible</span> <span class="o">=</span> <span class="n">DistanceBasedArchive</span><span class="p">(</span>
+    <span class="n">maximum_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">random_seed</span><span class="o">=</span><span class="mi">42</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="advanced-examples">
+<h2>Advanced Examples<a class="headerlink" href="#advanced-examples" title="Link to this heading">¶</a></h2>
+<section id="two-objective-problems">
+<h3>Two-Objective Problems<a class="headerlink" href="#two-objective-problems" title="Link to this heading">¶</a></h3>
+<p>For two-objective problems, the archive automatically uses crowding distance:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.archive</span><span class="w"> </span><span class="kn">import</span> <span class="n">DistanceBasedArchive</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.solution</span><span class="w"> </span><span class="kn">import</span> <span class="n">FloatSolution</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_zdt1_front</span><span class="p">(</span><span class="n">n_points</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create solutions on ZDT1 Pareto front&quot;&quot;&quot;</span>
+    <span class="n">solutions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_points</span><span class="p">):</span>
+        <span class="n">solution</span> <span class="o">=</span> <span class="n">FloatSolution</span><span class="p">([],</span> <span class="p">[],</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">f1</span> <span class="o">=</span> <span class="n">i</span> <span class="o">/</span> <span class="p">(</span><span class="n">n_points</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># f1 in [0, 1]</span>
+        <span class="n">f2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">f1</span><span class="p">)</span>     <span class="c1"># ZDT1 Pareto front</span>
+        <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span> <span class="o">=</span> <span class="p">[</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">]</span>
+        <span class="n">solutions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">solutions</span>
+
+<span class="c1"># Create archive and add Pareto front solutions</span>
+<span class="n">archive</span> <span class="o">=</span> <span class="n">DistanceBasedArchive</span><span class="p">(</span><span class="n">maximum_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">solutions</span> <span class="o">=</span> <span class="n">create_zdt1_front</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">solution</span> <span class="ow">in</span> <span class="n">solutions</span><span class="p">:</span>
+    <span class="n">archive</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Selected </span><span class="si">{</span><span class="n">archive</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="si">}</span><span class="s2"> solutions from </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">solutions</span><span class="p">)</span><span class="si">}</span><span class="s2"> candidates&quot;</span><span class="p">)</span>
+
+<span class="c1"># Solutions will be selected to maximize crowding distance</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">archive</span><span class="o">.</span><span class="n">size</span><span class="p">()):</span>
+    <span class="n">sol</span> <span class="o">=</span> <span class="n">archive</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">crowding_dist</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;crowding_distance&quot;</span><span class="p">,</span> <span class="s2">&quot;N/A&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Solution </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">sol</span><span class="o">.</span><span class="n">objectives</span><span class="si">}</span><span class="s2">, crowding_distance: </span><span class="si">{</span><span class="n">crowding_dist</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="many-objective-problems">
+<h3>Many-Objective Problems<a class="headerlink" href="#many-objective-problems" title="Link to this heading">¶</a></h3>
+<p>For problems with more than 2 objectives, distance-based selection is used:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.archive</span><span class="w"> </span><span class="kn">import</span> <span class="n">DistanceBasedArchive</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.solution</span><span class="w"> </span><span class="kn">import</span> <span class="n">FloatSolution</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_many_objective_solutions</span><span class="p">(</span><span class="n">n_solutions</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_objectives</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create diverse solutions in many-objective space&quot;&quot;&quot;</span>
+    <span class="n">solutions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># For reproducibility</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_solutions</span><span class="p">):</span>
+        <span class="n">solution</span> <span class="o">=</span> <span class="n">FloatSolution</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">n_objectives</span><span class="p">)</span>
+        <span class="c1"># Create solutions with different trade-offs</span>
+        <span class="n">objectives</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_objectives</span><span class="p">):</span>
+            <span class="c1"># Some solutions excel in specific objectives</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">n_objectives</span> <span class="o">==</span> <span class="n">j</span><span class="p">:</span>
+                <span class="n">objectives</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">))</span>  <span class="c1"># Good in this objective</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">objectives</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>  <span class="c1"># Worse in others</span>
+        <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span> <span class="o">=</span> <span class="n">objectives</span>
+        <span class="n">solutions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">solutions</span>
+
+<span class="c1"># Create archive for 5-objective problem</span>
+<span class="n">archive</span> <span class="o">=</span> <span class="n">DistanceBasedArchive</span><span class="p">(</span><span class="n">maximum_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">solutions</span> <span class="o">=</span> <span class="n">create_many_objective_solutions</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">solution</span> <span class="ow">in</span> <span class="n">solutions</span><span class="p">:</span>
+    <span class="n">archive</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Selected </span><span class="si">{</span><span class="n">archive</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="si">}</span><span class="s2"> solutions from </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">solutions</span><span class="p">)</span><span class="si">}</span><span class="s2"> candidates&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Selected solutions (5 objectives):&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">archive</span><span class="o">.</span><span class="n">size</span><span class="p">()):</span>
+    <span class="n">sol</span> <span class="o">=</span> <span class="n">archive</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">obj_str</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">obj</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">sol</span><span class="o">.</span><span class="n">objectives</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Solution </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: [</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">obj_str</span><span class="p">)</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="standalone-subset-selection">
+<h3>Standalone Subset Selection<a class="headerlink" href="#standalone-subset-selection" title="Link to this heading">¶</a></h3>
+</section>
+<section id="independent-usage-of-selection-functions">
+<h3>Independent Usage of Selection Functions<a class="headerlink" href="#independent-usage-of-selection-functions" title="Link to this heading">¶</a></h3>
+<p>You can also use the distance-based selection function independently with custom metrics:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.archive</span><span class="w"> </span><span class="kn">import</span> <span class="n">distance_based_subset_selection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">DistanceMetric</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Assuming you have a list of solutions</span>
+<span class="n">solutions</span> <span class="o">=</span> <span class="n">create_many_objective_solutions</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># Select best 5 solutions using different metrics</span>
+
+<span class="c1"># L2 squared distance (fastest)</span>
+<span class="n">selected_l2</span> <span class="o">=</span> <span class="n">distance_based_subset_selection</span><span class="p">(</span>
+    <span class="n">solution_list</span><span class="o">=</span><span class="n">solutions</span><span class="p">,</span>
+    <span class="n">subset_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">metric</span><span class="o">=</span><span class="n">DistanceMetric</span><span class="o">.</span><span class="n">L2_SQUARED</span><span class="p">,</span>
+    <span class="n">random_seed</span><span class="o">=</span><span class="mi">42</span>  <span class="c1"># For reproducible results</span>
+<span class="p">)</span>
+
+<span class="c1"># Chebyshev distance (emphasizes worst-case differences)</span>
+<span class="n">selected_linf</span> <span class="o">=</span> <span class="n">distance_based_subset_selection</span><span class="p">(</span>
+    <span class="n">solution_list</span><span class="o">=</span><span class="n">solutions</span><span class="p">,</span>
+    <span class="n">subset_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">metric</span><span class="o">=</span><span class="n">DistanceMetric</span><span class="o">.</span><span class="n">LINF</span><span class="p">,</span>
+    <span class="n">random_seed</span><span class="o">=</span><span class="mi">42</span>
+<span class="p">)</span>
+
+<span class="c1"># Weighted selection (prefer certain objectives)</span>
+<span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>  <span class="c1"># Prefer first objectives</span>
+<span class="n">selected_weighted</span> <span class="o">=</span> <span class="n">distance_based_subset_selection</span><span class="p">(</span>
+    <span class="n">solution_list</span><span class="o">=</span><span class="n">solutions</span><span class="p">,</span>
+    <span class="n">subset_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">metric</span><span class="o">=</span><span class="n">DistanceMetric</span><span class="o">.</span><span class="n">TCHEBY_WEIGHTED</span><span class="p">,</span>
+    <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span>
+    <span class="n">random_seed</span><span class="o">=</span><span class="mi">42</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;L2 squared selection:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sol</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">selected_l2</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">obj</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">obj</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">sol</span><span class="o">.</span><span class="n">objectives</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">nChebyshev selection:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sol</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">selected_linf</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">obj</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">obj</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">sol</span><span class="o">.</span><span class="n">objectives</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">nWeighted selection:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sol</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">selected_weighted</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">obj</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">obj</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">sol</span><span class="o">.</span><span class="n">objectives</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="integration-with-algorithms">
+<h2>Integration with Algorithms<a class="headerlink" href="#integration-with-algorithms" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">DistanceBasedArchive</span></code> can be used with optimization algorithms that support archives:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.algorithm.multiobjective.nsgaii</span><span class="w"> </span><span class="kn">import</span> <span class="n">NSGAII</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.archive</span><span class="w"> </span><span class="kn">import</span> <span class="n">DistanceBasedArchive</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZDT1</span>
+
+<span class="c1"># Create algorithm with custom archive</span>
+<span class="n">problem</span> <span class="o">=</span> <span class="n">ZDT1</span><span class="p">()</span>
+<span class="n">archive</span> <span class="o">=</span> <span class="n">DistanceBasedArchive</span><span class="p">(</span><span class="n">maximum_size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Note: This is conceptual - actual integration depends on algorithm design</span>
+<span class="c1"># Some algorithms may need modification to accept custom archives</span>
+</pre></div>
+</div>
+</section>
+<section id="performance-tips">
+<h2>Performance Tips<a class="headerlink" href="#performance-tips" title="Link to this heading">¶</a></h2>
+<p><strong>Choosing Distance Metrics:</strong></p>
+<ul class="simple">
+<li><p><strong>L2_SQUARED</strong>: Fastest option, good for general use (15-20% faster than standard Euclidean)</p></li>
+<li><p><strong>LINF</strong>: Efficient for high-dimensional spaces, emphasizes worst-case differences</p></li>
+<li><p><strong>TCHEBY_WEIGHTED</strong>: Use when objectives have different importance or scales</p></li>
+</ul>
+<p><strong>For Better Performance:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Choose appropriate archive sizes</strong>: Larger archives mean more comparisons</p></li>
+<li><p><strong>Pre-filter dominated solutions</strong>: Use <code class="docutils literal notranslate"><span class="pre">NonDominatedSolutionsArchive</span></code> first if needed</p></li>
+<li><p><strong>Use L2_SQUARED metric</strong>: Fastest for most cases due to avoided sqrt computation</p></li>
+<li><p><strong>Set random seeds</strong>: For reproducible results in deterministic environments</p></li>
+</ol>
+<p><strong>Thread Safety:</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">DistanceBasedArchive</span></code> is thread-safe for concurrent access:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.archive</span><span class="w"> </span><span class="kn">import</span> <span class="n">DistanceBasedArchive</span>
+
+<span class="c1"># Safe for concurrent use</span>
+<span class="n">archive</span> <span class="o">=</span> <span class="n">DistanceBasedArchive</span><span class="p">(</span><span class="n">maximum_size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">worker_thread</span><span class="p">(</span><span class="n">solutions_batch</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">solution</span> <span class="ow">in</span> <span class="n">solutions_batch</span><span class="p">:</span>
+        <span class="n">archive</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>  <span class="c1"># Thread-safe operation</span>
+</pre></div>
+</div>
+<p><strong>Memory Considerations:</strong></p>
+<ul class="simple">
+<li><p>Archives store references to solutions, not copies</p></li>
+<li><p>Large archives with many objectives can be memory-intensive</p></li>
+<li><p>Consider using archives as final result storage, not intermediate processing</p></li>
+</ul>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<p><strong>Common Issues:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Archive not filling up</strong>: Check if solutions are being dominated</p></li>
+<li><p><strong>Poor diversity</strong>: Try different distance metrics or verify objective normalization</p></li>
+<li><p><strong>Slow performance</strong>: Use L2_SQUARED metric or smaller archive sizes</p></li>
+<li><p><strong>Non-reproducible results</strong>: Set <code class="docutils literal notranslate"><span class="pre">random_seed</span></code> parameter for deterministic behavior</p></li>
+</ol>
+<p><strong>Debugging Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.solution</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_non_dominated_solutions</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.archive</span><span class="w"> </span><span class="kn">import</span> <span class="n">DistanceBasedArchive</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">DistanceMetric</span>
+
+<span class="c1"># Check if solutions are non-dominated</span>
+<span class="n">non_dominated</span> <span class="o">=</span> <span class="n">get_non_dominated_solutions</span><span class="p">(</span><span class="n">your_solutions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Non-dominated solutions: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">non_dominated</span><span class="p">)</span><span class="si">}</span><span class="s2"> out of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">your_solutions</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Check archive behavior with debugging</span>
+<span class="n">archive</span> <span class="o">=</span> <span class="n">DistanceBasedArchive</span><span class="p">(</span>
+    <span class="n">maximum_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">metric</span><span class="o">=</span><span class="n">DistanceMetric</span><span class="o">.</span><span class="n">L2_SQUARED</span><span class="p">,</span>
+    <span class="n">random_seed</span><span class="o">=</span><span class="mi">42</span>  <span class="c1"># For reproducible debugging</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">solution</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">your_solutions</span><span class="p">):</span>
+    <span class="n">was_added</span> <span class="o">=</span> <span class="n">archive</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Solution </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: added=</span><span class="si">{</span><span class="n">was_added</span><span class="si">}</span><span class="s2">, archive_size=</span><span class="si">{</span><span class="n">archive</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">archive</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">latest_sol</span> <span class="o">=</span> <span class="n">archive</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">archive</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Latest solution objectives: </span><span class="si">{</span><span class="n">latest_sol</span><span class="o">.</span><span class="n">objectives</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Handling Constant Objectives:</strong></p>
+<p>The archive automatically handles objectives with zero range (constant values):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># This works even if some objectives are constant</span>
+<span class="n">solutions_with_constants</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">solution</span> <span class="o">=</span> <span class="n">FloatSolution</span><span class="p">([],</span> <span class="p">[],</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">9</span><span class="o">-</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">]</span>  <span class="c1"># Second objective constant</span>
+    <span class="n">solutions_with_constants</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+
+<span class="n">archive</span> <span class="o">=</span> <span class="n">DistanceBasedArchive</span><span class="p">(</span><span class="n">maximum_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">solution</span> <span class="ow">in</span> <span class="n">solutions_with_constants</span><span class="p">:</span>
+    <span class="n">archive</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>  <span class="c1"># Handles constant objectives gracefully</span>
+</pre></div>
+</div>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../api/util/archive.html"><span class="doc">Archives</span></a> - Full API reference</p></li>
+<li><p><a class="reference internal" href="../api/util/distance.html"><span class="doc">Distance Metrics</span></a> - Distance measures</p></li>
+<li><p><a class="reference internal" href="../multiobjective.algorithms.html"><span class="doc">Multi-objective algorithms</span></a> - Algorithms that use archives</p></li>
+<li><p><a class="reference internal" href="../tutorials/quality_indicators_cli.html"><span class="doc">Quality Indicator CLI</span></a> - Measuring solution quality</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="float-left">
+        <a class="btn btn-outline btn-sm" href="../advanced-topics.html" title="previous chapter (use the left arrow)">← Advanced Topics</a>
+      </div>
+    
+      <div class="float-right">
+        <a class="btn btn-outline btn-sm" href="custom-archives.html" title="next chapter (use the right arrow)">Custom Archives →</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="custom-archives.html" title="Custom Archives"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../advanced-topics.html" title="Advanced Topics"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../advanced-topics.html" >Advanced Topics</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Distance-Based Archive Tutorial</a></li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

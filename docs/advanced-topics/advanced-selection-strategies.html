@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Advanced Selection Strategies &#8212; jMetalPy 1.7.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/guzzle.css?v=e05a0192" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=9aa90875" />
+    <script src="../_static/documentation_options.js?v=030dc6f6"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contributing" href="../contributing.html" />
+    <link rel="prev" title="Custom Archives" href="custom-archives.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../contributing.html" title="Contributing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="custom-archives.html" title="Custom Archives"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../advanced-topics.html" accesskey="U">Advanced Topics</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Advanced Selection Strategies</a></li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../index.html" class="text-logo">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.7.0 documentation">
+    <br>
+</a>
+
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    Python version of the jMetal framework
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api-reference.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../advanced-topics.html">Advanced Topics</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../advanced-topics.html#advanced-utilities">Advanced Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced-topics.html#distributed-computing">Distributed Computing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced-topics.html#custom-development">Custom Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced-topics.html#integration">Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced-topics.html#research-applications">Research Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced-topics.html#performance-optimization">Performance Optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Contents</h2>
+    <div class="sidebar-localtoc">
+      <ul>
+<li><a class="reference internal" href="#">Advanced Selection Strategies</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#planned-topics">Planned Topics</a><ul>
+<li><a class="reference internal" href="#distance-based-selection"><strong>Distance-Based Selection</strong></a></li>
+<li><a class="reference internal" href="#diversity-maintenance"><strong>Diversity Maintenance</strong></a></li>
+<li><a class="reference internal" href="#performance-optimization"><strong>Performance Optimization</strong></a></li>
+<li><a class="reference internal" href="#hybrid-approaches"><strong>Hybrid Approaches</strong></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples-to-be-covered">Examples to be Covered</a></li>
+<li><a class="reference internal" href="#current-implementation">Current Implementation</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="../index.html">Docs</a></li>
+              
+              <li class="breadcrumb-item"><a href="../advanced-topics.html">Advanced Topics</a></li>
+              
+              <li class="breadcrumb-item">Advanced Selection Strategies</li>
+            </ol>
+          </nav>
+          
+          <div class="document clearer body">
+            
+  <section id="advanced-selection-strategies">
+<h1>Advanced Selection Strategies<a class="headerlink" href="#advanced-selection-strategies" title="Link to this heading">¶</a></h1>
+<p>Implementing sophisticated solution selection mechanisms for multi-objective optimization.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>📝 <strong>Under Development</strong>: This section is planned for future development.
+The <a class="reference internal" href="distance-based-archive.html"><span class="doc">Distance-Based Archive Tutorial</span></a> provides a concrete example of advanced selection strategies.</p>
+</div>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>Selection strategies determine which solutions to maintain in archives and populations during optimization. Advanced strategies can significantly improve optimization performance.</p>
+</section>
+<section id="planned-topics">
+<h2>Planned Topics<a class="headerlink" href="#planned-topics" title="Link to this heading">¶</a></h2>
+<section id="distance-based-selection">
+<h3><strong>Distance-Based Selection</strong><a class="headerlink" href="#distance-based-selection" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Multi-Objective Distance Metrics</strong>: Beyond Euclidean distance</p></li>
+<li><p><strong>Adaptive Distance Measures</strong>: Context-aware distance calculations</p></li>
+<li><p><strong>Normalized vs Raw Objectives</strong>: When and how to normalize</p></li>
+</ul>
+</section>
+<section id="diversity-maintenance">
+<h3><strong>Diversity Maintenance</strong><a class="headerlink" href="#diversity-maintenance" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Crowding Distance Variations</strong>: Improvements to standard crowding distance</p></li>
+<li><p><strong>Hypervolume-Based Selection</strong>: Using hypervolume for selection</p></li>
+<li><p><strong>Reference Point Methods</strong>: Selection with user preferences</p></li>
+</ul>
+</section>
+<section id="performance-optimization">
+<h3><strong>Performance Optimization</strong><a class="headerlink" href="#performance-optimization" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Incremental Updates</strong>: Efficient recomputation strategies</p></li>
+<li><p><strong>Approximate Methods</strong>: Trading accuracy for speed</p></li>
+<li><p><strong>Parallel Selection</strong>: Distributed selection algorithms</p></li>
+</ul>
+</section>
+<section id="hybrid-approaches">
+<h3><strong>Hybrid Approaches</strong><a class="headerlink" href="#hybrid-approaches" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Multi-Criteria Selection</strong>: Combining multiple selection criteria</p></li>
+<li><p><strong>Adaptive Strategies</strong>: Changing selection during optimization</p></li>
+<li><p><strong>Problem-Specific Methods</strong>: Tailored selection for specific domains</p></li>
+</ul>
+</section>
+</section>
+<section id="examples-to-be-covered">
+<h2>Examples to be Covered<a class="headerlink" href="#examples-to-be-covered" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Knee Point Selection</strong>: Identifying solutions at trade-off knees</p></li>
+<li><p><strong>User-Preference Integration</strong>: Interactive selection strategies</p></li>
+<li><p><strong>Constraint-Aware Selection</strong>: Handling feasibility in selection</p></li>
+<li><p><strong>Dynamic Population Sizing</strong>: Adaptive archive and population sizes</p></li>
+</ul>
+</section>
+<section id="current-implementation">
+<h2>Current Implementation<a class="headerlink" href="#current-implementation" title="Link to this heading">¶</a></h2>
+<p>The <a class="reference internal" href="distance-based-archive.html"><span class="doc">Distance-Based Archive Tutorial</span></a> demonstrates several advanced concepts:</p>
+<ul class="simple">
+<li><p>Adaptive strategy selection based on problem dimensionality</p></li>
+<li><p>Robust normalization handling edge cases</p></li>
+<li><p>Integration of crowding distance and distance-based methods</p></li>
+<li><p>Memory-efficient implementation patterns</p></li>
+</ul>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="distance-based-archive.html"><span class="doc">Distance-Based Archive Tutorial</span></a> - Practical implementation example</p></li>
+<li><p><a class="reference internal" href="custom-archives.html"><span class="doc">Custom Archives</span></a> - Building custom archive types</p></li>
+<li><p><a class="reference internal" href="../api/util/archive.html"><span class="doc">Archives</span></a> - Archive API reference</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="float-left">
+        <a class="btn btn-outline btn-sm" href="custom-archives.html" title="previous chapter (use the left arrow)">← Custom Archives</a>
+      </div>
+    
+      <div class="float-right">
+        <a class="btn btn-outline btn-sm" href="../contributing.html" title="next chapter (use the right arrow)">Contributing →</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../contributing.html" title="Contributing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="custom-archives.html" title="Custom Archives"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../advanced-topics.html" >Advanced Topics</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Advanced Selection Strategies</a></li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

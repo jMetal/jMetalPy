@@ -3,6 +3,17 @@ Advanced Topics
 
 Specialized topics for advanced users and researchers.
 
+Advanced Utilities
+------------------
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Advanced Components:
+
+   advanced-topics/distance-based-archive
+   advanced-topics/custom-archives
+   advanced-topics/advanced-selection-strategies
+
 Distributed Computing
 ---------------------
 
@@ -10,9 +21,9 @@ Distributed Computing
    :maxdepth: 2
    :caption: Parallel & Distributed:
 
-   advanced/spark-computing
-   advanced/dask-integration
-   advanced/cloud-deployment
+   advanced-topics/spark-computing
+   advanced-topics/dask-integration
+   advanced-topics/cloud-deployment
 
 Custom Development
 ------------------
@@ -21,10 +32,10 @@ Custom Development
    :maxdepth: 2
    :caption: Extending jMetalPy:
 
-   advanced/custom-algorithms
-   advanced/custom-problems
-   advanced/custom-operators
-   advanced/custom-quality-indicators
+   advanced-topics/custom-algorithms
+   advanced-topics/custom-problems
+   advanced-topics/custom-operators
+   advanced-topics/custom-quality-indicators
 
 Integration
 -----------
@@ -33,9 +44,9 @@ Integration
    :maxdepth: 2
    :caption: External Tools:
 
-   advanced/jmetal-integration
-   advanced/jupyter-notebooks
-   advanced/web-interfaces
+   advanced-topics/jmetal-integration
+   advanced-topics/jupyter-notebooks
+   advanced-topics/web-interfaces
 
 Research Applications
 ---------------------
@@ -44,9 +55,9 @@ Research Applications
    :maxdepth: 2
    :caption: Academic Use:
 
-   advanced/reproducible-research
-   advanced/benchmark-studies
-   advanced/publication-guidelines
+   advanced-topics/reproducible-research
+   advanced-topics/benchmark-studies
+   advanced-topics/publication-guidelines
 
 Performance Optimization
 ------------------------
@@ -55,6 +66,6 @@ Performance Optimization
    :maxdepth: 2
    :caption: Optimization:
 
-   advanced/profiling
-   advanced/memory-management
-   advanced/algorithm-tuning
+   advanced-topics/profiling
+   advanced-topics/memory-management
+   advanced-topics/algorithm-tuning
