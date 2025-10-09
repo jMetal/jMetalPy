@@ -5,8 +5,10 @@ This module provides functions to normalize Pareto fronts before applying qualit
 Normalization is essential to avoid bias from objectives with different scales.
 """
 
+from typing import Tuple, List, Literal
+
 import numpy as np
-from typing import Tuple, List, Literal, Union
+
 from jmetal.core.solution import Solution
 
 # Type alias for normalization methods

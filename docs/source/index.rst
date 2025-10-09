@@ -37,10 +37,10 @@ jMetalPy (v1.7.1) provides:
 
 **Algorithms**
    Local search, genetic algorithms, evolution strategies, simulated annealing, NSGA-II, NSGA-III, 
-   SMPSO, OMOPSO, MOEA/D, GDE3, SPEA2, HYPE, IBEA, and preference-based variants.
+   SMPSO, OMOPSO, MOEA/D, SMS-EMOA, GDE3, SPEA2, HYPE, IBEA, and preference-based variants.
 
 **Problem Types**
-   Benchmark problems (ZDT, DTLZ, FDA, LZ09), real-world problems, constrained and unconstrained optimization.
+   Benchmark problems (ZDT, DTLZ, FDA, LZ09, RE, RWA), constrained and unconstrained benchmark problems.
 
 **Analysis Tools**
    Quality indicators (hypervolume, IGD, IGD+, epsilon), statistical testing, visualization, 

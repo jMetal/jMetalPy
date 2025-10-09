@@ -1,15 +1,15 @@
 import copy
 import random
-import numpy as np
 import threading
 from abc import ABC, abstractmethod
 from threading import Lock
-from typing import Generic, List, TypeVar, Optional, Literal
+from typing import Generic, List, TypeVar, Optional
 
-from jmetal.util.comparator import Comparator, DominanceComparator, SolutionAttributeComparator, ObjectiveComparator
+import numpy as np
+
+from jmetal.util.comparator import Comparator, DominanceComparator, SolutionAttributeComparator
 from jmetal.util.density_estimator import DensityEstimator, CrowdingDistanceDensityEstimator
-from jmetal.util.distance import EuclideanDistance, DistanceMetric, DistanceCalculator
-from jmetal.util.normalization import normalize_fronts
+from jmetal.util.distance import DistanceMetric, DistanceCalculator
 
 S = TypeVar('S')
 

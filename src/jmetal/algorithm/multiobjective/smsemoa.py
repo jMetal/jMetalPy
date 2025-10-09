@@ -1,35 +1,17 @@
-import time
-from copy import deepcopy
 from typing import Generator, List, TypeVar
 
-try:
-    import dask
-    from distributed import Client, as_completed
-except ImportError:
-    pass
-
-from jmetal.util.normalization import normalize_solution_fronts, solutions_to_matrix
 import numpy as np
-
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
-from jmetal.core.algorithm import Algorithm, DynamicAlgorithm
 from jmetal.core.operator import Crossover, Mutation, Selection
+from jmetal.core.problem import Problem
 from jmetal.operator.selection import RandomSelection
-from jmetal.core.problem import DynamicProblem, Problem
-from jmetal.operator.selection import BinaryTournamentSelection
-from jmetal.util.comparator import Comparator, DominanceComparator, MultiComparator
-from jmetal.util.density_estimator import CrowdingDistanceDensityEstimator
+from jmetal.util.comparator import Comparator
+from jmetal.util.density_estimator import HypervolumeContributionDensityEstimator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.ranking import FastNonDominatedRanking
-from jmetal.operator.replacement import (
-    RankingAndDensityEstimatorReplacement,
-    RemovalPolicyType,
-)
 from jmetal.util.termination_criterion import TerminationCriterion
-from jmetal.util.density_estimator import HypervolumeContributionDensityEstimator
-
 
 S = TypeVar("S")
 R = TypeVar("R")
@@ -73,25 +55,7 @@ class SMSEMOA(GeneticAlgorithm[S, R]):
         )
         self.dominance_comparator = dominance_comparator
 
-    from copy import deepcopy
     from typing import List
-    import numpy as np
-    from jmetal.core.solution import Solution
-    from jmetal.util.ranking import FastNonDominatedRanking
-    from jmetal.util.density_estimator import HypervolumeContributionDensityEstimator
-
-    from copy import deepcopy
-    from typing import List
-    import numpy as np
-    from jmetal.core.solution import Solution
-    from jmetal.util.ranking import FastNonDominatedRanking
-    from jmetal.util.density_estimator import HypervolumeContributionDensityEstimator
-
-    from typing import List
-    import numpy as np
-    from jmetal.core.solution import Solution
-    from jmetal.util.ranking import FastNonDominatedRanking
-    from jmetal.util.density_estimator import HypervolumeContributionDensityEstimator
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
         """

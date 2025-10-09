@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import List, Union, Optional
 from enum import Enum
+from typing import List, Union, Optional
 
 import numpy
 from scipy.spatial import distance

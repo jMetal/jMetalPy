@@ -1,9 +1,9 @@
-from jmetal.util.ranking import FastNonDominatedRanking
-from jmetal.util.density_estimator import HypervolumeContributionDensityEstimator
 from enum import Enum
 from typing import List, TypeVar
 
 from jmetal.util.density_estimator import DensityEstimator
+from jmetal.util.density_estimator import HypervolumeContributionDensityEstimator
+from jmetal.util.ranking import FastNonDominatedRanking
 from jmetal.util.ranking import Ranking
 
 S = TypeVar("S")

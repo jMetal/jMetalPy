@@ -1,6 +1,6 @@
-from typing import Sequence
 import math
 from math import sqrt
+from typing import Sequence
 
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
