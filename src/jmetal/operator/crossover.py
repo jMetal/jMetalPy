@@ -1,4 +1,5 @@
 import copy
+import math
 import random
 from typing import List
 
@@ -748,6 +749,151 @@ class ArithmeticCrossover(Crossover[FloatSolution, FloatSolution]):
     
     def get_name(self) -> str:
         return "Arithmetic Crossover"
+
+
+class UnimodalNormalDistributionCrossover(Crossover[FloatSolution, FloatSolution]):
+    """Unimodal Normal Distribution Crossover (UNDX) for real-valued solutions.
+    
+    UNDX is a multi-parent crossover operator that generates offspring based on the normal
+    distribution defined by three parent solutions. It is particularly effective for continuous
+    optimization problems as it preserves the statistics of the population.
+    
+    Reference:
+        Onikura, T., & Kobayashi, S. (1999). Extended UNIMODAL DISTRIBUTION CROSSOVER for
+        REAL-CODED GENETIC ALGORITHMS. In Proceedings of the 1999 Congress on Evolutionary
+        Computation-CEC99 (Cat. No. 99TH8406) (Vol. 2, pp. 1581-1588). IEEE.
+    
+    Args:
+        probability: Crossover probability (0.0 to 1.0)
+        zeta: Controls the spread along the line connecting parents (typically in [0.1, 1.0],
+            where smaller values produce offspring closer to the parents)
+        eta: Controls the spread in the orthogonal direction (typically in [0.1, 0.5],
+            where smaller values produce more concentrated distributions)
+        repair_operator: Optional function to repair out-of-bounds values.
+            If None, values are clamped to the variable bounds using min/max.
+            Signature: repair_operator(value: float, lower_bound: float, upper_bound: float) -> float
+    
+    Raises:
+        ValueError: If probability is not in [0,1] or if zeta or eta are negative
+    """
+
+    def __init__(
+        self,
+        probability: float = 0.9,
+        zeta: float = 0.5,
+        eta: float = 0.35,
+        repair_operator: Optional[Callable[[float, float, float], float]] = None,
+    ):
+        if not 0 <= probability <= 1:
+            raise ValueError("probability must be in [0, 1]")
+        if zeta < 0:
+            raise ValueError("zeta must be non-negative")
+        if eta < 0:
+            raise ValueError("eta must be non-negative")
+
+        super().__init__(probability=probability)
+        self.zeta = zeta
+        self.eta = eta
+        self.repair_operator = repair_operator if repair_operator else self._default_repair
+
+    def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
+        Check.that(len(parents) >= 3, "UNDX requires at least three parents")
+        return self.doCrossover(self.probability, parents[0], parents[1], parents[2])
+
+    def doCrossover(
+        self,
+        probability: float,
+        parent1: FloatSolution,
+        parent2: FloatSolution,
+        parent3: FloatSolution,
+    ) -> List[FloatSolution]:
+        """Perform the UNDX crossover operation.
+        
+        Args:
+            probability: Crossover probability
+            parent1: First parent solution
+            parent2: Second parent solution
+            parent3: Third parent solution (used to determine the orthogonal direction)
+            
+        Returns:
+            A list containing two offspring solutions
+        """
+        # Create offspring as copies of parents initially
+        offspring1 = parent1.__class__(
+            parent1.lower_bound,
+            parent1.upper_bound,
+            len(parent1.objectives),
+            len(parent1.constraints) if hasattr(parent1, 'constraints') else 0
+        )
+        offspring2 = parent2.__class__(
+            parent2.lower_bound,
+            parent2.upper_bound,
+            len(parent2.objectives),
+            len(parent2.constraints) if hasattr(parent2, 'constraints') else 0
+        )
+        
+        # If crossover doesn't happen, return copies of the parents
+        if random.random() >= probability:
+            offspring1.variables = parent1.variables.copy()
+            offspring2.variables = parent2.variables.copy()
+            return [offspring1, offspring2]
+        
+        number_of_variables = len(parent1.variables)
+        
+        # Calculate the center of mass between parent1 and parent2
+        center = [
+            (p1 + p2) / 2.0 
+            for p1, p2 in zip(parent1.variables, parent2.variables)
+        ]
+        
+        # Calculate the difference vector between parent1 and parent2
+        diff = [p2 - p1 for p1, p2 in zip(parent1.variables, parent2.variables)]
+        distance = math.sqrt(sum(d * d for d in diff))
+        
+        # If parents are too close, return exact copies to avoid division by zero
+        if distance < 1e-10:
+            offspring1.variables = parent1.variables.copy()
+            offspring2.variables = parent2.variables.copy()
+            return [offspring1, offspring2]
+        
+        # Generate offspring
+        for i in range(number_of_variables):
+            # Generate values along the line connecting the parents
+            alpha = random.uniform(-self.zeta * distance, self.zeta * distance)
+            
+            # Generate values in the orthogonal direction
+            # Calculate beta as the sum of two random values centered around 0
+            beta = (random.random() - 0.5) * self.eta * distance + \
+                   (random.random() - 0.5) * self.eta * distance
+            
+            # Calculate the orthogonal component from parent3
+            orthogonal = (parent3.variables[i] - center[i]) / distance if distance > 0 else 0.0
+            
+            # Create the new values
+            value1 = center[i] + alpha * diff[i] / distance + beta * orthogonal
+            value2 = center[i] - alpha * diff[i] / distance - beta * orthogonal
+            
+            # Apply bounds repair if needed
+            lower_bound = parent1.lower_bound[i]
+            upper_bound = parent1.upper_bound[i]
+            
+            offspring1.variables[i] = self.repair_operator(value1, lower_bound, upper_bound)
+            offspring2.variables[i] = self.repair_operator(value2, lower_bound, upper_bound)
+        
+        return [offspring1, offspring2]
+    
+    def _default_repair(self, value: float, lower_bound: float, upper_bound: float) -> float:
+        """Default repair method that clamps values to bounds."""
+        return max(lower_bound, min(upper_bound, value))
+    
+    def get_number_of_parents(self) -> int:
+        return 3  # UNDX requires exactly 3 parents
+    
+    def get_number_of_children(self) -> int:
+        return 2  # UNDX generates 2 offspring
+    
+    def get_name(self) -> str:
+        return f"Unimodal Normal Distribution Crossover (ζ={self.zeta}, η={self.eta})"
 
 
 class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):

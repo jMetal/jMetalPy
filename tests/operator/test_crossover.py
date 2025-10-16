@@ -21,7 +21,9 @@ from jmetal.operator.crossover import (
     PMXCrossover,
     SBXCrossover,
     SPXCrossover,
+    UnimodalNormalDistributionCrossover,
 )
+from jmetal.util.ckecking import Check
 from jmetal.util.ckecking import (
     EmptyCollectionException,
     InvalidConditionException,
@@ -760,6 +762,165 @@ class ArithmeticCrossoverTestCases(unittest.TestCase):
         
         # Verify random.random() was called 3 times (1 for probability, 2 for alphas)
         self.assertEqual(random_mock.call_count, 3)
+
+class UnimodalNormalDistributionCrossoverTestCases(unittest.TestCase):
+    def test_should_constructor_assign_the_correct_probability_value(self):
+        crossover_probability = 0.1
+        zeta = 0.5
+        eta = 0.35
+        crossover = UnimodalNormalDistributionCrossover(crossover_probability, zeta, eta)
+        self.assertEqual(crossover_probability, crossover.probability)
+        self.assertEqual(zeta, crossover.zeta)
+        self.assertEqual(eta, crossover.eta)
+
+    def test_should_constructor_raise_an_exception_if_the_probability_is_greater_than_one(self):
+        with self.assertRaises(ValueError):
+            UnimodalNormalDistributionCrossover(1.5, 0.5, 0.35)
+
+    def test_should_constructor_raise_an_exception_if_the_probability_is_negative(self):
+        with self.assertRaises(ValueError):
+            UnimodalNormalDistributionCrossover(-0.1, 0.5, 0.35)
+
+    def test_should_constructor_raise_an_exception_if_zeta_is_negative(self):
+        with self.assertRaises(ValueError):
+            UnimodalNormalDistributionCrossover(0.9, -0.1, 0.35)
+
+    def test_should_constructor_raise_an_exception_if_eta_is_negative(self):
+        with self.assertRaises(ValueError):
+            UnimodalNormalDistributionCrossover(0.9, 0.5, -0.1)
+
+    def test_should_execute_with_an_invalid_solution_list_size_raise_an_exception(self):
+        crossover = UnimodalNormalDistributionCrossover(0.1, 0.5, 0.35)
+        solution = FloatSolution([1, 2], [2, 4], 2, 2)
+        
+        # Test with too few parents
+        with self.assertRaises(Exception):
+            crossover.execute([solution])
+        with self.assertRaises(Exception):
+            crossover.execute([solution, solution])
+            
+        # Test with too many parents (should still work, just use first three)
+        try:
+            crossover.execute([solution, solution, solution, solution])
+        except Exception as e:
+            self.fail(f"Should accept more than 3 parents but got: {e}")
+
+    def test_should_execute_return_the_parents_if_the_crossover_probability_is_zero(self):
+        crossover = UnimodalNormalDistributionCrossover(0.0, 0.5, 0.35)
+        solution1 = FloatSolution([1, 2], [2, 4], 2, 2)
+        solution2 = FloatSolution([1, 2], [2, 4], 2, 2)
+        solution3 = FloatSolution([1, 2], [2, 4], 2, 2)
+        solution1.variables = [1.5, 2.7]
+        solution2.variables = [1.7, 3.6]
+        solution3.variables = [1.9, 3.2]
+        
+        offspring = crossover.execute([solution1, solution2, solution3])
+        self.assertEqual(2, len(offspring))
+        self.assertEqual(solution1.variables, offspring[0].variables)
+        self.assertEqual(solution2.variables, offspring[1].variables)
+
+    def test_should_execute_work_with_a_solution_subclass_of_float_solution(self):
+        class NewFloatSolution(FloatSolution):
+            def __init__(
+                self,
+                lower_bound: List[float],
+                upper_bound: List[float],
+                number_of_objectives: int,
+                number_of_constraints: int = 0,
+            ):
+                super(NewFloatSolution, self).__init__(
+                    lower_bound, upper_bound, number_of_objectives, number_of_constraints
+                )
+
+        solution1 = NewFloatSolution([1, 2], [2, 4], 2, 2)
+        solution2 = NewFloatSolution([1, 2], [2, 4], 2, 2)
+        solution3 = NewFloatSolution([1, 2], [2, 4], 2, 2)
+        solution1.variables = [1.5, 2.7]
+        solution2.variables = [1.7, 3.6]
+        solution3.variables = [1.9, 3.2]
+        
+        crossover = UnimodalNormalDistributionCrossover(0.0, 0.5, 0.35)
+        offspring = crossover.execute([solution1, solution2, solution3])
+        
+        self.assertEqual(2, len(offspring))
+        self.assertEqual(solution1.variables, offspring[0].variables)
+        self.assertEqual(solution2.variables, offspring[1].variables)
+        self.assertIsInstance(offspring[0], NewFloatSolution)
+        self.assertIsInstance(offspring[1], NewFloatSolution)
+
+    @mock.patch('random.random')
+    @mock.patch('random.uniform')
+    def test_should_execute_perform_undx_crossover(self, uniform_mock, random_mock):
+        # Mock random.random() for probability check (0.1 < 0.9, so crossover happens)
+        # and for beta calculation (two calls with 0.3 and 0.5)
+        random_mock.side_effect = [0.1, 0.3, 0.5, 0.3, 0.5]  # Add extra values for the second variable
+        
+        # Mock random.uniform() for alpha values (zeta=0.5, distance=1.0, so alpha in [-0.5, 0.5])
+        # Return 0.2 for both variables
+        uniform_mock.return_value = 0.2
+        
+        crossover = UnimodalNormalDistributionCrossover(0.9, 0.5, 0.35)
+        
+        # Create three parent solutions with known values
+        solution1 = FloatSolution([1.0, 1.0], [5.0, 5.0], 1, 0)
+        solution2 = FloatSolution([1.0, 1.0], [5.0, 5.0], 1, 0)
+        solution3 = FloatSolution([1.0, 1.0], [5.0, 5.0], 1, 0)
+        
+        # Set parent values (distance between p1 and p2 is 1.0)
+        solution1.variables = [2.0, 3.0]
+        solution2.variables = [3.0, 3.0]
+        solution3.variables = [2.5, 4.0]  # Used for orthogonal direction
+        
+        # Expected calculations:
+        # Center = [(2+3)/2, (3+3)/2] = [2.5, 3.0]
+        # diff = [3-2, 3-3] = [1.0, 0.0]
+        # distance = 1.0
+        # alpha = 0.2 (mocked)
+        # For first variable (i=0):
+        #   beta = (0.3-0.5 + 0.5-0.5) * 0.35 * 1.0 = (-0.2 + 0.0) * 0.35 = -0.07
+        #   orthogonal = (2.5-2.5)/1.0 = 0.0
+        #   value1 = 2.5 + 0.2*1.0 + (-0.07)*0.0 = 2.5 + 0.2 + 0.0 = 2.7
+        #   value2 = 2.5 - 0.2*1.0 - (-0.07)*0.0 = 2.5 - 0.2 - 0.0 = 2.3
+        # 
+        # For second variable (i=1):
+        #   beta = (0.3-0.5 + 0.5-0.5) * 0.35 * 1.0 = (-0.2 + 0.0) * 0.35 = -0.07
+        #   orthogonal = (4.0-3.0)/1.0 = 1.0
+        #   value1 = 3.0 + 0.2*0.0 + (-0.07)*1.0 = 3.0 + 0.0 - 0.07 = 2.93
+        #   value2 = 3.0 - 0.2*0.0 - (-0.07)*1.0 = 3.0 - 0.0 + 0.07 = 3.07
+        
+        offspring = crossover.execute([solution1, solution2, solution3])
+        
+        self.assertEqual(2, len(offspring))
+        
+        # Check the values with a small tolerance due to floating-point arithmetic
+        self.assertAlmostEqual(offspring[0].variables[0], 2.7, places=6)
+        self.assertAlmostEqual(offspring[0].variables[1], 2.93, places=6)
+        self.assertAlmostEqual(offspring[1].variables[0], 2.3, places=6)
+        self.assertAlmostEqual(offspring[1].variables[1], 3.07, places=6)
+        
+        # Verify random.random() was called for probability and beta calculation (1 for probability + 4 for beta)
+        self.assertEqual(random_mock.call_count, 5)
+        # Verify random.uniform() was called for each variable (2 variables)
+        self.assertEqual(uniform_mock.call_count, 2)
+
+    def test_should_handle_identical_parents_gracefully(self):
+        # Test case where parent1 and parent2 are identical
+        crossover = UnimodalNormalDistributionCrossover(1.0, 0.5, 0.35)
+        
+        solution1 = FloatSolution([1.0, 1.0], [5.0, 5.0], 1, 0)
+        solution2 = FloatSolution([1.0, 1.0], [5.0, 5.0], 1, 0)
+        solution3 = FloatSolution([1.0, 1.0], [5.0, 5.0], 1, 0)
+        
+        solution1.variables = [2.0, 3.0]
+        solution2.variables = [2.0, 3.0]  # Same as solution1
+        solution3.variables = [2.5, 4.0]
+        
+        # This should not raise an exception
+        try:
+            offspring = crossover.execute([solution1, solution2, solution3])
+            self.assertEqual(2, len(offspring))
+        except Exception as e:
+            self.fail(f"Should handle identical parents but got: {e}")
 
 
 if __name__ == "__main__":
