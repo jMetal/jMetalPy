@@ -11,6 +11,8 @@ from jmetal.core.solution import (
     PermutationSolution,
 )
 from jmetal.operator.crossover import (
+    ArithmeticCrossover,
+    BLXAlphaBetaCrossover,
     BLXAlphaCrossover,
     CompositeCrossover,
     CXCrossover,
@@ -335,6 +337,140 @@ class SBXCrossoverTestCases(unittest.TestCase):
         pass
 
 
+class BLXAlphaBetaCrossoverTestCases(unittest.TestCase):
+    def test_should_constructor_assign_the_correct_probability_value(self):
+        crossover_probability = 0.1
+        alpha = 0.3
+        beta = 0.5
+        crossover: BLXAlphaBetaCrossover = BLXAlphaBetaCrossover(crossover_probability, alpha, beta)
+
+        self.assertEqual(crossover_probability, crossover.probability)
+        self.assertEqual(alpha, crossover.alpha)
+        self.assertEqual(beta, crossover.beta)
+
+    def test_should_constructor_raise_an_exception_if_the_probability_is_greater_than_one(self):
+        with self.assertRaises(ValueError):
+            BLXAlphaBetaCrossover(1.5, 0.3, 0.5)
+
+    def test_should_constructor_raise_an_exception_if_the_probability_is_negative(self):
+        with self.assertRaises(ValueError):
+            BLXAlphaBetaCrossover(-0.1, 0.3, 0.5)
+
+    def test_should_constructor_raise_an_exception_if_alpha_is_negative(self):
+        with self.assertRaises(ValueError):
+            BLXAlphaBetaCrossover(0.1, -0.3, 0.5)
+
+    def test_should_constructor_raise_an_exception_if_beta_is_negative(self):
+        with self.assertRaises(ValueError):
+            BLXAlphaBetaCrossover(0.1, 0.3, -0.5)
+
+    def test_should_execute_with_an_invalid_solution_list_size_raise_an_exception(self):
+        crossover: BLXAlphaBetaCrossover = BLXAlphaBetaCrossover(0.1, 0.3, 0.5)
+
+        solution = FloatSolution([1, 2], [2, 4], 2, 2)
+        with self.assertRaises(Exception):
+            crossover.execute([solution])
+
+        with self.assertRaises(Exception):
+            crossover.execute([solution, solution, solution])
+
+    def test_should_execute_return_the_parents_if_the_crossover_probability_is_zero(self):
+        crossover: BLXAlphaBetaCrossover = BLXAlphaBetaCrossover(0.0, 0.3, 0.5)
+
+        solution1 = FloatSolution([1, 2], [2, 4], 2, 2)
+        solution2 = FloatSolution([1, 2], [2, 4], 2, 2)
+
+        solution1.variables = [1.5, 2.7]
+        solution2.variables = [1.7, 3.6]
+
+        offspring = crossover.execute([solution1, solution2])
+
+        self.assertEqual(2, len(offspring))
+        self.assertEqual(solution1.variables, offspring[0].variables)
+        self.assertEqual(solution2.variables, offspring[1].variables)
+
+    def test_should_execute_work_with_a_solution_subclass_of_float_solution(self):
+        class NewFloatSolution(FloatSolution):
+            def __init__(
+                self,
+                lower_bound: List[float],
+                upper_bound: List[float],
+                number_of_objectives: int,
+                number_of_constraints: int = 0,
+            ):
+                super(NewFloatSolution, self).__init__(
+                    lower_bound, upper_bound, number_of_objectives, number_of_constraints
+                )
+
+        solution1 = NewFloatSolution([1, 2], [2, 4], 2, 2)
+        solution2 = NewFloatSolution([1, 2], [2, 4], 2, 2)
+
+        solution1.variables = [1.5, 2.7]
+        solution2.variables = [1.7, 3.6]
+
+        crossover: BLXAlphaBetaCrossover = BLXAlphaBetaCrossover(0.0, 0.3, 0.5)
+        offspring = crossover.execute([solution1, solution2])
+
+        self.assertEqual(2, len(offspring))
+        self.assertEqual(solution1.variables, offspring[0].variables)
+        self.assertEqual(solution2.variables, offspring[1].variables)
+
+    @mock.patch('random.random')
+    @mock.patch('random.uniform')
+    def test_should_execute_produce_valid_solutions_within_expanded_range(self, uniform_mock, random_mock):
+        # Mock random.random() to ensure crossover happens
+        random_mock.return_value = 0.1  # Below probability threshold
+        
+        # Mock random.uniform to return specific values for testing
+        # For the first variable: x1=2.0, x2=3.0, alpha=0.5, beta=0.3
+        # Range: d = 3.0 - 2.0 = 1.0
+        # c_min = 2.0 - 0.5*1.0 = 1.5
+        # c_max = 3.0 + 0.3*1.0 = 3.3
+        # 
+        # For the second variable: x1=4.0, x2=5.0, alpha=0.5, beta=0.3
+        # Range: d = 5.0 - 4.0 = 1.0
+        # c_min = 4.0 - 0.5*1.0 = 3.5
+        # c_max = 5.0 + 0.3*1.0 = 5.3 (clamped to 5.0)
+        #
+        # Mock to return values in the order they'll be used:
+        # 1. First variable, first offspring
+        # 2. First variable, second offspring
+        # 3. Second variable, first offspring
+        # 4. Second variable, second offspring
+        uniform_mock.side_effect = [2.5, 3.0, 4.0, 4.5]
+        
+        crossover: BLXAlphaBetaCrossover = BLXAlphaBetaCrossover(0.9, 0.5, 0.3)
+        
+        # Create two parent solutions with known values
+        solution1 = FloatSolution([1.0, 1.0], [5.0, 5.0], 1, 0)
+        solution2 = FloatSolution([1.0, 1.0], [5.0, 5.0], 1, 0)
+        
+        # Set parent values that will create known ranges
+        solution1.variables = [2.0, 4.0]  # First variable: 2.0, Second: 4.0
+        solution2.variables = [3.0, 5.0]  # First variable: 3.0, Second: 5.0
+        
+        offspring = crossover.execute([solution1, solution2])
+        
+        self.assertEqual(2, len(offspring))
+        
+        # Check that the values are within the expected expanded ranges
+        # First variable should be in [1.5, 3.3]
+        self.assertGreaterEqual(offspring[0].variables[0], 1.5)
+        self.assertLessEqual(offspring[0].variables[0], 3.3)
+        self.assertGreaterEqual(offspring[1].variables[0], 1.5)
+        self.assertLessEqual(offspring[1].variables[0], 3.3)
+        
+        # Second variable should be in [3.5, 5.0]
+        self.assertGreaterEqual(offspring[0].variables[1], 3.5)
+        self.assertLessEqual(offspring[0].variables[1], 5.0)
+        self.assertGreaterEqual(offspring[1].variables[1], 3.5)
+        self.assertLessEqual(offspring[1].variables[1], 5.0)
+        
+        # Verify the mock was called with the expected arguments
+        # We expect 4 calls to uniform: 2 variables * 2 offspring
+        self.assertEqual(uniform_mock.call_count, 4)
+
+
 class BLXAlphaCrossoverTestCases(unittest.TestCase):
     def test_should_constructor_assign_the_correct_probability_value(self):
         crossover_probability = 0.1
@@ -530,6 +666,100 @@ class CompositeCrossoverTestCases(unittest.TestCase):
 
         with self.assertRaises(InvalidConditionException):
             operator.execute([composite_solution1, composite_solution2])
+
+
+
+class ArithmeticCrossoverTestCases(unittest.TestCase):
+    def test_should_constructor_assign_the_correct_probability_value(self):
+        crossover_probability = 0.1
+        crossover: ArithmeticCrossover = ArithmeticCrossover(crossover_probability)
+        self.assertEqual(crossover_probability, crossover.probability)
+
+    def test_should_constructor_raise_an_exception_if_the_probability_is_greater_than_one(self):
+        with self.assertRaises(ValueError):
+            ArithmeticCrossover(1.5)
+
+    def test_should_constructor_raise_an_exception_if_the_probability_is_negative(self):
+        with self.assertRaises(ValueError):
+            ArithmeticCrossover(-0.1)
+
+    def test_should_execute_with_an_invalid_solution_list_size_raise_an_exception(self):
+        crossover: ArithmeticCrossover = ArithmeticCrossover(0.1)
+        solution = FloatSolution([1, 2], [2, 4], 2, 2)
+        with self.assertRaises(Exception):
+            crossover.execute([solution])
+        with self.assertRaises(Exception):
+            crossover.execute([solution, solution, solution])
+
+    def test_should_execute_return_the_parents_if_the_crossover_probability_is_zero(self):
+        crossover: ArithmeticCrossover = ArithmeticCrossover(0.0)
+        solution1 = FloatSolution([1, 2], [2, 4], 2, 2)
+        solution2 = FloatSolution([1, 2], [2, 4], 2, 2)
+        solution1.variables = [1.5, 2.7]
+        solution2.variables = [1.7, 3.6]
+        offspring = crossover.execute([solution1, solution2])
+        self.assertEqual(2, len(offspring))
+        self.assertEqual(solution1.variables, offspring[0].variables)
+        self.assertEqual(solution2.variables, offspring[1].variables)
+
+    def test_should_execute_work_with_a_solution_subclass_of_float_solution(self):
+        class NewFloatSolution(FloatSolution):
+            def __init__(
+                self,
+                lower_bound: List[float],
+                upper_bound: List[float],
+                number_of_objectives: int,
+                number_of_constraints: int = 0,
+            ):
+                super(NewFloatSolution, self).__init__(
+                    lower_bound, upper_bound, number_of_objectives, number_of_constraints
+                )
+
+        solution1 = NewFloatSolution([1, 2], [2, 4], 2, 2)
+        solution2 = NewFloatSolution([1, 2], [2, 4], 2, 2)
+        solution1.variables = [1.5, 2.7]
+        solution2.variables = [1.7, 3.6]
+        crossover: ArithmeticCrossover = ArithmeticCrossover(0.0)
+        offspring = crossover.execute([solution1, solution2])
+        self.assertEqual(2, len(offspring))
+        self.assertEqual(solution1.variables, offspring[0].variables)
+        self.assertEqual(solution2.variables, offspring[1].variables)
+
+    @mock.patch('random.random')
+    def test_should_execute_perform_arithmetic_crossover(self, random_mock):
+        # Mock random.random() to control the crossover and alpha values
+        # First call is for the crossover probability check (0.1 < 0.9, so crossover happens)
+        # Next calls are for alpha values (0.5 for both variables)
+        random_mock.side_effect = [0.1, 0.5, 0.5]
+        
+        crossover: ArithmeticCrossover = ArithmeticCrossover(0.9)
+        
+        # Create two parent solutions with known values
+        solution1 = FloatSolution([1.0, 1.0], [5.0, 5.0], 1, 0)
+        solution2 = FloatSolution([1.0, 1.0], [5.0, 5.0], 1, 0)
+        
+        # Set parent values
+        solution1.variables = [2.0, 4.0]
+        solution2.variables = [3.0, 5.0]
+        
+        # Expected calculations with alpha=0.5:
+        # For first variable: 0.5*2.0 + 0.5*3.0 = 2.5 and 0.5*2.0 + 0.5*3.0 = 2.5
+        # For second variable: 0.5*4.0 + 0.5*5.0 = 4.5 and 0.5*4.0 + 0.5*5.0 = 4.5
+        # But since we're using the same alpha for both variables, the second alpha is ignored
+        # and we get the same values for both variables in both offspring
+        
+        offspring = crossover.execute([solution1, solution2])
+        
+        self.assertEqual(2, len(offspring))
+        
+        # Check that the values are the arithmetic mean of the parents
+        self.assertEqual(offspring[0].variables[0], 2.5)  # (2.0 + 3.0) / 2
+        self.assertEqual(offspring[0].variables[1], 4.5)  # (4.0 + 5.0) / 2
+        self.assertEqual(offspring[1].variables[0], 2.5)  # (2.0 + 3.0) / 2
+        self.assertEqual(offspring[1].variables[1], 4.5)  # (4.0 + 5.0) / 2
+        
+        # Verify random.random() was called 3 times (1 for probability, 2 for alphas)
+        self.assertEqual(random_mock.call_count, 3)
 
 
 if __name__ == "__main__":

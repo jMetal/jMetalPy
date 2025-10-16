@@ -1,12 +1,14 @@
 """
 from .crossover import (
+    BLXAlphaCrossover,
+    BLXAlphaBetaCrossover,
     CXCrossover,
     DifferentialEvolutionCrossover,
+    IntegerSBXCrossover,
     NullCrossover,
     PMXCrossover,
     SBXCrossover,
     SPXCrossover,
-    IntegerSBXCrossover,
 )
 from .mutation import (
     BitFlipMutation,
@@ -33,27 +35,31 @@ from .replacement import (
 )
 
 __all__ = [
+    "BLXAlphaCrossover",
+    "BLXAlphaBetaCrossover",
+    "CXCrossover",
+    "DifferentialEvolutionCrossover",
+    "IntegerSBXCrossover",
     "NullCrossover",
+    "PMXCrossover",
     "SBXCrossover",
     "SPXCrossover",
-    "DifferentialEvolutionCrossover",
-    "PMXCrossover",
-    "CXCrossover",
-    "NullMutation",
     "BitFlipMutation",
-    "PolynomialMutation",
     "IntegerPolynomialMutation",
-    "UniformMutation",
-    "SimpleRandomMutation",
-    "ScrambleMutation",
+    "NullMutation",
     "PermutationSwapMutation",
-    "RouletteWheelSelection",
+    "PolynomialMutation",
+    "ScrambleMutation",
+    "SimpleRandomMutation",
+    "UniformMutation",
     "BestSolutionSelection",
-    "BinaryTournamentSelection",
     "BinaryTournament2Selection",
+    "BinaryTournamentSelection",
+    "NaryRandomSolutionSelection",
     "RandomSelection",
-        "NaryRandomSolutionSelection",
-        "RankingAndCrowdingDistanceSelection",
+    "RankingAndCrowdingDistanceSelection",
+    "RouletteWheelSelection",
+    "RankingAndCrowdingDistanceReplacement",
 ]
 
 """

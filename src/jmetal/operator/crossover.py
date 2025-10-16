@@ -508,6 +508,248 @@ class BLXAlphaCrossover(Crossover[FloatSolution, FloatSolution]):
         return f"BLX-alpha crossover"
 
 
+class BLXAlphaBetaCrossover(Crossover[FloatSolution, FloatSolution]):
+    """BLX-αβ (Blend Crossover with separate alpha and beta) for real-valued solutions.
+    
+    An extension of BLX-α crossover that uses two different expansion factors (α and β)
+    for the lower and upper bounds respectively. This allows for asymmetric exploration
+    around the parent solutions.
+    
+    The crossover works by:
+    1. For each variable, determine the min and max values from the parents
+    2. Calculate the range between parents (d = max - min)
+    3. Expand the range by α*d below the min and β*d above the max
+    4. Sample new values uniformly from this expanded range
+    5. Apply bounds repair if values fall outside the variable bounds
+    
+    Args:
+        probability: Crossover probability (0.0 to 1.0)
+        alpha: Lower expansion factor (must be ≥ 0). Controls exploration below parents:
+            - alpha = 0: No exploration below the smaller parent value
+            - alpha > 0: Expands range below smaller parent by alpha*d
+            - Typical values: 0.1 to 0.5
+        beta: Upper expansion factor (must be ≥ 0). Controls exploration above parents:
+            - beta = 0: No exploration above the larger parent value
+            - beta > 0: Expands range above larger parent by beta*d
+            - Typical values: 0.1 to 0.5
+        repair_operator: Optional function to repair out-of-bounds values.
+            If None, values are clamped to the variable bounds using min/max.
+            Signature: repair_operator(value: float, lower_bound: float, upper_bound: float) -> float
+    
+    Raises:
+        ValueError: If probability is not in [0,1] or alpha/beta are negative.
+        
+    Reference:
+        Eshelman, L. J., & Schaffer, J. D. (1993). Real-coded genetic algorithms and 
+        interval-schemata. Foundations of genetic algorithms, 2, 187-202.
+    """
+
+    def __init__(
+        self,
+        probability: float = 0.9,
+        alpha: float = 0.5,
+        beta: float = 0.5,
+        repair_operator: Optional[Callable[[float, float, float], float]] = None,
+    ):
+        if not 0 <= probability <= 1:
+            raise ValueError("probability must be in [0, 1]")
+        if alpha < 0:
+            raise ValueError("alpha must be non-negative")
+        if beta < 0:
+            raise ValueError("beta must be non-negative")
+
+        super().__init__(probability=probability)
+        self.alpha = alpha
+        self.beta = beta
+        self.repair_operator = repair_operator if repair_operator else self._default_repair
+
+    def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
+        Check.that(len(parents) == 2, "BLXAlphaBetaCrossover requires exactly two parents")
+        return self.doCrossover(self.probability, parents[0], parents[1])
+
+    def doCrossover(
+        self, probability: float, parent1: FloatSolution, parent2: FloatSolution
+    ) -> List[FloatSolution]:
+        """Perform the crossover operation.
+
+        Args:
+            probability: Crossover probability
+            parent1: First parent solution
+            parent2: Second parent solution
+
+        Returns:
+            A list containing two offspring solutions
+        """
+        offspring1 = parent1.__class__(
+            parent1.lower_bound, 
+            parent1.upper_bound, 
+            len(parent1.objectives),
+            len(parent1.constraints) if hasattr(parent1, 'constraints') else 0
+        )
+        offspring2 = parent2.__class__(
+            parent1.lower_bound, 
+            parent2.upper_bound, 
+            len(parent2.objectives),
+            len(parent2.constraints) if hasattr(parent2, 'constraints') else 0
+        )
+
+        if random.random() > probability:
+            offspring1.variables = parent1.variables.copy()
+            offspring2.variables = parent2.variables.copy()
+            return [offspring1, offspring2]
+
+        for i in range(len(parent1.variables)):
+            x1, x2 = parent1.variables[i], parent2.variables[i]
+            lower_bound = parent1.lower_bound[i]
+            upper_bound = parent1.upper_bound[i]
+
+            # Ensure x1 <= x2
+            if x1 > x2:
+                x1, x2 = x2, x1
+
+            # Calculate the range and expanded bounds
+            d = x2 - x1
+            c_min = x1 - self.alpha * d
+            c_max = x2 + self.beta * d
+
+            # Generate offspring values within the expanded range
+            y1 = random.uniform(c_min, c_max)
+            y2 = random.uniform(c_min, c_max)
+
+            # Repair out-of-bounds values
+            y1 = self.repair_operator(y1, lower_bound, upper_bound)
+            y2 = self.repair_operator(y2, lower_bound, upper_bound)
+
+            offspring1.variables[i] = y1
+            offspring2.variables[i] = y2
+
+        return [offspring1, offspring2]
+
+    def _default_repair(self, value: float, lower_bound: float, upper_bound: float) -> float:
+        """Default repair method that clamps values to bounds."""
+        return max(lower_bound, min(upper_bound, value))
+
+    def get_number_of_parents(self) -> int:
+        return 2
+
+    def get_number_of_children(self) -> int:
+        return 2
+
+    def get_name(self) -> str:
+        return f"BLX-alpha-beta crossover (α={self.alpha}, β={self.beta})"
+
+
+class ArithmeticCrossover(Crossover[FloatSolution, FloatSolution]):
+    """Arithmetic Crossover for real-valued solutions.
+    
+    This operator performs an arithmetic combination of two parent solutions to produce
+    two offspring. For each variable, a random weight (alpha) is used to compute a weighted
+    average of the parent values.
+    
+    The crossover works by:
+    1. For each variable, generate a random weight alpha in [0, 1]
+    2. Calculate new values as:
+       - child1 = alpha * parent1 + (1 - alpha) * parent2
+       - child2 = (1 - alpha) * parent1 + alpha * parent2
+    3. Apply bounds repair if values fall outside the variable bounds
+    
+    Args:
+        probability: Crossover probability (0.0 to 1.0)
+        repair_operator: Optional function to repair out-of-bounds values.
+            If None, values are clamped to the variable bounds using min/max.
+            Signature: repair_operator(value: float, lower_bound: float, upper_bound: float) -> float
+    
+    Raises:
+        ValueError: If probability is not in [0,1]
+        
+    Reference:
+        Michalewicz, Z. (1996). Genetic Algorithms + Data Structures = Evolution Programs.
+        Springer-Verlag, Berlin.
+    """
+
+    def __init__(
+        self,
+        probability: float = 0.9,
+        repair_operator: Optional[Callable[[float, float, float], float]] = None,
+    ):
+        if not 0 <= probability <= 1:
+            raise ValueError("probability must be in [0, 1]")
+
+        super().__init__(probability=probability)
+        self.repair_operator = repair_operator if repair_operator else self._default_repair
+
+    def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
+        Check.that(len(parents) == 2, "Arithmetic Crossover requires exactly two parents")
+        return self.doCrossover(self.probability, parents[0], parents[1])
+
+    def doCrossover(
+        self, probability: float, parent1: FloatSolution, parent2: FloatSolution
+    ) -> List[FloatSolution]:
+        """Perform the arithmetic crossover operation.
+        
+        Args:
+            probability: Crossover probability
+            parent1: First parent solution
+            parent2: Second parent solution
+            
+        Returns:
+            A list containing two offspring solutions
+        """
+        # Create copies of the parents as the base for the offspring
+        offspring1 = parent1.__class__(
+            parent1.lower_bound,
+            parent1.upper_bound,
+            len(parent1.objectives),
+            len(parent1.constraints) if hasattr(parent1, 'constraints') else 0
+        )
+        offspring2 = parent2.__class__(
+            parent2.lower_bound,
+            parent2.upper_bound,
+            len(parent2.objectives),
+            len(parent2.constraints) if hasattr(parent2, 'constraints') else 0
+        )
+        
+        # If crossover doesn't happen, return copies of the parents
+        if random.random() >= probability:
+            offspring1.variables = parent1.variables.copy()
+            offspring2.variables = parent2.variables.copy()
+            return [offspring1, offspring2]
+        
+        # Perform arithmetic crossover on each variable
+        for i in range(len(parent1.variables)):
+            p1 = parent1.variables[i]
+            p2 = parent2.variables[i]
+            
+            # Generate a random weight for this variable
+            alpha = random.random()
+            
+            # Calculate new values using arithmetic crossover
+            value1 = alpha * p1 + (1 - alpha) * p2
+            value2 = (1 - alpha) * p1 + alpha * p2
+            
+            # Apply bounds repair if needed
+            lower_bound = parent1.lower_bound[i]
+            upper_bound = parent1.upper_bound[i]
+            
+            offspring1.variables[i] = self.repair_operator(value1, lower_bound, upper_bound)
+            offspring2.variables[i] = self.repair_operator(value2, lower_bound, upper_bound)
+        
+        return [offspring1, offspring2]
+    
+    def _default_repair(self, value: float, lower_bound: float, upper_bound: float) -> float:
+        """Default repair method that clamps values to bounds."""
+        return max(lower_bound, min(upper_bound, value))
+    
+    def get_number_of_parents(self) -> int:
+        return 2
+    
+    def get_number_of_children(self) -> int:
+        return 2
+    
+    def get_name(self) -> str:
+        return "Arithmetic Crossover"
+
+
 class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
     """Differential Evolution (DE) crossover operator for real-valued solutions.
     
