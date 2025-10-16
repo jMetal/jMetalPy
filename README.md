@@ -119,6 +119,10 @@ The current release of jMetalPy (v1.8.0) contains the following components:
 
 ## Changelog
 
+* [Current]
+  * Added PMX crossover operator
+  * Added Unimodal Normal Distribution Crossover (UNDX), BLX-Alpha, BLX-Alpha-Beta and Arithmetic crossover operators.
+  * Added Levy flight and power-law mutation operators.
 * [v.1.8.0] 
   * Add the SMS-EMOA algorithm (based on [moocore](https://multi-objective.github.io/moocore/python/).) 
   * Add the IGD+ quality indicator
