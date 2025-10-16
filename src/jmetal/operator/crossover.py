@@ -363,6 +363,125 @@ class SPXCrossover(Crossover[BinarySolution, BinarySolution]):
         return "Single point crossover"
 
 
+from typing import List, TypeVar, Callable, Optional
+import random
+from jmetal.core.operator import Crossover
+from jmetal.core.solution import FloatSolution
+from jmetal.util.ckecking import Check
+
+S = TypeVar('S', bound=FloatSolution)
+
+class BLXAlphaCrossover(Crossover[FloatSolution, FloatSolution]):
+    """Implementation of BLX-alpha crossover for real-valued solutions.
+
+    The BLX-alpha crossover creates offspring within a range that is extended
+    by a factor of alpha beyond the range defined by the parent values. This
+    allows for exploration beyond the region defined by the parents.
+
+    Args:
+        probability: Crossover probability (0.0 to 1.0)
+        alpha: Expansion factor (must be ≥ 0)
+            - alpha = 0: Offspring will be in the range defined by parents
+            - alpha > 0: Offspring can be outside parent range
+            - Typical values: 0.1 to 0.5
+        repair_operator: Optional function to repair out-of-bounds values.
+            If None, values are clamped to the variable bounds.
+
+    Raises:
+        ValueError: If probability is not in [0,1] or alpha is negative.
+    """
+
+    def __init__(
+        self,
+        probability: float = 0.9,
+        alpha: float = 0.5,
+        repair_operator: Optional[Callable[[float, float, float], float]] = None,
+    ):
+        if not 0 <= probability <= 1:
+            raise ValueError("probability must be in [0, 1]")
+        if alpha < 0:
+            raise ValueError("alpha must be non-negative")
+
+        super().__init__(probability=probability)
+        self.alpha = alpha
+        self.repair_operator = repair_operator if repair_operator else self._default_repair
+
+    def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
+        Check.that(len(parents) == 2, "BLXAlphaCrossover requires exactly two parents")
+        return self.doCrossover(self.probability, parents[0], parents[1])
+
+    def doCrossover(
+        self, probability: float, parent1: FloatSolution, parent2: FloatSolution
+    ) -> List[FloatSolution]:
+        """Perform the crossover operation.
+
+        Args:
+            probability: Crossover probability
+            parent1: First parent solution
+            parent2: Second parent solution
+
+        Returns:
+            A list containing two offspring solutions
+        """
+        offspring1 = parent1.__class__(
+            parent1.lower_bound, 
+            parent2.upper_bound, 
+            len(parent1.objectives),
+            len(parent1.constraints) if hasattr(parent1, 'constraints') else 0
+        )
+        offspring2 = parent2.__class__(
+            parent1.lower_bound, 
+            parent2.upper_bound, 
+            len(parent2.objectives),
+            len(parent2.constraints) if hasattr(parent2, 'constraints') else 0
+        )
+
+        if random.random() > probability:
+            offspring1.variables = parent1.variables.copy()
+            offspring2.variables = parent2.variables.copy()
+            return [offspring1, offspring2]
+
+        for i in range(len(parent1.variables)):
+            x1, x2 = parent1.variables[i], parent2.variables[i]
+            lower_bound = parent1.lower_bound[i]
+            upper_bound = parent1.upper_bound[i]
+
+            # Calculate the range between parents
+            min_val = min(x1, x2)
+            max_val = max(x1, x2)
+            range_val = max_val - min_val
+
+            # Expand the range by alpha
+            min_range = min_val - range_val * self.alpha
+            max_range = max_val + range_val * self.alpha
+
+            # Generate offspring values within the expanded range
+            y1 = random.uniform(min_range, max_range)
+            y2 = random.uniform(min_range, max_range)
+
+            # Repair out-of-bounds values
+            y1 = self.repair_operator(y1, lower_bound, upper_bound)
+            y2 = self.repair_operator(y2, lower_bound, upper_bound)
+
+            offspring1.variables[i] = y1
+            offspring2.variables[i] = y2
+
+        return [offspring1, offspring2]
+
+    def _default_repair(self, value: float, lower_bound: float, upper_bound: float) -> float:
+        """Default repair method that clamps values to bounds."""
+        return max(lower_bound, min(upper_bound, value))
+
+    def get_number_of_parents(self) -> int:
+        return 2
+
+    def get_number_of_children(self) -> int:
+        return 2
+
+    def get_name(self) -> str:
+        return f"BLX-alpha crossover"
+        
+
 class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
     """This operator receives two parameters: the current individual and an array of three parent individuals. The
     best and rand variants depends on the third parent, according whether it represents the current of the "best"

@@ -54,14 +54,43 @@ class BitFlipMutation(Mutation[BinarySolution]):
 
 
 class PolynomialMutation(Mutation[FloatSolution]):
-    """Polynomial mutation for real-valued decision variables.
-
-    - probability: Per-variable mutation probability.
-    - distribution_index: Controls mutation spread. Typical values ~20.0 for fine-grained moves; lower values increase exploration.
+    """Implementation of a polynomial mutation operator for real-valued solutions.
+    
+    The polynomial mutation is based on a polynomial probability distribution that
+    perturbs solutions in a way that favors small changes while still allowing
+    occasional larger jumps. This provides a good balance between exploration and
+    exploitation in evolutionary algorithms.
+    
+    The mutation follows a polynomial probability distribution centered on the
+    parent value, with the spread controlled by the distribution index.
+    
+    Args:
+        probability: The probability of mutating each variable (0 ≤ p ≤ 1).
+        distribution_index: Controls the perturbation magnitude (must be ≥ 0):
+            - Lower values (e.g., 5-20): More exploratory, larger mutations
+            - Medium values (e.g., 20-100): Balanced exploration/exploitation
+            - Higher values (e.g., >100): More exploitative, smaller mutations
+        repair_operator: Optional function to repair out-of-bounds values.
+            If None, values are clamped to the variable bounds.
+            
+    Raises:
+        ValueError: If probability is not in [0,1] or distribution_index is negative.
     """
-    def __init__(self, probability: float, distribution_index: float = 20.0):
+
+    def __init__(
+        self,
+        probability: float = 0.01,
+        distribution_index: float = 20.0,
+        repair_operator: Optional[Callable[[float, float, float], float]] = None,
+    ):
+        if not 0 <= probability <= 1:
+            raise ValueError("probability must be in [0, 1]")
+        if distribution_index < 0:
+            raise ValueError("distribution_index must be non-negative")
+            
         super(PolynomialMutation, self).__init__(probability=probability)
         self.distribution_index = distribution_index
+        self.repair_operator = repair_operator
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
         Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
@@ -150,95 +179,198 @@ class IntegerPolynomialMutation(Mutation[IntegerSolution]):
 
 
 class SimpleRandomMutation(Mutation[FloatSolution]):
+    """Implementation of a simple random mutation operator for real-valued solutions.
+    
+    This operator replaces the value of a decision variable with a random value
+    uniformly distributed between the lower and upper bounds of that variable.
+    This is one of the simplest mutation operators but can be effective for
+    exploration, especially in the early stages of optimization.
+    
+    Args:
+        probability: The probability of mutating each variable (0 ≤ p ≤ 1).
+            
+    Raises:
+        ValueError: If probability is not in [0,1].
+    """
+    
     def __init__(self, probability: float):
+        if not 0 <= probability <= 1:
+            raise ValueError("probability must be in [0, 1]")
         super(SimpleRandomMutation, self).__init__(probability=probability)
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
         Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
-
         for i in range(len(solution.variables)):
-            rand = random.random()
-            if rand <= self.probability:
-                solution.variables[i] = (
-                    solution.lower_bound[i] + (solution.upper_bound[i] - solution.lower_bound[i]) * random.random()
-                )
+            if random.random() <= self.probability:
+                solution.variables[i] = random.uniform(solution.lower_bound[i], solution.upper_bound[i])
+
         return solution
 
-    def get_name(self):
-        return "Simple random_search mutation"
+    def get_name(self) -> str:
+        return "Simple random mutation"
 
 
 class UniformMutation(Mutation[FloatSolution]):
+    """Implementation of a uniform mutation operator for real-valued solutions.
+    
+    This operator adds a random perturbation uniformly distributed in
+    [-perturbation/2, perturbation/2] to each variable with a given probability.
+    The perturbation is scaled by the variable's range, making the operator
+    scale-invariant to the problem's bounds.
+    
+    Args:
+        probability: The probability of mutating each variable (0 ≤ p ≤ 1).
+        perturbation: Controls the maximum relative perturbation size (must be > 0).
+            - Smaller values (e.g., 0.1-0.5): Small, local perturbations
+            - Larger values (e.g., 1.0-2.0): Larger, more exploratory perturbations
+            
+    Raises:
+        ValueError: If probability is not in [0,1] or perturbation is not positive.
+    """
+    
     def __init__(self, probability: float, perturbation: float = 0.5):
+        if not 0 <= probability <= 1:
+            raise ValueError("probability must be in [0, 1]")
+        if perturbation <= 0:
+            raise ValueError("perturbation must be positive")
+            
         super(UniformMutation, self).__init__(probability=probability)
         self.perturbation = perturbation
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
         Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
-
+        
         for i in range(len(solution.variables)):
-            rand = random.random()
-
-            if rand <= self.probability:
-                tmp = (random.random() - 0.5) * self.perturbation
-                tmp += solution.variables[i]
-
-                if tmp < solution.lower_bound[i]:
-                    tmp = solution.lower_bound[i]
-                elif tmp > solution.upper_bound[i]:
-                    tmp = solution.upper_bound[i]
-
-                solution.variables[i] = tmp
+            if random.random() <= self.probability:
+                # Calculate perturbation scaled by variable range
+                var_range = solution.upper_bound[i] - solution.lower_bound[i]
+                delta = (random.random() - 0.5) * self.perturbation * var_range
+                
+                # Apply perturbation and ensure bounds
+                new_value = solution.variables[i] + delta
+                solution.variables[i] = max(solution.lower_bound[i], 
+                                         min(solution.upper_bound[i], new_value))
 
         return solution
 
-    def get_name(self):
-        return "Uniform mutation"
+    def get_name(self) -> str:
+        return f"Uniform mutation"
 
 
 class NonUniformMutation(Mutation[FloatSolution]):
-    def __init__(self, probability: float, perturbation: float = 0.5, max_iterations: int = 0.5):
+    """Implementation of a non-uniform mutation operator for real-valued solutions.
+    
+    This operator perturbs solutions in a way that the mutation strength decreases
+    over time, allowing for more exploration in early generations and more
+    exploitation in later generations. The mutation strength is controlled by
+    the current iteration number relative to the maximum number of iterations.
+    
+    The mutation follows the formula:
+        Δ(t, y) = y * (r * (1 - t/T)^b - 1)  if r ≤ 0.5
+        Δ(t, y) = y * (1 - r * (1 - t/T)^b)  if r > 0.5
+    where t is the current iteration, T is max_iterations, and b is the perturbation.
+    
+    Args:
+        probability: The probability of mutating each variable (0 ≤ p ≤ 1).
+        perturbation: Controls the perturbation strength (must be > 0).
+            - Lower values: More gradual decrease in mutation strength
+            - Higher values: More rapid decrease in mutation strength
+        max_iterations: The maximum number of iterations (must be > 0).
+            Used to normalize the current iteration count.
+            
+    Raises:
+        ValueError: If probability is not in [0,1] or parameters are not positive.
+    """
+    
+    def __init__(self, probability: float, perturbation: float = 0.5, max_iterations: int = 1000):
+        if not 0 <= probability <= 1:
+            raise ValueError("probability must be in [0, 1]")
+        if perturbation <= 0:
+            raise ValueError("perturbation must be positive")
+        if max_iterations <= 0:
+            raise ValueError("max_iterations must be positive")
+            
         super(NonUniformMutation, self).__init__(probability=probability)
         self.perturbation = perturbation
         self.max_iterations = max_iterations
         self.current_iteration = 0
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
+        """Execute the non-uniform mutation on a solution.
+        
+        Args:
+            solution: The solution to be mutated.
+            
+        Returns:
+            The mutated solution.
+        """
         Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
 
         for i in range(len(solution.variables)):
             if random.random() <= self.probability:
-                rand = random.random()
-
-                if rand <= 0.5:
-                    tmp = self.__delta(solution.upper_bound[i] - solution.variables[i], self.perturbation)
+                current_value = solution.variables[i]
+                
+                # Calculate delta based on direction
+                if random.random() <= 0.5:
+                    delta = self.__delta(
+                        solution.upper_bound[i] - current_value,
+                        self.perturbation,
+                    )
                 else:
-                    tmp = self.__delta(solution.lower_bound[i] - solution.variables[i], self.perturbation)
+                    delta = self.__delta(
+                        solution.lower_bound[i] - current_value,
+                        self.perturbation,
+                    )
 
-                tmp += solution.variables[i]
-
-                if tmp < solution.lower_bound[i]:
-                    tmp = solution.lower_bound[i]
-                elif tmp > solution.upper_bound[i]:
-                    tmp = solution.upper_bound[i]
-
-                solution.variables[i] = tmp
+                # Apply mutation and ensure bounds
+                new_value = current_value + delta
+                solution.variables[i] = max(solution.lower_bound[i],
+                                         min(solution.upper_bound[i], new_value))
 
         return solution
 
-    def set_current_iteration(self, current_iteration: int):
+    def set_current_iteration(self, current_iteration: int) -> None:
+        """Set the current iteration number for controlling mutation strength.
+        
+        Args:
+            current_iteration: The current iteration number (must be ≥ 0).
+        """
+        if current_iteration < 0:
+            raise ValueError("current_iteration must be non-negative")
         self.current_iteration = current_iteration
 
-    def __delta(self, y: float, b_mutation_parameter: float):
-        return y * (
-            1.0
-            - pow(
-                random.random(), pow((1.0 - 1.0 * self.current_iteration / self.max_iterations), b_mutation_parameter)
-            )
-        )
+    def __delta(self, y: float, b_mutation_parameter: float) -> float:
+        """Calculate the non-uniform mutation delta.
+        
+        Args:
+            y: Distance to the bound
+            b_mutation_parameter: Perturbation parameter
+            
+        Returns:
+            The mutation delta value
+        """
+        if y == 0:
+            return 0
+            
+        r = random.random()
+        iter_frac = min(self.current_iteration / self.max_iterations, 1.0)
+        
+        # Calculate mutation strength based on current iteration
+        delta = 1 - math.pow(iter_frac, 1 / (1 + b_mutation_parameter))
+        
+        # Apply mutation in appropriate direction
+        if r <= 0.5:
+            return y * (math.pow(2 * r + (1 - 2 * r) * delta, 1 / (1 + b_mutation_parameter)) - 1)
+        return y * (1 - math.pow(2 * (1 - r) + 2 * (r - 0.5) * delta, 1 / (1 + b_mutation_parameter)))
 
-    def get_name(self):
-        return "Non-uniform mutation"
+    def get_name(self) -> str:
+        """Get the name of the operator.
+        
+        Returns:
+            A string containing the operator name and parameters.
+        """
+        return (f"Non-Uniform mutation (perturbation={self.perturbation}, "
+                f"max_iter={self.max_iterations})")
 
 
 class PermutationSwapMutation(Mutation[PermutationSolution]):
