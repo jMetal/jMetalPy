@@ -141,13 +141,27 @@ class CXCrossover(Crossover[PermutationSolution, PermutationSolution]):
 
 
 class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
-    __EPS = 1.0e-14
+    """Simulated Binary Crossover (SBX) for real-valued solutions.
+    
+    SBX is a popular crossover operator for real-coded genetic algorithms that simulates the behavior of the single-point
+    crossover operator in binary-coded GAs. It creates offspring solutions based on a probability distribution centered
+    around the parent solutions, with the spread of the distribution controlled by the distribution index.
+    
+    Args:
+        probability: Crossover probability (0.0 to 1.0)
+        distribution_index: Distribution index (must be ≥ 0). Higher values produce offspring closer to parents.
+            Typical values range from 5 to 30, with 20 being a common default.
+            
+    Raises:
+        Exception: If distribution_index is negative
+    """
+    __EPS = 1.0e-14  # Small constant to prevent division by zero
 
     def __init__(self, probability: float, distribution_index: float = 20.0):
         super(SBXCrossover, self).__init__(probability=probability)
         self.distribution_index = distribution_index
         if distribution_index < 0:
-            raise Exception("The distribution index is negative: " + str(distribution_index))
+            raise ValueError("The distribution index cannot be negative")
 
     def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
         Check.that(issubclass(type(parents[0]), FloatSolution), "Solution type invalid: " + str(type(parents[0])))
@@ -372,23 +386,35 @@ from jmetal.util.ckecking import Check
 S = TypeVar('S', bound=FloatSolution)
 
 class BLXAlphaCrossover(Crossover[FloatSolution, FloatSolution]):
-    """Implementation of BLX-alpha crossover for real-valued solutions.
-
-    The BLX-alpha crossover creates offspring within a range that is extended
-    by a factor of alpha beyond the range defined by the parent values. This
-    allows for exploration beyond the region defined by the parents.
-
+    """BLX-α (Blend Crossover) for real-valued solutions.
+    
+    The BLX-α crossover creates offspring within a range that is extended by a factor of α (alpha)
+    beyond the range defined by the parent values. This allows for exploration beyond the region
+    defined by the parents while maintaining a balance between exploration and exploitation.
+    
+    The crossover works by:
+    1. For each variable, determine the min and max values from the parents
+    2. Calculate the range between parents
+    3. Expand the range by α * range in both directions
+    4. Sample new values uniformly from this expanded range
+    5. Apply bounds repair if values fall outside the variable bounds
+    
     Args:
         probability: Crossover probability (0.0 to 1.0)
-        alpha: Expansion factor (must be ≥ 0)
-            - alpha = 0: Offspring will be in the range defined by parents
-            - alpha > 0: Offspring can be outside parent range
+        alpha: Expansion factor (must be ≥ 0). Controls the exploration range:
+            - alpha = 0: Offspring will be in the range defined by parents (no exploration)
+            - alpha > 0: Offspring can be outside parent range (increased exploration)
             - Typical values: 0.1 to 0.5
         repair_operator: Optional function to repair out-of-bounds values.
-            If None, values are clamped to the variable bounds.
-
+            If None, values are clamped to the variable bounds using min/max.
+            Signature: repair_operator(value: float, lower_bound: float, upper_bound: float) -> float
+    
     Raises:
         ValueError: If probability is not in [0,1] or alpha is negative.
+        
+    Reference:
+        Eshelman, L. J., & Schaffer, J. D. (1993). Real-coded genetic algorithms and 
+        interval-schemata. Foundations of genetic algorithms, 2, 187-202.
     """
 
     def __init__(
@@ -480,13 +506,30 @@ class BLXAlphaCrossover(Crossover[FloatSolution, FloatSolution]):
 
     def get_name(self) -> str:
         return f"BLX-alpha crossover"
-        
+
 
 class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
-    """This operator receives two parameters: the current individual and an array of three parent individuals. The
-    best and rand variants depends on the third parent, according whether it represents the current of the "best"
-    individual or a random_search one. The implementation of both variants are the same, due to that the parent selection is
-    external to the crossover operator.
+    """Differential Evolution (DE) crossover operator for real-valued solutions.
+    
+    This operator implements the standard DE crossover used in the DE/rand/1/bin and DE/best/1/bin
+    variants. It creates a trial vector by combining the target vector with a difference vector,
+    then performs binomial crossover between the target and trial vectors.
+    
+    The operator requires three parents and three mutation factors (F, CR, and K). The first parent
+    is the target vector, while the other two are used to compute the difference vector.
+    
+    Args:
+        cr: Crossover probability (0.0 to 1.0). Controls the probability of each variable being
+            taken from the trial vector versus the target vector.
+        f: Differential weight (mutation factor) for the difference vector. Typically in [0, 2].
+        k: Scaling factor for the difference vector. Typically in [0, 1].
+        
+    Raises:
+        ValueError: If cr is not in [0,1] or f/k are negative.
+        
+    Reference:
+        Storn, R., & Price, K. (1997). Differential evolution - a simple and efficient heuristic for
+        global optimization over continuous spaces. Journal of global optimization, 11(4), 341-359.
     """
 
     def __init__(self, CR: float, F: float, K: float = 0.5):
