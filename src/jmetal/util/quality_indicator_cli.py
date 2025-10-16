@@ -127,7 +127,8 @@ def _compute_all_indicators(front: np.ndarray, reference: np.ndarray, ref_point:
     results["hv"] = hv_indicator.compute(front)
     
     # Normalized Hypervolume
-    nhv_indicator = NormalizedHyperVolume(ref_point, reference)
+    nhv_indicator = NormalizedHyperVolume(ref_point)
+    nhv_indicator.set_reference_front(reference)
     results["nhv"] = nhv_indicator.compute(front)
     
     return results

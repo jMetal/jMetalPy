@@ -14,7 +14,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
  Programa para configurar y ejecutar el algoritmo SMS-EMOA con parámetros estándar.
 """
 if __name__ == "__main__":
-    problem = DTLZ3()
+    problem = DTLZ1()
 
     max_evaluations = 40000
     algorithm = SMSEMOA(

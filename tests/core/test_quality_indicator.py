@@ -680,7 +680,8 @@ class NormalizedHyperVolumeTestCases(unittest.TestCase):
         reference_point = [1, 1]
         reference_front = self._front
 
-        hv = NormalizedHyperVolume(reference_point, reference_front=reference_front)
+        hv = NormalizedHyperVolume(reference_point)
+        hv.set_reference_front(reference_front)
         value = hv.compute(reference_front)
 
         self.assertAlmostEqual(0, value, delta=0.001)
@@ -689,8 +690,9 @@ class NormalizedHyperVolumeTestCases(unittest.TestCase):
         reference_point = [0, 0]
         reference_front = self._front
 
+        hv = NormalizedHyperVolume(reference_point)
         with self.assertRaises(AssertionError):
-            _ = NormalizedHyperVolume(reference_point, reference_front=reference_front)
+            hv.set_reference_front(reference_front)
 
 
 if __name__ == "__main__":

@@ -319,7 +319,7 @@ class HyperVolume(QualityIndicator):
 
     def __init__(self, reference_point: list[float] = None):
         super(HyperVolume, self).__init__(is_minimization=False)
-        self.referencePoint = reference_point
+        self.reference_point = reference_point  
         self.hv = moocore.Hypervolume(ref=reference_point)
 
     def compute(self, solutions: np.array):
@@ -343,19 +343,23 @@ class NormalizedHyperVolume(QualityIndicator):
     Minimization is implicitly assumed here!
     """
 
-    def __init__(self, reference_point: Iterable[float], reference_front: np.array):
+    def __init__(self, reference_point: list[float]):
         """Delegates the computation of the HyperVolume to `jMetal.core.quality_indicator.HyperVolume`.
 
-        Fails if the HV of the reference front is zero."""
+        The reference front must be set before calling compute."""
+        super().__init__(is_minimization=True)
         self.reference_point = reference_point
         self._hv = HyperVolume(reference_point=reference_point)
-        self._reference_hypervolume = self._hv.compute(reference_front)
+        self._reference_hypervolume = None  # Se inicializa después
 
+    def set_reference_front(self, reference_front: np.array):
+        """Establece el frente de referencia y calcula su hipervolumen."""
+        self._reference_hypervolume = self._hv.compute(reference_front)
         assert self._reference_hypervolume != 0, "Hypervolume of reference front is zero"
 
     def compute(self, solutions: np.array) -> float:
+        assert self._reference_hypervolume is not None, "Reference front must be set before computing normalized hypervolume"
         hv = self._hv.compute(solutions=solutions)
-
         return 1 - (hv / self._reference_hypervolume)
 
     def get_short_name(self) -> str:
