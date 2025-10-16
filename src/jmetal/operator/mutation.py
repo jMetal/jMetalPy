@@ -312,7 +312,44 @@ class ScrambleMutation(Mutation[PermutationSolution]):
 
 
 class LevyFlightMutation(Mutation[FloatSolution]):
-    def __init__(self, mutation_probability=0.01, beta=1.5, step_size=0.01, repair_operator=None):
+    """Implementation of a Lévy flight mutation operator for real-valued solutions.
+    
+    Lévy flights are characterized by heavy-tailed distributions with infinite variance,
+    producing mostly small steps with occasional very large jumps. This behavior is
+    beneficial for global optimization as it provides both local search capabilities
+    and the ability to escape local optima through large jumps.
+    
+    The implementation uses the Mantegna algorithm to generate Lévy-distributed steps:
+    1. Generate u ~ Normal(0, σ_u²) where σ_u = [Γ(1+β)sin(πβ/2)/Γ((1+β)/2)β2^((β-1)/2)]^(1/β)
+    2. Generate v ~ Normal(0, 1)
+    3. Lévy step = u / |v|^(1/β)
+    
+    Args:
+        mutation_probability: The probability of mutating each variable (0 ≤ p ≤ 1).
+        beta: The Lévy index parameter (1 < β ≤ 2). Controls the tail heaviness:
+            - Values closer to 1.0 produce heavier tails with more frequent large jumps
+            - Values around 1.5 provide balanced exploration (default)
+            - Values closer to 2.0 approach Gaussian behavior with fewer large jumps
+        step_size: The scaling factor for Lévy steps (must be > 0). Typical values:
+            - 0.001-0.01: Fine-grained local search
+            - 0.01-0.05: Balance of local and global search (default: 0.01)
+            - 0.05-0.1: Emphasize global exploration
+        repair_operator: Optional function to repair out-of-bounds values.
+            If None, values are clamped to the variable bounds.
+            
+    Raises:
+        ValueError: If parameters are outside their valid ranges.
+    """
+    
+    def __init__(self, mutation_probability: float = 0.01, beta: float = 1.5,
+                 step_size: float = 0.01, repair_operator = None):
+        if not 0 <= mutation_probability <= 1:
+            raise ValueError("mutation_probability must be in [0, 1]")
+        if not 1 < beta <= 2:
+            raise ValueError("beta must be in (1, 2]")
+        if step_size <= 0:
+            raise ValueError("step_size must be positive")
+            
         super().__init__(probability=mutation_probability)
         self.beta = beta
         self.step_size = step_size
@@ -357,10 +394,39 @@ class LevyFlightMutation(Mutation[FloatSolution]):
 
 
 class PowerLawMutation(Mutation[FloatSolution]):
-    def __init__(self, probability: float = 0.01, delta: float = 1.0, repair_operator: Optional[Callable[[float, float, float], float]] = None):
-        super().__init__(probability=probability)
+    """Implementation of a power-law mutation operator for real-valued solutions.
+    
+    The power-law distribution produces heavy-tailed perturbations that can occasionally 
+    create large jumps while favoring smaller perturbations, which is beneficial for both 
+    exploration and exploitation in optimization.
+    
+    The mutation follows the formula:
+        temp_delta = rnd^(-delta)
+        deltaq = 0.5 * (rnd - 0.5) * (1 - temp_delta)
+        new_value = old_value + deltaq * (upper_bound - lower_bound)
+    
+    Args:
+        probability: The probability of mutating each variable (0 ≤ p ≤ 1).
+        delta: The power-law exponent parameter (must be > 0). Controls distribution shape:
+            - Values < 1.0: More uniform distributions with moderate perturbations
+            - Values ≈ 1.0: Balanced exploration/exploitation (default)
+            - Values > 1.0: Heavy-tailed distributions favoring small perturbations
+              with occasional large jumps
+        repair_operator: Optional function to repair out-of-bounds values.
+            If None, values are clamped to the variable bounds.
+            
+    Raises:
+        ValueError: If probability is not in [0,1] or delta is not positive.
+    """
+    
+    def __init__(self, probability: float = 0.01, delta: float = 1.0, 
+                 repair_operator: Optional[Callable[[float, float, float], float]] = None):
+        if not 0 <= probability <= 1:
+            raise ValueError("probability must be in [0, 1]")
         if delta <= 0:
-            raise ValueError("Delta parameter must be positive")
+            raise ValueError("delta must be positive")
+            
+        super().__init__(probability=probability)
         self.delta = delta
         self.repair_operator = repair_operator if repair_operator is not None else self._default_repair
 
