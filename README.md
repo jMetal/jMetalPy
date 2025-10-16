@@ -120,7 +120,6 @@ The current release of jMetalPy (v1.8.0) contains the following components:
 ## Changelog
 
 * [Current]
-  * Added PMX crossover operator
   * Added Unimodal Normal Distribution Crossover (UNDX), BLX-Alpha, BLX-Alpha-Beta and Arithmetic crossover operators.
   * Added Levy flight and power-law mutation operators.
 * [v.1.8.0] 
