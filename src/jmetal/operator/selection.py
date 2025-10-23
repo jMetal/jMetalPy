@@ -165,6 +165,17 @@ class BestSolutionSelection(Selection[List[S], S]):
 
 
 class NaryRandomSolutionSelection(Selection[List[S], S]):
+    """Performs random selection of multiple solutions from a population.
+    
+    This selection operator randomly selects a specified number of distinct solutions
+    from the population with uniform probability. The selection is done without replacement,
+    meaning each solution can be selected at most once.
+    
+    Args:
+        number_of_solutions_to_be_returned: Number of distinct solutions to select (default: 1).
+                                          Must be a positive integer.
+    """
+    
     def __init__(self, number_of_solutions_to_be_returned: int = 1):
         super(NaryRandomSolutionSelection, self).__init__()
         if number_of_solutions_to_be_returned < 1:
@@ -176,6 +187,17 @@ class NaryRandomSolutionSelection(Selection[List[S], S]):
         self.number_of_solutions_to_be_returned = number_of_solutions_to_be_returned
 
     def execute(self, front: List[S]) -> List[S]:
+        """Randomly select multiple solutions from the front.
+        
+        Args:
+            front: List of solutions to select from.
+            
+        Returns:
+            A list of randomly selected solutions from the front.
+            
+        Raises:
+            ValueError: If front is None, empty, or has fewer solutions than requested.
+        """
         if front is None:
             raise ValueError("The front is None")
         if not front:
@@ -188,20 +210,47 @@ class NaryRandomSolutionSelection(Selection[List[S], S]):
         return random.sample(front, self.number_of_solutions_to_be_returned)
 
     def get_name(self) -> str:
-        return "Nary random_search solution selection"
+        """Get the name of the selection operator.
+        
+        Returns:
+            A string representing the name of the selection operator.
+        """
+        return "N-ary random solution selection"
 
 
 class DifferentialEvolutionSelection(Selection[List[S], List[S]]):
+    """Performs selection for differential evolution algorithms.
+    
+    This selection operator is specifically designed for differential evolution algorithms.
+    It selects three distinct solutions from the population, with an optional index to exclude
+    (typically the current solution's index to avoid self-selection).
+    
+    Args:
+        index_to_exclude: Optional index of a solution to exclude from selection.
+                         This is useful to avoid selecting the same solution as the base vector.
+    """
+    
     def __init__(self, index_to_exclude: int = None):
         super(DifferentialEvolutionSelection, self).__init__()
         self.index_to_exclude = index_to_exclude
 
     def execute(self, front: List[S]) -> List[S]:
+        """Select three distinct solutions for differential evolution.
+        
+        Args:
+            front: List of solutions to select from.
+            
+        Returns:
+            A list containing three distinct solutions from the front.
+            
+        Raises:
+            ValueError: If front is None, empty, or has fewer than 4 solutions.
+        """
         if front is None:
-            raise ValueError("The front is None")
-        if not front:
+            raise ValueError("The front is null")
+        elif len(front) == 0:
             raise ValueError("The front is empty")
-        if len(front) < 4:  # Need at least 4 solutions (1 base + 3 for DE/rand/1)
+        elif len(front) < 4:
             raise ValueError(
                 f"Differential evolution selection requires at least 4 solutions, got {len(front)}"
             )
@@ -223,21 +272,49 @@ class DifferentialEvolutionSelection(Selection[List[S], List[S]]):
         
         return selected
 
-    def set_index_to_exclude(self, index: int):
+    def set_index_to_exclude(self, index: int) -> None:
+        """Set the index of the solution to exclude from selection.
+        
+        Args:
+            index: Index of the solution to exclude. Can be None to disable exclusion.
+        """
         self.index_to_exclude = index
 
     def get_name(self) -> str:
+        """Get the name of the selection operator.
+        
+        Returns:
+            A string representing the name of the selection operator.
+        """
         return "Differential evolution selection"
 
 
 class RandomSelection(Selection[List[S], S]):
+    """Performs random selection of a solution from a population.
+    
+    This selection operator randomly selects a single solution from the provided
+    population with uniform probability. It's a simple selection method that
+    doesn't consider solution quality.
+    """
+    
     def __init__(self):
         super(RandomSelection, self).__init__()
 
     def execute(self, front: List[S]) -> S:
+        """Randomly select a solution from the front.
+        
+        Args:
+            front: List of solutions to select from.
+            
+        Returns:
+            A randomly selected solution from the front.
+            
+        Raises:
+            ValueError: If front is None or empty.
+        """
         if front is None:
             raise ValueError("The front is None")
-        if not front:
+        elif len(front) == 0:
             raise ValueError("The front is empty")
 
         if not isinstance(front, list):
@@ -254,12 +331,35 @@ class RandomSelection(Selection[List[S], S]):
 
 
 class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
+    """Performs selection based on non-dominated ranking and crowding distance.
+    
+    This selection operator first ranks the solutions using non-dominated sorting
+    and then applies crowding distance to maintain diversity within each rank.
+    It's commonly used in NSGA-II and other multi-objective evolutionary algorithms.
+    
+    Args:
+        max_population_size: Maximum number of solutions to select.
+        dominance_comparator: Comparator used for non-dominated sorting.
+                           Defaults to DominanceComparator().
+    """
+    
     def __init__(self, max_population_size: int, dominance_comparator: Comparator = DominanceComparator()):
         super(RankingAndCrowdingDistanceSelection, self).__init__()
         self.max_population_size = max_population_size
         self.dominance_comparator = dominance_comparator
 
     def execute(self, front: List[S]) -> List[S]:
+        """Select solutions using non-dominated ranking and crowding distance.
+        
+        Args:
+            front: List of solutions to select from.
+            
+        Returns:
+            A list of selected solutions, with size up to max_population_size.
+            
+        Raises:
+            ValueError: If front is None, empty, or max_population_size is invalid.
+        """
         if front is None:
             raise ValueError("The front is None")
         if not front:
@@ -303,10 +403,30 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
         return new_solution_list
 
     def get_name(self) -> str:
+        """Get the name of the selection operator.
+        
+        Returns:
+            A string representing the name of the selection operator.
+        """
         return "Ranking and crowding distance selection"
 
 
 class RankingAndFitnessSelection(Selection[List[S], List[S]]):
+    """Performs selection based on non-dominated ranking and hypervolume contribution.
+    
+    This selection operator first ranks the solutions using non-dominated sorting
+    and then applies hypervolume contribution to maintain diversity within each rank.
+    It's commonly used in multi-objective evolutionary algorithms that aim to
+    maximize the hypervolume indicator.
+    
+    Args:
+        max_population_size: Maximum number of solutions to select.
+        reference_point: Reference point used for hypervolume calculation.
+                       Should be dominated by all solutions.
+        dominance_comparator: Comparator used for non-dominated sorting.
+                           Defaults to DominanceComparator().
+    """
+    
     def __init__(
         self, max_population_size: int, reference_point: S, dominance_comparator: Comparator = DominanceComparator()
     ):
@@ -315,7 +435,25 @@ class RankingAndFitnessSelection(Selection[List[S], List[S]]):
         self.dominance_comparator = dominance_comparator
         self.reference_point = reference_point
 
-    def hypesub(self, l, A, actDim, bounds, pvec, alpha, k):
+    def hypesub(self, l: int, A: List[List[float]], actDim: int, bounds: List[float], 
+               pvec: List[int], alpha: List[float], k: int) -> List[float]:
+        """Recursively compute hypervolume contributions.
+        
+        This is a helper method for hypervolume calculation. It's an implementation
+        of the Hype algorithm for hypervolume approximation.
+        
+        Args:
+            l: Number of points.
+            A: List of objective vectors.
+            actDim: Current dimension being processed.
+            bounds: Reference point coordinates.
+            pvec: Indices of points in A.
+            alpha: Weighting factors for hypervolume contribution.
+            k: Number of points to consider.
+            
+        Returns:
+            List of hypervolume contributions for each point.
+        """
         h = [0 for _ in range(l)]
         Adim = [a[actDim - 1] for a in A]
         indices_sort = sorted(range(len(Adim)), key=Adim.__getitem__)
@@ -343,7 +481,21 @@ class RankingAndFitnessSelection(Selection[List[S], List[S]]):
 
         return h
 
-    def compute_hypervol_fitness_values(self, population: List[S], reference_point: S, k: int):
+    def compute_hypervol_fitness_values(self, population: List[S], reference_point: S, k: int) -> List[S]:
+        """Compute hypervolume-based fitness values for a population.
+        
+        This method computes the hypervolume contribution of each solution in the
+        population and stores it in the solution's attributes as 'fitness'.
+        
+        Args:
+            population: List of solutions to evaluate.
+            reference_point: Reference point for hypervolume calculation.
+            k: Number of points to consider for hypervolume approximation.
+               If negative, uses the entire population size.
+               
+        Returns:
+            The input population with updated fitness values in their attributes.
+        """
         points = [ind.objectives for ind in population]
         bounds = reference_point.objectives
         population_size = len(points)
@@ -355,46 +507,85 @@ class RankingAndFitnessSelection(Selection[List[S], List[S]]):
         pvec = range(population_size)
         alpha = []
 
+        # Calculate alpha values for weighted hypervolume contribution
         for i in range(1, k + 1):
             alpha.append(np.prod([float(k - j) / (population_size - j) for j in range(1, i)]) / i)
 
+        # Compute hypervolume contributions
         f = self.hypesub(population_size, points, actDim, bounds, pvec, alpha, k)
 
+        # Store fitness values in solution attributes
         for i in range(len(population)):
+            if not hasattr(population[i], 'attributes') or population[i].attributes is None:
+                population[i].attributes = {}
             population[i].attributes["fitness"] = f[i]
 
         return population
 
     def execute(self, front: List[S]) -> List[S]:
+        """Select solutions using non-dominated ranking and hypervolume contribution.
+        
+        This method first performs non-dominated sorting of the input front.
+        It then fills the new population with solutions from the best ranks,
+        using hypervolume contribution to select solutions when a rank needs to be split.
+        
+        Args:
+            front: List of solutions to select from.
+            
+        Returns:
+            A list of selected solutions, with size equal to max_population_size.
+            
+        Raises:
+            ValueError: If front is None or empty.
+        """
         if front is None:
-            raise Exception("The front is null")
+            raise ValueError("The front is None")
         elif len(front) == 0:
-            raise Exception("The front is empty")
+            raise ValueError("The front is empty")
 
+        # Perform non-dominated sorting
         ranking = FastNonDominatedRanking(self.dominance_comparator)
         ranking.compute_ranking(front)
 
         ranking_index = 0
         new_solution_list = []
 
+        # Fill the new population with solutions from the best ranks
         while len(new_solution_list) < self.max_population_size:
-            if len(ranking.get_subfront(ranking_index)) < self.max_population_size - len(new_solution_list):
-                subfront = ranking.get_subfront(ranking_index)
-                new_solution_list = new_solution_list + subfront
+            current_rank = ranking.get_subfront(ranking_index)
+            
+            # If we can take all solutions from this rank without exceeding max_population_size
+            if len(current_rank) <= self.max_population_size - len(new_solution_list):
+                new_solution_list.extend(current_rank)
                 ranking_index += 1
             else:
-                subfront = ranking.get_subfront(ranking_index)
-                parameter_K = len(subfront) - (self.max_population_size - len(new_solution_list))
+                # Need to select a subset of this rank using hypervolume contribution
+                remaining_slots = self.max_population_size - len(new_solution_list)
+                parameter_K = len(current_rank) - remaining_slots
+                
+                # Remove the worst solutions based on hypervolume contribution
                 while parameter_K > 0:
-                    subfront = self.compute_hypervol_fitness_values(subfront, self.reference_point, parameter_K)
-                    subfront = sorted(subfront, key=lambda x: x.attributes["fitness"], reverse=True)
-                    subfront = subfront[:-1]
-                    parameter_K = parameter_K - 1
-                new_solution_list = new_solution_list + subfront
+                    current_rank = self.compute_hypervol_fitness_values(
+                        current_rank, self.reference_point, parameter_K)
+                    # Sort by fitness (hypervolume contribution) in descending order
+                    current_rank = sorted(current_rank, 
+                                       key=lambda x: x.attributes.get("fitness", 0), 
+                                       reverse=True)
+                    # Remove the solution with the lowest contribution
+                    current_rank = current_rank[:-1]
+                    parameter_K -= 1
+                
+                new_solution_list.extend(current_rank)
+                
         return new_solution_list
 
     def get_name(self) -> str:
-        return "Ranking and fitness selection"
+        """Get the name of the selection operator.
+        
+        Returns:
+            A string representing the name of the selection operator.
+        """
+        return "Ranking and hypervolume-based selection"
 
 
 class BinaryTournament2Selection(Selection[List[S], S]):
