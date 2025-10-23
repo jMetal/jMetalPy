@@ -6,6 +6,7 @@ from typing import Callable, Optional
 from jmetal.core.operator import Mutation
 from jmetal.core.solution import (
     BinarySolution,
+    BinarySolutionNP,
     CompositeSolution,
     FloatSolution,
     IntegerSolution,
@@ -415,6 +416,50 @@ class CompositeMutation(Mutation[Solution]):
 
     def get_name(self) -> str:
         return "Composite mutation operator"
+
+
+class BitFlipNPMutation(Mutation[BinarySolutionNP]):
+    """
+    NumPy-optimized bit flip mutation for BinarySolutionNP.
+    
+    This implementation uses NumPy's vectorized operations for better performance
+    when working with BinarySolutionNP solutions. It flips each bit with a given
+    probability, but does so using efficient array operations.
+    
+    Args:
+        probability: The probability of flipping each bit (0.0 to 1.0)
+    """
+    
+    def __init__(self, probability: float):
+        super(BitFlipNPMutation, self).__init__(probability=probability)
+    
+    def execute(self, solution: BinarySolutionNP) -> BinarySolutionNP:
+        """
+        Execute the bit flip mutation operation.
+        
+        Args:
+            solution: The solution to be mutated
+            
+        Returns:
+            The mutated solution
+            
+        Note:
+            The input solution is modified in-place and also returned.
+        """
+        # Generate random numbers for each bit
+        rand_values = np.random.random(solution.number_of_variables)
+        
+        # Create a mask of bits to flip
+        flip_mask = rand_values < self.probability
+        
+        # Flip the bits where the mask is True
+        solution.bits ^= flip_mask
+        
+        return solution
+    
+    def get_name(self) -> str:
+        """Return the name of the operator."""
+        return "Bit flip mutation (NP-optimized)"
 
 
 class ScrambleMutation(Mutation[PermutationSolution]):
