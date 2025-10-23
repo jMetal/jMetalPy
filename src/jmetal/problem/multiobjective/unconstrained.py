@@ -1,5 +1,6 @@
 import random
 from math import exp, pow, sin, sqrt
+import numpy as np
 
 from jmetal.core.problem import BinaryProblem, FloatProblem, Problem
 from jmetal.core.solution import (
@@ -150,68 +151,95 @@ class Viennet2(FloatProblem):
 class SubsetSum(BinaryProblem):
     def __init__(self, C: int, W: list):
         """The goal is to find a subset S of W whose elements sum is closest to (without exceeding) C.
-
-        :param C: Large integer.
-        :param W: Set of non-negative integers."""
+        
+        This is a bi-objective problem where we want to:
+        1. Maximize the sum of selected elements (without exceeding C)
+        2. Minimize the number of selected objects
+        
+        Args:
+            C: The target sum (large integer)
+            W: List of non-negative integers to select from
+        """
         super(SubsetSum, self).__init__()
         self.C = C
-        self.W = W
-
+        self.W = np.array(W, dtype=float)  # Convert to numpy array for vectorized operations
+        
         self.number_of_bits = len(self.W)
         self.number_of_objectives = 2
-        self.number_of_variables = 1
         self.number_of_constraints = 0
 
+        # Objective 1: Maximize sum (minimize negative sum)
+        # Objective 2: Minimize number of selected objects
         self.obj_directions = [self.MAXIMIZE, self.MINIMIZE]
         self.obj_labels = ["Sum", "No. of Objects"]
 
+    def number_of_variables(self) -> int:
+        return self.number_of_bits  # Each bit represents whether an item is selected
+
+    def number_of_objectives(self) -> int:
+        return self.number_of_objectives
+
+    def number_of_constraints(self) -> int:
+        return self.number_of_constraints
+
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
-        total_sum = 0.0
-        number_of_objects = 0
-
-        for index, bits in enumerate(solution.variables[0]):
-            if bits:
-                total_sum += self.W[index]
-                number_of_objects += 1
-
+        # Get the mask of selected items (bits that are True)
+        selected_mask = solution.bits
+        
+        # Calculate total sum of selected items
+        total_sum = np.sum(self.W[selected_mask])
+        number_of_objects = np.count_nonzero(selected_mask)
+        
+        # Penalize solutions that exceed the target sum C
         if total_sum > self.C:
-            total_sum = self.C - total_sum * 0.1
-
+            total_sum = self.C - (total_sum - self.C)  # Penalize by how much it exceeds
             if total_sum < 0.0:
                 total_sum = 0.0
-
-        solution.objectives[0] = -1.0 * total_sum
-        solution.objectives[1] = number_of_objects
-
+        
+        # Store objectives
+        # Note: First objective is negated because we're using MAXIMIZE direction
+        solution.objectives[0] = -total_sum  # Will be maximized
+        solution.objectives[1] = number_of_objects  # To be minimized
+        
         return solution
 
     def create_solution(self) -> BinarySolution:
-        new_solution = BinarySolution(
-            number_of_variables=self.number_of_variables, number_of_objectives=self.number_of_objectives
+        # Create a new binary solution with one bit per item in W
+        solution = BinarySolution(
+            number_of_variables=self.number_of_bits,
+            number_of_objectives=self.number_of_objectives()
         )
-        new_solution.variables[0] = [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
-
-        return new_solution
+        
+        # Initialize with random bits (each bit represents whether an item is selected)
+        solution.bits = np.random.choice([True, False], size=self.number_of_bits)
+        
+        return solution
 
     def name(self) -> str:
         return "Subset Sum"
 
 
 class OneZeroMax(BinaryProblem):
-    """ The implementation of the OneZeroMax problems defines a single binary variable. This variable
-    will contain the bit string representing the solutions.
-
+    """The OneZeroMax problem is a multi-objective problem that counts the number of ones and zeros in a binary string.
+    
+    The objectives are:
+    1. Maximize the number of ones (minimize negative count)
+    2. Maximize the number of zeros (minimize negative count)
+    
+    Args:
+        number_of_bits: The length of the binary string (default: 256)
     """
 
     def __init__(self, number_of_bits: int = 256):
         super(OneZeroMax, self).__init__()
-        self.number_of_bits_per_variable = [number_of_bits]
+        self.number_of_bits = number_of_bits
+        self.number_of_bits_per_variable = [number_of_bits]  # For backward compatibility
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ["Zeroes", "Ones"]
+        self.obj_labels = ["Ones", "Zeros"]
 
     def number_of_variables(self) -> int:
-        return 1
+        return self.number_of_bits  # Each bit is treated as a variable
 
     def number_of_objectives(self) -> int:
         return 2
@@ -220,26 +248,27 @@ class OneZeroMax(BinaryProblem):
         return 0
 
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
-        counter_of_ones = 0
-        counter_of_zeroes = 0
-        for bits in solution.variables[0]:
-            if bits:
-                counter_of_ones += 1
-            else:
-                counter_of_zeroes += 1
+        # Count the number of ones and zeros in the binary string
+        counter_of_ones = np.count_nonzero(solution.bits)
+        counter_of_zeros = len(solution.bits) - counter_of_ones
 
+        # Store the negative counts to be minimized
         solution.objectives[0] = -1.0 * counter_of_ones
-        solution.objectives[1] = -1.0 * counter_of_zeroes
+        solution.objectives[1] = -1.0 * counter_of_zeros
 
         return solution
 
     def create_solution(self) -> BinarySolution:
-        new_solution = BinarySolution(
-            number_of_variables=self.number_of_variables(), number_of_objectives=self.number_of_objectives()
+        # Create a new binary solution with the specified number of bits
+        solution = BinarySolution(
+            number_of_variables=self.number_of_bits,
+            number_of_objectives=self.number_of_objectives()
         )
-        new_solution.variables[0] = [True if random.randint(0, 1) == 0 else False for _ in
-                                     range(self.number_of_bits_per_variable[0])]
-        return new_solution
+        
+        # Initialize with random bits (using numpy for better performance)
+        solution.bits = np.random.choice([True, False], size=self.number_of_bits)
+        
+        return solution
 
     def name(self) -> str:
         return "OneZeroMax"

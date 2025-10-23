@@ -7,7 +7,6 @@ from typing import List
 from jmetal.core.operator import Crossover
 from jmetal.core.solution import (
     BinarySolution,
-    BinarySolutionNP,
     CompositeSolution,
     FloatSolution,
     IntegerSolution,
@@ -322,70 +321,11 @@ class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
 
 
 class SPXCrossover(Crossover[BinarySolution, BinarySolution]):
-    def __init__(self, probability: float):
-        super(SPXCrossover, self).__init__(probability=probability)
-
-    def execute(self, parents: List[BinarySolution]) -> List[BinarySolution]:
-        Check.that(type(parents[0]) is BinarySolution, "Solution type invalid")
-        Check.that(type(parents[1]) is BinarySolution, "Solution type invalid")
-        Check.that(len(parents) == 2, "The number of parents is not two: {}".format(len(parents)))
-
-        offspring = copy.deepcopy(parents)
-        rand = random.random()
-
-        if rand <= self.probability:
-            # 1. Get the total number of bits
-            total_number_of_bits = parents[0].get_total_number_of_bits()
-
-            # 2. Calculate the point to make the crossover
-            crossover_point = random.randrange(0, total_number_of_bits)
-
-            # 3. Compute the variable containing the crossover bit
-            variable_to_cut = 0
-            bits_count = len(parents[1].variables[variable_to_cut])
-            while bits_count < (crossover_point + 1):
-                variable_to_cut += 1
-                bits_count += len(parents[1].variables[variable_to_cut])
-
-            # 4. Compute the bit into the selected variable
-            diff = bits_count - crossover_point
-            crossover_point_in_variable = len(parents[1].variables[variable_to_cut]) - diff
-
-            # 5. Apply the crossover to the variable
-            bitset1 = copy.copy(parents[0].variables[variable_to_cut])
-            bitset2 = copy.copy(parents[1].variables[variable_to_cut])
-
-            for i in range(crossover_point_in_variable, len(bitset1)):
-                swap = bitset1[i]
-                bitset1[i] = bitset2[i]
-                bitset2[i] = swap
-
-            offspring[0].variables[variable_to_cut] = bitset1
-            offspring[1].variables[variable_to_cut] = bitset2
-
-            # 6. Apply the crossover to the other variables
-            for i in range(variable_to_cut + 1, len(parents[0].variables)):
-                offspring[0].variables[i] = copy.deepcopy(parents[1].variables[i])
-                offspring[1].variables[i] = copy.deepcopy(parents[0].variables[i])
-
-        return offspring
-
-    def get_number_of_parents(self) -> int:
-        return 2
-
-    def get_number_of_children(self) -> int:
-        return 2
-
-    def get_name(self) -> str:
-        return "Single point crossover"
-
-
-class SPXNPCrossover(Crossover[BinarySolutionNP, BinarySolutionNP]):
     """
-    A high-performance single-point crossover operator for BinarySolutionNP.
+    A high-performance single-point crossover operator for BinarySolution.
     
     This implementation uses NumPy's vectorized operations for better performance
-    when working with BinarySolutionNP solutions. It performs a single-point
+    when working with BinarySolution solutions. It performs a single-point
     crossover between two parent solutions to produce two offspring.
     
     The crossover point is selected uniformly at random from all possible bit
@@ -393,57 +333,60 @@ class SPXNPCrossover(Crossover[BinarySolutionNP, BinarySolutionNP]):
     between the two parents to create the offspring.
     
     Args:
-        probability: The probability of applying the crossover (0.0 to 1.0)
+        probability: The probability of applying the crossover (must be between 0.0 and 1.0)
+        
+    Raises:
+        ValueError: If the probability is not in the range [0.0, 1.0]
     """
     
     def __init__(self, probability: float):
-        super(SPXNPCrossover, self).__init__(probability=probability)
+        if not (0.0 <= probability <= 1.0):
+            raise ValueError(f"Probability must be between 0.0 and 1.0, but was {probability}")
+        super(SPXCrossover, self).__init__(probability=probability)
+        self._rng = np.random.default_rng()
 
-    def execute(self, parents: List[BinarySolutionNP]) -> List[BinarySolutionNP]:
+    def execute(self, parents: List[BinarySolution]) -> List[BinarySolution]:
         """
         Execute the single-point crossover operation.
         
         Args:
-            parents: A list of exactly two parent solutions
+            parents: A list of exactly two parent solutions of type BinarySolution.
+                    Both parents must have the same number of bits.
             
         Returns:
-            A list containing two offspring solutions
+            List[BinarySolution]: A list containing two offspring solutions.
             
-        Raises:
-            Exception: If the number of parents is not two or if the solutions
-                     are not of type BinarySolutionNP
+        Note:
+            This method assumes that both parents are valid BinarySolution instances
+            with properly initialized bits attributes.
         """
         if len(parents) != 2:
-            raise ValueError("The number of parents is not two: {}".format(len(parents)))
+            raise ValueError("SPXCrossover requires exactly two parents")
             
-        if not all(isinstance(p, BinarySolutionNP) for p in parents):
-            raise TypeError("Solutions must be of type BinarySolutionNP")
-            
-        if parents[0].number_of_variables != parents[1].number_of_variables:
-            raise ValueError("Parents have different number of variables")
-
-        # Create copies of the parents to become the offspring
+        # Create deep copies of the parents to avoid modifying the originals
         offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
         
-        # Only perform crossover with the given probability
-        if random.random() > self.probability:
+        # Check if crossover should be performed based on probability
+        if self._rng.random() > self.probability:
             return offspring
             
         # Get the bits from both parents
-        parent1_bits = parents[0].bits
-        parent2_bits = parents[1].bits
+        bits1 = offspring[0].bits
+        bits2 = offspring[1].bits
         
-        # Select a random crossover point (1 to n-1 to ensure crossover happens)
-        crossover_point = random.randint(1, parents[0].number_of_variables - 1)
-        
-        # Perform the crossover using NumPy array operations
-        temp = parent1_bits[crossover_point:].copy()
-        parent1_bits[crossover_point:] = parent2_bits[crossover_point:]
-        parent2_bits[crossover_point:] = temp
-        
-        # Update the offspring
-        offspring[0].bits[:] = parent1_bits
-        offspring[1].bits[:] = parent2_bits
+        # Ensure both parents have the same number of bits
+        if len(bits1) != len(bits2):
+            raise ValueError("Parents must have the same number of bits")
+            
+        num_bits = len(bits1)
+        if num_bits > 1:
+            # Select a random crossover point (1 to num_bits-1 to ensure crossover happens)
+            crossover_point = self._rng.integers(1, num_bits)
+            
+            # Perform the crossover by swapping bits after the crossover point
+            temp = bits1[crossover_point:].copy()
+            offspring[0].bits = np.concatenate([bits1[:crossover_point], bits2[crossover_point:]])
+            offspring[1].bits = np.concatenate([bits2[:crossover_point], temp])
         
         return offspring
 
@@ -457,7 +400,7 @@ class SPXNPCrossover(Crossover[BinarySolutionNP, BinarySolutionNP]):
 
     def get_name(self) -> str:
         """Return the name of the operator."""
-        return "Single point crossover (NP-optimized)"
+        return "Single point crossover"
 
 
 from typing import List, TypeVar, Callable, Optional

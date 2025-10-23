@@ -1,5 +1,6 @@
-from abc import ABC
 from __future__ import annotations
+import copy
+from abc import ABC, abstractmethod
 from typing import Generic, List, TypeVar, final
 import numpy as np
 

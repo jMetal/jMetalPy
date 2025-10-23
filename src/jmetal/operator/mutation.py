@@ -6,7 +6,6 @@ from typing import Callable, Optional
 from jmetal.core.operator import Mutation
 from jmetal.core.solution import (
     BinarySolution,
-    BinarySolutionNP,
     CompositeSolution,
     FloatSolution,
     IntegerSolution,
@@ -36,22 +35,82 @@ class NullMutation(Mutation[Solution]):
 
 
 class BitFlipMutation(Mutation[BinarySolution]):
+    """
+    NumPy-optimized bit flip mutation for BinarySolution.
+    
+    This implementation uses NumPy's vectorized operations for better performance
+    when working with BinarySolution solutions. It flips each bit with a given
+    probability, but does so using efficient array operations.
+    
+    Args:
+        probability: The probability of flipping each bit (0.0 to 1.0)
+        
+    Raises:
+        ValueError: If probability is not in range [0.0, 1.0]
+    """
+    
     def __init__(self, probability: float):
+        if not (0.0 <= probability <= 1.0):
+            raise ValueError(f"Probability must be in range [0.0, 1.0], got {probability}")
         super(BitFlipMutation, self).__init__(probability=probability)
-
+    
     def execute(self, solution: BinarySolution) -> BinarySolution:
-        Check.that(issubclass(type(solution), BinarySolution), "Solution type invalid")
-
-        for i in range(len(solution.variables)):
-            for j in range(len(solution.variables[i])):
-                rand = random.random()
-                if rand <= self.probability:
-                    solution.variables[i][j] = True if solution.variables[i][j] is False else False
-
-        return solution
-
-    def get_name(self):
-        return "BitFlip mutation"
+        """
+        Execute the bit flip mutation operation.
+        
+        Args:
+            solution: The solution to be mutated. Must be a BinarySolution with a 'bits' attribute.
+            
+        Returns:
+            The mutated solution (modified in-place)
+            
+        Raises:
+            TypeError: If solution is not a BinarySolution or doesn't have a 'bits' attribute
+            ValueError: If the solution has no variables or invalid bit values
+            
+        Note:
+            The input solution is modified in-place and also returned.
+        """
+        # Input validation
+        if not isinstance(solution, BinarySolution):
+            raise TypeError(f"Expected BinarySolution, got {type(solution).__name__}")
+            
+        if not hasattr(solution, 'bits') or not isinstance(solution.bits, np.ndarray):
+            raise AttributeError("Solution must have a 'bits' attribute of type numpy.ndarray")
+            
+        if solution.number_of_variables <= 0:
+            raise ValueError("Solution must have at least one variable")
+            
+        if len(solution.bits) == 0:
+            return solution  # Nothing to mutate
+            
+        try:
+            # Generate random numbers for each bit
+            rand_values = np.random.random(solution.number_of_variables)
+            
+            # Create a mask of bits to flip
+            flip_mask = rand_values < self.probability
+            
+            # Ensure the mask has the same shape as solution.bits
+            if flip_mask.shape != solution.bits.shape:
+                flip_mask = np.resize(flip_mask, solution.bits.shape)
+            
+            # Flip the bits where the mask is True
+            solution.bits ^= flip_mask.astype(bool)
+            
+            return solution
+            
+        except Exception as e:
+            raise RuntimeError(f"Error during bit flip mutation: {str(e)}") from e
+    
+    def get_name(self) -> str:
+        """
+        Return the name of the operator.
+        
+        Returns:
+            str: A string representing the name of the operator
+        """
+        return "Bit flip mutation"
 
 
 class PolynomialMutation(Mutation[FloatSolution]):
@@ -416,50 +475,6 @@ class CompositeMutation(Mutation[Solution]):
 
     def get_name(self) -> str:
         return "Composite mutation operator"
-
-
-class BitFlipNPMutation(Mutation[BinarySolutionNP]):
-    """
-    NumPy-optimized bit flip mutation for BinarySolutionNP.
-    
-    This implementation uses NumPy's vectorized operations for better performance
-    when working with BinarySolutionNP solutions. It flips each bit with a given
-    probability, but does so using efficient array operations.
-    
-    Args:
-        probability: The probability of flipping each bit (0.0 to 1.0)
-    """
-    
-    def __init__(self, probability: float):
-        super(BitFlipNPMutation, self).__init__(probability=probability)
-    
-    def execute(self, solution: BinarySolutionNP) -> BinarySolutionNP:
-        """
-        Execute the bit flip mutation operation.
-        
-        Args:
-            solution: The solution to be mutated
-            
-        Returns:
-            The mutated solution
-            
-        Note:
-            The input solution is modified in-place and also returned.
-        """
-        # Generate random numbers for each bit
-        rand_values = np.random.random(solution.number_of_variables)
-        
-        # Create a mask of bits to flip
-        flip_mask = rand_values < self.probability
-        
-        # Flip the bits where the mask is True
-        solution.bits ^= flip_mask
-        
-        return solution
-    
-    def get_name(self) -> str:
-        """Return the name of the operator."""
-        return "Bit flip mutation (NP-optimized)"
 
 
 class ScrambleMutation(Mutation[PermutationSolution]):
