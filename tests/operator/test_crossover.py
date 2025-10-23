@@ -1,6 +1,7 @@
 import unittest
 from typing import List
 from unittest import mock
+import numpy as np
 
 from jmetal.core.operator import Crossover
 from jmetal.core.solution import (
@@ -42,14 +43,14 @@ class NullCrossoverTestCases(unittest.TestCase):
 
     def test_should_the_solution_remain_unchanged(self):
         operator = NullCrossover()
-        solution1 = BinarySolution(number_of_variables=1, number_of_objectives=1)
-        solution1.variables[0] = [True, False, False, True, True, False]
-        solution2 = BinarySolution(number_of_variables=1, number_of_objectives=1)
-        solution2.variables[0] = [False, True, False, False, True, False]
+        solution1 = BinarySolution(number_of_variables=6, number_of_objectives=1)
+        solution1.bits = np.array([True, False, False, True, True, False])
+        solution2 = BinarySolution(number_of_variables=6, number_of_objectives=1)
+        solution2.bits = np.array([False, True, False, False, True, False])
 
         offspring = operator.execute([solution1, solution2])
-        self.assertEqual([True, False, False, True, True, False], offspring[0].variables[0])
-        self.assertEqual([False, True, False, False, True, False], offspring[1].variables[0])
+        np.testing.assert_array_equal(np.array([True, False, False, True, True, False]), offspring[0].bits)
+        np.testing.assert_array_equal(np.array([False, True, False, False, True, False]), offspring[1].bits)
 
 
 class SinglePointTestCases(unittest.TestCase):

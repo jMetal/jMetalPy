@@ -31,8 +31,9 @@ class NullCrossover(Crossover[Solution, Solution]):
     def execute(self, parents: List[Solution]) -> List[Solution]:
         if len(parents) != 2:
             raise Exception("The number of parents is not two: {}".format(len(parents)))
-
-        return parents
+            
+        # Create deep copies to avoid modifying the original parents
+        return [copy.deepcopy(parent) for parent in parents]
 
     def get_number_of_parents(self) -> int:
         return 2

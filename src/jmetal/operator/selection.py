@@ -21,62 +21,122 @@ S = TypeVar("S", bound=Solution)
 
 
 class RouletteWheelSelection(Selection[List[S], S]):
-    """Performs roulette wheel selection."""
+    """Performs roulette wheel selection.
+    
+    This selection operator selects solutions based on their fitness values using a roulette
+    wheel mechanism. It can handle both single and multi-objective optimization by using
+    the first objective value for selection. For multi-objective optimization, consider
+    using a proper fitness assignment strategy first.
+    
+    Note: This implementation assumes all objective values are non-negative. If negative
+    values are present, a proper normalization should be applied first.
+    """
 
-    def __init__(self):
-        super(RouletteWheelSelection).__init__()
+    def __init__(self, objective_index: int = 0):
+        """Initialize the roulette wheel selection operator.
+        
+        Args:
+            objective_index: Index of the objective to use for selection (default: 0).
+                            Only used if no fitness value is present in the solution attributes.
+        """
+        super().__init__()
+        self.objective_index = objective_index
 
     def execute(self, front: List[S]) -> S:
-        if front is None:
-            raise Exception("The front is null")
-        elif len(front) == 0:
-            raise Exception("The front is empty")
-
-        maximum = sum([solution.objectives[0] for solution in front])
-        rand = random.uniform(0.0, maximum)
-        value = 0.0
-
+        """Select a solution using roulette wheel selection.
+        
+        Args:
+            front: List of solutions to select from.
+            
+        Returns:
+            The selected solution.
+            
+        Raises:
+            ValueError: If the front is None, empty, or contains invalid fitness values.
+        """
+        if not front:
+            raise ValueError("The front is empty")
+            
+        # Calculate fitness values (using first objective if no fitness attribute)
+        fitness_values = []
         for solution in front:
-            value += solution.objectives[0]
-
-            if value > rand:
-                return solution
-
-        return None
+            if hasattr(solution, 'fitness') and solution.fitness is not None:
+                fitness_values.append(solution.fitness)
+            else:
+                # Fallback to using the specified objective
+                fitness_values.append(solution.objectives[self.objective_index])
+        
+        # Convert to numpy array for efficient operations
+        fitness_values = np.array(fitness_values, dtype=float)
+        
+        # Check for invalid fitness values
+        if np.any(fitness_values < 0):
+            raise ValueError("Negative fitness values are not supported. "
+                           "Consider normalizing the fitness values first.")
+        
+        # If all values are zero, return a random solution
+        total_fitness = np.sum(fitness_values)
+        if total_fitness <= 0:
+            return random.choice(front)
+            
+        # Calculate selection probabilities
+        probabilities = fitness_values / total_fitness
+        
+        # Select a solution based on the probabilities
+        selected_index = np.random.choice(len(front), p=probabilities)
+        return front[selected_index]
 
     def get_name(self) -> str:
         return "Roulette wheel selection"
 
 
 class BinaryTournamentSelection(Selection[List[S], S]):
+    """Performs binary tournament selection between two random solutions.
+    
+    This selection operator randomly selects two solutions from the population
+    and returns the better one according to the provided comparator.
+    If the comparator returns 0 (tie), a random solution is chosen.
+    
+    Args:
+        comparator: Comparator used to compare solutions (default: DominanceComparator)
+    """
+    
     def __init__(self, comparator: Comparator = DominanceComparator()):
-        super(BinaryTournamentSelection, self).__init__()
+        super().__init__()
         self.comparator = comparator
 
     def execute(self, front: List[S]) -> S:
-        if front is None:
-            raise Exception("The front is null")
-        elif len(front) == 0:
-            raise Exception("The front is empty")
+        """Execute the binary tournament selection.
+        
+        Args:
+            front: List of solutions to select from.
+            
+        Returns:
+            The selected solution.
+            
+        Raises:
+            ValueError: If front is None or empty.
+        """
+        if not front:
+            raise ValueError("The front is empty")
 
         if len(front) == 1:
-            result = front[0]
-        else:
-            # Sampling without replacement
-            i, j = random.sample(range(0, len(front)), 2)
-            solution1 = front[i]
-            solution2 = front[j]
+            return front[0]
 
-            flag = self.comparator.compare(solution1, solution2)
+        # Sample without replacement
+        idx1, idx2 = random.sample(range(len(front)), 2)
+        solution1 = front[idx1]
+        solution2 = front[idx2]
 
-            if flag == -1:
-                result = solution1
-            elif flag == 1:
-                result = solution2
-            else:
-                result = [solution1, solution2][random.random() < 0.5]
-
-        return result
+        # Compare solutions
+        comparison = self.comparator.compare(solution1, solution2)
+        
+        if comparison == -1:
+            return solution1
+        elif comparison == 1:
+            return solution2
+        else:  # Tie - choose randomly
+            return solution1 if random.random() < 0.5 else solution2
 
     def get_name(self) -> str:
         return "Binary tournament selection"
@@ -88,9 +148,9 @@ class BestSolutionSelection(Selection[List[S], S]):
 
     def execute(self, front: List[S]) -> S:
         if front is None:
-            raise Exception("The front is null")
-        elif len(front) == 0:
-            raise Exception("The front is empty")
+            raise ValueError("The front is None")
+        if not front:
+            raise ValueError("The front is empty")
 
         result = front[0]
 
@@ -107,20 +167,24 @@ class BestSolutionSelection(Selection[List[S], S]):
 class NaryRandomSolutionSelection(Selection[List[S], S]):
     def __init__(self, number_of_solutions_to_be_returned: int = 1):
         super(NaryRandomSolutionSelection, self).__init__()
-        if number_of_solutions_to_be_returned < 0:
-            raise Exception("The number of solutions to be returned must be positive integer")
+        if number_of_solutions_to_be_returned < 1:
+            raise ValueError(
+                "The number of solutions to be returned must be a positive integer, got {}"
+                .format(number_of_solutions_to_be_returned)
+            )
 
         self.number_of_solutions_to_be_returned = number_of_solutions_to_be_returned
 
-    def execute(self, front: List[S]) -> S:
+    def execute(self, front: List[S]) -> List[S]:
         if front is None:
-            raise Exception("The front is null")
-        if len(front) == 0:
-            raise Exception("The front is empty")
+            raise ValueError("The front is None")
+        if not front:
+            raise ValueError("The front is empty")
         if len(front) < self.number_of_solutions_to_be_returned:
-            raise Exception("The front contains less elements than required")
-
-        # random_search sampling without replacement
+            raise ValueError(
+                "The front size ({}) is smaller than the number of requested solutions: {}"
+                .format(len(front), self.number_of_solutions_to_be_returned)
+            )
         return random.sample(front, self.number_of_solutions_to_be_returned)
 
     def get_name(self) -> str:
@@ -128,23 +192,36 @@ class NaryRandomSolutionSelection(Selection[List[S], S]):
 
 
 class DifferentialEvolutionSelection(Selection[List[S], List[S]]):
-    def __init__(self):
+    def __init__(self, index_to_exclude: int = None):
         super(DifferentialEvolutionSelection, self).__init__()
-        self.index_to_exclude = None
+        self.index_to_exclude = index_to_exclude
 
     def execute(self, front: List[S]) -> List[S]:
         if front is None:
-            raise Exception("The front is null")
-        elif len(front) == 0:
-            raise Exception("The front is empty")
-        elif len(front) < 4:
-            raise Exception("The front has less than four solutions: " + str(len(front)))
+            raise ValueError("The front is None")
+        if not front:
+            raise ValueError("The front is empty")
+        if len(front) < 4:  # Need at least 4 solutions (1 base + 3 for DE/rand/1)
+            raise ValueError(
+                f"Differential evolution selection requires at least 4 solutions, got {len(front)}"
+            )
 
-        selected_indexes = random.sample(range(len(front)), 3)
-        while self.index_to_exclude in selected_indexes:
-            selected_indexes = random.sample(range(len(front)), 3)
-
-        return [front[i] for i in selected_indexes]
+        # If there's an index to exclude, create a new list without it
+        if self.index_to_exclude is not None and 0 <= self.index_to_exclude < len(front):
+            candidates = [sol for i, sol in enumerate(front) if i != self.index_to_exclude]
+        else:
+            candidates = list(front)
+        
+        # Check if we have enough candidates after exclusion
+        if len(candidates) < 3:
+            raise ValueError(
+                f"Not enough candidates to select from (need 3, have {len(candidates)} after exclusion)"
+            )
+            
+        # Randomly select 3 distinct solutions from the remaining candidates
+        selected = random.sample(candidates, 3)
+        
+        return selected
 
     def set_index_to_exclude(self, index: int):
         self.index_to_exclude = index
@@ -159,14 +236,21 @@ class RandomSelection(Selection[List[S], S]):
 
     def execute(self, front: List[S]) -> S:
         if front is None:
-            raise Exception("The front is null")
-        elif len(front) == 0:
-            raise Exception("The front is empty")
+            raise ValueError("The front is None")
+        if not front:
+            raise ValueError("The front is empty")
+
+        if not isinstance(front, list):
+            raise ValueError("The front must be a list")
+
+        # Check if all elements are instances of the same type as the first element
+        if front and not all(isinstance(solution, front[0].__class__) for solution in front):
+            raise ValueError("All elements in the front must be of the same type")
 
         return random.choice(front)
 
     def get_name(self) -> str:
-        return "Random solution selection"
+        return "Random selection"
 
 
 class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
@@ -177,9 +261,15 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
 
     def execute(self, front: List[S]) -> List[S]:
         if front is None:
-            raise Exception("The front is null")
-        elif len(front) == 0:
-            raise Exception("The front is empty")
+            raise ValueError("The front is None")
+        if not front:
+            raise ValueError("The front is empty")
+        if not isinstance(self.max_population_size, int) or self.max_population_size <= 0:
+            raise ValueError("max_population_size must be a positive integer")
+
+        # If the front is smaller than max_population_size, return the entire front
+        if len(front) <= self.max_population_size:
+            return front.copy()
 
         ranking = FastNonDominatedRanking(self.dominance_comparator)
         crowding_distance = CrowdingDistanceDensityEstimator()
@@ -187,17 +277,28 @@ class RankingAndCrowdingDistanceSelection(Selection[List[S], List[S]]):
 
         ranking_index = 0
         new_solution_list = []
+        number_of_subfronts = ranking.get_number_of_subfronts()
 
-        while len(new_solution_list) < self.max_population_size:
-            if len(ranking.get_subfront(ranking_index)) < (self.max_population_size - len(new_solution_list)):
-                new_solution_list = new_solution_list + ranking.get_subfront(ranking_index)
-                ranking_index += 1
+        while len(new_solution_list) < self.max_population_size and ranking_index < number_of_subfronts:
+            subfront = ranking.get_subfront(ranking_index)
+            
+            # If adding the entire subfront doesn't exceed max_population_size, add it all
+            if len(new_solution_list) + len(subfront) <= self.max_population_size:
+                new_solution_list.extend(subfront)
             else:
-                subfront = ranking.get_subfront(ranking_index)
+                # Otherwise, sort by crowding distance and add the best remaining solutions
                 crowding_distance.compute_density_estimator(subfront)
-                sorted_subfront = sorted(subfront, key=lambda x: x.attributes["crowding_distance"], reverse=True)
-                for i in range((self.max_population_size - len(new_solution_list))):
-                    new_solution_list.append(sorted_subfront[i])
+                # Sort by crowding distance in descending order
+                sorted_subfront = sorted(
+                    subfront, 
+                    key=lambda x: x.attributes.get("crowding_distance", 0.0), 
+                    reverse=True
+                )
+                # Take only as many as needed to fill the population
+                remaining = self.max_population_size - len(new_solution_list)
+                new_solution_list.extend(sorted_subfront[:remaining])
+            
+            ranking_index += 1
 
         return new_solution_list
 
@@ -297,35 +398,71 @@ class RankingAndFitnessSelection(Selection[List[S], List[S]]):
 
 
 class BinaryTournament2Selection(Selection[List[S], S]):
+    """Performs binary tournament selection with multiple comparators.
+    
+    This selection operator uses a list of comparators in sequence to determine
+    the winner between two randomly selected solutions. The first comparator that
+    can determine a winner is used. If all comparators result in a tie, a random
+    solution is chosen.
+    
+    Args:
+        comparator_list: List of comparators to use in sequence.
+    """
+    
     def __init__(self, comparator_list: List[Comparator]):
-        super(BinaryTournament2Selection, self).__init__()
+        super().__init__()
+        if not comparator_list:
+            raise ValueError("The comparator list cannot be empty")
         self.comparator_list = comparator_list
 
     def execute(self, front: List[S]) -> S:
+        """Execute the binary tournament selection with multiple comparators.
+        
+        Args:
+            front: List of solutions to select from.
+            
+        Returns:
+            The selected solution.
+            
+        Raises:
+            ValueError: If front is None, empty, or contains only one solution.
+        """
         if front is None:
-            raise Exception("The front is null")
-        elif len(front) == 0:
-            raise Exception("The front is empty")
-        elif not self.comparator_list:
-            raise Exception("The comparators' list is empty")
-
-        winner = None
-
+            raise ValueError("The front is None")
+            
+        if not front:
+            raise ValueError("The front is empty")
+            
         if len(front) == 1:
-            winner = front[0]
-        else:
-            for comparator in self.comparator_list:
-                winner = self.__winner(front, comparator)
-                if winner is not None:
+            return front[0]
+
+        # Use the first comparator to get initial winner
+        result = self.__winner(front, self.comparator_list[0])
+        
+        # If first comparator couldn't decide, try the rest
+        if result is None and len(self.comparator_list) > 1:
+            for comparator in self.comparator_list[1:]:
+                result = self.__winner(front, comparator)
+                if result is not None:
                     break
+        
+        # If no comparator could decide, choose randomly
+        if result is None:
+            idx = random.randint(0, len(front) - 1)
+            result = front[idx]
+            
+        return result
 
-        if not winner:
-            i = random.randrange(0, len(front))
-            winner = front[i]
-
-        return winner
-
-    def __winner(self, front: List[S], comparator: Comparator):
+    def __winner(self, front: List[S], comparator: Comparator) -> S:
+        """Select a winner between two random solutions using the given comparator.
+        
+        Args:
+            front: List of solutions to select from.
+            comparator: Comparator to determine the winner.
+            
+        Returns:
+            The winning solution, or None if it's a tie.
+        """
         # Sampling without replacement
         i, j = random.sample(range(0, len(front)), 2)
 
