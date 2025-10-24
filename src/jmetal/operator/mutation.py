@@ -154,11 +154,12 @@ class PolynomialMutation(Mutation[FloatSolution]):
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
         Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
-        for i in range(len(solution.variables)):
+                
+        for i in range(len(solution._variables)):
             rand = random.random()
 
             if rand <= self.probability:
-                y = solution.variables[i]
+                y = solution._variables[i]
                 yl, yu = solution.lower_bound[i], solution.upper_bound[i]
 
                 if yl == yu:
@@ -178,13 +179,10 @@ class PolynomialMutation(Mutation[FloatSolution]):
                         deltaq = 1.0 - pow(val, mut_pow)
 
                     y += deltaq * (yu - yl)
-                    if y < solution.lower_bound[i]:
-                        y = solution.lower_bound[i]
-                    if y > solution.upper_bound[i]:
-                        y = solution.upper_bound[i]
-
-                solution.variables[i] = y
-
+                    y = max(yl, min(y, yu))  # Clamp to bounds
+                    
+                    solution._variables[i] = y
+        
         return solution
 
     def get_name(self):
@@ -203,10 +201,11 @@ class IntegerPolynomialMutation(Mutation[IntegerSolution]):
 
     def execute(self, solution: IntegerSolution) -> IntegerSolution:
         Check.that(issubclass(type(solution), IntegerSolution), "Solution type invalid")
-
-        for i in range(len(solution.variables)):
+        
+        
+        for i in range(len(solution._variables)):
             if random.random() <= self.probability:
-                y = solution.variables[i]
+                y = solution._variables[i]
                 yl, yu = solution.lower_bound[i], solution.upper_bound[i]
 
                 if yl == yu:
@@ -226,12 +225,11 @@ class IntegerPolynomialMutation(Mutation[IntegerSolution]):
                         deltaq = 1.0 - val**mut_pow
 
                     y += deltaq * (yu - yl)
-                    if y < solution.lower_bound[i]:
-                        y = solution.lower_bound[i]
-                    if y > solution.upper_bound[i]:
-                        y = solution.upper_bound[i]
-
-                solution.variables[i] = int(round(y))
+                    y = max(yl, min(y, yu))  # Clamp to bounds
+                    y = int(round(y))  # Convert to integer and round to nearest
+                
+                solution._variables[i] = y
+                    
         return solution
 
     def get_name(self):
@@ -260,10 +258,13 @@ class SimpleRandomMutation(Mutation[FloatSolution]):
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
         Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
-        for i in range(len(solution.variables)):
+                
+        for i in range(len(solution._variables)):
             if random.random() <= self.probability:
-                solution.variables[i] = random.uniform(solution.lower_bound[i], solution.upper_bound[i])
-
+                new_value = random.uniform(solution.lower_bound[i], solution.upper_bound[i])
+                
+                solution._variables[i] = new_value        
+        
         return solution
 
     def get_name(self) -> str:
@@ -299,18 +300,20 @@ class UniformMutation(Mutation[FloatSolution]):
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
         Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
-        
-        for i in range(len(solution.variables)):
+                
+        for i in range(len(solution._variables)):
             if random.random() <= self.probability:
                 # Calculate perturbation scaled by variable range
                 var_range = solution.upper_bound[i] - solution.lower_bound[i]
                 delta = (random.random() - 0.5) * self.perturbation * var_range
                 
                 # Apply perturbation and ensure bounds
-                new_value = solution.variables[i] + delta
-                solution.variables[i] = max(solution.lower_bound[i], 
-                                         min(solution.upper_bound[i], new_value))
-
+                new_value = solution._variables[i] + delta
+                new_value = max(solution.lower_bound[i], 
+                             min(solution.upper_bound[i], new_value))
+                
+                solution._variables[i] = new_value
+            
         return solution
 
     def get_name(self) -> str:
@@ -384,7 +387,7 @@ class NonUniformMutation(Mutation[FloatSolution]):
 
                 # Apply mutation and ensure bounds
                 new_value = current_value + delta
-                solution.variables[i] = max(solution.lower_bound[i],
+                solution._variables[i] = max(solution.lower_bound[i],
                                          min(solution.upper_bound[i], new_value))
 
         return solution
@@ -547,10 +550,10 @@ class LevyFlightMutation(Mutation[FloatSolution]):
         self.step_size = step_size
         self.repair_operator = repair_operator
 
-    def execute(self, solution: FloatSolution) -> FloatSolution:
-        for i in range(len(solution.variables)):
+    def execute(self, solution: FloatSolution) -> FloatSolution:        
+        for i in range(len(solution._variables)):
             if np.random.rand() <= self.probability:
-                current_value = solution.variables[i]
+                current_value = solution._variables[i]
                 lower_bound = solution.lower_bound[i]
                 upper_bound = solution.upper_bound[i]
 
@@ -564,8 +567,9 @@ class LevyFlightMutation(Mutation[FloatSolution]):
                     new_value = self.repair_operator(new_value, lower_bound, upper_bound)
                 else:
                     new_value = min(max(new_value, lower_bound), upper_bound)
-
-                solution.variables[i] = new_value
+                
+                solution._variables[i] = new_value
+            
         return solution
 
     def _generate_levy_step(self):
@@ -624,18 +628,25 @@ class PowerLawMutation(Mutation[FloatSolution]):
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
         Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
-        for i in range(len(solution.variables)):
+                
+        for i in range(len(solution._variables)):
             if random.random() <= self.probability:
-                current_value = solution.variables[i]
+                current_value = solution._variables[i]
                 lower_bound = solution.lower_bound[i]
                 upper_bound = solution.upper_bound[i]
+                
+                # Generate power-law perturbation
                 rnd = random.random()
                 rnd = min(max(rnd, 1e-10), 1 - 1e-10)
                 temp_delta = math.pow(rnd, -self.delta)
                 deltaq = 0.5 * (rnd - 0.5) * (1 - temp_delta)
                 new_value = current_value + deltaq * (upper_bound - lower_bound)
+                
+                # Repair if out of bounds
                 new_value = self.repair_operator(new_value, lower_bound, upper_bound)
-                solution.variables[i] = new_value
+                
+                solution._variables[i] = new_value
+            
         return solution
 
     def _default_repair(self, value, lower, upper):

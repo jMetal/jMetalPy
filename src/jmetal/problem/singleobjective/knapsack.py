@@ -39,7 +39,7 @@ class Knapsack(BinaryProblem):
         self.obj_directions = [self.MAXIMIZE]
 
     def number_of_variables(self) -> int:
-        return 1
+        return self.number_of_bits
 
     def number_of_objectives(self) -> int:
         return 1
@@ -77,14 +77,16 @@ class Knapsack(BinaryProblem):
 
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
         total_profits = 0.0
-        total_weigths = 0.0
+        total_weights = 0.0
 
-        for index, bits in enumerate(solution.variables[0]):
-            if bits:
-                total_profits += self.profits[index]
-                total_weigths += self.weights[index]
+        # Access the bits from variables
+        bits = solution.variables
+        for i in range(len(bits)):
+            if bits[i]:
+                total_profits += self.profits[i]
+                total_weights += self.weights[i]
 
-        if total_weigths > self.capacity:
+        if total_weights > self.capacity:
             total_profits = 0.0
 
         solution.objectives[0] = -1.0 * total_profits
@@ -92,11 +94,13 @@ class Knapsack(BinaryProblem):
 
     def create_solution(self) -> BinarySolution:
         new_solution = BinarySolution(
-            number_of_variables=self.number_of_variables(), number_of_objectives=self.number_of_objectives()
+            number_of_variables=self.number_of_bits,
+            number_of_objectives=self.number_of_objectives()
         )
-
-        new_solution.variables[0] = [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
-
+        
+        # The BinarySolution initializes with empty variables, we need to set the bits
+        # The bits will be stored in variables[0] as a numpy array
+        new_solution.variables[0] = np.random.choice([True, False], size=self.number_of_bits)
         return new_solution
 
     def name(self):

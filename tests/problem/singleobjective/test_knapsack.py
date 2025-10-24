@@ -11,7 +11,7 @@ class KnapsackTestCases(unittest.TestCase):
 
     def test_should_constructor_create_a_valid_problem_with_default_settings(self) -> None:
         problem = Knapsack()
-        self.assertEqual(1, problem.number_of_variables())
+        self.assertEqual(50, problem.number_of_variables())  # Each bit is a separate variable
         self.assertEqual(1, problem.number_of_objectives())
         self.assertEqual(1, problem.number_of_constraints())
         self.assertEqual(50, problem.number_of_bits)
@@ -21,7 +21,7 @@ class KnapsackTestCases(unittest.TestCase):
 
     def test_should_constructor_create_a_valid_problem_with_500_bits(self) -> None:
         problem = Knapsack(500)
-        self.assertEqual(1, problem.number_of_variables())
+        self.assertEqual(500, problem.number_of_variables())  # Each bit is a separate variable
         self.assertEqual(1, problem.number_of_objectives())
         self.assertEqual(1, problem.number_of_constraints())
         self.assertEqual(500, problem.number_of_bits)
@@ -32,7 +32,9 @@ class KnapsackTestCases(unittest.TestCase):
     def test_should_create_solution_a_valid_binary_solution(self) -> None:
         problem = Knapsack(256)
         solution = problem.create_solution()
-        self.assertEqual(256, len(solution.variables[0]))
+        # Check that the solution has a bits attribute with the correct length
+        self.assertTrue(hasattr(solution, 'bits'))
+        self.assertEqual(256, len(solution.bits))
 
     def test_should_create_solution_from_file(self) -> None:
         filename = "resources/Knapsack_instances/KnapsackInstance_50_0_0.kp"
@@ -46,7 +48,7 @@ class KnapsackTestCases(unittest.TestCase):
         )
         with mock.patch("jmetal.problem.singleobjective.knapsack.open", new=mock.mock_open(read_data=data)):
             problem = Knapsack(from_file=True, filename=filename)
-            self.assertEqual(1, problem.number_of_variables())
+            self.assertEqual(50, problem.number_of_variables())  # Each bit is a separate variable
             self.assertEqual(1, problem.number_of_objectives())
             self.assertEqual(1, problem.number_of_constraints())
             self.assertEqual(50, problem.number_of_bits)

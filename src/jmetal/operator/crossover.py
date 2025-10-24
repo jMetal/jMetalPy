@@ -219,17 +219,17 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
                             c2 = upper_bound
 
                         if random.random() <= 0.5:
-                            offspring[0].variables[i] = c2
-                            offspring[1].variables[i] = c1
+                            offspring[0]._variables[i] = c2
+                            offspring[1]._variables[i] = c1
                         else:
-                            offspring[0].variables[i] = c1
-                            offspring[1].variables[i] = c2
+                            offspring[0]._variables[i] = c1
+                            offspring[1]._variables[i] = c2
                     else:
-                        offspring[0].variables[i] = value_x1
-                        offspring[1].variables[i] = value_x2
+                        offspring[0]._variables[i] = value_x1
+                        offspring[1]._variables[i] = value_x2
                 else:
-                    offspring[0].variables[i] = value_x1
-                    offspring[1].variables[i] = value_x2
+                    offspring[0]._variables[i] = value_x1
+                    offspring[1]._variables[i] = value_x2
         return offspring
 
     def get_number_of_parents(self) -> int:
@@ -300,17 +300,17 @@ class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
                             c2 = upper_bound
 
                         if random.random() <= 0.5:
-                            offspring[0].variables[i] = int(c2)
-                            offspring[1].variables[i] = int(c1)
+                            offspring[0]._variables[i] = int(c2)
+                            offspring[1]._variables[i] = int(c1)
                         else:
-                            offspring[0].variables[i] = int(c1)
-                            offspring[1].variables[i] = int(c2)
+                            offspring[0]._variables[i] = int(c1)
+                            offspring[1]._variables[i] = int(c2)
                     else:
-                        offspring[0].variables[i] = value_x1
-                        offspring[1].variables[i] = value_x2
+                        offspring[0]._variables[i] = value_x1
+                        offspring[1]._variables[i] = value_x2
                 else:
-                    offspring[0].variables[i] = value_x1
-                    offspring[1].variables[i] = value_x2
+                    offspring[0]._variables[i] = value_x1
+                    offspring[1]._variables[i] = value_x2
         return offspring
 
     def get_number_of_parents(self) -> int:
@@ -512,8 +512,8 @@ class BLXAlphaCrossover(Crossover[FloatSolution, FloatSolution]):
             y1 = self.repair_operator(y1, lower_bound, upper_bound)
             y2 = self.repair_operator(y2, lower_bound, upper_bound)
 
-            offspring1.variables[i] = y1
-            offspring2.variables[i] = y2
+            offspring1._variables[i] = y1
+            offspring2._variables[i] = y2
 
         return [offspring1, offspring2]
 
@@ -643,8 +643,8 @@ class BLXAlphaBetaCrossover(Crossover[FloatSolution, FloatSolution]):
             y1 = self.repair_operator(y1, lower_bound, upper_bound)
             y2 = self.repair_operator(y2, lower_bound, upper_bound)
 
-            offspring1.variables[i] = y1
-            offspring2.variables[i] = y2
+            offspring1._variables[i] = y1
+            offspring2._variables[i] = y2
 
         return [offspring1, offspring2]
 
@@ -767,8 +767,8 @@ class ArithmeticCrossover(Crossover[FloatSolution, FloatSolution]):
             vars2[i] = repaired2
             
         # Set the variables after all calculations are done
-        offspring1.variables = vars1
-        offspring2.variables = vars2
+        offspring1._variables = vars1
+        offspring2._variables = vars2
         
         return [offspring1, offspring2]
     
@@ -912,8 +912,8 @@ class UnimodalNormalDistributionCrossover(Crossover[FloatSolution, FloatSolution
             lower_bound = parent1.lower_bound[i]
             upper_bound = parent1.upper_bound[i]
             
-            offspring1.variables[i] = self.repair_operator(value1, lower_bound, upper_bound)
-            offspring2.variables[i] = self.repair_operator(value2, lower_bound, upper_bound)
+            offspring1._variables[i] = self.repair_operator(value1, lower_bound, upper_bound)
+            offspring2._variables[i] = self.repair_operator(value2, lower_bound, upper_bound)
         
         return [offspring1, offspring2]
     
@@ -984,7 +984,7 @@ class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
             else:
                 value = child.variables[i]
 
-            child.variables[i] = value
+            child._variables[i] = value
 
         return [child]
 
