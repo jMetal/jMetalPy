@@ -12,6 +12,12 @@ class DummySolution:
     def __init__(self, objectives):
         self.objectives = objectives
         self.attributes = {}
+        self.number_of_objectives = len(objectives)
+        self.variables = [0.0] * len(objectives)  # Dummy variables
+        self.number_of_variables = len(objectives)
+        self.number_of_constraints = 0
+        self.constraints = []
+        self.constraint_violation = 0.0
 
 class TestCrowdingDistanceDensityEstimator(unittest.TestCase):
     def test_multiple_objectives(self):

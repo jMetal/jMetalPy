@@ -2,7 +2,7 @@ import copy
 import math
 import random
 import numpy as np
-from typing import List
+from typing import List, Callable, Optional, Union
 
 from jmetal.core.operator import Crossover
 from jmetal.core.solution import (
@@ -14,6 +14,8 @@ from jmetal.core.solution import (
     Solution,
 )
 from jmetal.util.ckecking import Check
+
+# Type variables for generic type hints
 
 """
 .. module:: crossover
@@ -185,7 +187,7 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
                         else:
                             y1, y2 = value_x2, value_x1
 
-                        lower_bound, upper_bound = parents[0].lower_bound[i], parents[1].upper_bound[i]
+                        lower_bound, upper_bound = parents[0].lower_bound[i], parents[0].upper_bound[i]
 
                         beta = 1.0 + (2.0 * (y1 - lower_bound) / (y2 - y1))
                         alpha = 2.0 - pow(beta, -(self.distribution_index + 1.0))
@@ -266,7 +268,7 @@ class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
                         else:
                             y1, y2 = value_x2, value_x1
 
-                        lower_bound, upper_bound = parents[0].lower_bound[i], parents[1].upper_bound[i]
+                        lower_bound, upper_bound = parents[0].lower_bound[i], parents[0].upper_bound[i]
 
                         beta = 1.0 + (2.0 * (y1 - lower_bound) / (y2 - y1))
                         alpha = 2.0 - pow(beta, -(self.distribution_index + 1.0))
@@ -384,10 +386,13 @@ class SPXCrossover(Crossover[BinarySolution, BinarySolution]):
             # Select a random crossover point (1 to num_bits-1 to ensure crossover happens)
             crossover_point = self._rng.integers(1, num_bits)
             
-            # Perform the crossover by swapping bits after the crossover point
-            temp = bits1[crossover_point:].copy()
-            offspring[0].bits = np.concatenate([bits1[:crossover_point], bits2[crossover_point:]])
-            offspring[1].bits = np.concatenate([bits2[:crossover_point], temp])
+            # Create new bit arrays for the offspring
+            new_bits1 = np.concatenate([bits1[:crossover_point], bits2[crossover_point:]])
+            new_bits2 = np.concatenate([bits2[:crossover_point], bits1[crossover_point:]])
+            
+            # Update the bits in the offspring
+            offspring[0].bits = new_bits1
+            offspring[1].bits = new_bits2
         
         return offspring
 
@@ -402,15 +407,6 @@ class SPXCrossover(Crossover[BinarySolution, BinarySolution]):
     def get_name(self) -> str:
         """Return the name of the operator."""
         return "Single point crossover"
-
-
-from typing import List, TypeVar, Callable, Optional
-import random
-from jmetal.core.operator import Crossover
-from jmetal.core.solution import FloatSolution
-from jmetal.util.ckecking import Check
-
-S = TypeVar('S', bound=FloatSolution)
 
 class BLXAlphaCrossover(Crossover[FloatSolution, FloatSolution]):
     """BLX-α (Blend Crossover) for real-valued solutions.
@@ -478,12 +474,12 @@ class BLXAlphaCrossover(Crossover[FloatSolution, FloatSolution]):
         """
         offspring1 = parent1.__class__(
             parent1.lower_bound, 
-            parent2.upper_bound, 
+            parent1.upper_bound, 
             len(parent1.objectives),
             len(parent1.constraints) if hasattr(parent1, 'constraints') else 0
         )
         offspring2 = parent2.__class__(
-            parent1.lower_bound, 
+            parent2.lower_bound, 
             parent2.upper_bound, 
             len(parent2.objectives),
             len(parent2.constraints) if hasattr(parent2, 'constraints') else 0
@@ -614,7 +610,7 @@ class BLXAlphaBetaCrossover(Crossover[FloatSolution, FloatSolution]):
             len(parent1.constraints) if hasattr(parent1, 'constraints') else 0
         )
         offspring2 = parent2.__class__(
-            parent1.lower_bound, 
+            parent2.lower_bound, 
             parent2.upper_bound, 
             len(parent2.objectives),
             len(parent2.constraints) if hasattr(parent2, 'constraints') else 0
@@ -742,15 +738,21 @@ class ArithmeticCrossover(Crossover[FloatSolution, FloatSolution]):
             offspring2.variables = parent2.variables.copy()
             return [offspring1, offspring2]
         
+        # Generate a single alpha for all variables in this crossover
+        alpha = random.random()
+        
+        # Initialize variables for both offspring with the correct length
+        num_variables = len(parent1.variables)
+        # Initialize variables as lists
+        vars1 = [0.0] * num_variables
+        vars2 = [0.0] * num_variables
+        
         # Perform arithmetic crossover on each variable
-        for i in range(len(parent1.variables)):
+        for i in range(num_variables):
             p1 = parent1.variables[i]
             p2 = parent2.variables[i]
             
-            # Generate a random weight for this variable
-            alpha = random.random()
-            
-            # Calculate new values using arithmetic crossover
+            # Calculate new values using the same alpha for all variables
             value1 = alpha * p1 + (1 - alpha) * p2
             value2 = (1 - alpha) * p1 + alpha * p2
             
@@ -758,8 +760,15 @@ class ArithmeticCrossover(Crossover[FloatSolution, FloatSolution]):
             lower_bound = parent1.lower_bound[i]
             upper_bound = parent1.upper_bound[i]
             
-            offspring1.variables[i] = self.repair_operator(value1, lower_bound, upper_bound)
-            offspring2.variables[i] = self.repair_operator(value2, lower_bound, upper_bound)
+            repaired1 = self.repair_operator(value1, lower_bound, upper_bound)
+            repaired2 = self.repair_operator(value2, lower_bound, upper_bound)
+            
+            vars1[i] = repaired1
+            vars2[i] = repaired2
+            
+        # Set the variables after all calculations are done
+        offspring1.variables = vars1
+        offspring2.variables = vars2
         
         return [offspring1, offspring2]
     
@@ -992,7 +1001,7 @@ class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
 class CompositeCrossover(Crossover[CompositeSolution, CompositeSolution]):
     __EPS = 1.0e-14
 
-    def __init__(self, crossover_operator_list: [Crossover]):
+    def __init__(self, crossover_operator_list: List[Crossover]):
         super(CompositeCrossover, self).__init__(probability=1.0)
 
         Check.is_not_none(crossover_operator_list)

@@ -1,7 +1,7 @@
 import random
 import numpy as np
 import math
-from typing import Callable, Optional
+from typing import Callable, Optional, List
 
 from jmetal.core.operator import Mutation
 from jmetal.core.solution import (
@@ -453,7 +453,7 @@ class PermutationSwapMutation(Mutation[PermutationSolution]):
 
 
 class CompositeMutation(Mutation[Solution]):
-    def __init__(self, mutation_operator_list: [Mutation]):
+    def __init__(self, mutation_operator_list: List[Mutation]):
         super(CompositeMutation, self).__init__(probability=1.0)
 
         Check.is_not_none(mutation_operator_list)
@@ -534,7 +534,7 @@ class LevyFlightMutation(Mutation[FloatSolution]):
     """
     
     def __init__(self, mutation_probability: float = 0.01, beta: float = 1.5,
-                 step_size: float = 0.01, repair_operator = None):
+                 step_size: float = 0.01, repair_operator: Optional[Callable[[float, float, float], float]] = None):
         if not 0 <= mutation_probability <= 1:
             raise ValueError("mutation_probability must be in [0, 1]")
         if not 1 < beta <= 2:

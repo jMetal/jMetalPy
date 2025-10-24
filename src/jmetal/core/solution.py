@@ -1,7 +1,7 @@
 from __future__ import annotations
 import copy
 from abc import ABC, abstractmethod
-from typing import Generic, List, TypeVar, final
+from typing import Generic, List, TypeVar, final, Dict, Any
 import numpy as np
 
 from jmetal.util.ckecking import Check

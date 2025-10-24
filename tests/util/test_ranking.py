@@ -1,12 +1,13 @@
 import unittest
 
-from jmetal.core.solution import Solution
+from jmetal.core.solution import FloatSolution
 from jmetal.util.ranking import FastNonDominatedRanking, Ranking, StrengthRanking
+from jmetal.util.comparator import DominanceWithConstraintsComparator
 
 
 class FastNonDominatedRankingTestCases(unittest.TestCase):
     def setUp(self):
-        self.ranking = FastNonDominatedRanking()
+        self.ranking = FastNonDominatedRanking(comparator=DominanceWithConstraintsComparator())
 
     def test_should_constructor_create_a_valid_object(self):
         self.assertIsNotNone(self.ranking)
@@ -17,7 +18,7 @@ class FastNonDominatedRankingTestCases(unittest.TestCase):
         self.assertEqual(0, len(self.ranking.compute_ranking(solution_list)))
 
     def test_should_compute_ranking_return_a_subfront_if_the_solution_list_contains_one_solution(self):
-        solution = Solution(2, 3)
+        solution = FloatSolution([0.0, 0.0], [1.0, 1.0], 3)
         solution_list = [solution]
 
         ranking = self.ranking.compute_ranking(solution_list)
@@ -26,9 +27,9 @@ class FastNonDominatedRankingTestCases(unittest.TestCase):
         self.assertEqual(solution, ranking[0][0])
 
     def test_should_compute_ranking_return_a_subfront_if_the_solution_list_contains_two_nondominated_solutions(self):
-        solution = Solution(2, 2)
+        solution = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution.objectives = [1, 2]
-        solution2 = Solution(2, 2)
+        solution2 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution2.objectives = [2, 1]
         solution_list = [solution, solution2]
 
@@ -41,9 +42,9 @@ class FastNonDominatedRankingTestCases(unittest.TestCase):
 
     def test_should_compute_ranking_work_properly_case1(self):
         """The list contains two solutions and one of them is dominated by the other one."""
-        solution = Solution(2, 2)
+        solution = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution.objectives = [2, 3]
-        solution2 = Solution(2, 2)
+        solution2 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution2.objectives = [3, 6]
         solution_list = [solution, solution2]
 
@@ -56,11 +57,11 @@ class FastNonDominatedRankingTestCases(unittest.TestCase):
         self.assertEqual(solution2, ranking[1][0])
 
     def test_should_ranking_of_a_population_with_three_dominated_solutions_return_three_subfronts(self):
-        solution = Solution(2, 2)
+        solution = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution.objectives = [2, 3]
-        solution2 = Solution(2, 2)
+        solution2 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution2.objectives = [3, 6]
-        solution3 = Solution(2, 2)
+        solution3 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution3.objectives = [4, 8]
         solution_list = [solution, solution2, solution3]
 
@@ -75,11 +76,11 @@ class FastNonDominatedRankingTestCases(unittest.TestCase):
         self.assertEqual(solution3, ranking[2][0])
 
     def test_should_ranking_of_a_population_with_five_solutions_work_properly(self):
-        solution1 = Solution(2, 2)
-        solution2 = Solution(2, 2)
-        solution3 = Solution(2, 2)
-        solution4 = Solution(2, 2)
-        solution5 = Solution(2, 2)
+        solution1 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
+        solution2 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
+        solution3 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
+        solution4 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
+        solution5 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
 
         solution1.objectives[0] = 1.0
         solution1.objectives[1] = 0.0
@@ -108,10 +109,10 @@ class FastNonDominatedRankingTestCases(unittest.TestCase):
 
     def test_should_compute_ranking_work_properly_with_constraints_case1(self):
         """The list contains two solutions and one is infeasible"""
-        solution = Solution(2, 2, 1)
+        solution = FloatSolution([0.0, 0.0], [1.0, 1.0], 2, 1)
         solution.objectives = [2, 3]
         solution.constraints[0] = -1
-        solution2 = Solution(2, 2, 1)
+        solution2 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2, 1)
         solution2.objectives = [3, 6]
         solution2.constraints[0] = 0
         solution_list = [solution, solution2]
@@ -124,10 +125,10 @@ class FastNonDominatedRankingTestCases(unittest.TestCase):
 
     def test_should_compute_ranking_work_properly_with_constraints_case2(self):
         """The list contains two solutions and both are infeasible with different violation degree"""
-        solution = Solution(2, 2, 1)
+        solution = FloatSolution([0.0, 0.0], [1.0, 1.0], 2, 1)
         solution.objectives = [2, 3]
         solution.constraints[0] = -1
-        solution2 = Solution(2, 2, 1)
+        solution2 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2, 1)
         solution2.objectives = [3, 6]
         solution2.constraints[0] = -2
         solution_list = [solution, solution2]
@@ -140,10 +141,10 @@ class FastNonDominatedRankingTestCases(unittest.TestCase):
 
     def test_should_compute_ranking_work_properly_with_constraints_case3(self):
         """The list contains two solutions and both are infeasible with equal violation degree"""
-        solution = Solution(2, 2, 1)
+        solution = FloatSolution([0.0, 0.0], [1.0, 1.0], 2, 1)
         solution.objectives = [2, 3]
         solution.constraints[0] = -1
-        solution2 = Solution(2, 2, 1)
+        solution2 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2, 1)
         solution2.objectives = [3, 6]
         solution2.constraints[0] = -1
         solution_list = [solution, solution2]
@@ -170,13 +171,13 @@ class StrengthRankingTestCases(unittest.TestCase):
 
         Points 1, 2, 3 and 4 are nondominated
         """
-        solution1 = Solution(2, 2)
+        solution1 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution1.objectives = [1, 5]
-        solution2 = Solution(2, 2)
+        solution2 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution2.objectives = [2, 4]
-        solution3 = Solution(2, 2)
+        solution3 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution3.objectives = [3, 3]
-        solution4 = Solution(2, 2)
+        solution4 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution4.objectives = [5, 1]
 
         solution_list = [solution1, solution2, solution3, solution4]
@@ -202,15 +203,15 @@ class StrengthRankingTestCases(unittest.TestCase):
         Expected result: two ranks (rank 0: 1, 2, 5, 4; rank 1: 3)
         """
 
-        solution1 = Solution(2, 2)
+        solution1 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution1.objectives = [1, 5]
-        solution2 = Solution(2, 2)
+        solution2 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution2.objectives = [2, 4]
-        solution3 = Solution(2, 2)
+        solution3 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution3.objectives = [3, 3]
-        solution4 = Solution(2, 2)
+        solution4 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution4.objectives = [5, 1]
-        solution5 = Solution(2, 2)
+        solution5 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution5.objectives = [3, 2]
 
         solution_list = [solution1, solution2, solution3, solution4, solution5]
