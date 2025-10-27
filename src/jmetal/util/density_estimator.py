@@ -4,7 +4,8 @@ from typing import List, TypeVar
 
 import numpy
 from moocore import hv_contributions
-from scipy.spatial.distance import euclidean
+import numpy as np
+from scipy.spatial.distance import cdist
 
 from jmetal.logger import get_logger
 from jmetal.util.comparator import Comparator, SolutionAttributeComparator
@@ -110,18 +111,19 @@ class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
         if solutions_size <= self.k:
             return
 
-        # Compute distance matrix
-        self.distance_matrix = numpy.zeros(shape=(solutions_size, solutions_size))
-        for i in range(solutions_size):
-            for j in range(solutions_size):
-                self.distance_matrix[i, j] = self.distance_matrix[j, i] = euclidean(
-                    solutions[i].objectives, solutions[j].objectives
-                )
+        # Extract objectives as a 2D numpy array for vectorized operations
+        objectives = np.array([s.objectives for s in solutions])
+        
+        # Compute pairwise distances using cdist (much faster than nested loops)
+        self.distance_matrix = cdist(objectives, objectives, 'euclidean')
+        
+        # Get k-th nearest neighbor distance for each solution
+        # Using np.partition which is O(n) instead of full sort O(n log n)
+        k_distances = np.partition(self.distance_matrix, kth=self.k, axis=1)[:, self.k]
+        
         # Assign knn_density attribute
-        for i in range(solutions_size):
-            distances = list(self.distance_matrix[i])
-            distances.sort()
-            solutions[i].attributes["knn_density"] = distances[self.k]
+        for i, dist in enumerate(k_distances):
+            solutions[i].attributes["knn_density"] = dist
 
     def sort(self, solutions: List[S]) -> List[S]:
         """

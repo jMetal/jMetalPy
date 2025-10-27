@@ -80,8 +80,8 @@ class SPEA2(GeneticAlgorithm[S, R]):
         ranking = StrengthRanking(self.dominance_comparator)
         density_estimator = KNearestNeighborDensityEstimator()
 
-        r = RankingAndDensityEstimatorReplacement(ranking, density_estimator, RemovalPolicyType.SEQUENTIAL)
-        solutions = r.replace(population, offspring_population)
+        replacement = RankingAndDensityEstimatorReplacement(ranking, density_estimator, RemovalPolicyType.SEQUENTIAL)
+        solutions = replacement.replace(population, offspring_population)
 
         return solutions
 
