@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import List, TypeVar
+from typing import List, TypeVar, Dict, Any
+import numpy as np
 
 from jmetal.util.comparator import (
     Comparator,
@@ -137,47 +138,56 @@ class StrengthRanking(Ranking[List[S]]):
 
     def compute_ranking(self, solutions: List[S], k: int = None):
         """
-        Compute ranking of solutions.
-
+        Compute ranking of solutions using vectorized operations.
+        
         :param solutions: Solution list.
         :param k: Number of individuals.
         """
-        strength: List[int] = [0 for _ in range(len(solutions))]
-        raw_fitness: List[int] = [0 for _ in range(len(solutions))]
-
-        # strength(i) = | {j | j < - SolutionSet and i dominate j} |
-        for i in range(len(solutions)):
-            for j in range(len(solutions)):
-                if self.comparator.compare(solutions[i], solutions[j]) < 0:
-                    strength[i] += 1
-
-        # Calculate the raw fitness:
-        # rawFitness(i) = |{sum strength(j) | j <- SolutionSet and j dominate i}|
-        for i in range(len(solutions)):
-            for j in range(len(solutions)):
-                if self.comparator.compare(solutions[i], solutions[j]) == 1:
-                    raw_fitness[i] += strength[j]
-
-        max_fitness_value: int = 0
-        for i in range(len(solutions)):
-            solutions[i].attributes["strength_ranking"] = raw_fitness[i]
-            if raw_fitness[i] > max_fitness_value:
-                max_fitness_value = raw_fitness[i]
-
-        # Initialize the ranked sublists. In the worst case will be max_fitness_value + 1 different sublists
-        self.ranked_sublists = [[] for _ in range(max_fitness_value + 1)]
-
-        # Assign each solution to its corresponding front
-        for solution in solutions:
-            self.ranked_sublists[int(solution.attributes["strength_ranking"])].append(solution)
-
-        # Remove empty fronts
-        counter = 0
-        while counter < len(self.ranked_sublists):
-            if len(self.ranked_sublists[counter]) == 0:
-                del self.ranked_sublists[counter]
-            else:
-                counter += 1
+        if not solutions:
+            self.ranked_sublists = []
+            return self.ranked_sublists
+            
+        n = len(solutions)
+        strength = [0] * n
+        raw_fitness = [0] * n
+        
+        # Convert objectives to a NumPy array for vectorized operations
+        objectives = np.array([s.objectives for s in solutions])
+        
+        # Compute strength values (number of solutions each solution dominates)
+        for i in range(n):
+            # Vectorized dominance check: solution i dominates j if all objectives are <= and at least one is <
+            dominated = np.all(objectives[i] <= objectives, axis=1) & np.any(objectives[i] < objectives, axis=1)
+            # Don't count self-dominance
+            strength[i] = np.sum(dominated) - 1 if dominated[i] else np.sum(dominated)
+        
+        # Compute raw fitness (sum of strengths of dominators)
+        for i in range(n):
+            # Find solutions that dominate i
+            dominators = np.where(
+                np.all(objectives <= objectives[i], axis=1) & 
+                np.any(objectives < objectives[i], axis=1)
+            )[0]
+            # Sum strengths of dominators
+            raw_fitness[i] = sum(strength[d] for d in dominators)
+        
+        # Store raw fitness in the strength_ranking attribute
+        max_fitness = 0
+        for i in range(n):
+            fitness = int(raw_fitness[i])
+            solutions[i].attributes["strength_ranking"] = fitness
+            if fitness > max_fitness:
+                max_fitness = fitness
+        
+        # Group solutions by raw fitness (ascending order)
+        fitness_to_solutions: Dict[int, List[S]] = {}
+        for i, fit in enumerate(raw_fitness):
+            if fit not in fitness_to_solutions:
+                fitness_to_solutions[fit] = []
+            fitness_to_solutions[fit].append(solutions[i])
+        
+        # Create ranked sublists sorted by fitness (ascending order)
+        self.ranked_sublists = [fitness_to_solutions[f] for f in sorted(fitness_to_solutions)]
 
         return self.ranked_sublists
 
