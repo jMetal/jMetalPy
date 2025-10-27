@@ -138,7 +138,7 @@ class StrengthRanking(Ranking[List[S]]):
 
     def compute_ranking(self, solutions: List[S], k: int = None):
         """
-        Compute ranking of solutions using vectorized operations.
+        Compute ranking of solutions using the provided dominance comparator.
         
         :param solutions: Solution list.
         :param k: Number of individuals.
@@ -151,27 +151,25 @@ class StrengthRanking(Ranking[List[S]]):
         strength = [0] * n
         raw_fitness = [0] * n
         
-        # Convert objectives to a NumPy array for vectorized operations
-        objectives = np.array([s.objectives for s in solutions])
-        
         # Compute strength values (number of solutions each solution dominates)
         for i in range(n):
-            # Vectorized dominance check: solution i dominates j if all objectives are <= and at least one is <
-            dominated = np.all(objectives[i] <= objectives, axis=1) & np.any(objectives[i] < objectives, axis=1)
-            # Don't count self-dominance
-            strength[i] = np.sum(dominated) - 1 if dominated[i] else np.sum(dominated)
+            for j in range(n):
+                if i == j:
+                    continue
+                # Use the provided comparator to check if solution i dominates solution j
+                if self.comparator.compare(solutions[i], solutions[j]) < 0:
+                    strength[i] += 1
         
         # Compute raw fitness (sum of strengths of dominators)
         for i in range(n):
-            # Find solutions that dominate i
-            dominators = np.where(
-                np.all(objectives <= objectives[i], axis=1) & 
-                np.any(objectives < objectives[i], axis=1)
-            )[0]
-            # Sum strengths of dominators
-            raw_fitness[i] = sum(strength[d] for d in dominators)
+            for j in range(n):
+                if i == j:
+                    continue
+                # Check if solution j dominates solution i
+                if self.comparator.compare(solutions[j], solutions[i]) < 0:
+                    raw_fitness[i] += strength[j]
         
-        # Store raw fitness in the strength_ranking attribute
+        # Store raw fitness in the strength_ranking attribute and find max fitness
         max_fitness = 0
         for i in range(n):
             fitness = int(raw_fitness[i])
