@@ -40,17 +40,17 @@ if __name__ == '__main__':
     # Plot front
     plot_front = Plot(title='Pareto front approximation. Problem: ' + problem.name(),
                       reference_front=problem.reference_front, axis_labels=problem.obj_labels)
-    plot_front.plot(front, label=algorithm.label, filename=algorithm.get_name())
+    plot_front.plot(front, label=algorithm.label, filename=algorithm.name)
 
     # Plot interactive front
     plot_front = InteractivePlot(title='Pareto front approximation. Problem: ' + problem.name(),
                                  reference_front=problem.reference_front, axis_labels=problem.obj_labels)
-    plot_front.plot(front, label=algorithm.label, filename=algorithm.get_name())
+    plot_front.plot(front, label=algorithm.label, filename=algorithm.name)
 
     # Save results to file
     print_function_values_to_file(front, 'FUN.' + algorithm.label)
     print_variables_to_file(front, 'VAR.' + algorithm.label)
 
     print('Algorithm (continuous problem): ' + algorithm.get_name())
-    print('Problem: ' + problem.get_name())
+    print('Problem: ' + problem.name())
     print('Computing time: ' + str(algorithm.total_computing_time))

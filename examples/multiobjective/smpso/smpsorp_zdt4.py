@@ -13,7 +13,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":
     problem = ZDT1()
-    reference_front = read_solutions(filename="resources/reference_fronts/ZDT1.pf")
+    reference_front = read_solutions(filename="resources/reference_fronts/ZDT4.pf")
 
     swarm_size = 100
 

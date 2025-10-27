@@ -16,7 +16,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 if __name__ == "__main__":
     problem = DTLZ1()
 
-    max_evaluations = 40000
+    max_evaluations = 30000
     algorithm = SMSEMOA(
         problem=problem,
         population_size=100,

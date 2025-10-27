@@ -118,26 +118,35 @@ class OMOPSO(ParticleSwarmOptimization):
             c2 = round(random.uniform(self.c2_min, self.c2_max), 1)
             w = round(random.uniform(self.weight_min, self.weight_max), 1)
 
-            for var in range(len(swarm[i].variables)):
+            # Direct access to _variables for better performance
+            particle_vars = swarm[i]._variables
+            best_particle_vars = best_particle._variables
+            best_global_vars = best_global._variables
+
+            for var in range(len(particle_vars)):
                 self.speed[i][var] = (
                     w * self.speed[i][var]
-                    + (c1 * r1 * (best_particle.variables[var] - swarm[i].variables[var]))
-                    + (c2 * r2 * (best_global.variables[var] - swarm[i].variables[var]))
+                    + (c1 * r1 * (best_particle_vars[var] - particle_vars[var]))
+                    + (c2 * r2 * (best_global_vars[var] - particle_vars[var]))
                 )
 
     def update_position(self, swarm: List[FloatSolution]) -> None:
         for i in range(self.swarm_size):
             particle = swarm[i]
+            particle_vars = particle._variables  # Direct access to internal list
+            lower_bounds = self.problem.lower_bound
+            upper_bounds = self.problem.upper_bound
 
-            for j in range(len(particle.variables)):
-                particle.variables[j] += self.speed[i][j]
+            for j in range(len(particle_vars)):
+                # Update position
+                particle_vars[j] += self.speed[i][j]
 
-                if particle.variables[j] < self.problem.lower_bound[j]:
-                    particle.variables[j] = self.problem.lower_bound[j]
+                # Apply bounds
+                if particle_vars[j] < lower_bounds[j]:
+                    particle_vars[j] = lower_bounds[j]
                     self.speed[i][j] *= self.change_velocity1
-
-                if particle.variables[j] > self.problem.upper_bound[j]:
-                    particle.variables[j] = self.problem.upper_bound[j]
+                elif particle_vars[j] > upper_bounds[j]:
+                    particle_vars[j] = upper_bounds[j]
                     self.speed[i][j] *= self.change_velocity2
 
     def update_global_best(self, swarm: List[FloatSolution]) -> None:
