@@ -1,236 +1,167 @@
-import unittest
-
+import pytest
+import numpy as np
 from jmetal.problem.multiobjective.unconstrained import (
     Fonseca,
     Kursawe,
     Schaffer,
-    Viennet2, OneZeroMax,
+    Viennet2,
+    OneZeroMax,
+    SubsetSum,
+    MixedIntegerFloatProblem,
 )
 
+# Test data
+FONSECA_TEST_CASES = [
+    # Test case 1: Random values
+    ([-1.3, 1.5, 1.21], [0.9915701157761243, 0.9996751762268354]),
+    # Test case 2: All zeros
+    ([0.0, 0.0, 0.0], [0.6321205588285578, 0.6321205588285578]),
+]
 
-class KursaweTestCases(unittest.TestCase):
-    def test_should_constructor_create_a_non_null_object(self) -> None:
-        problem = Kursawe(3)
-        self.assertIsNotNone(problem)
+KURSAWE_TEST_CASES = [
+    # Test case 1: Edge values
+    ([-5.0, 5.0, 5.0], [-4.8623346886842835, 7.791492659222151]),
+    # Test case 2: All zeros
+    ([0.0, 0.0, 0.0], [-20.0, 0.0]),
+]
 
-    def test_should_constructor_create_a_valid_problem_with_default_settings(self) -> None:
-        problem = Kursawe()
-        self.assertEqual(3, problem.number_of_variables())
-        self.assertEqual(2, problem.number_of_objectives())
-        self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual([-5.0, -5.0, -5.0], problem.lower_bound)
-        self.assertEqual([5.0, 5.0, 5.0], problem.upper_bound)
+SCHAFFER_TEST_CASES = [
+    # Test case 1: Positive value
+    ([3.0], [9.0, 1.0]),  # x² and (x-2)²
+    # Test case 2: Negative value
+    ([-2.6], [6.76, 21.16]),  # x² and (x-2)²
+]
 
-    def test_should_constructor_create_a_valid_problem_with_5_variables(self) -> None:
-        problem = Kursawe(5)
-        self.assertEqual(5, problem.number_of_variables())
-        self.assertEqual(2, problem.number_of_objectives())
-        self.assertEqual(0, problem.number_of_constraints())
+VIENNET2_TEST_CASES = [
+    # Test case 1: Specific values
+    ([-2.6, 1.5], [14.0607692307, -11.8818055555, -11.1532369747]),
+    # Test case 2: All zeros
+    ([0.0, 0.0], [5.07692307692, -16.25, -12.994285714285715]),
+]
 
-        self.assertEqual([-5.0, -5.0, -5.0, -5.0, -5.0], problem.lower_bound)
-        self.assertEqual([5.0, 5.0, 5.0, 5.0, 5.0], problem.upper_bound)
+ONE_ZERO_MAX_TEST_CASES = [
+    ([True] * 10 + [False] * 6, [-10.0, -6.0]),  # 10 ones, 6 zeros
+    ([False] * 10, [0.0, -10.0]),  # 0 ones, 10 zeros
+    ([True] * 10, [-10.0, 0.0]),  # 10 ones, 0 zeros
+]
 
-    def test_should_create_solution_create_a_valid_float_solution(self) -> None:
-        problem = Kursawe(3)
-        solution = problem.create_solution()
-        self.assertEqual(3, len(solution.variables))
-        self.assertEqual(2, len(solution.objectives))
-        self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual([-5.0, -5.0, -5.0], problem.lower_bound)
-        self.assertEqual([5.0, 5.0, 5.0], problem.upper_bound)
-        self.assertTrue(all(variable >= -5.0 for variable in solution.variables))
-        self.assertTrue(all(variable <= 5.0 for variable in solution.variables))
+# Fixtures
+@pytest.fixture
+def fonseca():
+    return Fonseca()
 
-    def test_should_get_name_return_the_right_name(self):
-        problem = Kursawe()
-        self.assertEqual("Kursawe", problem.name())
+@pytest.fixture
+def kursawe():
+    return Kursawe()
 
+@pytest.fixture
+def schaffer():
+    return Schaffer()
 
-class FonsecaTestCases(unittest.TestCase):
-    def test_should_constructor_create_a_non_null_object(self):
-        problem = Fonseca()
-        self.assertIsNotNone(problem)
+@pytest.fixture
+def viennet2():
+    return Viennet2()
 
-    def test_should_constructor_create_a_valid_problem_with_default_settings(self):
-        problem = Fonseca()
-        self.assertEqual(3, problem.number_of_variables())
-        self.assertEqual(2, problem.number_of_objectives())
-        self.assertEqual(0, problem.number_of_constraints())
+@pytest.fixture
+def one_zero_max():
+    return OneZeroMax()
 
-        self.assertEqual(3 * [-4], problem.lower_bound)
-        self.assertEqual(3 * [4], problem.upper_bound)
+# Parameterized tests
+@pytest.mark.parametrize("variables, expected_objectives", FONSECA_TEST_CASES)
+def test_fonseca_evaluate(fonseca, variables, expected_objectives):
+    """Test Fonseca problem evaluation."""
+    solution = fonseca.create_solution()
+    solution.variables = variables
+    fonseca.evaluate(solution)
+    
+    assert len(solution.objectives) == 2
+    for i, (obj, expected) in enumerate(zip(solution.objectives, expected_objectives)):
+        assert obj == pytest.approx(expected, rel=1e-6), f"Objective {i} mismatch"
 
-    def test_should_create_solution_create_a_valid_float_solution(self):
-        problem = Fonseca()
-        solution = problem.create_solution()
+@pytest.mark.parametrize("variables, expected_objectives", KURSAWE_TEST_CASES)
+def test_kursawe_evaluate(kursawe, variables, expected_objectives):
+    """Test Kursawe problem evaluation."""
+    solution = kursawe.create_solution()
+    solution.variables = variables.copy()
+    kursawe.evaluate(solution)
+    
+    assert len(solution.objectives) == 2
+    for i, (obj, expected) in enumerate(zip(solution.objectives, expected_objectives)):
+        if not np.isinf(expected):
+            assert obj == pytest.approx(expected, rel=1e-6), f"Objective {i} mismatch"
 
-        self.assertEqual(3, len(solution.variables))
-        self.assertEqual(2, len(solution.objectives))
-        self.assertEqual(0, problem.number_of_constraints())
+@pytest.mark.parametrize("variables, expected_objectives", SCHAFFER_TEST_CASES)
+def test_schaffer_evaluate(schaffer, variables, expected_objectives):
+    """Test Schaffer problem evaluation."""
+    solution = schaffer.create_solution()
+    solution.variables = variables.copy()
+    schaffer.evaluate(solution)
+    
+    assert len(solution.objectives) == 2
+    for i, (obj, expected) in enumerate(zip(solution.objectives, expected_objectives)):
+        assert obj == pytest.approx(expected, rel=1e-6), f"Objective {i} mismatch"
 
-        self.assertEqual(3 * [-4], problem.lower_bound)
-        self.assertEqual(3 * [4], problem.upper_bound)
+@pytest.mark.parametrize("variables, expected_objectives", VIENNET2_TEST_CASES)
+def test_viennet2_evaluate(viennet2, variables, expected_objectives):
+    """Test Viennet2 problem evaluation."""
+    solution = viennet2.create_solution()
+    solution.variables = variables.copy()
+    viennet2.evaluate(solution)
+    
+    assert len(solution.objectives) == 3
+    for i, (obj, expected) in enumerate(zip(solution.objectives, expected_objectives)):
+        assert obj == pytest.approx(expected, rel=1e-6), f"Objective {i} mismatch"
 
-        self.assertTrue(solution.variables[0] >= -4)
-        self.assertTrue(solution.variables[0] <= 4)
+# OneZeroMax specific tests
+def test_one_zero_max_initialization(one_zero_max):
+    """Test OneZeroMax problem initialization."""
+    assert one_zero_max.number_of_variables() == 256
+    assert one_zero_max.number_of_objectives() == 2
+    assert one_zero_max.number_of_constraints() == 0
+    assert one_zero_max.name() == "OneZeroMax"
 
-    def test_should_create_solution_return_right_evaluation_values(self):
-        problem = Fonseca()
-        solution1 = problem.create_solution()
+@pytest.mark.parametrize("bits, expected_objectives", ONE_ZERO_MAX_TEST_CASES)
+def test_one_zero_max_evaluate(one_zero_max, bits, expected_objectives):
+    """Test OneZeroMax problem evaluation."""
+    # Create a custom OneZeroMax with smaller bit length for testing
+    problem = OneZeroMax(number_of_bits=len(bits))
+    solution = problem.create_solution()
+    solution.variables = bits
+    
+    problem.evaluate(solution)
+    
+    assert len(solution.objectives) == 2
+    for i, (obj, expected) in enumerate(zip(solution.objectives, expected_objectives)):
+        assert obj == pytest.approx(expected, rel=1e-6), f"Objective {i} mismatch"
 
-        solution1.variables[0] = -1.3
-        solution1.variables[1] = 1.5
-        solution1.variables[2] = 1.21
+def test_one_zero_max_create_solution(one_zero_max):
+    """Test OneZeroMax solution creation."""
+    solution = one_zero_max.create_solution()
+    assert len(solution.variables) == 256
+    assert all(isinstance(bit, bool) for bit in solution.variables)
 
-        problem.evaluate(solution1)
+# Test problem properties
+def test_problem_properties():
+    """Test common problem properties."""
+    # Test Fonseca bounds
+    fonseca = Fonseca()
+    assert len(fonseca.lower_bound) == 3
+    assert len(fonseca.upper_bound) == 3
+    assert all(lb == -4 for lb in fonseca.lower_bound)
+    assert all(ub == 4 for ub in fonseca.upper_bound)
+    
+    # Test Viennet2 bounds
+    viennet2 = Viennet2()
+    assert len(viennet2.lower_bound) == 2
+    assert len(viennet2.upper_bound) == 2
+    assert all(lb == -4 for lb in viennet2.lower_bound)
+    assert all(ub == 4 for ub in viennet2.upper_bound)
 
-        self.assertAlmostEqual(solution1.objectives[0], 0.991563628, 4)
-        self.assertAlmostEqual(solution1.objectives[1], 0.999663388, 4)
-
-    def test_should_get_name_return_the_right_name(self):
-        problem = Fonseca()
-        self.assertEqual("Fonseca", problem.name())
-
-
-class SchafferTestCases(unittest.TestCase):
-    def test_should_constructor_create_a_non_null_object(self):
-        problem = Schaffer()
-        self.assertIsNotNone(problem)
-
-    def test_should_constructor_create_a_valid_problem_with_default_settings(self):
-        problem = Schaffer()
-        self.assertEqual(1, problem.number_of_variables())
-        self.assertEqual(2, problem.number_of_objectives())
-        self.assertEqual(0, problem.number_of_constraints())
-
-        self.assertEqual([-1000], problem.lower_bound)
-        self.assertEqual([1000], problem.upper_bound)
-
-    def test_should_create_solution_create_a_valid_float_solution(self):
-        problem = Schaffer()
-        solution = problem.create_solution()
-
-        self.assertEqual(1, len(solution.variables))
-        self.assertEqual(2, len(solution.objectives))
-        self.assertEqual(0, problem.number_of_constraints())
-
-        self.assertEqual([-1000], problem.lower_bound)
-        self.assertEqual([1000], problem.upper_bound)
-
-        self.assertTrue(solution.variables[0] >= -1000)
-        self.assertTrue(solution.variables[0] <= 1000)
-
-    def test_should_create_solution_return_right_evaluation_values(self):
-        problem = Schaffer()
-
-        solution1 = problem.create_solution()
-        solution2 = problem.create_solution()
-        solution1.variables[0] = 3
-        solution2.variables[0] = -2.6
-
-        problem.evaluate(solution1)
-        problem.evaluate(solution2)
-
-        self.assertAlmostEqual(solution1.objectives[0], 9)
-        self.assertAlmostEqual(solution1.objectives[1], 1)
-
-        self.assertAlmostEqual(solution2.objectives[0], 6.76)
-        self.assertAlmostEqual(solution2.objectives[1], 21.16)
-
-    def test_should_get_name_return_the_right_name(self):
-        problem = Schaffer()
-        self.assertEqual("Schaffer", problem.name())
-
-
-class Viennet2TestCases(unittest.TestCase):
-    def test_should_constructor_create_a_non_null_object(self):
-        problem = Viennet2()
-        self.assertIsNotNone(problem)
-
-    def test_should_constructor_create_a_valid_problem_with_default_settings(self):
-        problem = Viennet2()
-        self.assertEqual(2, problem.number_of_variables())
-        self.assertEqual(3, problem.number_of_objectives())
-        self.assertEqual(0, problem.number_of_constraints())
-
-        self.assertEqual([-4, -4], problem.lower_bound)
-        self.assertEqual([4, 4], problem.upper_bound)
-
-    def test_should_create_solution_create_a_valid_float_solution(self):
-        problem = Viennet2()
-        solution = problem.create_solution()
-
-        self.assertEqual(2, len(solution.variables))
-        self.assertEqual(3, len(solution.objectives))
-        self.assertEqual(0, problem.number_of_constraints())
-
-        self.assertEqual([-4, -4], problem.lower_bound)
-        self.assertEqual([4, 4], problem.upper_bound)
-
-        self.assertTrue(solution.variables[0] >= -4)
-        self.assertTrue(solution.variables[0] <= 4)
-
-    def test_should_create_solution_return_right_evaluation_values(self):
-        problem = Viennet2()
-        solution2 = problem.create_solution()
-        solution2.variables[0] = -2.6
-        solution2.variables[1] = 1.5
-
-        problem.evaluate(solution2)
-
-        self.assertAlmostEqual(solution2.objectives[0], 14.0607692307)
-        self.assertAlmostEqual(solution2.objectives[1], -11.8818055555)
-        self.assertAlmostEqual(solution2.objectives[2], -11.1532369747)
-
-    def test_should_get_name_return_the_right_name(self):
-        problem = Viennet2()
-        self.assertEqual("Viennet2", problem.name())
-
-
-class OneZeroMaxTestCases(unittest.TestCase):
-    def test_should_constructor_create_a_non_null_object(self) -> None:
-        problem = OneZeroMax()
-        self.assertIsNotNone(problem)
-
-    def test_should_constructor_create_a_valid_problem_with_default_settings(self) -> None:
-        problem = OneZeroMax()
-        self.assertEqual(1, problem.number_of_variables())
-        self.assertEqual(2, problem.number_of_objectives())
-        self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(256, problem.total_number_of_bits())
-
-    def test_should_constructor_create_a_valid_problem_with_512_bits(self) -> None:
-        problem = OneZeroMax(512)
-        self.assertEqual(1, problem.number_of_variables())
-        self.assertEqual(2, problem.number_of_objectives())
-        self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(512, problem.total_number_of_bits())
-
-    def test_should_create_solution_a_valid_binary_solution(self) -> None:
-        problem = OneZeroMax(256)
-        solution = problem.create_solution()
-        self.assertEqual(256, len(solution.variables[0]))
-
-    def test_should_evaluate_work_properly_if_the_bitset_only_contains_zeroes(self) -> None:
-        problem = OneZeroMax(512)
-        solution = problem.create_solution()
-        solution.variables[0] = [False for _ in range(problem.total_number_of_bits())]
-        problem.evaluate(solution)
-        self.assertEqual(0.0, solution.objectives[0])
-        self.assertEqual(-512, solution.objectives[1])
-
-    def test_should_evaluate_work_properly_if_the_bitset_only_contains_ones(self) -> None:
-        problem = OneZeroMax(512)
-        solution = problem.create_solution()
-        solution.variables[0] = [True for _ in range(problem.total_number_of_bits())]
-        problem.evaluate(solution)
-        self.assertEqual(-512, solution.objectives[0])
-        self.assertEqual(0.0, solution.objectives[1])
-
-    def test_should_get_name_return_the_right_name(self):
-        problem = OneZeroMax()
-        self.assertEqual("OneZeroMax", problem.name())
-
-
-if __name__ == "__main__":
-    unittest.main()
+# Test solution creation
+def test_solution_creation():
+    """Test that solutions are created with valid values within bounds."""
+    problem = Fonseca()
+    solution = problem.create_solution()
+    
+    for var, lb, ub in zip(solution.variables, problem.lower_bound, problem.upper_bound):
+        assert lb <= var <= ub

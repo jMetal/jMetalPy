@@ -159,20 +159,36 @@ class ZDT5(BinaryProblem):
     """Problem ZDT5.
 
     .. note:: Bi-objective binary unconstrained problem. The default number of variables is 11.
+    
+    In this implementation, each variable is represented by a single boolean value in the solution,
+    and the number_of_bits_per_variable attribute is used to track how many bits each variable
+    conceptually represents for evaluation purposes.
     """
 
     def __init__(self, number_of_variables: int = 11):
-        """:param number_of_bits: Number of bits of each variable of the problem."""
+        """
+        :param number_of_variables: Number of variables in the problem.
+        """
         super(ZDT5, self).__init__()
 
-        self.number_of_bits_per_variable = [5 for _ in range(0, number_of_variables)]
+        # Track how many bits each variable conceptually represents
+        self.number_of_bits_per_variable = [5 for _ in range(number_of_variables)]
         self.number_of_bits_per_variable[0] = 30
-
+        
+        # Total number of bits is the sum of all bits per variable
+        self.total_number_of_bits = sum(self.number_of_bits_per_variable)
+        
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["x", "y"]
+        
+        # For compatibility with the original implementation
+        self.number_of_bits = self.total_number_of_bits
 
     def number_of_variables(self) -> int:
-        return len(self.number_of_bits_per_variable)
+        return self.total_number_of_bits
+
+    def total_number_of_bits(self) -> int:
+        return self.total_number_of_bits
 
     def number_of_objectives(self) -> int:
         return 2
@@ -181,35 +197,62 @@ class ZDT5(BinaryProblem):
         return 0
 
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
-        solution.objectives[0] = 1.0 + solution.cardinality(0)
+        """
+        Evaluate the solution by counting the number of true bits in each variable's range.
+        """
+        # Calculate first objective: 1 + number of true bits in first variable (30 bits)
+        first_var_bits = solution.variables[:30]
+        solution.objectives[0] = 1.0 + sum(first_var_bits)
 
+        # Calculate g function for second objective
         g = self.eval_g(solution)
         h = 1.0 / solution.objectives[0]
-
         solution.objectives[1] = h * g
 
         return solution
 
-    def eval_g(self, solution: BinarySolution):
+    def eval_g(self, solution: BinarySolution) -> float:
+        """
+        Calculate the g function for ZDT5.
+        """
         result = 0.0
-        for i in range(1, len(solution.variables)):
-            result = result + self.eval_v(solution.cardinality(i))
-
+        bit_index = 30  # Start after the first variable (30 bits)
+        
+        # Process remaining variables (each 5 bits)
+        for bits in self.number_of_bits_per_variable[1:]:
+            # Count true bits in this variable's range
+            var_bits = solution.variables[bit_index:bit_index + bits]
+            ones_count = sum(var_bits)
+            result += self.eval_v(ones_count)
+            bit_index += bits
+            
         return result
 
-    def eval_v(self, value):
+    def eval_v(self, value: int) -> float:
+        """
+        Helper function for ZDT5 evaluation.
+        """
         if value < 5.0:
             return 2.0 + value
-        else:
-            return 1.0
+        return 1.0
 
     def create_solution(self) -> BinarySolution:
-        new_solution = BinarySolution(number_of_variables=self.number_of_variables(), number_of_objectives=2)
-        for i in range(self.number_of_variables()):
-            new_solution.variables[i] = [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits_per_variable[i])]
-        return new_solution
+        """
+        Create a new random solution.
+        """
+        solution = BinarySolution(
+            number_of_variables=self.total_number_of_bits,
+            number_of_objectives=self.number_of_objectives(),
+            number_of_constraints=self.number_of_constraints()
+        )
+        
+        # Initialize with random bits
+        for i in range(self.total_number_of_bits):
+            solution.variables[i] = random.random() < 0.5
+            
+        return solution
 
-    def name(self):
+    def name(self) -> str:
         return "ZDT5"
 
 

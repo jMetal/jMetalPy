@@ -211,16 +211,34 @@ class ZDT5TestCases(unittest.TestCase):
 
     def test_should_constructor_create_a_valid_problem_with_default_settings(self) -> None:
         problem = ZDT5()
-        self.assertEqual(11, problem.number_of_variables())
+        # The problem should have 80 bits total (30 + 5*10)
+        self.assertEqual(80, problem.number_of_variables())
         self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(30 + 5 * (problem.number_of_variables()-1), problem.total_number_of_bits())
+        self.assertEqual(80, problem.total_number_of_bits)  # Access as property, not method
+        self.assertEqual(11, len(problem.number_of_bits_per_variable))  # 11 variables
+        self.assertEqual(30, problem.number_of_bits_per_variable[0])    # First var has 30 bits
+        self.assertTrue(all(bits == 5 for bits in problem.number_of_bits_per_variable[1:]))  # Rest have 5 bits
 
     def test_should_create_solution_a_valid_binary_solution(self) -> None:
         problem = ZDT5()
         solution = problem.create_solution()
-        self.assertEqual(30, len(solution.variables[0]))
-        self.assertEqual(5, len(solution.variables[1]))
+        
+        # Check total number of bits
+        self.assertEqual(80, len(solution.variables))
+        
+        # Check first variable (30 bits)
+        first_var_bits = solution.variables[:30]
+        self.assertEqual(30, len(first_var_bits))
+        self.assertTrue(all(isinstance(bit, bool) for bit in first_var_bits))
+        
+        # Check remaining variables (5 bits each)
+        bit_index = 30
+        for bits in problem.number_of_bits_per_variable[1:]:
+            var_bits = solution.variables[bit_index:bit_index + bits]
+            self.assertEqual(5, len(var_bits))
+            self.assertTrue(all(isinstance(bit, bool) for bit in var_bits))
+            bit_index += bits
 
     def test_should_get_name_return_the_right_name(self):
         problem = ZDT5()

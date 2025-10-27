@@ -44,9 +44,13 @@ class TestDistanceBasedSelectionEquivalence(unittest.TestCase):
         ]
         
         for i, objectives in enumerate(objectives_data):
-            solution = FloatSolution([], [], 3)
+            # Initialize with 5 variables and matching bounds
+            solution = FloatSolution(
+                lower_bound=[0.0] * 5,
+                upper_bound=[1.0] * 5,
+                number_of_objectives=3
+            )
             solution.objectives = objectives
-            solution.variables = [0.0] * 5  # Dummy variables
             solutions.append(solution)
             
         return solutions
@@ -57,7 +61,7 @@ class TestDistanceBasedSelectionEquivalence(unittest.TestCase):
         
         objectives_data = [
             [0.1, 0.9],
-            [0.2, 0.8], 
+            [0.2, 0.8],
             [0.3, 0.7],
             [0.4, 0.6],
             [0.5, 0.5],
@@ -68,9 +72,13 @@ class TestDistanceBasedSelectionEquivalence(unittest.TestCase):
         ]
         
         for objectives in objectives_data:
-            solution = FloatSolution([], [], 2)
+            # Initialize with 3 variables and matching bounds
+            solution = FloatSolution(
+                lower_bound=[0.0] * 3,
+                upper_bound=[1.0] * 3,
+                number_of_objectives=2
+            )
             solution.objectives = objectives
-            solution.variables = [0.0] * 5
             solutions.append(solution)
             
         return solutions

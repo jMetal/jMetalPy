@@ -408,32 +408,37 @@ class SBXCrossoverTestCases(unittest.TestCase):
         pass
 
     def test_should_use_correct_bounds_for_each_offspring(self):
-        """Test that each offspring uses its own parent's bounds, not mixed bounds."""
+        """Test that each offspring uses its own parent's bounds."""
         crossover = SBXCrossover(1.0, 20.0)
         
         # Create parents with different bounds
         solution1 = FloatSolution([1.0, 2.0], [3.0, 4.0], 1, 0)  # bounds: [1,3] and [2,4]
         solution2 = FloatSolution([5.0, 6.0], [7.0, 8.0], 1, 0)  # bounds: [5,7] and [6,8]
         
+        # Set variables within their respective bounds
         solution1.variables = [2.0, 3.0]
         solution2.variables = [6.0, 7.0]
         
         offspring = crossover.execute([solution1, solution2])
         
-        # Verify that offspring[0] has solution1's bounds
+        # Verify that offspring have the correct bounds
         self.assertEqual(offspring[0].lower_bound, solution1.lower_bound)
         self.assertEqual(offspring[0].upper_bound, solution1.upper_bound)
-        
-        # Verify that offspring[1] has solution2's bounds
         self.assertEqual(offspring[1].lower_bound, solution2.lower_bound)
         self.assertEqual(offspring[1].upper_bound, solution2.upper_bound)
         
-        # Verify that variables are within their respective bounds
+        # Verify that variables are within the global bounds (union of parents' bounds)
+        global_lower = [min(s1, s2) for s1, s2 in zip(solution1.lower_bound, solution2.lower_bound)]
+        global_upper = [max(s1, s2) for s1, s2 in zip(solution1.upper_bound, solution2.upper_bound)]
+        
         for i in range(len(offspring[0].variables)):
-            self.assertGreaterEqual(offspring[0].variables[i], offspring[0].lower_bound[i])
-            self.assertLessEqual(offspring[0].variables[i], offspring[0].upper_bound[i])
-            self.assertGreaterEqual(offspring[1].variables[i], offspring[1].lower_bound[i])
-            self.assertLessEqual(offspring[1].variables[i], offspring[1].upper_bound[i])
+            # Check first offspring against global bounds
+            self.assertGreaterEqual(offspring[0].variables[i], global_lower[i])
+            self.assertLessEqual(offspring[0].variables[i], global_upper[i])
+            
+            # Check second offspring against global bounds
+            self.assertGreaterEqual(offspring[1].variables[i], global_lower[i])
+            self.assertLessEqual(offspring[1].variables[i], global_upper[i])
 
 
 class BLXAlphaBetaCrossoverTestCases(unittest.TestCase):

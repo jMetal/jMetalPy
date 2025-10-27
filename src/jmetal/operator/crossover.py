@@ -187,36 +187,54 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
                         else:
                             y1, y2 = value_x2, value_x1
 
-                        lower_bound, upper_bound = parents[0].lower_bound[i], parents[0].upper_bound[i]
+                        # Calculate beta and handle potential complex numbers
+                        try:
+                            # First offspring (based on first parent's bounds)
+                            lb1, ub1 = parents[0].lower_bound[i], parents[0].upper_bound[i]
+                            beta1 = 1.0 + (2.0 * (y1 - lb1) / (y2 - y1))
+                            alpha1 = 2.0 - pow(beta1, -(self.distribution_index + 1.0))
+                            
+                            rand_val = random.random()
+                            if rand_val <= (1.0 / alpha1):
+                                betaq1 = pow(rand_val * alpha1, (1.0 / (self.distribution_index + 1.0)))
+                            else:
+                                betaq1 = pow(1.0 / (2.0 - rand_val * alpha1), 1.0 / (self.distribution_index + 1.0))
+                            
+                            c1 = 0.5 * (y1 + y2 - betaq1 * (y2 - y1))
+                            
+                            # Ensure c1 is a real number and within bounds
+                            if isinstance(c1, complex):
+                                c1 = y1 if c1.real < lb1 else (y2 if c1.real > ub1 else c1.real)
+                            
+                            # Second offspring (based on second parent's bounds)
+                            lb2, ub2 = parents[1].lower_bound[i], parents[1].upper_bound[i]
+                            beta2 = 1.0 + (2.0 * (ub2 - y2) / (y2 - y1))
+                            alpha2 = 2.0 - pow(beta2, -(self.distribution_index + 1.0))
+                            
+                            if rand_val <= (1.0 / alpha2):
+                                betaq2 = pow((rand_val * alpha2), (1.0 / (self.distribution_index + 1.0)))
+                            else:
+                                betaq2 = pow(1.0 / (2.0 - rand_val * alpha2), 1.0 / (self.distribution_index + 1.0))
+                            
+                            c2 = 0.5 * (y1 + y2 + betaq2 * (y2 - y1))
+                            
+                            # Ensure c2 is a real number and within bounds
+                            if isinstance(c2, complex):
+                                c2 = y1 if c2.real < lb2 else (y2 if c2.real > ub2 else c2.real)
+                                
+                        except (ValueError, ZeroDivisionError):
+                            # Fallback to parent values if any numerical issues occur
+                            c1, c2 = y1, y2
 
-                        beta = 1.0 + (2.0 * (y1 - lower_bound) / (y2 - y1))
-                        alpha = 2.0 - pow(beta, -(self.distribution_index + 1.0))
-
-                        rand = random.random()
-                        if rand <= (1.0 / alpha):
-                            betaq = pow(rand * alpha, (1.0 / (self.distribution_index + 1.0)))
-                        else:
-                            betaq = pow(1.0 / (2.0 - rand * alpha), 1.0 / (self.distribution_index + 1.0))
-
-                        c1 = 0.5 * (y1 + y2 - betaq * (y2 - y1))
-                        beta = 1.0 + (2.0 * (upper_bound - y2) / (y2 - y1))
-                        alpha = 2.0 - pow(beta, -(self.distribution_index + 1.0))
-
-                        if rand <= (1.0 / alpha):
-                            betaq = pow((rand * alpha), (1.0 / (self.distribution_index + 1.0)))
-                        else:
-                            betaq = pow(1.0 / (2.0 - rand * alpha), 1.0 / (self.distribution_index + 1.0))
-
-                        c2 = 0.5 * (y1 + y2 + betaq * (y2 - y1))
-
-                        if c1 < lower_bound:
-                            c1 = lower_bound
-                        if c2 < lower_bound:
-                            c2 = lower_bound
-                        if c1 > upper_bound:
-                            c1 = upper_bound
-                        if c2 > upper_bound:
-                            c2 = upper_bound
+                        # Apply bounds checking using the correct bounds for each offspring
+                        if c1 < lb1:
+                            c1 = lb1
+                        if c2 < lb2:
+                            c2 = lb2
+                        if c1 > ub1:
+                            c1 = ub1
+                        if c2 > ub2:
+                            c2 = ub2
 
                         if random.random() <= 0.5:
                             offspring[0]._variables[i] = c2
@@ -268,36 +286,54 @@ class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
                         else:
                             y1, y2 = value_x2, value_x1
 
-                        lower_bound, upper_bound = parents[0].lower_bound[i], parents[0].upper_bound[i]
+                        # Calculate beta and handle potential complex numbers
+                        try:
+                            # First offspring (based on first parent's bounds)
+                            lb1, ub1 = parents[0].lower_bound[i], parents[0].upper_bound[i]
+                            beta1 = 1.0 + (2.0 * (y1 - lb1) / (y2 - y1))
+                            alpha1 = 2.0 - pow(beta1, -(self.distribution_index + 1.0))
+                            
+                            rand_val = random.random()
+                            if rand_val <= (1.0 / alpha1):
+                                betaq1 = pow(rand_val * alpha1, (1.0 / (self.distribution_index + 1.0)))
+                            else:
+                                betaq1 = pow(1.0 / (2.0 - rand_val * alpha1), 1.0 / (self.distribution_index + 1.0))
+                            
+                            c1 = 0.5 * (y1 + y2 - betaq1 * (y2 - y1))
+                            
+                            # Ensure c1 is a real number and within bounds
+                            if isinstance(c1, complex):
+                                c1 = y1 if c1.real < lb1 else (y2 if c1.real > ub1 else c1.real)
+                            
+                            # Second offspring (based on second parent's bounds)
+                            lb2, ub2 = parents[1].lower_bound[i], parents[1].upper_bound[i]
+                            beta2 = 1.0 + (2.0 * (ub2 - y2) / (y2 - y1))
+                            alpha2 = 2.0 - pow(beta2, -(self.distribution_index + 1.0))
+                            
+                            if rand_val <= (1.0 / alpha2):
+                                betaq2 = pow((rand_val * alpha2), (1.0 / (self.distribution_index + 1.0)))
+                            else:
+                                betaq2 = pow(1.0 / (2.0 - rand_val * alpha2), 1.0 / (self.distribution_index + 1.0))
+                            
+                            c2 = 0.5 * (y1 + y2 + betaq2 * (y2 - y1))
+                            
+                            # Ensure c2 is a real number and within bounds
+                            if isinstance(c2, complex):
+                                c2 = y1 if c2.real < lb2 else (y2 if c2.real > ub2 else c2.real)
+                                
+                        except (ValueError, ZeroDivisionError):
+                            # Fallback to parent values if any numerical issues occur
+                            c1, c2 = y1, y2
 
-                        beta = 1.0 + (2.0 * (y1 - lower_bound) / (y2 - y1))
-                        alpha = 2.0 - pow(beta, -(self.distribution_index + 1.0))
-
-                        rand = random.random()
-                        if rand <= (1.0 / alpha):
-                            betaq = pow(rand * alpha, (1.0 / (self.distribution_index + 1.0)))
-                        else:
-                            betaq = pow(1.0 / (2.0 - rand * alpha), 1.0 / (self.distribution_index + 1.0))
-
-                        c1 = 0.5 * (y1 + y2 - betaq * (y2 - y1))
-                        beta = 1.0 + (2.0 * (upper_bound - y2) / (y2 - y1))
-                        alpha = 2.0 - pow(beta, -(self.distribution_index + 1.0))
-
-                        if rand <= (1.0 / alpha):
-                            betaq = pow((rand * alpha), (1.0 / (self.distribution_index + 1.0)))
-                        else:
-                            betaq = pow(1.0 / (2.0 - rand * alpha), 1.0 / (self.distribution_index + 1.0))
-
-                        c2 = 0.5 * (y1 + y2 + betaq * (y2 - y1))
-
-                        if c1 < lower_bound:
-                            c1 = lower_bound
-                        if c2 < lower_bound:
-                            c2 = lower_bound
-                        if c1 > upper_bound:
-                            c1 = upper_bound
-                        if c2 > upper_bound:
-                            c2 = upper_bound
+                        # Apply bounds checking using the correct bounds for each offspring
+                        if c1 < lb1:
+                            c1 = lb1
+                        if c2 < lb2:
+                            c2 = lb2
+                        if c1 > ub1:
+                            c1 = ub1
+                        if c2 > ub2:
+                            c2 = ub2
 
                         if random.random() <= 0.5:
                             offspring[0]._variables[i] = int(c2)

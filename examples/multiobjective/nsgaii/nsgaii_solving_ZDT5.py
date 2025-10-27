@@ -18,7 +18,7 @@ if __name__ == "__main__":
         problem=problem,
         population_size=100,
         offspring_population_size=100,
-        mutation=BitFlipMutation(probability=1.0 / problem.total_number_of_bits()),
+        mutation=BitFlipMutation(probability=1.0 / problem.total_number_of_bits),
         crossover=SPXCrossover(probability=1.0),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
     )
