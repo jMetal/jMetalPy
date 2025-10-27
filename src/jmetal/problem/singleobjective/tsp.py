@@ -93,7 +93,8 @@ class TSP(PermutationProblem):
 
     def create_solution(self) -> PermutationSolution:
         new_solution = PermutationSolution(
-            number_of_variables=self.number_of_variables(), number_of_objectives=self.number_of_objectives()
+            number_of_variables=self.number_of_variables(), number_of_objectives=self.number_of_objectives(),
+            number_of_constraints=self.number_of_constraints()
         )
         new_solution.variables = random.sample(range(self.number_of_variables()), k=self.number_of_variables())
 

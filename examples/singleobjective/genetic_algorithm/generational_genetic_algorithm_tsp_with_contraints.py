@@ -45,7 +45,7 @@ if __name__ == "__main__":
         mutation=PermutationSwapMutation(1.0 / problem.number_of_variables()),
         crossover=PMXCrossover(0.9),
         selection=BinaryTournamentSelection(solution_comparator),
-        termination_criterion=StoppingByEvaluations(max_evaluations=10000),
+        termination_criterion=StoppingByEvaluations(max_evaluations=50000),
         solution_comparator=solution_comparator
     )
 
