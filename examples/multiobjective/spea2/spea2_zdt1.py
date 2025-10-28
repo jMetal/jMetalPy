@@ -1,13 +1,13 @@
-from jmetal.algorithm.multiobjective.spea2 import SPEA2
+from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.mutation import PolynomialMutation
 from jmetal.problem import ZDT1
-from jmetal.algorithm.multiobjective.spea2 import SPEA2
 from jmetal.util.solution import (
     print_function_values_to_file,
     print_variables_to_file,
 )
 from jmetal.util.termination_criterion import StoppingByEvaluations
+
 
 def main():
     problem = ZDT1()

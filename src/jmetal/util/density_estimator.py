@@ -3,8 +3,8 @@ from functools import cmp_to_key
 from typing import List, TypeVar
 
 import numpy
-from moocore import hv_contributions
 import numpy as np
+from moocore import hv_contributions
 from scipy.spatial.distance import cdist
 
 from jmetal.logger import get_logger

@@ -2,8 +2,7 @@ from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.lab.visualization import InteractivePlot, Plot
 from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.mutation import PolynomialMutation
-from jmetal.problem import ZDT1, ZDT4
-from jmetal.problem.multiobjective.re import RE21, RE22
+from jmetal.problem import ZDT4
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution import (
     print_function_values_to_file,

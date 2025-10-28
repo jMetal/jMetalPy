@@ -6,6 +6,7 @@ This script shows how to use the new DistanceBasedArchive class with both
 """
 
 import random
+
 from jmetal.core.solution import FloatSolution
 from jmetal.util.archive import DistanceBasedArchive
 from jmetal.util.distance import EuclideanDistance

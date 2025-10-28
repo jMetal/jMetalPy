@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import Iterable
 
 import moocore
 import numpy as np

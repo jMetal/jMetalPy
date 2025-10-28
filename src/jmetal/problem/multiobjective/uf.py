@@ -394,8 +394,8 @@ class UF8(FloatProblem):
     def __init__(self, number_of_variables: int = 30):
         """:param number_of_variables: number of decision variables of the problem."""
         super(UF8, self).__init__()
-        self.lower_bound = [0.0, 0.0, 0.0] + [-2.0] * (number_of_variables - 3)
-        self.upper_bound = [1.0, 1.0, 1.0] + [2.0] * (number_of_variables - 3)
+        self.lower_bound = [0.0, 0.0] + [-2.0] * (number_of_variables - 2)
+        self.upper_bound = [1.0, 1.0] + [2.0] * (number_of_variables - 2)
         
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f1", "f2", "f3"]
@@ -454,8 +454,8 @@ class UF9(FloatProblem):
         :param epsilon: controls the shape of the Pareto front (default: 0.1)
         """
         super(UF9, self).__init__()
-        self.lower_bound = [0.0, 0.0, 0.0] + [-2.0] * (number_of_variables - 3)
-        self.upper_bound = [1.0, 1.0, 1.0] + [2.0] * (number_of_variables - 3)
+        self.lower_bound = [0.0, 0.0] + [-2.0] * (number_of_variables - 2)
+        self.upper_bound = [1.0, 1.0] + [2.0] * (number_of_variables - 2)
         self.epsilon = epsilon
         
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE, self.MINIMIZE]
@@ -516,9 +516,8 @@ class UF10(FloatProblem):
     def __init__(self, number_of_variables: int = 30):
         """:param number_of_variables: number of decision variables of the problem."""
         super(UF10, self).__init__()
-        self.lower_bound = [0.0, 0.0, 0.0] + [-2.0] * (number_of_variables - 3)
-        self.upper_bound = [1.0, 1.0, 1.0] + [2.0] * (number_of_variables - 3)
-        
+        self.lower_bound = [0.0, 0.0] + [-2.0] * (number_of_variables - 2)
+        self.upper_bound = [1.0, 1.0] + [2.0] * (number_of_variables - 2)
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f1", "f2", "f3"]
     

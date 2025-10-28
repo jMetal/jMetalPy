@@ -1,5 +1,6 @@
 import random
 from math import exp, pow, sin, sqrt
+
 import numpy as np
 
 from jmetal.core.problem import BinaryProblem, FloatProblem, Problem

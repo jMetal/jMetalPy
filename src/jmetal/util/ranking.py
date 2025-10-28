@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, TypeVar, Dict, Any
-import numpy as np
+from typing import List, TypeVar, Dict
 
 from jmetal.util.comparator import (
     Comparator,

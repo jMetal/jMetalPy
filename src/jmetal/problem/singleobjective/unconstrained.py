@@ -1,5 +1,5 @@
 import math
-import random
+
 import numpy as np
 
 from jmetal.core.problem import BinaryProblem, FloatProblem

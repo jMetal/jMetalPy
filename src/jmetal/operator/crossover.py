@@ -1,8 +1,9 @@
 import copy
 import math
 import random
+from typing import List, Callable, Optional
+
 import numpy as np
-from typing import List, Callable, Optional, Union
 
 from jmetal.core.operator import Crossover
 from jmetal.core.solution import (

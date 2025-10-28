@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.spea2 import SPEA2
 from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.mutation import PolynomialMutation
-from jmetal.problem import DTLZ2, DTLZ1, DTLZ3
+from jmetal.problem import DTLZ2
 from jmetal.util.solution import (
     print_function_values_to_file,
     print_variables_to_file,

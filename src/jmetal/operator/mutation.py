@@ -1,7 +1,8 @@
-import random
-import numpy as np
 import math
+import random
 from typing import Callable, Optional, List
+
+import numpy as np
 
 from jmetal.core.operator import Mutation
 from jmetal.core.solution import (

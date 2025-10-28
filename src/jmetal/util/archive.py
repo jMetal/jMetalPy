@@ -1,6 +1,5 @@
-from typing import TypeVar, Generic, List, Optional
 from abc import ABC, abstractmethod
-from scipy.spatial import cKDTree
+from typing import TypeVar, Generic
 
 S = TypeVar('S')
 

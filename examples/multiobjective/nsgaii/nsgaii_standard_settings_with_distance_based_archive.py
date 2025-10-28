@@ -1,13 +1,11 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.mutation import PolynomialMutation
-from jmetal.problem import ZDT4
-from jmetal.problem.multiobjective.dtlz import DTLZ1, DTLZ2, DTLZ3, DTLZ7
+from jmetal.problem.multiobjective.dtlz import DTLZ2
 from jmetal.util.archive import DistanceBasedArchive
 from jmetal.util.distance import DistanceMetric
 from jmetal.util.evaluator import SequentialEvaluatorWithArchive
 from jmetal.util.solution import (
-    get_non_dominated_solutions,
     print_function_values_to_file,
     print_variables_to_file, read_solutions,
 )
