@@ -46,7 +46,8 @@
           <a href="crossover.html" title="Crossover"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../operators.html" accesskey="U">Operators</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../api-reference.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../operators.html" accesskey="U">Operators</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Mutation</a></li> 
       </ul>
     </div>
@@ -75,16 +76,17 @@
     
     
       <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../../operators.html">Operators</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="crossover.html">Crossover</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Mutation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="selection.html">Selection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user-guide.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../api-reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../api-reference.html#algorithms">Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api-reference.html#problem-definitions">Problem Definitions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../api-reference.html#operators">Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api-reference.html#core-components">Core Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api-reference.html#utilities">Utilities</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced-topics.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
 </ul>
@@ -113,6 +115,11 @@
 <li><a class="reference internal" href="#jmetal.operator.mutation.IntegerPolynomialMutation.get_name"><code class="docutils literal notranslate"><span class="pre">IntegerPolynomialMutation.get_name()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#jmetal.operator.mutation.LevyFlightMutation"><code class="docutils literal notranslate"><span class="pre">LevyFlightMutation</span></code></a><ul>
+<li><a class="reference internal" href="#jmetal.operator.mutation.LevyFlightMutation.execute"><code class="docutils literal notranslate"><span class="pre">LevyFlightMutation.execute()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.operator.mutation.LevyFlightMutation.get_name"><code class="docutils literal notranslate"><span class="pre">LevyFlightMutation.get_name()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#jmetal.operator.mutation.NonUniformMutation"><code class="docutils literal notranslate"><span class="pre">NonUniformMutation</span></code></a><ul>
 <li><a class="reference internal" href="#jmetal.operator.mutation.NonUniformMutation.execute"><code class="docutils literal notranslate"><span class="pre">NonUniformMutation.execute()</span></code></a></li>
 <li><a class="reference internal" href="#jmetal.operator.mutation.NonUniformMutation.get_name"><code class="docutils literal notranslate"><span class="pre">NonUniformMutation.get_name()</span></code></a></li>
@@ -132,6 +139,11 @@
 <li><a class="reference internal" href="#jmetal.operator.mutation.PolynomialMutation"><code class="docutils literal notranslate"><span class="pre">PolynomialMutation</span></code></a><ul>
 <li><a class="reference internal" href="#jmetal.operator.mutation.PolynomialMutation.execute"><code class="docutils literal notranslate"><span class="pre">PolynomialMutation.execute()</span></code></a></li>
 <li><a class="reference internal" href="#jmetal.operator.mutation.PolynomialMutation.get_name"><code class="docutils literal notranslate"><span class="pre">PolynomialMutation.get_name()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jmetal.operator.mutation.PowerLawMutation"><code class="docutils literal notranslate"><span class="pre">PowerLawMutation</span></code></a><ul>
+<li><a class="reference internal" href="#jmetal.operator.mutation.PowerLawMutation.execute"><code class="docutils literal notranslate"><span class="pre">PowerLawMutation.execute()</span></code></a></li>
+<li><a class="reference internal" href="#jmetal.operator.mutation.PowerLawMutation.get_name"><code class="docutils literal notranslate"><span class="pre">PowerLawMutation.get_name()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#jmetal.operator.mutation.ScrambleMutation"><code class="docutils literal notranslate"><span class="pre">ScrambleMutation</span></code></a><ul>
@@ -178,6 +190,8 @@
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="../../index.html">Docs</a></li>
               
+              <li class="breadcrumb-item"><a href="../../api-reference.html">API Reference</a></li>
+              
               <li class="breadcrumb-item"><a href="../../operators.html">Operators</a></li>
               
               <li class="breadcrumb-item">Mutation</li>
@@ -190,23 +204,50 @@
 <span id="mutation"></span><h1>Mutation<a class="headerlink" href="#module-jmetal.operator.mutation" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.BitFlipMutation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">BitFlipMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#BitFlipMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.BitFlipMutation" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">BitFlipMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#BitFlipMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.BitFlipMutation" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Mutation</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">BinarySolution</span></code>]</p>
+<p>NumPy-optimized bit flip mutation for BinarySolution.</p>
+<p>This implementation uses NumPy’s vectorized operations for better performance
+when working with BinarySolution solutions. It flips each bit with a given
+probability, but does so using efficient array operations.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>probability: The probability of flipping each bit (0.0 to 1.0)</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If probability is not in range [0.0, 1.0]</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.BitFlipMutation.execute">
 <span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BinarySolution</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">BinarySolution</span></span></span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#BitFlipMutation.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.BitFlipMutation.execute" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Execute the bit flip mutation operation.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>solution: The solution to be mutated. Must be a BinarySolution with a ‘bits’ attribute.</p>
+</dd>
+<dt>Returns:</dt><dd><p>The mutated solution (modified in-place)</p>
+</dd>
+<dt>Raises:</dt><dd><p>TypeError: If solution is not a BinarySolution or doesn’t have a ‘bits’ attribute
+ValueError: If the solution has no variables or invalid bit values</p>
+</dd>
+<dt>Note:</dt><dd><p>The input solution is modified in-place and also returned.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.BitFlipMutation.get_name">
-<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#BitFlipMutation.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.BitFlipMutation.get_name" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#BitFlipMutation.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.BitFlipMutation.get_name" title="Link to this definition">¶</a></dt>
+<dd><p>Return the name of the operator.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>str: A string representing the name of the operator</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.CompositeMutation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">CompositeMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">mutation_operator_list:</span> <span class="pre">[&lt;class</span> <span class="pre">'jmetal.core.operator.Mutation'&gt;]</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#CompositeMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.CompositeMutation" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">CompositeMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mutation_operator_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Mutation</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#CompositeMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.CompositeMutation" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Mutation</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Solution</span></code>]</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.CompositeMutation.execute">
@@ -215,14 +256,14 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.CompositeMutation.get_name">
-<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#CompositeMutation.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.CompositeMutation.get_name" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#CompositeMutation.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.CompositeMutation.get_name" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.IntegerPolynomialMutation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">IntegerPolynomialMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#IntegerPolynomialMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.IntegerPolynomialMutation" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">IntegerPolynomialMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#IntegerPolynomialMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.IntegerPolynomialMutation" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Mutation</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">IntegerSolution</span></code>]</p>
 <p>Polynomial mutation adapted to integer-valued decision variables.</p>
 <ul class="simple">
@@ -242,23 +283,117 @@
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="jmetal.operator.mutation.NonUniformMutation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">NonUniformMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">perturbation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#NonUniformMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.NonUniformMutation" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jmetal.operator.mutation.LevyFlightMutation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">LevyFlightMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mutation_probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repair_operator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.14)"><span class="pre">Callable</span></a><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#LevyFlightMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.LevyFlightMutation" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Mutation</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">FloatSolution</span></code>]</p>
+<p>Implementation of a Lévy flight mutation operator for real-valued solutions.</p>
+<p>Lévy flights are characterized by heavy-tailed distributions with infinite variance,
+producing mostly small steps with occasional very large jumps. This behavior is
+beneficial for global optimization as it provides both local search capabilities
+and the ability to escape local optima through large jumps.</p>
+<p>The implementation uses the Mantegna algorithm to generate Lévy-distributed steps:
+1. Generate u ~ Normal(0, σ_u²) where σ_u = [Γ(1+β)sin(πβ/2)/Γ((1+β)/2)β2^((β-1)/2)]^(1/β)
+2. Generate v ~ Normal(0, 1)
+3. Lévy step = u / <a href="#id1"><span class="problematic" id="id2">|</span></a>v|^(1/β)</p>
+<dl>
+<dt>Args:</dt><dd><p>mutation_probability: The probability of mutating each variable (0 ≤ p ≤ 1).
+beta: The Lévy index parameter (1 &lt; β ≤ 2). Controls the tail heaviness:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Values closer to 1.0 produce heavier tails with more frequent large jumps</p></li>
+<li><p>Values around 1.5 provide balanced exploration (default)</p></li>
+<li><p>Values closer to 2.0 approach Gaussian behavior with fewer large jumps</p></li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>step_size: The scaling factor for Lévy steps (must be &gt; 0). Typical values:</dt><dd><ul class="simple">
+<li><p>0.001-0.01: Fine-grained local search</p></li>
+<li><p>0.01-0.05: Balance of local and global search (default: 0.01)</p></li>
+<li><p>0.05-0.1: Emphasize global exploration</p></li>
+</ul>
+</dd>
+<dt>repair_operator: Optional function to repair out-of-bounds values.</dt><dd><p>If None, values are clamped to the variable bounds.</p>
+</dd>
+</dl>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If parameters are outside their valid ranges.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.operator.mutation.LevyFlightMutation.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FloatSolution</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">FloatSolution</span></span></span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#LevyFlightMutation.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.LevyFlightMutation.execute" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.operator.mutation.LevyFlightMutation.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#LevyFlightMutation.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.LevyFlightMutation.get_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="jmetal.operator.mutation.NonUniformMutation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">NonUniformMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">perturbation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#NonUniformMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.NonUniformMutation" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Mutation</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">FloatSolution</span></code>]</p>
+<p>Implementation of a non-uniform mutation operator for real-valued solutions.</p>
+<p>This operator perturbs solutions in a way that the mutation strength decreases
+over time, allowing for more exploration in early generations and more
+exploitation in later generations. The mutation strength is controlled by
+the current iteration number relative to the maximum number of iterations.</p>
+<dl class="simple">
+<dt>The mutation follows the formula:</dt><dd><p>Δ(t, y) = y * (r * (1 - t/T)^b - 1)  if r ≤ 0.5
+Δ(t, y) = y * (1 - r * (1 - t/T)^b)  if r &gt; 0.5</p>
+</dd>
+</dl>
+<p>where t is the current iteration, T is max_iterations, and b is the perturbation.</p>
+<dl>
+<dt>Args:</dt><dd><p>probability: The probability of mutating each variable (0 ≤ p ≤ 1).
+perturbation: Controls the perturbation strength (must be &gt; 0).</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Lower values: More gradual decrease in mutation strength</p></li>
+<li><p>Higher values: More rapid decrease in mutation strength</p></li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>max_iterations: The maximum number of iterations (must be &gt; 0).</dt><dd><p>Used to normalize the current iteration count.</p>
+</dd>
+</dl>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If probability is not in [0,1] or parameters are not positive.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.NonUniformMutation.execute">
 <span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FloatSolution</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">FloatSolution</span></span></span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#NonUniformMutation.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.NonUniformMutation.execute" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Execute the non-uniform mutation on a solution.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>solution: The solution to be mutated.</p>
+</dd>
+<dt>Returns:</dt><dd><p>The mutated solution.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.NonUniformMutation.get_name">
-<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#NonUniformMutation.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.NonUniformMutation.get_name" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#NonUniformMutation.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.NonUniformMutation.get_name" title="Link to this definition">¶</a></dt>
+<dd><p>Get the name of the operator.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A string containing the operator name and parameters.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.NonUniformMutation.set_current_iteration">
-<span class="sig-name descname"><span class="pre">set_current_iteration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#NonUniformMutation.set_current_iteration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.NonUniformMutation.set_current_iteration" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">set_current_iteration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#NonUniformMutation.set_current_iteration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.NonUniformMutation.set_current_iteration" title="Link to this definition">¶</a></dt>
+<dd><p>Set the current iteration number for controlling mutation strength.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>current_iteration: The current iteration number (must be ≥ 0).</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -280,7 +415,7 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.PermutationSwapMutation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">PermutationSwapMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#PermutationSwapMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.PermutationSwapMutation" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">PermutationSwapMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#PermutationSwapMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.PermutationSwapMutation" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Mutation</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">PermutationSolution</span></code>]</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.PermutationSwapMutation.execute">
@@ -296,13 +431,33 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.PolynomialMutation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">PolynomialMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#PolynomialMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.PolynomialMutation" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">PolynomialMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repair_operator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.14)"><span class="pre">Callable</span></a><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#PolynomialMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.PolynomialMutation" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Mutation</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">FloatSolution</span></code>]</p>
-<p>Polynomial mutation for real-valued decision variables.</p>
-<ul class="simple">
-<li><p>probability: Per-variable mutation probability.</p></li>
-<li><p>distribution_index: Controls mutation spread. Typical values ~20.0 for fine-grained moves; lower values increase exploration.</p></li>
+<p>Implementation of a polynomial mutation operator for real-valued solutions.</p>
+<p>The polynomial mutation is based on a polynomial probability distribution that
+perturbs solutions in a way that favors small changes while still allowing
+occasional larger jumps. This provides a good balance between exploration and
+exploitation in evolutionary algorithms.</p>
+<p>The mutation follows a polynomial probability distribution centered on the
+parent value, with the spread controlled by the distribution index.</p>
+<dl>
+<dt>Args:</dt><dd><p>probability: The probability of mutating each variable (0 ≤ p ≤ 1).
+distribution_index: Controls the perturbation magnitude (must be ≥ 0):</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Lower values (e.g., 5-20): More exploratory, larger mutations</p></li>
+<li><p>Medium values (e.g., 20-100): Balanced exploration/exploitation</p></li>
+<li><p>Higher values (e.g., &gt;100): More exploitative, smaller mutations</p></li>
 </ul>
+</div></blockquote>
+<dl class="simple">
+<dt>repair_operator: Optional function to repair out-of-bounds values.</dt><dd><p>If None, values are clamped to the variable bounds.</p>
+</dd>
+</dl>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If probability is not in [0,1] or distribution_index is negative.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.PolynomialMutation.execute">
 <span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FloatSolution</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">FloatSolution</span></span></span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#PolynomialMutation.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.PolynomialMutation.execute" title="Link to this definition">¶</a></dt>
@@ -316,8 +471,51 @@
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="jmetal.operator.mutation.PowerLawMutation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">PowerLawMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repair_operator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.14)"><span class="pre">Callable</span></a><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#PowerLawMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.PowerLawMutation" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Mutation</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">FloatSolution</span></code>]</p>
+<p>Implementation of a power-law mutation operator for real-valued solutions.</p>
+<p>The power-law distribution produces heavy-tailed perturbations that can occasionally 
+create large jumps while favoring smaller perturbations, which is beneficial for both 
+exploration and exploitation in optimization.</p>
+<dl>
+<dt>The mutation follows the formula:</dt><dd><p>temp_delta = rnd^(-delta)
+deltaq = 0.5 * (rnd - 0.5) * (1 - temp_delta)
+new_value = old_value + deltaq * (upper_bound - lower_bound)</p>
+</dd>
+<dt>Args:</dt><dd><p>probability: The probability of mutating each variable (0 ≤ p ≤ 1).
+delta: The power-law exponent parameter (must be &gt; 0). Controls distribution shape:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Values &lt; 1.0: More uniform distributions with moderate perturbations</p></li>
+<li><p>Values ≈ 1.0: Balanced exploration/exploitation (default)</p></li>
+<li><p>Values &gt; 1.0: Heavy-tailed distributions favoring small perturbations
+with occasional large jumps</p></li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>repair_operator: Optional function to repair out-of-bounds values.</dt><dd><p>If None, values are clamped to the variable bounds.</p>
+</dd>
+</dl>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If probability is not in [0,1] or delta is not positive.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.operator.mutation.PowerLawMutation.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FloatSolution</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">FloatSolution</span></span></span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#PowerLawMutation.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.PowerLawMutation.execute" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jmetal.operator.mutation.PowerLawMutation.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#PowerLawMutation.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.PowerLawMutation.get_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.ScrambleMutation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">ScrambleMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#ScrambleMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.ScrambleMutation" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">ScrambleMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#ScrambleMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.ScrambleMutation" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Mutation</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">PermutationSolution</span></code>]</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.ScrambleMutation.execute">
@@ -333,8 +531,19 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.SimpleRandomMutation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">SimpleRandomMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#SimpleRandomMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.SimpleRandomMutation" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">SimpleRandomMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#SimpleRandomMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.SimpleRandomMutation" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Mutation</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">FloatSolution</span></code>]</p>
+<p>Implementation of a simple random mutation operator for real-valued solutions.</p>
+<p>This operator replaces the value of a decision variable with a random value
+uniformly distributed between the lower and upper bounds of that variable.
+This is one of the simplest mutation operators but can be effective for
+exploration, especially in the early stages of optimization.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>probability: The probability of mutating each variable (0 ≤ p ≤ 1).</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If probability is not in [0,1].</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.SimpleRandomMutation.execute">
 <span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FloatSolution</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">FloatSolution</span></span></span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#SimpleRandomMutation.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.SimpleRandomMutation.execute" title="Link to this definition">¶</a></dt>
@@ -342,15 +551,33 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.SimpleRandomMutation.get_name">
-<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#SimpleRandomMutation.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.SimpleRandomMutation.get_name" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#SimpleRandomMutation.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.SimpleRandomMutation.get_name" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.UniformMutation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">UniformMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">perturbation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#UniformMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.UniformMutation" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jmetal.operator.mutation.</span></span><span class="sig-name descname"><span class="pre">UniformMutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">perturbation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#UniformMutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.UniformMutation" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Mutation</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">FloatSolution</span></code>]</p>
+<p>Implementation of a uniform mutation operator for real-valued solutions.</p>
+<p>This operator adds a random perturbation uniformly distributed in
+[-perturbation/2, perturbation/2] to each variable with a given probability.
+The perturbation is scaled by the variable’s range, making the operator
+scale-invariant to the problem’s bounds.</p>
+<dl>
+<dt>Args:</dt><dd><p>probability: The probability of mutating each variable (0 ≤ p ≤ 1).
+perturbation: Controls the maximum relative perturbation size (must be &gt; 0).</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Smaller values (e.g., 0.1-0.5): Small, local perturbations</p></li>
+<li><p>Larger values (e.g., 1.0-2.0): Larger, more exploratory perturbations</p></li>
+</ul>
+</div></blockquote>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If probability is not in [0,1] or perturbation is not positive.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.UniformMutation.execute">
 <span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FloatSolution</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">FloatSolution</span></span></span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#UniformMutation.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.UniformMutation.execute" title="Link to this definition">¶</a></dt>
@@ -358,7 +585,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jmetal.operator.mutation.UniformMutation.get_name">
-<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#UniformMutation.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.UniformMutation.get_name" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../_modules/jmetal/operator/mutation.html#UniformMutation.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jmetal.operator.mutation.UniformMutation.get_name" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -399,7 +626,8 @@
           <a href="crossover.html" title="Crossover"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../operators.html" >Operators</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../api-reference.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../operators.html" >Operators</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Mutation</a></li> 
       </ul>
     </div>

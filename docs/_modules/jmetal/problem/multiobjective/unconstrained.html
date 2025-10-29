@@ -66,11 +66,10 @@
     
     
       <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials.html">Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../operators.html">Operators</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../advanced-topics.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About</a></li>
 </ul>
@@ -111,6 +110,8 @@
   <h1>Source code for jmetal.problem.multiobjective.unconstrained</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="nb">pow</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">sqrt</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">BinaryProblem</span><span class="p">,</span> <span class="n">FloatProblem</span><span class="p">,</span> <span class="n">Problem</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.solution</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
@@ -323,53 +324,83 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">SubsetSum</span><span class="p">(</span><span class="n">BinaryProblem</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">W</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The goal is to find a subset S of W whose elements sum is closest to (without exceeding) C.</span>
-
-<span class="sd">        :param C: Large integer.</span>
-<span class="sd">        :param W: Set of non-negative integers.&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        This is a bi-objective problem where we want to:</span>
+<span class="sd">        1. Maximize the sum of selected elements (without exceeding C)</span>
+<span class="sd">        2. Minimize the number of selected objects</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            C: The target sum (large integer)</span>
+<span class="sd">            W: List of non-negative integers to select from</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SubsetSum</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">C</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">W</span> <span class="o">=</span> <span class="n">W</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># Convert to numpy array for vectorized operations</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span> <span class="o">=</span> <span class="mi">0</span>
 
+        <span class="c1"># Objective 1: Maximize sum (minimize negative sum)</span>
+        <span class="c1"># Objective 2: Minimize number of selected objects</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MAXIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">obj_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Sum&quot;</span><span class="p">,</span> <span class="s2">&quot;No. of Objects&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="SubsetSum.number_of_variables">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.unconstrained.SubsetSum.number_of_variables">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits</span>  <span class="c1"># Each bit represents whether an item is selected</span></div>
+
+
+<div class="viewcode-block" id="SubsetSum.number_of_objectives">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.unconstrained.SubsetSum.number_of_objectives">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span></div>
+
+
+<div class="viewcode-block" id="SubsetSum.number_of_constraints">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.unconstrained.SubsetSum.number_of_constraints">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span></div>
+
 
 <div class="viewcode-block" id="SubsetSum.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.unconstrained.SubsetSum.evaluate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">BinarySolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
-        <span class="n">total_sum</span> <span class="o">=</span> <span class="mf">0.0</span>
-        <span class="n">number_of_objects</span> <span class="o">=</span> <span class="mi">0</span>
-
-        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">bits</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="k">if</span> <span class="n">bits</span><span class="p">:</span>
-                <span class="n">total_sum</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-                <span class="n">number_of_objects</span> <span class="o">+=</span> <span class="mi">1</span>
-
+        <span class="c1"># Get the mask of selected items (bits that are True)</span>
+        <span class="n">selected_mask</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">bits</span>
+        
+        <span class="c1"># Calculate total sum of selected items</span>
+        <span class="n">total_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="p">[</span><span class="n">selected_mask</span><span class="p">])</span>
+        <span class="n">number_of_objects</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">selected_mask</span><span class="p">)</span>
+        
+        <span class="c1"># Penalize solutions that exceed the target sum C</span>
         <span class="k">if</span> <span class="n">total_sum</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">:</span>
-            <span class="n">total_sum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span> <span class="o">-</span> <span class="n">total_sum</span> <span class="o">*</span> <span class="mf">0.1</span>
-
+            <span class="n">total_sum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span> <span class="o">-</span> <span class="p">(</span><span class="n">total_sum</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="p">)</span>  <span class="c1"># Penalize by how much it exceeds</span>
             <span class="k">if</span> <span class="n">total_sum</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
                 <span class="n">total_sum</span> <span class="o">=</span> <span class="mf">0.0</span>
-
-        <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="n">total_sum</span>
-        <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">number_of_objects</span>
-
+        
+        <span class="c1"># Store objectives</span>
+        <span class="c1"># Note: First objective is negated because we&#39;re using MAXIMIZE direction</span>
+        <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">total_sum</span>  <span class="c1"># Will be maximized</span>
+        <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">number_of_objects</span>  <span class="c1"># To be minimized</span>
+        
         <span class="k">return</span> <span class="n">solution</span></div>
 
 
 <div class="viewcode-block" id="SubsetSum.create_solution">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.unconstrained.SubsetSum.create_solution">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">create_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
-        <span class="n">new_solution</span> <span class="o">=</span> <span class="n">BinarySolution</span><span class="p">(</span>
-            <span class="n">number_of_variables</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">,</span> <span class="n">number_of_objectives</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span>
+        <span class="c1"># Create a new binary solution with one bit per item in W</span>
+        <span class="n">solution</span> <span class="o">=</span> <span class="n">BinarySolution</span><span class="p">(</span>
+            <span class="n">number_of_variables</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits</span><span class="p">,</span>
+            <span class="n">number_of_objectives</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">()</span>
         <span class="p">)</span>
-        <span class="n">new_solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span> <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits</span><span class="p">)]</span>
-
-        <span class="k">return</span> <span class="n">new_solution</span></div>
+        
+        <span class="c1"># Initialize with random bits (each bit represents whether an item is selected)</span>
+        <span class="n">solution</span><span class="o">.</span><span class="n">bits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">solution</span></div>
 
 
 <div class="viewcode-block" id="SubsetSum.name">
@@ -383,22 +414,28 @@
 <div class="viewcode-block" id="OneZeroMax">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.unconstrained.OneZeroMax">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">OneZeroMax</span><span class="p">(</span><span class="n">BinaryProblem</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; The implementation of the OneZeroMax problems defines a single binary variable. This variable</span>
-<span class="sd">    will contain the bit string representing the solutions.</span>
-
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The OneZeroMax problem is a multi-objective problem that counts the number of ones and zeros in a binary string.</span>
+<span class="sd">    </span>
+<span class="sd">    The objectives are:</span>
+<span class="sd">    1. Maximize the number of ones (minimize negative count)</span>
+<span class="sd">    2. Maximize the number of zeros (minimize negative count)</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        number_of_bits: The length of the binary string (default: 256)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_bits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">OneZeroMax</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits_per_variable</span> <span class="o">=</span> <span class="p">[</span><span class="n">number_of_bits</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits</span> <span class="o">=</span> <span class="n">number_of_bits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits_per_variable</span> <span class="o">=</span> <span class="p">[</span><span class="n">number_of_bits</span><span class="p">]</span>  <span class="c1"># For backward compatibility</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">obj_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Zeroes&quot;</span><span class="p">,</span> <span class="s2">&quot;Ones&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Ones&quot;</span><span class="p">,</span> <span class="s2">&quot;Zeros&quot;</span><span class="p">]</span>
 
 <div class="viewcode-block" id="OneZeroMax.number_of_variables">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.unconstrained.OneZeroMax.number_of_variables">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">number_of_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="k">return</span> <span class="mi">1</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits</span>  <span class="c1"># Each bit is treated as a variable</span></div>
 
 
 <div class="viewcode-block" id="OneZeroMax.number_of_objectives">
@@ -416,16 +453,13 @@
 <div class="viewcode-block" id="OneZeroMax.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.unconstrained.OneZeroMax.evaluate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">BinarySolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
-        <span class="n">counter_of_ones</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">counter_of_zeroes</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">bits</span> <span class="ow">in</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="n">bits</span><span class="p">:</span>
-                <span class="n">counter_of_ones</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">counter_of_zeroes</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># Count the number of ones and zeros in the binary string</span>
+        <span class="n">counter_of_ones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">bits</span><span class="p">)</span>
+        <span class="n">counter_of_zeros</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">bits</span><span class="p">)</span> <span class="o">-</span> <span class="n">counter_of_ones</span>
 
+        <span class="c1"># Store the negative counts to be minimized</span>
         <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="n">counter_of_ones</span>
-        <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="n">counter_of_zeroes</span>
+        <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="n">counter_of_zeros</span>
 
         <span class="k">return</span> <span class="n">solution</span></div>
 
@@ -433,12 +467,16 @@
 <div class="viewcode-block" id="OneZeroMax.create_solution">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.unconstrained.OneZeroMax.create_solution">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">create_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
-        <span class="n">new_solution</span> <span class="o">=</span> <span class="n">BinarySolution</span><span class="p">(</span>
-            <span class="n">number_of_variables</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">(),</span> <span class="n">number_of_objectives</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">()</span>
+        <span class="c1"># Create a new binary solution with the specified number of bits</span>
+        <span class="n">solution</span> <span class="o">=</span> <span class="n">BinarySolution</span><span class="p">(</span>
+            <span class="n">number_of_variables</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits</span><span class="p">,</span>
+            <span class="n">number_of_objectives</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">()</span>
         <span class="p">)</span>
-        <span class="n">new_solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span> <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span>
-                                     <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits_per_variable</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
-        <span class="k">return</span> <span class="n">new_solution</span></div>
+        
+        <span class="c1"># Initialize with random bits (using numpy for better performance)</span>
+        <span class="n">solution</span><span class="o">.</span><span class="n">bits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">solution</span></div>
 
 
 <div class="viewcode-block" id="OneZeroMax.name">

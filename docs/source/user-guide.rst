@@ -1,7 +1,7 @@
 User Guide
 ==========
 
-Comprehensive tutorials and guides for using jMetalPy effectively.
+Tutorials and guides for using jMetalPy effectively.
 
 Basic Tutorials
 ---------------

@@ -66,11 +66,10 @@
     
     
       <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../operators.html">Operators</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api-reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced-topics.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a></li>
 </ul>
@@ -109,7 +108,11 @@
           <div class="document clearer body">
             
   <h1>Source code for jmetal.operator.mutation</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.operator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mutation</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.solution</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
@@ -154,27 +157,87 @@
 <div class="viewcode-block" id="BitFlipMutation">
 <a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.BitFlipMutation">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">BitFlipMutation</span><span class="p">(</span><span class="n">Mutation</span><span class="p">[</span><span class="n">BinarySolution</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    NumPy-optimized bit flip mutation for BinarySolution.</span>
+<span class="sd">    </span>
+<span class="sd">    This implementation uses NumPy&#39;s vectorized operations for better performance</span>
+<span class="sd">    when working with BinarySolution solutions. It flips each bit with a given</span>
+<span class="sd">    probability, but does so using efficient array operations.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        probability: The probability of flipping each bit (0.0 to 1.0)</span>
+<span class="sd">        </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If probability is not in range [0.0, 1.0]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">probability</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Probability must be in range [0.0, 1.0], got </span><span class="si">{</span><span class="n">probability</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">BitFlipMutation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
-
+    
 <div class="viewcode-block" id="BitFlipMutation.execute">
 <a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.BitFlipMutation.execute">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">BinarySolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
-        <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">solution</span><span class="p">),</span> <span class="n">BinarySolution</span><span class="p">),</span> <span class="s2">&quot;Solution type invalid&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Execute the bit flip mutation operation.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            solution: The solution to be mutated. Must be a BinarySolution with a &#39;bits&#39; attribute.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            The mutated solution (modified in-place)</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            TypeError: If solution is not a BinarySolution or doesn&#39;t have a &#39;bits&#39; attribute</span>
+<span class="sd">            ValueError: If the solution has no variables or invalid bit values</span>
+<span class="sd">            </span>
+<span class="sd">        Note:</span>
+<span class="sd">            The input solution is modified in-place and also returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Input validation</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">BinarySolution</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected BinarySolution, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="s1">&#39;bits&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">bits</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;Solution must have a &#39;bits&#39; attribute of type numpy.ndarray&quot;</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="n">solution</span><span class="o">.</span><span class="n">number_of_variables</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Solution must have at least one variable&quot;</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">bits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">solution</span>  <span class="c1"># Nothing to mutate</span>
+            
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Generate random numbers for each bit</span>
+            <span class="n">rand_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">)</span>
+            
+            <span class="c1"># Create a mask of bits to flip</span>
+            <span class="n">flip_mask</span> <span class="o">=</span> <span class="n">rand_values</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span>
+            
+            <span class="c1"># Ensure the mask has the same shape as solution.bits</span>
+            <span class="k">if</span> <span class="n">flip_mask</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">solution</span><span class="o">.</span><span class="n">bits</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+                <span class="n">flip_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">flip_mask</span><span class="p">,</span> <span class="n">solution</span><span class="o">.</span><span class="n">bits</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            
+            <span class="c1"># Flip the bits where the mask is True</span>
+            <span class="n">solution</span><span class="o">.</span><span class="n">bits</span> <span class="o">^=</span> <span class="n">flip_mask</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+            
+            <span class="k">return</span> <span class="n">solution</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error during bit flip mutation: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span></div>
 
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">)):</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">])):</span>
-                <span class="n">rand</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">rand</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">:</span>
-                    <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span> <span class="k">else</span> <span class="kc">False</span>
-
-        <span class="k">return</span> <span class="n">solution</span></div>
-
-
+    
 <div class="viewcode-block" id="BitFlipMutation.get_name">
 <a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.BitFlipMutation.get_name">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;BitFlip mutation&quot;</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the name of the operator.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            str: A string representing the name of the operator</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;Bit flip mutation&quot;</span></div>
 </div>
 
 
@@ -182,24 +245,54 @@
 <div class="viewcode-block" id="PolynomialMutation">
 <a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.PolynomialMutation">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PolynomialMutation</span><span class="p">(</span><span class="n">Mutation</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Polynomial mutation for real-valued decision variables.</span>
-
-<span class="sd">    - probability: Per-variable mutation probability.</span>
-<span class="sd">    - distribution_index: Controls mutation spread. Typical values ~20.0 for fine-grained moves; lower values increase exploration.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of a polynomial mutation operator for real-valued solutions.</span>
+<span class="sd">    </span>
+<span class="sd">    The polynomial mutation is based on a polynomial probability distribution that</span>
+<span class="sd">    perturbs solutions in a way that favors small changes while still allowing</span>
+<span class="sd">    occasional larger jumps. This provides a good balance between exploration and</span>
+<span class="sd">    exploitation in evolutionary algorithms.</span>
+<span class="sd">    </span>
+<span class="sd">    The mutation follows a polynomial probability distribution centered on the</span>
+<span class="sd">    parent value, with the spread controlled by the distribution index.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        probability: The probability of mutating each variable (0 ≤ p ≤ 1).</span>
+<span class="sd">        distribution_index: Controls the perturbation magnitude (must be ≥ 0):</span>
+<span class="sd">            - Lower values (e.g., 5-20): More exploratory, larger mutations</span>
+<span class="sd">            - Medium values (e.g., 20-100): Balanced exploration/exploitation</span>
+<span class="sd">            - Higher values (e.g., &gt;100): More exploitative, smaller mutations</span>
+<span class="sd">        repair_operator: Optional function to repair out-of-bounds values.</span>
+<span class="sd">            If None, values are clamped to the variable bounds.</span>
+<span class="sd">            </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If probability is not in [0,1] or distribution_index is negative.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">distribution_index</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span>
+        <span class="n">distribution_index</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">,</span>
+        <span class="n">repair_operator</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">probability</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;probability must be in [0, 1]&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">distribution_index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;distribution_index must be non-negative&quot;</span><span class="p">)</span>
+            
         <span class="nb">super</span><span class="p">(</span><span class="n">PolynomialMutation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">=</span> <span class="n">distribution_index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repair_operator</span> <span class="o">=</span> <span class="n">repair_operator</span>
 
 <div class="viewcode-block" id="PolynomialMutation.execute">
 <a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.PolynomialMutation.execute">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">solution</span><span class="p">),</span> <span class="n">FloatSolution</span><span class="p">),</span> <span class="s2">&quot;Solution type invalid&quot;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">)):</span>
+                
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">_variables</span><span class="p">)):</span>
             <span class="n">rand</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
 
             <span class="k">if</span> <span class="n">rand</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">:</span>
-                <span class="n">y</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
                 <span class="n">yl</span><span class="p">,</span> <span class="n">yu</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
                 <span class="k">if</span> <span class="n">yl</span> <span class="o">==</span> <span class="n">yu</span><span class="p">:</span>
@@ -219,13 +312,10 @@
                         <span class="n">deltaq</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="nb">pow</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">mut_pow</span><span class="p">)</span>
 
                     <span class="n">y</span> <span class="o">+=</span> <span class="n">deltaq</span> <span class="o">*</span> <span class="p">(</span><span class="n">yu</span> <span class="o">-</span> <span class="n">yl</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-                        <span class="n">y</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-                        <span class="n">y</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
-                <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
-
+                    <span class="n">y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">yl</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">yu</span><span class="p">))</span>  <span class="c1"># Clamp to bounds</span>
+                    
+                    <span class="n">solution</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+        
         <span class="k">return</span> <span class="n">solution</span></div>
 
 
@@ -253,10 +343,11 @@
 <a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.IntegerPolynomialMutation.execute">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">IntegerSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegerSolution</span><span class="p">:</span>
         <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">solution</span><span class="p">),</span> <span class="n">IntegerSolution</span><span class="p">),</span> <span class="s2">&quot;Solution type invalid&quot;</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">)):</span>
+        
+        
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">_variables</span><span class="p">)):</span>
             <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">:</span>
-                <span class="n">y</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
                 <span class="n">yl</span><span class="p">,</span> <span class="n">yu</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
                 <span class="k">if</span> <span class="n">yl</span> <span class="o">==</span> <span class="n">yu</span><span class="p">:</span>
@@ -276,12 +367,11 @@
                         <span class="n">deltaq</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">val</span><span class="o">**</span><span class="n">mut_pow</span>
 
                     <span class="n">y</span> <span class="o">+=</span> <span class="n">deltaq</span> <span class="o">*</span> <span class="p">(</span><span class="n">yu</span> <span class="o">-</span> <span class="n">yl</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-                        <span class="n">y</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-                        <span class="n">y</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
-                <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">yl</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">yu</span><span class="p">))</span>  <span class="c1"># Clamp to bounds</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>  <span class="c1"># Convert to integer and round to nearest</span>
+                
+                <span class="n">solution</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+                    
         <span class="k">return</span> <span class="n">solution</span></div>
 
 
@@ -296,27 +386,43 @@
 <div class="viewcode-block" id="SimpleRandomMutation">
 <a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.SimpleRandomMutation">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SimpleRandomMutation</span><span class="p">(</span><span class="n">Mutation</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of a simple random mutation operator for real-valued solutions.</span>
+<span class="sd">    </span>
+<span class="sd">    This operator replaces the value of a decision variable with a random value</span>
+<span class="sd">    uniformly distributed between the lower and upper bounds of that variable.</span>
+<span class="sd">    This is one of the simplest mutation operators but can be effective for</span>
+<span class="sd">    exploration, especially in the early stages of optimization.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        probability: The probability of mutating each variable (0 ≤ p ≤ 1).</span>
+<span class="sd">            </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If probability is not in [0,1].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">probability</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;probability must be in [0, 1]&quot;</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SimpleRandomMutation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SimpleRandomMutation.execute">
 <a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.SimpleRandomMutation.execute">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">solution</span><span class="p">),</span> <span class="n">FloatSolution</span><span class="p">),</span> <span class="s2">&quot;Solution type invalid&quot;</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">)):</span>
-            <span class="n">rand</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">rand</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">:</span>
-                <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
-                <span class="p">)</span>
+                
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">_variables</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">:</span>
+                <span class="n">new_value</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                
+                <span class="n">solution</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_value</span>        
+        
         <span class="k">return</span> <span class="n">solution</span></div>
 
 
 <div class="viewcode-block" id="SimpleRandomMutation.get_name">
 <a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.SimpleRandomMutation.get_name">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;Simple random_search mutation&quot;</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Simple random mutation&quot;</span></div>
 </div>
 
 
@@ -324,7 +430,29 @@
 <div class="viewcode-block" id="UniformMutation">
 <a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.UniformMutation">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">UniformMutation</span><span class="p">(</span><span class="n">Mutation</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of a uniform mutation operator for real-valued solutions.</span>
+<span class="sd">    </span>
+<span class="sd">    This operator adds a random perturbation uniformly distributed in</span>
+<span class="sd">    [-perturbation/2, perturbation/2] to each variable with a given probability.</span>
+<span class="sd">    The perturbation is scaled by the variable&#39;s range, making the operator</span>
+<span class="sd">    scale-invariant to the problem&#39;s bounds.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        probability: The probability of mutating each variable (0 ≤ p ≤ 1).</span>
+<span class="sd">        perturbation: Controls the maximum relative perturbation size (must be &gt; 0).</span>
+<span class="sd">            - Smaller values (e.g., 0.1-0.5): Small, local perturbations</span>
+<span class="sd">            - Larger values (e.g., 1.0-2.0): Larger, more exploratory perturbations</span>
+<span class="sd">            </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If probability is not in [0,1] or perturbation is not positive.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">perturbation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">probability</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;probability must be in [0, 1]&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">perturbation</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;perturbation must be positive&quot;</span><span class="p">)</span>
+            
         <span class="nb">super</span><span class="p">(</span><span class="n">UniformMutation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">perturbation</span> <span class="o">=</span> <span class="n">perturbation</span>
 
@@ -332,28 +460,27 @@
 <a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.UniformMutation.execute">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
         <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">solution</span><span class="p">),</span> <span class="n">FloatSolution</span><span class="p">),</span> <span class="s2">&quot;Solution type invalid&quot;</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">)):</span>
-            <span class="n">rand</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
-
-            <span class="k">if</span> <span class="n">rand</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">:</span>
-                <span class="n">tmp</span> <span class="o">=</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturbation</span>
-                <span class="n">tmp</span> <span class="o">+=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
-                <span class="k">if</span> <span class="n">tmp</span> <span class="o">&lt;</span> <span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-                    <span class="n">tmp</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="k">elif</span> <span class="n">tmp</span> <span class="o">&gt;</span> <span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-                    <span class="n">tmp</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
-                <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
-
+                
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">_variables</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">:</span>
+                <span class="c1"># Calculate perturbation scaled by variable range</span>
+                <span class="n">var_range</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">delta</span> <span class="o">=</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturbation</span> <span class="o">*</span> <span class="n">var_range</span>
+                
+                <span class="c1"># Apply perturbation and ensure bounds</span>
+                <span class="n">new_value</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">delta</span>
+                <span class="n">new_value</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> 
+                             <span class="nb">min</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">new_value</span><span class="p">))</span>
+                
+                <span class="n">solution</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_value</span>
+            
         <span class="k">return</span> <span class="n">solution</span></div>
 
 
 <div class="viewcode-block" id="UniformMutation.get_name">
 <a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.UniformMutation.get_name">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;Uniform mutation&quot;</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Uniform mutation&quot;</span></div>
 </div>
 
 
@@ -361,7 +488,38 @@
 <div class="viewcode-block" id="NonUniformMutation">
 <a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.NonUniformMutation">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NonUniformMutation</span><span class="p">(</span><span class="n">Mutation</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">perturbation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">max_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of a non-uniform mutation operator for real-valued solutions.</span>
+<span class="sd">    </span>
+<span class="sd">    This operator perturbs solutions in a way that the mutation strength decreases</span>
+<span class="sd">    over time, allowing for more exploration in early generations and more</span>
+<span class="sd">    exploitation in later generations. The mutation strength is controlled by</span>
+<span class="sd">    the current iteration number relative to the maximum number of iterations.</span>
+<span class="sd">    </span>
+<span class="sd">    The mutation follows the formula:</span>
+<span class="sd">        Δ(t, y) = y * (r * (1 - t/T)^b - 1)  if r ≤ 0.5</span>
+<span class="sd">        Δ(t, y) = y * (1 - r * (1 - t/T)^b)  if r &gt; 0.5</span>
+<span class="sd">    where t is the current iteration, T is max_iterations, and b is the perturbation.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        probability: The probability of mutating each variable (0 ≤ p ≤ 1).</span>
+<span class="sd">        perturbation: Controls the perturbation strength (must be &gt; 0).</span>
+<span class="sd">            - Lower values: More gradual decrease in mutation strength</span>
+<span class="sd">            - Higher values: More rapid decrease in mutation strength</span>
+<span class="sd">        max_iterations: The maximum number of iterations (must be &gt; 0).</span>
+<span class="sd">            Used to normalize the current iteration count.</span>
+<span class="sd">            </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If probability is not in [0,1] or parameters are not positive.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">perturbation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">max_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">probability</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;probability must be in [0, 1]&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">perturbation</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;perturbation must be positive&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">max_iterations</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;max_iterations must be positive&quot;</span><span class="p">)</span>
+            
         <span class="nb">super</span><span class="p">(</span><span class="n">NonUniformMutation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">perturbation</span> <span class="o">=</span> <span class="n">perturbation</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_iterations</span> <span class="o">=</span> <span class="n">max_iterations</span>
@@ -370,47 +528,87 @@
 <div class="viewcode-block" id="NonUniformMutation.execute">
 <a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.NonUniformMutation.execute">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute the non-uniform mutation on a solution.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            solution: The solution to be mutated.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            The mutated solution.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">solution</span><span class="p">),</span> <span class="n">FloatSolution</span><span class="p">),</span> <span class="s2">&quot;Solution type invalid&quot;</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">)):</span>
             <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">:</span>
-                <span class="n">rand</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
-
-                <span class="k">if</span> <span class="n">rand</span> <span class="o">&lt;=</span> <span class="mf">0.5</span><span class="p">:</span>
-                    <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__delta</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturbation</span><span class="p">)</span>
+                <span class="n">current_value</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                
+                <span class="c1"># Calculate delta based on direction</span>
+                <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mf">0.5</span><span class="p">:</span>
+                    <span class="n">delta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__delta</span><span class="p">(</span>
+                        <span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">current_value</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">perturbation</span><span class="p">,</span>
+                    <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__delta</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturbation</span><span class="p">)</span>
+                    <span class="n">delta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__delta</span><span class="p">(</span>
+                        <span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">current_value</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">perturbation</span><span class="p">,</span>
+                    <span class="p">)</span>
 
-                <span class="n">tmp</span> <span class="o">+=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
-                <span class="k">if</span> <span class="n">tmp</span> <span class="o">&lt;</span> <span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-                    <span class="n">tmp</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="k">elif</span> <span class="n">tmp</span> <span class="o">&gt;</span> <span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-                    <span class="n">tmp</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
-                <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
+                <span class="c1"># Apply mutation and ensure bounds</span>
+                <span class="n">new_value</span> <span class="o">=</span> <span class="n">current_value</span> <span class="o">+</span> <span class="n">delta</span>
+                <span class="n">solution</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                         <span class="nb">min</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">new_value</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">solution</span></div>
 
 
 <div class="viewcode-block" id="NonUniformMutation.set_current_iteration">
 <a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.NonUniformMutation.set_current_iteration">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">set_current_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_iteration</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_current_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_iteration</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the current iteration number for controlling mutation strength.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            current_iteration: The current iteration number (must be ≥ 0).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">current_iteration</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;current_iteration must be non-negative&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_iteration</span> <span class="o">=</span> <span class="n">current_iteration</span></div>
 
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">__delta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b_mutation_parameter</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">y</span> <span class="o">*</span> <span class="p">(</span>
-            <span class="mf">1.0</span>
-            <span class="o">-</span> <span class="nb">pow</span><span class="p">(</span>
-                <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(),</span> <span class="nb">pow</span><span class="p">((</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_iteration</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_iterations</span><span class="p">),</span> <span class="n">b_mutation_parameter</span><span class="p">)</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__delta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b_mutation_parameter</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the non-uniform mutation delta.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            y: Distance to the bound</span>
+<span class="sd">            b_mutation_parameter: Perturbation parameter</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            The mutation delta value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+            
+        <span class="n">r</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+        <span class="n">iter_frac</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_iteration</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_iterations</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        
+        <span class="c1"># Calculate mutation strength based on current iteration</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">iter_frac</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">b_mutation_parameter</span><span class="p">))</span>
+        
+        <span class="c1"># Apply mutation in appropriate direction</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;=</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">y</span> <span class="o">*</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">r</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">r</span><span class="p">)</span> <span class="o">*</span> <span class="n">delta</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">b_mutation_parameter</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">y</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">r</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">r</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">delta</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">b_mutation_parameter</span><span class="p">)))</span>
 
 <div class="viewcode-block" id="NonUniformMutation.get_name">
 <a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.NonUniformMutation.get_name">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;Non-uniform mutation&quot;</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the name of the operator.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            A string containing the operator name and parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Non-Uniform mutation (perturbation=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">perturbation</span><span class="si">}</span><span class="s2">, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;max_iter=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_iterations</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span></div>
 </div>
 
 
@@ -446,7 +644,7 @@
 <div class="viewcode-block" id="CompositeMutation">
 <a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.CompositeMutation">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CompositeMutation</span><span class="p">(</span><span class="n">Mutation</span><span class="p">[</span><span class="n">Solution</span><span class="p">]):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mutation_operator_list</span><span class="p">:</span> <span class="p">[</span><span class="n">Mutation</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mutation_operator_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Mutation</span><span class="p">]):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CompositeMutation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 
         <span class="n">Check</span><span class="o">.</span><span class="n">is_not_none</span><span class="p">(</span><span class="n">mutation_operator_list</span><span class="p">)</span>
@@ -508,6 +706,174 @@
 <a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.ScrambleMutation.get_name">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Scramble&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="LevyFlightMutation">
+<a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.LevyFlightMutation">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LevyFlightMutation</span><span class="p">(</span><span class="n">Mutation</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of a Lévy flight mutation operator for real-valued solutions.</span>
+<span class="sd">    </span>
+<span class="sd">    Lévy flights are characterized by heavy-tailed distributions with infinite variance,</span>
+<span class="sd">    producing mostly small steps with occasional very large jumps. This behavior is</span>
+<span class="sd">    beneficial for global optimization as it provides both local search capabilities</span>
+<span class="sd">    and the ability to escape local optima through large jumps.</span>
+<span class="sd">    </span>
+<span class="sd">    The implementation uses the Mantegna algorithm to generate Lévy-distributed steps:</span>
+<span class="sd">    1. Generate u ~ Normal(0, σ_u²) where σ_u = [Γ(1+β)sin(πβ/2)/Γ((1+β)/2)β2^((β-1)/2)]^(1/β)</span>
+<span class="sd">    2. Generate v ~ Normal(0, 1)</span>
+<span class="sd">    3. Lévy step = u / |v|^(1/β)</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        mutation_probability: The probability of mutating each variable (0 ≤ p ≤ 1).</span>
+<span class="sd">        beta: The Lévy index parameter (1 &lt; β ≤ 2). Controls the tail heaviness:</span>
+<span class="sd">            - Values closer to 1.0 produce heavier tails with more frequent large jumps</span>
+<span class="sd">            - Values around 1.5 provide balanced exploration (default)</span>
+<span class="sd">            - Values closer to 2.0 approach Gaussian behavior with fewer large jumps</span>
+<span class="sd">        step_size: The scaling factor for Lévy steps (must be &gt; 0). Typical values:</span>
+<span class="sd">            - 0.001-0.01: Fine-grained local search</span>
+<span class="sd">            - 0.01-0.05: Balance of local and global search (default: 0.01)</span>
+<span class="sd">            - 0.05-0.1: Emphasize global exploration</span>
+<span class="sd">        repair_operator: Optional function to repair out-of-bounds values.</span>
+<span class="sd">            If None, values are clamped to the variable bounds.</span>
+<span class="sd">            </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If parameters are outside their valid ranges.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mutation_probability</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">beta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">,</span>
+                 <span class="n">step_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">repair_operator</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">mutation_probability</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;mutation_probability must be in [0, 1]&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">beta</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;beta must be in (1, 2]&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">step_size</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;step_size must be positive&quot;</span><span class="p">)</span>
+            
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">mutation_probability</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">step_size</span> <span class="o">=</span> <span class="n">step_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repair_operator</span> <span class="o">=</span> <span class="n">repair_operator</span>
+
+<div class="viewcode-block" id="LevyFlightMutation.execute">
+<a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.LevyFlightMutation.execute">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>        
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">_variables</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">:</span>
+                <span class="n">current_value</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+                <span class="c1"># Lévy flight step (Mantegna algorithm)</span>
+                <span class="n">levy_step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_levy_step</span><span class="p">()</span>
+                <span class="n">perturbation</span> <span class="o">=</span> <span class="n">levy_step</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">step_size</span> <span class="o">*</span> <span class="p">(</span><span class="n">upper_bound</span> <span class="o">-</span> <span class="n">lower_bound</span><span class="p">)</span>
+                <span class="n">new_value</span> <span class="o">=</span> <span class="n">current_value</span> <span class="o">+</span> <span class="n">perturbation</span>
+
+                <span class="c1"># Repair if out of bounds</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">repair_operator</span><span class="p">:</span>
+                    <span class="n">new_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">repair_operator</span><span class="p">(</span><span class="n">new_value</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">new_value</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">new_value</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">),</span> <span class="n">upper_bound</span><span class="p">)</span>
+                
+                <span class="n">solution</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_value</span>
+            
+        <span class="k">return</span> <span class="n">solution</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_generate_levy_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Mantegna algorithm</span>
+        <span class="n">sigma_u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_u</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">)</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sigma_u</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">u</span> <span class="o">/</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_sigma_u</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">beta</span><span class="p">):</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+        <span class="n">numerator</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">gamma</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">beta</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">beta</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">denominator</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">gamma</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">beta</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">beta</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="p">((</span><span class="n">beta</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">numerator</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">beta</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LevyFlightMutation.get_name">
+<a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.LevyFlightMutation.get_name">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Levy Flight mutation&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="PowerLawMutation">
+<a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.PowerLawMutation">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PowerLawMutation</span><span class="p">(</span><span class="n">Mutation</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of a power-law mutation operator for real-valued solutions.</span>
+<span class="sd">    </span>
+<span class="sd">    The power-law distribution produces heavy-tailed perturbations that can occasionally </span>
+<span class="sd">    create large jumps while favoring smaller perturbations, which is beneficial for both </span>
+<span class="sd">    exploration and exploitation in optimization.</span>
+<span class="sd">    </span>
+<span class="sd">    The mutation follows the formula:</span>
+<span class="sd">        temp_delta = rnd^(-delta)</span>
+<span class="sd">        deltaq = 0.5 * (rnd - 0.5) * (1 - temp_delta)</span>
+<span class="sd">        new_value = old_value + deltaq * (upper_bound - lower_bound)</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        probability: The probability of mutating each variable (0 ≤ p ≤ 1).</span>
+<span class="sd">        delta: The power-law exponent parameter (must be &gt; 0). Controls distribution shape:</span>
+<span class="sd">            - Values &lt; 1.0: More uniform distributions with moderate perturbations</span>
+<span class="sd">            - Values ≈ 1.0: Balanced exploration/exploitation (default)</span>
+<span class="sd">            - Values &gt; 1.0: Heavy-tailed distributions favoring small perturbations</span>
+<span class="sd">              with occasional large jumps</span>
+<span class="sd">        repair_operator: Optional function to repair out-of-bounds values.</span>
+<span class="sd">            If None, values are clamped to the variable bounds.</span>
+<span class="sd">            </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If probability is not in [0,1] or delta is not positive.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> 
+                 <span class="n">repair_operator</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">probability</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;probability must be in [0, 1]&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">delta</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;delta must be positive&quot;</span><span class="p">)</span>
+            
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repair_operator</span> <span class="o">=</span> <span class="n">repair_operator</span> <span class="k">if</span> <span class="n">repair_operator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_repair</span>
+
+<div class="viewcode-block" id="PowerLawMutation.execute">
+<a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.PowerLawMutation.execute">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FloatSolution</span><span class="p">:</span>
+        <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">solution</span><span class="p">),</span> <span class="n">FloatSolution</span><span class="p">),</span> <span class="s2">&quot;Solution type invalid&quot;</span><span class="p">)</span>
+                
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">_variables</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">:</span>
+                <span class="n">current_value</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                
+                <span class="c1"># Generate power-law perturbation</span>
+                <span class="n">rnd</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+                <span class="n">rnd</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">rnd</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">),</span> <span class="mi">1</span> <span class="o">-</span> <span class="mf">1e-10</span><span class="p">)</span>
+                <span class="n">temp_delta</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">rnd</span><span class="p">,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)</span>
+                <span class="n">deltaq</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">rnd</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">temp_delta</span><span class="p">)</span>
+                <span class="n">new_value</span> <span class="o">=</span> <span class="n">current_value</span> <span class="o">+</span> <span class="n">deltaq</span> <span class="o">*</span> <span class="p">(</span><span class="n">upper_bound</span> <span class="o">-</span> <span class="n">lower_bound</span><span class="p">)</span>
+                
+                <span class="c1"># Repair if out of bounds</span>
+                <span class="n">new_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">repair_operator</span><span class="p">(</span><span class="n">new_value</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
+                
+                <span class="n">solution</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_value</span>
+            
+        <span class="k">return</span> <span class="n">solution</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_default_repair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">upper</span><span class="p">),</span> <span class="n">lower</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PowerLawMutation.get_name">
+<a class="viewcode-back" href="../../../api/operator/mutation.html#jmetal.operator.mutation.PowerLawMutation.get_name">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Power Law mutation (delta=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="si">}</span><span class="s2">)&quot;</span></div>
 </div>
 
 </pre></div>

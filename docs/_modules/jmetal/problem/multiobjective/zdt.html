@@ -66,11 +66,10 @@
     
     
       <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials.html">Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../operators.html">Operators</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../advanced-topics.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About</a></li>
 </ul>
@@ -332,22 +331,41 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Problem ZDT5.</span>
 
 <span class="sd">    .. note:: Bi-objective binary unconstrained problem. The default number of variables is 11.</span>
+<span class="sd">    </span>
+<span class="sd">    In this implementation, each variable is represented by a single boolean value in the solution,</span>
+<span class="sd">    and the number_of_bits_per_variable attribute is used to track how many bits each variable</span>
+<span class="sd">    conceptually represents for evaluation purposes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">11</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;:param number_of_bits: Number of bits of each variable of the problem.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param number_of_variables: Number of variables in the problem.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ZDT5</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits_per_variable</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">number_of_variables</span><span class="p">)]</span>
+        <span class="c1"># Track how many bits each variable conceptually represents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits_per_variable</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_of_variables</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits_per_variable</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">30</span>
-
+        
+        <span class="c1"># Total number of bits is the sum of all bits per variable</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_number_of_bits</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits_per_variable</span><span class="p">)</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">obj_directions</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">obj_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]</span>
+        
+        <span class="c1"># For compatibility with the original implementation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_number_of_bits</span>
 
 <div class="viewcode-block" id="ZDT5.number_of_variables">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT5.number_of_variables">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">number_of_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits_per_variable</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_number_of_bits</span></div>
+
+
+<div class="viewcode-block" id="ZDT5.total_number_of_bits">
+<a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT5.total_number_of_bits">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">total_number_of_bits</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_number_of_bits</span></div>
 
 
 <div class="viewcode-block" id="ZDT5.number_of_objectives">
@@ -365,11 +383,16 @@
 <div class="viewcode-block" id="ZDT5.evaluate">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT5.evaluate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">BinarySolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
-        <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">solution</span><span class="o">.</span><span class="n">cardinality</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Evaluate the solution by counting the number of true bits in each variable&#39;s range.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Calculate first objective: 1 + number of true bits in first variable (30 bits)</span>
+        <span class="n">first_var_bits</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[:</span><span class="mi">30</span><span class="p">]</span>
+        <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">first_var_bits</span><span class="p">)</span>
 
+        <span class="c1"># Calculate g function for second objective</span>
         <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_g</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
         <span class="n">h</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
         <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span> <span class="o">*</span> <span class="n">g</span>
 
         <span class="k">return</span> <span class="n">solution</span></div>
@@ -377,35 +400,57 @@
 
 <div class="viewcode-block" id="ZDT5.eval_g">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT5.eval_g">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">eval_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">BinarySolution</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">eval_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">BinarySolution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the g function for ZDT5.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="mf">0.0</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">)):</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">result</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_v</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">cardinality</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-
+        <span class="n">bit_index</span> <span class="o">=</span> <span class="mi">30</span>  <span class="c1"># Start after the first variable (30 bits)</span>
+        
+        <span class="c1"># Process remaining variables (each 5 bits)</span>
+        <span class="k">for</span> <span class="n">bits</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits_per_variable</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="c1"># Count true bits in this variable&#39;s range</span>
+            <span class="n">var_bits</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">bit_index</span><span class="p">:</span><span class="n">bit_index</span> <span class="o">+</span> <span class="n">bits</span><span class="p">]</span>
+            <span class="n">ones_count</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">var_bits</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_v</span><span class="p">(</span><span class="n">ones_count</span><span class="p">)</span>
+            <span class="n">bit_index</span> <span class="o">+=</span> <span class="n">bits</span>
+            
         <span class="k">return</span> <span class="n">result</span></div>
 
 
 <div class="viewcode-block" id="ZDT5.eval_v">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT5.eval_v">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">eval_v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">eval_v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function for ZDT5 evaluation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mf">5.0</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="n">value</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mf">1.0</span></div>
+        <span class="k">return</span> <span class="mf">1.0</span></div>
 
 
 <div class="viewcode-block" id="ZDT5.create_solution">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT5.create_solution">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">create_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BinarySolution</span><span class="p">:</span>
-        <span class="n">new_solution</span> <span class="o">=</span> <span class="n">BinarySolution</span><span class="p">(</span><span class="n">number_of_variables</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">(),</span> <span class="n">number_of_objectives</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">()):</span>
-            <span class="n">new_solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span> <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_bits_per_variable</span><span class="p">[</span><span class="n">i</span><span class="p">])]</span>
-        <span class="k">return</span> <span class="n">new_solution</span></div>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new random solution.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">solution</span> <span class="o">=</span> <span class="n">BinarySolution</span><span class="p">(</span>
+            <span class="n">number_of_variables</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">total_number_of_bits</span><span class="p">,</span>
+            <span class="n">number_of_objectives</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_objectives</span><span class="p">(),</span>
+            <span class="n">number_of_constraints</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_constraints</span><span class="p">()</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># Initialize with random bits</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total_number_of_bits</span><span class="p">):</span>
+            <span class="n">solution</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span>
+            
+        <span class="k">return</span> <span class="n">solution</span></div>
 
 
 <div class="viewcode-block" id="ZDT5.name">
 <a class="viewcode-back" href="../../../../api/problem/multiobjective.html#jmetal.problem.multiobjective.zdt.ZDT5.name">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;ZDT5&quot;</span></div>
 </div>
 

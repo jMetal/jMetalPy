@@ -66,11 +66,10 @@
     
     
       <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../operators.html">Operators</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api-reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced-topics.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a></li>
 </ul>
@@ -110,8 +109,11 @@
             
   <h1>Source code for jmetal.operator.crossover</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.operator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Crossover</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.core.solution</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
@@ -123,6 +125,8 @@
     <span class="n">Solution</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.ckecking</span><span class="w"> </span><span class="kn">import</span> <span class="n">Check</span>
+
+<span class="c1"># Type variables for generic type hints</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">.. module:: crossover</span>
@@ -144,8 +148,9 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Solution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Solution</span><span class="p">]:</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The number of parents is not two: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)))</span>
-
-        <span class="k">return</span> <span class="n">parents</span></div>
+            
+        <span class="c1"># Create deep copies to avoid modifying the original parents</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span> <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="NullCrossover.get_number_of_parents">
@@ -299,13 +304,27 @@
 <div class="viewcode-block" id="SBXCrossover">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.SBXCrossover">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SBXCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">,</span> <span class="n">FloatSolution</span><span class="p">]):</span>
-    <span class="n">__EPS</span> <span class="o">=</span> <span class="mf">1.0e-14</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simulated Binary Crossover (SBX) for real-valued solutions.</span>
+<span class="sd">    </span>
+<span class="sd">    SBX is a popular crossover operator for real-coded genetic algorithms that simulates the behavior of the single-point</span>
+<span class="sd">    crossover operator in binary-coded GAs. It creates offspring solutions based on a probability distribution centered</span>
+<span class="sd">    around the parent solutions, with the spread of the distribution controlled by the distribution index.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        probability: Crossover probability (0.0 to 1.0)</span>
+<span class="sd">        distribution_index: Distribution index (must be ≥ 0). Higher values produce offspring closer to parents.</span>
+<span class="sd">            Typical values range from 5 to 30, with 20 being a common default.</span>
+<span class="sd">            </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        Exception: If distribution_index is negative</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__EPS</span> <span class="o">=</span> <span class="mf">1.0e-14</span>  <span class="c1"># Small constant to prevent division by zero</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">distribution_index</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SBXCrossover</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">=</span> <span class="n">distribution_index</span>
         <span class="k">if</span> <span class="n">distribution_index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The distribution index is negative: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">distribution_index</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The distribution index cannot be negative&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SBXCrossover.execute">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.SBXCrossover.execute">[docs]</a>
@@ -328,49 +347,67 @@
                         <span class="k">else</span><span class="p">:</span>
                             <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">value_x2</span><span class="p">,</span> <span class="n">value_x1</span>
 
-                        <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                        <span class="c1"># Calculate beta and handle potential complex numbers</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="c1"># First offspring (based on first parent&#39;s bounds)</span>
+                            <span class="n">lb1</span><span class="p">,</span> <span class="n">ub1</span> <span class="o">=</span> <span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                            <span class="n">beta1</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">lb1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">))</span>
+                            <span class="n">alpha1</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="nb">pow</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span>
+                            
+                            <span class="n">rand_val</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+                            <span class="k">if</span> <span class="n">rand_val</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">alpha1</span><span class="p">):</span>
+                                <span class="n">betaq1</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">rand_val</span> <span class="o">*</span> <span class="n">alpha1</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)))</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">betaq1</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">-</span> <span class="n">rand_val</span> <span class="o">*</span> <span class="n">alpha1</span><span class="p">),</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span>
+                            
+                            <span class="n">c1</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">y1</span> <span class="o">+</span> <span class="n">y2</span> <span class="o">-</span> <span class="n">betaq1</span> <span class="o">*</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">))</span>
+                            
+                            <span class="c1"># Ensure c1 is a real number and within bounds</span>
+                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="nb">complex</span><span class="p">):</span>
+                                <span class="n">c1</span> <span class="o">=</span> <span class="n">y1</span> <span class="k">if</span> <span class="n">c1</span><span class="o">.</span><span class="n">real</span> <span class="o">&lt;</span> <span class="n">lb1</span> <span class="k">else</span> <span class="p">(</span><span class="n">y2</span> <span class="k">if</span> <span class="n">c1</span><span class="o">.</span><span class="n">real</span> <span class="o">&gt;</span> <span class="n">ub1</span> <span class="k">else</span> <span class="n">c1</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+                            
+                            <span class="c1"># Second offspring (based on second parent&#39;s bounds)</span>
+                            <span class="n">lb2</span><span class="p">,</span> <span class="n">ub2</span> <span class="o">=</span> <span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                            <span class="n">beta2</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">ub2</span> <span class="o">-</span> <span class="n">y2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">))</span>
+                            <span class="n">alpha2</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="nb">pow</span><span class="p">(</span><span class="n">beta2</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span>
+                            
+                            <span class="k">if</span> <span class="n">rand_val</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">alpha2</span><span class="p">):</span>
+                                <span class="n">betaq2</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">((</span><span class="n">rand_val</span> <span class="o">*</span> <span class="n">alpha2</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)))</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">betaq2</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">-</span> <span class="n">rand_val</span> <span class="o">*</span> <span class="n">alpha2</span><span class="p">),</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span>
+                            
+                            <span class="n">c2</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">y1</span> <span class="o">+</span> <span class="n">y2</span> <span class="o">+</span> <span class="n">betaq2</span> <span class="o">*</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">))</span>
+                            
+                            <span class="c1"># Ensure c2 is a real number and within bounds</span>
+                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="nb">complex</span><span class="p">):</span>
+                                <span class="n">c2</span> <span class="o">=</span> <span class="n">y1</span> <span class="k">if</span> <span class="n">c2</span><span class="o">.</span><span class="n">real</span> <span class="o">&lt;</span> <span class="n">lb2</span> <span class="k">else</span> <span class="p">(</span><span class="n">y2</span> <span class="k">if</span> <span class="n">c2</span><span class="o">.</span><span class="n">real</span> <span class="o">&gt;</span> <span class="n">ub2</span> <span class="k">else</span> <span class="n">c2</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+                                
+                        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">ZeroDivisionError</span><span class="p">):</span>
+                            <span class="c1"># Fallback to parent values if any numerical issues occur</span>
+                            <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span> <span class="o">=</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span>
 
-                        <span class="n">beta</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">lower_bound</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">))</span>
-                        <span class="n">alpha</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="nb">pow</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span>
-
-                        <span class="n">rand</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
-                        <span class="k">if</span> <span class="n">rand</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">alpha</span><span class="p">):</span>
-                            <span class="n">betaq</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">rand</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)))</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">betaq</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">-</span> <span class="n">rand</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">),</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span>
-
-                        <span class="n">c1</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">y1</span> <span class="o">+</span> <span class="n">y2</span> <span class="o">-</span> <span class="n">betaq</span> <span class="o">*</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">))</span>
-                        <span class="n">beta</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">upper_bound</span> <span class="o">-</span> <span class="n">y2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">))</span>
-                        <span class="n">alpha</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="nb">pow</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span>
-
-                        <span class="k">if</span> <span class="n">rand</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">alpha</span><span class="p">):</span>
-                            <span class="n">betaq</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">((</span><span class="n">rand</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)))</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">betaq</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">-</span> <span class="n">rand</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">),</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span>
-
-                        <span class="n">c2</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">y1</span> <span class="o">+</span> <span class="n">y2</span> <span class="o">+</span> <span class="n">betaq</span> <span class="o">*</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">))</span>
-
-                        <span class="k">if</span> <span class="n">c1</span> <span class="o">&lt;</span> <span class="n">lower_bound</span><span class="p">:</span>
-                            <span class="n">c1</span> <span class="o">=</span> <span class="n">lower_bound</span>
-                        <span class="k">if</span> <span class="n">c2</span> <span class="o">&lt;</span> <span class="n">lower_bound</span><span class="p">:</span>
-                            <span class="n">c2</span> <span class="o">=</span> <span class="n">lower_bound</span>
-                        <span class="k">if</span> <span class="n">c1</span> <span class="o">&gt;</span> <span class="n">upper_bound</span><span class="p">:</span>
-                            <span class="n">c1</span> <span class="o">=</span> <span class="n">upper_bound</span>
-                        <span class="k">if</span> <span class="n">c2</span> <span class="o">&gt;</span> <span class="n">upper_bound</span><span class="p">:</span>
-                            <span class="n">c2</span> <span class="o">=</span> <span class="n">upper_bound</span>
+                        <span class="c1"># Apply bounds checking using the correct bounds for each offspring</span>
+                        <span class="k">if</span> <span class="n">c1</span> <span class="o">&lt;</span> <span class="n">lb1</span><span class="p">:</span>
+                            <span class="n">c1</span> <span class="o">=</span> <span class="n">lb1</span>
+                        <span class="k">if</span> <span class="n">c2</span> <span class="o">&lt;</span> <span class="n">lb2</span><span class="p">:</span>
+                            <span class="n">c2</span> <span class="o">=</span> <span class="n">lb2</span>
+                        <span class="k">if</span> <span class="n">c1</span> <span class="o">&gt;</span> <span class="n">ub1</span><span class="p">:</span>
+                            <span class="n">c1</span> <span class="o">=</span> <span class="n">ub1</span>
+                        <span class="k">if</span> <span class="n">c2</span> <span class="o">&gt;</span> <span class="n">ub2</span><span class="p">:</span>
+                            <span class="n">c2</span> <span class="o">=</span> <span class="n">ub2</span>
 
                         <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mf">0.5</span><span class="p">:</span>
-                            <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c2</span>
-                            <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c1</span>
+                            <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c2</span>
+                            <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c1</span>
                         <span class="k">else</span><span class="p">:</span>
-                            <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c1</span>
-                            <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c2</span>
+                            <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c1</span>
+                            <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c2</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_x1</span>
-                        <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_x2</span>
+                        <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_x1</span>
+                        <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_x2</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_x1</span>
-                    <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_x2</span>
+                    <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_x1</span>
+                    <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_x2</span>
         <span class="k">return</span> <span class="n">offspring</span></div>
 
 
@@ -424,49 +461,67 @@
                         <span class="k">else</span><span class="p">:</span>
                             <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">value_x2</span><span class="p">,</span> <span class="n">value_x1</span>
 
-                        <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                        <span class="c1"># Calculate beta and handle potential complex numbers</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="c1"># First offspring (based on first parent&#39;s bounds)</span>
+                            <span class="n">lb1</span><span class="p">,</span> <span class="n">ub1</span> <span class="o">=</span> <span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                            <span class="n">beta1</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">lb1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">))</span>
+                            <span class="n">alpha1</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="nb">pow</span><span class="p">(</span><span class="n">beta1</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span>
+                            
+                            <span class="n">rand_val</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+                            <span class="k">if</span> <span class="n">rand_val</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">alpha1</span><span class="p">):</span>
+                                <span class="n">betaq1</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">rand_val</span> <span class="o">*</span> <span class="n">alpha1</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)))</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">betaq1</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">-</span> <span class="n">rand_val</span> <span class="o">*</span> <span class="n">alpha1</span><span class="p">),</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span>
+                            
+                            <span class="n">c1</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">y1</span> <span class="o">+</span> <span class="n">y2</span> <span class="o">-</span> <span class="n">betaq1</span> <span class="o">*</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">))</span>
+                            
+                            <span class="c1"># Ensure c1 is a real number and within bounds</span>
+                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="nb">complex</span><span class="p">):</span>
+                                <span class="n">c1</span> <span class="o">=</span> <span class="n">y1</span> <span class="k">if</span> <span class="n">c1</span><span class="o">.</span><span class="n">real</span> <span class="o">&lt;</span> <span class="n">lb1</span> <span class="k">else</span> <span class="p">(</span><span class="n">y2</span> <span class="k">if</span> <span class="n">c1</span><span class="o">.</span><span class="n">real</span> <span class="o">&gt;</span> <span class="n">ub1</span> <span class="k">else</span> <span class="n">c1</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+                            
+                            <span class="c1"># Second offspring (based on second parent&#39;s bounds)</span>
+                            <span class="n">lb2</span><span class="p">,</span> <span class="n">ub2</span> <span class="o">=</span> <span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                            <span class="n">beta2</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">ub2</span> <span class="o">-</span> <span class="n">y2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">))</span>
+                            <span class="n">alpha2</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="nb">pow</span><span class="p">(</span><span class="n">beta2</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span>
+                            
+                            <span class="k">if</span> <span class="n">rand_val</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">alpha2</span><span class="p">):</span>
+                                <span class="n">betaq2</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">((</span><span class="n">rand_val</span> <span class="o">*</span> <span class="n">alpha2</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)))</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">betaq2</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">-</span> <span class="n">rand_val</span> <span class="o">*</span> <span class="n">alpha2</span><span class="p">),</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span>
+                            
+                            <span class="n">c2</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">y1</span> <span class="o">+</span> <span class="n">y2</span> <span class="o">+</span> <span class="n">betaq2</span> <span class="o">*</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">))</span>
+                            
+                            <span class="c1"># Ensure c2 is a real number and within bounds</span>
+                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="nb">complex</span><span class="p">):</span>
+                                <span class="n">c2</span> <span class="o">=</span> <span class="n">y1</span> <span class="k">if</span> <span class="n">c2</span><span class="o">.</span><span class="n">real</span> <span class="o">&lt;</span> <span class="n">lb2</span> <span class="k">else</span> <span class="p">(</span><span class="n">y2</span> <span class="k">if</span> <span class="n">c2</span><span class="o">.</span><span class="n">real</span> <span class="o">&gt;</span> <span class="n">ub2</span> <span class="k">else</span> <span class="n">c2</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+                                
+                        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">ZeroDivisionError</span><span class="p">):</span>
+                            <span class="c1"># Fallback to parent values if any numerical issues occur</span>
+                            <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span> <span class="o">=</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span>
 
-                        <span class="n">beta</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">lower_bound</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">))</span>
-                        <span class="n">alpha</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="nb">pow</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span>
-
-                        <span class="n">rand</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
-                        <span class="k">if</span> <span class="n">rand</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">alpha</span><span class="p">):</span>
-                            <span class="n">betaq</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">rand</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)))</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">betaq</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">-</span> <span class="n">rand</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">),</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span>
-
-                        <span class="n">c1</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">y1</span> <span class="o">+</span> <span class="n">y2</span> <span class="o">-</span> <span class="n">betaq</span> <span class="o">*</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">))</span>
-                        <span class="n">beta</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">upper_bound</span> <span class="o">-</span> <span class="n">y2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">))</span>
-                        <span class="n">alpha</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="nb">pow</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span>
-
-                        <span class="k">if</span> <span class="n">rand</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">alpha</span><span class="p">):</span>
-                            <span class="n">betaq</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">((</span><span class="n">rand</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)))</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">betaq</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">-</span> <span class="n">rand</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">),</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_index</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span>
-
-                        <span class="n">c2</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">y1</span> <span class="o">+</span> <span class="n">y2</span> <span class="o">+</span> <span class="n">betaq</span> <span class="o">*</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">))</span>
-
-                        <span class="k">if</span> <span class="n">c1</span> <span class="o">&lt;</span> <span class="n">lower_bound</span><span class="p">:</span>
-                            <span class="n">c1</span> <span class="o">=</span> <span class="n">lower_bound</span>
-                        <span class="k">if</span> <span class="n">c2</span> <span class="o">&lt;</span> <span class="n">lower_bound</span><span class="p">:</span>
-                            <span class="n">c2</span> <span class="o">=</span> <span class="n">lower_bound</span>
-                        <span class="k">if</span> <span class="n">c1</span> <span class="o">&gt;</span> <span class="n">upper_bound</span><span class="p">:</span>
-                            <span class="n">c1</span> <span class="o">=</span> <span class="n">upper_bound</span>
-                        <span class="k">if</span> <span class="n">c2</span> <span class="o">&gt;</span> <span class="n">upper_bound</span><span class="p">:</span>
-                            <span class="n">c2</span> <span class="o">=</span> <span class="n">upper_bound</span>
+                        <span class="c1"># Apply bounds checking using the correct bounds for each offspring</span>
+                        <span class="k">if</span> <span class="n">c1</span> <span class="o">&lt;</span> <span class="n">lb1</span><span class="p">:</span>
+                            <span class="n">c1</span> <span class="o">=</span> <span class="n">lb1</span>
+                        <span class="k">if</span> <span class="n">c2</span> <span class="o">&lt;</span> <span class="n">lb2</span><span class="p">:</span>
+                            <span class="n">c2</span> <span class="o">=</span> <span class="n">lb2</span>
+                        <span class="k">if</span> <span class="n">c1</span> <span class="o">&gt;</span> <span class="n">ub1</span><span class="p">:</span>
+                            <span class="n">c1</span> <span class="o">=</span> <span class="n">ub1</span>
+                        <span class="k">if</span> <span class="n">c2</span> <span class="o">&gt;</span> <span class="n">ub2</span><span class="p">:</span>
+                            <span class="n">c2</span> <span class="o">=</span> <span class="n">ub2</span>
 
                         <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mf">0.5</span><span class="p">:</span>
-                            <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">c2</span><span class="p">)</span>
-                            <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span>
+                            <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">c2</span><span class="p">)</span>
+                            <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span>
                         <span class="k">else</span><span class="p">:</span>
-                            <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span>
-                            <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">c2</span><span class="p">)</span>
+                            <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span>
+                            <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">c2</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_x1</span>
-                        <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_x2</span>
+                        <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_x1</span>
+                        <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_x2</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_x1</span>
-                    <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_x2</span>
+                    <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_x1</span>
+                    <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_x2</span>
         <span class="k">return</span> <span class="n">offspring</span></div>
 
 
@@ -493,73 +548,694 @@
 <div class="viewcode-block" id="SPXCrossover">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.SPXCrossover">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SPXCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">BinarySolution</span><span class="p">,</span> <span class="n">BinarySolution</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A high-performance single-point crossover operator for BinarySolution.</span>
+<span class="sd">    </span>
+<span class="sd">    This implementation uses NumPy&#39;s vectorized operations for better performance</span>
+<span class="sd">    when working with BinarySolution solutions. It performs a single-point</span>
+<span class="sd">    crossover between two parent solutions to produce two offspring.</span>
+<span class="sd">    </span>
+<span class="sd">    The crossover point is selected uniformly at random from all possible bit</span>
+<span class="sd">    positions in the solution. The bits after the crossover point are swapped</span>
+<span class="sd">    between the two parents to create the offspring.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        probability: The probability of applying the crossover (must be between 0.0 and 1.0)</span>
+<span class="sd">        </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the probability is not in the range [0.0, 1.0]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">probability</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Probability must be between 0.0 and 1.0, but was </span><span class="si">{</span><span class="n">probability</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SPXCrossover</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>
 
 <div class="viewcode-block" id="SPXCrossover.execute">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.SPXCrossover.execute">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">BinarySolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">BinarySolution</span><span class="p">]:</span>
-        <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">is</span> <span class="n">BinarySolution</span><span class="p">,</span> <span class="s2">&quot;Solution type invalid&quot;</span><span class="p">)</span>
-        <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">is</span> <span class="n">BinarySolution</span><span class="p">,</span> <span class="s2">&quot;Solution type invalid&quot;</span><span class="p">)</span>
-        <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;The number of parents is not two: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)))</span>
-
-        <span class="n">offspring</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span>
-        <span class="n">rand</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="n">rand</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">:</span>
-            <span class="c1"># 1. Get the total number of bits</span>
-            <span class="n">total_number_of_bits</span> <span class="o">=</span> <span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_total_number_of_bits</span><span class="p">()</span>
-
-            <span class="c1"># 2. Calculate the point to make the crossover</span>
-            <span class="n">crossover_point</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">total_number_of_bits</span><span class="p">)</span>
-
-            <span class="c1"># 3. Compute the variable containing the crossover bit</span>
-            <span class="n">variable_to_cut</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="n">bits_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable_to_cut</span><span class="p">])</span>
-            <span class="k">while</span> <span class="n">bits_count</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">crossover_point</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-                <span class="n">variable_to_cut</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="n">bits_count</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable_to_cut</span><span class="p">])</span>
-
-            <span class="c1"># 4. Compute the bit into the selected variable</span>
-            <span class="n">diff</span> <span class="o">=</span> <span class="n">bits_count</span> <span class="o">-</span> <span class="n">crossover_point</span>
-            <span class="n">crossover_point_in_variable</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable_to_cut</span><span class="p">])</span> <span class="o">-</span> <span class="n">diff</span>
-
-            <span class="c1"># 5. Apply the crossover to the variable</span>
-            <span class="n">bitset1</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable_to_cut</span><span class="p">])</span>
-            <span class="n">bitset2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable_to_cut</span><span class="p">])</span>
-
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">crossover_point_in_variable</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">bitset1</span><span class="p">)):</span>
-                <span class="n">swap</span> <span class="o">=</span> <span class="n">bitset1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">bitset1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">bitset2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">bitset2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">swap</span>
-
-            <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable_to_cut</span><span class="p">]</span> <span class="o">=</span> <span class="n">bitset1</span>
-            <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable_to_cut</span><span class="p">]</span> <span class="o">=</span> <span class="n">bitset2</span>
-
-            <span class="c1"># 6. Apply the crossover to the other variables</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">variable_to_cut</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">)):</span>
-                <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-                <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Execute the single-point crossover operation.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            parents: A list of exactly two parent solutions of type BinarySolution.</span>
+<span class="sd">                    Both parents must have the same number of bits.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            List[BinarySolution]: A list containing two offspring solutions.</span>
+<span class="sd">            </span>
+<span class="sd">        Note:</span>
+<span class="sd">            This method assumes that both parents are valid BinarySolution instances</span>
+<span class="sd">            with properly initialized bits attributes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;SPXCrossover requires exactly two parents&quot;</span><span class="p">)</span>
+            
+        <span class="c1"># Create deep copies of the parents to avoid modifying the originals</span>
+        <span class="n">offspring</span> <span class="o">=</span> <span class="p">[</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+        
+        <span class="c1"># Check if crossover should be performed based on probability</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rng</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">offspring</span>
+            
+        <span class="c1"># Get the bits from both parents</span>
+        <span class="n">bits1</span> <span class="o">=</span> <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bits</span>
+        <span class="n">bits2</span> <span class="o">=</span> <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">bits</span>
+        
+        <span class="c1"># Ensure both parents have the same number of bits</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bits1</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bits2</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Parents must have the same number of bits&quot;</span><span class="p">)</span>
+            
+        <span class="n">num_bits</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bits1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">num_bits</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Select a random crossover point (1 to num_bits-1 to ensure crossover happens)</span>
+            <span class="n">crossover_point</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_bits</span><span class="p">)</span>
+            
+            <span class="c1"># Create new bit arrays for the offspring</span>
+            <span class="n">new_bits1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">bits1</span><span class="p">[:</span><span class="n">crossover_point</span><span class="p">],</span> <span class="n">bits2</span><span class="p">[</span><span class="n">crossover_point</span><span class="p">:]])</span>
+            <span class="n">new_bits2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">bits2</span><span class="p">[:</span><span class="n">crossover_point</span><span class="p">],</span> <span class="n">bits1</span><span class="p">[</span><span class="n">crossover_point</span><span class="p">:]])</span>
+            
+            <span class="c1"># Update the bits in the offspring</span>
+            <span class="n">offspring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bits</span> <span class="o">=</span> <span class="n">new_bits1</span>
+            <span class="n">offspring</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">bits</span> <span class="o">=</span> <span class="n">new_bits2</span>
+        
         <span class="k">return</span> <span class="n">offspring</span></div>
 
 
 <div class="viewcode-block" id="SPXCrossover.get_number_of_parents">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.SPXCrossover.get_number_of_parents">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of parent solutions required by the operator.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="SPXCrossover.get_number_of_children">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.SPXCrossover.get_number_of_children">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of offspring produced by the operator.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="SPXCrossover.get_name">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.SPXCrossover.get_name">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the name of the operator.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;Single point crossover&quot;</span></div>
+</div>
+
+
+<div class="viewcode-block" id="BLXAlphaCrossover">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.BLXAlphaCrossover">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BLXAlphaCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">,</span> <span class="n">FloatSolution</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BLX-α (Blend Crossover) for real-valued solutions.</span>
+<span class="sd">    </span>
+<span class="sd">    The BLX-α crossover creates offspring within a range that is extended by a factor of α (alpha)</span>
+<span class="sd">    beyond the range defined by the parent values. This allows for exploration beyond the region</span>
+<span class="sd">    defined by the parents while maintaining a balance between exploration and exploitation.</span>
+<span class="sd">    </span>
+<span class="sd">    The crossover works by:</span>
+<span class="sd">    1. For each variable, determine the min and max values from the parents</span>
+<span class="sd">    2. Calculate the range between parents</span>
+<span class="sd">    3. Expand the range by α * range in both directions</span>
+<span class="sd">    4. Sample new values uniformly from this expanded range</span>
+<span class="sd">    5. Apply bounds repair if values fall outside the variable bounds</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        probability: Crossover probability (0.0 to 1.0)</span>
+<span class="sd">        alpha: Expansion factor (must be ≥ 0). Controls the exploration range:</span>
+<span class="sd">            - alpha = 0: Offspring will be in the range defined by parents (no exploration)</span>
+<span class="sd">            - alpha &gt; 0: Offspring can be outside parent range (increased exploration)</span>
+<span class="sd">            - Typical values: 0.1 to 0.5</span>
+<span class="sd">        repair_operator: Optional function to repair out-of-bounds values.</span>
+<span class="sd">            If None, values are clamped to the variable bounds using min/max.</span>
+<span class="sd">            Signature: repair_operator(value: float, lower_bound: float, upper_bound: float) -&gt; float</span>
+<span class="sd">    </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If probability is not in [0,1] or alpha is negative.</span>
+<span class="sd">        </span>
+<span class="sd">    Reference:</span>
+<span class="sd">        Eshelman, L. J., &amp; Schaffer, J. D. (1993). Real-coded genetic algorithms and </span>
+<span class="sd">        interval-schemata. Foundations of genetic algorithms, 2, 187-202.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">repair_operator</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">probability</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;probability must be in [0, 1]&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">alpha</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;alpha must be non-negative&quot;</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repair_operator</span> <span class="o">=</span> <span class="n">repair_operator</span> <span class="k">if</span> <span class="n">repair_operator</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_repair</span>
+
+<div class="viewcode-block" id="BLXAlphaCrossover.execute">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.BLXAlphaCrossover.execute">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
+        <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;BLXAlphaCrossover requires exactly two parents&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">doCrossover</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">,</span> <span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="BLXAlphaCrossover.doCrossover">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.BLXAlphaCrossover.doCrossover">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">doCrossover</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">parent1</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">parent2</span><span class="p">:</span> <span class="n">FloatSolution</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the crossover operation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            probability: Crossover probability</span>
+<span class="sd">            parent1: First parent solution</span>
+<span class="sd">            parent2: Second parent solution</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A list containing two offspring solutions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">offspring1</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+            <span class="n">parent1</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">,</span> 
+            <span class="n">parent1</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">,</span> 
+            <span class="nb">len</span><span class="p">(</span><span class="n">parent1</span><span class="o">.</span><span class="n">objectives</span><span class="p">),</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">parent1</span><span class="o">.</span><span class="n">constraints</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">parent1</span><span class="p">,</span> <span class="s1">&#39;constraints&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="p">)</span>
+        <span class="n">offspring2</span> <span class="o">=</span> <span class="n">parent2</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+            <span class="n">parent2</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">,</span> 
+            <span class="n">parent2</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">,</span> 
+            <span class="nb">len</span><span class="p">(</span><span class="n">parent2</span><span class="o">.</span><span class="n">objectives</span><span class="p">),</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">parent2</span><span class="o">.</span><span class="n">constraints</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">parent2</span><span class="p">,</span> <span class="s1">&#39;constraints&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">probability</span><span class="p">:</span>
+            <span class="n">offspring1</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">offspring2</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">parent2</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">offspring1</span><span class="p">,</span> <span class="n">offspring2</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parent1</span><span class="o">.</span><span class="n">variables</span><span class="p">)):</span>
+            <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">parent2</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="c1"># Calculate the range between parents</span>
+            <span class="n">min_val</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
+            <span class="n">max_val</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
+            <span class="n">range_val</span> <span class="o">=</span> <span class="n">max_val</span> <span class="o">-</span> <span class="n">min_val</span>
+
+            <span class="c1"># Expand the range by alpha</span>
+            <span class="n">min_range</span> <span class="o">=</span> <span class="n">min_val</span> <span class="o">-</span> <span class="n">range_val</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span>
+            <span class="n">max_range</span> <span class="o">=</span> <span class="n">max_val</span> <span class="o">+</span> <span class="n">range_val</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span>
+
+            <span class="c1"># Generate offspring values within the expanded range</span>
+            <span class="n">y1</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">min_range</span><span class="p">,</span> <span class="n">max_range</span><span class="p">)</span>
+            <span class="n">y2</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">min_range</span><span class="p">,</span> <span class="n">max_range</span><span class="p">)</span>
+
+            <span class="c1"># Repair out-of-bounds values</span>
+            <span class="n">y1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">repair_operator</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
+            <span class="n">y2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">repair_operator</span><span class="p">(</span><span class="n">y2</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
+
+            <span class="n">offspring1</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y1</span>
+            <span class="n">offspring2</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y2</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">offspring1</span><span class="p">,</span> <span class="n">offspring2</span><span class="p">]</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_default_repair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Default repair method that clamps values to bounds.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">upper_bound</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+
+<div class="viewcode-block" id="BLXAlphaCrossover.get_number_of_parents">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.BLXAlphaCrossover.get_number_of_parents">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="BLXAlphaCrossover.get_number_of_children">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.BLXAlphaCrossover.get_number_of_children">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="BLXAlphaCrossover.get_name">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.BLXAlphaCrossover.get_name">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;BLX-alpha crossover&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="BLXAlphaBetaCrossover">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.BLXAlphaBetaCrossover">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BLXAlphaBetaCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">,</span> <span class="n">FloatSolution</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BLX-αβ (Blend Crossover with separate alpha and beta) for real-valued solutions.</span>
+<span class="sd">    </span>
+<span class="sd">    An extension of BLX-α crossover that uses two different expansion factors (α and β)</span>
+<span class="sd">    for the lower and upper bounds respectively. This allows for asymmetric exploration</span>
+<span class="sd">    around the parent solutions.</span>
+<span class="sd">    </span>
+<span class="sd">    The crossover works by:</span>
+<span class="sd">    1. For each variable, determine the min and max values from the parents</span>
+<span class="sd">    2. Calculate the range between parents (d = max - min)</span>
+<span class="sd">    3. Expand the range by α*d below the min and β*d above the max</span>
+<span class="sd">    4. Sample new values uniformly from this expanded range</span>
+<span class="sd">    5. Apply bounds repair if values fall outside the variable bounds</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        probability: Crossover probability (0.0 to 1.0)</span>
+<span class="sd">        alpha: Lower expansion factor (must be ≥ 0). Controls exploration below parents:</span>
+<span class="sd">            - alpha = 0: No exploration below the smaller parent value</span>
+<span class="sd">            - alpha &gt; 0: Expands range below smaller parent by alpha*d</span>
+<span class="sd">            - Typical values: 0.1 to 0.5</span>
+<span class="sd">        beta: Upper expansion factor (must be ≥ 0). Controls exploration above parents:</span>
+<span class="sd">            - beta = 0: No exploration above the larger parent value</span>
+<span class="sd">            - beta &gt; 0: Expands range above larger parent by beta*d</span>
+<span class="sd">            - Typical values: 0.1 to 0.5</span>
+<span class="sd">        repair_operator: Optional function to repair out-of-bounds values.</span>
+<span class="sd">            If None, values are clamped to the variable bounds using min/max.</span>
+<span class="sd">            Signature: repair_operator(value: float, lower_bound: float, upper_bound: float) -&gt; float</span>
+<span class="sd">    </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If probability is not in [0,1] or alpha/beta are negative.</span>
+<span class="sd">        </span>
+<span class="sd">    Reference:</span>
+<span class="sd">        Eshelman, L. J., &amp; Schaffer, J. D. (1993). Real-coded genetic algorithms and </span>
+<span class="sd">        interval-schemata. Foundations of genetic algorithms, 2, 187-202.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">beta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">repair_operator</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">probability</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;probability must be in [0, 1]&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">alpha</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;alpha must be non-negative&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">beta</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;beta must be non-negative&quot;</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repair_operator</span> <span class="o">=</span> <span class="n">repair_operator</span> <span class="k">if</span> <span class="n">repair_operator</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_repair</span>
+
+<div class="viewcode-block" id="BLXAlphaBetaCrossover.execute">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.BLXAlphaBetaCrossover.execute">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
+        <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;BLXAlphaBetaCrossover requires exactly two parents&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">doCrossover</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">,</span> <span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="BLXAlphaBetaCrossover.doCrossover">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.BLXAlphaBetaCrossover.doCrossover">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">doCrossover</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">parent1</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">parent2</span><span class="p">:</span> <span class="n">FloatSolution</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the crossover operation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            probability: Crossover probability</span>
+<span class="sd">            parent1: First parent solution</span>
+<span class="sd">            parent2: Second parent solution</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A list containing two offspring solutions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">offspring1</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+            <span class="n">parent1</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">,</span> 
+            <span class="n">parent1</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">,</span> 
+            <span class="nb">len</span><span class="p">(</span><span class="n">parent1</span><span class="o">.</span><span class="n">objectives</span><span class="p">),</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">parent1</span><span class="o">.</span><span class="n">constraints</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">parent1</span><span class="p">,</span> <span class="s1">&#39;constraints&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="p">)</span>
+        <span class="n">offspring2</span> <span class="o">=</span> <span class="n">parent2</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+            <span class="n">parent2</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">,</span> 
+            <span class="n">parent2</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">,</span> 
+            <span class="nb">len</span><span class="p">(</span><span class="n">parent2</span><span class="o">.</span><span class="n">objectives</span><span class="p">),</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">parent2</span><span class="o">.</span><span class="n">constraints</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">parent2</span><span class="p">,</span> <span class="s1">&#39;constraints&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">probability</span><span class="p">:</span>
+            <span class="n">offspring1</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">offspring2</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">parent2</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">offspring1</span><span class="p">,</span> <span class="n">offspring2</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parent1</span><span class="o">.</span><span class="n">variables</span><span class="p">)):</span>
+            <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">parent2</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="c1"># Ensure x1 &lt;= x2</span>
+            <span class="k">if</span> <span class="n">x1</span> <span class="o">&gt;</span> <span class="n">x2</span><span class="p">:</span>
+                <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">=</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x1</span>
+
+            <span class="c1"># Calculate the range and expanded bounds</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span>
+            <span class="n">c_min</span> <span class="o">=</span> <span class="n">x1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">d</span>
+            <span class="n">c_max</span> <span class="o">=</span> <span class="n">x2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">*</span> <span class="n">d</span>
+
+            <span class="c1"># Generate offspring values within the expanded range</span>
+            <span class="n">y1</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">c_min</span><span class="p">,</span> <span class="n">c_max</span><span class="p">)</span>
+            <span class="n">y2</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">c_min</span><span class="p">,</span> <span class="n">c_max</span><span class="p">)</span>
+
+            <span class="c1"># Repair out-of-bounds values</span>
+            <span class="n">y1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">repair_operator</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
+            <span class="n">y2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">repair_operator</span><span class="p">(</span><span class="n">y2</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
+
+            <span class="n">offspring1</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y1</span>
+            <span class="n">offspring2</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y2</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">offspring1</span><span class="p">,</span> <span class="n">offspring2</span><span class="p">]</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_default_repair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Default repair method that clamps values to bounds.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">upper_bound</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+
+<div class="viewcode-block" id="BLXAlphaBetaCrossover.get_number_of_parents">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.BLXAlphaBetaCrossover.get_number_of_parents">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="BLXAlphaBetaCrossover.get_number_of_children">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.BLXAlphaBetaCrossover.get_number_of_children">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="BLXAlphaBetaCrossover.get_name">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.BLXAlphaBetaCrossover.get_name">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;BLX-alpha-beta crossover (α=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="si">}</span><span class="s2">, β=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ArithmeticCrossover">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.ArithmeticCrossover">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ArithmeticCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">,</span> <span class="n">FloatSolution</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Arithmetic Crossover for real-valued solutions.</span>
+<span class="sd">    </span>
+<span class="sd">    This operator performs an arithmetic combination of two parent solutions to produce</span>
+<span class="sd">    two offspring. For each variable, a random weight (alpha) is used to compute a weighted</span>
+<span class="sd">    average of the parent values.</span>
+<span class="sd">    </span>
+<span class="sd">    The crossover works by:</span>
+<span class="sd">    1. For each variable, generate a random weight alpha in [0, 1]</span>
+<span class="sd">    2. Calculate new values as:</span>
+<span class="sd">       - child1 = alpha * parent1 + (1 - alpha) * parent2</span>
+<span class="sd">       - child2 = (1 - alpha) * parent1 + alpha * parent2</span>
+<span class="sd">    3. Apply bounds repair if values fall outside the variable bounds</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        probability: Crossover probability (0.0 to 1.0)</span>
+<span class="sd">        repair_operator: Optional function to repair out-of-bounds values.</span>
+<span class="sd">            If None, values are clamped to the variable bounds using min/max.</span>
+<span class="sd">            Signature: repair_operator(value: float, lower_bound: float, upper_bound: float) -&gt; float</span>
+<span class="sd">    </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If probability is not in [0,1]</span>
+<span class="sd">        </span>
+<span class="sd">    Reference:</span>
+<span class="sd">        Michalewicz, Z. (1996). Genetic Algorithms + Data Structures = Evolution Programs.</span>
+<span class="sd">        Springer-Verlag, Berlin.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span>
+        <span class="n">repair_operator</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">probability</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;probability must be in [0, 1]&quot;</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repair_operator</span> <span class="o">=</span> <span class="n">repair_operator</span> <span class="k">if</span> <span class="n">repair_operator</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_repair</span>
+
+<div class="viewcode-block" id="ArithmeticCrossover.execute">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.ArithmeticCrossover.execute">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
+        <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Arithmetic Crossover requires exactly two parents&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">doCrossover</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">,</span> <span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="ArithmeticCrossover.doCrossover">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.ArithmeticCrossover.doCrossover">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">doCrossover</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">parent1</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span> <span class="n">parent2</span><span class="p">:</span> <span class="n">FloatSolution</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the arithmetic crossover operation.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            probability: Crossover probability</span>
+<span class="sd">            parent1: First parent solution</span>
+<span class="sd">            parent2: Second parent solution</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            A list containing two offspring solutions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create copies of the parents as the base for the offspring</span>
+        <span class="n">offspring1</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+            <span class="n">parent1</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">,</span>
+            <span class="n">parent1</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">,</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">parent1</span><span class="o">.</span><span class="n">objectives</span><span class="p">),</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">parent1</span><span class="o">.</span><span class="n">constraints</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">parent1</span><span class="p">,</span> <span class="s1">&#39;constraints&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="p">)</span>
+        <span class="n">offspring2</span> <span class="o">=</span> <span class="n">parent2</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+            <span class="n">parent2</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">,</span>
+            <span class="n">parent2</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">,</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">parent2</span><span class="o">.</span><span class="n">objectives</span><span class="p">),</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">parent2</span><span class="o">.</span><span class="n">constraints</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">parent2</span><span class="p">,</span> <span class="s1">&#39;constraints&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># If crossover doesn&#39;t happen, return copies of the parents</span>
+        <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">probability</span><span class="p">:</span>
+            <span class="n">offspring1</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">offspring2</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">parent2</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">offspring1</span><span class="p">,</span> <span class="n">offspring2</span><span class="p">]</span>
+        
+        <span class="c1"># Generate a single alpha for all variables in this crossover</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+        
+        <span class="c1"># Initialize variables for both offspring with the correct length</span>
+        <span class="n">num_variables</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">parent1</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
+        <span class="c1"># Initialize variables as lists</span>
+        <span class="n">vars1</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_variables</span>
+        <span class="n">vars2</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_variables</span>
+        
+        <span class="c1"># Perform arithmetic crossover on each variable</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_variables</span><span class="p">):</span>
+            <span class="n">p1</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">p2</span> <span class="o">=</span> <span class="n">parent2</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            
+            <span class="c1"># Calculate new values using the same alpha for all variables</span>
+            <span class="n">value1</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">p1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">p2</span>
+            <span class="n">value2</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">p1</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">p2</span>
+            
+            <span class="c1"># Apply bounds repair if needed</span>
+            <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            
+            <span class="n">repaired1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">repair_operator</span><span class="p">(</span><span class="n">value1</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
+            <span class="n">repaired2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">repair_operator</span><span class="p">(</span><span class="n">value2</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
+            
+            <span class="n">vars1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">repaired1</span>
+            <span class="n">vars2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">repaired2</span>
+            
+        <span class="c1"># Set the variables after all calculations are done</span>
+        <span class="n">offspring1</span><span class="o">.</span><span class="n">_variables</span> <span class="o">=</span> <span class="n">vars1</span>
+        <span class="n">offspring2</span><span class="o">.</span><span class="n">_variables</span> <span class="o">=</span> <span class="n">vars2</span>
+        
+        <span class="k">return</span> <span class="p">[</span><span class="n">offspring1</span><span class="p">,</span> <span class="n">offspring2</span><span class="p">]</span></div>
+
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_default_repair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Default repair method that clamps values to bounds.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">upper_bound</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+    
+<div class="viewcode-block" id="ArithmeticCrossover.get_number_of_parents">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.ArithmeticCrossover.get_number_of_parents">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">2</span></div>
+
+    
+<div class="viewcode-block" id="ArithmeticCrossover.get_number_of_children">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.ArithmeticCrossover.get_number_of_children">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">2</span></div>
+
+    
+<div class="viewcode-block" id="ArithmeticCrossover.get_name">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.ArithmeticCrossover.get_name">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Arithmetic Crossover&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="UnimodalNormalDistributionCrossover">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.UnimodalNormalDistributionCrossover">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">UnimodalNormalDistributionCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">,</span> <span class="n">FloatSolution</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unimodal Normal Distribution Crossover (UNDX) for real-valued solutions.</span>
+<span class="sd">    </span>
+<span class="sd">    UNDX is a multi-parent crossover operator that generates offspring based on the normal</span>
+<span class="sd">    distribution defined by three parent solutions. It is particularly effective for continuous</span>
+<span class="sd">    optimization problems as it preserves the statistics of the population.</span>
+<span class="sd">    </span>
+<span class="sd">    Reference:</span>
+<span class="sd">        Onikura, T., &amp; Kobayashi, S. (1999). Extended UNIMODAL DISTRIBUTION CROSSOVER for</span>
+<span class="sd">        REAL-CODED GENETIC ALGORITHMS. In Proceedings of the 1999 Congress on Evolutionary</span>
+<span class="sd">        Computation-CEC99 (Cat. No. 99TH8406) (Vol. 2, pp. 1581-1588). IEEE.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        probability: Crossover probability (0.0 to 1.0)</span>
+<span class="sd">        zeta: Controls the spread along the line connecting parents (typically in [0.1, 1.0],</span>
+<span class="sd">            where smaller values produce offspring closer to the parents)</span>
+<span class="sd">        eta: Controls the spread in the orthogonal direction (typically in [0.1, 0.5],</span>
+<span class="sd">            where smaller values produce more concentrated distributions)</span>
+<span class="sd">        repair_operator: Optional function to repair out-of-bounds values.</span>
+<span class="sd">            If None, values are clamped to the variable bounds using min/max.</span>
+<span class="sd">            Signature: repair_operator(value: float, lower_bound: float, upper_bound: float) -&gt; float</span>
+<span class="sd">    </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If probability is not in [0,1] or if zeta or eta are negative</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span>
+        <span class="n">zeta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">eta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.35</span><span class="p">,</span>
+        <span class="n">repair_operator</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">probability</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;probability must be in [0, 1]&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">zeta</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;zeta must be non-negative&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">eta</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;eta must be non-negative&quot;</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zeta</span> <span class="o">=</span> <span class="n">zeta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="n">eta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repair_operator</span> <span class="o">=</span> <span class="n">repair_operator</span> <span class="k">if</span> <span class="n">repair_operator</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_repair</span>
+
+<div class="viewcode-block" id="UnimodalNormalDistributionCrossover.execute">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.UnimodalNormalDistributionCrossover.execute">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
+        <span class="n">Check</span><span class="o">.</span><span class="n">that</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;UNDX requires at least three parents&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">doCrossover</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">,</span> <span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parents</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="UnimodalNormalDistributionCrossover.doCrossover">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.UnimodalNormalDistributionCrossover.doCrossover">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">doCrossover</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">parent1</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span>
+        <span class="n">parent2</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span>
+        <span class="n">parent3</span><span class="p">:</span> <span class="n">FloatSolution</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the UNDX crossover operation.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            probability: Crossover probability</span>
+<span class="sd">            parent1: First parent solution</span>
+<span class="sd">            parent2: Second parent solution</span>
+<span class="sd">            parent3: Third parent solution (used to determine the orthogonal direction)</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            A list containing two offspring solutions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create offspring as copies of parents initially</span>
+        <span class="n">offspring1</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+            <span class="n">parent1</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">,</span>
+            <span class="n">parent1</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">,</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">parent1</span><span class="o">.</span><span class="n">objectives</span><span class="p">),</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">parent1</span><span class="o">.</span><span class="n">constraints</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">parent1</span><span class="p">,</span> <span class="s1">&#39;constraints&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="p">)</span>
+        <span class="n">offspring2</span> <span class="o">=</span> <span class="n">parent2</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+            <span class="n">parent2</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">,</span>
+            <span class="n">parent2</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">,</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">parent2</span><span class="o">.</span><span class="n">objectives</span><span class="p">),</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">parent2</span><span class="o">.</span><span class="n">constraints</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">parent2</span><span class="p">,</span> <span class="s1">&#39;constraints&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># If crossover doesn&#39;t happen, return copies of the parents</span>
+        <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">probability</span><span class="p">:</span>
+            <span class="n">offspring1</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">offspring2</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">parent2</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">offspring1</span><span class="p">,</span> <span class="n">offspring2</span><span class="p">]</span>
+        
+        <span class="n">number_of_variables</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">parent1</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
+        
+        <span class="c1"># Calculate the center of mass between parent1 and parent2</span>
+        <span class="n">center</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">p1</span> <span class="o">+</span> <span class="n">p2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span> 
+            <span class="k">for</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">parent1</span><span class="o">.</span><span class="n">variables</span><span class="p">,</span> <span class="n">parent2</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
+        <span class="p">]</span>
+        
+        <span class="c1"># Calculate the difference vector between parent1 and parent2</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="p">[</span><span class="n">p2</span> <span class="o">-</span> <span class="n">p1</span> <span class="k">for</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">parent1</span><span class="o">.</span><span class="n">variables</span><span class="p">,</span> <span class="n">parent2</span><span class="o">.</span><span class="n">variables</span><span class="p">)]</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">d</span> <span class="o">*</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">diff</span><span class="p">))</span>
+        
+        <span class="c1"># If parents are too close, return exact copies to avoid division by zero</span>
+        <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span>
+            <span class="n">offspring1</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">offspring2</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">parent2</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">offspring1</span><span class="p">,</span> <span class="n">offspring2</span><span class="p">]</span>
+        
+        <span class="c1"># Generate offspring</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_of_variables</span><span class="p">):</span>
+            <span class="c1"># Generate values along the line connecting the parents</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">zeta</span> <span class="o">*</span> <span class="n">distance</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zeta</span> <span class="o">*</span> <span class="n">distance</span><span class="p">)</span>
+            
+            <span class="c1"># Generate values in the orthogonal direction</span>
+            <span class="c1"># Calculate beta as the sum of two random values centered around 0</span>
+            <span class="n">beta</span> <span class="o">=</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">*</span> <span class="n">distance</span> <span class="o">+</span> \
+                   <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">*</span> <span class="n">distance</span>
+            
+            <span class="c1"># Calculate the orthogonal component from parent3</span>
+            <span class="n">orthogonal</span> <span class="o">=</span> <span class="p">(</span><span class="n">parent3</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">center</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="n">distance</span> <span class="k">if</span> <span class="n">distance</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+            
+            <span class="c1"># Create the new values</span>
+            <span class="n">value1</span> <span class="o">=</span> <span class="n">center</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">diff</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">distance</span> <span class="o">+</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">orthogonal</span>
+            <span class="n">value2</span> <span class="o">=</span> <span class="n">center</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">diff</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">distance</span> <span class="o">-</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">orthogonal</span>
+            
+            <span class="c1"># Apply bounds repair if needed</span>
+            <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">parent1</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            
+            <span class="n">offspring1</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">repair_operator</span><span class="p">(</span><span class="n">value1</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
+            <span class="n">offspring2</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">repair_operator</span><span class="p">(</span><span class="n">value2</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="p">[</span><span class="n">offspring1</span><span class="p">,</span> <span class="n">offspring2</span><span class="p">]</span></div>
+
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_default_repair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Default repair method that clamps values to bounds.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">upper_bound</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+    
+<div class="viewcode-block" id="UnimodalNormalDistributionCrossover.get_number_of_parents">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.UnimodalNormalDistributionCrossover.get_number_of_parents">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_parents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">3</span>  <span class="c1"># UNDX requires exactly 3 parents</span></div>
+
+    
+<div class="viewcode-block" id="UnimodalNormalDistributionCrossover.get_number_of_children">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.UnimodalNormalDistributionCrossover.get_number_of_children">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">2</span>  <span class="c1"># UNDX generates 2 offspring</span></div>
+
+    
+<div class="viewcode-block" id="UnimodalNormalDistributionCrossover.get_name">
+<a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.UnimodalNormalDistributionCrossover.get_name">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Unimodal Normal Distribution Crossover (ζ=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">zeta</span><span class="si">}</span><span class="s2">, η=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="si">}</span><span class="s2">)&quot;</span></div>
 </div>
 
 
@@ -567,10 +1243,27 @@
 <div class="viewcode-block" id="DifferentialEvolutionCrossover">
 <a class="viewcode-back" href="../../../api/operator/crossover.html#jmetal.operator.crossover.DifferentialEvolutionCrossover">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DifferentialEvolutionCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">,</span> <span class="n">FloatSolution</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;This operator receives two parameters: the current individual and an array of three parent individuals. The</span>
-<span class="sd">    best and rand variants depends on the third parent, according whether it represents the current of the &quot;best&quot;</span>
-<span class="sd">    individual or a random_search one. The implementation of both variants are the same, due to that the parent selection is</span>
-<span class="sd">    external to the crossover operator.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Differential Evolution (DE) crossover operator for real-valued solutions.</span>
+<span class="sd">    </span>
+<span class="sd">    This operator implements the standard DE crossover used in the DE/rand/1/bin and DE/best/1/bin</span>
+<span class="sd">    variants. It creates a trial vector by combining the target vector with a difference vector,</span>
+<span class="sd">    then performs binomial crossover between the target and trial vectors.</span>
+<span class="sd">    </span>
+<span class="sd">    The operator requires three parents and three mutation factors (F, CR, and K). The first parent</span>
+<span class="sd">    is the target vector, while the other two are used to compute the difference vector.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        cr: Crossover probability (0.0 to 1.0). Controls the probability of each variable being</span>
+<span class="sd">            taken from the trial vector versus the target vector.</span>
+<span class="sd">        f: Differential weight (mutation factor) for the difference vector. Typically in [0, 2].</span>
+<span class="sd">        k: Scaling factor for the difference vector. Typically in [0, 1].</span>
+<span class="sd">        </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If cr is not in [0,1] or f/k are negative.</span>
+<span class="sd">        </span>
+<span class="sd">    Reference:</span>
+<span class="sd">        Storn, R., &amp; Price, K. (1997). Differential evolution - a simple and efficient heuristic for</span>
+<span class="sd">        global optimization over continuous spaces. Journal of global optimization, 11(4), 341-359.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">CR</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">F</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">K</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">):</span>
@@ -604,7 +1297,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
-            <span class="n">child</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">child</span><span class="o">.</span><span class="n">_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
         <span class="k">return</span> <span class="p">[</span><span class="n">child</span><span class="p">]</span></div>
 
@@ -634,7 +1327,7 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">CompositeCrossover</span><span class="p">(</span><span class="n">Crossover</span><span class="p">[</span><span class="n">CompositeSolution</span><span class="p">,</span> <span class="n">CompositeSolution</span><span class="p">]):</span>
     <span class="n">__EPS</span> <span class="o">=</span> <span class="mf">1.0e-14</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crossover_operator_list</span><span class="p">:</span> <span class="p">[</span><span class="n">Crossover</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crossover_operator_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Crossover</span><span class="p">]):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CompositeCrossover</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 
         <span class="n">Check</span><span class="o">.</span><span class="n">is_not_none</span><span class="p">(</span><span class="n">crossover_operator_list</span><span class="p">)</span>

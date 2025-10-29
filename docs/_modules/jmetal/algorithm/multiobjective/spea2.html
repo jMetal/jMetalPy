@@ -194,8 +194,8 @@
         <span class="n">ranking</span> <span class="o">=</span> <span class="n">StrengthRanking</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dominance_comparator</span><span class="p">)</span>
         <span class="n">density_estimator</span> <span class="o">=</span> <span class="n">KNearestNeighborDensityEstimator</span><span class="p">()</span>
 
-        <span class="n">r</span> <span class="o">=</span> <span class="n">RankingAndDensityEstimatorReplacement</span><span class="p">(</span><span class="n">ranking</span><span class="p">,</span> <span class="n">density_estimator</span><span class="p">,</span> <span class="n">RemovalPolicyType</span><span class="o">.</span><span class="n">SEQUENTIAL</span><span class="p">)</span>
-        <span class="n">solutions</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">offspring_population</span><span class="p">)</span>
+        <span class="n">replacement</span> <span class="o">=</span> <span class="n">RankingAndDensityEstimatorReplacement</span><span class="p">(</span><span class="n">ranking</span><span class="p">,</span> <span class="n">density_estimator</span><span class="p">,</span> <span class="n">RemovalPolicyType</span><span class="o">.</span><span class="n">SEQUENTIAL</span><span class="p">)</span>
+        <span class="n">solutions</span> <span class="o">=</span> <span class="n">replacement</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">offspring_population</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">solutions</span></div>
 

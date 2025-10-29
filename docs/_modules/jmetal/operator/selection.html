@@ -66,11 +66,10 @@
     
     
       <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../operators.html">Operators</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api-reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced-topics.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a></li>
 </ul>
@@ -134,30 +133,72 @@
 <div class="viewcode-block" id="RouletteWheelSelection">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RouletteWheelSelection">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">RouletteWheelSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">S</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs roulette wheel selection.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs roulette wheel selection.</span>
+<span class="sd">    </span>
+<span class="sd">    This selection operator selects solutions based on their fitness values using a roulette</span>
+<span class="sd">    wheel mechanism. It can handle both single and multi-objective optimization by using</span>
+<span class="sd">    the first objective value for selection. For multi-objective optimization, consider</span>
+<span class="sd">    using a proper fitness assignment strategy first.</span>
+<span class="sd">    </span>
+<span class="sd">    Note: This implementation assumes all objective values are non-negative. If negative</span>
+<span class="sd">    values are present, a proper normalization should be applied first.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">RouletteWheelSelection</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the roulette wheel selection operator.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            objective_index: Index of the objective to use for selection (default: 0).</span>
+<span class="sd">                            Only used if no fitness value is present in the solution attributes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">objective_index</span> <span class="o">=</span> <span class="n">objective_index</span>
 
 <div class="viewcode-block" id="RouletteWheelSelection.execute">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RouletteWheelSelection.execute">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">front</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">front</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is null&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
-
-        <span class="n">maximum</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">solution</span> <span class="ow">in</span> <span class="n">front</span><span class="p">])</span>
-        <span class="n">rand</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">maximum</span><span class="p">)</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="mf">0.0</span>
-
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select a solution using roulette wheel selection.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            front: List of solutions to select from.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            The selected solution.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the front is None, empty, or contains invalid fitness values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">front</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
+            
+        <span class="c1"># Calculate fitness values (using first objective if no fitness attribute)</span>
+        <span class="n">fitness_values</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">solution</span> <span class="ow">in</span> <span class="n">front</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">+=</span> <span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-            <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="n">rand</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">solution</span>
-
-        <span class="k">return</span> <span class="kc">None</span></div>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="s1">&#39;fitness&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">solution</span><span class="o">.</span><span class="n">fitness</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">fitness_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Fallback to using the specified objective</span>
+                <span class="n">fitness_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">objective_index</span><span class="p">])</span>
+        
+        <span class="c1"># Convert to numpy array for efficient operations</span>
+        <span class="n">fitness_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fitness_values</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        
+        <span class="c1"># Check for invalid fitness values</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">fitness_values</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Negative fitness values are not supported. &quot;</span>
+                           <span class="s2">&quot;Consider normalizing the fitness values first.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># If all values are zero, return a random solution</span>
+        <span class="n">total_fitness</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">fitness_values</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">total_fitness</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">front</span><span class="p">)</span>
+            
+        <span class="c1"># Calculate selection probabilities</span>
+        <span class="n">probabilities</span> <span class="o">=</span> <span class="n">fitness_values</span> <span class="o">/</span> <span class="n">total_fitness</span>
+        
+        <span class="c1"># Select a solution based on the probabilities</span>
+        <span class="n">selected_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">),</span> <span class="n">p</span><span class="o">=</span><span class="n">probabilities</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">front</span><span class="p">[</span><span class="n">selected_index</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="RouletteWheelSelection.get_name">
@@ -171,36 +212,54 @@
 <div class="viewcode-block" id="BinaryTournamentSelection">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.BinaryTournamentSelection">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">BinaryTournamentSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">S</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs binary tournament selection between two random solutions.</span>
+<span class="sd">    </span>
+<span class="sd">    This selection operator randomly selects two solutions from the population</span>
+<span class="sd">    and returns the better one according to the provided comparator.</span>
+<span class="sd">    If the comparator returns 0 (tie), a random solution is chosen.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        comparator: Comparator used to compare solutions (default: DominanceComparator)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comparator</span><span class="p">:</span> <span class="n">Comparator</span> <span class="o">=</span> <span class="n">DominanceComparator</span><span class="p">()):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">BinaryTournamentSelection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">comparator</span> <span class="o">=</span> <span class="n">comparator</span>
 
 <div class="viewcode-block" id="BinaryTournamentSelection.execute">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.BinaryTournamentSelection.execute">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">front</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">front</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is null&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute the binary tournament selection.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            front: List of solutions to select from.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            The selected solution.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If front is None or empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">front</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">front</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Sampling without replacement</span>
-            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)),</span> <span class="mi">2</span><span class="p">)</span>
-            <span class="n">solution1</span> <span class="o">=</span> <span class="n">front</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="n">solution2</span> <span class="o">=</span> <span class="n">front</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">front</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-            <span class="n">flag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comparator</span><span class="o">.</span><span class="n">compare</span><span class="p">(</span><span class="n">solution1</span><span class="p">,</span> <span class="n">solution2</span><span class="p">)</span>
+        <span class="c1"># Sample without replacement</span>
+        <span class="n">idx1</span><span class="p">,</span> <span class="n">idx2</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)),</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">solution1</span> <span class="o">=</span> <span class="n">front</span><span class="p">[</span><span class="n">idx1</span><span class="p">]</span>
+        <span class="n">solution2</span> <span class="o">=</span> <span class="n">front</span><span class="p">[</span><span class="n">idx2</span><span class="p">]</span>
 
-            <span class="k">if</span> <span class="n">flag</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-                <span class="n">result</span> <span class="o">=</span> <span class="n">solution1</span>
-            <span class="k">elif</span> <span class="n">flag</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">result</span> <span class="o">=</span> <span class="n">solution2</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">solution1</span><span class="p">,</span> <span class="n">solution2</span><span class="p">][</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">]</span>
-
-        <span class="k">return</span> <span class="n">result</span></div>
+        <span class="c1"># Compare solutions</span>
+        <span class="n">comparison</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comparator</span><span class="o">.</span><span class="n">compare</span><span class="p">(</span><span class="n">solution1</span><span class="p">,</span> <span class="n">solution2</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">comparison</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">solution1</span>
+        <span class="k">elif</span> <span class="n">comparison</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">solution2</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># Tie - choose randomly</span>
+            <span class="k">return</span> <span class="n">solution1</span> <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="n">solution2</span></div>
 
 
 <div class="viewcode-block" id="BinaryTournamentSelection.get_name">
@@ -221,9 +280,9 @@
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.BestSolutionSelection.execute">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">front</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">front</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is null&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The front is None&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">front</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
 
         <span class="n">result</span> <span class="o">=</span> <span class="n">front</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -245,31 +304,62 @@
 <div class="viewcode-block" id="NaryRandomSolutionSelection">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.NaryRandomSolutionSelection">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NaryRandomSolutionSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">S</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs random selection of multiple solutions from a population.</span>
+<span class="sd">    </span>
+<span class="sd">    This selection operator randomly selects a specified number of distinct solutions</span>
+<span class="sd">    from the population with uniform probability. The selection is done without replacement,</span>
+<span class="sd">    meaning each solution can be selected at most once.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        number_of_solutions_to_be_returned: Number of distinct solutions to select (default: 1).</span>
+<span class="sd">                                          Must be a positive integer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number_of_solutions_to_be_returned</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NaryRandomSolutionSelection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">number_of_solutions_to_be_returned</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The number of solutions to be returned must be positive integer&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">number_of_solutions_to_be_returned</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The number of solutions to be returned must be a positive integer, got </span><span class="si">{}</span><span class="s2">&quot;</span>
+                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">number_of_solutions_to_be_returned</span><span class="p">)</span>
+            <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">number_of_solutions_to_be_returned</span> <span class="o">=</span> <span class="n">number_of_solutions_to_be_returned</span>
 
 <div class="viewcode-block" id="NaryRandomSolutionSelection.execute">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.NaryRandomSolutionSelection.execute">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">front</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">front</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Randomly select multiple solutions from the front.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            front: List of solutions to select from.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            A list of randomly selected solutions from the front.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If front is None, empty, or has fewer solutions than requested.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">front</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is null&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The front is None&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">front</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_solutions_to_be_returned</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front contains less elements than required&quot;</span><span class="p">)</span>
-
-        <span class="c1"># random_search sampling without replacement</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The front size (</span><span class="si">{}</span><span class="s2">) is smaller than the number of requested solutions: </span><span class="si">{}</span><span class="s2">&quot;</span>
+                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_solutions_to_be_returned</span><span class="p">)</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">front</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_solutions_to_be_returned</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="NaryRandomSolutionSelection.get_name">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.NaryRandomSolutionSelection.get_name">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;Nary random_search solution selection&quot;</span></div>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the name of the selection operator.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            A string representing the name of the selection operator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;N-ary random solution selection&quot;</span></div>
 </div>
 
 
@@ -277,62 +367,132 @@
 <div class="viewcode-block" id="DifferentialEvolutionSelection">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.DifferentialEvolutionSelection">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DifferentialEvolutionSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]]):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs selection for differential evolution algorithms.</span>
+<span class="sd">    </span>
+<span class="sd">    This selection operator is specifically designed for differential evolution algorithms.</span>
+<span class="sd">    It selects three distinct solutions from the population, with an optional index to exclude</span>
+<span class="sd">    (typically the current solution&#39;s index to avoid self-selection).</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        index_to_exclude: Optional index of a solution to exclude from selection.</span>
+<span class="sd">                         This is useful to avoid selecting the same solution as the base vector.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index_to_exclude</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DifferentialEvolutionSelection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">index_to_exclude</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_to_exclude</span> <span class="o">=</span> <span class="n">index_to_exclude</span>
 
 <div class="viewcode-block" id="DifferentialEvolutionSelection.execute">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.DifferentialEvolutionSelection.execute">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">front</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select three distinct solutions for differential evolution.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            front: List of solutions to select from.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            A list containing three distinct solutions from the front.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If front is None, empty, or has fewer than 4 solutions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">front</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is null&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The front is null&quot;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front has less than four solutions: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Differential evolution selection requires at least 4 solutions, got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
 
-        <span class="n">selected_indexes</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)),</span> <span class="mi">3</span><span class="p">)</span>
-        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_to_exclude</span> <span class="ow">in</span> <span class="n">selected_indexes</span><span class="p">:</span>
-            <span class="n">selected_indexes</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)),</span> <span class="mi">3</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="p">[</span><span class="n">front</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selected_indexes</span><span class="p">]</span></div>
+        <span class="c1"># If there&#39;s an index to exclude, create a new list without it</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_to_exclude</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_to_exclude</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">):</span>
+            <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">sol</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sol</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">front</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_to_exclude</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">candidates</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">front</span><span class="p">)</span>
+        
+        <span class="c1"># Check if we have enough candidates after exclusion</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Not enough candidates to select from (need 3, have </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span><span class="si">}</span><span class="s2"> after exclusion)&quot;</span>
+            <span class="p">)</span>
+            
+        <span class="c1"># Randomly select 3 distinct solutions from the remaining candidates</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">selected</span></div>
 
 
 <div class="viewcode-block" id="DifferentialEvolutionSelection.set_index_to_exclude">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.DifferentialEvolutionSelection.set_index_to_exclude">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">set_index_to_exclude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_index_to_exclude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the index of the solution to exclude from selection.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            index: Index of the solution to exclude. Can be None to disable exclusion.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">index_to_exclude</span> <span class="o">=</span> <span class="n">index</span></div>
 
 
 <div class="viewcode-block" id="DifferentialEvolutionSelection.get_name">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.DifferentialEvolutionSelection.get_name">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the name of the selection operator.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            A string representing the name of the selection operator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;Differential evolution selection&quot;</span></div>
 </div>
 
 
 
-<div class="viewcode-block" id="RandomSolutionSelection">
-<a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RandomSolutionSelection">[docs]</a>
+<div class="viewcode-block" id="RandomSelection">
+<a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RandomSelection">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">RandomSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">S</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs random selection of a solution from a population.</span>
+<span class="sd">    </span>
+<span class="sd">    This selection operator randomly selects a single solution from the provided</span>
+<span class="sd">    population with uniform probability. It&#39;s a simple selection method that</span>
+<span class="sd">    doesn&#39;t consider solution quality.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RandomSelection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-<div class="viewcode-block" id="RandomSolutionSelection.execute">
-<a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RandomSolutionSelection.execute">[docs]</a>
+<div class="viewcode-block" id="RandomSelection.execute">
+<a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RandomSelection.execute">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">front</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Randomly select a solution from the front.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            front: List of solutions to select from.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            A randomly selected solution from the front.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If front is None or empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">front</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is null&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The front is None&quot;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">front</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The front must be a list&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Check if all elements are instances of the same type as the first element</span>
+        <span class="k">if</span> <span class="n">front</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">front</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span> <span class="k">for</span> <span class="n">solution</span> <span class="ow">in</span> <span class="n">front</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;All elements in the front must be of the same type&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">front</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="RandomSolutionSelection.get_name">
-<a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RandomSolutionSelection.get_name">[docs]</a>
+<div class="viewcode-block" id="RandomSelection.get_name">
+<a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RandomSelection.get_name">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;Random solution selection&quot;</span></div>
+        <span class="k">return</span> <span class="s2">&quot;Random selection&quot;</span></div>
 </div>
 
 
@@ -340,6 +500,18 @@
 <div class="viewcode-block" id="RankingAndCrowdingDistanceSelection">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RankingAndCrowdingDistanceSelection">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">RankingAndCrowdingDistanceSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs selection based on non-dominated ranking and crowding distance.</span>
+<span class="sd">    </span>
+<span class="sd">    This selection operator first ranks the solutions using non-dominated sorting</span>
+<span class="sd">    and then applies crowding distance to maintain diversity within each rank.</span>
+<span class="sd">    It&#39;s commonly used in NSGA-II and other multi-objective evolutionary algorithms.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        max_population_size: Maximum number of solutions to select.</span>
+<span class="sd">        dominance_comparator: Comparator used for non-dominated sorting.</span>
+<span class="sd">                           Defaults to DominanceComparator().</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dominance_comparator</span><span class="p">:</span> <span class="n">Comparator</span> <span class="o">=</span> <span class="n">DominanceComparator</span><span class="p">()):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RankingAndCrowdingDistanceSelection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_population_size</span> <span class="o">=</span> <span class="n">max_population_size</span>
@@ -348,10 +520,27 @@
 <div class="viewcode-block" id="RankingAndCrowdingDistanceSelection.execute">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RankingAndCrowdingDistanceSelection.execute">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">front</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select solutions using non-dominated ranking and crowding distance.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            front: List of solutions to select from.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            A list of selected solutions, with size up to max_population_size.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If front is None, empty, or max_population_size is invalid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">front</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is null&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The front is None&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">front</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_population_size</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_population_size</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;max_population_size must be a positive integer&quot;</span><span class="p">)</span>
+
+        <span class="c1"># If the front is smaller than max_population_size, return the entire front</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_population_size</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">front</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
         <span class="n">ranking</span> <span class="o">=</span> <span class="n">FastNonDominatedRanking</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dominance_comparator</span><span class="p">)</span>
         <span class="n">crowding_distance</span> <span class="o">=</span> <span class="n">CrowdingDistanceDensityEstimator</span><span class="p">()</span>
@@ -359,17 +548,28 @@
 
         <span class="n">ranking_index</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">new_solution_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">number_of_subfronts</span> <span class="o">=</span> <span class="n">ranking</span><span class="o">.</span><span class="n">get_number_of_subfronts</span><span class="p">()</span>
 
-        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_solution_list</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_population_size</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranking</span><span class="o">.</span><span class="n">get_subfront</span><span class="p">(</span><span class="n">ranking_index</span><span class="p">))</span> <span class="o">&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_population_size</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_solution_list</span><span class="p">)):</span>
-                <span class="n">new_solution_list</span> <span class="o">=</span> <span class="n">new_solution_list</span> <span class="o">+</span> <span class="n">ranking</span><span class="o">.</span><span class="n">get_subfront</span><span class="p">(</span><span class="n">ranking_index</span><span class="p">)</span>
-                <span class="n">ranking_index</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_solution_list</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_population_size</span> <span class="ow">and</span> <span class="n">ranking_index</span> <span class="o">&lt;</span> <span class="n">number_of_subfronts</span><span class="p">:</span>
+            <span class="n">subfront</span> <span class="o">=</span> <span class="n">ranking</span><span class="o">.</span><span class="n">get_subfront</span><span class="p">(</span><span class="n">ranking_index</span><span class="p">)</span>
+            
+            <span class="c1"># If adding the entire subfront doesn&#39;t exceed max_population_size, add it all</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_solution_list</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">subfront</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_population_size</span><span class="p">:</span>
+                <span class="n">new_solution_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">subfront</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">subfront</span> <span class="o">=</span> <span class="n">ranking</span><span class="o">.</span><span class="n">get_subfront</span><span class="p">(</span><span class="n">ranking_index</span><span class="p">)</span>
+                <span class="c1"># Otherwise, sort by crowding distance and add the best remaining solutions</span>
                 <span class="n">crowding_distance</span><span class="o">.</span><span class="n">compute_density_estimator</span><span class="p">(</span><span class="n">subfront</span><span class="p">)</span>
-                <span class="n">sorted_subfront</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">subfront</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;crowding_distance&quot;</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">max_population_size</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_solution_list</span><span class="p">))):</span>
-                    <span class="n">new_solution_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sorted_subfront</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="c1"># Sort by crowding distance in descending order</span>
+                <span class="n">sorted_subfront</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+                    <span class="n">subfront</span><span class="p">,</span> 
+                    <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;crowding_distance&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> 
+                    <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
+                <span class="c1"># Take only as many as needed to fill the population</span>
+                <span class="n">remaining</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_population_size</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_solution_list</span><span class="p">)</span>
+                <span class="n">new_solution_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">sorted_subfront</span><span class="p">[:</span><span class="n">remaining</span><span class="p">])</span>
+            
+            <span class="n">ranking_index</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="k">return</span> <span class="n">new_solution_list</span></div>
 
@@ -377,6 +577,11 @@
 <div class="viewcode-block" id="RankingAndCrowdingDistanceSelection.get_name">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RankingAndCrowdingDistanceSelection.get_name">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the name of the selection operator.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            A string representing the name of the selection operator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;Ranking and crowding distance selection&quot;</span></div>
 </div>
 
@@ -385,6 +590,21 @@
 <div class="viewcode-block" id="RankingAndFitnessSelection">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RankingAndFitnessSelection">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">RankingAndFitnessSelection</span><span class="p">(</span><span class="n">Selection</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs selection based on non-dominated ranking and hypervolume contribution.</span>
+<span class="sd">    </span>
+<span class="sd">    This selection operator first ranks the solutions using non-dominated sorting</span>
+<span class="sd">    and then applies hypervolume contribution to maintain diversity within each rank.</span>
+<span class="sd">    It&#39;s commonly used in multi-objective evolutionary algorithms that aim to</span>
+<span class="sd">    maximize the hypervolume indicator.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        max_population_size: Maximum number of solutions to select.</span>
+<span class="sd">        reference_point: Reference point used for hypervolume calculation.</span>
+<span class="sd">                       Should be dominated by all solutions.</span>
+<span class="sd">        dominance_comparator: Comparator used for non-dominated sorting.</span>
+<span class="sd">                           Defaults to DominanceComparator().</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">max_population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">reference_point</span><span class="p">:</span> <span class="n">S</span><span class="p">,</span> <span class="n">dominance_comparator</span><span class="p">:</span> <span class="n">Comparator</span> <span class="o">=</span> <span class="n">DominanceComparator</span><span class="p">()</span>
     <span class="p">):</span>
@@ -395,7 +615,25 @@
 
 <div class="viewcode-block" id="RankingAndFitnessSelection.hypesub">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RankingAndFitnessSelection.hypesub">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">hypesub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">actDim</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">pvec</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">hypesub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">A</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">actDim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bounds</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> 
+               <span class="n">pvec</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">alpha</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Recursively compute hypervolume contributions.</span>
+<span class="sd">        </span>
+<span class="sd">        This is a helper method for hypervolume calculation. It&#39;s an implementation</span>
+<span class="sd">        of the Hype algorithm for hypervolume approximation.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            l: Number of points.</span>
+<span class="sd">            A: List of objective vectors.</span>
+<span class="sd">            actDim: Current dimension being processed.</span>
+<span class="sd">            bounds: Reference point coordinates.</span>
+<span class="sd">            pvec: Indices of points in A.</span>
+<span class="sd">            alpha: Weighting factors for hypervolume contribution.</span>
+<span class="sd">            k: Number of points to consider.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            List of hypervolume contributions for each point.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">h</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">l</span><span class="p">)]</span>
         <span class="n">Adim</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">actDim</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">A</span><span class="p">]</span>
         <span class="n">indices_sort</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Adim</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="n">Adim</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">)</span>
@@ -426,7 +664,21 @@
 
 <div class="viewcode-block" id="RankingAndFitnessSelection.compute_hypervol_fitness_values">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RankingAndFitnessSelection.compute_hypervol_fitness_values">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">compute_hypervol_fitness_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">reference_point</span><span class="p">:</span> <span class="n">S</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_hypervol_fitness_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">reference_point</span><span class="p">:</span> <span class="n">S</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute hypervolume-based fitness values for a population.</span>
+<span class="sd">        </span>
+<span class="sd">        This method computes the hypervolume contribution of each solution in the</span>
+<span class="sd">        population and stores it in the solution&#39;s attributes as &#39;fitness&#39;.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            population: List of solutions to evaluate.</span>
+<span class="sd">            reference_point: Reference point for hypervolume calculation.</span>
+<span class="sd">            k: Number of points to consider for hypervolume approximation.</span>
+<span class="sd">               If negative, uses the entire population size.</span>
+<span class="sd">               </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            The input population with updated fitness values in their attributes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="n">ind</span><span class="o">.</span><span class="n">objectives</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">population</span><span class="p">]</span>
         <span class="n">bounds</span> <span class="o">=</span> <span class="n">reference_point</span><span class="o">.</span><span class="n">objectives</span>
         <span class="n">population_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
@@ -438,12 +690,17 @@
         <span class="n">pvec</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">population_size</span><span class="p">)</span>
         <span class="n">alpha</span> <span class="o">=</span> <span class="p">[]</span>
 
+        <span class="c1"># Calculate alpha values for weighted hypervolume contribution</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
             <span class="n">alpha</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">j</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">population_size</span> <span class="o">-</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">)])</span> <span class="o">/</span> <span class="n">i</span><span class="p">)</span>
 
+        <span class="c1"># Compute hypervolume contributions</span>
         <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hypesub</span><span class="p">(</span><span class="n">population_size</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">actDim</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">pvec</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
 
+        <span class="c1"># Store fitness values in solution attributes</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">population</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">population</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s1">&#39;attributes&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">population</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">attributes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">population</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">attributes</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="n">population</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;fitness&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">population</span></div>
@@ -452,38 +709,72 @@
 <div class="viewcode-block" id="RankingAndFitnessSelection.execute">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RankingAndFitnessSelection.execute">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">front</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select solutions using non-dominated ranking and hypervolume contribution.</span>
+<span class="sd">        </span>
+<span class="sd">        This method first performs non-dominated sorting of the input front.</span>
+<span class="sd">        It then fills the new population with solutions from the best ranks,</span>
+<span class="sd">        using hypervolume contribution to select solutions when a rank needs to be split.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            front: List of solutions to select from.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            A list of selected solutions, with size equal to max_population_size.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If front is None or empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">front</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is null&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The front is None&quot;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
 
+        <span class="c1"># Perform non-dominated sorting</span>
         <span class="n">ranking</span> <span class="o">=</span> <span class="n">FastNonDominatedRanking</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dominance_comparator</span><span class="p">)</span>
         <span class="n">ranking</span><span class="o">.</span><span class="n">compute_ranking</span><span class="p">(</span><span class="n">front</span><span class="p">)</span>
 
         <span class="n">ranking_index</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">new_solution_list</span> <span class="o">=</span> <span class="p">[]</span>
 
+        <span class="c1"># Fill the new population with solutions from the best ranks</span>
         <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_solution_list</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_population_size</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranking</span><span class="o">.</span><span class="n">get_subfront</span><span class="p">(</span><span class="n">ranking_index</span><span class="p">))</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_population_size</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_solution_list</span><span class="p">):</span>
-                <span class="n">subfront</span> <span class="o">=</span> <span class="n">ranking</span><span class="o">.</span><span class="n">get_subfront</span><span class="p">(</span><span class="n">ranking_index</span><span class="p">)</span>
-                <span class="n">new_solution_list</span> <span class="o">=</span> <span class="n">new_solution_list</span> <span class="o">+</span> <span class="n">subfront</span>
+            <span class="n">current_rank</span> <span class="o">=</span> <span class="n">ranking</span><span class="o">.</span><span class="n">get_subfront</span><span class="p">(</span><span class="n">ranking_index</span><span class="p">)</span>
+            
+            <span class="c1"># If we can take all solutions from this rank without exceeding max_population_size</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_rank</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_population_size</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_solution_list</span><span class="p">):</span>
+                <span class="n">new_solution_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">current_rank</span><span class="p">)</span>
                 <span class="n">ranking_index</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">subfront</span> <span class="o">=</span> <span class="n">ranking</span><span class="o">.</span><span class="n">get_subfront</span><span class="p">(</span><span class="n">ranking_index</span><span class="p">)</span>
-                <span class="n">parameter_K</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">subfront</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_population_size</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_solution_list</span><span class="p">))</span>
+                <span class="c1"># Need to select a subset of this rank using hypervolume contribution</span>
+                <span class="n">remaining_slots</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_population_size</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_solution_list</span><span class="p">)</span>
+                <span class="n">parameter_K</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_rank</span><span class="p">)</span> <span class="o">-</span> <span class="n">remaining_slots</span>
+                
+                <span class="c1"># Remove the worst solutions based on hypervolume contribution</span>
                 <span class="k">while</span> <span class="n">parameter_K</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">subfront</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_hypervol_fitness_values</span><span class="p">(</span><span class="n">subfront</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_point</span><span class="p">,</span> <span class="n">parameter_K</span><span class="p">)</span>
-                    <span class="n">subfront</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">subfront</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;fitness&quot;</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                    <span class="n">subfront</span> <span class="o">=</span> <span class="n">subfront</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                    <span class="n">parameter_K</span> <span class="o">=</span> <span class="n">parameter_K</span> <span class="o">-</span> <span class="mi">1</span>
-                <span class="n">new_solution_list</span> <span class="o">=</span> <span class="n">new_solution_list</span> <span class="o">+</span> <span class="n">subfront</span>
+                    <span class="n">current_rank</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_hypervol_fitness_values</span><span class="p">(</span>
+                        <span class="n">current_rank</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_point</span><span class="p">,</span> <span class="n">parameter_K</span><span class="p">)</span>
+                    <span class="c1"># Sort by fitness (hypervolume contribution) in descending order</span>
+                    <span class="n">current_rank</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">current_rank</span><span class="p">,</span> 
+                                       <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fitness&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> 
+                                       <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="c1"># Remove the solution with the lowest contribution</span>
+                    <span class="n">current_rank</span> <span class="o">=</span> <span class="n">current_rank</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">parameter_K</span> <span class="o">-=</span> <span class="mi">1</span>
+                
+                <span class="n">new_solution_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">current_rank</span><span class="p">)</span>
+                
         <span class="k">return</span> <span class="n">new_solution_list</span></div>
 
 
 <div class="viewcode-block" id="RankingAndFitnessSelection.get_name">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.RankingAndFitnessSelection.get_name">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;Ranking and fitness selection&quot;</span></div>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the name of the selection operator.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            A string representing the name of the selection operator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;Ranking and hypervolume-based selection&quot;</span></div>
 </div>
 
 
@@ -491,38 +782,74 @@
 <div class="viewcode-block" id="BinaryTournament2Selection">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.BinaryTournament2Selection">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">BinaryTournament2Selection</span><span class="p">(</span><span class="n">Selection</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">S</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs binary tournament selection with multiple comparators.</span>
+<span class="sd">    </span>
+<span class="sd">    This selection operator uses a list of comparators in sequence to determine</span>
+<span class="sd">    the winner between two randomly selected solutions. The first comparator that</span>
+<span class="sd">    can determine a winner is used. If all comparators result in a tie, a random</span>
+<span class="sd">    solution is chosen.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        comparator_list: List of comparators to use in sequence.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comparator_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Comparator</span><span class="p">]):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">BinaryTournament2Selection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">comparator_list</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The comparator list cannot be empty&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">comparator_list</span> <span class="o">=</span> <span class="n">comparator_list</span>
 
 <div class="viewcode-block" id="BinaryTournament2Selection.execute">
 <a class="viewcode-back" href="../../../api/operator/selection.html#jmetal.operator.selection.BinaryTournament2Selection.execute">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">front</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute the binary tournament selection with multiple comparators.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            front: List of solutions to select from.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            The selected solution.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If front is None, empty, or contains only one solution.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">front</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is null&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">comparator_list</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The comparators&#39; list is empty&quot;</span><span class="p">)</span>
-
-        <span class="n">winner</span> <span class="o">=</span> <span class="kc">None</span>
-
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The front is None&quot;</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">front</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The front is empty&quot;</span><span class="p">)</span>
+            
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">winner</span> <span class="o">=</span> <span class="n">front</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">comparator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">comparator_list</span><span class="p">:</span>
-                <span class="n">winner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__winner</span><span class="p">(</span><span class="n">front</span><span class="p">,</span> <span class="n">comparator</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">winner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">front</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Use the first comparator to get initial winner</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__winner</span><span class="p">(</span><span class="n">front</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comparator_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        
+        <span class="c1"># If first comparator couldn&#39;t decide, try the rest</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comparator_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">comparator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">comparator_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__winner</span><span class="p">(</span><span class="n">front</span><span class="p">,</span> <span class="n">comparator</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="k">break</span>
+        
+        <span class="c1"># If no comparator could decide, choose randomly</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">front</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            
+        <span class="k">return</span> <span class="n">result</span></div>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">winner</span><span class="p">:</span>
-            <span class="n">i</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">))</span>
-            <span class="n">winner</span> <span class="o">=</span> <span class="n">front</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">winner</span></div>
-
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">__winner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">front</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">comparator</span><span class="p">:</span> <span class="n">Comparator</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__winner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">front</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">comparator</span><span class="p">:</span> <span class="n">Comparator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select a winner between two random solutions using the given comparator.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            front: List of solutions to select from.</span>
+<span class="sd">            comparator: Comparator to determine the winner.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            The winning solution, or None if it&#39;s a tie.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Sampling without replacement</span>
         <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">front</span><span class="p">)),</span> <span class="mi">2</span><span class="p">)</span>
 

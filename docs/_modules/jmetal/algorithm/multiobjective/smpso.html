@@ -66,11 +66,10 @@
     
     
       <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials.html">Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../multiobjective.algorithms.html">Multi-objective algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../singleobjective.algorithms.html">Single-objective algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../operators.html">Operators</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../problems.html">Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api-reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../advanced-topics.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About</a></li>
 </ul>
@@ -251,13 +250,17 @@
             <span class="n">wmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_weight</span>
             <span class="n">wmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_weight</span>
 
-            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">swarm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">)):</span>
+            <span class="n">particle_vars</span> <span class="o">=</span> <span class="n">swarm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">_variables</span>
+            <span class="n">best_particle_vars</span> <span class="o">=</span> <span class="n">best_particle</span><span class="o">.</span><span class="n">_variables</span>
+            <span class="n">best_global_vars</span> <span class="o">=</span> <span class="n">best_global</span><span class="o">.</span><span class="n">_variables</span>
+
+            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">particle_vars</span><span class="p">)):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__velocity_constriction</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__constriction_coefficient</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">)</span>
                     <span class="o">*</span> <span class="p">(</span>
                         <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__inertia_weight</span><span class="p">(</span><span class="n">wmax</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">var</span><span class="p">])</span>
-                        <span class="o">+</span> <span class="p">(</span><span class="n">c1</span> <span class="o">*</span> <span class="n">r1</span> <span class="o">*</span> <span class="p">(</span><span class="n">best_particle</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">-</span> <span class="n">swarm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">var</span><span class="p">]))</span>
-                        <span class="o">+</span> <span class="p">(</span><span class="n">c2</span> <span class="o">*</span> <span class="n">r2</span> <span class="o">*</span> <span class="p">(</span><span class="n">best_global</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">-</span> <span class="n">swarm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">var</span><span class="p">]))</span>
+                        <span class="o">+</span> <span class="p">(</span><span class="n">c1</span> <span class="o">*</span> <span class="n">r1</span> <span class="o">*</span> <span class="p">(</span><span class="n">best_particle_vars</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">-</span> <span class="n">particle_vars</span><span class="p">[</span><span class="n">var</span><span class="p">]))</span>
+                        <span class="o">+</span> <span class="p">(</span><span class="n">c2</span> <span class="o">*</span> <span class="n">r2</span> <span class="o">*</span> <span class="p">(</span><span class="n">best_global_vars</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">-</span> <span class="n">particle_vars</span><span class="p">[</span><span class="n">var</span><span class="p">]))</span>
                     <span class="p">),</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">delta_max</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">delta_min</span><span class="p">,</span>
@@ -270,16 +273,20 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">update_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">swarm</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FloatSolution</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swarm_size</span><span class="p">):</span>
             <span class="n">particle</span> <span class="o">=</span> <span class="n">swarm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">particle_vars</span> <span class="o">=</span> <span class="n">particle</span><span class="o">.</span><span class="n">_variables</span>  <span class="c1"># Direct access to internal list</span>
+            <span class="n">lower_bounds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">lower_bound</span>
+            <span class="n">upper_bounds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">upper_bound</span>
 
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">particle</span><span class="o">.</span><span class="n">variables</span><span class="p">)):</span>
-                <span class="n">particle</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">particle_vars</span><span class="p">)):</span>
+                <span class="c1"># Update position</span>
+                <span class="n">particle_vars</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
 
-                <span class="k">if</span> <span class="n">particle</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
-                    <span class="n">particle</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="c1"># Apply bounds</span>
+                <span class="k">if</span> <span class="n">particle_vars</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">lower_bounds</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                    <span class="n">particle_vars</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">lower_bounds</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">change_velocity1</span>
-
-                <span class="k">if</span> <span class="n">particle</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
-                    <span class="n">particle</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">particle_vars</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">upper_bounds</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                    <span class="n">particle_vars</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">upper_bounds</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">change_velocity2</span></div>
 
 

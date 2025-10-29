@@ -9,12 +9,12 @@ complex optimization problems.
    📚 **New to jMetalPy?** Start with the :doc:`getting-started` guide for a quick introduction.
 
 .. warning:: 
-   Documentation of jMetal 1.8.0 is a work in progress! Some information may be missing or outdated.
+   Documentation of jMetal 1.9.0 is a work in progress! Some information may be missing or outdated.
 
 .. table::
 
    +---------------------+----------+
-   | **Target doc**      |  v1.8.0  |
+   | **Target doc**      |  v1.9.0  |
    +---------------------+----------+
 
 Content
@@ -33,7 +33,7 @@ Content
 Key Features
 ------------------------
 
-jMetalPy (v1.8.0) provides:
+jMetalPy (v1.9.0) provides:
 
 **Algorithms**
    Local search, genetic algorithms, evolution strategies, simulated annealing, NSGA-II, NSGA-III, 
@@ -47,8 +47,7 @@ jMetalPy (v1.8.0) provides:
    and experimental frameworks.
 
 **Advanced Features**
-   Parallel computing (Apache Spark, Dask), real-time plotting, dynamic algorithms, 
-   and integration with jMetal.
+   Parallel computing (Apache Spark, Dask), real-time plotting, and dynamic algorithms.
 
 Quick Example
 -------------
