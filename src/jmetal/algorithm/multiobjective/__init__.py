@@ -4,6 +4,7 @@ from .ibea import IBEA
 from .mocell import MOCell
 from .moead import MOEAD, MOEAD_DRA, MOEADIEpsilon
 from .nsgaii import NSGAII, DistributedNSGAII, DynamicNSGAII
+from .nsgaiii import NSGAIII
 from .omopso import OMOPSO
 from .random_search import RandomSearch
 from .smpso import SMPSO, SMPSORP, DynamicSMPSO

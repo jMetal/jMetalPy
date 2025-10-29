@@ -11,7 +11,8 @@ multiobjective version of the ONE_MAX problem where the numbers of 1s and 0s hav
 """
 
 if __name__ == "__main__":
-    binary_string_length = 10000
+    binary_string_length = 100000
+
     problem = OneZeroMax(binary_string_length)
 
     max_evaluations = 30000
