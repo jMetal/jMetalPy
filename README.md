@@ -120,9 +120,9 @@ The current release of jMetalPy (v1.8.0) contains the following components:
 ## Changelog
 
 * [Current]
-  * Add benchmark RE  
+  * Add RE benchmark  
   * Refactor algorithm SPEA2 
-  * Refactor class Solution, BinarySolution, and FloatSolution
+  * Refactor classes Solution, BinarySolution, and FloatSolution
   * Added Unimodal Normal Distribution Crossover (UNDX), BLX-Alpha, BLX-Alpha-Beta and Arithmetic crossover operators.
   * Added Levy flight and power-law mutation operators.
 * [v.1.8.0] 
