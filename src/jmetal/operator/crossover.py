@@ -28,10 +28,49 @@ from jmetal.util.ckecking import Check
 
 
 class NullCrossover(Crossover[Solution, Solution]):
+    """A no-operation crossover operator that simply returns copies of the parents.
+    
+    This operator is useful as a placeholder when no crossover is desired in an algorithm.
+    It creates deep copies of the parent solutions without performing any genetic
+    recombination. The number of parents and children is fixed at 2.
+    
+    Example:
+        >>> from jmetal.operator import NullCrossover
+        >>> from jmetal.core.solution import FloatSolution
+        >>> 
+        >>> # Create two test solutions
+        >>> parent1 = FloatSolution([0], [1], 1)
+        >>> parent2 = FloatSolution([0], [1], 1)
+        >>> parent1.variables = [0.5]
+        >>> parent2.variables = [1.5]
+        >>> 
+        >>> # Apply null crossover
+        >>> crossover = NullCrossover()
+        >>> offspring = crossover.execute([parent1, parent2])
+        >>> 
+        # Offspring are copies of parents
+        >>> offspring[0].variables[0] == parent1.variables[0]
+        True
+        >>> offspring[1].variables[0] == parent2.variables[0]
+        True
+    """
+    
     def __init__(self):
+        """Initialize the null crossover operator with zero probability."""
         super(NullCrossover, self).__init__(probability=0.0)
 
     def execute(self, parents: List[Solution]) -> List[Solution]:
+        """Execute the crossover operation.
+        
+        Args:
+            parents: A list of exactly two parent solutions.
+            
+        Returns:
+            A list containing deep copies of the parent solutions.
+            
+        Raises:
+            Exception: If the number of parents is not exactly two.
+        """
         if len(parents) != 2:
             raise Exception("The number of parents is not two: {}".format(len(parents)))
             
@@ -39,60 +78,129 @@ class NullCrossover(Crossover[Solution, Solution]):
         return [copy.deepcopy(parent) for parent in parents]
 
     def get_number_of_parents(self) -> int:
+        """Get the number of parent solutions required.
+        
+        Returns:
+            int: Always returns 2, as this operator works with exactly two parents.
+        """
         return 2
 
     def get_number_of_children(self) -> int:
+        """Get the number of offspring solutions produced.
+        
+        Returns:
+            int: Always returns 2, as this operator produces two offspring.
+        """
         return 2
 
-    def get_name(self):
+    def get_name(self) -> str:
+        """Get the name of the operator.
+        
+        Returns:
+            str: "Null crossover"
+        """
         return "Null crossover"
 
 
 class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
+    """Partially Mapped Crossover (PMX) for permutation problems.
+    
+    PMX is a specialized crossover operator designed for permutation-based representations,
+    commonly used in problems like the Traveling Salesman Problem (TSP) and other ordering problems.
+    
+    The operator works by:
+    1. Selecting two random cut points in the parent permutations
+    2. Creating an offspring by copying the segment between the cut points from parent1
+    3. Filling the remaining positions with the relative order of elements from parent2,
+       while avoiding duplicates using a mapping relationship
+    
+    Args:
+        probability: The probability of applying the crossover (0.0 to 1.0).
+                    For each pair of parents, this probability determines
+                    whether crossover is applied.
+                    
+    Example:
+        >>> from jmetal.operator import PMXCrossover
+        >>> from jmetal.core.solution import PermutationSolution
+        >>> 
+        >>> # Create two test solutions (permutation of [0,1,2,3,4])
+        >>> parent1 = PermutationSolution(5, 1)
+        >>> parent2 = PermutationSolution(5, 1)
+        >>> parent1.variables = [0, 1, 2, 3, 4]
+        >>> parent2.variables = [4, 3, 2, 1, 0]
+        >>> 
+        >>> # Apply PMX crossover (with probability 1.0 to ensure execution)
+        >>> crossover = PMXCrossover(probability=1.0)
+        >>> offspring = crossover.execute([parent1, parent2])
+        >>> 
+        # The offspring will be a mix of both parents while preserving the permutation property
+        >>> all(x in offspring[0].variables for x in range(5))
+        True
+        
+    Reference:
+        Goldberg, D. E., & Lingle, R. (1985). Alleles, loci, and the traveling
+        salesman problem. In Proceedings of the First International Conference on
+        Genetic Algorithms and their Applications (pp. 154-159).
+    """
+    
     def __init__(self, probability: float):
+        """Initialize the PMX crossover operator.
+        
+        Args:
+            probability: Crossover probability between 0.0 and 1.0.
+        """
         super(PMXCrossover, self).__init__(probability=probability)
 
     def execute(self, parents: List[PermutationSolution]) -> List[PermutationSolution]:
+        """Execute the PMX crossover operation.
+        
+        Args:
+            parents: A list of exactly two parent solutions of type PermutationSolution.
+            
+        Returns:
+            A list containing two offspring solutions.
+            
+        Raises:
+            Exception: If the number of parents is not exactly two.
+        """
         if len(parents) != 2:
             raise Exception("The number of parents is not two: {}".format(len(parents)))
 
-        offspring = copy.deepcopy(parents)
-        permutation_length = len(offspring[0].variables)
-
-        rand = random.random()
-        if rand <= self.probability:
-            cross_points = sorted([random.randint(0, permutation_length) for _ in range(2)])
-
-            def _repeated(element, collection):
-                c = 0
-                for e in collection:
-                    if e == element:
-                        c += 1
-                return c > 1
-
-            def _swap(data_a, data_b, cross_points):
-                c1, c2 = cross_points
-                new_a = data_a[:c1] + data_b[c1:c2] + data_a[c2:]
-                new_b = data_b[:c1] + data_a[c1:c2] + data_b[c2:]
-                return new_a, new_b
-
-            def _map(swapped, cross_points):
-                n = len(swapped[0])
-                c1, c2 = cross_points
-                s1, s2 = swapped
-                map_ = s1[c1:c2], s2[c1:c2]
-                for i_chromosome in range(n):
-                    if not c1 < i_chromosome < c2:
-                        for i_son in range(2):
-                            while _repeated(swapped[i_son][i_chromosome], swapped[i_son]):
-                                map_index = map_[i_son].index(swapped[i_son][i_chromosome])
-                                swapped[i_son][i_chromosome] = map_[1 - i_son][map_index]
-                return s1, s2
-
-            swapped = _swap(offspring[0].variables, offspring[1].variables, cross_points)
-            mapped = _map(swapped, cross_points)
-
-            offspring[0].variables, offspring[1].variables = mapped
+        # Create copies of parents to serve as offspring
+        offspring = [parents[0].__class__(parents[0]), parents[1].__class__(parents[1])]
+        
+        # Only perform crossover with the specified probability
+        if random.random() <= self.probability:
+            permutation_length = parents[0].number_of_variables()
+            
+            # Select two distinct random points for crossover
+            point1, point2 = sorted(random.sample(range(permutation_length), 2))
+            
+            # Create mapping between parents
+            mapping = {}
+            for i in range(point1, point2 + 1):
+                mapping[parents[0].variables[i]] = parents[1].variables[i]
+                mapping[parents[1].variables[i]] = parents[0].variables[i]
+            
+            # Apply PMX crossover
+            for i in range(permutation_length):
+                if i < point1 or i > point2:
+                    # For positions outside the crossover points
+                    val1 = parents[0].variables[i]
+                    val2 = parents[1].variables[i]
+                    
+                    # Resolve mappings
+                    while val1 in mapping:
+                        val1 = mapping[val1]
+                    while val2 in mapping:
+                        val2 = mapping[val2]
+                        
+                    offspring[0].variables[i] = val1
+                    offspring[1].variables[i] = val2
+                else:
+                    # Swap the segment between the points
+                    offspring[0].variables[i] = parents[1].variables[i]
+                    offspring[1].variables[i] = parents[0].variables[i]
 
         return offspring
 
@@ -107,42 +215,126 @@ class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
 
 
 class CXCrossover(Crossover[PermutationSolution, PermutationSolution]):
+    """Cycle Crossover (CX) for permutation-based solutions.
+    
+    Cycle Crossover is a specialized operator for permutation problems that preserves the absolute
+    positions of elements from both parents. It works by identifying cycles between two parent
+    permutations and creating offspring by alternating between the cycles of the parents.
+    
+    The algorithm works as follows:
+    1. Start with the first parent and identify a cycle of positions where the elements
+       alternate between the two parents
+    2. For the first offspring, take elements from parent 1 at the cycle positions
+       and from parent 2 at all other positions
+    3. For the second offspring, do the opposite (parent 2 at cycle positions,
+       parent 1 elsewhere)
+    
+    This operator is particularly useful for problems where the absolute position of elements
+    is important, such as the Traveling Salesman Problem (TSP).
+    
+    Args:
+        probability: Crossover probability (0.0 to 1.0). The probability that crossover
+                    will be applied to a given pair of parents.
+                    
+    Example:
+        >>> from jmetal.operator import CXCrossover
+        >>> from jmetal.core.solution import PermutationSolution
+        >>>
+        >>> # Create two parent solutions (permutation of [0,1,2,3,4])
+        >>> parent1 = PermutationSolution(5, 1)
+        >>> parent2 = PermutationSolution(5, 1)
+        >>> parent1.variables = [0, 1, 2, 3, 4]  # Identity permutation
+        >>> parent2.variables = [4, 3, 2, 1, 0]  # Reverse permutation
+        >>>
+        >>> # Create CX crossover with probability 1.0
+        >>> crossover = CXCrossover(probability=1.0)
+        >>> offspring = crossover.execute([parent1, parent2])
+        >>>
+        # The offspring will preserve absolute positions from both parents
+        >>> all(x in offspring[0].variables for x in range(5))  # Still a valid permutation
+        True
+        
+    Reference:
+        Oliver, I. M., Smith, D. J., & Holland, J. R. (1987). A study of permutation
+        crossover operators on the traveling salesman problem. In Proceedings of the
+        Second International Conference on Genetic Algorithms on Genetic algorithms
+        and their application (pp. 224-230).
+    """
+    
     def __init__(self, probability: float):
+        """Initialize the Cycle Crossover operator.
+        
+        Args:
+            probability: Crossover probability between 0.0 and 1.0.
+        """
         super(CXCrossover, self).__init__(probability=probability)
 
     def execute(self, parents: List[PermutationSolution]) -> List[PermutationSolution]:
+        """Execute the Cycle Crossover operation.
+        
+        Args:
+            parents: A list of exactly two parent solutions of type PermutationSolution.
+                    Both parents must have the same length and contain the same elements.
+            
+        Returns:
+            A list containing two offspring solutions.
+            
+        Raises:
+            Exception: If the number of parents is not exactly two.
+        """
         if len(parents) != 2:
             raise Exception("The number of parents is not two: {}".format(len(parents)))
 
-        offspring = copy.deepcopy(parents[::-1])
-        rand = random.random()
-
-        if rand <= self.probability:
-            idx = random.randint(0, len(parents[0].variables) - 1)
-            curr_idx = idx
+        # Create copies of parents (swapped) to serve as offspring
+        offspring = [copy.deepcopy(parents[1]), copy.deepcopy(parents[0])]
+        
+        # Only perform crossover with the specified probability
+        if random.random() <= self.probability:
+            # Start with a random position
+            start_idx = random.randint(0, len(parents[0].variables) - 1)
+            curr_idx = start_idx
             cycle = []
 
+            # Find the cycle of positions
             while True:
                 cycle.append(curr_idx)
+                # Find where parent1's element is in parent2
                 curr_idx = parents[0].variables.index(parents[1].variables[curr_idx])
-
-                if curr_idx == idx:
+                if curr_idx == start_idx:  # Completed a full cycle
                     break
 
+            # Apply the cycle to create offspring
             for j in range(len(parents[0].variables)):
                 if j in cycle:
+                    # Take values from parent1 for cycle positions in offspring1
+                    # and from parent2 for cycle positions in offspring2
                     offspring[0].variables[j] = parents[0].variables[j]
                     offspring[1].variables[j] = parents[1].variables[j]
 
         return offspring
 
     def get_number_of_parents(self) -> int:
+        """Get the number of parent solutions required.
+        
+        Returns:
+            int: Always returns 2, as this operator works with exactly two parents.
+        """
         return 2
 
     def get_number_of_children(self) -> int:
+        """Get the number of offspring solutions produced.
+        
+        Returns:
+            int: Always returns 2, as this operator produces two offspring.
+        """
         return 2
 
-    def get_name(self):
+    def get_name(self) -> str:
+        """Get the name of the operator.
+        
+        Returns:
+            str: "Cycle crossover"
+        """
         return "Cycle crossover"
 
 
@@ -153,13 +345,49 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
     crossover operator in binary-coded GAs. It creates offspring solutions based on a probability distribution centered
     around the parent solutions, with the spread of the distribution controlled by the distribution index.
     
+    The operator works by:
+    1. For each variable, compute a spread factor β based on a random number and the distribution index
+    2. Use β to compute new variable values that are spread around the parent values
+    3. The distribution index controls whether offspring are likely to be near the parents (high values)
+       or more spread out (low values)
+    
     Args:
-        probability: Crossover probability (0.0 to 1.0)
-        distribution_index: Distribution index (must be ≥ 0). Higher values produce offspring closer to parents.
+        probability: Crossover probability (0.0 to 1.0). The probability that crossover will be applied
+            to a given pair of parents.
+        distribution_index: Distribution index (must be ≥ 0). Controls the shape of the probability distribution:
+            - High values (>20): Offspring are very close to parents
+            - Medium values (~10-20): Balanced exploration/exploitation
+            - Low values (<5): High exploration, offspring can be far from parents
             Typical values range from 5 to 30, with 20 being a common default.
-            
+    
     Raises:
-        Exception: If distribution_index is negative
+        ValueError: If distribution_index is negative
+        
+    Example:
+        >>> from jmetal.operator import SBXCrossover
+        >>> from jmetal.core.solution import FloatSolution
+        >>>
+        >>> # Create two parent solutions
+        >>> parent1 = FloatSolution([0, 0], [1, 1], 1)
+        >>> parent2 = FloatSolution([0, 0], [1, 1], 1)
+        >>> parent1.variables = [0.2, 0.8]
+        >>> parent2.variables = [0.8, 0.2]
+        >>>
+        >>> # Create SBX crossover with probability 0.9 and distribution index 20
+        >>> crossover = SBXCrossover(probability=0.9, distribution_index=20.0)
+        >>>
+        >>> # Generate offspring
+        >>> offspring = crossover.execute([parent1, parent2])
+        >>> # Offspring will be similar to parents due to high distribution index
+        >>> all(0.1 < x < 0.9 for x in offspring[0].variables + offspring[1].variables)
+        True
+    
+    References:
+        Deb, K., & Agrawal, R. B. (1995). Simulated binary crossover for continuous search space.
+        Complex Systems, 9(2), 115-148.
+        
+        Deb, K., & Deb, K. (2014). Multi-objective optimization. In Search methodologies (pp. 403-449).
+        Springer, Boston, MA.
     """
     __EPS = 1.0e-14  # Small constant to prevent division by zero
 

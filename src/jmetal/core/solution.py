@@ -1,3 +1,8 @@
+"""
+This module defines the core solution representations used in evolutionary computation.
+It provides abstract and concrete implementations of solutions for different types of optimization problems.
+"""
+
 from __future__ import annotations
 
 import copy
@@ -8,16 +13,25 @@ import numpy as np
 
 from jmetal.util.ckecking import Check
 
-BitSet = List[bool]
-S = TypeVar("S")
+# Type aliases for better code readability
+BitSet = List[bool]  # Represents a sequence of binary values
+S = TypeVar("S")  # Generic type variable for solution variables
 
 
 class Solution(Generic[S], ABC):
-    """
-    Abstract base class for optimization solutions.
+    """Abstract base class for all solution representations in the optimization framework.
     
-    Subclasses must implement the variables property to provide
-    their own storage mechanism (lists, NumPy arrays, etc.).
+    This class defines the common interface and functionality for all solution types.
+    Subclasses must implement the abstract methods to provide specific variable storage
+    and manipulation mechanisms.
+    
+    Attributes:
+        number_of_variables: Number of decision variables in the solution.
+        number_of_objectives: Number of objective values to optimize.
+        number_of_constraints: Number of constraint values (default: 0).
+        _objectives: List storing the objective values of the solution.
+        _constraints: List storing the constraint values of the solution.
+        attributes: Dictionary for storing additional solution metadata.
     """
     
     def __init__(
@@ -26,11 +40,18 @@ class Solution(Generic[S], ABC):
         number_of_objectives: int, 
         number_of_constraints: int = 0
     ) -> None:
+        """Initialize a new solution with the specified dimensions.
+        
+        Args:
+            number_of_variables: The number of decision variables.
+            number_of_objectives: The number of objective values.
+            number_of_constraints: The number of constraint values (default: 0).
+        """
         self.number_of_variables = number_of_variables
         self.number_of_objectives = number_of_objectives
         self.number_of_constraints = number_of_constraints
         
-        # Initialize with None - subclasses should set appropriate types
+        # Initialize internal storage with default values
         self._objectives: List[float] = [0.0] * number_of_objectives
         self._constraints: List[float] = [0.0] * number_of_constraints
         self.attributes: Dict[str, Any] = {}
@@ -103,18 +124,25 @@ class Solution(Generic[S], ABC):
 
 @final
 class BinarySolution(Solution[bool]):
-    """
-    High-performance binary solution using NumPy.
+    """A solution representation for binary-encoded optimization problems.
     
-    This class represents a binary solution where each variable is a single bit,
-    stored efficiently in a NumPy array. It provides both a Pythonic interface
-    through the `variables` property and high-performance NumPy operations
-    through the `bits` property.
+    This class provides an efficient implementation of binary solutions using NumPy
+    arrays for storage and operations. It's particularly suited for problems where
+    solutions are represented as bit strings, such as binary-encoded combinatorial
+    optimization problems.
     
-    Args:
-        number_of_variables: Number of binary variables (bits) in the solution
-        number_of_objectives: Number of objective values
-        number_of_constraints: Number of constraint values (default: 0)
+    The implementation uses NumPy's boolean arrays for compact storage and efficient
+    bitwise operations. It maintains both a NumPy array for performance and provides
+    a Python list interface for compatibility.
+    
+    Attributes:
+        _bits: NumPy array storing the binary values (internal representation).
+        
+    Example:
+        >>> solution = BinarySolution(number_of_variables=10, number_of_objectives=2)
+        >>> solution.variables = [True, False] * 5  # Set variables
+        >>> solution[0] = False  # Modify a single bit
+        >>> distance = solution.hamming_distance(other_solution)  # Calculate distance
     """
     __slots__ = ('_bits',)
     
@@ -311,10 +339,21 @@ class BinarySolution(Solution[bool]):
 
 
 class FloatSolution(Solution[float]):
-    """Class representing float solutions
+    """A solution representation for continuous optimization problems with float variables.
     
-    This class implements a solution where each variable is a float value
-    constrained by lower and upper bounds.
+    This class implements a solution where each decision variable is a floating-point
+    value constrained by lower and upper bounds. It's suitable for continuous
+    optimization problems where variables can take any real value within specified ranges.
+    
+    The solution maintains the following properties:
+    - Each variable has independent lower and upper bounds
+    - Variables are stored as a list of floats
+    - Bounds checking is performed when variables are set
+    
+    Attributes:
+        lower_bound: List of lower bounds for each variable.
+        upper_bound: List of upper bounds for each variable.
+        _variables: Internal storage for the decision variables.
     """
     __slots__ = ('_variables', 'lower_bound', 'upper_bound')
     
@@ -379,120 +418,23 @@ class FloatSolution(Solution[float]):
         return new_solution
 
 
-@final
-class FloatSolutionNP(Solution[float]):
-    """High-performance float solution using NumPy."""
-    __slots__ = ('_values', '_lower_bound', '_upper_bound', 
-                 'objectives', 'constraints', 'attributes',
-                 'number_of_variables', 'number_of_objectives', 'number_of_constraints')
-    
-    def __init__(
-        self,
-        lower_bound: np.ndarray | List[float],
-        upper_bound: np.ndarray | List[float],
-        number_of_objectives: int,
-        number_of_constraints: int = 0
-    ) -> None:
-        number_of_variables = len(lower_bound)
-        self.number_of_variables = number_of_variables
-        self.number_of_objectives = number_of_objectives
-        self.number_of_constraints = number_of_constraints
-        
-        self._lower_bound = np.asarray(lower_bound, dtype=np.float64)
-        self._upper_bound = np.asarray(upper_bound, dtype=np.float64)
-        self._values = np.zeros(number_of_variables, dtype=np.float64)
-        
-        self.objectives = [0.0] * number_of_objectives
-        self.constraints = [0.0] * number_of_constraints
-        self.attributes = {}
-    
-    @property
-    def variables(self) -> List[float]:
-        """Return values as a list of floats."""
-        return self._values.tolist()
-    
-    @variables.setter
-    def variables(self, values: List[float]) -> None:
-        """Set values from a list of floats."""
-        if len(values) != self.number_of_variables:
-            raise ValueError(f"Expected {self.number_of_variables} variables, got {len(values)}")
-        self._values[:] = values
-    
-    @property
-    def values(self) -> np.ndarray:
-        """Direct access to the NumPy array."""
-        return self._values
-    
-    @values.setter
-    def values(self, arr: np.ndarray) -> None:
-        """Set values from a NumPy array."""
-        if arr.size != self.number_of_variables:
-            raise ValueError(f"Expected {self.number_of_variables} values")
-        np.copyto(self._values, arr.astype(np.float64, copy=False))
-    
-    @property
-    def lower_bound(self) -> np.ndarray:
-        """Get the lower bounds as a NumPy array."""
-        return self._lower_bound
-    
-    @property
-    def upper_bound(self) -> np.ndarray:
-        """Get the upper bounds as a NumPy array."""
-        return self._upper_bound
-    
-    def __copy__(self) -> 'FloatSolutionNP':
-        new_solution = FloatSolutionNP(
-            self._lower_bound,
-            self._upper_bound,
-            self.number_of_objectives,
-            self.number_of_constraints
-        )
-        np.copyto(new_solution._values, self._values)
-        new_solution.objectives = self.objectives[:]
-        new_solution.constraints = self.constraints[:]
-        new_solution.attributes = self.attributes.copy()
-        return new_solution
-    
-    def __getitem__(self, index: int) -> float:
-        """Get a variable by index."""
-        return float(self._values[index])
-    
-    def __setitem__(self, index: int, value: float) -> None:
-        """Set a variable by index."""
-        self._values[index] = value
-    
-    def __eq__(self, other: object) -> bool:
-        """Check if this solution is equal to another."""
-        if not isinstance(other, FloatSolutionNP):
-            return False
-        return (self.number_of_variables == other.number_of_variables and
-                np.allclose(self._values, other._values))
-    
-    def euclidean_distance(self, other: 'FloatSolutionNP') -> float:
-        """Calculate Euclidean distance to another solution.
-        
-        Args:
-            other: Another FloatSolutionNP to compare with
-            
-        Returns:
-            The Euclidean distance between the solutions
-            
-        Raises:
-            TypeError: If other is not a FloatSolutionNP
-            ValueError: If solutions have different number of variables
-        """
-        if not isinstance(other, FloatSolutionNP):
-            raise TypeError(f"Expected FloatSolutionNP, got {type(other).__name__}")
-        if self.number_of_variables != other.number_of_variables:
-            raise ValueError("Solutions must have the same number of variables")
-        return float(np.linalg.norm(self._values - other._values))
-
-
 class IntegerSolution(Solution[int]):
-    """Class representing integer solutions
+    """A solution representation for integer-constrained optimization problems.
     
-    This class implements a solution where each variable is an integer value
-    constrained by lower and upper bounds.
+    This class is designed for optimization problems where decision variables
+    must take integer values within specified bounds. It's suitable for:
+    - Pure integer programming problems
+    - Mixed-integer problems (when used with other solution types)
+    - Combinatorial optimization with integer-encoded solutions
+    
+    The implementation ensures that all variables remain within their specified
+    bounds and are stored as integers. Bounds checking is performed when variables
+    are modified.
+    
+    Attributes:
+        lower_bound: List of lower bounds for each variable (inclusive).
+        upper_bound: List of upper bounds for each variable (inclusive).
+        _variables: Internal storage for the integer decision variables.
     """
     __slots__ = ('_variables', 'lower_bound', 'upper_bound')
     
@@ -558,10 +500,26 @@ class IntegerSolution(Solution[int]):
 
 
 class CompositeSolution(Solution[Solution]):
-    """Class representing solutions composed of a list of solutions.
+    """A solution composed of multiple heterogeneous solution types.
     
-    This class allows creating mixed solutions by combining solutions of different types.
-    All solutions in the composite must have the same number of objectives and constraints.
+    This class enables the creation of complex solutions by combining multiple
+    solution objects of different types (e.g., binary, integer, float) into a single
+    composite solution. This is particularly useful for:
+    - Multi-encoding optimization problems
+    - Decomposition-based optimization approaches
+    - Problems with mixed variable types
+    
+    All constituent solutions must have the same number of objectives and constraints
+    to maintain consistency in the optimization process.
+    
+    Example:
+        # Create a composite solution with binary and float parts
+        binary_part = BinarySolution(10, 2)
+        float_part = FloatSolution([0.0]*5, [1.0]*5, 2)
+        composite = CompositeSolution([binary_part, float_part])
+    
+    Attributes:
+        _solutions: List of solution objects that compose this composite solution.
     """
     __slots__ = ('_solutions',)
     
@@ -661,10 +619,27 @@ class CompositeSolution(Solution[Solution]):
 
 
 class PermutationSolution(Solution[int]):
-    """Class representing permutation solutions.
+    """A solution representation for permutation-based optimization problems.
     
-    This class implements a solution where variables represent a permutation
-    of integers from 0 to number_of_variables-1.
+    This class is designed for problems where solutions are represented as
+    permutations of integers, such as:
+    - Traveling Salesman Problem (TSP)
+    - Job Shop Scheduling
+    - Quadratic Assignment Problem (QAP)
+    - Any problem where the order of elements matters
+    
+    The solution maintains a permutation of integers from 0 to n-1, where n is
+    the number of variables. The implementation ensures that the permutation
+    remains valid (no duplicates, all numbers in range) at all times.
+    
+    Attributes:
+        _variables: List storing the permutation of integers.
+    
+    Example:
+        # Create a permutation solution for a 5-city TSP
+        solution = PermutationSolution(5, 1)  # 5 cities, 1 objective
+        # The initial permutation is [0, 1, 2, 3, 4]
+        solution.variables = [4, 2, 0, 1, 3]  # Set a specific tour
     """
     __slots__ = ('_variables',)
     

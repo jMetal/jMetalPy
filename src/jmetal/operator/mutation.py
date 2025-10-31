@@ -31,8 +31,13 @@ class NullMutation(Mutation[Solution]):
     def execute(self, solution: Solution) -> Solution:
         return solution
 
-    def get_name(self):
-        return "Null mutation"
+    def get_name(self) -> str:
+        """Get the name of the operator.
+        
+        Returns:
+            str: A string containing the operator name and mutation probability.
+        """
+        return f"Null mutation (p={self.probability})"
 
 
 class BitFlipMutation(Mutation[BinarySolution]):
@@ -191,10 +196,38 @@ class PolynomialMutation(Mutation[FloatSolution]):
 
 
 class IntegerPolynomialMutation(Mutation[IntegerSolution]):
-    """Polynomial mutation adapted to integer-valued decision variables.
-
-    - probability: Per-variable mutation probability.
-    - distribution_index: Controls mutation spread. Typical values ~20.0 for fine-grained moves; lower values increase exploration.
+    """Polynomial mutation operator for integer-valued decision variables.
+    
+    This operator adapts the polynomial mutation for integer solutions by rounding
+    the continuous values to the nearest integer. It's particularly useful for
+    problems where variables must take discrete integer values.
+    
+    The mutation works by:
+    1. Applying polynomial mutation to the integer variable (treated as float)
+    2. Rounding the result to the nearest integer
+    3. Clamping the value to the variable's bounds
+    
+    Args:
+        probability: The probability of mutating each variable (0 ≤ p ≤ 1).
+        distribution_index: Controls the perturbation magnitude (must be ≥ 0):
+            - Lower values (e.g., 5-20): More exploratory, larger mutations
+            - Medium values (e.g., 20-100): Balanced exploration/exploitation
+            - Higher values (e.g., >100): More exploitative, smaller mutations
+            
+    Example:
+        >>> from jmetal.operator import IntegerPolynomialMutation
+        >>> from jmetal.core.solution import IntegerSolution
+        >>> 
+        >>> # Create an integer solution with bounds [0, 10] for all variables
+        >>> solution = IntegerSolution(3, 1, 0)  # 3 variables, 1 objective, 0 constraints
+        >>> solution.variables = [5, 5, 5]
+        >>> solution.lower_bound = [0] * 3
+        >>> solution.upper_bound = [10] * 3
+        >>> 
+        >>> # Apply polynomial mutation with 100% probability
+        >>> mutation = IntegerPolynomialMutation(probability=1.0, distribution_index=20.0)
+        >>> mutated = mutation.execute(solution)
+        >>> # Variables will be mutated with integer values within [0, 10]
     """
     def __init__(self, probability: float, distribution_index: float = 20.0):
         super(IntegerPolynomialMutation, self).__init__(probability=probability)
@@ -233,8 +266,13 @@ class IntegerPolynomialMutation(Mutation[IntegerSolution]):
                     
         return solution
 
-    def get_name(self):
-        return "Polynomial mutation (Integer)"
+    def get_name(self) -> str:
+        """Get the name of the operator.
+        
+        Returns:
+            str: A string containing the operator name and distribution index.
+        """
+        return f"Polynomial mutation (int, η={self.distribution_index})"
 
 
 class SimpleRandomMutation(Mutation[FloatSolution]):
@@ -244,6 +282,29 @@ class SimpleRandomMutation(Mutation[FloatSolution]):
     uniformly distributed between the lower and upper bounds of that variable.
     This is one of the simplest mutation operators but can be effective for
     exploration, especially in the early stages of optimization.
+    
+    The mutation works by:
+    1. For each variable, with probability `probability`:
+       - Replace the variable's value with a random value from a uniform distribution
+         between the variable's lower and upper bounds
+    2. Leave the variable unchanged otherwise
+    
+    Args:
+        probability: The probability of mutating each variable (0 ≤ p ≤ 1).
+                    Higher values increase exploration but may disrupt good solutions.
+                    
+    Example:
+        >>> from jmetal.operator import SimpleRandomMutation
+        >>> from jmetal.core.solution import FloatSolution
+        >>> 
+        >>> # Create a solution with bounds [0, 10] for all variables
+        >>> solution = FloatSolution([0, 0], [10, 10], 1)  # 2 variables, 1 objective
+        >>> solution.variables = [5.0, 5.0]  # Initial values
+        >>> 
+        >>> # Apply random mutation with 50% probability
+        >>> mutation = SimpleRandomMutation(probability=0.5)
+        >>> mutated = mutation.execute(solution)
+        >>> # Each variable has a 50% chance to be replaced with a random value in [0, 10]
     
     Args:
         probability: The probability of mutating each variable (0 ≤ p ≤ 1).
@@ -332,16 +393,51 @@ class NonUniformMutation(Mutation[FloatSolution]):
     The mutation follows the formula:
         Δ(t, y) = y * (r * (1 - t/T)^b - 1)  if r ≤ 0.5
         Δ(t, y) = y * (1 - r * (1 - t/T)^b)  if r > 0.5
-    where t is the current iteration, T is max_iterations, and b is the perturbation.
+    where:
+    - t is the current iteration
+    - T is max_iterations
+    - b is the perturbation index
+    - r is a random number in [0,1]
+    - y is the variable's range
+    
+    The operator is particularly useful for:
+    - Fine-tuning solutions in later generations
+    - Problems requiring adaptive exploration/exploitation balance
+    - Situations where solution precision increases over time
     
     Args:
         probability: The probability of mutating each variable (0 ≤ p ≤ 1).
         perturbation: Controls the perturbation strength (must be > 0).
-            - Lower values: More gradual decrease in mutation strength
-            - Higher values: More rapid decrease in mutation strength
-        max_iterations: The maximum number of iterations (must be > 0).
-            Used to normalize the current iteration count.
+            - Lower values (e.g., 1-5): Smoother decrease in mutation strength
+            - Higher values (e.g., 5-20): Faster transition to smaller mutations
+        max_iterations: The maximum number of iterations/generations (must be > 0).
+            This is used to calculate the current progress (t/T).
             
+    Example:
+        >>> from jmetal.operator import NonUniformMutation
+        >>> from jmetal.core.solution import FloatSolution
+        >>> 
+        >>> # Create a solution with bounds [0, 10] for all variables
+        >>> solution = FloatSolution([0, 0], [10, 10], 1)  # 2 variables, 1 objective
+        >>> solution.variables = [5.0, 5.0]  # Initial values
+        >>> 
+        >>> # Create a non-uniform mutation operator
+        >>> # With 30% mutation probability, medium perturbation (5.0), and 1000 max iterations
+        >>> mutation = NonUniformMutation(probability=0.3, perturbation=5.0, max_iterations=1000)
+        >>> 
+        >>> # In early generations (e.g., iteration 10 of 1000)
+        >>> mutation.current_iteration = 10
+        >>> mutated_early = mutation.execute(solution)
+        >>> 
+        >>> # In later generations (e.g., iteration 900 of 1000)
+        >>> mutation.current_iteration = 900
+        >>> mutated_late = mutation.execute(solution)
+        >>> # Later mutations will be much smaller in magnitude
+    
+    Note:
+        Remember to update `current_iteration` before each generation to ensure
+        proper adaptation of the mutation strength.
+        
     Raises:
         ValueError: If probability is not in [0,1] or parameters are not positive.
     """
@@ -438,6 +534,33 @@ class NonUniformMutation(Mutation[FloatSolution]):
 
 
 class PermutationSwapMutation(Mutation[PermutationSolution]):
+    """Implementation of a swap mutation operator for permutation solutions.
+    
+    This operator randomly selects two distinct positions in the permutation and swaps their values.
+    It is commonly used for permutation-based optimization problems like the Traveling Salesman Problem (TSP).
+    
+    The mutation works by:
+    1. Randomly selecting two distinct positions in the permutation
+    2. Swapping the values at these positions
+    3. Only performing the swap with a given probability
+    
+    Args:
+        probability: The probability of applying the mutation to a solution (0 ≤ p ≤ 1).
+                    If the probability is 1.0, the mutation is always applied.
+                    
+    Example:
+        >>> from jmetal.operator import PermutationSwapMutation
+        >>> from jmetal.core.solution import PermutationSolution
+        >>> 
+        >>> # Create a permutation solution [0, 1, 2, 3, 4]
+        >>> solution = PermutationSolution(5, 1)  # 5 variables, 1 objective
+        >>> solution.variables = [0, 1, 2, 3, 4]
+        >>> 
+        >>> # Apply swap mutation with 100% probability
+        >>> mutation = PermutationSwapMutation(probability=1.0)
+        >>> mutated = mutation.execute(solution)
+        >>> # Two random positions will be swapped, e.g., [2, 1, 0, 3, 4]
+    """
     def execute(self, solution: PermutationSolution) -> PermutationSolution:
         Check.that(issubclass(type(solution), PermutationSolution), "Solution type invalid")
 
@@ -457,6 +580,43 @@ class PermutationSwapMutation(Mutation[PermutationSolution]):
 
 
 class CompositeMutation(Mutation[Solution]):
+    """A composite mutation operator that applies different mutation operators to different solution components.
+    
+    This operator is particularly useful for composite solutions where each component may require
+    a different mutation strategy. It maintains a list of mutation operators, one for each component
+    of the composite solution.
+    
+    The mutation works by:
+    1. Taking a composite solution as input
+    2. Applying each mutation operator to the corresponding solution component
+    3. Combining the results into a new composite solution
+    
+    Args:
+        mutation_operator_list: A list of mutation operators, one for each component of the composite solution.
+                               The length of this list must match the number of variables in the composite solution.
+                               
+    Raises:
+        ValueError: If the mutation_operator_list is empty or None.
+        TypeError: If any element in mutation_operator_list is not a subclass of Mutation.
+        
+    Example:
+        >>> from jmetal.operator import CompositeMutation, BitFlipMutation, PolynomialMutation
+        >>> from jmetal.core.solution import CompositeSolution, BinarySolution, FloatSolution
+        >>> 
+        >>> # Create a composite solution with binary and float components
+        >>> binary_solution = BinarySolution(5, 1)  # 5 bits, 1 objective
+        >>> float_solution = FloatSolution([0]*3, [1]*3, 1)  # 3 variables, 1 objective
+        >>> composite = CompositeSolution([binary_solution, float_solution])
+        >>> 
+        >>> # Create a composite mutation with appropriate operators for each component
+        >>> mutation = CompositeMutation([
+        ...     BitFlipMutation(0.1),      # For binary component
+        ...     PolynomialMutation(0.1, 20)  # For float component
+        ... ])
+        >>> 
+        >>> # Apply the composite mutation
+        >>> mutated = mutation.execute(composite)
+    """
     def __init__(self, mutation_operator_list: List[Mutation]):
         super(CompositeMutation, self).__init__(probability=1.0)
 
@@ -478,10 +638,44 @@ class CompositeMutation(Mutation[Solution]):
         return CompositeSolution(mutated_solution_components)
 
     def get_name(self) -> str:
-        return "Composite mutation operator"
+        """Get the name of the operator.
+        
+        Returns:
+            str: A string containing the operator name and the names of the component operators.
+        """
+        operator_names = [op.get_name() for op in self.mutation_operators_list]
+        return f"Composite mutation ({', '.join(operator_names)})"
 
 
 class ScrambleMutation(Mutation[PermutationSolution]):
+    """Implementation of a scramble mutation operator for permutation solutions.
+    
+    This operator selects a random subsequence of the permutation and randomly reorders
+    (scrambles) the elements within that subsequence. It is particularly useful for
+    permutation problems where the relative ordering of elements is important.
+    
+    The mutation works by:
+    1. Randomly selecting a subsequence of the permutation (limited to max 20 elements)
+    2. Randomly shuffling the elements within this subsequence
+    3. Only performing the scramble with a given probability
+    
+    Args:
+        probability: The probability of applying the mutation to a solution (0 ≤ p ≤ 1).
+                    If the probability is 1.0, the mutation is always applied.
+                    
+    Example:
+        >>> from jmetal.operator import ScrambleMutation
+        >>> from jmetal.core.solution import PermutationSolution
+        >>> 
+        >>> # Create a permutation solution [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        >>> solution = PermutationSolution(10, 1)  # 10 variables, 1 objective
+        >>> solution.variables = list(range(10))
+        >>> 
+        >>> # Apply scramble mutation with 100% probability
+        >>> mutation = ScrambleMutation(probability=1.0)
+        >>> mutated = mutation.execute(solution)
+        >>> # A random subsequence will be scrambled, e.g., [0, 1, 4, 3, 2, 5, 6, 7, 8, 9]
+    """
     def execute(self, solution: PermutationSolution) -> PermutationSolution:
         Check.that(issubclass(type(solution), PermutationSolution), "Solution type invalid")
         rand = random.random()
@@ -503,8 +697,13 @@ class ScrambleMutation(Mutation[PermutationSolution]):
 
         return solution
 
-    def get_name(self):
-        return "Scramble"
+    def get_name(self) -> str:
+        """Get the name of the operator.
+        
+        Returns:
+            str: A string containing the operator name.
+        """
+        return "Scramble mutation"
 
 
 class LevyFlightMutation(Mutation[FloatSolution]):

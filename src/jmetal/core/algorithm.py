@@ -1,36 +1,52 @@
+"""
+This module defines the core algorithm interfaces for optimization in JMetalPy.
+
+It provides abstract base classes for different types of optimization algorithms,
+including evolutionary algorithms and particle swarm optimization, with support
+for both single-objective and multi-objective optimization problems.
+"""
+
 import threading
 import time
 from abc import ABC, abstractmethod
-from typing import Generic, List, TypeVar
+from typing import Generic, List, TypeVar, Dict, Any
 
 from jmetal.config import store
 from jmetal.core.problem import Problem
 from jmetal.core.solution import FloatSolution
 from jmetal.logger import get_logger
 
+# Initialize module logger
 logger = get_logger(__name__)
 
-S = TypeVar("S")
-R = TypeVar("R")
-
-"""
-.. module:: algorithm
-   :platform: Unix, Windows
-   :synopsis: Templates for algorithms.
-
-.. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
-"""
+# Type variables for generic algorithm implementation
+S = TypeVar("S")  # Type of the solutions
+R = TypeVar("R")  # Type of the result returned by the algorithm
 
 
 class Algorithm(Generic[S, R], threading.Thread, ABC):
+    """Abstract base class for all optimization algorithms in JMetalPy.
+    
+    This class serves as the foundation for implementing various optimization algorithms.
+    It extends threading.Thread to support concurrent execution and implements the
+    template method pattern through its abstract methods.
+    
+    Attributes:
+        solutions: List of solutions found by the algorithm.
+        evaluations: Number of solution evaluations performed.
+        start_computing_time: Timestamp when the algorithm started running.
+        total_computing_time: Total time taken by the algorithm (in seconds).
+        observable: Observer pattern implementation for monitoring algorithm progress.
+    """
+    
     def __init__(self):
+        """Initialize the algorithm with default values."""
         threading.Thread.__init__(self)
 
         self.solutions: List[S] = []
         self.evaluations = 0
         self.start_computing_time = 0
         self.total_computing_time = 0
-
         self.observable = store.default_observable
 
     @abstractmethod
@@ -100,13 +116,47 @@ class Algorithm(Generic[S, R], threading.Thread, ABC):
 
 
 class DynamicAlgorithm(Algorithm[S, R], ABC):
+    """Abstract base class for algorithms that can handle dynamic optimization problems.
+    
+    Dynamic optimization problems are those where the fitness function, constraints,
+    or other problem characteristics may change over time. This class extends the
+    base Algorithm with methods to handle such changes.
+    
+    Subclasses must implement the restart method to define how the algorithm should
+    respond to changes in the problem definition.
+    """
+    
     @abstractmethod
     def restart(self) -> None:
+        """Restart the algorithm in response to changes in the problem.
+        
+        This method is called when a change in the problem is detected. Implementations
+        should reset or adapt the algorithm's state to handle the new problem conditions.
+        """
         pass
 
 
 class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
+    """Abstract base class for evolutionary algorithms.
+    
+    This class implements the core structure of an evolutionary algorithm, including
+    the evolutionary cycle of selection, reproduction, and replacement. Subclasses
+    must implement the specific selection, reproduction, and replacement strategies.
+    
+    Attributes:
+        problem: The optimization problem to solve.
+        population_size: Number of solutions in the population.
+        offspring_population_size: Number of offspring solutions generated each generation.
+    """
+    
     def __init__(self, problem: Problem[S], population_size: int, offspring_population_size: int):
+        """Initialize the evolutionary algorithm.
+        
+        Args:
+            problem: The optimization problem to solve.
+            population_size: Number of solutions in the population.
+            offspring_population_size: Number of offspring solutions to generate each generation.
+        """
         super(EvolutionaryAlgorithm, self).__init__()
         self.problem = problem
         self.population_size = population_size
@@ -160,7 +210,24 @@ class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
 
 
 class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], ABC):
+    """Abstract base class for Particle Swarm Optimization (PSO) algorithms.
+    
+    This class implements the core structure of a PSO algorithm, where a population
+    of candidate solutions (particles) move through the search space according to
+    simple mathematical formulae over the particle's position and velocity.
+    
+    Attributes:
+        problem: The optimization problem to solve.
+        swarm_size: Number of particles in the swarm.
+    """
+    
     def __init__(self, problem: Problem[S], swarm_size: int):
+        """Initialize the PSO algorithm.
+        
+        Args:
+            problem: The optimization problem to solve.
+            swarm_size: Number of particles in the swarm.
+        """
         super(ParticleSwarmOptimization, self).__init__()
         self.problem = problem
         self.swarm_size = swarm_size

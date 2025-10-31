@@ -8,7 +8,6 @@ from jmetal.core.solution import (
     Solution,
     BinarySolution,
     FloatSolution,
-    FloatSolutionNP,
     IntegerSolution,
     CompositeSolution,
     PermutationSolution
@@ -203,121 +202,6 @@ class TestBinarySolution:
         # Act & Assert
         with pytest.raises(ValueError):
             solution1.hamming_distance(solution2)
-
-
-class TestFloatSolutionNP:
-    """Test cases for FloatSolutionNP class."""
-    
-    @pytest.fixture
-    def solution(self) -> FloatSolutionNP:
-        return FloatSolutionNP(
-            lower_bound=[0.0, 1.0],
-            upper_bound=[1.0, 2.0],
-            number_of_objectives=2,
-            number_of_constraints=1
-        )
-    
-    def test_given_initial_parameters_when_creating_float_solution_np_then_initializes_correctly(self, solution: FloatSolutionNP) -> None:
-        """Test that a FloatSolutionNP is properly initialized with the given parameters."""
-        # Assert
-        assert solution.number_of_variables == 2
-        assert solution.number_of_objectives == 2
-        assert solution.number_of_constraints == 1
-        assert np.array_equal(solution.values, np.array([0.0, 0.0]))
-        assert np.array_equal(solution.lower_bound, np.array([0.0, 1.0]))
-        assert np.array_equal(solution.upper_bound, np.array([1.0, 2.0]))
-    
-    def test_given_valid_variables_list_when_setting_variables_then_they_are_stored(self, solution: FloatSolutionNP) -> None:
-        """Test that variables can be set and retrieved correctly as a list."""
-        # Arrange
-        variables = [0.5, 1.5]
-        
-        # Act
-        solution.variables = variables
-        
-        # Assert
-        assert solution.variables == variables
-        assert np.array_equal(solution.values, np.array(variables))
-    
-    def test_given_invalid_variables_length_when_setting_variables_then_raises_error(self, solution: FloatSolutionNP) -> None:
-        """Test that setting variables with incorrect length raises ValueError."""
-        # Act & Assert
-        with pytest.raises(ValueError):
-            solution.variables = [0.5]  # Too few variables
-    
-    def test_given_numpy_array_when_setting_values_then_they_are_stored(self, solution: FloatSolutionNP) -> None:
-        """Test that values can be set and retrieved correctly as a NumPy array."""
-        # Arrange
-        values = np.array([0.7, 1.8])
-        
-        # Act
-        solution.values = values
-        
-        # Assert
-        assert np.array_equal(solution.values, values)
-        assert solution.variables == values.tolist()
-    
-    def test_given_two_solutions_when_calculating_euclidean_distance_then_returns_correct_value(self) -> None:
-        """Test that Euclidean distance is calculated correctly between two solutions."""
-        # Arrange
-        solution1 = FloatSolutionNP(
-            lower_bound=[0.0, 0.0],
-            upper_bound=[10.0, 10.0],
-            number_of_objectives=2
-        )
-        solution1.values = np.array([0.0, 0.0])
-        
-        solution2 = FloatSolutionNP(
-            lower_bound=[0.0, 0.0],
-            upper_bound=[10.0, 10.0],
-            number_of_objectives=2
-        )
-        solution2.values = np.array([3.0, 4.0])
-        
-        # Act & Assert (3-4-5 right triangle)
-        assert solution1.euclidean_distance(solution2) == 5.0
-    
-    def test_given_solutions_with_different_lengths_when_calculating_euclidean_distance_then_raises_error(self) -> None:
-        """Test that Euclidean distance calculation raises error for solutions with different lengths."""
-        # Arrange
-        solution1 = FloatSolutionNP(
-            lower_bound=[0.0, 0.0],
-            upper_bound=[10.0, 10.0],
-            number_of_objectives=2
-        )
-        solution2 = FloatSolutionNP(
-            lower_bound=[0.0],
-            upper_bound=[10.0],
-            number_of_objectives=2
-        )
-        
-        # Act & Assert
-        with pytest.raises(ValueError):
-            solution1.euclidean_distance(solution2)
-    
-    def test_given_solution_with_data_when_copying_then_creates_deep_copy(self, solution: FloatSolutionNP) -> None:
-        """Test that copying a solution creates a deep copy with all attributes."""
-        # Arrange
-        solution.values = np.array([0.5, 1.5])
-        solution.objectives = [1.0, 2.0]
-        solution.constraints = [0.1]
-        solution.attributes["test"] = "value"
-        
-        # Act
-        copy_solution = solution.__copy__()
-        
-        # Assert - Check values are equal
-        assert np.array_equal(copy_solution.values, solution.values)
-        assert copy_solution.objectives == solution.objectives
-        assert copy_solution.constraints == solution.constraints
-        assert copy_solution.attributes == solution.attributes
-        
-        # Assert - Check they are different objects (deep copy)
-        assert id(copy_solution) != id(solution)
-        assert not np.may_share_memory(copy_solution.values, solution.values)
-        assert id(copy_solution.objectives) != id(solution.objectives)
-        assert id(copy_solution.constraints) != id(solution.constraints)
-        assert id(copy_solution.attributes) != id(solution.attributes)
 
 
 class TestIntegerSolution:

@@ -143,10 +143,48 @@ class BinaryTournamentSelection(Selection[List[S], S]):
 
 
 class BestSolutionSelection(Selection[List[S], S]):
+    """Selects the best solution from a population based on dominance comparison.
+    
+    This selection operator returns the non-dominated solution from the population.
+    If multiple solutions are non-dominated with respect to each other, it returns
+    the first one encountered in the front.
+    
+    The comparison is done using the DominanceComparator, which follows these rules:
+    - Solution A dominates solution B if A is not worse than B in all objectives
+      and A is strictly better than B in at least one objective
+    - If neither solution dominates the other, they are considered non-dominated
+    
+    Example:
+        >>> from jmetal.operator import BestSolutionSelection
+        >>> from jmetal.core.solution import FloatSolution
+        >>> 
+        >>> # Create a population of solutions
+        >>> solution1 = FloatSolution([0], [1], 2)  # 2 objectives
+        >>> solution1.objectives = [0.5, 0.8]
+        >>> solution2 = FloatSolution([0], [1], 2)
+        >>> solution2.objectives = [0.3, 0.9]
+        >>> population = [solution1, solution2]
+        >>> 
+        >>> # Select the best solution
+        >>> selector = BestSolutionSelection()
+        >>> best_solution = selector.execute(population)
+    """
     def __init__(self):
+        """Initialize the best solution selector."""
         super(BestSolutionSelection, self).__init__()
 
     def execute(self, front: List[S]) -> S:
+        """Select the best solution from the front.
+        
+        Args:
+            front: List of solutions to select from.
+            
+        Returns:
+            The best solution in the front according to dominance comparison.
+            
+        Raises:
+            ValueError: If front is None or empty.
+        """
         if front is None:
             raise ValueError("The front is None")
         if not front:
@@ -161,6 +199,11 @@ class BestSolutionSelection(Selection[List[S], S]):
         return result
 
     def get_name(self) -> str:
+        """Get the name of the selection operator.
+        
+        Returns:
+            A string representing the name of the selection operator.
+        """
         return "Best solution selection"
 
 
