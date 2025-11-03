@@ -166,12 +166,27 @@ class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
         if len(parents) != 2:
             raise Exception("The number of parents is not two: {}".format(len(parents)))
 
-        # Create copies of parents to serve as offspring
-        offspring = [parents[0].__class__(parents[0]), parents[1].__class__(parents[1])]
+        # Create new PermutationSolution instances with the correct parameters
+        parent1, parent2 = parents
+        offspring = [
+            parent1.__class__(
+                number_of_variables=parent1.number_of_variables,
+                number_of_objectives=parent1.number_of_objectives,
+                number_of_constraints=parent1.number_of_constraints
+            ),
+            parent2.__class__(
+                number_of_variables=parent2.number_of_variables,
+                number_of_objectives=parent2.number_of_objectives,
+                number_of_constraints=parent2.number_of_constraints
+            )
+        ]
+        # Copy the variables from parents to offspring
+        offspring[0].variables = parent1.variables.copy()
+        offspring[1].variables = parent2.variables.copy()
         
         # Only perform crossover with the specified probability
         if random.random() <= self.probability:
-            permutation_length = parents[0].number_of_variables()
+            permutation_length = parents[0].number_of_variables
             
             # Select two distinct random points for crossover
             point1, point2 = sorted(random.sample(range(permutation_length), 2))

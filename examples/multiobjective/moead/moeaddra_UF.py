@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.moead import MOEAD_DRA
 from jmetal.operator.crossover import DifferentialEvolutionCrossover
 from jmetal.operator.mutation import PolynomialMutation
-from jmetal.problem.multiobjective.uf import UF1, UF9
+from jmetal.problem.multiobjective.uf import UF9
 from jmetal.util.aggregation_function import Tschebycheff
 from jmetal.util.solution import (
     print_function_values_to_file,

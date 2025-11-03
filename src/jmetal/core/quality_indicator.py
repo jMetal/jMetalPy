@@ -8,7 +8,7 @@ Hypervolume (HV).
 """
 
 from abc import ABC, abstractmethod
-from typing import List, Optional, Union, Tuple, Dict, Any
+from typing import List
 
 import moocore
 import numpy as np

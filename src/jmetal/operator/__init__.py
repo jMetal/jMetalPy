@@ -65,6 +65,9 @@ from .mutation import (
     SimpleRandomMutation,
     UniformMutation,
 )
+from .replacement import (
+    RankingAndCrowdingDistanceReplacement,
+)
 from .selection import (
     BestSolutionSelection,
     BinaryTournament2Selection,
@@ -73,10 +76,6 @@ from .selection import (
     RandomSelection,
     RankingAndCrowdingDistanceSelection,
     RouletteWheelSelection,
-)
-
-from .replacement import (
-    RankingAndCrowdingDistanceReplacement,
 )
 
 __all__ = [

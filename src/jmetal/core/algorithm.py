@@ -9,7 +9,7 @@ for both single-objective and multi-objective optimization problems.
 import threading
 import time
 from abc import ABC, abstractmethod
-from typing import Generic, List, TypeVar, Dict, Any
+from typing import Generic, List, TypeVar
 
 from jmetal.config import store
 from jmetal.core.problem import Problem

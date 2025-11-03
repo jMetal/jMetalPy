@@ -8,7 +8,7 @@ in the population and guide the search towards better solutions.
 
 from abc import ABC, abstractmethod
 from functools import wraps
-from typing import Generic, List, TypeVar, Callable, Any, TypeVar, Type
+from typing import Generic, List, Callable, Any, TypeVar
 
 from jmetal.core.solution import Solution
 
@@ -70,10 +70,10 @@ def check_valid_probability_value(func: Callable) -> Callable:
     """
     @wraps(func)
     def func_wrapper(self, probability: float) -> Any:
-        if not 0.0 <= probability <= 1.0:
-            raise ValueError(
-                f"Probability must be between 0.0 and 1.0, but got {probability}"
-            )
+        if probability > 1.0:
+            raise ValueError(f"The probability is greater than one: {probability}")
+        elif probability < 0.0:
+            raise ValueError(f"The probability is lower than zero: {probability}")
         return func(self, probability)
     return func_wrapper
 

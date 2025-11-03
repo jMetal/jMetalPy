@@ -3,6 +3,7 @@ import pytest
 
 from jmetal.operator.replacement import SMSEMOAReplacement
 from jmetal.util.density_estimator import HypervolumeContributionDensityEstimator
+from jmetal.core.solution import FloatSolution
 
 
 class TestSMSEMOAReplacement:
@@ -22,6 +23,20 @@ class TestSMSEMOAReplacement:
     def hv_estimator_2d(self):
         """Create a 2D hypervolume contribution estimator."""
         return HypervolumeContributionDensityEstimator(reference_point=[6, 6])
+
+    @pytest.fixture
+    def float_solution(self):
+        """Create a float solution with the specified objectives."""
+        def _create_float_solution(objectives):
+            solution = FloatSolution(
+                lower_bound=[0.0] * len(objectives),
+                upper_bound=[10.0] * len(objectives),  # Use a larger upper bound for test values
+                number_of_objectives=len(objectives)
+            )
+            solution.objectives = objectives
+            solution.variables = [0.5] * len(objectives)  # Initialize variables with default values
+            return solution
+        return _create_float_solution
 
     def test_removes_min_hv_solution(self, replacement_2d, float_solution, hv_estimator_2d):
         """Test that the solution with minimum hypervolume contribution is removed."""
@@ -62,11 +77,11 @@ class TestSMSEMOAReplacement:
         """Test that the operator works with 3D solutions."""
         # Given: A set of 3D solutions and an offspring
         solutions = [
-            float_solution(objectives=[1, 2, 3], n_objs=3),
-            float_solution(objectives=[2, 3, 4], n_objs=3),
-            float_solution(objectives=[3, 4, 5], n_objs=3),
+            float_solution(objectives=[1, 2, 3]),
+            float_solution(objectives=[2, 3, 4]),
+            float_solution(objectives=[3, 4, 5]),
         ]
-        offspring = [float_solution(objectives=[4, 5, 6], n_objs=3)]
+        offspring = [float_solution(objectives=[4, 5, 6])]
         
         # When: Applying the replacement
         result = replacement_3d.replace(solutions, offspring)

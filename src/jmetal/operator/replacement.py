@@ -1,7 +1,6 @@
 from enum import Enum
 from typing import List, TypeVar
 
-from jmetal.util.density_estimator import CrowdingDistance
 from jmetal.util.density_estimator import DensityEstimator
 from jmetal.util.density_estimator import HypervolumeContributionDensityEstimator
 from jmetal.util.ranking import FastNonDominatedRanking

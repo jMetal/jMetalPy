@@ -6,7 +6,7 @@ This is particularly useful for monitoring algorithm progress, logging, and visu
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, TypeVar, Generic, Optional
+from typing import Any, List
 
 
 class Observer(ABC):

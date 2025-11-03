@@ -8,7 +8,7 @@ creating problems on the fly.
 
 import random
 from abc import ABC, abstractmethod
-from typing import Generic, List, TypeVar, Callable, Any
+from typing import Generic, List, TypeVar
 
 from jmetal.core.observer import Observer
 from jmetal.core.solution import (

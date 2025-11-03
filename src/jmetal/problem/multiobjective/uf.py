@@ -1,5 +1,4 @@
-from math import pi, sin, cos, sqrt, exp, e
-from typing import List
+from math import pi, sin, sqrt
 
 import numpy as np
 
