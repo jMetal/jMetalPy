@@ -1,9 +1,9 @@
 import unittest
 
 from jmetal.core.solution import FloatSolution
+from jmetal.operator.replacement import RankingAndDensityEstimatorReplacement
 from jmetal.util.density_estimator import KNearestNeighborDensityEstimator
 from jmetal.util.ranking import FastNonDominatedRanking, StrengthRanking
-from jmetal.operator.replacement import RankingAndDensityEstimatorReplacement
 
 
 class RankingAndDensityEstimatorReplacementTestCases(unittest.TestCase):

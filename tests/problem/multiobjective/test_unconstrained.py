@@ -1,13 +1,12 @@
-import pytest
 import numpy as np
+import pytest
+
 from jmetal.problem.multiobjective.unconstrained import (
     Fonseca,
     Kursawe,
     Schaffer,
     Viennet2,
     OneZeroMax,
-    SubsetSum,
-    MixedIntegerFloatProblem,
 )
 
 # Test data

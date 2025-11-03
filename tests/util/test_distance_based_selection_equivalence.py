@@ -1,11 +1,12 @@
-import unittest
-import numpy as np
 import random
+import unittest
 from typing import List
 from unittest.mock import patch
 
+import numpy as np
+
 from jmetal.core.solution import FloatSolution
-from jmetal.util.archive import _robust_distance_based_selection, _original_subset_selection, _vectorized_subset_selection
+from jmetal.util.archive import _original_subset_selection, _vectorized_subset_selection
 from jmetal.util.distance import DistanceMetric, DistanceCalculator
 
 

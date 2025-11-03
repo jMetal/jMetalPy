@@ -1,5 +1,5 @@
-import unittest
 import random
+import unittest
 from typing import List
 
 import numpy as np

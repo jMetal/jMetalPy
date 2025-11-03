@@ -1,15 +1,10 @@
+from unittest.mock import patch
+
 import pytest
-import random
-import numpy as np
-from unittest.mock import patch, MagicMock, PropertyMock
 
 from jmetal.core.solution import (
     Solution,
-    FloatSolution,
-    BinarySolution,
-    IntegerSolution,
-    PermutationSolution,
-    CompositeSolution
+    FloatSolution
 )
 from jmetal.operator.selection import (
     BinaryTournamentSelection,
@@ -19,14 +14,7 @@ from jmetal.operator.selection import (
     NaryRandomSolutionSelection,
     RankingAndCrowdingDistanceSelection
 )
-from jmetal.util.comparator import (
-    DominanceComparator,
-    EqualSolutionsComparator, 
-    SolutionAttributeComparator,
-    MultiComparator
-)
-from jmetal.util.ranking import FastNonDominatedRanking, Ranking
-from jmetal.util.density_estimator import CrowdingDistanceDensityEstimator
+
 
 # Fixtures and helper functions
 @pytest.fixture

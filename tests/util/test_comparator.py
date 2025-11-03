@@ -1,6 +1,6 @@
 import unittest
 
-from mockito import mock, never, verify, when
+from mockito import mock, verify, when
 
 from jmetal.core.solution import FloatSolution
 from jmetal.util.comparator import (

@@ -1,11 +1,9 @@
 import unittest
-import copy
-from unittest.mock import Mock
 
-from jmetal.core.solution import FloatSolution
 from jmetal.core.problem import Problem
+from jmetal.core.solution import FloatSolution
 from jmetal.util.archive import NonDominatedSolutionsArchive, DistanceBasedArchive, Archive
-from jmetal.util.evaluator import SequentialEvaluator, SequentialEvaluatorWithArchive
+from jmetal.util.evaluator import SequentialEvaluatorWithArchive
 
 
 class SimpleArchive(Archive):

@@ -1,8 +1,4 @@
 import unittest
-import time
-import random
-
-import unittest
 
 from jmetal.core.solution import FloatSolution
 from jmetal.util.archive import (

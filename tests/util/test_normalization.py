@@ -6,12 +6,13 @@ to ensure they work correctly across different scenarios and edge cases.
 """
 
 import unittest
-import numpy as np
 from unittest import TestCase
+
+import numpy as np
 
 from jmetal.util.normalization import (
     normalize_fronts,
-    normalize_front, 
+    normalize_front,
     get_ideal_and_nadir_points,
     normalize_to_unit_hypercube,
     solutions_to_matrix

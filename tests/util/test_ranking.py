@@ -1,8 +1,8 @@
 import unittest
 
 from jmetal.core.solution import FloatSolution
-from jmetal.util.ranking import FastNonDominatedRanking, Ranking, StrengthRanking
 from jmetal.util.comparator import DominanceWithConstraintsComparator
+from jmetal.util.ranking import FastNonDominatedRanking, Ranking, StrengthRanking
 
 
 class FastNonDominatedRankingTestCases(unittest.TestCase):

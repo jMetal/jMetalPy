@@ -1,8 +1,9 @@
 import numpy as np
 import pytest
 
-from jmetal.problem.multiobjective import uf
 from jmetal.core.solution import FloatSolution
+from jmetal.problem.multiobjective import uf
+
 
 @pytest.mark.parametrize("problem_class, n_var, n_obj", [
     (uf.UF1, 30, 2),

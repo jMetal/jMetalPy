@@ -4,6 +4,7 @@ import pytest
 from jmetal.operator.replacement import SMSEMOAReplacement
 from jmetal.util.density_estimator import HypervolumeContributionDensityEstimator
 
+
 class TestSMSEMOAReplacement:
     """Tests for the SMS-EMOA replacement operator."""
     

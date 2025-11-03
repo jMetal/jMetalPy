@@ -1,5 +1,4 @@
 import unittest
-import numpy as np
 
 from jmetal.core.problem import BinaryProblem
 from jmetal.problem.singleobjective.unconstrained import OneMax, Sphere

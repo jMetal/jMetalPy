@@ -1,8 +1,8 @@
 """Unit tests for Solution classes using pytest."""
 
-import numpy as np
+from typing import List, TypeVar
+
 import pytest
-from typing import List, Type, TypeVar, Any
 
 from jmetal.core.solution import (
     Solution,

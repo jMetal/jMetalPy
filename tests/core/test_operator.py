@@ -1,11 +1,11 @@
+from unittest.mock import patch, MagicMock
+
 import numpy as np
 import pytest
-from unittest.mock import patch, MagicMock, ANY
 
-from jmetal.core.operator import Mutation, Crossover
 from jmetal.core.solution import BinarySolution
-from jmetal.operator.mutation import BitFlipMutation
 from jmetal.operator.crossover import SPXCrossover
+from jmetal.operator.mutation import BitFlipMutation
 
 
 class TestSPXCrossover:

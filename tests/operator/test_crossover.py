@@ -1,36 +1,28 @@
 """Tests for crossover operators using pytest."""
-from typing import List
-from unittest import mock
 import random
+from unittest import mock
+
 import numpy as np
 import pytest
 
-from jmetal.core.operator import Crossover
 from jmetal.core.solution import (
     BinarySolution,
-    CompositeSolution,
     FloatSolution,
-    IntegerSolution,
     PermutationSolution,
 )
 from jmetal.operator.crossover import (
-    ArithmeticCrossover,
     BLXAlphaBetaCrossover,
     BLXAlphaCrossover,
-    CompositeCrossover,
     CXCrossover,
-    IntegerSBXCrossover,
     NullCrossover,
     PMXCrossover,
     SBXCrossover,
     SPXCrossover,
-    UnimodalNormalDistributionCrossover,
 )
 from jmetal.util.ckecking import (
-    EmptyCollectionException,
     InvalidConditionException,
-    NoneParameterException,
 )
+
 
 # Fixtures
 @pytest.fixture

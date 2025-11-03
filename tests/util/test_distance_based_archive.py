@@ -1,11 +1,12 @@
-import unittest
 import random
-import numpy as np
+import unittest
 from unittest.mock import Mock
+
+import numpy as np
 
 from jmetal.core.solution import FloatSolution
 from jmetal.util.archive import DistanceBasedArchive, distance_based_subset_selection
-from jmetal.util.distance import EuclideanDistance, DistanceMetric, DistanceCalculator
+from jmetal.util.distance import DistanceMetric
 
 
 class DistanceBasedArchiveTestCase(unittest.TestCase):

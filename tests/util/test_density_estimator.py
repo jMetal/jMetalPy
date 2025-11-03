@@ -1,12 +1,13 @@
 
 import unittest
 from functools import cmp_to_key
-import numpy as np
+
 from jmetal.util.density_estimator import (
     CrowdingDistanceDensityEstimator,
     KNearestNeighborDensityEstimator,
     HypervolumeContributionDensityEstimator,
 )
+
 
 class DummySolution:
     def __init__(self, objectives):

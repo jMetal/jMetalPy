@@ -1,4 +1,5 @@
 import unittest
+
 import numpy as np
 
 from jmetal.util.distance import DistanceMetric, DistanceCalculator
