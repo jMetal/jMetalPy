@@ -1,33 +1,13 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic
-
-S = TypeVar('S')
-
-class Archive(Generic[S], ABC):
-    def __init__(self):
-        self.solution_list: List[S] = []
-
-    @abstractmethod
-    def add(self, solution: S) -> bool:
-        pass
-
-    def get(self, index: int) -> S:
-        return self.solution_list[index]
-
-    def size(self) -> int:
-        return len(self.solution_list)
-
-    def get_name(self) -> str:
-        return self.__class__.__name__
-
+from threading import Lock
 import copy
 import random
 import threading
-from abc import ABC, abstractmethod
-from threading import Lock
-from typing import Generic, List, TypeVar, Optional
+from typing import Generic, List, Optional, TypeVar
 
 import numpy as np
+import logging
+import warnings
 
 from jmetal.util.comparator import Comparator, DominanceComparator, SolutionAttributeComparator
 from jmetal.util.density_estimator import DensityEstimator, CrowdingDistanceDensityEstimator
@@ -300,11 +280,15 @@ class CrowdingDistanceArchiveWithReferencePoint(ArchiveWithReferencePoint[S]):
         )
 
 
-def distance_based_subset_selection_robust(solution_list: List[S], subset_size: int, 
-                                          metric: DistanceMetric = DistanceMetric.L2_SQUARED,
-                                          weights: Optional[np.ndarray] = None,
-                                          random_seed: Optional[int] = None,
-                                          use_vectorized: bool = True) -> List[S]:
+def distance_based_subset_selection_robust(
+    solution_list: List[S],
+    subset_size: int,
+    metric: DistanceMetric = DistanceMetric.L2_SQUARED,
+    weights: Optional[np.ndarray] = None,
+    random_seed: Optional[int] = None,
+    use_vectorized: bool = True,
+    rng: Optional[np.random.Generator] = None,
+) -> List[S]:
     """
     Robust distance-based subset selection with multiple metrics and improved normalization.
     
@@ -337,10 +321,9 @@ def distance_based_subset_selection_robust(solution_list: List[S], subset_size: 
     if subset_size >= len(solution_list):
         return solution_list[:]
     
-    # Set random seed if provided for reproducibility
-    if random_seed is not None:
-        np.random.seed(random_seed)
-        random.seed(random_seed)
+    # Prepare RNG for reproducibility
+    if rng is None:
+        rng = np.random.default_rng(random_seed)
     
     # Get number of objectives from first solution
     num_objectives = len(solution_list[0].objectives)
@@ -350,7 +333,7 @@ def distance_based_subset_selection_robust(solution_list: List[S], subset_size: 
         return _crowding_distance_selection(solution_list, subset_size)
     
     # For >2 objectives, use robust distance-based selection
-    return _robust_distance_based_selection(solution_list, subset_size, metric, weights, use_vectorized)
+    return _robust_distance_based_selection(solution_list, subset_size, metric, weights, use_vectorized, rng)
 
 
 def _identify_valid_dimensions(objectives_matrix: np.ndarray) -> np.ndarray:
@@ -371,9 +354,14 @@ def _identify_valid_dimensions(objectives_matrix: np.ndarray) -> np.ndarray:
     return valid_dims
 
 
-def _robust_distance_based_selection(solution_list: List[S], subset_size: int,
-                                    metric: DistanceMetric, weights: Optional[np.ndarray] = None,
-                                    use_vectorized: bool = True) -> List[S]:
+def _robust_distance_based_selection(
+    solution_list: List[S],
+    subset_size: int,
+    metric: DistanceMetric,
+    weights: Optional[np.ndarray] = None,
+    use_vectorized: bool = True,
+    rng: Optional[np.random.Generator] = None,
+) -> List[S]:
     """
     Robust distance-based selection for >2 objective problems.
     
@@ -422,77 +410,46 @@ def _robust_distance_based_selection(solution_list: List[S], subset_size: int,
             projected_weights = weights[valid_dims]
     
     # Seed selection: best solution in a random valid objective
-    random_objective_idx = random.randint(0, len(valid_dims) - 1)
+    random_objective_idx = int(rng.integers(0, len(valid_dims)))
     random_objective = valid_dims[random_objective_idx]
     
     # Find best (minimum) value in the random objective
     seed_idx = np.argmin(objectives_matrix[:, random_objective])
     
-    # Choose implementation based on parameter
-    if use_vectorized:
-        return _vectorized_subset_selection(solution_list, normalized_matrix, subset_size, 
-                                           seed_idx, metric, projected_weights)
-    else:
-        return _original_subset_selection(solution_list, normalized_matrix, subset_size, 
-                                         seed_idx, metric, projected_weights)
+    # The non-vectorized implementation has been removed; if callers still
+    # request `use_vectorized=False` we log a warning and fall back to the
+    # vectorized implementation to preserve behavior for existing tests/users.
+    if not use_vectorized:
+        logging.warning(
+            "Non-vectorized subset selection was removed; falling back to vectorized implementation."
+        )
+
+    return _vectorized_subset_selection(
+        solution_list, normalized_matrix, subset_size, seed_idx, metric, projected_weights, rng
+    )
 
 
 def _original_subset_selection(solution_list: List[S], normalized_matrix: np.ndarray,
                               subset_size: int, seed_idx: int, metric: DistanceMetric,
-                              weights: Optional[np.ndarray] = None) -> List[S]:
+                              weights: Optional[np.ndarray] = None,
+                              rng: Optional[np.random.Generator] = None) -> List[S]:
     """
-    Original (non-vectorized) implementation of subset selection for higher quality results.
-    
-    This function uses the original iterative approach which may be slower but can provide
-    higher quality diversity selection in some cases.
-    
-    Args:
-        solution_list: List of solutions to select from
-        normalized_matrix: Normalized objective matrix
-        subset_size: Number of solutions to select
-        seed_idx: Index of seed solution
-        metric: Distance metric to use
-        weights: Optional weights for weighted metrics
-        
-    Returns:
-        List[S]: Selected solutions
+    Backwards-compatible wrapper: delegate original (non-vectorized) calls
+    to the vectorized implementation. This preserves API compatibility while
+    removing the legacy implementation body.
     """
-    n_solutions = len(solution_list)
-    
-    # Initialize selection
-    selected_indices = [seed_idx]
-    selected_mask = np.zeros(n_solutions, dtype=bool)
-    selected_mask[seed_idx] = True
-    
-    # Track minimum distances to selected solutions
-    min_distances = np.full(n_solutions, np.inf)
-    _update_min_distances_legacy(normalized_matrix, min_distances, selected_mask, seed_idx, metric, weights)
-    
-    # Iteratively select solutions with maximum minimum distance
-    while len(selected_indices) < subset_size:
-        # Find unselected solution with maximum minimum distance
-        candidates = np.where(~selected_mask)[0]
-        if len(candidates) == 0:
-            break
-            
-        candidate_distances = min_distances[candidates]
-        best_candidate_local_idx = np.argmax(candidate_distances)
-        best_candidate_idx = candidates[best_candidate_local_idx]
-        
-        # Add to selection
-        selected_indices.append(best_candidate_idx)
-        selected_mask[best_candidate_idx] = True
-        
-        # Update minimum distances
-        _update_min_distances_legacy(normalized_matrix, min_distances, selected_mask, best_candidate_idx, metric, weights)
-    
-    # Return selected solutions
-    return [solution_list[i] for i in selected_indices]
+    logging.warning(
+        "_original_subset_selection: legacy non-vectorized implementation removed; delegating to vectorized version."
+    )
+    # Delegate to vectorized implementation (ensures tests and users get
+    # consistent behavior even if they explicitly call the original function).
+    return _vectorized_subset_selection(solution_list, normalized_matrix, subset_size, seed_idx, metric, weights, rng)
 
 
 def _vectorized_subset_selection(solution_list: List[S], normalized_matrix: np.ndarray,
                                subset_size: int, seed_idx: int, metric: DistanceMetric,
-                               weights: Optional[np.ndarray] = None) -> List[S]:
+                               weights: Optional[np.ndarray] = None,
+                               rng: Optional[np.random.Generator] = None) -> List[S]:
     """
     Vectorized implementation of subset selection using optimized distance calculations.
     
@@ -510,93 +467,144 @@ def _vectorized_subset_selection(solution_list: List[S], normalized_matrix: np.n
     Returns:
         List[S]: Selected solutions
     """
+    # Fast path for L2 squared distances using incremental updates
+    if metric == DistanceMetric.L2_SQUARED:
+        return _vectorized_subset_selection_l2(solution_list, normalized_matrix, subset_size, seed_idx)
+
     n_solutions = len(solution_list)
-    
+
     # Initialize selection with seed
     selected_indices = [seed_idx]
-    
+
     # Iteratively select solutions with maximum minimum distance
     while len(selected_indices) < subset_size:
         # Calculate minimum distances using vectorized operations
         min_distances = DistanceCalculator.calculate_min_distances_vectorized(
             normalized_matrix, selected_indices, metric, weights
         )
-        
-        # Find unselected solution with maximum minimum distance
-        # (selected solutions already have infinite distance)
-        best_candidate_idx = np.argmax(min_distances[np.isfinite(min_distances)])
-        
+
         # Convert to actual index (since argmax works on finite subset)
         finite_indices = np.where(np.isfinite(min_distances))[0]
         if len(finite_indices) == 0:
             # All remaining solutions are already selected
             break
-            
+
         best_candidate_idx = finite_indices[np.argmax(min_distances[finite_indices])]
-            
+
         # Add to selection
         selected_indices.append(best_candidate_idx)
-    
+
     # Return selected solutions
     return [solution_list[i] for i in selected_indices]
 
 
-def _update_min_distances_legacy(normalized_matrix: np.ndarray, min_distances: np.ndarray, 
-                         selected_mask: np.ndarray, new_selected_idx: int,
-                         metric: DistanceMetric, weights: Optional[np.ndarray] = None):
+def _vectorized_subset_selection_l2(solution_list: List[S], normalized_matrix: np.ndarray,
+                                   subset_size: int, seed_idx: int,
+                                   rng: Optional[np.random.Generator] = None) -> List[S]:
     """
-    Legacy function for updating minimum distances (kept for compatibility).
-    
-    Note: This function is now deprecated in favor of vectorized operations.
-    Use DistanceCalculator.calculate_min_distances_vectorized() instead.
-    
-    Args:
-        normalized_matrix: Normalized objective matrix
-        min_distances: Array of minimum distances to selected solutions
-        selected_mask: Boolean mask of selected solutions
-        new_selected_idx: Index of newly selected solution
-        metric: Distance metric to use
-        weights: Optional weights for weighted metrics
+    Optimized vectorized subset selection for the L2 squared metric.
+
+    This routine maintains and updates the minimum squared distance to the
+    selected set incrementally. Complexity O(n * k) where k is subset_size.
+    Memory overhead is minimal (O(n)).
     """
-    new_solution = normalized_matrix[new_selected_idx]
-    
-    for i in range(len(min_distances)):
-        if selected_mask[i]:  # Skip already selected solutions
-            continue
-            
-        # Calculate distance to new selected solution
-        distance = DistanceCalculator.calculate_distance(
-            normalized_matrix[i], new_solution, metric, weights
-        )
-        
-        # Update minimum distance if this is closer
-        if distance < min_distances[i]:
-            min_distances[i] = distance
+    n_solutions = len(solution_list)
+
+    # Initialize
+    selected_indices = [seed_idx]
+    selected_mask = np.zeros(n_solutions, dtype=bool)
+    selected_mask[seed_idx] = True
+
+    # Minimum distances to the selected set (squared L2)
+    min_distances = np.full(n_solutions, np.inf)
+
+    # Compute distances to seed
+    seed_vec = normalized_matrix[seed_idx]
+    dists = np.sum((normalized_matrix - seed_vec) ** 2, axis=1)
+    min_distances = np.minimum(min_distances, dists)
+
+    # Iteratively select points with maximum minimum distance
+    while len(selected_indices) < subset_size:
+        candidates = np.where(~selected_mask)[0]
+        if len(candidates) == 0:
+            break
+
+        candidate_distances = min_distances[candidates]
+        best_local = int(np.argmax(candidate_distances))
+        best_idx = int(candidates[best_local])
+
+        # Add to selection
+        selected_indices.append(best_idx)
+        selected_mask[best_idx] = True
+
+        # Update minimum distances using vectorized squared L2
+        vec = normalized_matrix[best_idx]
+        dists = np.sum((normalized_matrix - vec) ** 2, axis=1)
+        min_distances = np.minimum(min_distances, dists)
+
+    return [solution_list[i] for i in selected_indices]
 
 
-# Maintain backward compatibility
-_update_min_distances = _update_min_distances_legacy
+# The legacy non-vectorized helpers have been removed. Any attempt to use them
+# should fail fast and ask callers to migrate to the vectorized API.
 
 
 def _crowding_distance_selection(solution_list: List[S], subset_size: int) -> List[S]:
     """
     Selects solutions using crowding distance for 2-objective problems.
     """
-    # Create a temporary archive to calculate crowding distances
-    archive = CrowdingDistanceArchive(len(solution_list))
-    
-    # Add all solutions to calculate crowding distances
-    for solution in solution_list:
-        archive.add(copy.deepcopy(solution))
-    
-    # Sort by crowding distance (descending)
-    sorted_solutions = sorted(
-        archive.solution_list,
-        key=lambda sol: sol.attributes.get("crowding_distance", 0.0),
-        reverse=True
-    )
-    
-    return sorted_solutions[:subset_size]
+    # Compute objectives matrix
+    if not solution_list:
+        return []
+
+    objectives = np.array([sol.objectives for sol in solution_list])
+
+    distances = _compute_crowding_distances(objectives)
+
+    # Sort indices by distance descending
+    idx_sorted = np.argsort(-distances)
+    selected_idx = idx_sorted[:subset_size]
+
+    return [solution_list[i] for i in selected_idx]
+
+
+def _compute_crowding_distances(objectives: np.ndarray) -> np.ndarray:
+    """Compute crowding distances for a population of objective vectors.
+
+    Returns an array of distances (higher is less crowded). Uses standard
+    normalization per objective and sums normalized gaps.
+    """
+    n_solutions, n_obj = objectives.shape
+
+    if n_solutions == 0:
+        return np.array([])
+
+    distances = np.zeros(n_solutions, dtype=float)
+
+    if n_solutions == 1:
+        return np.array([np.inf])
+
+    for m in range(n_obj):
+        vals = objectives[:, m]
+        order = np.argsort(vals)
+        sorted_vals = vals[order]
+
+        # Assign infinite distance to boundary solutions
+        distances[order[0]] = np.inf
+        distances[order[-1]] = np.inf
+
+        denom = sorted_vals[-1] - sorted_vals[0]
+        if denom <= 0:
+            # all values equal for this objective: skip contribution
+            continue
+
+        # internal solutions get contribution
+        for i in range(1, n_solutions - 1):
+            prev_v = sorted_vals[i - 1]
+            next_v = sorted_vals[i + 1]
+            distances[order[i]] += (next_v - prev_v) / denom
+
+    return distances
 
 
 # Backward compatibility alias
@@ -665,6 +673,16 @@ class DistanceBasedArchive(BoundedArchive[S]):
         self.weights = weights
         self.random_seed = random_seed
         self.use_vectorized = use_vectorized
+        # Deprecation warning: non-vectorized path will be removed in future releases
+        if not self.use_vectorized:
+            logging.warning(
+                "DistanceBasedArchive: use_vectorized=False is deprecated and will be removed in a future release. "
+                "Prefer the vectorized implementation (use_vectorized=True)."
+            )
+            warnings.warn(
+                "DistanceBasedArchive: use_vectorized=False is deprecated and will be removed in a future release.",
+                DeprecationWarning,
+            )
         
         # Thread safety for concurrent access
         self._lock = threading.Lock()
@@ -685,14 +703,18 @@ class DistanceBasedArchive(BoundedArchive[S]):
             success = self.non_dominated_solution_archive.add(solution)
             
             if success and self.size() > self.maximum_size:
+                # Prepare RNG from stored seed for reproducibility
+                rng = np.random.default_rng(self.random_seed)
+
                 # Apply distance-based subset selection
                 selected_solutions = distance_based_subset_selection_robust(
-                    self.solution_list, 
+                    self.solution_list,
                     self.maximum_size,
                     self.metric,
                     self.weights,
                     self.random_seed,
-                    self.use_vectorized
+                    self.use_vectorized,
+                    rng,
                 )
                 
                 # Update solution list with selected solutions

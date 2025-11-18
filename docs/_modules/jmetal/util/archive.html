@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/bootstrap.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>jmetal.util.archive &#8212; jMetalPy 1.7.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/guzzle.css?v=e05a0192" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9aa90875" />
+    <script src="../../../_static/documentation_options.js?v=030dc6f6"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jmetal.util.archive</a></li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../../../index.html" class="text-logo">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.7.0 documentation">
+    <br>
+</a>
+
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    Python version of the jMetal framework
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api-reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced-topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="../../../index.html">Docs</a></li>
+              
+              <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+              
+              <li class="breadcrumb-item">jmetal.util.archive</li>
+            </ol>
+          </nav>
+          
+          <div class="document clearer body">
+            
+  <h1>Source code for jmetal.util.archive</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Generic</span>
+
+<span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Archive</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">ABC</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">S</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">threading</span><span class="w"> </span><span class="kn">import</span> <span class="n">Lock</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.comparator</span><span class="w"> </span><span class="kn">import</span> <span class="n">Comparator</span><span class="p">,</span> <span class="n">DominanceComparator</span><span class="p">,</span> <span class="n">SolutionAttributeComparator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.density_estimator</span><span class="w"> </span><span class="kn">import</span> <span class="n">DensityEstimator</span><span class="p">,</span> <span class="n">CrowdingDistanceDensityEstimator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">DistanceMetric</span><span class="p">,</span> <span class="n">DistanceCalculator</span>
+
+<span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: archive</span>
+<span class="sd">   :platform: Unix, Windows</span>
+<span class="sd">   :synopsis: Archive implementation.</span>
+
+<span class="sd">.. moduleauthor:: Antonio J. Nebro &lt;antonio@lcc.uma.es&gt;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="Archive">
+<a class="viewcode-back" href="../../../api/util/archive.html#jmetal.util.archive.Archive">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Archive</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">ABC</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">S</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span></div>
+
+
+
+<div class="viewcode-block" id="BoundedArchive">
+<a class="viewcode-back" href="../../../api/util/archive.html#jmetal.util.archive.BoundedArchive">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BoundedArchive</span><span class="p">(</span><span class="n">Archive</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maximum_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">comparator</span><span class="p">:</span> <span class="n">Comparator</span><span class="p">[</span><span class="n">S</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">density_estimator</span><span class="p">:</span> <span class="n">DensityEstimator</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">dominance_comparator</span><span class="p">:</span> <span class="n">Comparator</span><span class="p">[</span><span class="n">S</span><span class="p">]</span> <span class="o">=</span> <span class="n">DominanceComparator</span><span class="p">()):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BoundedArchive</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maximum_size</span> <span class="o">=</span> <span class="n">maximum_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comparator</span> <span class="o">=</span> <span class="n">comparator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">density_estimator</span> <span class="o">=</span> <span class="n">density_estimator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">non_dominated_solution_archive</span> <span class="o">=</span> <span class="n">NonDominatedSolutionsArchive</span><span class="p">(</span><span class="n">dominance_comparator</span><span class="o">=</span><span class="n">dominance_comparator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">non_dominated_solution_archive</span><span class="o">.</span><span class="n">solution_list</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_density_estimator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">density_estimator</span><span class="o">.</span><span class="n">compute_density_estimator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">S</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">non_dominated_solution_archive</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">maximum_size</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">compute_density_estimator</span><span class="p">()</span>
+                <span class="n">worst_solution</span><span class="p">,</span> <span class="n">index_to_remove</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__find_worst_solution</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index_to_remove</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">success</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__find_worst_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">solution_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The solution list is None&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">solution_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The solution list is empty&quot;</span><span class="p">)</span>
+
+        <span class="n">worst_solution</span> <span class="o">=</span> <span class="n">solution_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">index_to_remove</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">solution_index</span><span class="p">,</span> <span class="n">solution</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">solution_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comparator</span><span class="o">.</span><span class="n">compare</span><span class="p">(</span><span class="n">worst_solution</span><span class="p">,</span> <span class="n">solution</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">worst_solution</span> <span class="o">=</span> <span class="n">solution</span>
+                <span class="n">index_to_remove</span> <span class="o">=</span> <span class="n">solution_index</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">worst_solution</span><span class="p">,</span> <span class="n">index_to_remove</span></div>
+
+
+
+<div class="viewcode-block" id="NonDominatedSolutionsArchive">
+<a class="viewcode-back" href="../../../api/util/archive.html#jmetal.util.archive.NonDominatedSolutionsArchive">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NonDominatedSolutionsArchive</span><span class="p">(</span><span class="n">Archive</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Archive that maintains only non-dominated solutions using Pareto dominance.</span>
+<span class="sd">    </span>
+<span class="sd">    This implementation efficiently manages a collection of solutions by:</span>
+<span class="sd">    - Adding new non-dominated solutions</span>
+<span class="sd">    - Removing solutions dominated by new ones</span>
+<span class="sd">    - Preventing duplicate solutions based on objectives</span>
+<span class="sd">    </span>
+<span class="sd">    Time Complexity: O(n) per insertion, where n is archive size</span>
+<span class="sd">    Space Complexity: O(n) for storing solutions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dominance_comparator</span><span class="p">:</span> <span class="n">Comparator</span> <span class="o">=</span> <span class="n">DominanceComparator</span><span class="p">(),</span> 
+                 <span class="n">objective_tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the non-dominated solutions archive.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            dominance_comparator: Comparator to determine dominance relationships</span>
+<span class="sd">            objective_tolerance: Tolerance for comparing floating-point objectives</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">NonDominatedSolutionsArchive</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comparator</span> <span class="o">=</span> <span class="n">dominance_comparator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">objective_tolerance</span> <span class="o">=</span> <span class="n">objective_tolerance</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_objectives_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution1</span><span class="p">:</span> <span class="n">S</span><span class="p">,</span> <span class="n">solution2</span><span class="p">:</span> <span class="n">S</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if two solutions have equal objectives within tolerance.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            solution1: First solution to compare</span>
+<span class="sd">            solution2: Second solution to compare</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            True if objectives are equal within tolerance, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">solution1</span><span class="o">.</span><span class="n">objectives</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">solution2</span><span class="o">.</span><span class="n">objectives</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+            
+        <span class="k">for</span> <span class="n">obj1</span><span class="p">,</span> <span class="n">obj2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">solution1</span><span class="o">.</span><span class="n">objectives</span><span class="p">,</span> <span class="n">solution2</span><span class="o">.</span><span class="n">objectives</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">obj1</span> <span class="o">-</span> <span class="n">obj2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">objective_tolerance</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="NonDominatedSolutionsArchive.add">
+<a class="viewcode-back" href="../../../api/util/archive.html#jmetal.util.archive.NonDominatedSolutionsArchive.add">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">S</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a solution to the archive if it&#39;s non-dominated and not duplicate.</span>
+<span class="sd">        </span>
+<span class="sd">        This method efficiently handles the archive by:</span>
+<span class="sd">        1. Checking if the new solution is dominated by existing ones</span>
+<span class="sd">        2. Removing existing solutions dominated by the new one</span>
+<span class="sd">        3. Preventing addition of duplicate solutions</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            solution: Solution to add to the archive</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            True if solution was added, False if rejected (dominated or duplicate)</span>
+<span class="sd">            </span>
+<span class="sd">        Time Complexity: O(n) where n is the number of solutions in archive</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Handle empty archive case</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="c1"># Check dominance against all existing solutions</span>
+        <span class="n">remaining_solutions</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">current_solution</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">:</span>
+            <span class="n">dominance_flag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comparator</span><span class="o">.</span><span class="n">compare</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">current_solution</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">dominance_flag</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># New solution is dominated by current -&gt; reject immediately</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">elif</span> <span class="n">dominance_flag</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># No dominance relationship -&gt; check for duplicates</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_objectives_equal</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">current_solution</span><span class="p">):</span>
+                    <span class="c1"># Duplicate found -&gt; reject</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+                <span class="c1"># Keep the current solution as it&#39;s not dominated</span>
+                <span class="n">remaining_solutions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_solution</span><span class="p">)</span>
+            <span class="c1"># dominance_flag == -1: current solution is dominated -&gt; don&#39;t add to remaining</span>
+
+        <span class="c1"># Update archive with non-dominated solutions and add new one</span>
+        <span class="c1"># IMPORTANT: Modify list in-place to maintain references from BoundedArchive</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">remaining_solutions</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CrowdingDistanceArchive">
+<a class="viewcode-back" href="../../../api/util/archive.html#jmetal.util.archive.CrowdingDistanceArchive">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CrowdingDistanceArchive</span><span class="p">(</span><span class="n">BoundedArchive</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maximum_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dominance_comparator</span><span class="o">=</span><span class="n">DominanceComparator</span><span class="p">()):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CrowdingDistanceArchive</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">maximum_size</span><span class="o">=</span><span class="n">maximum_size</span><span class="p">,</span>
+            <span class="n">comparator</span><span class="o">=</span><span class="n">SolutionAttributeComparator</span><span class="p">(</span><span class="s2">&quot;crowding_distance&quot;</span><span class="p">,</span> <span class="n">lowest_is_best</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+            <span class="n">dominance_comparator</span><span class="o">=</span><span class="n">dominance_comparator</span><span class="p">,</span>
+            <span class="n">density_estimator</span><span class="o">=</span><span class="n">CrowdingDistanceDensityEstimator</span><span class="p">(),</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ArchiveWithReferencePoint">
+<a class="viewcode-back" href="../../../api/util/archive.html#jmetal.util.archive.ArchiveWithReferencePoint">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ArchiveWithReferencePoint</span><span class="p">(</span><span class="n">BoundedArchive</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">maximum_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">reference_point</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+            <span class="n">comparator</span><span class="p">:</span> <span class="n">Comparator</span><span class="p">[</span><span class="n">S</span><span class="p">],</span>
+            <span class="n">density_estimator</span><span class="p">:</span> <span class="n">DensityEstimator</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ArchiveWithReferencePoint</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">maximum_size</span><span class="p">,</span> <span class="n">comparator</span><span class="p">,</span> <span class="n">density_estimator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__reference_point</span> <span class="o">=</span> <span class="n">reference_point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__comparator</span> <span class="o">=</span> <span class="n">comparator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__density_estimator</span> <span class="o">=</span> <span class="n">density_estimator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">S</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">:</span>
+            <span class="n">dominated_solution</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dominance_test</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">objectives</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__reference_point</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">:</span>
+                        <span class="n">result</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="n">dominated_solution</span> <span class="o">=</span> <span class="n">solution</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">result</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">ArchiveWithReferencePoint</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">and</span> <span class="n">dominated_solution</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">dominated_solution</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">dominated_solution</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">maximum_size</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">compute_density_estimator</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># In case of having at least a solution which is non-dominated with the reference point, filter it</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">sol</span> <span class="k">for</span> <span class="n">sol</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dominance_test</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">objectives</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__reference_point</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span>
+            <span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_reference_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_reference_point</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__reference_point</span> <span class="o">=</span> <span class="n">new_reference_point</span>
+
+            <span class="n">first_solution</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">first_solution</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_reference_point</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__reference_point</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__dominance_test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector1</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">vector2</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">best_is_one</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">best_is_two</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">value1</span><span class="p">,</span> <span class="n">value2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">vector1</span><span class="p">,</span> <span class="n">vector2</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">value1</span> <span class="o">!=</span> <span class="n">value2</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">value1</span> <span class="o">&lt;</span> <span class="n">value2</span><span class="p">:</span>
+                    <span class="n">best_is_one</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">value2</span> <span class="o">&lt;</span> <span class="n">value1</span><span class="p">:</span>
+                    <span class="n">best_is_two</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">best_is_one</span> <span class="o">&gt;</span> <span class="n">best_is_two</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">best_is_two</span> <span class="o">&gt;</span> <span class="n">best_is_one</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CrowdingDistanceArchiveWithReferencePoint</span><span class="p">(</span><span class="n">ArchiveWithReferencePoint</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maximum_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">reference_point</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CrowdingDistanceArchiveWithReferencePoint</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">maximum_size</span><span class="o">=</span><span class="n">maximum_size</span><span class="p">,</span>
+            <span class="n">reference_point</span><span class="o">=</span><span class="n">reference_point</span><span class="p">,</span>
+            <span class="n">comparator</span><span class="o">=</span><span class="n">SolutionAttributeComparator</span><span class="p">(</span><span class="s2">&quot;crowding_distance&quot;</span><span class="p">,</span> <span class="n">lowest_is_best</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+            <span class="n">density_estimator</span><span class="o">=</span><span class="n">CrowdingDistanceDensityEstimator</span><span class="p">(),</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">distance_based_subset_selection_robust</span><span class="p">(</span><span class="n">solution_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">subset_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> 
+                                          <span class="n">metric</span><span class="p">:</span> <span class="n">DistanceMetric</span> <span class="o">=</span> <span class="n">DistanceMetric</span><span class="o">.</span><span class="n">L2_SQUARED</span><span class="p">,</span>
+                                          <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                          <span class="n">random_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                          <span class="n">use_vectorized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Robust distance-based subset selection with multiple metrics and improved normalization.</span>
+<span class="sd">    </span>
+<span class="sd">    This implementation follows the SafeBestSolutionsArchive approach:</span>
+<span class="sd">    - For 2 objectives: Uses crowding distance selection (fast and standard)</span>
+<span class="sd">    - For &gt;2 objectives: Uses robust distance-based selection with smart normalization</span>
+<span class="sd">    - Only normalizes dimensions with non-zero range to avoid division by zero</span>
+<span class="sd">    - Supports multiple distance metrics for performance and flexibility</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        solution_list: List of solutions to select from</span>
+<span class="sd">        subset_size: Number of solutions to select</span>
+<span class="sd">        metric: Distance metric to use (default: L2_SQUARED)</span>
+<span class="sd">        weights: Optional weights for TCHEBY_WEIGHTED metric</span>
+<span class="sd">        random_seed: Optional seed for reproducible results</span>
+<span class="sd">        use_vectorized: Whether to use vectorized implementation (default: True)</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        List of selected solutions</span>
+<span class="sd">        </span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If parameters are invalid</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">solution_list</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+        
+    <span class="k">if</span> <span class="n">subset_size</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Subset size must be positive&quot;</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="n">subset_size</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">solution_list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">solution_list</span><span class="p">[:]</span>
+    
+    <span class="c1"># Set random seed if provided for reproducibility</span>
+    <span class="k">if</span> <span class="n">random_seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_seed</span><span class="p">)</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_seed</span><span class="p">)</span>
+    
+    <span class="c1"># Get number of objectives from first solution</span>
+    <span class="n">num_objectives</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">solution_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">objectives</span><span class="p">)</span>
+    
+    <span class="c1"># For 2 objectives, use crowding distance (fast and standard in jMetal)</span>
+    <span class="k">if</span> <span class="n">num_objectives</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_crowding_distance_selection</span><span class="p">(</span><span class="n">solution_list</span><span class="p">,</span> <span class="n">subset_size</span><span class="p">)</span>
+    
+    <span class="c1"># For &gt;2 objectives, use robust distance-based selection</span>
+    <span class="k">return</span> <span class="n">_robust_distance_based_selection</span><span class="p">(</span><span class="n">solution_list</span><span class="p">,</span> <span class="n">subset_size</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">use_vectorized</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_identify_valid_dimensions</span><span class="p">(</span><span class="n">objectives_matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Identify dimensions with non-zero range to avoid normalization issues.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        objectives_matrix: Matrix of objectives (n_solutions x n_objectives)</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Array of valid dimension indices (those with max &gt; min)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">min_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">objectives_matrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">max_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">objectives_matrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    
+    <span class="c1"># Find dimensions where max &gt; min (non-constant objectives)</span>
+    <span class="n">valid_dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">max_vals</span> <span class="o">&gt;</span> <span class="n">min_vals</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">valid_dims</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_robust_distance_based_selection</span><span class="p">(</span><span class="n">solution_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">subset_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                                    <span class="n">metric</span><span class="p">:</span> <span class="n">DistanceMetric</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                    <span class="n">use_vectorized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Robust distance-based selection for &gt;2 objective problems.</span>
+<span class="sd">    </span>
+<span class="sd">    Algorithm improvements:</span>
+<span class="sd">    1. Identify valid dimensions (non-zero range) for normalization</span>
+<span class="sd">    2. Fallback to crowding distance if all dimensions are constant</span>
+<span class="sd">    3. Use best solution in random objective as seed (not extremes)</span>
+<span class="sd">    4. Apply efficient distance calculations with selectable metrics</span>
+<span class="sd">    5. Choose between vectorized and original implementations</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        solution_list: List of solutions to select from</span>
+<span class="sd">        subset_size: Number of solutions to select</span>
+<span class="sd">        metric: Distance metric to use</span>
+<span class="sd">        weights: Optional weights for TCHEBY_WEIGHTED metric</span>
+<span class="sd">        use_vectorized: Whether to use vectorized implementation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert solutions to matrix</span>
+    <span class="n">objectives_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">sol</span><span class="o">.</span><span class="n">objectives</span> <span class="k">for</span> <span class="n">sol</span> <span class="ow">in</span> <span class="n">solution_list</span><span class="p">])</span>
+    <span class="n">n_solutions</span><span class="p">,</span> <span class="n">n_objectives</span> <span class="o">=</span> <span class="n">objectives_matrix</span><span class="o">.</span><span class="n">shape</span>
+    
+    <span class="c1"># Identify valid dimensions (non-zero range)</span>
+    <span class="n">valid_dims</span> <span class="o">=</span> <span class="n">_identify_valid_dimensions</span><span class="p">(</span><span class="n">objectives_matrix</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_dims</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># All objectives are constant -&gt; fallback to crowding distance</span>
+        <span class="k">return</span> <span class="n">_crowding_distance_selection</span><span class="p">(</span><span class="n">solution_list</span><span class="p">,</span> <span class="n">subset_size</span><span class="p">)</span>
+    
+    <span class="c1"># Normalize only valid dimensions</span>
+    <span class="n">normalized_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_solutions</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_dims</span><span class="p">)))</span>
+    <span class="n">min_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">objectives_matrix</span><span class="p">[:,</span> <span class="n">valid_dims</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">max_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">objectives_matrix</span><span class="p">[:,</span> <span class="n">valid_dims</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">ranges</span> <span class="o">=</span> <span class="n">max_vals</span> <span class="o">-</span> <span class="n">min_vals</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_solutions</span><span class="p">):</span>
+        <span class="n">normalized_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">objectives_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">valid_dims</span><span class="p">]</span> <span class="o">-</span> <span class="n">min_vals</span><span class="p">)</span> <span class="o">/</span> <span class="n">ranges</span>
+    
+    <span class="c1"># Project weights to valid dimensions if using weighted metric</span>
+    <span class="n">projected_weights</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">metric</span> <span class="o">==</span> <span class="n">DistanceMetric</span><span class="o">.</span><span class="n">TCHEBY_WEIGHTED</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">projected_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">valid_dims</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n_objectives</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Weights length (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="si">}</span><span class="s2">) must match number of objectives (</span><span class="si">{</span><span class="n">n_objectives</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+            <span class="n">projected_weights</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[</span><span class="n">valid_dims</span><span class="p">]</span>
+    
+    <span class="c1"># Seed selection: best solution in a random valid objective</span>
+    <span class="n">random_objective_idx</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_dims</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">random_objective</span> <span class="o">=</span> <span class="n">valid_dims</span><span class="p">[</span><span class="n">random_objective_idx</span><span class="p">]</span>
+    
+    <span class="c1"># Find best (minimum) value in the random objective</span>
+    <span class="n">seed_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">objectives_matrix</span><span class="p">[:,</span> <span class="n">random_objective</span><span class="p">])</span>
+    
+    <span class="c1"># Choose implementation based on parameter</span>
+    <span class="k">if</span> <span class="n">use_vectorized</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_vectorized_subset_selection</span><span class="p">(</span><span class="n">solution_list</span><span class="p">,</span> <span class="n">normalized_matrix</span><span class="p">,</span> <span class="n">subset_size</span><span class="p">,</span> 
+                                           <span class="n">seed_idx</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">projected_weights</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_original_subset_selection</span><span class="p">(</span><span class="n">solution_list</span><span class="p">,</span> <span class="n">normalized_matrix</span><span class="p">,</span> <span class="n">subset_size</span><span class="p">,</span> 
+                                         <span class="n">seed_idx</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">projected_weights</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_original_subset_selection</span><span class="p">(</span><span class="n">solution_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">normalized_matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                              <span class="n">subset_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">seed_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">metric</span><span class="p">:</span> <span class="n">DistanceMetric</span><span class="p">,</span>
+                              <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Original (non-vectorized) implementation of subset selection for higher quality results.</span>
+<span class="sd">    </span>
+<span class="sd">    This function uses the original iterative approach which may be slower but can provide</span>
+<span class="sd">    higher quality diversity selection in some cases.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        solution_list: List of solutions to select from</span>
+<span class="sd">        normalized_matrix: Normalized objective matrix</span>
+<span class="sd">        subset_size: Number of solutions to select</span>
+<span class="sd">        seed_idx: Index of seed solution</span>
+<span class="sd">        metric: Distance metric to use</span>
+<span class="sd">        weights: Optional weights for weighted metrics</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        List[S]: Selected solutions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n_solutions</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">solution_list</span><span class="p">)</span>
+    
+    <span class="c1"># Initialize selection</span>
+    <span class="n">selected_indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">seed_idx</span><span class="p">]</span>
+    <span class="n">selected_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_solutions</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">selected_mask</span><span class="p">[</span><span class="n">seed_idx</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    
+    <span class="c1"># Track minimum distances to selected solutions</span>
+    <span class="n">min_distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">n_solutions</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+    <span class="n">_update_min_distances_legacy</span><span class="p">(</span><span class="n">normalized_matrix</span><span class="p">,</span> <span class="n">min_distances</span><span class="p">,</span> <span class="n">selected_mask</span><span class="p">,</span> <span class="n">seed_idx</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+    
+    <span class="c1"># Iteratively select solutions with maximum minimum distance</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_indices</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">subset_size</span><span class="p">:</span>
+        <span class="c1"># Find unselected solution with maximum minimum distance</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">selected_mask</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">break</span>
+            
+        <span class="n">candidate_distances</span> <span class="o">=</span> <span class="n">min_distances</span><span class="p">[</span><span class="n">candidates</span><span class="p">]</span>
+        <span class="n">best_candidate_local_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">candidate_distances</span><span class="p">)</span>
+        <span class="n">best_candidate_idx</span> <span class="o">=</span> <span class="n">candidates</span><span class="p">[</span><span class="n">best_candidate_local_idx</span><span class="p">]</span>
+        
+        <span class="c1"># Add to selection</span>
+        <span class="n">selected_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best_candidate_idx</span><span class="p">)</span>
+        <span class="n">selected_mask</span><span class="p">[</span><span class="n">best_candidate_idx</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        
+        <span class="c1"># Update minimum distances</span>
+        <span class="n">_update_min_distances_legacy</span><span class="p">(</span><span class="n">normalized_matrix</span><span class="p">,</span> <span class="n">min_distances</span><span class="p">,</span> <span class="n">selected_mask</span><span class="p">,</span> <span class="n">best_candidate_idx</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+    
+    <span class="c1"># Return selected solutions</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">solution_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selected_indices</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_vectorized_subset_selection</span><span class="p">(</span><span class="n">solution_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">normalized_matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                               <span class="n">subset_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">seed_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">metric</span><span class="p">:</span> <span class="n">DistanceMetric</span><span class="p">,</span>
+                               <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vectorized implementation of subset selection using optimized distance calculations.</span>
+<span class="sd">    </span>
+<span class="sd">    This function uses the new vectorized distance calculation methods to significantly</span>
+<span class="sd">    improve performance when selecting subsets from large solution sets.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        solution_list: List of solutions to select from</span>
+<span class="sd">        normalized_matrix: Normalized objective matrix</span>
+<span class="sd">        subset_size: Number of solutions to select</span>
+<span class="sd">        seed_idx: Index of seed solution</span>
+<span class="sd">        metric: Distance metric to use</span>
+<span class="sd">        weights: Optional weights for weighted metrics</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        List[S]: Selected solutions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n_solutions</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">solution_list</span><span class="p">)</span>
+    
+    <span class="c1"># Initialize selection with seed</span>
+    <span class="n">selected_indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">seed_idx</span><span class="p">]</span>
+    
+    <span class="c1"># Iteratively select solutions with maximum minimum distance</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_indices</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">subset_size</span><span class="p">:</span>
+        <span class="c1"># Calculate minimum distances using vectorized operations</span>
+        <span class="n">min_distances</span> <span class="o">=</span> <span class="n">DistanceCalculator</span><span class="o">.</span><span class="n">calculate_min_distances_vectorized</span><span class="p">(</span>
+            <span class="n">normalized_matrix</span><span class="p">,</span> <span class="n">selected_indices</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">weights</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># Find unselected solution with maximum minimum distance</span>
+        <span class="c1"># (selected solutions already have infinite distance)</span>
+        <span class="n">best_candidate_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">min_distances</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">min_distances</span><span class="p">)])</span>
+        
+        <span class="c1"># Convert to actual index (since argmax works on finite subset)</span>
+        <span class="n">finite_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">min_distances</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">finite_indices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># All remaining solutions are already selected</span>
+            <span class="k">break</span>
+            
+        <span class="n">best_candidate_idx</span> <span class="o">=</span> <span class="n">finite_indices</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">min_distances</span><span class="p">[</span><span class="n">finite_indices</span><span class="p">])]</span>
+            
+        <span class="c1"># Add to selection</span>
+        <span class="n">selected_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best_candidate_idx</span><span class="p">)</span>
+    
+    <span class="c1"># Return selected solutions</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">solution_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selected_indices</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_update_min_distances_legacy</span><span class="p">(</span><span class="n">normalized_matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">min_distances</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+                         <span class="n">selected_mask</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">new_selected_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                         <span class="n">metric</span><span class="p">:</span> <span class="n">DistanceMetric</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Legacy function for updating minimum distances (kept for compatibility).</span>
+<span class="sd">    </span>
+<span class="sd">    Note: This function is now deprecated in favor of vectorized operations.</span>
+<span class="sd">    Use DistanceCalculator.calculate_min_distances_vectorized() instead.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        normalized_matrix: Normalized objective matrix</span>
+<span class="sd">        min_distances: Array of minimum distances to selected solutions</span>
+<span class="sd">        selected_mask: Boolean mask of selected solutions</span>
+<span class="sd">        new_selected_idx: Index of newly selected solution</span>
+<span class="sd">        metric: Distance metric to use</span>
+<span class="sd">        weights: Optional weights for weighted metrics</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_solution</span> <span class="o">=</span> <span class="n">normalized_matrix</span><span class="p">[</span><span class="n">new_selected_idx</span><span class="p">]</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">min_distances</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">selected_mask</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>  <span class="c1"># Skip already selected solutions</span>
+            <span class="k">continue</span>
+            
+        <span class="c1"># Calculate distance to new selected solution</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="n">DistanceCalculator</span><span class="o">.</span><span class="n">calculate_distance</span><span class="p">(</span>
+            <span class="n">normalized_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">new_solution</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">weights</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># Update minimum distance if this is closer</span>
+        <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;</span> <span class="n">min_distances</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">min_distances</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">distance</span>
+
+
+<span class="c1"># Maintain backward compatibility</span>
+<span class="n">_update_min_distances</span> <span class="o">=</span> <span class="n">_update_min_distances_legacy</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_crowding_distance_selection</span><span class="p">(</span><span class="n">solution_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">subset_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Selects solutions using crowding distance for 2-objective problems.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Create a temporary archive to calculate crowding distances</span>
+    <span class="n">archive</span> <span class="o">=</span> <span class="n">CrowdingDistanceArchive</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">solution_list</span><span class="p">))</span>
+    
+    <span class="c1"># Add all solutions to calculate crowding distances</span>
+    <span class="k">for</span> <span class="n">solution</span> <span class="ow">in</span> <span class="n">solution_list</span><span class="p">:</span>
+        <span class="n">archive</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">solution</span><span class="p">))</span>
+    
+    <span class="c1"># Sort by crowding distance (descending)</span>
+    <span class="n">sorted_solutions</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+        <span class="n">archive</span><span class="o">.</span><span class="n">solution_list</span><span class="p">,</span>
+        <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">sol</span><span class="p">:</span> <span class="n">sol</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;crowding_distance&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">sorted_solutions</span><span class="p">[:</span><span class="n">subset_size</span><span class="p">]</span>
+
+
+<span class="c1"># Backward compatibility alias</span>
+<div class="viewcode-block" id="distance_based_subset_selection">
+<a class="viewcode-back" href="../../../api/util/archive.html#jmetal.util.archive.distance_based_subset_selection">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">distance_based_subset_selection</span><span class="p">(</span><span class="n">solution_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">subset_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">distance_measure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                   <span class="n">metric</span><span class="p">:</span> <span class="n">DistanceMetric</span> <span class="o">=</span> <span class="n">DistanceMetric</span><span class="o">.</span><span class="n">L2_SQUARED</span><span class="p">,</span>
+                                   <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                   <span class="n">random_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Backward compatibility wrapper for distance_based_subset_selection_robust.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        solution_list: List of solutions to select from</span>
+<span class="sd">        subset_size: Number of solutions to select  </span>
+<span class="sd">        distance_measure: Deprecated parameter (ignored)</span>
+<span class="sd">        metric: Distance metric to use</span>
+<span class="sd">        weights: Optional weights for TCHEBY_WEIGHTED metric</span>
+<span class="sd">        random_seed: Optional seed for reproducible results</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        List of selected solutions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">distance_based_subset_selection_robust</span><span class="p">(</span><span class="n">solution_list</span><span class="p">,</span> <span class="n">subset_size</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">random_seed</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="DistanceBasedArchive">
+<a class="viewcode-back" href="../../../api/util/archive.html#jmetal.util.archive.DistanceBasedArchive">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DistanceBasedArchive</span><span class="p">(</span><span class="n">BoundedArchive</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Archive that maintains solutions using adaptive distance-based subset selection.</span>
+<span class="sd">    </span>
+<span class="sd">    This archive extends BoundedArchive to use a sophisticated selection mechanism:</span>
+<span class="sd">    - For 2 objectives: Uses crowding distance selection</span>
+<span class="sd">    - For &gt;2 objectives: Uses robust distance-based subset selection with normalization</span>
+<span class="sd">    </span>
+<span class="sd">    The implementation follows the Java jMetal SafeBestSolutionsArchive algorithm.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maximum_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> 
+                 <span class="n">metric</span><span class="p">:</span> <span class="n">DistanceMetric</span> <span class="o">=</span> <span class="n">DistanceMetric</span><span class="o">.</span><span class="n">L2_SQUARED</span><span class="p">,</span>
+                 <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">random_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">dominance_comparator</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">use_vectorized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the distance-based archive.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            maximum_size: Maximum number of solutions to maintain</span>
+<span class="sd">            metric: Distance metric to use (default: L2_SQUARED)</span>
+<span class="sd">            weights: Optional weights for TCHEBY_WEIGHTED metric</span>
+<span class="sd">            random_seed: Optional seed for reproducible results</span>
+<span class="sd">            dominance_comparator: Comparator for dominance (default: DominanceComparator)</span>
+<span class="sd">            use_vectorized: Whether to use vectorized implementation (default: True)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">dominance_comparator</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dominance_comparator</span> <span class="o">=</span> <span class="n">DominanceComparator</span><span class="p">()</span>
+            
+        <span class="c1"># Initialize parent with dummy comparator and density estimator</span>
+        <span class="c1"># We&#39;ll override the selection mechanism in our custom add method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DistanceBasedArchive</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">maximum_size</span><span class="o">=</span><span class="n">maximum_size</span><span class="p">,</span>
+            <span class="n">comparator</span><span class="o">=</span><span class="n">SolutionAttributeComparator</span><span class="p">(</span><span class="s2">&quot;dummy&quot;</span><span class="p">,</span> <span class="n">lowest_is_best</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+            <span class="n">density_estimator</span><span class="o">=</span><span class="n">CrowdingDistanceDensityEstimator</span><span class="p">(),</span>
+            <span class="n">dominance_comparator</span><span class="o">=</span><span class="n">dominance_comparator</span>
+        <span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">metric</span> <span class="o">=</span> <span class="n">metric</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span> <span class="o">=</span> <span class="n">random_seed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_vectorized</span> <span class="o">=</span> <span class="n">use_vectorized</span>
+        
+        <span class="c1"># Thread safety for concurrent access</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+        
+<div class="viewcode-block" id="DistanceBasedArchive.add">
+<a class="viewcode-back" href="../../../api/util/archive.html#jmetal.util.archive.DistanceBasedArchive.add">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">S</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a solution to the archive using non-dominated sorting and distance-based selection.</span>
+<span class="sd">        Thread-safe implementation for concurrent use.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            solution: Solution to add</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            True if solution was added or archive was modified, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="c1"># First, add to non-dominated archive (this handles dominance)</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">non_dominated_solution_archive</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">success</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">maximum_size</span><span class="p">:</span>
+                <span class="c1"># Apply distance-based subset selection</span>
+                <span class="n">selected_solutions</span> <span class="o">=</span> <span class="n">distance_based_subset_selection_robust</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="p">,</span> 
+                    <span class="bp">self</span><span class="o">.</span><span class="n">maximum_size</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">use_vectorized</span>
+                <span class="p">)</span>
+                
+                <span class="c1"># Update solution list with selected solutions</span>
+                <span class="c1"># IMPORTANT: Clear and extend to maintain reference from parent class</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">solution_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">selected_solutions</span><span class="p">)</span>
+            
+            <span class="k">return</span> <span class="n">success</span></div>
+
+    
+<div class="viewcode-block" id="DistanceBasedArchive.compute_density_estimator">
+<a class="viewcode-back" href="../../../api/util/archive.html#jmetal.util.archive.DistanceBasedArchive.compute_density_estimator">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_density_estimator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Override parent method since we use distance-based selection instead.</span>
+<span class="sd">        This method is called by parent class but we don&#39;t need density estimation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Do nothing - we use distance-based selection instead of density estimation</span>
+        <span class="k">pass</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jmetal.util.archive</a></li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

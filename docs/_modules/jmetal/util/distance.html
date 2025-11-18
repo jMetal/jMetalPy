@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/bootstrap.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>jmetal.util.distance &#8212; jMetalPy 1.7.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/guzzle.css?v=e05a0192" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9aa90875" />
+    <script src="../../../_static/documentation_options.js?v=030dc6f6"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jmetal.util.distance</a></li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar"><a href="
+    ../../../index.html" class="text-logo">
+    <img src="_static/jmetalpy.png" class="img-fluid" alt="jMetalPy 1.7.0 documentation">
+    <br>
+</a>
+
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    Python version of the jMetal framework
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api-reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../advanced-topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a></li>
+</ul>
+
+    
+  </div>
+</div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="../../../index.html">Docs</a></li>
+              
+              <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+              
+              <li class="breadcrumb-item">jmetal.util.distance</li>
+            </ol>
+          </nav>
+          
+          <div class="document clearer body">
+            
+  <h1>Source code for jmetal.util.distance</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">distance</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: distance</span>
+<span class="sd">   :platform: Unix, Windows</span>
+<span class="sd">   :synopsis: implementation of distances between entities</span>
+
+<span class="sd">.. moduleauthor:: Antonio J. Nebro &lt;antonio@lcc.uma.es&gt;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="DistanceMetric">
+<a class="viewcode-back" href="../../../api/util/distance.html#jmetal.util.distance.DistanceMetric">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DistanceMetric</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enumeration of available distance metrics for optimized distance calculations.</span>
+<span class="sd">    </span>
+<span class="sd">    Each metric is optimized for specific use cases:</span>
+<span class="sd">    - L2_SQUARED: Fastest, avoids sqrt computation for relative distance comparisons</span>
+<span class="sd">    - LINF: Efficient for high-dimensional spaces, emphasizes maximum difference</span>
+<span class="sd">    - TCHEBY_WEIGHTED: Flexible weighted distance allowing preference specification</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">L2_SQUARED</span> <span class="o">=</span> <span class="s2">&quot;l2_squared&quot;</span>
+    <span class="n">LINF</span> <span class="o">=</span> <span class="s2">&quot;linf&quot;</span>  
+    <span class="n">TCHEBY_WEIGHTED</span> <span class="o">=</span> <span class="s2">&quot;tcheby_weighted&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="DistanceCalculator">
+<a class="viewcode-back" href="../../../api/util/distance.html#jmetal.util.distance.DistanceCalculator">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DistanceCalculator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    High-performance distance calculator supporting multiple metrics.</span>
+<span class="sd">    </span>
+<span class="sd">    This utility class provides optimized implementations for different distance</span>
+<span class="sd">    metrics commonly used in multi-objective optimization. All methods are static</span>
+<span class="sd">    for efficiency and support numpy array operations for vectorized performance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="DistanceCalculator.calculate_distance">
+<a class="viewcode-back" href="../../../api/util/distance.html#jmetal.util.distance.DistanceCalculator.calculate_distance">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_distance</span><span class="p">(</span><span class="n">point1</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">point2</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+                          <span class="n">metric</span><span class="p">:</span> <span class="n">DistanceMetric</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate distance between two points using the specified metric.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            point1: First point as numpy array</span>
+<span class="sd">            point2: Second point as numpy array  </span>
+<span class="sd">            metric: Distance metric to use</span>
+<span class="sd">            weights: Optional weights for TCHEBY_WEIGHTED metric</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Distance between points according to specified metric</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If metric is invalid or weights are required but not provided</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">metric</span> <span class="o">==</span> <span class="n">DistanceMetric</span><span class="o">.</span><span class="n">L2_SQUARED</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">DistanceCalculator</span><span class="o">.</span><span class="n">_l2_squared</span><span class="p">(</span><span class="n">point1</span><span class="p">,</span> <span class="n">point2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="n">DistanceMetric</span><span class="o">.</span><span class="n">LINF</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">DistanceCalculator</span><span class="o">.</span><span class="n">_linf</span><span class="p">(</span><span class="n">point1</span><span class="p">,</span> <span class="n">point2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="n">DistanceMetric</span><span class="o">.</span><span class="n">TCHEBY_WEIGHTED</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Weights required for TCHEBY_WEIGHTED metric&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">DistanceCalculator</span><span class="o">.</span><span class="n">_tcheby_weighted</span><span class="p">(</span><span class="n">point1</span><span class="p">,</span> <span class="n">point2</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown distance metric: </span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_l2_squared</span><span class="p">(</span><span class="n">point1</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">point2</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate squared Euclidean distance (L2 squared).</span>
+<span class="sd">        </span>
+<span class="sd">        This is faster than regular Euclidean distance as it avoids the sqrt operation.</span>
+<span class="sd">        Suitable for relative distance comparisons where absolute values don&#39;t matter.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            point1: First point</span>
+<span class="sd">            point2: Second point</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Squared Euclidean distance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">point1</span> <span class="o">-</span> <span class="n">point2</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="n">diff</span><span class="p">)</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_linf</span><span class="p">(</span><span class="n">point1</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">point2</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate L-infinity (Chebyshev) distance.</span>
+<span class="sd">        </span>
+<span class="sd">        This metric emphasizes the maximum difference across all dimensions.</span>
+<span class="sd">        Efficient for high-dimensional spaces and robust to outliers.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            point1: First point</span>
+<span class="sd">            point2: Second point</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: L-infinity distance (maximum absolute difference)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">point1</span> <span class="o">-</span> <span class="n">point2</span><span class="p">))</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_tcheby_weighted</span><span class="p">(</span><span class="n">point1</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">point2</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+                        <span class="n">weights</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate weighted Chebyshev distance.</span>
+<span class="sd">        </span>
+<span class="sd">        This metric allows specifying importance weights for different dimensions.</span>
+<span class="sd">        Useful when objectives have different scales or importance levels.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            point1: First point</span>
+<span class="sd">            point2: Second point</span>
+<span class="sd">            weights: Weight vector for each dimension</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Weighted Chebyshev distance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">weighted_diff</span> <span class="o">=</span> <span class="n">weights</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">point1</span> <span class="o">-</span> <span class="n">point2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">weighted_diff</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="DistanceCalculator.calculate_distance_matrix">
+<a class="viewcode-back" href="../../../api/util/distance.html#jmetal.util.distance.DistanceCalculator.calculate_distance_matrix">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_distance_matrix</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">metric</span><span class="p">:</span> <span class="n">DistanceMetric</span><span class="p">,</span>
+                                 <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate pairwise distance matrix between all points using vectorized operations.</span>
+<span class="sd">        </span>
+<span class="sd">        This is significantly faster than calculating distances individually,</span>
+<span class="sd">        especially for large numbers of points. Uses optimized NumPy operations</span>
+<span class="sd">        for maximum performance.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            points: 2D array where each row is a point (n_points, n_dimensions)</span>
+<span class="sd">            metric: Distance metric to use</span>
+<span class="sd">            weights: Optional weights for TCHEBY_WEIGHTED metric</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: Symmetric distance matrix (n_points, n_points)</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If metric is invalid or weights are required but not provided</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n_points</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">metric</span> <span class="o">==</span> <span class="n">DistanceMetric</span><span class="o">.</span><span class="n">L2_SQUARED</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">DistanceCalculator</span><span class="o">.</span><span class="n">_l2_squared_matrix</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="n">DistanceMetric</span><span class="o">.</span><span class="n">LINF</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">DistanceCalculator</span><span class="o">.</span><span class="n">_linf_matrix</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="n">DistanceMetric</span><span class="o">.</span><span class="n">TCHEBY_WEIGHTED</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Weights required for TCHEBY_WEIGHTED metric&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">DistanceCalculator</span><span class="o">.</span><span class="n">_tcheby_weighted_matrix</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown distance metric: </span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_l2_squared_matrix</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate squared Euclidean distance matrix using vectorized operations.</span>
+<span class="sd">        </span>
+<span class="sd">        Uses broadcasting and matrix operations for optimal performance.</span>
+<span class="sd">        Formula: ||a-b||² = ||a||² + ||b||² - 2⟨a,b⟩</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            points: 2D array of points (n_points, n_dimensions)</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: Symmetric squared distance matrix</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Calculate squared norms for each point</span>
+        <span class="n">squared_norms</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">points</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="c1"># Calculate dot products matrix</span>
+        <span class="n">dot_products</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">points</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        
+        <span class="c1"># Use broadcasting to create distance matrix</span>
+        <span class="c1"># ||a-b||² = ||a||² + ||b||² - 2⟨a,b⟩</span>
+        <span class="n">distance_matrix</span> <span class="o">=</span> <span class="p">(</span><span class="n">squared_norms</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">+</span> 
+                          <span class="n">squared_norms</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> 
+                          <span class="mi">2</span> <span class="o">*</span> <span class="n">dot_products</span><span class="p">)</span>
+        
+        <span class="c1"># Ensure diagonal is exactly zero (numerical precision)</span>
+        <span class="n">numpy</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">distance_matrix</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        
+        <span class="c1"># Ensure non-negative distances (numerical precision)</span>
+        <span class="n">distance_matrix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">distance_matrix</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">distance_matrix</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_linf_matrix</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate L-infinity distance matrix using vectorized operations.</span>
+<span class="sd">        </span>
+<span class="sd">        Uses broadcasting for efficient computation of maximum absolute differences.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            points: 2D array of points (n_points, n_dimensions)</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: Symmetric L-infinity distance matrix</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n_points</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="c1"># Reshape for broadcasting: (n_points, 1, n_dims) - (1, n_points, n_dims)</span>
+        <span class="n">points_expanded1</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">points_expanded2</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+        
+        <span class="c1"># Calculate absolute differences and take maximum along last axis</span>
+        <span class="n">distance_matrix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">points_expanded1</span> <span class="o">-</span> <span class="n">points_expanded2</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">distance_matrix</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_tcheby_weighted_matrix</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate weighted Chebyshev distance matrix using vectorized operations.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            points: 2D array of points (n_points, n_dimensions)</span>
+<span class="sd">            weights: Weight vector for each dimension</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: Symmetric weighted Chebyshev distance matrix</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n_points</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="c1"># Reshape for broadcasting</span>
+        <span class="n">points_expanded1</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">points_expanded2</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+        
+        <span class="c1"># Apply weights and calculate maximum weighted difference</span>
+        <span class="n">weighted_diff</span> <span class="o">=</span> <span class="n">weights</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">points_expanded1</span> <span class="o">-</span> <span class="n">points_expanded2</span><span class="p">)</span>
+        <span class="n">distance_matrix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">weighted_diff</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">distance_matrix</span>
+    
+<div class="viewcode-block" id="DistanceCalculator.calculate_min_distances_vectorized">
+<a class="viewcode-back" href="../../../api/util/distance.html#jmetal.util.distance.DistanceCalculator.calculate_min_distances_vectorized">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_min_distances_vectorized</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+                                         <span class="n">selected_indices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+                                         <span class="n">metric</span><span class="p">:</span> <span class="n">DistanceMetric</span><span class="p">,</span>
+                                         <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate minimum distances from each point to the selected points using vectorized operations.</span>
+<span class="sd">        </span>
+<span class="sd">        This is optimized for the subset selection process where we need to find</span>
+<span class="sd">        the minimum distance from each candidate point to any already selected point.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            points: 2D array of all points (n_points, n_dimensions)</span>
+<span class="sd">            selected_indices: List of indices of already selected points</span>
+<span class="sd">            metric: Distance metric to use</span>
+<span class="sd">            weights: Optional weights for TCHEBY_WEIGHTED metric</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: Array of minimum distances for each point</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_indices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># If no points selected yet, return infinite distances</span>
+            <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+        
+        <span class="c1"># Extract selected points</span>
+        <span class="n">selected_points</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">selected_indices</span><span class="p">]</span>
+        
+        <span class="c1"># Calculate minimum distances</span>
+        <span class="k">if</span> <span class="n">metric</span> <span class="o">==</span> <span class="n">DistanceMetric</span><span class="o">.</span><span class="n">L2_SQUARED</span><span class="p">:</span>
+            <span class="n">min_distances</span> <span class="o">=</span> <span class="n">DistanceCalculator</span><span class="o">.</span><span class="n">_min_l2_squared_distances</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">selected_points</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="n">DistanceMetric</span><span class="o">.</span><span class="n">LINF</span><span class="p">:</span>
+            <span class="n">min_distances</span> <span class="o">=</span> <span class="n">DistanceCalculator</span><span class="o">.</span><span class="n">_min_linf_distances</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">selected_points</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="n">DistanceMetric</span><span class="o">.</span><span class="n">TCHEBY_WEIGHTED</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Weights required for TCHEBY_WEIGHTED metric&quot;</span><span class="p">)</span>
+            <span class="n">min_distances</span> <span class="o">=</span> <span class="n">DistanceCalculator</span><span class="o">.</span><span class="n">_min_tcheby_weighted_distances</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">selected_points</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown distance metric: </span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Set selected points to have infinite distance (they should not be reselected)</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">selected_indices</span><span class="p">:</span>
+            <span class="n">min_distances</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">inf</span>
+            
+        <span class="k">return</span> <span class="n">min_distances</span></div>
+
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_min_l2_squared_distances</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">selected_points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate minimum squared L2 distances to selected points.&quot;&quot;&quot;</span>
+        <span class="c1"># Calculate distances from each point to each selected point</span>
+        <span class="c1"># points: (n_points, n_dims), selected_points: (n_selected, n_dims)</span>
+        
+        <span class="c1"># Squared norms</span>
+        <span class="n">points_norms</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">points</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># (n_points,)</span>
+        <span class="n">selected_norms</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">selected_points</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># (n_selected,)</span>
+        
+        <span class="c1"># Dot products matrix</span>
+        <span class="n">dot_products</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">selected_points</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>  <span class="c1"># (n_points, n_selected)</span>
+        
+        <span class="c1"># Distance matrix using broadcasting</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="p">(</span><span class="n">points_norms</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">+</span> 
+                    <span class="n">selected_norms</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> 
+                    <span class="mi">2</span> <span class="o">*</span> <span class="n">dot_products</span><span class="p">)</span>
+        
+        <span class="c1"># Ensure non-negative</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        
+        <span class="c1"># Return minimum distance for each point</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_min_linf_distances</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">selected_points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate minimum L-infinity distances to selected points.&quot;&quot;&quot;</span>
+        <span class="c1"># points: (n_points, n_dims), selected_points: (n_selected, n_dims)</span>
+        
+        <span class="c1"># Reshape for broadcasting</span>
+        <span class="n">points_expanded</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># (n_points, 1, n_dims)</span>
+        <span class="n">selected_expanded</span> <span class="o">=</span> <span class="n">selected_points</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>  <span class="c1"># (1, n_selected, n_dims)</span>
+        
+        <span class="c1"># Calculate L-infinity distances</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">points_expanded</span> <span class="o">-</span> <span class="n">selected_expanded</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># (n_points, n_selected)</span>
+        
+        <span class="c1"># Return minimum distance for each point</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_min_tcheby_weighted_distances</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+                                     <span class="n">selected_points</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                                     <span class="n">weights</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate minimum weighted Chebyshev distances to selected points.&quot;&quot;&quot;</span>
+        <span class="c1"># Reshape for broadcasting</span>
+        <span class="n">points_expanded</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># (n_points, 1, n_dims)</span>
+        <span class="n">selected_expanded</span> <span class="o">=</span> <span class="n">selected_points</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>  <span class="c1"># (1, n_selected, n_dims)</span>
+        
+        <span class="c1"># Apply weights and calculate weighted Chebyshev distances</span>
+        <span class="n">weighted_diff</span> <span class="o">=</span> <span class="n">weights</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">points_expanded</span> <span class="o">-</span> <span class="n">selected_expanded</span><span class="p">)</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">weighted_diff</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># (n_points, n_selected)</span>
+        
+        <span class="c1"># Return minimum distance for each point</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Distance</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element1</span><span class="p">,</span> <span class="n">element2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+
+<div class="viewcode-block" id="EuclideanDistance">
+<a class="viewcode-back" href="../../../api/util/distance.html#jmetal.util.distance.EuclideanDistance">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">EuclideanDistance</span><span class="p">(</span><span class="n">Distance</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Euclidean distance implementation with enhanced type safety and validation.</span>
+<span class="sd">    </span>
+<span class="sd">    Supports both Python lists and numpy arrays as input.</span>
+<span class="sd">    Provides comprehensive input validation for robust operation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="EuclideanDistance.get_distance">
+<a class="viewcode-back" href="../../../api/util/distance.html#jmetal.util.distance.EuclideanDistance.get_distance">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">list1</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> 
+                     <span class="n">list2</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the Euclidean distance between two points.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            list1: First point as list or numpy array</span>
+<span class="sd">            list2: Second point as list or numpy array</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Euclidean distance between the points</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If inputs have different dimensions or are empty</span>
+<span class="sd">            TypeError: If inputs cannot be converted to numeric arrays</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Convert to numpy arrays for consistent handling</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">arr1</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">list1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">arr2</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">list2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input vectors must be numeric: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Input validation - check for empty arrays</span>
+        <span class="k">if</span> <span class="n">arr1</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">arr2</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input vectors cannot be empty&quot;</span><span class="p">)</span>
+            
+        <span class="c1"># Dimension validation</span>
+        <span class="k">if</span> <span class="n">arr1</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">arr2</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input vectors must have the same dimensions: &quot;</span>
+                           <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">arr1</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="n">arr2</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># For 1D vectors, use scipy&#39;s optimized implementation</span>
+        <span class="k">if</span> <span class="n">arr1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">distance</span><span class="o">.</span><span class="n">euclidean</span><span class="p">(</span><span class="n">arr1</span><span class="p">,</span> <span class="n">arr2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># For higher dimensions, flatten and compute</span>
+            <span class="k">return</span> <span class="n">distance</span><span class="o">.</span><span class="n">euclidean</span><span class="p">(</span><span class="n">arr1</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">arr2</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CosineDistance">
+<a class="viewcode-back" href="../../../api/util/distance.html#jmetal.util.distance.CosineDistance">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CosineDistance</span><span class="p">(</span><span class="n">Distance</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Cosine distance implementation with reference point translation.</span>
+<span class="sd">    </span>
+<span class="sd">    This class computes the cosine distance between two points after translating them</span>
+<span class="sd">    relative to a reference point. The cosine distance is defined as:</span>
+<span class="sd">    distance = 1 - cosine_similarity</span>
+<span class="sd">    </span>
+<span class="sd">    Where cosine_similarity = (a·b) / (||a|| * ||b||)</span>
+<span class="sd">    </span>
+<span class="sd">    The distance ranges from 0 (identical direction) to 2 (opposite directions).</span>
+<span class="sd">    </span>
+<span class="sd">    Performance optimizations:</span>
+<span class="sd">    - Cached reference point norm for efficiency</span>
+<span class="sd">    - Vectorized numpy operations </span>
+<span class="sd">    - Robust input validation and error handling</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference_point</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the cosine distance calculator with a reference point.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            reference_point: Point used to translate input vectors before computing distance</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If reference point is empty</span>
+<span class="sd">            TypeError: If reference point is not numeric or is None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">reference_point</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Reference point cannot be None&quot;</span><span class="p">)</span>
+            
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reference_point</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">reference_point</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reference point must be numeric: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_point</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Reference point cannot be empty&quot;</span><span class="p">)</span>
+            
+        <span class="c1"># Cache reference point norm for efficiency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ref_norm</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_point</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CosineDistance.get_distance">
+<a class="viewcode-back" href="../../../api/util/distance.html#jmetal.util.distance.CosineDistance.get_distance">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">list1</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> 
+                     <span class="n">list2</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the cosine distance between two points relative to the reference point.</span>
+<span class="sd">        </span>
+<span class="sd">        The computation follows these steps:</span>
+<span class="sd">        1. Translate both points by subtracting the reference point</span>
+<span class="sd">        2. Compute cosine similarity of the translated vectors</span>
+<span class="sd">        3. Return cosine distance = 1 - cosine_similarity</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            list1: First point as list or numpy array</span>
+<span class="sd">            list2: Second point as list or numpy array</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Cosine distance in range [0, 2]</span>
+<span class="sd">                  0 = vectors point in same direction</span>
+<span class="sd">                  1 = vectors are orthogonal  </span>
+<span class="sd">                  2 = vectors point in opposite directions</span>
+<span class="sd">                  </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If inputs have different dimensions than reference point or are empty</span>
+<span class="sd">            TypeError: If inputs cannot be converted to numeric arrays</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Convert inputs to numpy arrays</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">vec1</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">list1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">vec2</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">list2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input vectors must be numeric: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Validate inputs</span>
+        <span class="k">if</span> <span class="n">vec1</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">vec2</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input vectors cannot be empty&quot;</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="n">vec1</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">vec2</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input vectors must have same dimensions: </span><span class="si">{</span><span class="n">vec1</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="n">vec2</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="n">vec1</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_point</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input vectors must match reference point dimensions: &quot;</span>
+                           <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">vec1</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_point</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Translate vectors relative to reference point</span>
+        <span class="n">diff1</span> <span class="o">=</span> <span class="n">vec1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_point</span>
+        <span class="n">diff2</span> <span class="o">=</span> <span class="n">vec2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_point</span>
+        
+        <span class="c1"># Handle zero vectors after translation (return 0 since they&#39;re at reference point)</span>
+        <span class="n">norm1</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">diff1</span><span class="p">)</span>
+        <span class="n">norm2</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">diff2</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">norm1</span> <span class="o">==</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">norm2</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="c1"># Both vectors are at the reference point</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+        <span class="k">elif</span> <span class="n">norm1</span> <span class="o">==</span> <span class="mf">0.0</span> <span class="ow">or</span> <span class="n">norm2</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="c1"># One vector is at reference point, other is not</span>
+            <span class="k">return</span> <span class="mf">1.0</span>
+        
+        <span class="c1"># Compute cosine similarity</span>
+        <span class="n">dot_product</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">diff1</span><span class="p">,</span> <span class="n">diff2</span><span class="p">)</span>
+        <span class="n">cosine_similarity</span> <span class="o">=</span> <span class="n">dot_product</span> <span class="o">/</span> <span class="p">(</span><span class="n">norm1</span> <span class="o">*</span> <span class="n">norm2</span><span class="p">)</span>
+        
+        <span class="c1"># Clamp to handle numerical precision issues</span>
+        <span class="n">cosine_similarity</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">cosine_similarity</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        
+        <span class="c1"># Return cosine distance = 1 - cosine_similarity</span>
+        <span class="n">distance_result</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">cosine_similarity</span>
+        
+        <span class="c1"># Handle numerical precision for identical vectors (should be exactly 0)</span>
+        <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">diff1</span><span class="p">,</span> <span class="n">diff2</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-15</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-15</span><span class="p">):</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+            
+        <span class="k">return</span> <span class="n">distance_result</span></div>
+
+
+<div class="viewcode-block" id="CosineDistance.get_similarity">
+<a class="viewcode-back" href="../../../api/util/distance.html#jmetal.util.distance.CosineDistance.get_similarity">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">list1</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> 
+                       <span class="n">list2</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the cosine similarity between two points relative to the reference point.</span>
+<span class="sd">        </span>
+<span class="sd">        This is a convenience method that returns the similarity instead of distance.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            list1: First point as list or numpy array</span>
+<span class="sd">            list2: Second point as list or numpy array</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Cosine similarity in range [-1, 1]</span>
+<span class="sd">                  1 = vectors point in same direction</span>
+<span class="sd">                  0 = vectors are orthogonal</span>
+<span class="sd">                 -1 = vectors point in opposite directions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_distance</span><span class="p">(</span><span class="n">list1</span><span class="p">,</span> <span class="n">list2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">distance</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">jMetalPy 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jmetal.util.distance</a></li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Antonio Benítez-Hidalgo. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>
