@@ -12,7 +12,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 def main():
     problem = ZDT1()
 
-    max_evaluations = 20000
+    max_evaluations = 25000
     algorithm = SPEA2(
         problem=problem,
         population_size=100,

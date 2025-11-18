@@ -12,34 +12,19 @@ from jmetal.operator.selection import (
     RankingAndCrowdingDistanceSelection
 )
 
-# Fixtures
-@pytest.fixture
-def float_solution_factory():
-    """Factory fixture for creating float solutions with specified objectives and variables."""
-    def _create_float_solution(objectives, variables=None):
+# Dummy solution class for testing
+class DummySolution(Solution):
+    """Dummy solution class for testing purposes."""
+    def __init__(self, objectives, variables=None):
         if variables is None:
             variables = [0.0] * len(objectives)
-        solution = FloatSolution([0.0] * len(variables), [1.0] * len(variables), len(objectives))
-        solution.objectives = objectives
-        solution.variables = variables
-        return solution
-    return _create_float_solution
-
-@pytest.fixture
-def dummy_solution_factory():
-    """Factory fixture for creating dummy solutions for testing."""
-    class DummySolution(Solution):
-        def __init__(self, objectives, variables=None):
-            if variables is None:
-                variables = [0.0] * len(objectives)
-            super().__init__(len(variables), len(objectives))
-            self.objectives = objectives
-            self.variables = variables
-            self.attributes = {}
-            self.number_of_constraints = 0
-            self.constraints = []
-            self.constraint_violation = 0.0
-    return DummySolution
+        super().__init__(len(variables), len(objectives))
+        self.objectives = objectives
+        self.variables = variables
+        self.attributes = {}
+        self.number_of_constraints = 0
+        self.constraints = []
+        self.constraint_violation = 0.0
 
 class TestBinaryTournamentSelection:
     """Tests for BinaryTournamentSelection operator."""
@@ -356,36 +341,20 @@ class TestRankingAndCrowdingDistanceSelection:
         
         assert len(result) == 5
 
-    def test_should_preserve_diversity(self, float_solution_factory):
-        # Create a set of solutions that form a front
-        # We'll create a more diverse set of solutions with clear non-dominated sorting
-        solutions = [
-            # First front (non-dominated)
-            float_solution_factory([1.0, 0.0]),  # Extreme point
-            float_solution_factory([0.0, 1.0]),  # Extreme point
-            float_solution_factory([0.5, 0.5]),  # Center point
-            
-            # Second front (dominated by the first front)
-            float_solution_factory([0.9, 0.2]),
-            float_solution_factory([0.8, 0.3]),
-            float_solution_factory([0.2, 0.9]),
-            float_solution_factory([0.3, 0.8]),
-        ]
-        
-        # Initialize attributes to avoid KeyError
-        for sol in solutions:
-            sol.attributes = {}
-        
-        # We'll select 3 solutions, which should all come from the first front
+    def test_should_preserve_diversity(self, mixed_front_solutions):
+        """Test that the selection maintains diversity by selecting from the non-dominated front."""
+        # We'll select 3 solutions, which should all come from the non-dominated front
         selector = RankingAndCrowdingDistanceSelection(3)
-        result = selector.execute(solutions)
+        result = selector.execute(mixed_front_solutions)
         
         assert len(result) == 3
         
-        # Verify that the selected solutions are from the first front
-        first_front = solutions[:3]
-        assert all(s in first_front for s in result), "All selected solutions should be from the first front"
+        # The first 3 solutions in mixed_front_solutions are non-dominated
+        non_dominated = mixed_front_solutions[:3]
+        assert all(s in non_dominated for s in result), \
+            "All selected solutions should be from the non-dominated front"
         
-        # The selection should include the extreme points since they have the highest crowding distance
-        extreme_points = [solutions[0], solutions[1]]
-        assert any(s in extreme_points for s in result), "At least one extreme point should be selected"
+        # The selection should include at least one extreme point
+        extreme_points = [mixed_front_solutions[0], mixed_front_solutions[1]]
+        assert any(s in extreme_points for s in result), \
+            "At least one extreme point should be selected"

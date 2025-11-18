@@ -1,4 +1,5 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
+from jmetal.algorithm.multiobjective.nsgaiii import UniformReferenceDirectionFactory, NSGAIII
 from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.mutation import PolynomialMutation
 from jmetal.problem.multiobjective.zdt import ZDT1Modified
@@ -11,11 +12,11 @@ if __name__ == "__main__":
 
     max_evaluations = 1000
 
-    algorithm = NSGAII(
+    algorithm = NSGAIII(
         population_evaluator=MultiprocessEvaluator(8),
         problem=problem,
         population_size=100,
-        offspring_population_size=100,
+        reference_directions=UniformReferenceDirectionFactory(2, n_points=100),
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),

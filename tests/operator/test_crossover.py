@@ -1,6 +1,7 @@
 """Tests for crossover operators using pytest."""
 import random
 from unittest import mock
+from typing import List, Type, Any
 
 import numpy as np
 import pytest
@@ -9,6 +10,7 @@ from jmetal.core.solution import (
     BinarySolution,
     FloatSolution,
     PermutationSolution,
+    Solution,
 )
 from jmetal.operator.crossover import (
     BLXAlphaBetaCrossover,
@@ -20,67 +22,60 @@ from jmetal.operator.crossover import (
     SPXCrossover,
 )
 from jmetal.util.ckecking import (
+    EmptyCollectionException,
     InvalidConditionException,
+    NoneParameterException,
 )
-
-
-# Fixtures
-@pytest.fixture
-def binary_solution():
-    solution = BinarySolution(number_of_variables=6, number_of_objectives=1)
-    solution.bits = np.array([True, False, False, True, True, False])
-    return solution
-
-@pytest.fixture
-def float_solution():
-    solution = FloatSolution(
-        lower_bound=[0.0, 0.0, 0.0],
-        upper_bound=[1.0, 1.0, 1.0],
-        number_of_objectives=1
-    )
-    solution.variables = [0.5, 0.5, 0.5]
-    return solution
 
 class TestNullCrossover:
     """Tests for the NullCrossover operator."""
     
     def test_should_constructor_create_a_non_null_object(self):
         """Test that the constructor creates a non-null object."""
-        solution = NullCrossover()
-        assert solution is not None
+        crossover = NullCrossover()
+        assert crossover is not None
 
     def test_should_constructor_create_a_valid_operator(self):
         """Test that the constructor creates a valid operator with default probability 0."""
         operator = NullCrossover()
         assert operator.probability == 0
 
-    def test_should_the_solution_remain_unchanged(self, binary_solution):
+    def test_should_the_solution_remain_unchanged(self):
         """Test that the solution remains unchanged after crossover."""
         # Given
         operator = NullCrossover()
-        solution1 = binary_solution
-        solution2 = binary_solution.__class__(
-            number_of_variables=solution1.number_of_variables,
-            number_of_objectives=solution1.number_of_objectives
-        )
-        solution2.bits = np.array([False, True, False, False, True, False])
+        solution1 = BinarySolution(number_of_variables=4, number_of_objectives=1)
+        solution1.variables = [True, False, True, False]
+        solution2 = BinarySolution(number_of_variables=4, number_of_objectives=1)
+        solution2.variables = [False, True, False, True]
         
+        original_variables1 = solution1.variables.copy()
+        original_variables2 = solution2.variables.copy()
+        original_objectives1 = solution1.objectives.copy()
+        original_objectives2 = solution2.objectives.copy()
+
         # When
-        offspring = operator.execute([solution1, solution2])
-        
-        # Then
-        assert len(offspring) == 2
-        assert (offspring[0].bits == solution1.bits).all()
-        assert (offspring[1].bits == solution2.bits).all()
+        result = operator.execute([solution1, solution2])
+
+        # Then - verify we get back two solutions with the same values as the originals
+        assert len(result) == 2
+        assert result[0].variables == original_variables1
+        assert result[1].variables == original_variables2
+        assert result[0].objectives == original_objectives1
+        assert result[1].objectives == original_objectives2
 
 class TestSinglePointCrossover:
     """Tests for the SinglePointCrossover operator."""
     
-    @pytest.mark.parametrize("probability", [-0.5, 1.5])
-    def test_should_constructor_raise_exception_for_invalid_probability(self, probability):
+    @pytest.mark.parametrize("probability,expected_msg", [
+        (-0.5, "Probability must be between 0.0 and 1.0"),
+        (1.5, "Probability must be between 0.0 and 1.0")
+    ])
+    def test_should_constructor_raise_exception_for_invalid_probability(self, probability, expected_msg):
         """Test that constructor raises an exception for invalid probability values."""
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError) as exc_info:
             SPXCrossover(probability=probability)
+        assert expected_msg in str(exc_info.value)
     
     def test_should_constructor_create_valid_operator(self):
         """Test that constructor creates a valid operator with default values."""
@@ -137,7 +132,6 @@ class TestSinglePointCrossover:
         assert len(offspring) == 2
         assert (offspring[0].bits == solution1.bits).all()
         assert (offspring[1].bits == solution2.bits).all()
-
 
 class TestSBXCrossover:
     """Tests for the SBXCrossover (Simulated Binary Crossover) operator."""

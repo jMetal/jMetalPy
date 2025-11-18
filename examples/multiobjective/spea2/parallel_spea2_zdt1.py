@@ -1,17 +1,22 @@
-from jmetal.algorithm.multiobjective.nsgaii import NSGAII
+from jmetal.algorithm.multiobjective import SPEA2
 from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.mutation import PolynomialMutation
+from jmetal.problem import ZDT1
 from jmetal.problem.multiobjective.zdt import ZDT1Modified
 from jmetal.util.evaluator import MultiprocessEvaluator
-from jmetal.util.solution import print_function_values_to_file, print_variables_to_file
+from jmetal.util.solution import (
+    print_function_values_to_file,
+    print_variables_to_file,
+)
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
-if __name__ == "__main__":
+
+def main():
     problem = ZDT1Modified()
 
     max_evaluations = 1000
 
-    algorithm = NSGAII(
+    algorithm = SPEA2(
         population_evaluator=MultiprocessEvaluator(8),
         problem=problem,
         population_size=100,
@@ -31,3 +36,6 @@ if __name__ == "__main__":
     print(f"Algorithm: {algorithm.get_name()}")
     print(f"Problem: {problem.name()}")
     print(f"Computing time: {algorithm.total_computing_time}")
+
+if __name__ == "__main__":
+    main()

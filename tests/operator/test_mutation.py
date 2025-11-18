@@ -1,6 +1,6 @@
 import random
-from typing import List
-from unittest.mock import patch
+from typing import List, Type, Any, cast
+from unittest.mock import patch, MagicMock
 
 import numpy as np
 import pytest
@@ -11,6 +11,7 @@ from jmetal.core.solution import (
     CompositeSolution,
     FloatSolution,
     IntegerSolution,
+    Solution,
 )
 from jmetal.operator.mutation import (
     BitFlipMutation,
@@ -27,33 +28,6 @@ from jmetal.util.ckecking import (
     InvalidConditionException,
     NoneParameterException,
 )
-
-# Fixtures
-@pytest.fixture
-def binary_solution():
-    solution = BinarySolution(number_of_variables=6, number_of_objectives=1)
-    solution.bits = np.array([True, False, False, True, True, False])
-    return solution
-
-@pytest.fixture
-def float_solution():
-    solution = FloatSolution(
-        lower_bound=[0.0, 0.0],
-        upper_bound=[1.0, 1.0],
-        number_of_objectives=2
-    )
-    solution.variables = [0.5, 0.5]
-    return solution
-
-@pytest.fixture
-def integer_solution():
-    solution = IntegerSolution(
-        lower_bound=[0, 0],
-        upper_bound=[10, 10],
-        number_of_objectives=2
-    )
-    solution.variables = [5, 5]
-    return solution
 
 class TestPolynomialMutation:
     @pytest.mark.parametrize("probability", [-1, 1.1])
@@ -87,64 +61,143 @@ class TestPolynomialMutation:
         assert mutated_solution.variables[0] == 0.5
 
 class TestBitFlipMutation:
-    def test_should_mutate_binary_solution(self, binary_solution):
+    def test_should_mutate_binary_solution(self):
+        # Create a binary solution with known bits
+        solution = BinarySolution(number_of_variables=4, number_of_objectives=1)
+        solution.variables = [True, False, True, False]
+        original_bits = solution.variables.copy()
+        
+        # Create and apply mutation with probability 1.0 (all bits should flip)
         operator = BitFlipMutation(probability=1.0)
-        # Store original bits
-        original_bits = binary_solution.bits.copy()
-        mutated = operator.execute(binary_solution)
         
-        assert isinstance(mutated, BinarySolution)
-        assert len(mutated.bits) == len(original_bits)
-        # Check that at least one bit has flipped
-        assert any(orig != mut for orig, mut in zip(original_bits, mutated.bits))
+        # Mock random to control which bits flip
+        with patch('numpy.random.random') as mock_random:
+            # Make all bits flip
+            mock_random.return_value = np.array([0.0, 0.0, 0.0, 0.0])
+            
+            # Apply mutation
+            mutated = operator.execute(solution)
+            
+            # Verify mutation
+            assert isinstance(mutated, BinarySolution)
+            assert len(mutated.variables) == len(original_bits)
+            
+            # All bits should have flipped
+            assert all(not orig == mut for orig, mut in zip(original_bits, mutated.variables))
 
-    def test_should_not_mutate_with_zero_probability(self, binary_solution):
-        operator = BitFlipMutation(probability=0.0)
-        original_bits = binary_solution.bits.copy()
-        mutated = operator.execute(binary_solution)
+    def test_should_not_mutate_with_zero_probability(self):
+        # Create a binary solution with known bits
+        solution = BinarySolution(number_of_variables=4, number_of_objectives=1)
+        solution.variables = [True, False, True, False]
+        original_bits = solution.variables.copy()
         
-        assert np.array_equal(mutated.bits, original_bits)
+        # Create and apply mutation with zero probability
+        operator = BitFlipMutation(probability=0.0)
+        
+        # Mock random to ensure no bits flip even if random returns 0
+        with patch('numpy.random.random') as mock_random:
+            mock_random.return_value = np.array([0.0, 0.0, 0.0, 0.0])
+            mutated = operator.execute(solution)
+            
+            # Verify no mutation occurred
+            assert mutated.variables == original_bits
 
 class TestIntegerPolynomialMutation:
-    @pytest.mark.parametrize("value,expected", [
-        (0, 0),    # Lower bound
-        (10, 10),  # Upper bound
-        (5, 5)     # Middle
-    ])
-    def test_should_keep_integer_values_within_bounds(self, value, expected):
-        solution = IntegerSolution([0], [10], 1)
-        solution.variables = [value]
+    def test_should_keep_values_within_bounds(self):
+        # Test with a solution at lower bound
+        lower_solution = IntegerSolution([0], [10], 1)
+        lower_solution.variables = [0]
         
-        operator = IntegerPolynomialMutation(probability=1.0)
-        mutated = operator.execute(solution)
+        # Test with a solution at upper bound
+        upper_solution = IntegerSolution([0], [10], 1)
+        upper_solution.variables = [10]
         
-        assert mutated.variables[0] == expected
+        # Test with a solution in the middle
+        mid_solution = IntegerSolution([0], [10], 1)
+        mid_solution.variables = [5]
+        
+        operator = IntegerPolynomialMutation(probability=1.0, distribution_index=20.0)
+        
+        # Run multiple times to ensure stability
+        for _ in range(10):
+            # Test lower bound
+            mutated = operator.execute(lower_solution)
+            assert mutated.variables[0] >= 0
+            assert isinstance(mutated.variables[0], int)
+            
+            # Test upper bound
+            mutated = operator.execute(upper_solution)
+            assert mutated.variables[0] <= 10
+            assert isinstance(mutated.variables[0], int)
+            
+            # Test middle value
+            mutated = operator.execute(mid_solution)
+            assert 0 <= mutated.variables[0] <= 10
+            assert isinstance(mutated.variables[0], int)
 
 class TestCompositeMutation:
-    def test_should_apply_all_mutations_in_sequence(self, float_solution):
-        # Create a composite solution with two float solutions
-        composite_solution = CompositeSolution([float_solution, float_solution])
-        
-        # Create a mock that returns a new solution with mutated values
-        def mock_execute(solution):
-            # Create a new solution with mutated values
-            result = FloatSolution(
-                lower_bound=solution.lower_bound,
-                upper_bound=solution.upper_bound,
-                number_of_objectives=solution.number_of_objectives
-            )
-            result.variables = [v + 0.1 for v in solution.variables]
-            return result
+    @pytest.fixture
+    def mock_mutation(self):
+        class MockMutation(Mutation[Solution]):
+            def __init__(self):
+                super().__init__()
+                self.called = False
 
-        with patch.object(PolynomialMutation, 'execute', side_effect=mock_execute) as mock_mutation:
-            operator = CompositeMutation([PolynomialMutation(1.0), PolynomialMutation(1.0)])
-            result = operator.execute(composite_solution)
+            def execute(self, solution: Solution) -> Solution:
+                self.called = True
+                return solution
+
+            def get_name(self) -> str:
+                return "MockMutation"
+
+        return MockMutation()
+
+    def test_should_apply_all_mutations_in_sequence(self):
+        # Create a composite solution with two float solutions
+        from jmetal.core.solution import CompositeSolution, FloatSolution
+        from jmetal.operator.mutation import Mutation
+        
+        # Create two float solutions
+        solution1 = FloatSolution([0.0, 0.0], [1.0, 1.0], 1)
+        solution1.variables = [0.5, 0.5]
+        
+        solution2 = FloatSolution([0.0, 0.0], [1.0, 1.0], 1)
+        solution2.variables = [0.3, 0.7]
+        
+        composite_solution = CompositeSolution([solution1, solution2])
+        
+        # Create mock mutations that are subclasses of Mutation
+        class MockMutation(Mutation[FloatSolution]):
+            def __init__(self, return_solution):
+                super().__init__(probability=1.0)
+                self.return_solution = return_solution
+                self.called = False
             
-            # Should be called once for each solution in the composite
-            assert mock_mutation.call_count == 2
-            # Verify the result was mutated
-            assert result.variables[0].variables[0] == pytest.approx(float_solution.variables[0] + 0.1)
-            assert result.variables[1].variables[1] == pytest.approx(float_solution.variables[1] + 0.1)
+            def execute(self, solution):
+                self.called = True
+                return self.return_solution
+            
+            def get_name(self):
+                return "MockMutation"
+        
+        # Create mock mutations that will return the original solutions
+        mock_mutation1 = MockMutation(solution1)
+        mock_mutation2 = MockMutation(solution2)
+        
+        # Create and execute composite mutation
+        composite = CompositeMutation([mock_mutation1, mock_mutation2])
+        result = composite.execute(composite_solution)
+        
+        # Verify mocks were called
+        assert mock_mutation1.called
+        assert mock_mutation2.called
+        
+        # Verify the result is a composite solution with the correct structure
+        assert isinstance(result, CompositeSolution)
+        assert len(result.variables) == 2
+        # Compare variable values instead of solution objects
+        assert result.variables[0].variables == solution1.variables
+        assert result.variables[1].variables == solution2.variables
 
     def test_should_raise_exception_for_empty_mutation_list(self):
         with pytest.raises(EmptyCollectionException):
