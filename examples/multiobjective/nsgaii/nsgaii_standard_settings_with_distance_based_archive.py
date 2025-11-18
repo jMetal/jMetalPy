@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.mutation import PolynomialMutation
-from jmetal.problem.multiobjective.dtlz import DTLZ2
+from jmetal.problem.multiobjective.dtlz import DTLZ2, DTLZ1
 from jmetal.util.archive import DistanceBasedArchive
 from jmetal.util.distance import DistanceMetric
 from jmetal.util.evaluator import SequentialEvaluatorWithArchive
@@ -22,7 +22,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
  Both implementations produce mathematically identical results.
 """
 if __name__ == "__main__":
-    problem = DTLZ2()
+    problem = DTLZ2()   
 
     problem.reference_front = read_solutions(filename="resources/reference_fronts/DTLZ2.3D.pf")
 
