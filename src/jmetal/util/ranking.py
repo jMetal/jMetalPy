@@ -6,6 +6,7 @@ from jmetal.util.comparator import (
     DominanceComparator,
     SolutionAttributeComparator,
 )
+import numpy as np
 
 S = TypeVar("S")
 
@@ -66,18 +67,52 @@ class FastNonDominatedRanking(Ranking[List[S]]):
         # list of solutions dominated by solution ith
         ith_dominated = [[] for _ in range(num_solutions)]
 
-        # Optimized dominance comparison with early break
-        for p in range(num_solutions - 1):
-            for q in range(p + 1, num_solutions):
-                dominance_test_result = self.comparator.compare(solutions[p], solutions[q])
-                self.number_of_comparisons += 1
+        # Try a vectorized dominance computation when using the default
+        # DominanceComparator to avoid Python-level loops and many calls
+        # to the comparator. Fallback to the original nested loops when
+        # a custom comparator is provided or when solutions have
+        # heterogeneous objective lengths.
+        can_vectorize = isinstance(self.comparator, DominanceComparator)
+        if can_vectorize:
+            try:
+                objectives = np.asarray([s.objectives for s in solutions], dtype=float)
+                # pairwise comparisons: for minimization, i dominates j if
+                # all(obj_i <= obj_j) and any(obj_i < obj_j)
+                le = np.all(objectives[:, None, :] <= objectives[None, :, :], axis=2)
+                lt = np.any(objectives[:, None, :] < objectives[None, :, :], axis=2)
+                i_dom_j = le & lt
+                # ensure diagonal is False
+                np.fill_diagonal(i_dom_j, False)
 
-                if dominance_test_result == -1:
-                    ith_dominated[p].append(q)
-                    dominating_ith[q] += 1
-                elif dominance_test_result == 1:
-                    ith_dominated[q].append(p)
-                    dominating_ith[p] += 1
+                # dominating_ith[j] = number of solutions that dominate j
+                dominating_counts = np.sum(i_dom_j, axis=0)
+                for idx in range(num_solutions):
+                    dominating_ith[idx] = int(dominating_counts[idx])
+
+                # ith_dominated[i] = list of indices j dominated by i
+                for i in range(num_solutions):
+                    ith_dominated[i] = list(np.nonzero(i_dom_j[i])[0].tolist())
+
+                # number of pairwise comparisons (unique unordered pairs)
+                self.number_of_comparisons = num_solutions * (num_solutions - 1) // 2
+            except Exception:
+                # If any unexpected issue arises (e.g., non-numeric objectives),
+                # fall back to the safe python implementation.
+                can_vectorize = False
+
+        if not can_vectorize:
+            # Optimized dominance comparison with early break (original)
+            for p in range(num_solutions - 1):
+                for q in range(p + 1, num_solutions):
+                    dominance_test_result = self.comparator.compare(solutions[p], solutions[q])
+                    self.number_of_comparisons += 1
+
+                    if dominance_test_result == -1:
+                        ith_dominated[p].append(q)
+                        dominating_ith[q] += 1
+                    elif dominance_test_result == 1:
+                        ith_dominated[q].append(p)
+                        dominating_ith[p] += 1
 
         # Initialize first front efficiently
         current_front = []

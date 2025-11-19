@@ -22,7 +22,7 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
  Both implementations produce mathematically identical results.
 """
 if __name__ == "__main__":
-    problem = DTLZ2()   
+    problem = DTLZ2()
 
     problem.reference_front = read_solutions(filename="resources/reference_fronts/DTLZ2.3D.pf")
 
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     archive = DistanceBasedArchive(maximum_size=100, metric=DistanceMetric.L2_SQUARED, use_vectorized=True)
     evaluator = SequentialEvaluatorWithArchive(archive)
 
-    max_evaluations = 30000
+    max_evaluations = 50000
     algorithm = NSGAII(
         problem=problem,
         population_size=100,

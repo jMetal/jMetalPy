@@ -2,7 +2,7 @@ from jmetal.algorithm.multiobjective.moead import MOEAD
 from jmetal.core.quality_indicator import HyperVolume
 from jmetal.operator.crossover import DifferentialEvolutionCrossover
 from jmetal.operator.mutation import PolynomialMutation
-from jmetal.problem import DTLZ2
+from jmetal.problem import DTLZ2, DTLZ1
 from jmetal.util.aggregation_function import PenaltyBoundaryIntersection
 
 from jmetal.util.solution import (
@@ -13,14 +13,14 @@ from jmetal.util.solution import (
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":
-    problem = DTLZ2()
+    problem = DTLZ1()
     problem.reference_front = read_solutions(filename="resources/reference_fronts/DTLZ2.3D.pf")
 
     max_evaluations = 50000
 
     algorithm = MOEAD(
         problem=problem,
-        population_size=91,
+        population_size=100,
         crossover=DifferentialEvolutionCrossover(CR=1.0, F=0.5),
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
         aggregation_function=PenaltyBoundaryIntersection(dimension=problem.number_of_objectives()),

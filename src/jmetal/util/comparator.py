@@ -157,18 +157,18 @@ class DominanceComparator(Comparator):
 
     @staticmethod
     def dominance_test(vector1: [float], vector2: [float]) -> int:
-        result = 0
-        for i in range(len(vector1)):
-            if vector1[i] > vector2[i]:
-                if result == -1:
+        res = 0
+        for a, b in zip(vector1, vector2):
+            if a > b:
+                if res == -1:
                     return 0
-                result = 1
-            elif vector2[i] > vector1[i]:
-                if result == 1:
+                res = 1
+            elif b > a:
+                if res == 1:
                     return 0
-                result = -1
+                res = -1
 
-        return result
+        return res
 
 
 class ObjectiveComparator(Comparator):

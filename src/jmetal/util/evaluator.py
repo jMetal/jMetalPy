@@ -99,7 +99,9 @@ class SequentialEvaluatorWithArchive(SequentialEvaluator[S]):
         
         # Add copies of evaluated solutions to archive
         for solution in evaluated_solutions:
-            self.archive.add(copy.deepcopy(solution))
+            # Use copy.copy to call solution.__copy__ implementations
+            # which are more efficient and tailored for Solution types.
+            self.archive.add(copy.copy(solution))
         
         return evaluated_solutions
     

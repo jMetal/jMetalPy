@@ -53,7 +53,8 @@ class LocalSearch(Algorithm[S, R], threading.Thread):
         self.evaluations = 0
 
     def step(self) -> None:
-        mutated_solution = copy.deepcopy(self.solutions[0])
+        # Use copy.copy to create a solution copy via Solution.__copy__
+        mutated_solution = copy.copy(self.solutions[0])
         mutated_solution: Solution = self.mutation.execute(mutated_solution)
         mutated_solution = self.evaluate([mutated_solution])[0]
 

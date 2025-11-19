@@ -73,9 +73,8 @@ class NullCrossover(Crossover[Solution, Solution]):
         """
         if len(parents) != 2:
             raise Exception("The number of parents is not two: {}".format(len(parents)))
-            
-        # Create deep copies to avoid modifying the original parents
-        return [copy.deepcopy(parent) for parent in parents]
+        # Create copies to avoid modifying the original parents
+        return [copy.copy(parent) for parent in parents]
 
     def get_number_of_parents(self) -> int:
         """Get the number of parent solutions required.
@@ -306,7 +305,7 @@ class CXCrossover(Crossover[PermutationSolution, PermutationSolution]):
             raise Exception("The number of parents is not two: {}".format(len(parents)))
 
         # Create copies of parents (swapped) to serve as offspring
-        offspring = [copy.deepcopy(parents[1]), copy.deepcopy(parents[0])]
+        offspring = [copy.copy(parents[1]), copy.copy(parents[0])]
         
         # Only perform crossover with the specified probability
         if random.random() <= self.probability:
@@ -422,7 +421,7 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
         Check.that(issubclass(type(parents[1]), FloatSolution), "Solution type invalid")
         Check.that(len(parents) == 2, "The number of parents is not two: {}".format(len(parents)))
 
-        offspring = copy.deepcopy(parents)
+        offspring = [copy.copy(p) for p in parents]
         rand = random.random()
 
         if rand <= self.probability:
@@ -521,7 +520,7 @@ class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
         Check.that(issubclass(type(parents[1]), IntegerSolution), "Solution type invalid")
         Check.that(len(parents) == 2, "The number of parents is not two: {}".format(len(parents)))
 
-        offspring = copy.deepcopy(parents)
+        offspring = [copy.copy(p) for p in parents]
         rand = random.random()
 
         if rand <= self.probability:
@@ -651,8 +650,8 @@ class SPXCrossover(Crossover[BinarySolution, BinarySolution]):
         if len(parents) != 2:
             raise ValueError("SPXCrossover requires exactly two parents")
             
-        # Create deep copies of the parents to avoid modifying the originals
-        offspring = [copy.deepcopy(parents[0]), copy.deepcopy(parents[1])]
+        # Create copies of the parents to avoid modifying the originals
+        offspring = [copy.copy(parents[0]), copy.copy(parents[1])]
         
         # Check if crossover should be performed based on probability
         if self._rng.random() > self.probability:
@@ -1253,7 +1252,8 @@ class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
         if len(parents) != self.get_number_of_parents():
             raise Exception("The number of parents is not {}: {}".format(self.get_number_of_parents(), len(parents)))
 
-        child = copy.deepcopy(self.current_individual)
+        # Copy the current individual using __copy__
+        child = copy.copy(self.current_individual)
 
         number_of_variables = len(parents[0].variables)
         rand = random.randint(0, number_of_variables - 1)
