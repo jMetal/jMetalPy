@@ -1,6 +1,6 @@
 from jmetal.algorithm.multiobjective.smpso import SMPSO
 from jmetal.operator.mutation import PolynomialMutation
-from jmetal.problem import ZDT4, ZDT3
+from jmetal.problem import ZDT3
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.solution import (
     print_function_values_to_file,

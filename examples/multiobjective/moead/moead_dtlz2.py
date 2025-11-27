@@ -2,7 +2,7 @@ from jmetal.algorithm.multiobjective.moead import MOEAD
 from jmetal.core.quality_indicator import HyperVolume
 from jmetal.operator.crossover import DifferentialEvolutionCrossover
 from jmetal.operator.mutation import PolynomialMutation
-from jmetal.problem import DTLZ2, DTLZ1
+from jmetal.problem import DTLZ1
 from jmetal.util.aggregation_function import PenaltyBoundaryIntersection
 
 from jmetal.util.solution import (
@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
     algorithm = MOEAD(
         problem=problem,
-        population_size=100,
+        population_size=91,
         crossover=DifferentialEvolutionCrossover(CR=1.0, F=0.5),
         mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
         aggregation_function=PenaltyBoundaryIntersection(dimension=problem.number_of_objectives()),

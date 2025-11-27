@@ -1,7 +1,6 @@
 from jmetal.algorithm.multiobjective import SPEA2
 from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.mutation import PolynomialMutation
-from jmetal.problem import ZDT1
 from jmetal.problem.multiobjective.zdt import ZDT1Modified
 from jmetal.util.evaluator import MultiprocessEvaluator
 from jmetal.util.solution import (

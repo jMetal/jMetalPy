@@ -9,7 +9,6 @@ from jmetal.util.solution import (
     get_non_dominated_solutions,
     print_function_values_to_file,
     print_variables_to_file,
-    read_solutions,
 )
 from jmetal.util.termination_criterion import StoppingByEvaluations
 

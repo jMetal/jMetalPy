@@ -1,4 +1,3 @@
-from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.algorithm.multiobjective.nsgaiii import UniformReferenceDirectionFactory, NSGAIII
 from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.mutation import PolynomialMutation

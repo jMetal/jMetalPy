@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.mutation import PolynomialMutation
-from jmetal.problem.multiobjective.dtlz import DTLZ2, DTLZ1
+from jmetal.problem.multiobjective.dtlz import DTLZ2
 from jmetal.util.archive import DistanceBasedArchive
 from jmetal.util.distance import DistanceMetric
 from jmetal.util.evaluator import SequentialEvaluatorWithArchive
