@@ -106,7 +106,7 @@ def _normalize_fronts(front: np.ndarray, reference: np.ndarray, method: str = "r
         raise ValueError(f"Unsupported normalization method: {method}")
 
 
-def _compute_all_indicators(front: np.ndarray, reference: np.ndarray, ref_point: List[float]) -> Dict[str, float]:
+def _compute_all_indicators(front: np.ndarray, reference: np.ndarray, ref_point: List[float] | None, margin: float = 0.1) -> Dict[str, float]:
     """Compute all quality indicators."""
     results = {}
     
@@ -122,12 +122,22 @@ def _compute_all_indicators(front: np.ndarray, reference: np.ndarray, ref_point:
     igdplus_indicator = InvertedGenerationalDistancePlus(reference)
     results["igdplus"] = igdplus_indicator.compute(front)
     
-    # Hypervolume
-    hv_indicator = HyperVolume(ref_point)
+    # Hypervolume: prefer constructing from the reference front (like other indicators).
+    if ref_point is not None:
+        hv_indicator = HyperVolume(reference_point=ref_point)
+    else:
+        hv_indicator = HyperVolume(reference_front=reference, reference_point_offset=margin)
     results["hv"] = hv_indicator.compute(front)
-    
+
     # Normalized Hypervolume
-    nhv_indicator = NormalizedHyperVolume(ref_point)
+    if ref_point is not None:
+        # If user provided an explicit reference point, build NHV from it
+        nhv_indicator = NormalizedHyperVolume(reference_point=ref_point)
+    else:
+        # Otherwise derive the reference point from the provided reference front
+        nhv_indicator = NormalizedHyperVolume(reference_front=reference, reference_point_offset=margin)
+
+    # In both cases, cache the hypervolume of the reference front used for normalization
     nhv_indicator.set_reference_front(reference)
     results["nhv"] = nhv_indicator.compute(front)
     
@@ -249,7 +259,7 @@ def main():
         
         # Compute indicators
         if args.indicator == "all":
-            results = _compute_all_indicators(front, reference, ref_point)
+                results = _compute_all_indicators(front, reference, ref_point, args.margin)
         elif args.indicator == "epsilon":
             indicator = AdditiveEpsilonIndicator(reference)
             result = indicator.compute(front)
@@ -263,11 +273,15 @@ def main():
             result = indicator.compute(front)
             results = {"igdplus": result}
         elif args.indicator == "hv":
-            indicator = HyperVolume(ref_point)
+            indicator = HyperVolume(reference_point=ref_point)
             result = indicator.compute(front)
             results = {"hv": result}
         elif args.indicator == "nhv":
-            indicator = NormalizedHyperVolume(ref_point, reference)
+            if ref_point is not None:
+                indicator = NormalizedHyperVolume(reference_point=ref_point)
+            else:
+                indicator = NormalizedHyperVolume(reference_front=reference, reference_point_offset=args.margin)
+            indicator.set_reference_front(reference)
             result = indicator.compute(front)
             results = {"nhv": result}
         
