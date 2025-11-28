@@ -5,3 +5,7 @@ dist
 .vscode
 FUN.*
 VAR.*
+.RData
+.Rhistory
+db.sqlite3
+optuna/optuna_nsgaii.db
