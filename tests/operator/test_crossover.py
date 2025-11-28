@@ -21,6 +21,7 @@ from jmetal.operator.crossover import (
     SBXCrossover,
     SPXCrossover,
 )
+from jmetal.operator.repair import ClampFloatRepair
 from jmetal.util.ckecking import (
     EmptyCollectionException,
     InvalidConditionException,
@@ -254,6 +255,40 @@ class TestSBXCrossover:
             for i, var in enumerate(child.variables):
                 assert child.lower_bound[i] <= var <= child.upper_bound[i], \
                     f"Variable {i} = {var} is out of bounds [{child.lower_bound[i]}, {child.upper_bound[i]}]"
+
+    def test_callable_vs_instance_repair_equivalence(self):
+        """SBX should behave identically when passing a callable repair or a ClampFloatRepair instance."""
+        import random
+        import numpy as _np
+
+        # deterministic seeds
+        random.seed(42)
+        _np.random.seed(42)
+
+        # parents
+        s1 = FloatSolution([0.0, 0.0], [1.0, 1.0], 1)
+        s2 = FloatSolution([0.0, 0.0], [1.0, 1.0], 1)
+        s1.variables = [0.2, 0.8]
+        s2.variables = [0.8, 0.2]
+
+        # as callable
+        callable_repair = lambda v, lb, ub: min(max(lb, v), ub)
+        sbx_callable = SBXCrossover(probability=1.0, distribution_index=20.0, repair_operator=callable_repair)
+
+        # as instance
+        sbx_instance = SBXCrossover(probability=1.0, distribution_index=20.0, repair_operator=ClampFloatRepair())
+
+        # execute
+        off1 = sbx_callable.execute([s1, s2])
+
+        # reset seeds to reproduce same random draws
+        random.seed(42)
+        _np.random.seed(42)
+
+        off2 = sbx_instance.execute([s1, s2])
+
+        assert off1[0].variables == off2[0].variables
+        assert off1[1].variables == off2[1].variables
     
     def test_should_use_correct_bounds_for_each_offspring(self):
         """Test that each offspring uses its own parent's bounds."""

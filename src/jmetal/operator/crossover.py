@@ -1,7 +1,7 @@
 import copy
 import math
 import random
-from typing import List, Callable, Optional
+from typing import List, Callable, Optional, Union
 
 import numpy as np
 
@@ -15,6 +15,7 @@ from jmetal.core.solution import (
     Solution,
 )
 from jmetal.util.ckecking import Check
+from jmetal.operator.repair import ensure_float_repair, ClampFloatRepair, FloatRepairOperator
 
 # Type variables for generic type hints
 
@@ -25,6 +26,18 @@ from jmetal.util.ckecking import Check
 
 .. moduleauthor:: Antonio J. Nebro <antonio@lcc.uma.es>, Antonio Benítez-Hidalgo <antonio.b@uma.es>
 """
+
+
+# Module-level default repair function: clamps value to [lower_bound, upper_bound].
+def _default_repair(value: float, lower_bound: float, upper_bound: float) -> float:
+    """Clamp value to the provided bounds.
+
+    This is the canonical repair function used by float-valued crossovers when no
+    custom repair operator is provided. Centralizing it avoids duplicated
+    implementations across crossover classes.
+    """
+    return max(lower_bound, min(upper_bound, value))
+
 
 
 class NullCrossover(Crossover[Solution, Solution]):
@@ -142,13 +155,15 @@ class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
         Genetic Algorithms and their Applications (pp. 154-159).
     """
     
-    def __init__(self, probability: float):
+    def __init__(self, probability: float, rng: Optional[np.random.Generator] = None):
         """Initialize the PMX crossover operator.
-        
+
         Args:
             probability: Crossover probability between 0.0 and 1.0.
+            rng: Optional NumPy Generator for reproducible randomness.
         """
         super(PMXCrossover, self).__init__(probability=probability)
+        self._rng = rng or np.random
 
     def execute(self, parents: List[PermutationSolution]) -> List[PermutationSolution]:
         """Execute the PMX crossover operation.
@@ -184,11 +199,12 @@ class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
         offspring[1].variables = parent2.variables.copy()
         
         # Only perform crossover with the specified probability
-        if random.random() <= self.probability:
+        if self._rng.random() <= self.probability:
             permutation_length = parents[0].number_of_variables
-            
+
             # Select two distinct random points for crossover
-            point1, point2 = sorted(random.sample(range(permutation_length), 2))
+            pts = self._rng.choice(permutation_length, size=2, replace=False)
+            point1, point2 = sorted(pts.tolist())
             
             # Create mapping between parents
             mapping = {}
@@ -287,6 +303,7 @@ class CXCrossover(Crossover[PermutationSolution, PermutationSolution]):
             probability: Crossover probability between 0.0 and 1.0.
         """
         super(CXCrossover, self).__init__(probability=probability)
+        self._rng = np.random.default_rng()
 
     def execute(self, parents: List[PermutationSolution]) -> List[PermutationSolution]:
         """Execute the Cycle Crossover operation.
@@ -308,9 +325,12 @@ class CXCrossover(Crossover[PermutationSolution, PermutationSolution]):
         offspring = [copy.copy(parents[1]), copy.copy(parents[0])]
         
         # Only perform crossover with the specified probability
-        if random.random() <= self.probability:
+        if self._rng.random() <= self.probability:
             # Start with a random position
-            start_idx = random.randint(0, len(parents[0].variables) - 1)
+            if hasattr(self._rng, "integers"):
+                start_idx = int(self._rng.integers(0, len(parents[0].variables)))
+            else:
+                start_idx = int(self._rng.randint(0, len(parents[0].variables)))
             curr_idx = start_idx
             cycle = []
 
@@ -410,11 +430,20 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
     """
     __EPS = 1.0e-14  # Small constant to prevent division by zero
 
-    def __init__(self, probability: float, distribution_index: float = 20.0):
+    def __init__(
+        self,
+        probability: float,
+        distribution_index: float = 20.0,
+        repair_operator: Optional[Union[Callable[[float, float, float], float], FloatRepairOperator]] = ClampFloatRepair(),
+        rng: Optional[np.random.Generator] = None,
+    ):
         super(SBXCrossover, self).__init__(probability=probability)
         self.distribution_index = distribution_index
         if distribution_index < 0:
             raise ValueError("The distribution index cannot be negative")
+        # Normalize/ensure the repair operator provides scalar and vector APIs
+        self.repair_operator = ensure_float_repair(repair_operator)
+        self._rng = rng or np.random
 
     def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
         Check.that(issubclass(type(parents[0]), FloatSolution), "Solution type invalid: " + str(type(parents[0])))
@@ -422,13 +451,13 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
         Check.that(len(parents) == 2, "The number of parents is not two: {}".format(len(parents)))
 
         offspring = [copy.copy(p) for p in parents]
-        rand = random.random()
+        rand = self._rng.random()
 
         if rand <= self.probability:
             for i in range(len(parents[0].variables)):
                 value_x1, value_x2 = parents[0].variables[i], parents[1].variables[i]
 
-                if random.random() <= 0.5:
+                if self._rng.random() <= 0.5:
                     if abs(value_x1 - value_x2) > self.__EPS:
                         if value_x1 < value_x2:
                             y1, y2 = value_x1, value_x2
@@ -442,7 +471,7 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
                             beta1 = 1.0 + (2.0 * (y1 - lb1) / (y2 - y1))
                             alpha1 = 2.0 - pow(beta1, -(self.distribution_index + 1.0))
                             
-                            rand_val = random.random()
+                            rand_val = self._rng.random()
                             if rand_val <= (1.0 / alpha1):
                                 betaq1 = pow(rand_val * alpha1, (1.0 / (self.distribution_index + 1.0)))
                             else:
@@ -474,17 +503,11 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
                             # Fallback to parent values if any numerical issues occur
                             c1, c2 = y1, y2
 
-                        # Apply bounds checking using the correct bounds for each offspring
-                        if c1 < lb1:
-                            c1 = lb1
-                        if c2 < lb2:
-                            c2 = lb2
-                        if c1 > ub1:
-                            c1 = ub1
-                        if c2 > ub2:
-                            c2 = ub2
+                        # Apply bounds checking using the configured repair operator (scalar API)
+                        c1 = self.repair_operator.repair_scalar(c1, lb1, ub1)
+                        c2 = self.repair_operator.repair_scalar(c2, lb2, ub2)
 
-                        if random.random() <= 0.5:
+                        if self._rng.random() <= 0.5:
                             offspring[0]._variables[i] = c2
                             offspring[1]._variables[i] = c1
                         else:
@@ -511,9 +534,10 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
 class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
     __EPS = 1.0e-14
 
-    def __init__(self, probability: float, distribution_index: float = 20.0):
+    def __init__(self, probability: float, distribution_index: float = 20.0, rng: Optional[np.random.Generator] = None):
         super(IntegerSBXCrossover, self).__init__(probability=probability)
         self.distribution_index = distribution_index
+        self._rng = rng or np.random
 
     def execute(self, parents: List[IntegerSolution]) -> List[IntegerSolution]:
         Check.that(issubclass(type(parents[0]), IntegerSolution), "Solution type invalid")
@@ -521,13 +545,13 @@ class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
         Check.that(len(parents) == 2, "The number of parents is not two: {}".format(len(parents)))
 
         offspring = [copy.copy(p) for p in parents]
-        rand = random.random()
+        rand = self._rng.random()
 
         if rand <= self.probability:
             for i in range(len(parents[0].variables)):
                 value_x1, value_x2 = parents[0].variables[i], parents[1].variables[i]
 
-                if random.random() <= 0.5:
+                if self._rng.random() <= 0.5:
                     if abs(value_x1 - value_x2) > self.__EPS:
                         if value_x1 < value_x2:
                             y1, y2 = value_x1, value_x2
@@ -541,7 +565,7 @@ class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
                             beta1 = 1.0 + (2.0 * (y1 - lb1) / (y2 - y1))
                             alpha1 = 2.0 - pow(beta1, -(self.distribution_index + 1.0))
                             
-                            rand_val = random.random()
+                            rand_val = self._rng.random()
                             if rand_val <= (1.0 / alpha1):
                                 betaq1 = pow(rand_val * alpha1, (1.0 / (self.distribution_index + 1.0)))
                             else:
@@ -583,7 +607,7 @@ class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
                         if c2 > ub2:
                             c2 = ub2
 
-                        if random.random() <= 0.5:
+                        if self._rng.random() <= 0.5:
                             offspring[0]._variables[i] = int(c2)
                             offspring[1]._variables[i] = int(c1)
                         else:
@@ -626,11 +650,13 @@ class SPXCrossover(Crossover[BinarySolution, BinarySolution]):
         ValueError: If the probability is not in the range [0.0, 1.0]
     """
     
-    def __init__(self, probability: float):
+    def __init__(self, probability: float, rng: Optional[np.random.Generator] = None):
         if not (0.0 <= probability <= 1.0):
             raise ValueError(f"Probability must be between 0.0 and 1.0, but was {probability}")
         super(SPXCrossover, self).__init__(probability=probability)
-        self._rng = np.random.default_rng()
+        # Prefer a provided Generator or use the modern NumPy default_rng. This
+        # makes the operator testable when tests patch `numpy.random.default_rng`.
+        self._rng = rng or np.random.default_rng()
 
     def execute(self, parents: List[BinarySolution]) -> List[BinarySolution]:
         """
@@ -668,7 +694,14 @@ class SPXCrossover(Crossover[BinarySolution, BinarySolution]):
         num_bits = len(bits1)
         if num_bits > 1:
             # Select a random crossover point (1 to num_bits-1 to ensure crossover happens)
-            crossover_point = self._rng.integers(1, num_bits)
+            try:
+                crossover_point = int(self._rng.integers(1, num_bits))
+            except Exception:
+                try:
+                    crossover_point = int(self._rng.randint(1, num_bits))
+                except Exception:
+                    # Fallback to python random if RNG object is unusual
+                    crossover_point = random.randint(1, num_bits - 1)
             
             # Create new bit arrays for the offspring
             new_bits1 = np.concatenate([bits1[:crossover_point], bits2[crossover_point:]])
@@ -729,6 +762,7 @@ class BLXAlphaCrossover(Crossover[FloatSolution, FloatSolution]):
         probability: float = 0.9,
         alpha: float = 0.5,
         repair_operator: Optional[Callable[[float, float, float], float]] = None,
+        rng: Optional[np.random.Generator] = None,
     ):
         if not 0 <= probability <= 1:
             raise ValueError("probability must be in [0, 1]")
@@ -737,7 +771,9 @@ class BLXAlphaCrossover(Crossover[FloatSolution, FloatSolution]):
 
         super().__init__(probability=probability)
         self.alpha = alpha
-        self.repair_operator = repair_operator if repair_operator else self._default_repair
+        # Normalize repair operator to FloatRepairOperator for scalar/vector API
+        self.repair_operator = ensure_float_repair(repair_operator)
+        self._rng = rng or np.random
 
     def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
         Check.that(len(parents) == 2, "BLXAlphaCrossover requires exactly two parents")
@@ -769,7 +805,7 @@ class BLXAlphaCrossover(Crossover[FloatSolution, FloatSolution]):
             len(parent2.constraints) if hasattr(parent2, 'constraints') else 0
         )
 
-        if random.random() > probability:
+        if self._rng.random() > probability:
             offspring1.variables = parent1.variables.copy()
             offspring2.variables = parent2.variables.copy()
             return [offspring1, offspring2]
@@ -789,21 +825,19 @@ class BLXAlphaCrossover(Crossover[FloatSolution, FloatSolution]):
             max_range = max_val + range_val * self.alpha
 
             # Generate offspring values within the expanded range
-            y1 = random.uniform(min_range, max_range)
-            y2 = random.uniform(min_range, max_range)
+            y1 = self._rng.uniform(min_range, max_range)
+            y2 = self._rng.uniform(min_range, max_range)
 
-            # Repair out-of-bounds values
-            y1 = self.repair_operator(y1, lower_bound, upper_bound)
-            y2 = self.repair_operator(y2, lower_bound, upper_bound)
+            # Repair out-of-bounds values (use scalar API)
+            y1 = self.repair_operator.repair_scalar(y1, lower_bound, upper_bound)
+            y2 = self.repair_operator.repair_scalar(y2, lower_bound, upper_bound)
 
             offspring1._variables[i] = y1
             offspring2._variables[i] = y2
 
         return [offspring1, offspring2]
 
-    def _default_repair(self, value: float, lower_bound: float, upper_bound: float) -> float:
-        """Default repair method that clamps values to bounds."""
-        return max(lower_bound, min(upper_bound, value))
+    
 
     def get_number_of_parents(self) -> int:
         return 2
@@ -857,6 +891,7 @@ class BLXAlphaBetaCrossover(Crossover[FloatSolution, FloatSolution]):
         alpha: float = 0.5,
         beta: float = 0.5,
         repair_operator: Optional[Callable[[float, float, float], float]] = None,
+        rng: Optional[np.random.Generator] = None,
     ):
         if not 0 <= probability <= 1:
             raise ValueError("probability must be in [0, 1]")
@@ -868,7 +903,9 @@ class BLXAlphaBetaCrossover(Crossover[FloatSolution, FloatSolution]):
         super().__init__(probability=probability)
         self.alpha = alpha
         self.beta = beta
-        self.repair_operator = repair_operator if repair_operator else self._default_repair
+        # Normalize repair operator to FloatRepairOperator for scalar/vector API
+        self.repair_operator = ensure_float_repair(repair_operator)
+        self._rng = rng or np.random
 
     def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
         Check.that(len(parents) == 2, "BLXAlphaBetaCrossover requires exactly two parents")
@@ -900,7 +937,7 @@ class BLXAlphaBetaCrossover(Crossover[FloatSolution, FloatSolution]):
             len(parent2.constraints) if hasattr(parent2, 'constraints') else 0
         )
 
-        if random.random() > probability:
+        if self._rng.random() > probability:
             offspring1.variables = parent1.variables.copy()
             offspring2.variables = parent2.variables.copy()
             return [offspring1, offspring2]
@@ -920,21 +957,19 @@ class BLXAlphaBetaCrossover(Crossover[FloatSolution, FloatSolution]):
             c_max = x2 + self.beta * d
 
             # Generate offspring values within the expanded range
-            y1 = random.uniform(c_min, c_max)
-            y2 = random.uniform(c_min, c_max)
+            y1 = self._rng.uniform(c_min, c_max)
+            y2 = self._rng.uniform(c_min, c_max)
 
-            # Repair out-of-bounds values
-            y1 = self.repair_operator(y1, lower_bound, upper_bound)
-            y2 = self.repair_operator(y2, lower_bound, upper_bound)
+            # Repair out-of-bounds values (use scalar API)
+            y1 = self.repair_operator.repair_scalar(y1, lower_bound, upper_bound)
+            y2 = self.repair_operator.repair_scalar(y2, lower_bound, upper_bound)
 
             offspring1._variables[i] = y1
             offspring2._variables[i] = y2
 
         return [offspring1, offspring2]
 
-    def _default_repair(self, value: float, lower_bound: float, upper_bound: float) -> float:
-        """Default repair method that clamps values to bounds."""
-        return max(lower_bound, min(upper_bound, value))
+    
 
     def get_number_of_parents(self) -> int:
         return 2
@@ -983,7 +1018,9 @@ class ArithmeticCrossover(Crossover[FloatSolution, FloatSolution]):
             raise ValueError("probability must be in [0, 1]")
 
         super().__init__(probability=probability)
-        self.repair_operator = repair_operator if repair_operator else self._default_repair
+        # Normalize repair operator to FloatRepairOperator for scalar/vector API
+        self.repair_operator = ensure_float_repair(repair_operator)
+        self._rng = np.random
 
     def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
         Check.that(len(parents) == 2, "Arithmetic Crossover requires exactly two parents")
@@ -1017,13 +1054,13 @@ class ArithmeticCrossover(Crossover[FloatSolution, FloatSolution]):
         )
         
         # If crossover doesn't happen, return copies of the parents
-        if random.random() >= probability:
+        if self._rng.random() >= probability:
             offspring1.variables = parent1.variables.copy()
             offspring2.variables = parent2.variables.copy()
             return [offspring1, offspring2]
         
         # Generate a single alpha for all variables in this crossover
-        alpha = random.random()
+        alpha = self._rng.random()
         
         # Initialize variables for both offspring with the correct length
         num_variables = len(parent1.variables)
@@ -1044,8 +1081,8 @@ class ArithmeticCrossover(Crossover[FloatSolution, FloatSolution]):
             lower_bound = parent1.lower_bound[i]
             upper_bound = parent1.upper_bound[i]
             
-            repaired1 = self.repair_operator(value1, lower_bound, upper_bound)
-            repaired2 = self.repair_operator(value2, lower_bound, upper_bound)
+            repaired1 = self.repair_operator.repair_scalar(value1, lower_bound, upper_bound)
+            repaired2 = self.repair_operator.repair_scalar(value2, lower_bound, upper_bound)
             
             vars1[i] = repaired1
             vars2[i] = repaired2
@@ -1056,9 +1093,7 @@ class ArithmeticCrossover(Crossover[FloatSolution, FloatSolution]):
         
         return [offspring1, offspring2]
     
-    def _default_repair(self, value: float, lower_bound: float, upper_bound: float) -> float:
-        """Default repair method that clamps values to bounds."""
-        return max(lower_bound, min(upper_bound, value))
+    
     
     def get_number_of_parents(self) -> int:
         return 2
@@ -1113,7 +1148,9 @@ class UnimodalNormalDistributionCrossover(Crossover[FloatSolution, FloatSolution
         super().__init__(probability=probability)
         self.zeta = zeta
         self.eta = eta
-        self.repair_operator = repair_operator if repair_operator else self._default_repair
+        # Normalize repair operator to FloatRepairOperator for scalar/vector API
+        self.repair_operator = ensure_float_repair(repair_operator)
+        self._rng = np.random
 
     def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
         Check.that(len(parents) >= 3, "UNDX requires at least three parents")
@@ -1152,7 +1189,7 @@ class UnimodalNormalDistributionCrossover(Crossover[FloatSolution, FloatSolution
         )
         
         # If crossover doesn't happen, return copies of the parents
-        if random.random() >= probability:
+        if self._rng.random() >= probability:
             offspring1.variables = parent1.variables.copy()
             offspring2.variables = parent2.variables.copy()
             return [offspring1, offspring2]
@@ -1178,32 +1215,30 @@ class UnimodalNormalDistributionCrossover(Crossover[FloatSolution, FloatSolution
         # Generate offspring
         for i in range(number_of_variables):
             # Generate values along the line connecting the parents
-            alpha = random.uniform(-self.zeta * distance, self.zeta * distance)
-            
+            alpha = self._rng.uniform(-self.zeta * distance, self.zeta * distance)
+
             # Generate values in the orthogonal direction
             # Calculate beta as the sum of two random values centered around 0
-            beta = (random.random() - 0.5) * self.eta * distance + \
-                   (random.random() - 0.5) * self.eta * distance
-            
+            beta = (self._rng.random() - 0.5) * self.eta * distance + \
+                   (self._rng.random() - 0.5) * self.eta * distance
+
             # Calculate the orthogonal component from parent3
             orthogonal = (parent3.variables[i] - center[i]) / distance if distance > 0 else 0.0
-            
+
             # Create the new values
             value1 = center[i] + alpha * diff[i] / distance + beta * orthogonal
             value2 = center[i] - alpha * diff[i] / distance - beta * orthogonal
-            
-            # Apply bounds repair if needed
+
+            # Apply bounds repair if needed (use scalar API)
             lower_bound = parent1.lower_bound[i]
             upper_bound = parent1.upper_bound[i]
-            
-            offspring1._variables[i] = self.repair_operator(value1, lower_bound, upper_bound)
-            offspring2._variables[i] = self.repair_operator(value2, lower_bound, upper_bound)
+
+            offspring1._variables[i] = self.repair_operator.repair_scalar(value1, lower_bound, upper_bound)
+            offspring2._variables[i] = self.repair_operator.repair_scalar(value2, lower_bound, upper_bound)
         
         return [offspring1, offspring2]
     
-    def _default_repair(self, value: float, lower_bound: float, upper_bound: float) -> float:
-        """Default repair method that clamps values to bounds."""
-        return max(lower_bound, min(upper_bound, value))
+    
     
     def get_number_of_parents(self) -> int:
         return 3  # UNDX requires exactly 3 parents
@@ -1239,27 +1274,34 @@ class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
         global optimization over continuous spaces. Journal of global optimization, 11(4), 341-359.
     """
 
-    def __init__(self, CR: float, F: float, K: float = 0.5):
+    def __init__(self, CR: float, F: float, K: float = 0.5, rng: Optional[np.random.Generator] = None):
         super(DifferentialEvolutionCrossover, self).__init__(probability=1.0)
         self.CR = CR
         self.F = F
         self.K = K
+        self._rng = rng or np.random
 
-        self.current_individual: FloatSolution = None
+        self.current_individual: Optional[FloatSolution] = None
 
     def execute(self, parents: List[FloatSolution]) -> List[FloatSolution]:
         """Execute the differential evolution crossover ('best/1/bin' variant in jMetal)."""
         if len(parents) != self.get_number_of_parents():
             raise Exception("The number of parents is not {}: {}".format(self.get_number_of_parents(), len(parents)))
 
+        # Ensure current_individual has been set before using it
+        # Ensure current_individual has been set before using it
+        assert self.current_individual is not None, "current_individual must be set before calling execute"
         # Copy the current individual using __copy__
         child = copy.copy(self.current_individual)
 
         number_of_variables = len(parents[0].variables)
-        rand = random.randint(0, number_of_variables - 1)
+        if hasattr(self._rng, "integers"):
+            rand = int(self._rng.integers(0, number_of_variables))
+        else:
+            rand = int(self._rng.randint(0, number_of_variables))
 
         for i in range(number_of_variables):
-            if random.random() < self.CR or i == rand:
+            if self._rng.random() < self.CR or i == rand:
                 value = parents[2].variables[i] + self.F * (parents[0].variables[i] - parents[1].variables[i])
 
                 if value < child.lower_bound[i]:

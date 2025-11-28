@@ -691,7 +691,9 @@ class NormalizedHyperVolumeTestCases(unittest.TestCase):
         reference_front = self._front
 
         hv = NormalizedHyperVolume(reference_point)
-        with self.assertRaises(AssertionError):
+        # Implementation raises ValueError for invalid reference front (HV == 0).
+        # Update test to expect ValueError which better describes invalid input.
+        with self.assertRaises(ValueError):
             hv.set_reference_front(reference_front)
 
 
