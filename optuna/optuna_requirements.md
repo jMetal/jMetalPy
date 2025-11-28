@@ -21,8 +21,8 @@ It does not prescribe algorithm internals beyond the interface: each evaluation 
 - Problem: an optimization problem instance (e.g., `ZDT1`).
 - Training set: a collection of problems used to evaluate a configuration.
 - Reference front: a high-quality Pareto approximation for a problem (array of objective vectors).
-- Indicator: quality indicators such as Hypervolume (HV), Normalized Hypervolume (NHV), Inverted Generational Distance (IGD), Additive Epsilon (EP / Epsilon).
-- Convention: the protocol treats the overall score as a minimization objective. All indicators used in aggregation must be expressed so that lower is better (e.g., NHV = 1 - HV/HV_ref, Epsilon as-is).
+- Indicator: quality indicators such as Normalized Hypervolume (NHV), Inverted Generational Distance (IGD), Additive Epsilon (EP / Epsilon). (Use NHV instead of raw HV; NHV is bounded in [0, 1] and is a minimization indicator.)
+- Convention: the protocol treats the overall score as a minimization objective. Indicators used in aggregation must be lower-is-better; prefer NHV (which already follows this convention) and other indicators that have optimum at 0.0.
 
 ## 3. Objective function components (required inputs)
 
@@ -57,7 +57,7 @@ This section defines the steps executed for each Optuna trial (a sampled configu
 
 Notes:
 - Default `N = 1` to keep tuning affordable. Increase `N` (e.g. to 3 or 5) to reduce variance in final comparisons.
-- All indicators must be in “lower-is-better” convention before aggregation. If an indicator is naturally higher-is-better (e.g., raw HV), transform it (e.g., NHV = 1 - HV / HV_ref) so smaller is better.
+- Prefer NHV over raw HV: NHV is bounded to [0,1] and is lower-is-better, so when using NHV together with indicators like IGD, IGD+ and Additive Epsilon (which all have optimal value 0.0) explicit normalization is not required. If a different higher-is-better indicator is included, transform it before aggregation.
 
 ### 4.2 Seeding and reproducibility
 
@@ -69,10 +69,8 @@ Notes:
 
 ### 4.3 Normalization and scaling
 
-- Because different indicators may have different numeric scales, consider normalizing indicators before aggregation. Two suggested strategies:
-  - Baseline scaling: divide by a baseline value (e.g., historic maximum for the indicator) to put indicators on comparable scales.
-  - Robust scaling: use median or percentile-based scaling across a small pilot set.
-- The specification does not mandate a particular normalization method, but the chosen method must be documented and applied consistently across experiments.
+- When the chosen indicator set includes `NHV` and indicators that by convention are optimal at `0.0` (for example IGD, IGD+, Additive Epsilon), explicit normalization is generally not required because all values are comparable in the sense that lower-is-better and NHV ∈ [0,1].
+- If you include indicators that are not on a compatible scale (e.g., other higher-is-better measures), either remove them or apply a deterministic transformation so that they become lower-is-better and roughly comparable; document any transformation used.
 
 ### 4.4 Handling degenerate cases
 
