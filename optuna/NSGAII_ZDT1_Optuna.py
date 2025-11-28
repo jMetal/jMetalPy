@@ -28,6 +28,12 @@ POPULATION_SIZE = 100
 MAXIMUM_EVALUATIONS = 25000
 NUMBER_OF_TRIALS = 200
 N_JOBS = 8  # parallel workers for Optuna (threads/processes)
+# Number of independent runs per (algorithm, problem). Default 1 to keep tuning affordable.
+N_REPEATS = 1
+# Final aggregation method across problems: 'sum' (default), 'mean', or 'median'
+FINAL_AGG = "sum"
+# Base seed used to derive per-trial/per-run seeds deterministically
+BASE_SEED = 1234
 
 
 def objective(trial: optuna.Trial) -> float:
@@ -56,7 +62,9 @@ def objective(trial: optuna.Trial) -> float:
         f"{crossover_description}, mutation_probability={mutation_probability:.4f}, mutation_eta={mutation_eta:.2f}"
     )
 
-    algo = NSGAII(
+    # Prepare algorithm instance template (we will re-instantiate for each run to ensure fresh state)
+    def make_algo():
+        return NSGAII(
         problem=problem,
         population_size=population_size,
         offspring_population_size=offspring_population_size,
@@ -64,8 +72,6 @@ def objective(trial: optuna.Trial) -> float:
         crossover=crossover,
         termination_criterion=StoppingByEvaluations(max_evaluations=MAXIMUM_EVALUATIONS),
     )
-    algo.run()
-    front = get_non_dominated_solutions(algo.result())
     # Create the NormalizedHyperVolume by providing the reference front and
     # the scalar offset. Then compute and cache the reference hypervolume.
     normalized_hv_indicator = NormalizedHyperVolume(
@@ -73,16 +79,49 @@ def objective(trial: optuna.Trial) -> float:
         reference_point_offset=REFERENCE_POINT_OFFSET,
     )
     normalized_hv_indicator.set_reference_front(reference_front_objectives)
-    objectives = np.array([s.objectives for s in front])
-    # Compute Normalized Hypervolume (NHV)
-    nhv_value = normalized_hv_indicator.compute(objectives)
 
-    # Compute Additive Epsilon indicator between the front and reference
+    # Prepare epsilon indicator (reference fixed)
     epsilon_indicator = AdditiveEpsilonIndicator(reference_front_objectives)
-    epsilon_value = epsilon_indicator.compute(objectives)
 
-    # Return the sum NHV + Epsilon as the optimization objective
-    return float(nhv_value + epsilon_value)
+    # Run the algorithm N_REPEATS times and collect indicator values per run
+    nhv_values = []
+    eps_values = []
+    for r in range(N_REPEATS):
+        seed = BASE_SEED + trial.number * 1000 + r
+        # deterministically seed Python and numpy RNGs to improve reproducibility
+        import random
+
+        random.seed(seed)
+        np.random.seed(seed)
+
+        algo = make_algo()
+        algo.run()
+        front = get_non_dominated_solutions(algo.result())
+        objectives = np.array([s.objectives for s in front])
+
+        nhv_values.append(float(normalized_hv_indicator.compute(objectives)))
+        eps_values.append(float(epsilon_indicator.compute(objectives)))
+
+    # Aggregate across repeats using the mean (as agreed)
+    nhv_mean = float(np.mean(nhv_values))
+    eps_mean = float(np.mean(eps_values))
+
+    # For a single problem the per-problem composite is sum of indicator means
+    composite = nhv_mean + eps_mean
+
+    # If multiple problems were used, we would compute composite_p per problem and
+    # then aggregate across problems according to FINAL_AGG. For the single-problem
+    # prototype here, apply FINAL_AGG trivially.
+    if FINAL_AGG == "sum":
+        overall = composite
+    elif FINAL_AGG == "mean":
+        overall = composite  # single problem: mean == sum
+    elif FINAL_AGG == "median":
+        overall = composite  # single problem: median == composite
+    else:
+        overall = composite
+
+    return float(overall)
 
 sampler = optuna.samplers.TPESampler(seed=42)
 

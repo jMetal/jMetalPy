@@ -74,7 +74,7 @@ Notes:
 
 ### 4.4 Handling degenerate cases
 
-- If the hypervolume of the reference front is zero (HV_ref == 0) the protocol must flag the problem as invalid for HV-based indicators and either skip the indicator or fail early with a clear error.
+- If the hypervolume of the reference front is zero (HV_ref == 0) the protocol must treat the problem as invalid for HV-based indicators and **fail early by raising a clear error**. A zero HV makes normalization impossible (division by zero) and therefore the evaluation should not continue for that problem. Implementations must raise a descriptive exception so the caller (or the tuning harness) can log the failure and either abort the trial or skip the configuration according to the experimental policy.
 
 ## 5. Parallelism and storage
 

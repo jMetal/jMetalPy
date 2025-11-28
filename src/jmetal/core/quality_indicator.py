@@ -663,9 +663,11 @@ class NormalizedHyperVolume(QualityIndicator):
         # compute and cache the hypervolume of the provided reference front
         self._reference_hypervolume = self._hv.compute(reference_front)
         if self._reference_hypervolume == 0:
-            # Keep backward compatibility with existing tests/code that expect
-            # an AssertionError when the reference hypervolume is zero.
-            raise AssertionError("Hypervolume of reference front is zero")
+            # A zero hypervolume for the reference front makes normalization
+            # impossible (division by zero) and indicates an invalid
+            # reference front for HV-based indicators. Raise a clear
+            # ValueError so callers can handle/report this explicitly.
+            raise ValueError("Hypervolume of reference front is zero: reference front invalid for HV-based normalization")
 
     def compute(self, solutions: np.ndarray) -> float:
         """Compute the normalized hypervolume indicator value.
