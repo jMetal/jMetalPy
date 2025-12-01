@@ -73,16 +73,22 @@ class IBEA(GeneticAlgorithm[S, R]):
 
             for j in range(len(population)):
                 if j != i:
+                    # I_ε(j, i): how much solution j "dominates" solution i
+                    # EpsilonIndicator(reference).compute(front) computes I_ε(front, reference)
+                    # So to get I_ε(j, i) we set i as reference and j as front
+                    ref = np.array([population[i].objectives])
+                    sol = np.array([population[j].objectives])
                     population[i].attributes["fitness"] += -np.exp(
-                        -EpsilonIndicator([population[i].objectives]).compute([population[j].objectives]) / self.kappa
+                        -EpsilonIndicator(ref).compute(sol) / self.kappa
                     )
         return population
 
-    def create_initial_solutions(self) -> List[S]:
-        population = [self.population_generator.new(self.problem) for _ in range(self.population_size)]
-        population = self.compute_fitness_values(population, self.kappa)
+    def evaluate(self, population: List[S]):
+        evaluated = super().evaluate(population)
+        return self.compute_fitness_values(evaluated, self.kappa)
 
-        return population
+    def create_initial_solutions(self) -> List[S]:
+        return [self.population_generator.new(self.problem) for _ in range(self.population_size)]
 
     def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
         join_population = population + offspring_population
@@ -94,11 +100,11 @@ class IBEA(GeneticAlgorithm[S, R]):
             index_worst = current_fitnesses.index(min(current_fitnesses))
 
             for i in range(join_population_size):
+                # When removing worst, subtract its contribution I_ε(worst, i) from each fitness
+                ref = np.array([join_population[i].objectives])
+                worst = np.array([join_population[index_worst].objectives])
                 join_population[i].attributes["fitness"] += np.exp(
-                    -EpsilonIndicator([join_population[i].objectives]).compute(
-                        [join_population[index_worst].objectives]
-                    )
-                    / self.kappa
+                    -EpsilonIndicator(ref).compute(worst) / self.kappa
                 )
 
             join_population.pop(index_worst)
