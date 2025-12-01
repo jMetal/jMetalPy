@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     # Save a PNG visualization of the front (and optional HTML if Plotly available)
     try:
-        png = save_plt_to_file(front, "FUN." + algorithm.label, out_dir='notebooks/output', html_plotly=True)
+        png = save_plt_to_file(front, "FUN." + algorithm.label, out_dir='.', html_plotly=True)
         print(f"Saved front plot to: {png}")
     except Exception as e:
         print(f"Warning: could not generate front plot: {e}")
