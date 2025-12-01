@@ -57,6 +57,18 @@ def save_plt_to_file(solutions: Iterable, filename: str, out_dir: str = "results
         plt.savefig(png_path, dpi=200)
         plt.close()
 
+        # Optional interactive Plotly output for 2D
+        if html_plotly and _PLOTLY_AVAILABLE:
+            try:
+                import pandas as pd
+
+                df = pd.DataFrame(arr, columns=[f"f{i+1}" for i in range(n_obj)])
+                figly = px.scatter(df, x=df.columns[0], y=df.columns[1], title=f"{filename} approximation front (2D)")
+                html_path = os.path.join(out_dir, f"{filename}_front.html")
+                pyoff.plot(figly, filename=html_path, auto_open=False)
+            except Exception:
+                pass
+
     elif n_obj == 3:
         fig = plt.figure(figsize=(6, 6))
         ax = fig.add_subplot(111, projection="3d")
@@ -68,6 +80,18 @@ def save_plt_to_file(solutions: Iterable, filename: str, out_dir: str = "results
         plt.tight_layout()
         fig.savefig(png_path, dpi=200)
         plt.close(fig)
+
+        # Optional interactive Plotly output for 3D
+        if html_plotly and _PLOTLY_AVAILABLE:
+            try:
+                import pandas as pd
+
+                df = pd.DataFrame(arr, columns=[f"f{i+1}" for i in range(n_obj)])
+                figly = px.scatter_3d(df, x=df.columns[0], y=df.columns[1], z=df.columns[2], title=f"{filename} approximation front (3D)")
+                html_path = os.path.join(out_dir, f"{filename}_front.html")
+                pyoff.plot(figly, filename=html_path, auto_open=False)
+            except Exception:
+                pass
 
     else:
         # Parallel coordinates (matplotlib): small stacked plots
