@@ -15,13 +15,11 @@ from jmetal.tuning.config import (
     NUMBER_OF_TRIALS,
     N_REPEATS,
     SEED,
-)
-from jmetal.tuning.config.paths import (
     CONFIG_PATH,
     REFERENCE_FRONTS_DIR,
     ROOT_DIR,
+    TRAINING_PROBLEMS,
 )
-from jmetal.tuning.config.problems import TRAINING_PROBLEMS
 
 # Aliases for backward compatibility in tests
 REFERENCE_FRONTS_PATH = REFERENCE_FRONTS_DIR

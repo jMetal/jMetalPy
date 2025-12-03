@@ -23,7 +23,7 @@ Examples:
 import argparse
 
 from .tuning import tune
-from .config import NUMBER_OF_TRIALS, SEED, POPULATION_SIZE
+from jmetal.tuning.config import NUMBER_OF_TRIALS, SEED, POPULATION_SIZE
 
 
 def main():
