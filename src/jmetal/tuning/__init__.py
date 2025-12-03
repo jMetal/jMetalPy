@@ -57,6 +57,13 @@ from .observers import (
     create_default_observers,
 )
 
+# Metrics (from new modular structure)
+from .metrics import (
+    compute_quality_indicators,
+    load_reference_front,
+    aggregate_scores,
+)
+
 # Configuration
 from .config import (
     POPULATION_SIZE,
@@ -85,6 +92,10 @@ __all__ = [
     "TuningFileObserver",
     "TuningRichObserver",
     "create_default_observers",
+    # Metrics
+    "compute_quality_indicators",
+    "load_reference_front",
+    "aggregate_scores",
     # Config
     "POPULATION_SIZE",
     "TRAINING_EVALUATIONS", 
