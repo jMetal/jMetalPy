@@ -26,6 +26,12 @@ def main():
         default=15,
         help="Number of trials (default: 15)"
     )
+    parser.add_argument(
+        "--output", "-o",
+        type=str,
+        default="./nsgaii_tuned_config.json",
+        help="Output file for best configuration (default: ./nsgaii_tuned_config.json)"
+    )
     args = parser.parse_args()
     
     print("=" * 60)
@@ -55,6 +61,7 @@ def main():
         n_trials=args.trials,
         n_evaluations=5000,  # Reduced for faster demo
         observers=[TuningProgressObserver(display_frequency=3)],
+        output_path=args.output,
     )
     
     # Display results
@@ -67,6 +74,7 @@ def main():
     print("Best parameters:")
     for name, value in result.best_params.items():
         print(f"  {name}: {value}")
+    print(f"\nConfiguration saved to: {args.output}")
     
     return result
 

@@ -44,7 +44,6 @@ import optuna
 
 from .algorithms import TUNERS
 from .config import (
-    CONFIG_PATH,
     TRAINING_PROBLEMS,
     TRAINING_EVALUATIONS,
     NUMBER_OF_TRIALS,
@@ -98,6 +97,7 @@ def run_parallel_tuning(
     storage_url: str = DEFAULT_STORAGE_URL,
     study_name: str = DEFAULT_STUDY_NAME,
     observers: Optional[Sequence[TuningObserver]] = None,
+    output_path: Optional[str] = None,
 ):
     """
     Run parallel hyperparameter tuning as one worker.
@@ -116,6 +116,8 @@ def run_parallel_tuning(
         storage_url: PostgreSQL connection URL
         study_name: Optuna study name
         observers: List of TuningObserver instances for progress visualization
+        output_path: Path for output JSON file. If None, saves to current directory
+            as '{algorithm}_tuned_config.json'
     """
     # Get worker configuration from environment
     worker_id = os.environ.get("WORKER_ID", "0")
@@ -220,9 +222,13 @@ def run_parallel_tuning(
     
     # Only save results from worker 0
     if worker_id == "0":
+        # Determine output path
+        if output_path is None:
+            output_path = f"./{algorithm.lower()}_tuned_config.json"
+        
         save_results(
             study, elapsed, sampler_name, mode, algorithm,
-            population_size, max_evaluations
+            population_size, max_evaluations, output_path
         )
     
     return study
@@ -236,8 +242,20 @@ def save_results(
     algorithm: str,
     population_size: int,
     max_evaluations: int,
+    output_path: str,
 ):
-    """Save tuning results to JSON file."""
+    """Save tuning results to JSON file.
+    
+    Args:
+        study: Completed Optuna study
+        elapsed: Total elapsed time in seconds
+        sampler_name: Name of the sampler used
+        mode: Parameter space mode (categorical/continuous)
+        algorithm: Algorithm name
+        population_size: Population size used
+        max_evaluations: Max evaluations per problem
+        output_path: Path where to save the JSON file
+    """
     payload = {
         "algorithm": algorithm,
         "best_value": float(study.best_value),
@@ -255,10 +273,10 @@ def save_results(
         "timestamp": datetime.now().isoformat(),
     }
     
-    with open(CONFIG_PATH, "w", encoding="utf-8") as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2)
     
-    print(f"\n[Worker 0] Configuration saved to: {CONFIG_PATH}")
+    print(f"\n[Worker 0] Configuration saved to: {output_path}")
 
 
 def main():
@@ -331,6 +349,12 @@ def main():
         default="./tuning_output",
         help="Output directory for file observer (default: ./tuning_output)"
     )
+    parser.add_argument(
+        "--output", "-O",
+        type=str,
+        default=None,
+        help="Output JSON file path for best configuration (default: ./{algorithm}_tuned_config.json)"
+    )
     
     args = parser.parse_args()
     
@@ -372,6 +396,7 @@ def main():
         storage_url=args.db_url,
         study_name=args.study_name,
         observers=observers,
+        output_path=args.output,
     )
 
 

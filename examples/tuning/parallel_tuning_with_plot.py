@@ -75,6 +75,7 @@ def main():
             storage_url="postgresql://localhost/optuna_jmetal",
             study_name="plot_demo",
             observers=observers,
+            output_path="./nsgaii_tuned_config.json",  # Save in current directory
         )
     except Exception as e:
         print(f"\nError: {e}")

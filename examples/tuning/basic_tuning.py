@@ -28,8 +28,8 @@ def main():
     parser.add_argument(
         "--output", "-o",
         type=str,
-        default=None,
-        help="Output file for best configuration (JSON)"
+        default="./nsgaii_tuned_config.json",
+        help="Output file for best configuration (default: ./nsgaii_tuned_config.json)"
     )
     args = parser.parse_args()
     
@@ -57,8 +57,7 @@ def main():
     for name, value in result.best_params.items():
         print(f"  {name}: {value}")
     
-    if args.output:
-        print(f"\nConfiguration saved to: {args.output}")
+    print(f"\nConfiguration saved to: {args.output}")
     
     return result
 

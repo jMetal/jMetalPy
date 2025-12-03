@@ -11,6 +11,7 @@ Usage:
 """
 
 import argparse
+import json
 
 from jmetal.problem import ZDT1, ZDT2
 from jmetal.tuning import tune
@@ -25,6 +26,12 @@ def main():
         type=int,
         default=15,
         help="Number of trials per sampler (default: 15)"
+    )
+    parser.add_argument(
+        "--output", "-o",
+        type=str,
+        default="./sampler_comparison_best.json",
+        help="Output file for best configuration (default: ./sampler_comparison_best.json)"
     )
     args = parser.parse_args()
     
@@ -48,6 +55,8 @@ def main():
     ]
     
     results = {}
+    best_result = None
+    best_name = None
     
     for sampler, mode in samplers:
         name = f"{sampler.upper()} ({mode})"
@@ -67,6 +76,11 @@ def main():
         
         results[name] = result.best_score
         print(f"Best score: {result.best_score:.6f}")
+        
+        # Track the best result overall
+        if best_result is None or result.best_score < best_result.best_score:
+            best_result = result
+            best_name = name
     
     # Summary
     print()
@@ -82,9 +96,19 @@ def main():
     for name, score in sorted_results:
         print(f"{name:<25} {score:>15.6f}")
     
-    best_sampler = sorted_results[0][0]
     print()
-    print(f"Winner: {best_sampler}")
+    print(f"Winner: {best_name}")
+    
+    # Save best configuration
+    if best_result is not None:
+        output_data = best_result.to_dict()
+        output_data["winning_sampler"] = best_name
+        output_data["all_results"] = {name: score for name, score in sorted_results}
+        
+        with open(args.output, "w", encoding="utf-8") as f:
+            json.dump(output_data, f, indent=2)
+        
+        print(f"\nBest configuration saved to: {args.output}")
 
 
 if __name__ == "__main__":

@@ -62,6 +62,12 @@ def main():
         default="./tuning_output",
         help="Output directory for file observer"
     )
+    parser.add_argument(
+        "--output",
+        type=str,
+        default="./nsgaii_tuned_config.json",
+        help="Output file for best configuration (default: ./nsgaii_tuned_config.json)"
+    )
     args = parser.parse_args()
     
     # Create observers based on arguments
@@ -99,9 +105,11 @@ def main():
         n_trials=args.trials,
         n_evaluations=5000,  # Reduced for demo
         observers=observers,
+        output_path=args.output,
     )
     
     print(f"\nFinal result: {result.best_score:.6f}")
+    print(f"Configuration saved to: {args.output}")
     
     return result
 
