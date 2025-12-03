@@ -14,9 +14,9 @@ from jmetal.problem import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
 # ============================================================================
 # PATHS
 # ============================================================================
-# ROOT_DIR points to the jMetalPy project root (3 levels up from this file)
-ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent
-CONFIG_PATH = Path(__file__).resolve().parent / "nsgaii_tuned_config.json"
+# ROOT_DIR points to the jMetalPy project root (4 levels up from this file)
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent
+CONFIG_PATH = Path(__file__).resolve().parent.parent / "nsgaii_tuned_config.json"
 REFERENCE_FRONTS_DIR = ROOT_DIR / "resources" / "reference_fronts"
 
 # ============================================================================

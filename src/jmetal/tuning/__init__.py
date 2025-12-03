@@ -7,13 +7,13 @@ using Optuna optimization framework.
 Currently Supported Algorithms:
     - NSGA-II
 
-Modules:
-    tuning: High-level API (recommended)
-    algorithms: Algorithm-specific tuners
+Package Structure:
+    tuning: High-level API (recommended entry point)
+    algorithms/: Algorithm-specific tuners
+    observers/: Progress visualization components
     config: Configuration constants and paths
-    observer: Progress visualization observers
-    tuning_sequential: Sequential tuning (no database required)
-    tuning_parallel: Parallel tuning with PostgreSQL storage
+    runners/: Sequential and parallel execution (future)
+    cli/: Command-line interfaces (future)
 
 Quick Start:
     # Using the high-level API
@@ -47,8 +47,8 @@ from .tuning import tune, describe_parameters, list_algorithms
 # Algorithm tuners
 from .algorithms import AlgorithmTuner, TuningResult, ParameterInfo, NSGAIITuner, TUNERS
 
-# Observers
-from .observer import (
+# Observers (from new modular structure)
+from .observers import (
     TuningObserver,
     TuningProgressObserver,
     TuningPlotObserver,
