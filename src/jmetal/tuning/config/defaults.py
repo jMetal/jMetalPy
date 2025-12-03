@@ -1,23 +1,11 @@
 """
-Configuration for hyperparameter tuning.
+Default configuration constants for hyperparameter tuning.
 
-This module centralizes all configuration constants and training problem definitions.
-Users can modify these settings to customize the tuning process.
+This module contains the core tuning parameters. For path and problem
+configuration, see paths.py and problems.py respectively.
+
+All settings can be overridden at runtime via function parameters.
 """
-
-from pathlib import Path
-from typing import List, Tuple
-
-from jmetal.core.problem import Problem
-from jmetal.problem import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
-
-# ============================================================================
-# PATHS
-# ============================================================================
-# ROOT_DIR points to the jMetalPy project root (4 levels up from this file)
-ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent
-CONFIG_PATH = Path(__file__).resolve().parent.parent / "nsgaii_tuned_config.json"
-REFERENCE_FRONTS_DIR = ROOT_DIR / "resources" / "reference_fronts"
 
 # ============================================================================
 # ALGORITHM SETTINGS
@@ -39,31 +27,19 @@ SEED = 42  # Random seed for reproducibility
 # ============================================================================
 REFERENCE_POINT_OFFSET = 0.1  # Offset for hypervolume reference point
 
-# ============================================================================
-# TRAINING PROBLEMS
-# Define the problems used for hyperparameter tuning.
-# Format: (Problem instance, reference_front_filename)
-# The reference_front_filename is the full name of the file (with extension)
-# in the REFERENCE_FRONTS_DIR directory.
-# The problem name is obtained from problem.name().
-# ============================================================================
-TRAINING_PROBLEMS: List[Tuple[Problem, str]] = [
-    (ZDT1(), "ZDT1.pf"),
-    (ZDT2(), "ZDT2.pf"),
-    (ZDT3(), "ZDT3.pf"),
-    (ZDT4(), "ZDT4.pf"),
-    (ZDT6(), "ZDT6.pf"),
-]
+# Re-export paths and problems for backward compatibility
+from .paths import (
+    ROOT_DIR,
+    CONFIG_PATH,
+    REFERENCE_FRONTS_DIR,
+    get_reference_front_path,
+    get_output_path,
+)
 
+from .problems import (
+    TRAINING_PROBLEMS,
+    ZDT_PROBLEMS,
+    get_training_problems,
+    create_problem_set,
+)
 
-def get_reference_front_path(reference_front_filename: str) -> Path:
-    """
-    Get the path to the reference front file.
-    
-    Args:
-        reference_front_filename: Full name of the reference front file (with extension)
-        
-    Returns:
-        Path to the reference front file
-    """
-    return REFERENCE_FRONTS_DIR / reference_front_filename
