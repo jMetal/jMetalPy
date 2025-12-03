@@ -40,6 +40,7 @@ from .config import (
 
 if TYPE_CHECKING:
     from .observer import TuningObserver
+    from .tuning_config import ParameterSpaceConfig
 
 
 def _configure_logging(quiet: bool = False) -> None:
@@ -72,6 +73,7 @@ def tune(
     output_path: Optional[str] = None,
     verbose: bool = True,
     observers: Optional[List["TuningObserver"]] = None,
+    parameter_space: Optional["ParameterSpaceConfig"] = None,
 ) -> TuningResult:
     """
     Tune hyperparameters for a multi-objective optimization algorithm.
@@ -95,6 +97,8 @@ def tune(
         verbose: Print progress information (disabled if observers provided)
         observers: List of TuningObserver instances for progress visualization.
             When provided, verbose output is disabled in favor of observer output.
+        parameter_space: Custom parameter space configuration from TuningConfig.
+            When provided, limits the hyperparameter search to specified ranges.
         
     Returns:
         TuningResult with best parameters and metadata
@@ -118,6 +122,11 @@ def tune(
             TuningProgressObserver(),
             TuningPlotObserver(),
         ])
+        
+        # With custom parameter space from YAML config
+        from jmetal.tuning import TuningConfig
+        config = TuningConfig.from_yaml("my_config.yaml")
+        result = tune("NSGAII", parameter_space=config.parameter_space)
     """
     # Get tuner class
     if algorithm not in TUNERS:
@@ -125,7 +134,7 @@ def tune(
         raise ValueError(f"Unknown algorithm: {algorithm}. Available: {available}")
     
     tuner_class = TUNERS[algorithm]
-    tuner = tuner_class(population_size=population_size)
+    tuner = tuner_class(population_size=population_size, parameter_space=parameter_space)
     
     # Prepare problems
     if problems is None:

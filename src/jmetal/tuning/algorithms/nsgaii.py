@@ -4,7 +4,7 @@ NSGA-II algorithm tuner.
 This module provides hyperparameter tuning support for the NSGA-II algorithm.
 """
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional, TYPE_CHECKING
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.core.problem import Problem
@@ -13,6 +13,9 @@ from jmetal.operator.mutation import PolynomialMutation, UniformMutation
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 from .base import AlgorithmTuner, ParameterInfo
+
+if TYPE_CHECKING:
+    from jmetal.tuning.tuning_config import ParameterSpaceConfig, ParameterRange
 
 
 class NSGAIITuner(AlgorithmTuner):
@@ -30,10 +33,30 @@ class NSGAIITuner(AlgorithmTuner):
         - mutation_eta: Polynomial distribution index [5, 400]
         - mutation_perturbation: Uniform mutation perturbation [0.1, 2.0]
     
+    The search space can be customized via a ParameterSpaceConfig from YAML.
+    
     Example:
         tuner = NSGAIITuner(population_size=100)
         # Use with tune() function or directly
+        
+        # With custom parameter space from YAML config
+        tuner = NSGAIITuner(population_size=100, parameter_space=config.parameter_space)
     """
+    
+    def __init__(
+        self,
+        population_size: int = 100,
+        parameter_space: Optional["ParameterSpaceConfig"] = None,
+    ):
+        """
+        Initialize NSGA-II tuner.
+        
+        Args:
+            population_size: Fixed population size for NSGA-II
+            parameter_space: Optional custom parameter space configuration from YAML
+        """
+        super().__init__(population_size=population_size)
+        self._parameter_space = parameter_space
     
     @property
     def name(self) -> str:
@@ -204,42 +227,140 @@ class NSGAIITuner(AlgorithmTuner):
         else:
             return self._sample_continuous(trial)
     
+    def _get_range(self, value) -> tuple:
+        """Extract min/max from ParameterRange or return fixed value as range."""
+        from jmetal.tuning.tuning_config import ParameterRange
+        if isinstance(value, ParameterRange):
+            return value.min, value.max
+        else:
+            # Fixed value - return as both min and max
+            return float(value), float(value)
+    
     def _sample_categorical(self, trial) -> Dict[str, Any]:
         """Sample using categorical variables (for TPE sampler)."""
         params = {}
+        ps = self._parameter_space  # Shorthand
         
         # Offspring population size
+        if ps is not None:
+            from jmetal.tuning.tuning_config import CategoricalParameter
+            ops = ps.offspring_population_size
+            if isinstance(ops, CategoricalParameter):
+                offspring_values = ops.values
+            elif isinstance(ops, list):
+                offspring_values = ops
+            else:
+                offspring_values = [ops]  # Single fixed value
+        else:
+            offspring_values = [1, 10, 50, 100, 150, 200]
+        
         params["offspring_population_size"] = trial.suggest_categorical(
-            "offspring_population_size", [1, 10, 50, 100, 150, 200]
+            "offspring_population_size", offspring_values
         )
         
-        # Crossover
-        params["crossover_type"] = trial.suggest_categorical(
-            "crossover_type", ["sbx", "blxalpha"]
-        )
-        params["crossover_probability"] = trial.suggest_float(
-            "crossover_probability", 0.7, 1.0
-        )
-        
-        if params["crossover_type"] == "sbx":
-            params["crossover_eta"] = trial.suggest_float("crossover_eta", 5.0, 400.0)
+        # Crossover type
+        if ps is not None:
+            crossover_types = ps.crossover.types
         else:
-            params["blx_alpha"] = trial.suggest_float("blx_alpha", 0.0, 1.0)
+            crossover_types = ["sbx", "blxalpha"]
         
-        # Mutation
-        params["mutation_type"] = trial.suggest_categorical(
-            "mutation_type", ["polynomial", "uniform"]
-        )
-        params["mutation_probability_factor"] = trial.suggest_float(
-            "mutation_probability_factor", 0.5, 2.0
-        )
-        
-        if params["mutation_type"] == "polynomial":
-            params["mutation_eta"] = trial.suggest_float("mutation_eta", 5.0, 400.0)
+        if len(crossover_types) == 1:
+            params["crossover_type"] = crossover_types[0]
         else:
-            params["mutation_perturbation"] = trial.suggest_float(
-                "mutation_perturbation", 0.1, 2.0
+            params["crossover_type"] = trial.suggest_categorical(
+                "crossover_type", crossover_types
             )
+        
+        # Crossover probability
+        if ps is not None:
+            prob_min, prob_max = self._get_range(ps.crossover.probability)
+        else:
+            prob_min, prob_max = 0.7, 1.0
+        
+        if prob_min == prob_max:
+            params["crossover_probability"] = prob_min
+        else:
+            params["crossover_probability"] = trial.suggest_float(
+                "crossover_probability", prob_min, prob_max
+            )
+        
+        # Crossover-specific parameters
+        if params["crossover_type"] == "sbx":
+            if ps is not None:
+                eta_min, eta_max = self._get_range(ps.crossover.sbx_distribution_index)
+            else:
+                eta_min, eta_max = 5.0, 400.0
+            
+            if eta_min == eta_max:
+                params["crossover_eta"] = eta_min
+            else:
+                params["crossover_eta"] = trial.suggest_float(
+                    "crossover_eta", eta_min, eta_max
+                )
+        else:  # blxalpha
+            if ps is not None:
+                alpha_min, alpha_max = self._get_range(ps.crossover.blx_alpha)
+            else:
+                alpha_min, alpha_max = 0.0, 1.0
+            
+            if alpha_min == alpha_max:
+                params["blx_alpha"] = alpha_min
+            else:
+                params["blx_alpha"] = trial.suggest_float(
+                    "blx_alpha", alpha_min, alpha_max
+                )
+        
+        # Mutation type
+        if ps is not None:
+            mutation_types = ps.mutation.types
+        else:
+            mutation_types = ["polynomial", "uniform"]
+        
+        if len(mutation_types) == 1:
+            params["mutation_type"] = mutation_types[0]
+        else:
+            params["mutation_type"] = trial.suggest_categorical(
+                "mutation_type", mutation_types
+            )
+        
+        # Mutation probability factor
+        if ps is not None:
+            factor_min, factor_max = self._get_range(ps.mutation.probability_factor)
+        else:
+            factor_min, factor_max = 0.5, 2.0
+        
+        if factor_min == factor_max:
+            params["mutation_probability_factor"] = factor_min
+        else:
+            params["mutation_probability_factor"] = trial.suggest_float(
+                "mutation_probability_factor", factor_min, factor_max
+            )
+        
+        # Mutation-specific parameters
+        if params["mutation_type"] == "polynomial":
+            if ps is not None:
+                eta_min, eta_max = self._get_range(ps.mutation.polynomial_distribution_index)
+            else:
+                eta_min, eta_max = 5.0, 400.0
+            
+            if eta_min == eta_max:
+                params["mutation_eta"] = eta_min
+            else:
+                params["mutation_eta"] = trial.suggest_float(
+                    "mutation_eta", eta_min, eta_max
+                )
+        else:  # uniform
+            if ps is not None:
+                pert_min, pert_max = self._get_range(ps.mutation.uniform_perturbation)
+            else:
+                pert_min, pert_max = 0.1, 2.0
+            
+            if pert_min == pert_max:
+                params["mutation_perturbation"] = pert_min
+            else:
+                params["mutation_perturbation"] = trial.suggest_float(
+                    "mutation_perturbation", pert_min, pert_max
+                )
         
         return params
     

@@ -115,6 +115,9 @@ def main():
     # Get problems from config
     problems = config.get_problems_as_tuples() if args.config else None
     
+    # Get parameter space from config (only if config file provided)
+    parameter_space = config.parameter_space if args.config else None
+    
     # Run tuning
     result = tune(
         algorithm=algorithm,
@@ -126,6 +129,7 @@ def main():
         population_size=population_size,
         output_path=output_path,
         verbose=not args.quiet,
+        parameter_space=parameter_space,
     )
     
     return result

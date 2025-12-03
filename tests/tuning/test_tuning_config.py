@@ -261,3 +261,83 @@ class TestTuningConfigGetProblems:
         # Act & Assert
         with pytest.raises(ValueError, match="Unknown problem"):
             config.get_problems_as_tuples()
+
+
+class TestParameterSpaceIntegration:
+    """Tests for ParameterSpaceConfig integration with NSGAIITuner."""
+
+    def test_given_sbx_only_config_when_sample_then_only_sbx_crossover(self) -> None:
+        """When crossover is fixed to SBX, sampled params should only contain SBX."""
+        from jmetal.tuning.algorithms import NSGAIITuner
+        from unittest.mock import MagicMock
+        
+        # Arrange - Create config with only SBX crossover
+        param_space = ParameterSpaceConfig(
+            crossover=CrossoverConfig(
+                types=["sbx"],
+                probability=ParameterRange(min=0.9, max=1.0),
+                sbx_distribution_index=ParameterRange(min=5.0, max=20.0),
+            ),
+            mutation=MutationConfig(types=["polynomial"]),
+        )
+        tuner = NSGAIITuner(parameter_space=param_space)
+        
+        # Mock Optuna trial
+        mock_trial = MagicMock()
+        mock_trial.suggest_categorical.return_value = 100
+        mock_trial.suggest_float.side_effect = [0.95, 15.0, 1.0, 20.0]  # prob, eta, mut_factor, mut_eta
+        
+        # Act
+        params = tuner.sample_parameters(mock_trial, mode="categorical")
+        
+        # Assert
+        assert params["crossover_type"] == "sbx"
+        assert "blx_alpha" not in params
+        assert "crossover_eta" in params
+
+    def test_given_custom_offspring_values_when_sample_then_uses_values(self) -> None:
+        """When offspring_population_size has custom values, should use them."""
+        from jmetal.tuning.algorithms import NSGAIITuner
+        from unittest.mock import MagicMock
+        
+        # Arrange - Create config with custom offspring values
+        param_space = ParameterSpaceConfig(
+            offspring_population_size=CategoricalParameter(values=[25, 50, 75]),
+        )
+        tuner = NSGAIITuner(parameter_space=param_space)
+        
+        # Mock Optuna trial
+        mock_trial = MagicMock()
+        mock_trial.suggest_categorical.side_effect = [50, "sbx", "polynomial"]
+        mock_trial.suggest_float.side_effect = [0.9, 15.0, 1.0, 20.0]
+        
+        # Act
+        params = tuner.sample_parameters(mock_trial, mode="categorical")
+        
+        # Assert
+        # Verify the values passed to suggest_categorical include our custom values
+        calls = mock_trial.suggest_categorical.call_args_list
+        offspring_call = [c for c in calls if c[0][0] == "offspring_population_size"]
+        assert len(offspring_call) == 1
+        assert offspring_call[0][0][1] == [25, 50, 75]
+
+    def test_given_no_parameter_space_when_sample_then_uses_defaults(self) -> None:
+        """When no parameter_space, should use default parameter space."""
+        from jmetal.tuning.algorithms import NSGAIITuner
+        from unittest.mock import MagicMock
+        
+        # Arrange
+        tuner = NSGAIITuner()  # No parameter_space
+        
+        # Mock Optuna trial
+        mock_trial = MagicMock()
+        mock_trial.suggest_categorical.side_effect = [100, "sbx", "polynomial"]
+        mock_trial.suggest_float.side_effect = [0.9, 15.0, 1.0, 20.0]
+        
+        # Act
+        params = tuner.sample_parameters(mock_trial, mode="categorical")
+        
+        # Assert - default values should work
+        assert "crossover_type" in params
+        assert "mutation_type" in params
+        assert "offspring_population_size" in params

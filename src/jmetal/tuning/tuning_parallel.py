@@ -53,6 +53,7 @@ from .config import (
     SEED,
 )
 from .observers import TuningObserver, TuningProgressObserver, TuningFileObserver, TuningPlotObserver
+from .tuning_config import TuningConfig, ParameterSpaceConfig
 
 
 # Default PostgreSQL storage URL
@@ -98,6 +99,8 @@ def run_parallel_tuning(
     study_name: str = DEFAULT_STUDY_NAME,
     observers: Optional[Sequence[TuningObserver]] = None,
     output_path: Optional[str] = None,
+    parameter_space: Optional[ParameterSpaceConfig] = None,
+    problems: Optional[List] = None,
 ):
     """
     Run parallel hyperparameter tuning as one worker.
@@ -118,6 +121,8 @@ def run_parallel_tuning(
         observers: List of TuningObserver instances for progress visualization
         output_path: Path for output JSON file. If None, saves to current directory
             as '{algorithm}_tuned_config.json'
+        parameter_space: Custom parameter space configuration from TuningConfig
+        problems: List of (Problem, reference_front) tuples to use. If None, uses defaults.
     """
     # Get worker configuration from environment
     worker_id = os.environ.get("WORKER_ID", "0")
@@ -143,7 +148,10 @@ def run_parallel_tuning(
         available = ", ".join(TUNERS.keys())
         raise ValueError(f"Unknown algorithm: {algorithm}. Available: {available}")
     
-    tuner = TUNERS[algorithm](population_size=population_size)
+    tuner = TUNERS[algorithm](population_size=population_size, parameter_space=parameter_space)
+    
+    # Use provided problems or defaults
+    training_problems = problems if problems is not None else TRAINING_PROBLEMS
     
     # Show header (only when not using observers)
     if not use_observers:
@@ -187,7 +195,7 @@ def run_parallel_tuning(
             print(f"[Worker {worker_id}] Trial {trial.number}: {tuner.format_params(params)}")
         
         score = tuner.evaluate_on_problems(
-            problems=TRAINING_PROBLEMS,
+            problems=training_problems,
             params=params,
             max_evaluations=max_evaluations,
             n_repeats=N_REPEATS,
@@ -228,7 +236,7 @@ def run_parallel_tuning(
         
         save_results(
             study, elapsed, sampler_name, mode, algorithm,
-            population_size, max_evaluations, output_path
+            population_size, max_evaluations, output_path, training_problems
         )
     
     return study
@@ -243,6 +251,7 @@ def save_results(
     population_size: int,
     max_evaluations: int,
     output_path: str,
+    training_problems: List,
 ):
     """Save tuning results to JSON file.
     
@@ -255,6 +264,7 @@ def save_results(
         population_size: Population size used
         max_evaluations: Max evaluations per problem
         output_path: Path where to save the JSON file
+        training_problems: List of (Problem, reference_front) tuples used
     """
     payload = {
         "algorithm": algorithm,
@@ -263,7 +273,7 @@ def save_results(
         "population_size": population_size,
         "training_evaluations": max_evaluations,
         "validation_evaluations": max_evaluations * 2,
-        "training_problems": [problem.name() for problem, _ in TRAINING_PROBLEMS],
+        "training_problems": [problem.name() for problem, _ in training_problems],
         "ref_point_offset": REFERENCE_POINT_OFFSET,
         "n_trials": len(study.trials),
         "n_repeats": N_REPEATS,
@@ -282,6 +292,12 @@ def save_results(
 def main():
     parser = argparse.ArgumentParser(
         description="Parallel hyperparameter tuning with Optuna and PostgreSQL"
+    )
+    parser.add_argument(
+        "--config", "-c",
+        type=str,
+        default=None,
+        help="YAML configuration file (recommended way to configure tuning)"
     )
     parser.add_argument(
         "--algorithm", "-a",
@@ -358,6 +374,24 @@ def main():
     
     args = parser.parse_args()
     
+    # Load configuration from file or use defaults
+    if args.config:
+        config = TuningConfig.from_yaml(args.config)
+        parameter_space = config.parameter_space
+        problems = config.get_problems_as_tuples()
+    else:
+        config = None
+        parameter_space = None
+        problems = None
+    
+    # Apply config values with CLI overrides
+    algorithm = args.algorithm if args.algorithm != "NSGAII" or config is None else config.algorithm
+    total_trials = args.trials if config is None else config.n_trials
+    max_evaluations = args.evaluations if config is None else config.n_evaluations
+    sampler = args.sampler if config is None else config.sampler
+    seed = args.seed if config is None else config.seed
+    population_size = args.population_size if config is None else config.population_size
+    
     # Create observers based on argument
     # Note: plot observer only enabled on worker 0 to show global progress
     worker_id = os.environ.get("WORKER_ID", "0")
@@ -386,17 +420,19 @@ def main():
         ]
     
     run_parallel_tuning(
-        algorithm=args.algorithm,
-        total_trials=args.trials,
-        max_evaluations=args.evaluations,
-        sampler_name=args.sampler,
+        algorithm=algorithm,
+        total_trials=total_trials,
+        max_evaluations=max_evaluations,
+        sampler_name=sampler,
         mode=args.mode,
-        seed=args.seed,
-        population_size=args.population_size,
+        seed=seed,
+        population_size=population_size,
         storage_url=args.db_url,
         study_name=args.study_name,
         observers=observers,
         output_path=args.output,
+        parameter_space=parameter_space,
+        problems=problems,
     )
 
 
