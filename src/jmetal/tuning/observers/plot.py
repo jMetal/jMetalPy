@@ -34,7 +34,7 @@ class TuningPlotObserver(TuningObserver):
     def __init__(
         self,
         update_frequency: int = 1,
-        figsize: tuple = (10, 6),
+        figsize: tuple = (10, 7),
         title: Optional[str] = None,
     ):
         self.update_frequency = update_frequency
@@ -47,12 +47,15 @@ class TuningPlotObserver(TuningObserver):
         self.trial_scores: List[float] = []
         self.best_scores: List[float] = []
         self.algorithm = ""
+        self.config_text = None  # Text object for configuration display
+        self.current_best_trial = None  # Track best trial for config updates
     
     def on_tuning_start(self, n_trials: int, algorithm: str) -> None:
         """Initialize the plot."""
         self.algorithm = algorithm
         self.trial_scores = []
         self.best_scores = []
+        self.current_best_trial = None
         
         try:
             import matplotlib.pyplot as plt
@@ -70,11 +73,53 @@ class TuningPlotObserver(TuningObserver):
             self.best_line, = self.ax.plot([], [], 'r-', linewidth=2, label='Best score')
             self.ax.legend(loc='upper right')
             
+            # Reserve space at bottom for configuration text
+            self.fig.subplots_adjust(bottom=0.25)
+            
+            # Initialize configuration text (empty)
+            self.config_text = self.fig.text(
+                0.5, 0.01, "",
+                ha='center', va='bottom',
+                fontsize=9, family='monospace',
+                bbox=dict(boxstyle='round,pad=0.5', facecolor='lightyellow', 
+                         edgecolor='orange', alpha=0.9)
+            )
+            
             plt.show(block=False)
             plt.pause(0.1)
         except ImportError:
             print("Warning: matplotlib not available. Plot observer disabled.")
             self.fig = None
+    
+    def _format_params(self, params: dict) -> str:
+        """Format parameters for display in footer."""
+        crossover_params = []
+        mutation_params = []
+        other_params = []
+        
+        for name, value in params.items():
+            if isinstance(value, float):
+                formatted = f"{name}: {value:.4f}"
+            else:
+                formatted = f"{name}: {value}"
+            
+            if 'crossover' in name or 'blx' in name:
+                crossover_params.append(formatted)
+            elif 'mutation' in name:
+                mutation_params.append(formatted)
+            else:
+                other_params.append(formatted)
+        
+        # Build footer text
+        footer_parts = []
+        if other_params:
+            footer_parts.append("General: " + ", ".join(other_params))
+        if crossover_params:
+            footer_parts.append("Crossover: " + ", ".join(crossover_params))
+        if mutation_params:
+            footer_parts.append("Mutation: " + ", ".join(mutation_params))
+        
+        return "\n".join(footer_parts)
     
     def __call__(self, study: Study, trial: FrozenTrial) -> None:
         """Update the plot after each trial."""
@@ -87,6 +132,12 @@ class TuningPlotObserver(TuningObserver):
         self.trial_scores.append(trial.value)
         current_best = min(self.trial_scores)
         self.best_scores.append(current_best)
+        
+        # Check if this trial is the new best
+        is_new_best = (self.current_best_trial is None or 
+                       trial.value <= current_best)
+        if is_new_best and trial.value == current_best:
+            self.current_best_trial = trial
         
         # Update plot every N trials
         if (trial.number + 1) % self.update_frequency == 0:
@@ -101,30 +152,47 @@ class TuningPlotObserver(TuningObserver):
             
             # Update title with current best
             title = self.title or f"{self.algorithm} Hyperparameter Tuning"
-            self.ax.set_title(f"{title}\nBest: {current_best:.6f} (trial {trial.number + 1})")
+            self.ax.set_title(f"{title}\nBest: {current_best:.6f} (trial {self.current_best_trial.number + 1})")
+            
+            # Update configuration text with current best trial parameters
+            if self.current_best_trial is not None and self.config_text is not None:
+                config_str = self._format_params(self.current_best_trial.params)
+                footer_text = f"BEST CONFIG (Trial {self.current_best_trial.number + 1})\n{config_str}"
+                self.config_text.set_text(footer_text)
             
             self.fig.canvas.draw()
             self.fig.canvas.flush_events()
             plt.pause(0.01)
     
     def on_tuning_end(self, study: Study) -> None:
-        """Finalize the plot."""
+        """Finalize the plot with best configuration in footer."""
         if self.fig is None:
             return
         
         import matplotlib.pyplot as plt
         
-        # Final update
+        # Final update of title
         title = self.title or f"{self.algorithm} Hyperparameter Tuning"
-        self.ax.set_title(f"{title}\nFinal Best: {study.best_value:.6f}")
+        self.ax.set_title(f"{title}\nFinal Best Score: {study.best_value:.6f} (Trial {study.best_trial.number + 1})")
         
-        # Mark the best trial
+        # Mark the best trial with vertical line
         best_trial_idx = study.best_trial.number
         if best_trial_idx < len(self.trial_scores):
             self.ax.axvline(x=best_trial_idx + 1, color='g', linestyle='--', 
                           alpha=0.7, label=f'Best trial ({best_trial_idx + 1})')
             self.ax.legend(loc='upper right')
         
+        # Final update of configuration text
+        if self.config_text is not None:
+            config_str = self._format_params(study.best_params)
+            footer_text = f"BEST CONFIGURATION (Trial {study.best_trial.number + 1})\n{config_str}"
+            self.config_text.set_text(footer_text)
+        
+        # Redraw the figure
         self.fig.canvas.draw()
-        plt.ioff()  # Disable interactive mode
-        plt.show(block=False)
+        self.fig.canvas.flush_events()
+        
+        # Disable interactive mode and keep window open
+        plt.ioff()
+        print("\n[Plot] Close the plot window to continue...")
+        plt.show(block=True)  # Block to keep window open
