@@ -12,7 +12,7 @@ Prerequisites:
 
 Usage:
     # Run with 4 workers and plot observer (single window from worker 0)
-    python -m jmetal.tuning.run_parallel_tuning -w 4 -t 100 --observer plot
+    python -m jmetal.tuning.cli.parallel -w 4 -t 100 --observer plot
     
     # Or run this script directly (single worker with plot)
     python examples/tuning/parallel_tuning_with_plot.py
@@ -30,10 +30,7 @@ Note:
 import os
 import sys
 
-# Add src to path if running directly
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "src"))
-
-from jmetal.tuning.observer import TuningProgressObserver, TuningPlotObserver
+from jmetal.tuning.observers import TuningProgressObserver, TuningPlotObserver
 from jmetal.tuning.tuning_parallel import run_parallel_tuning
 
 
@@ -60,7 +57,7 @@ def main():
     print("This demo runs a single worker with real-time plot.")
     print("For multi-worker parallel tuning with plot, use:")
     print()
-    print("  python -m jmetal.tuning.run_parallel_tuning -w 4 --observer plot")
+    print("  python -m jmetal.tuning.cli.parallel -w 4 --observer plot")
     print()
     print("Only worker 0 shows the plot (global progress from all workers).")
     print("=" * 60)

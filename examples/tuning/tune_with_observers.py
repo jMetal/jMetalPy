@@ -12,26 +12,26 @@ the tuning process:
 
 Usage:
     # Basic progress observer
-    python tune_with_observers.py --observer progress
+    python examples/tuning/tune_with_observers.py --observer progress
     
     # Real-time plot
-    python tune_with_observers.py --observer plot
+    python examples/tuning/tune_with_observers.py --observer plot
     
     # File logging
-    python tune_with_observers.py --observer file
+    python examples/tuning/tune_with_observers.py --observer file
     
     # Rich console (requires: pip install rich)
-    python tune_with_observers.py --observer rich
+    python examples/tuning/tune_with_observers.py --observer rich
     
     # Multiple observers
-    python tune_with_observers.py --observer progress --observer plot
+    python examples/tuning/tune_with_observers.py --observer progress --observer plot
 """
 
 import argparse
 
 from jmetal.problem import ZDT1, ZDT2
 from jmetal.tuning import tune
-from jmetal.tuning.observer import (
+from jmetal.tuning.observers import (
     TuningProgressObserver,
     TuningPlotObserver,
     TuningFileObserver,
