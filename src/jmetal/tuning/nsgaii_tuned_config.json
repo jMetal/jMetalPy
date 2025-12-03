@@ -1,18 +1,18 @@
 {
   "algorithm": "NSGAII",
-  "best_value": 0.10487513701103865,
+  "best_value": 0.6912247508329992,
   "best_params": {
     "offspring_population_size": 100,
     "crossover_type": "sbx",
-    "crossover_probability": 0.7742033976822386,
-    "crossover_eta": 164.81427972396432,
+    "crossover_probability": 0.7876433945605654,
+    "crossover_eta": 149.71292810100823,
     "mutation_type": "uniform",
-    "mutation_probability_factor": 0.5135674248351441,
-    "mutation_perturbation": 0.953404832574681
+    "mutation_probability_factor": 0.7995106732375397,
+    "mutation_perturbation": 1.077045432985862
   },
   "population_size": 100,
-  "training_evaluations": 10000,
-  "validation_evaluations": 20000,
+  "training_evaluations": 5000,
+  "validation_evaluations": 10000,
   "training_problems": [
     "ZDT1",
     "ZDT2",
@@ -21,10 +21,10 @@
     "ZDT6"
   ],
   "ref_point_offset": 0.1,
-  "n_trials": 85,
+  "n_trials": 15,
   "n_repeats": 1,
-  "elapsed_seconds": 104.56213604100049,
+  "elapsed_seconds": 38.55867216701154,
   "sampler": "tpe",
   "mode": "categorical",
-  "timestamp": "2025-12-03T12:49:22.794106"
+  "timestamp": "2025-12-03T15:50:15.426532"
 }

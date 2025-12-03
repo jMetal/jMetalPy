@@ -53,7 +53,7 @@ from .config import (
     REFERENCE_POINT_OFFSET,
     SEED,
 )
-from .observer import TuningObserver, TuningProgressObserver, TuningFileObserver, TuningPlotObserver
+from .observers import TuningObserver, TuningProgressObserver, TuningFileObserver, TuningPlotObserver
 
 
 # Default PostgreSQL storage URL

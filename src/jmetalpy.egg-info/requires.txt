@@ -13,7 +13,7 @@ moocore>=0.1.8
 tqdm
 numpy>=2.2.5
 pandas>=2.2.3
-plotly>=3.3.0
+plotly>=5.22.0
 matplotlib>=3.0.2
 scipy>=1.15.3
 statsmodels>=0.9.0
@@ -73,3 +73,9 @@ PyHamcrest
 moocore>=0.1.9
 pytest>=7.0
 pytest-cov>=4.0
+
+[tuning]
+optuna>=4.0.0
+joblib>=1.3.0
+pyyaml>=6.0
+psycopg2-binary>=2.9.0

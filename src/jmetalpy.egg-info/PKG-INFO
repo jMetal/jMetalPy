@@ -74,7 +74,7 @@ Provides-Extra: complete
 Requires-Dist: tqdm; extra == "complete"
 Requires-Dist: numpy>=2.2.5; extra == "complete"
 Requires-Dist: pandas>=2.2.3; extra == "complete"
-Requires-Dist: plotly>=3.3.0; extra == "complete"
+Requires-Dist: plotly>=5.22.0; extra == "complete"
 Requires-Dist: matplotlib>=3.0.2; extra == "complete"
 Requires-Dist: scipy>=1.15.3; extra == "complete"
 Requires-Dist: statsmodels>=0.9.0; extra == "complete"
@@ -84,6 +84,11 @@ Requires-Dist: nbsphinx; extra == "complete"
 Requires-Dist: dask[complete]>=2024.3.0; extra == "complete"
 Requires-Dist: distributed>=2024.3.0; extra == "complete"
 Requires-Dist: pyspark>=3.4.0; extra == "complete"
+Provides-Extra: tuning
+Requires-Dist: optuna>=4.0.0; extra == "tuning"
+Requires-Dist: joblib>=1.3.0; extra == "tuning"
+Requires-Dist: pyyaml>=6.0; extra == "tuning"
+Requires-Dist: psycopg2-binary>=2.9.0; extra == "tuning"
 Dynamic: license-file
 
 ![jMetalPy](docs/source/jmetalpy.png)
