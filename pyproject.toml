@@ -42,6 +42,11 @@ dependencies = [
 addopts = [
     "--import-mode=importlib",
 ]
+markers = [
+    "smoke: Quick tests for basic functionality verification (CI gating)",
+    "slow: Tests that take more than 5 seconds to run",
+    "integration: Tests that verify multiple components working together",
+]
 
 [project.optional-dependencies]
 core = [
