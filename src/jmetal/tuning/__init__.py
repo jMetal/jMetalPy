@@ -73,6 +73,9 @@ from .config import (
     TRAINING_PROBLEMS,
 )
 
+# YAML Configuration
+from .tuning_config import TuningConfig
+
 __all__ = [
     # High-level API
     "tune",
@@ -102,4 +105,6 @@ __all__ = [
     "NUMBER_OF_TRIALS",
     "N_REPEATS",
     "TRAINING_PROBLEMS",
+    # YAML Configuration
+    "TuningConfig",
 ]
