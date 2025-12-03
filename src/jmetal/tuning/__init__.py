@@ -8,12 +8,14 @@ Currently Supported Algorithms:
     - NSGA-II
 
 Package Structure:
-    tuning: High-level API (recommended entry point)
-    algorithms/: Algorithm-specific tuners
-    observers/: Progress visualization components
-    config: Configuration constants and paths
-    runners/: Sequential and parallel execution (future)
-    cli/: Command-line interfaces (future)
+    - tuning.py: High-level API (tune, describe_parameters)
+    - algorithms/: Algorithm-specific tuners (NSGAIITuner)
+    - observers/: Progress visualization (console, plot, file, rich)
+    - metrics/: Quality indicators (NHV, Additive Epsilon)
+    - config/: Configuration (defaults, paths, problems)
+    - cli/: Command-line interfaces (sequential, parallel)
+    - runners/: Execution runners (future)
+    - _legacy/: Deprecated files for reference
 
 Quick Start:
     # Using the high-level API
@@ -27,18 +29,15 @@ Quick Start:
         TuningPlotObserver(),
     ])
     
-    # View tunable parameters (no Python expertise required!)
+    # View tunable parameters
     from jmetal.tuning import describe_parameters
     print(describe_parameters("NSGAII"))
     
-    # Export to file
-    describe_parameters("NSGAII", format="json", output_path="params.json")
-    
     # Command-line sequential tuning
-    python -m jmetal.tuning.tuning_sequential --trials 100
+    python -m jmetal.tuning.cli.sequential --trials 100
     
     # Parallel tuning (requires PostgreSQL)
-    python -m jmetal.tuning.run_parallel_tuning -w 4  # 4 workers
+    python -m jmetal.tuning.cli.parallel -w 4  # 4 workers
 """
 
 # High-level API
