@@ -21,6 +21,7 @@ The main categories of operators are:
 
 3. Selection (jmetal.operator.selection):
    - BinaryTournamentSelection: Tournament selection with size 2
+   - TournamentSelection: K-ary tournament selection with configurable size
    - NaryRandomSolutionSelection: Random selection of N solutions
    - BestSolutionSelection: Selects the best solutions from a list
    - And other selection strategies
@@ -76,6 +77,7 @@ from .selection import (
     RandomSelection,
     RankingAndCrowdingDistanceSelection,
     RouletteWheelSelection,
+    TournamentSelection,
 )
 
 __all__ = [
@@ -103,5 +105,6 @@ __all__ = [
     "RandomSelection",
     "RankingAndCrowdingDistanceSelection",
     "RouletteWheelSelection",
+    "TournamentSelection",
     "RankingAndCrowdingDistanceReplacement",
 ]

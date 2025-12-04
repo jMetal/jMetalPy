@@ -142,6 +142,83 @@ class BinaryTournamentSelection(Selection[List[S], S]):
         return "Binary tournament selection"
 
 
+class TournamentSelection(Selection[List[S], S]):
+    """Performs k-ary tournament selection.
+    
+    This selection operator randomly selects k solutions from the population
+    and returns the best one according to the provided comparator. It's a
+    generalization of binary tournament selection that allows controlling
+    selection pressure through the tournament size.
+    
+    A larger tournament size (k) increases selection pressure, favoring
+    better solutions more strongly. A smaller k provides more diversity
+    but slower convergence.
+    
+    Args:
+        tournament_size: Number of solutions to participate in each tournament (default: 2).
+                        Must be at least 2.
+        comparator: Comparator used to compare solutions (default: DominanceComparator).
+    
+    Example:
+        >>> from jmetal.operator import TournamentSelection
+        >>> from jmetal.util.comparator import DominanceComparator
+        >>> 
+        >>> # Create a tournament selection with size 5
+        >>> selector = TournamentSelection(tournament_size=5)
+        >>> 
+        >>> # Select from a population
+        >>> winner = selector.execute(population)
+    """
+    
+    def __init__(self, tournament_size: int = 2, comparator: Comparator = DominanceComparator()):
+        super().__init__()
+        if tournament_size < 2:
+            raise ValueError(f"Tournament size must be at least 2, got {tournament_size}")
+        self.tournament_size = tournament_size
+        self.comparator = comparator
+
+    def execute(self, front: List[S]) -> S:
+        """Execute the k-ary tournament selection.
+        
+        Args:
+            front: List of solutions to select from.
+            
+        Returns:
+            The best solution among the tournament participants.
+            
+        Raises:
+            ValueError: If front is None, empty, or smaller than tournament size.
+        """
+        if not front:
+            raise ValueError("The front is empty")
+
+        if len(front) == 1:
+            return front[0]
+        
+        # Adjust tournament size if population is smaller
+        effective_size = min(self.tournament_size, len(front))
+        
+        # Sample k solutions without replacement
+        tournament_indices = random.sample(range(len(front)), effective_size)
+        tournament_solutions = [front[i] for i in tournament_indices]
+        
+        # Find the best solution in the tournament
+        winner = tournament_solutions[0]
+        for i in range(1, len(tournament_solutions)):
+            candidate = tournament_solutions[i]
+            comparison = self.comparator.compare(candidate, winner)
+            if comparison < 0:  # candidate is better
+                winner = candidate
+            elif comparison == 0:  # tie - randomly decide
+                if random.random() < 0.5:
+                    winner = candidate
+        
+        return winner
+
+    def get_name(self) -> str:
+        return f"Tournament selection (k={self.tournament_size})"
+
+
 class BestSolutionSelection(Selection[List[S], S]):
     """Selects the best solution from a population based on dominance comparison.
     
