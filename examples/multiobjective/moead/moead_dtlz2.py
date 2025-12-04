@@ -4,6 +4,7 @@ from jmetal.operator.crossover import DifferentialEvolutionCrossover
 from jmetal.operator.mutation import PolynomialMutation
 from jmetal.problem import DTLZ1
 from jmetal.util.aggregation_function import PenaltyBoundaryIntersection
+from jmetal.util.plotting import save_plt_to_file
 
 from jmetal.util.solution import (
     print_function_values_to_file,
@@ -40,6 +41,11 @@ if __name__ == "__main__":
     # Save results to file
     print_function_values_to_file(front, "FUN." + algorithm.label)
     print_variables_to_file(front, "VAR." + algorithm.label)
+
+    # Save a PNG visualization of the front (and optional HTML if Plotly available)
+    png = save_plt_to_file(front, "FUN." + algorithm.label, out_dir='.', html_plotly=True)
+    print(f"Saved front plot to: {png}")
+
 
     print(f"Algorithm: {algorithm.get_name()}")
     print(f"Problem: {problem.name()}")
