@@ -284,7 +284,7 @@ class BestSolutionSelection(Selection[List[S], S]):
         return "Best solution selection"
 
 
-class NaryRandomSolutionSelection(Selection[List[S], S]):
+class NaryRandomSolutionSelection(Selection[List[S], List[S]]):
     """Performs random selection of multiple solutions from a population.
     
     This selection operator randomly selects a specified number of distinct solutions
@@ -294,6 +294,13 @@ class NaryRandomSolutionSelection(Selection[List[S], S]):
     Args:
         number_of_solutions_to_be_returned: Number of distinct solutions to select (default: 1).
                                           Must be a positive integer.
+    
+    Example:
+        >>> from jmetal.operator import NaryRandomSolutionSelection
+        >>> 
+        >>> # Select 3 random solutions
+        >>> selector = NaryRandomSolutionSelection(number_of_solutions_to_be_returned=3)
+        >>> selected = selector.execute(population)  # Returns List[S] with 3 solutions
     """
     
     def __init__(self, number_of_solutions_to_be_returned: int = 1):
@@ -327,6 +334,11 @@ class NaryRandomSolutionSelection(Selection[List[S], S]):
                 "The front size ({}) is smaller than the number of requested solutions: {}"
                 .format(len(front), self.number_of_solutions_to_be_returned)
             )
+        
+        # Optimization: use random.choice for single selection
+        if self.number_of_solutions_to_be_returned == 1:
+            return [random.choice(front)]
+        
         return random.sample(front, self.number_of_solutions_to_be_returned)
 
     def get_name(self) -> str:
