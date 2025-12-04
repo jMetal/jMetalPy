@@ -153,6 +153,44 @@ class SelectionConfig:
         return self.types[0] if self.is_fixed_type() else None
 
 
+@dataclass
+class ExternalArchiveConfig:
+    """
+    Configuration for external archive parameters.
+    
+    Attributes:
+        archive_types: List of archive types ["crowding_distance", "distance_based"]
+        population_size_with_archive: Range for population size when using archive
+    """
+    archive_types: List[str] = field(
+        default_factory=lambda: ["crowding_distance", "distance_based"]
+    )
+    population_size_with_archive: Union[Tuple[int, int], ParameterRange] = field(
+        default_factory=lambda: ParameterRange(10, 200)
+    )
+
+
+@dataclass
+class AlgorithmResultConfig:
+    """
+    Configuration for algorithm result strategy.
+    
+    Attributes:
+        types: List of result types ["population", "external_archive"]
+        external_archive: Archive-specific parameters (only used when type="external_archive")
+    """
+    types: List[str] = field(default_factory=lambda: ["population", "external_archive"])
+    external_archive: ExternalArchiveConfig = field(default_factory=ExternalArchiveConfig)
+    
+    def is_fixed_type(self) -> bool:
+        """Check if only one result type is specified."""
+        return len(self.types) == 1
+    
+    def get_fixed_type(self) -> Optional[str]:
+        """Get the fixed type if only one is specified."""
+        return self.types[0] if self.is_fixed_type() else None
+
+
 @dataclass  
 class ParameterSpaceConfig:
     """
@@ -163,6 +201,7 @@ class ParameterSpaceConfig:
         crossover: Crossover operator configuration
         mutation: Mutation operator configuration
         selection: Selection operator configuration
+        algorithm_result: Algorithm result strategy configuration
     """
     offspring_population_size: Union[CategoricalParameter, List[int]] = field(
         default_factory=lambda: CategoricalParameter([1, 10, 50, 100, 150, 200])
@@ -170,6 +209,7 @@ class ParameterSpaceConfig:
     crossover: CrossoverConfig = field(default_factory=CrossoverConfig)
     mutation: MutationConfig = field(default_factory=MutationConfig)
     selection: SelectionConfig = field(default_factory=SelectionConfig)
+    algorithm_result: AlgorithmResultConfig = field(default_factory=AlgorithmResultConfig)
 
 
 @dataclass
@@ -419,6 +459,10 @@ def _parse_parameter_space(data: Dict[str, Any]) -> ParameterSpaceConfig:
     if "selection" in data:
         config.selection = _parse_selection_config(data["selection"])
     
+    # Algorithm result
+    if "algorithm_result" in data:
+        config.algorithm_result = _parse_algorithm_result_config(data["algorithm_result"])
+    
     return config
 
 
@@ -516,6 +560,52 @@ def _parse_selection_config(data: Dict[str, Any]) -> SelectionConfig:
     return config
 
 
+def _parse_algorithm_result_config(data: Dict[str, Any]) -> AlgorithmResultConfig:
+    """Parse algorithm_result configuration from YAML data."""
+    config = AlgorithmResultConfig()
+    
+    # Types
+    if "type" in data:
+        config.types = data["type"] if isinstance(data["type"], list) else [data["type"]]
+    elif "types" in data:
+        config.types = data["types"]
+    
+    # External archive parameters
+    if "external_archive" in data:
+        archive_data = data["external_archive"]
+        archive_config = ExternalArchiveConfig()
+        
+        # Archive types
+        if "archive_type" in archive_data:
+            archive_type = archive_data["archive_type"]
+            archive_config.archive_types = archive_type if isinstance(archive_type, list) else [archive_type]
+        elif "archive_types" in archive_data:
+            archive_config.archive_types = archive_data["archive_types"]
+        
+        # Population size with archive
+        if "population_size_with_archive" in archive_data:
+            pop_data = archive_data["population_size_with_archive"]
+            if isinstance(pop_data, list) and len(pop_data) == 2:
+                # Format: [min, max]
+                archive_config.population_size_with_archive = ParameterRange(
+                    min=pop_data[0], max=pop_data[1]
+                )
+            elif isinstance(pop_data, dict):
+                # Format: {min: x, max: y}
+                archive_config.population_size_with_archive = ParameterRange(
+                    min=pop_data["min"], max=pop_data["max"]
+                )
+            else:
+                # Fixed value
+                archive_config.population_size_with_archive = ParameterRange(
+                    min=int(pop_data), max=int(pop_data)
+                )
+        
+        config.external_archive = archive_config
+    
+    return config
+
+
 def _parse_value_or_range(data: Any) -> Union[float, ParameterRange]:
     """Parse a value that can be either fixed or a range."""
     if isinstance(data, dict):
@@ -568,6 +658,15 @@ def _parameter_space_to_dict(config: ParameterSpaceConfig) -> Dict[str, Any]:
             "type": config.selection.types,
             "tournament": {
                 "size": int_or_range_to_list(config.selection.tournament.size),
+            },
+        },
+        "algorithm_result": {
+            "type": config.algorithm_result.types,
+            "external_archive": {
+                "archive_type": config.algorithm_result.external_archive.archive_types,
+                "population_size_with_archive": int_or_range_to_list(
+                    config.algorithm_result.external_archive.population_size_with_archive
+                ),
             },
         },
     }

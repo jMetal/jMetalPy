@@ -56,6 +56,12 @@ parameter_space:
     tournament:                  # Parameters specific to tournament
       size: [2, 10]              # Tournament size k (only if type=tournament)
 
+  algorithm_result:
+    type: [population, external_archive]  # Where to get the final result from
+    external_archive:                      # Parameters specific to external_archive
+      archive_type: [crowding_distance, distance_based]  # Archive implementation
+      population_size_with_archive: [10, 200]            # Population size when using archive
+
 # Output settings
 output:
   path: ./nsgaii_tuned_config.json

@@ -89,8 +89,8 @@ class TestNSGAIITunerParameterSampling:
         """SBX crossover should include crossover_eta parameter."""
         # Arrange
         tuner = NSGAIITuner()
-        # Order: offspring, crossover_type, mutation_type, selection_type
-        mock_optuna_trial.suggest_categorical.side_effect = [1, "sbx", "polynomial", "tournament"]
+        # Order: offspring, crossover_type, mutation_type, selection_type, algorithm_result
+        mock_optuna_trial.suggest_categorical.side_effect = [1, "sbx", "polynomial", "tournament", "population"]
         mock_optuna_trial.suggest_float.return_value = 20.0
         mock_optuna_trial.suggest_int.return_value = 2
         
@@ -106,8 +106,8 @@ class TestNSGAIITunerParameterSampling:
         """BLX_ALPHA crossover should include blx_alpha parameter."""
         # Arrange
         tuner = NSGAIITuner()
-        # Order: offspring, crossover_type, mutation_type, selection_type
-        mock_optuna_trial.suggest_categorical.side_effect = [1, "blxalpha", "polynomial", "tournament"]
+        # Order: offspring, crossover_type, mutation_type, selection_type, algorithm_result
+        mock_optuna_trial.suggest_categorical.side_effect = [1, "blxalpha", "polynomial", "tournament", "population"]
         mock_optuna_trial.suggest_float.return_value = 0.5
         mock_optuna_trial.suggest_int.return_value = 2
         
@@ -123,8 +123,8 @@ class TestNSGAIITunerParameterSampling:
         """Polynomial mutation should include mutation_eta."""
         # Arrange
         tuner = NSGAIITuner()
-        # Order: offspring, crossover_type, mutation_type, selection_type
-        mock_optuna_trial.suggest_categorical.side_effect = [1, "sbx", "polynomial", "tournament"]
+        # Order: offspring, crossover_type, mutation_type, selection_type, algorithm_result
+        mock_optuna_trial.suggest_categorical.side_effect = [1, "sbx", "polynomial", "tournament", "population"]
         mock_optuna_trial.suggest_float.return_value = 20.0
         mock_optuna_trial.suggest_int.return_value = 2
         
@@ -140,8 +140,8 @@ class TestNSGAIITunerParameterSampling:
         """Sampled parameters should always include crossover_probability."""
         # Arrange
         tuner = NSGAIITuner()
-        # Order: offspring, crossover_type, mutation_type, selection_type
-        mock_optuna_trial.suggest_categorical.side_effect = [1, "sbx", "polynomial", "tournament"]
+        # Order: offspring, crossover_type, mutation_type, selection_type, algorithm_result
+        mock_optuna_trial.suggest_categorical.side_effect = [1, "sbx", "polynomial", "tournament", "population"]
         mock_optuna_trial.suggest_float.return_value = 0.9
         mock_optuna_trial.suggest_int.return_value = 2
         
@@ -157,8 +157,8 @@ class TestNSGAIITunerParameterSampling:
         """Sampled parameters should always include mutation_probability_factor."""
         # Arrange
         tuner = NSGAIITuner()
-        # Order: offspring, crossover_type, mutation_type, selection_type
-        mock_optuna_trial.suggest_categorical.side_effect = [1, "sbx", "polynomial", "tournament"]
+        # Order: offspring, crossover_type, mutation_type, selection_type, algorithm_result
+        mock_optuna_trial.suggest_categorical.side_effect = [1, "sbx", "polynomial", "tournament", "population"]
         mock_optuna_trial.suggest_float.return_value = 1.0
         mock_optuna_trial.suggest_int.return_value = 2
         
@@ -189,11 +189,12 @@ class TestNSGAIITunerAlgorithmCreation:
         }
         
         # Act
-        algorithm = tuner.create_algorithm(simple_problem, params, max_evaluations=1000)
+        algorithm, evaluator = tuner.create_algorithm(simple_problem, params, max_evaluations=1000)
         
         # Assert
         from jmetal.algorithm.multiobjective.nsgaii import NSGAII
         assert isinstance(algorithm, NSGAII)
+        assert evaluator is None  # No external archive
 
     def test_given_blx_params_when_create_algorithm_then_returns_nsgaii(
         self, simple_problem
@@ -212,11 +213,12 @@ class TestNSGAIITunerAlgorithmCreation:
         }
         
         # Act
-        algorithm = tuner.create_algorithm(simple_problem, params, max_evaluations=1000)
+        algorithm, evaluator = tuner.create_algorithm(simple_problem, params, max_evaluations=1000)
         
         # Assert
         from jmetal.algorithm.multiobjective.nsgaii import NSGAII
         assert isinstance(algorithm, NSGAII)
+        assert evaluator is None  # No external archive
 
     def test_given_uniform_mutation_when_create_algorithm_then_succeeds(
         self, simple_problem
@@ -235,10 +237,72 @@ class TestNSGAIITunerAlgorithmCreation:
         }
         
         # Act
-        algorithm = tuner.create_algorithm(simple_problem, params, max_evaluations=1000)
+        algorithm, evaluator = tuner.create_algorithm(simple_problem, params, max_evaluations=1000)
         
         # Assert
         assert algorithm is not None
+        assert evaluator is None  # No external archive
+
+    def test_given_external_archive_crowding_when_create_algorithm_then_returns_evaluator(
+        self, simple_problem
+    ) -> None:
+        """create_algorithm() with CrowdingDistance archive should return evaluator."""
+        # Arrange
+        tuner = NSGAIITuner(population_size=100)
+        params = {
+            "offspring_population_size": 50,
+            "crossover_type": "sbx",
+            "crossover_probability": 0.9,
+            "crossover_eta": 20.0,
+            "mutation_type": "polynomial",
+            "mutation_probability_factor": 1.0,
+            "mutation_eta": 20.0,
+            "algorithm_result": "external_archive",
+            "archive_type": "crowding_distance",
+            "population_size_with_archive": 50,
+        }
+        
+        # Act
+        algorithm, evaluator = tuner.create_algorithm(simple_problem, params, max_evaluations=1000)
+        
+        # Assert
+        from jmetal.algorithm.multiobjective.nsgaii import NSGAII
+        from jmetal.util.evaluator import SequentialEvaluatorWithArchive
+        from jmetal.util.archive import CrowdingDistanceArchive
+        assert isinstance(algorithm, NSGAII)
+        assert isinstance(evaluator, SequentialEvaluatorWithArchive)
+        assert isinstance(evaluator.get_archive(), CrowdingDistanceArchive)
+        assert evaluator.get_archive().maximum_size == 100  # tuner's population_size
+
+    def test_given_external_archive_distance_based_when_create_algorithm_then_returns_evaluator(
+        self, simple_problem
+    ) -> None:
+        """create_algorithm() with DistanceBased archive should return evaluator."""
+        # Arrange
+        tuner = NSGAIITuner(population_size=100)
+        params = {
+            "offspring_population_size": 50,
+            "crossover_type": "sbx",
+            "crossover_probability": 0.9,
+            "crossover_eta": 20.0,
+            "mutation_type": "polynomial",
+            "mutation_probability_factor": 1.0,
+            "mutation_eta": 20.0,
+            "algorithm_result": "external_archive",
+            "archive_type": "distance_based",
+            "population_size_with_archive": 30,
+        }
+        
+        # Act
+        algorithm, evaluator = tuner.create_algorithm(simple_problem, params, max_evaluations=1000)
+        
+        # Assert
+        from jmetal.algorithm.multiobjective.nsgaii import NSGAII
+        from jmetal.util.evaluator import SequentialEvaluatorWithArchive
+        from jmetal.util.archive import DistanceBasedArchive
+        assert isinstance(algorithm, NSGAII)
+        assert isinstance(evaluator, SequentialEvaluatorWithArchive)
+        assert isinstance(evaluator.get_archive(), DistanceBasedArchive)
 
 
 class TestNSGAIITunerParameterSpace:
@@ -315,6 +379,46 @@ class TestNSGAIITunerParameterSpace:
         assert crossover_eta_param.conditional_on == "crossover_type"
         assert crossover_eta_param.conditional_value == "sbx"
 
+    def test_given_tuner_when_get_parameter_space_then_includes_algorithm_result(
+        self
+    ) -> None:
+        """Parameter space should include algorithm_result."""
+        # Arrange
+        tuner = NSGAIITuner()
+        
+        # Act
+        params = tuner.get_parameter_space()
+        param_names = [p.name for p in params]
+        
+        # Assert
+        assert "algorithm_result" in param_names
+        algorithm_result_param = next((p for p in params if p.name == "algorithm_result"), None)
+        assert algorithm_result_param is not None
+        assert algorithm_result_param.type == "categorical"
+        assert "population" in algorithm_result_param.choices
+        assert "external_archive" in algorithm_result_param.choices
+
+    def test_given_tuner_when_get_parameter_space_then_archive_params_conditional(
+        self
+    ) -> None:
+        """Archive parameters should be conditional on algorithm_result."""
+        # Arrange
+        tuner = NSGAIITuner()
+        
+        # Act
+        params = tuner.get_parameter_space()
+        archive_type_param = next((p for p in params if p.name == "archive_type"), None)
+        pop_size_archive_param = next((p for p in params if p.name == "population_size_with_archive"), None)
+        
+        # Assert
+        assert archive_type_param is not None
+        assert archive_type_param.conditional_on == "algorithm_result"
+        assert archive_type_param.conditional_value == "external_archive"
+        
+        assert pop_size_archive_param is not None
+        assert pop_size_archive_param.conditional_on == "algorithm_result"
+        assert pop_size_archive_param.conditional_value == "external_archive"
+
 
 class TestNSGAIITunerEvaluation:
     """Tests for NSGAIITuner evaluation methods."""
@@ -380,3 +484,38 @@ class TestNSGAIITunerEvaluation:
         # Assert
         assert isinstance(score, float)
         assert score >= 0
+
+    @pytest.mark.slow
+    def test_given_external_archive_config_when_evaluate_then_uses_archive(
+        self, simple_problem
+    ) -> None:
+        """evaluate() with external_archive should get results from archive."""
+        # Arrange
+        tuner = NSGAIITuner(population_size=50)
+        params = {
+            "offspring_population_size": 20,
+            "crossover_type": "sbx",
+            "crossover_probability": 0.9,
+            "crossover_eta": 20.0,
+            "mutation_type": "polynomial",
+            "mutation_probability_factor": 1.0,
+            "mutation_eta": 20.0,
+            "algorithm_result": "external_archive",
+            "archive_type": "crowding_distance",
+            "population_size_with_archive": 20,
+        }
+        
+        # Act
+        nhv, epsilon = tuner.evaluate(
+            problem=simple_problem,
+            reference_front_file="ZDT1.pf",
+            params=params,
+            max_evaluations=1000,
+            n_repeats=1,
+        )
+        
+        # Assert
+        assert isinstance(nhv, float)
+        assert isinstance(epsilon, float)
+        assert nhv >= 0
+        assert epsilon >= 0

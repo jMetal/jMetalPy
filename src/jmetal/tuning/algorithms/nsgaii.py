@@ -4,13 +4,19 @@ NSGA-II algorithm tuner.
 This module provides hyperparameter tuning support for the NSGA-II algorithm.
 """
 
-from typing import Any, Dict, List, Optional, TYPE_CHECKING
+from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
+
+import numpy as np
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.core.problem import Problem
 from jmetal.operator.crossover import SBXCrossover, BLXAlphaCrossover
 from jmetal.operator.mutation import PolynomialMutation, UniformMutation
 from jmetal.operator.selection import RandomSelection, TournamentSelection
+from jmetal.util.archive import CrowdingDistanceArchive, DistanceBasedArchive
+from jmetal.util.distance import DistanceMetric
+from jmetal.util.evaluator import SequentialEvaluatorWithArchive
+from jmetal.util.solution import get_non_dominated_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 from .base import AlgorithmTuner, ParameterInfo
@@ -35,6 +41,9 @@ class NSGAIITuner(AlgorithmTuner):
         - mutation_perturbation: Uniform mutation perturbation [0.1, 2.0]
         - selection_type: "random" or "tournament"
         - tournament_size: Tournament size k [2, 10] (only if selection_type="tournament")
+        - algorithm_result: "population" or "external_archive"
+        - archive_type: "crowding_distance" or "distance_based" (only if algorithm_result="external_archive")
+        - population_size_with_archive: [10, 200] (only if algorithm_result="external_archive")
     
     The search space can be customized via a ParameterSpaceConfig from YAML.
     
@@ -243,6 +252,51 @@ class NSGAIITuner(AlgorithmTuner):
                 conditional_on="selection_type",
                 conditional_value="tournament",
             ),
+            
+            # Algorithm result type
+            ParameterInfo(
+                name="algorithm_result",
+                type="categorical",
+                description=(
+                    "Where to get the final result from. "
+                    "'population': use the final population (standard NSGA-II). "
+                    "'external_archive': use an external archive that stores "
+                    "non-dominated solutions found during the entire run."
+                ),
+                choices=["population", "external_archive"],
+                default="population",
+            ),
+            
+            # Archive type (conditional on algorithm_result)
+            ParameterInfo(
+                name="archive_type",
+                type="categorical",
+                description=(
+                    "Type of external archive. "
+                    "'crowding_distance': uses crowding distance for diversity. "
+                    "'distance_based': uses L2 squared distance metric."
+                ),
+                choices=["crowding_distance", "distance_based"],
+                default="crowding_distance",
+                conditional_on="algorithm_result",
+                conditional_value="external_archive",
+            ),
+            
+            # Population size with archive (conditional)
+            ParameterInfo(
+                name="population_size_with_archive",
+                type="int",
+                description=(
+                    "Population size when using external archive. The archive size "
+                    "is fixed to the tuner's population_size, but the algorithm's "
+                    "population can be tuned independently for efficiency."
+                ),
+                min_value=10,
+                max_value=200,
+                default=100,
+                conditional_on="algorithm_result",
+                conditional_value="external_archive",
+            ),
         ]
     
     def sample_parameters(self, trial, mode: str = "categorical") -> Dict[str, Any]:
@@ -432,6 +486,48 @@ class NSGAIITuner(AlgorithmTuner):
                     "tournament_size", size_min, size_max
                 )
         
+        # Algorithm result type
+        if ps is not None:
+            result_types = ps.algorithm_result.types
+        else:
+            result_types = ["population", "external_archive"]
+        
+        if len(result_types) == 1:
+            params["algorithm_result"] = result_types[0]
+        else:
+            params["algorithm_result"] = trial.suggest_categorical(
+                "algorithm_result", result_types
+            )
+        
+        # Archive-specific parameters (only if external_archive selected)
+        if params["algorithm_result"] == "external_archive":
+            if ps is not None:
+                archive_types = ps.algorithm_result.external_archive.archive_types
+            else:
+                archive_types = ["crowding_distance", "distance_based"]
+            
+            if len(archive_types) == 1:
+                params["archive_type"] = archive_types[0]
+            else:
+                params["archive_type"] = trial.suggest_categorical(
+                    "archive_type", archive_types
+                )
+            
+            # Population size with archive
+            if ps is not None:
+                pop_min, pop_max = self._get_int_range(
+                    ps.algorithm_result.external_archive.population_size_with_archive
+                )
+            else:
+                pop_min, pop_max = 10, 200
+            
+            if pop_min == pop_max:
+                params["population_size_with_archive"] = pop_min
+            else:
+                params["population_size_with_archive"] = trial.suggest_int(
+                    "population_size_with_archive", pop_min, pop_max
+                )
+        
         return params
     
     def _sample_continuous(self, trial) -> Dict[str, Any]:
@@ -470,6 +566,17 @@ class NSGAIITuner(AlgorithmTuner):
         params["selection_type"] = "random" if selection_idx < 0.5 else "tournament"
         params["tournament_size"] = trial.suggest_int("tournament_size", 2, 10)
         
+        # Algorithm result type as float threshold
+        result_idx = trial.suggest_float("algorithm_result_idx", 0.0, 1.0)
+        params["algorithm_result"] = "population" if result_idx < 0.5 else "external_archive"
+        
+        # Archive parameters (always sampled in continuous mode)
+        archive_idx = trial.suggest_float("archive_type_idx", 0.0, 1.0)
+        params["archive_type"] = "crowding_distance" if archive_idx < 0.5 else "distance_based"
+        params["population_size_with_archive"] = trial.suggest_int(
+            "population_size_with_archive", 10, 200
+        )
+        
         return params
     
     def create_algorithm(
@@ -477,7 +584,7 @@ class NSGAIITuner(AlgorithmTuner):
         problem: Problem,
         params: Dict[str, Any],
         max_evaluations: int
-    ) -> NSGAII:
+    ) -> Tuple[NSGAII, Optional[SequentialEvaluatorWithArchive]]:
         """
         Create NSGA-II instance with given parameters.
         
@@ -487,7 +594,9 @@ class NSGAIITuner(AlgorithmTuner):
             max_evaluations: Maximum function evaluations
             
         Returns:
-            Configured NSGAII instance
+            Tuple of (NSGAII instance, evaluator with archive or None)
+            If algorithm_result is "external_archive", returns the evaluator
+            so the caller can get results from the archive.
         """
         # Build crossover operator
         crossover = self._build_crossover(params)
@@ -498,16 +607,42 @@ class NSGAIITuner(AlgorithmTuner):
         # Build selection operator
         selection = self._build_selection(params)
         
-        # Create algorithm
-        return NSGAII(
-            problem=problem,
-            population_size=self.population_size,
-            offspring_population_size=params["offspring_population_size"],
-            mutation=mutation,
-            crossover=crossover,
-            selection=selection,
-            termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
-        )
+        # Determine if using external archive
+        algorithm_result = params.get("algorithm_result", "population")
+        evaluator = None
+        population_size = self.population_size
+        
+        if algorithm_result == "external_archive":
+            # Create archive with size = tuner's population_size
+            archive = self._build_archive(params, self.population_size)
+            evaluator = SequentialEvaluatorWithArchive(archive)
+            # Use the tuned population size for the algorithm
+            population_size = params.get("population_size_with_archive", self.population_size)
+        
+        # Create algorithm - only pass evaluator if using external archive
+        if evaluator is not None:
+            algorithm = NSGAII(
+                problem=problem,
+                population_size=population_size,
+                offspring_population_size=params["offspring_population_size"],
+                mutation=mutation,
+                crossover=crossover,
+                selection=selection,
+                termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
+                population_evaluator=evaluator,
+            )
+        else:
+            algorithm = NSGAII(
+                problem=problem,
+                population_size=population_size,
+                offspring_population_size=params["offspring_population_size"],
+                mutation=mutation,
+                crossover=crossover,
+                selection=selection,
+                termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
+            )
+        
+        return algorithm, evaluator
     
     def _build_crossover(self, params: Dict[str, Any]):
         """Build crossover operator from parameters."""
@@ -553,6 +688,80 @@ class NSGAIITuner(AlgorithmTuner):
             tournament_size = params.get("tournament_size", 2)
             return TournamentSelection(tournament_size=tournament_size)
     
+    def _build_archive(self, params: Dict[str, Any], archive_size: int):
+        """
+        Build external archive from parameters.
+        
+        Args:
+            params: Hyperparameters containing archive_type
+            archive_size: Maximum size of the archive
+            
+        Returns:
+            Archive instance (CrowdingDistanceArchive or DistanceBasedArchive)
+        """
+        archive_type = params.get("archive_type", "crowding_distance")
+        
+        if archive_type == "crowding_distance":
+            return CrowdingDistanceArchive(maximum_size=archive_size)
+        else:  # distance_based
+            return DistanceBasedArchive(
+                maximum_size=archive_size,
+                metric=DistanceMetric.L2_SQUARED
+            )
+    
+    def evaluate(
+        self,
+        problem: Problem,
+        reference_front_file: str,
+        params: Dict[str, Any],
+        max_evaluations: int,
+        n_repeats: int = 1,
+    ) -> Tuple[float, float]:
+        """
+        Evaluate a configuration on a single problem.
+        
+        Overrides base class to handle external archive results.
+        
+        Args:
+            problem: The optimization problem
+            reference_front_file: Full filename of the reference front (with extension)
+            params: Hyperparameters to evaluate
+            max_evaluations: Maximum evaluations per run
+            n_repeats: Number of independent runs
+            
+        Returns:
+            Tuple of mean (normalized_hypervolume, additive_epsilon)
+        """
+        import copy
+        
+        reference_front = self.load_reference_front(reference_front_file)
+        
+        nhv_values = []
+        epsilon_values = []
+        
+        for _ in range(n_repeats):
+            # Create and run algorithm
+            algorithm, evaluator = self.create_algorithm(
+                copy.deepcopy(problem), params, max_evaluations
+            )
+            algorithm.run()
+            
+            # Get results: from archive if using external_archive, else from algorithm
+            algorithm_result = params.get("algorithm_result", "population")
+            if algorithm_result == "external_archive" and evaluator is not None:
+                solutions = get_non_dominated_solutions(evaluator.get_archive().solution_list)
+            else:
+                solutions = get_non_dominated_solutions(algorithm.result())
+            
+            front = np.array([s.objectives for s in solutions])
+            
+            # Compute indicators
+            nhv, epsilon = self.compute_indicators(front, reference_front)
+            nhv_values.append(nhv)
+            epsilon_values.append(epsilon)
+        
+        return float(np.mean(nhv_values)), float(np.mean(epsilon_values))
+    
     def format_params(self, params: Dict[str, Any]) -> str:
         """Format NSGA-II parameters as readable string."""
         offspring = params["offspring_population_size"]
@@ -573,4 +782,15 @@ class NSGAIITuner(AlgorithmTuner):
         else:
             selection = f"Tournament(k={params.get('tournament_size', 2)})"
         
-        return f"offspring={offspring}, {crossover}, {mutation}, {selection}"
+        # Build result string
+        parts = [f"offspring={offspring}", crossover, mutation, selection]
+        
+        # Add algorithm_result info if using external archive
+        algorithm_result = params.get("algorithm_result", "population")
+        if algorithm_result == "external_archive":
+            archive_type = params.get("archive_type", "crowding_distance")
+            pop_size = params.get("population_size_with_archive", self.population_size)
+            archive_info = f"Archive({archive_type}, pop={pop_size})"
+            parts.append(archive_info)
+        
+        return ", ".join(parts)

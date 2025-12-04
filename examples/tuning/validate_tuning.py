@@ -30,6 +30,9 @@ from jmetal.operator.crossover import SBXCrossover, BLXAlphaCrossover
 from jmetal.operator.mutation import PolynomialMutation, UniformMutation
 from jmetal.operator.selection import RandomSelection, TournamentSelection
 from jmetal.problem import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
+from jmetal.util.archive import CrowdingDistanceArchive, DistanceBasedArchive
+from jmetal.util.distance import DistanceMetric
+from jmetal.util.evaluator import SequentialEvaluatorWithArchive
 from jmetal.util.solution import get_non_dominated_solutions, read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
@@ -59,8 +62,13 @@ def load_reference_front(problem_name: str) -> np.ndarray:
     return np.array([s.objectives for s in solutions])
 
 
-def create_algorithm(problem: Problem, config: dict, max_evaluations: int) -> NSGAII:
-    """Create NSGA-II with tuned parameters."""
+def create_algorithm(problem: Problem, config: dict, max_evaluations: int) -> Tuple[NSGAII, Optional[SequentialEvaluatorWithArchive]]:
+    """
+    Create NSGA-II with tuned parameters.
+    
+    Returns:
+        Tuple of (algorithm, evaluator_with_archive or None)
+    """
     params = config["best_params"]
     population_size = config["population_size"]
     
@@ -110,18 +118,38 @@ def create_algorithm(problem: Problem, config: dict, max_evaluations: int) -> NS
         tournament_size = params.get("tournament_size", 2)
         selection = TournamentSelection(tournament_size=tournament_size)
     
+    # Handle algorithm_result parameter
+    algorithm_result = params.get("algorithm_result", "population")
+    evaluator = None
+    effective_population_size = population_size
+    
+    if algorithm_result == "external_archive":
+        # Create archive with size = original population_size
+        archive_type = params.get("archive_type", "crowding_distance")
+        if archive_type == "crowding_distance":
+            archive = CrowdingDistanceArchive(maximum_size=population_size)
+        else:  # distance_based
+            archive = DistanceBasedArchive(
+                maximum_size=population_size,
+                distance_metric=DistanceMetric.L2_SQUARED
+            )
+        evaluator = SequentialEvaluatorWithArchive(archive)
+        # Use the tuned population size for the algorithm
+        effective_population_size = params.get("population_size_with_archive", population_size)
+    
     # Create algorithm
     algorithm = NSGAII(
         problem=problem,
-        population_size=population_size,
+        population_size=effective_population_size,
         offspring_population_size=params["offspring_population_size"],
         mutation=mutation,
         crossover=crossover,
         selection=selection,
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
+        population_evaluator=evaluator,
     )
     
-    return algorithm
+    return algorithm, evaluator
 
 
 def save_front(front: np.ndarray, problem_name: str, output_dir: Path) -> None:
@@ -255,12 +283,16 @@ def validate(
         print(f"  Reference front: {len(reference_front)} solutions")
         
         # Create and run algorithm
-        algorithm = create_algorithm(problem, config, max_evaluations)
+        algorithm, evaluator = create_algorithm(problem, config, max_evaluations)
         print(f"  Running NSGA-II ({max_evaluations} evaluations)...")
         algorithm.run()
         
-        # Get non-dominated solutions
-        solutions = get_non_dominated_solutions(algorithm.result())
+        # Get non-dominated solutions (from archive if using external_archive)
+        algorithm_result = config["best_params"].get("algorithm_result", "population")
+        if algorithm_result == "external_archive" and evaluator is not None:
+            solutions = get_non_dominated_solutions(evaluator.get_archive().solution_list)
+        else:
+            solutions = get_non_dominated_solutions(algorithm.result())
         obtained_front = np.array([s.objectives for s in solutions])
         print(f"  Obtained front: {len(obtained_front)} solutions")
         

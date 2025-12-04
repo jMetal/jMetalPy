@@ -308,8 +308,8 @@ class TestParameterSpaceIntegration:
         
         # Mock Optuna trial
         mock_trial = MagicMock()
-        # Order: offspring, crossover_type, mutation_type, selection_type
-        mock_trial.suggest_categorical.side_effect = [50, "sbx", "polynomial", "tournament"]
+        # Order: offspring, crossover_type, mutation_type, selection_type, algorithm_result
+        mock_trial.suggest_categorical.side_effect = [50, "sbx", "polynomial", "tournament", "population"]
         mock_trial.suggest_float.side_effect = [0.9, 15.0, 1.0, 20.0]
         mock_trial.suggest_int.return_value = 2
         
@@ -333,8 +333,8 @@ class TestParameterSpaceIntegration:
         
         # Mock Optuna trial
         mock_trial = MagicMock()
-        # Order: offspring, crossover_type, mutation_type, selection_type
-        mock_trial.suggest_categorical.side_effect = [100, "sbx", "polynomial", "tournament"]
+        # Order: offspring, crossover_type, mutation_type, selection_type, algorithm_result
+        mock_trial.suggest_categorical.side_effect = [100, "sbx", "polynomial", "tournament", "population"]
         mock_trial.suggest_float.side_effect = [0.9, 15.0, 1.0, 20.0]
         mock_trial.suggest_int.return_value = 2
         
