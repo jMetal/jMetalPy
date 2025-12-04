@@ -44,18 +44,22 @@ class TuningPlotObserver(TuningObserver):
         self.ax = None
         self.trials_line = None
         self.best_line = None
+        self.trial_numbers: List[int] = []  # Real trial numbers from Optuna
         self.trial_scores: List[float] = []
         self.best_scores: List[float] = []
         self.algorithm = ""
         self.config_text = None  # Text object for configuration display
         self.current_best_trial = None  # Track best trial for config updates
+        self._local_trial_count = 0  # Count for update frequency
     
     def on_tuning_start(self, n_trials: int, algorithm: str) -> None:
         """Initialize the plot."""
         self.algorithm = algorithm
+        self.trial_numbers = []
         self.trial_scores = []
         self.best_scores = []
         self.current_best_trial = None
+        self._local_trial_count = 0
         
         try:
             import matplotlib.pyplot as plt
@@ -128,10 +132,15 @@ class TuningPlotObserver(TuningObserver):
         
         import matplotlib.pyplot as plt
         
-        # Record data
+        # Record data using real trial number from Optuna
+        real_trial_number = trial.number + 1  # 1-indexed for display
+        self.trial_numbers.append(real_trial_number)
         self.trial_scores.append(trial.value)
         current_best = min(self.trial_scores)
         self.best_scores.append(current_best)
+        
+        # Increment local counter for update frequency
+        self._local_trial_count += 1
         
         # Check if this trial is the new best
         is_new_best = (self.current_best_trial is None or 
@@ -139,12 +148,11 @@ class TuningPlotObserver(TuningObserver):
         if is_new_best and trial.value == current_best:
             self.current_best_trial = trial
         
-        # Update plot every N trials
-        if (trial.number + 1) % self.update_frequency == 0:
-            trials = list(range(1, len(self.trial_scores) + 1))
-            
-            self.trials_line.set_data(trials, self.trial_scores)
-            self.best_line.set_data(trials, self.best_scores)
+        # Update plot every N trials (based on local count)
+        if self._local_trial_count % self.update_frequency == 0:
+            # Use real trial numbers for x-axis
+            self.trials_line.set_data(self.trial_numbers, self.trial_scores)
+            self.best_line.set_data(self.trial_numbers, self.best_scores)
             
             # Adjust axis limits
             self.ax.relim()
@@ -175,12 +183,11 @@ class TuningPlotObserver(TuningObserver):
         title = self.title or f"{self.algorithm} Hyperparameter Tuning"
         self.ax.set_title(f"{title}\nFinal Best Score: {study.best_value:.6f} (Trial {study.best_trial.number + 1})")
         
-        # Mark the best trial with vertical line
-        best_trial_idx = study.best_trial.number
-        if best_trial_idx < len(self.trial_scores):
-            self.ax.axvline(x=best_trial_idx + 1, color='g', linestyle='--', 
-                          alpha=0.7, label=f'Best trial ({best_trial_idx + 1})')
-            self.ax.legend(loc='upper right')
+        # Mark the best trial with vertical line using real trial number
+        best_trial_number = study.best_trial.number + 1  # 1-indexed
+        self.ax.axvline(x=best_trial_number, color='g', linestyle='--', 
+                      alpha=0.7, label=f'Best trial ({best_trial_number})')
+        self.ax.legend(loc='upper right')
         
         # Final update of configuration text
         if self.config_text is not None:
