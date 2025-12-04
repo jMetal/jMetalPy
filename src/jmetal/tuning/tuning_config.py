@@ -119,6 +119,40 @@ class MutationConfig:
         return self.types[0] if self.is_fixed_type() else None
 
 
+@dataclass
+class TournamentConfig:
+    """
+    Configuration for tournament selection parameters.
+    
+    Attributes:
+        size: Range for tournament size (k)
+    """
+    size: Union[int, ParameterRange] = field(
+        default_factory=lambda: ParameterRange(2, 10)
+    )
+
+
+@dataclass
+class SelectionConfig:
+    """
+    Configuration for selection operator(s).
+    
+    Attributes:
+        types: List of selection types to consider ["random", "tournament"]
+        tournament: Tournament-specific parameters (only used when type="tournament")
+    """
+    types: List[str] = field(default_factory=lambda: ["random", "tournament"])
+    tournament: TournamentConfig = field(default_factory=TournamentConfig)
+    
+    def is_fixed_type(self) -> bool:
+        """Check if only one selection type is specified."""
+        return len(self.types) == 1
+    
+    def get_fixed_type(self) -> Optional[str]:
+        """Get the fixed type if only one is specified."""
+        return self.types[0] if self.is_fixed_type() else None
+
+
 @dataclass  
 class ParameterSpaceConfig:
     """
@@ -128,12 +162,14 @@ class ParameterSpaceConfig:
         offspring_population_size: Categorical values or range for offspring size
         crossover: Crossover operator configuration
         mutation: Mutation operator configuration
+        selection: Selection operator configuration
     """
     offspring_population_size: Union[CategoricalParameter, List[int]] = field(
         default_factory=lambda: CategoricalParameter([1, 10, 50, 100, 150, 200])
     )
     crossover: CrossoverConfig = field(default_factory=CrossoverConfig)
     mutation: MutationConfig = field(default_factory=MutationConfig)
+    selection: SelectionConfig = field(default_factory=SelectionConfig)
 
 
 @dataclass
@@ -379,6 +415,10 @@ def _parse_parameter_space(data: Dict[str, Any]) -> ParameterSpaceConfig:
     if "mutation" in data:
         config.mutation = _parse_mutation_config(data["mutation"])
     
+    # Selection
+    if "selection" in data:
+        config.selection = _parse_selection_config(data["selection"])
+    
     return config
 
 
@@ -443,6 +483,39 @@ def _parse_mutation_config(data: Dict[str, Any]) -> MutationConfig:
     return config
 
 
+def _parse_selection_config(data: Dict[str, Any]) -> SelectionConfig:
+    """Parse selection configuration from YAML data."""
+    config = SelectionConfig()
+    
+    # Types
+    if "type" in data:
+        # Single type specified
+        config.types = data["type"] if isinstance(data["type"], list) else [data["type"]]
+    elif "types" in data:
+        config.types = data["types"]
+    
+    # Tournament-specific parameters
+    if "tournament" in data:
+        tournament_data = data["tournament"]
+        if "size" in tournament_data:
+            size_data = tournament_data["size"]
+            if isinstance(size_data, list) and len(size_data) == 2:
+                # Format: [min, max]
+                config.tournament = TournamentConfig(
+                    size=ParameterRange(min=size_data[0], max=size_data[1])
+                )
+            elif isinstance(size_data, dict):
+                # Format: {min: x, max: y}
+                config.tournament = TournamentConfig(
+                    size=_parse_value_or_range(size_data)
+                )
+            else:
+                # Fixed value
+                config.tournament = TournamentConfig(size=int(size_data))
+    
+    return config
+
+
 def _parse_value_or_range(data: Any) -> Union[float, ParameterRange]:
     """Parse a value that can be either fixed or a range."""
     if isinstance(data, dict):
@@ -457,6 +530,11 @@ def _parameter_space_to_dict(config: ParameterSpaceConfig) -> Dict[str, Any]:
         if isinstance(v, ParameterRange):
             return {"min": v.min, "max": v.max}
         return v
+    
+    def int_or_range_to_list(v):
+        if isinstance(v, ParameterRange):
+            return [int(v.min), int(v.max)]
+        return int(v)
     
     # Offspring
     if isinstance(config.offspring_population_size, CategoricalParameter):
@@ -484,6 +562,12 @@ def _parameter_space_to_dict(config: ParameterSpaceConfig) -> Dict[str, Any]:
             },
             "uniform": {
                 "perturbation": value_or_range_to_dict(config.mutation.uniform_perturbation),
+            },
+        },
+        "selection": {
+            "type": config.selection.types,
+            "tournament": {
+                "size": int_or_range_to_list(config.selection.tournament.size),
             },
         },
     }

@@ -50,6 +50,11 @@ parameter_space:
       distribution_index: {min: 5.0, max: 400.0}
     uniform:
       perturbation: {min: 0.1, max: 2.0}
+  
+  selection:
+    type: [random, tournament]  # Selection operator type
+    tournament:                  # Parameters specific to tournament
+      size: [2, 10]              # Tournament size k (only if type=tournament)
 
 # Output settings
 output:

@@ -28,6 +28,7 @@ from jmetal.core.problem import Problem
 from jmetal.core.quality_indicator import NormalizedHyperVolume, AdditiveEpsilonIndicator
 from jmetal.operator.crossover import SBXCrossover, BLXAlphaCrossover
 from jmetal.operator.mutation import PolynomialMutation, UniformMutation
+from jmetal.operator.selection import RandomSelection, TournamentSelection
 from jmetal.problem import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6
 from jmetal.util.solution import get_non_dominated_solutions, read_solutions
 from jmetal.util.termination_criterion import StoppingByEvaluations
@@ -100,6 +101,15 @@ def create_algorithm(problem: Problem, config: dict, max_evaluations: int) -> NS
             perturbation=params["mutation_perturbation"]
         )
     
+    # Build selection operator
+    selection_type = params.get("selection_type", "tournament")
+    
+    if selection_type == "random":
+        selection = RandomSelection()
+    else:  # tournament
+        tournament_size = params.get("tournament_size", 2)
+        selection = TournamentSelection(tournament_size=tournament_size)
+    
     # Create algorithm
     algorithm = NSGAII(
         problem=problem,
@@ -107,6 +117,7 @@ def create_algorithm(problem: Problem, config: dict, max_evaluations: int) -> NS
         offspring_population_size=params["offspring_population_size"],
         mutation=mutation,
         crossover=crossover,
+        selection=selection,
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
     )
     

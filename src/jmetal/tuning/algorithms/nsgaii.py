@@ -10,6 +10,7 @@ from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.core.problem import Problem
 from jmetal.operator.crossover import SBXCrossover, BLXAlphaCrossover
 from jmetal.operator.mutation import PolynomialMutation, UniformMutation
+from jmetal.operator.selection import RandomSelection, TournamentSelection
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 from .base import AlgorithmTuner, ParameterInfo
@@ -32,6 +33,8 @@ class NSGAIITuner(AlgorithmTuner):
         - mutation_probability_factor: Scales with 1/n_variables [0.5, 2.0]
         - mutation_eta: Polynomial distribution index [5, 400]
         - mutation_perturbation: Uniform mutation perturbation [0.1, 2.0]
+        - selection_type: "random" or "tournament"
+        - tournament_size: Tournament size k [2, 10] (only if selection_type="tournament")
     
     The search space can be customized via a ParameterSpaceConfig from YAML.
     
@@ -209,6 +212,37 @@ class NSGAIITuner(AlgorithmTuner):
                 conditional_on="mutation_type",
                 conditional_value="uniform",
             ),
+            
+            # Selection type
+            ParameterInfo(
+                name="selection_type",
+                type="categorical",
+                description=(
+                    "Type of selection operator for choosing parents. "
+                    "'random': uniform random selection, no selection pressure. "
+                    "'tournament': k-ary tournament selection, applies selection "
+                    "pressure favoring better solutions."
+                ),
+                choices=["random", "tournament"],
+                default="tournament",
+            ),
+            
+            # Tournament size (conditional)
+            ParameterInfo(
+                name="tournament_size",
+                type="int",
+                description=(
+                    "Number of solutions competing in each tournament (k). "
+                    "Higher k increases selection pressure: k=2 is mild pressure, "
+                    "k=10 strongly favors best solutions. Only used when "
+                    "selection_type='tournament'."
+                ),
+                min_value=2,
+                max_value=10,
+                default=2,
+                conditional_on="selection_type",
+                conditional_value="tournament",
+            ),
         ]
     
     def sample_parameters(self, trial, mode: str = "categorical") -> Dict[str, Any]:
@@ -235,6 +269,15 @@ class NSGAIITuner(AlgorithmTuner):
         else:
             # Fixed value - return as both min and max
             return float(value), float(value)
+    
+    def _get_int_range(self, value) -> tuple:
+        """Extract min/max integers from ParameterRange or return fixed value as range."""
+        from jmetal.tuning.tuning_config import ParameterRange
+        if isinstance(value, ParameterRange):
+            return int(value.min), int(value.max)
+        else:
+            # Fixed value - return as both min and max
+            return int(value), int(value)
     
     def _sample_categorical(self, trial) -> Dict[str, Any]:
         """Sample using categorical variables (for TPE sampler)."""
@@ -362,6 +405,33 @@ class NSGAIITuner(AlgorithmTuner):
                     "mutation_perturbation", pert_min, pert_max
                 )
         
+        # Selection type
+        if ps is not None:
+            selection_types = ps.selection.types
+        else:
+            selection_types = ["random", "tournament"]
+        
+        if len(selection_types) == 1:
+            params["selection_type"] = selection_types[0]
+        else:
+            params["selection_type"] = trial.suggest_categorical(
+                "selection_type", selection_types
+            )
+        
+        # Tournament-specific parameters (only if tournament selected)
+        if params["selection_type"] == "tournament":
+            if ps is not None:
+                size_min, size_max = self._get_int_range(ps.selection.tournament.size)
+            else:
+                size_min, size_max = 2, 10
+            
+            if size_min == size_max:
+                params["tournament_size"] = size_min
+            else:
+                params["tournament_size"] = trial.suggest_int(
+                    "tournament_size", size_min, size_max
+                )
+        
         return params
     
     def _sample_continuous(self, trial) -> Dict[str, Any]:
@@ -395,6 +465,11 @@ class NSGAIITuner(AlgorithmTuner):
             "mutation_perturbation", 0.1, 2.0
         )
         
+        # Selection type as float threshold
+        selection_idx = trial.suggest_float("selection_type_idx", 0.0, 1.0)
+        params["selection_type"] = "random" if selection_idx < 0.5 else "tournament"
+        params["tournament_size"] = trial.suggest_int("tournament_size", 2, 10)
+        
         return params
     
     def create_algorithm(
@@ -420,6 +495,9 @@ class NSGAIITuner(AlgorithmTuner):
         # Build mutation operator (probability scales with problem size)
         mutation = self._build_mutation(params, problem.number_of_variables())
         
+        # Build selection operator
+        selection = self._build_selection(params)
+        
         # Create algorithm
         return NSGAII(
             problem=problem,
@@ -427,6 +505,7 @@ class NSGAIITuner(AlgorithmTuner):
             offspring_population_size=params["offspring_population_size"],
             mutation=mutation,
             crossover=crossover,
+            selection=selection,
             termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
         )
     
@@ -464,6 +543,16 @@ class NSGAIITuner(AlgorithmTuner):
                 perturbation=params.get("mutation_perturbation", 0.5),
             )
     
+    def _build_selection(self, params: Dict[str, Any]):
+        """Build selection operator from parameters."""
+        selection_type = params.get("selection_type", "tournament")
+        
+        if selection_type == "random":
+            return RandomSelection()
+        else:  # tournament
+            tournament_size = params.get("tournament_size", 2)
+            return TournamentSelection(tournament_size=tournament_size)
+    
     def format_params(self, params: Dict[str, Any]) -> str:
         """Format NSGA-II parameters as readable string."""
         offspring = params["offspring_population_size"]
@@ -478,4 +567,10 @@ class NSGAIITuner(AlgorithmTuner):
         else:
             mutation = f"Unif(f={params.get('mutation_probability_factor', 1):.2f}, pert={params.get('mutation_perturbation', 0.5):.2f})"
         
-        return f"offspring={offspring}, {crossover}, {mutation}"
+        selection_type = params.get("selection_type", "tournament")
+        if selection_type == "random":
+            selection = "Random"
+        else:
+            selection = f"Tournament(k={params.get('tournament_size', 2)})"
+        
+        return f"offspring={offspring}, {crossover}, {mutation}, {selection}"

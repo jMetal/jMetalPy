@@ -89,8 +89,10 @@ class TestNSGAIITunerParameterSampling:
         """SBX crossover should include crossover_eta parameter."""
         # Arrange
         tuner = NSGAIITuner()
-        mock_optuna_trial.suggest_categorical.side_effect = [1, "sbx", "polynomial"]
+        # Order: offspring, crossover_type, mutation_type, selection_type
+        mock_optuna_trial.suggest_categorical.side_effect = [1, "sbx", "polynomial", "tournament"]
         mock_optuna_trial.suggest_float.return_value = 20.0
+        mock_optuna_trial.suggest_int.return_value = 2
         
         # Act
         params = tuner.sample_parameters(mock_optuna_trial, mode="categorical")
@@ -104,8 +106,10 @@ class TestNSGAIITunerParameterSampling:
         """BLX_ALPHA crossover should include blx_alpha parameter."""
         # Arrange
         tuner = NSGAIITuner()
-        mock_optuna_trial.suggest_categorical.side_effect = [1, "blxalpha", "polynomial"]
+        # Order: offspring, crossover_type, mutation_type, selection_type
+        mock_optuna_trial.suggest_categorical.side_effect = [1, "blxalpha", "polynomial", "tournament"]
         mock_optuna_trial.suggest_float.return_value = 0.5
+        mock_optuna_trial.suggest_int.return_value = 2
         
         # Act
         params = tuner.sample_parameters(mock_optuna_trial, mode="categorical")
@@ -119,8 +123,10 @@ class TestNSGAIITunerParameterSampling:
         """Polynomial mutation should include mutation_eta."""
         # Arrange
         tuner = NSGAIITuner()
-        mock_optuna_trial.suggest_categorical.side_effect = [1, "sbx", "polynomial"]
+        # Order: offspring, crossover_type, mutation_type, selection_type
+        mock_optuna_trial.suggest_categorical.side_effect = [1, "sbx", "polynomial", "tournament"]
         mock_optuna_trial.suggest_float.return_value = 20.0
+        mock_optuna_trial.suggest_int.return_value = 2
         
         # Act
         params = tuner.sample_parameters(mock_optuna_trial, mode="categorical")
@@ -134,8 +140,10 @@ class TestNSGAIITunerParameterSampling:
         """Sampled parameters should always include crossover_probability."""
         # Arrange
         tuner = NSGAIITuner()
-        mock_optuna_trial.suggest_categorical.side_effect = [1, "sbx", "polynomial"]
+        # Order: offspring, crossover_type, mutation_type, selection_type
+        mock_optuna_trial.suggest_categorical.side_effect = [1, "sbx", "polynomial", "tournament"]
         mock_optuna_trial.suggest_float.return_value = 0.9
+        mock_optuna_trial.suggest_int.return_value = 2
         
         # Act
         params = tuner.sample_parameters(mock_optuna_trial, mode="categorical")
@@ -149,8 +157,10 @@ class TestNSGAIITunerParameterSampling:
         """Sampled parameters should always include mutation_probability_factor."""
         # Arrange
         tuner = NSGAIITuner()
-        mock_optuna_trial.suggest_categorical.side_effect = [1, "sbx", "polynomial"]
+        # Order: offspring, crossover_type, mutation_type, selection_type
+        mock_optuna_trial.suggest_categorical.side_effect = [1, "sbx", "polynomial", "tournament"]
         mock_optuna_trial.suggest_float.return_value = 1.0
+        mock_optuna_trial.suggest_int.return_value = 2
         
         # Act
         params = tuner.sample_parameters(mock_optuna_trial, mode="categorical")
