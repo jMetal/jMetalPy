@@ -1,4 +1,6 @@
+import argparse
 import os
+import sys
 from typing import Iterable
 
 import numpy as np
@@ -70,12 +72,13 @@ def save_plt_to_file(solutions: Iterable, filename: str, out_dir: str = "results
                 pass
 
     elif n_obj == 3:
+        axis_labels = [f"f{i+1}" for i in range(n_obj)]
         fig = plt.figure(figsize=(6, 6))
         ax = fig.add_subplot(111, projection="3d")
         ax.scatter(arr[:, 0], arr[:, 1], arr[:, 2], s=8, c="C0", alpha=0.8)
-        ax.set_xlabel("f1")
-        ax.set_ylabel("f2")
-        ax.set_zlabel("f3")
+        ax.set_xlabel(axis_labels[0])
+        ax.set_ylabel(axis_labels[1])
+        ax.set_zlabel(axis_labels[2])
         ax.set_title(f"{filename} approximation front (3D)")
         plt.tight_layout()
         fig.savefig(png_path, dpi=200)
@@ -86,8 +89,9 @@ def save_plt_to_file(solutions: Iterable, filename: str, out_dir: str = "results
             try:
                 import pandas as pd
 
-                df = pd.DataFrame(arr, columns=[f"f{i+1}" for i in range(n_obj)])
-                figly = px.scatter_3d(df, x=df.columns[0], y=df.columns[1], z=df.columns[2], title=f"{filename} approximation front (3D)")
+                df = pd.DataFrame(arr, columns=axis_labels)
+                figly = px.scatter_3d(df, x=axis_labels[0], y=axis_labels[1], z=axis_labels[2], title=f"{filename} approximation front (3D)")
+                figly.update_layout(scene=dict(xaxis_title=axis_labels[0], yaxis_title=axis_labels[1], zaxis_title=axis_labels[2]))
                 html_path = os.path.join(out_dir, f"{filename}_front.html")
                 pyoff.plot(figly, filename=html_path, auto_open=False)
             except Exception:
@@ -122,3 +126,74 @@ def save_plt_to_file(solutions: Iterable, filename: str, out_dir: str = "results
                 pass
 
     return png_path
+
+
+def _read_numeric_csv(csv_path: str) -> np.ndarray:
+    """Load numeric columns from a CSV file into a NumPy array."""
+    try:
+        import pandas as pd  # type: ignore
+
+        df = pd.read_csv(csv_path)
+        numeric_df = df.select_dtypes(include=[np.number])
+        if numeric_df.empty:
+            raise ValueError("No numeric columns found in CSV")
+        arr = numeric_df.to_numpy()
+        if arr.ndim == 1:
+            arr = arr.reshape(-1, 1)
+        return arr
+    except Exception:
+        pass
+
+    for skip_header in (0, 1):
+        data = np.genfromtxt(csv_path, delimiter=",", skip_header=skip_header)
+        if data.size == 0 or (isinstance(data, float) and np.isnan(data)):
+            continue
+        if data.ndim == 0:
+            continue
+        if data.ndim == 1:
+            data = data.reshape(-1, 1)
+        data = np.asarray(data, dtype=float)
+        if data.ndim > 1:
+            data = data[~np.isnan(data).all(axis=1)]
+        if data.size == 0 or np.isnan(data).all():
+            continue
+        return data
+
+    raise ValueError(f"Could not read numeric data from {csv_path}")
+
+
+def _cli() -> None:
+    """Entry point for plotting approximation fronts from CSV files."""
+    parser = argparse.ArgumentParser(description="Generate approximation front plots from a numeric CSV file.")
+    parser.add_argument("csv_file", help="Path to a CSV file containing numeric columns to plot.")
+    parser.add_argument("--out-dir", default="results", help="Directory where output files will be written (default: results).")
+    parser.add_argument("--base-name", help="Base name for generated files (defaults to CSV filename without extension).")
+    parser.add_argument("--html", action="store_true", help="Also generate an interactive Plotly HTML if available.")
+    args = parser.parse_args()
+
+    base_name = args.base_name or os.path.splitext(os.path.basename(args.csv_file))[0]
+
+    try:
+        front = _read_numeric_csv(args.csv_file)
+    except Exception as ex:
+        print(f"Error reading CSV '{args.csv_file}': {ex}", file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        png_path = save_plt_to_file(front, base_name, out_dir=args.out_dir, html_plotly=args.html)
+    except Exception as ex:
+        print(f"Error generating plot: {ex}", file=sys.stderr)
+        sys.exit(1)
+
+    print(f"PNG saved to: {png_path}")
+    if args.html:
+        if not _PLOTLY_AVAILABLE:
+            print("Plotly not available; HTML file not generated.", file=sys.stderr)
+        else:
+            html_path = os.path.join(args.out_dir, f"{base_name}_front.html")
+            if os.path.isfile(html_path):
+                print(f"HTML saved to: {html_path}")
+
+
+if __name__ == "__main__":
+    _cli()
