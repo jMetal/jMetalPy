@@ -2,6 +2,7 @@ from .multiobjective.constrained import Srinivas, Tanaka
 from .multiobjective.dtlz import *
 from .multiobjective.lz09 import LZ09_F2
 from .multiobjective.unconstrained import Fonseca, Kursawe, Schaffer, Viennet2
+from .multiobjective.wfg import WFG1, WFG2, WFG3, WFG4, WFG5, WFG6, WFG7, WFG8, WFG9
 from .multiobjective.zdt import ZDT1, ZDT2, ZDT3, ZDT4, ZDT5, ZDT6
 from .singleobjective.tsp import TSP
 from .singleobjective.unconstrained import OneMax, Sphere
@@ -26,6 +27,15 @@ __all__ = [
     "ZDT4",
     "ZDT5",
     "ZDT6",
+    "WFG1",
+    "WFG2",
+    "WFG3",
+    "WFG4",
+    "WFG5",
+    "WFG6",
+    "WFG7",
+    "WFG8",
+    "WFG9",
     "LZ09_F2",
     "OneMax",
     "Sphere",
