@@ -13,6 +13,7 @@ A paper introducing jMetalPy is available at: https://doi.org/10.1016/j.swevo.20
 - [Installation](#installation)
 - [Usage](#hello-world-)
 - [Hyperparameter Tuning](#hyperparameter-tuning-)
+- [Agents](#agents)
 - [Features](#features)
 - [Changelog](#changelog)
 - [License](#license)
@@ -208,6 +209,10 @@ result = tune(
 print(f"Best score: {result.best_score}")
 print(f"Best params: {result.best_params}")
 ```
+
+## Agents
+
+If you use AI assistants (e.g., Copilot, Codex) while working on this project, please follow the guidelines in [AGENTS.md](AGENTS.md).
 
 ### Available Example Configurations
 

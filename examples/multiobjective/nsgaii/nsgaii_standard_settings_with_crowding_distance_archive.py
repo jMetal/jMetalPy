@@ -44,11 +44,8 @@ if __name__ == "__main__":
     print_variables_to_file(front, "VAR." + algorithm.label)
 
     # Save a PNG visualization of the front (and optional HTML if Plotly available)
-    try:
-        png = save_plt_to_file(front, "FUN." + algorithm.label, out_dir='.', html_plotly=True)
-        print(f"Saved front plot to: {png}")
-    except Exception as e:
-        print(f"Warning: could not generate front plot: {e}")
+    png = save_plt_to_file(front, "FUN." + algorithm.label, out_dir='.', html_plotly=True)
+    print(f"Saved front plot to: {png}")
 
     print(f"Algorithm: {algorithm.get_name()}")
     print(f"Problem: {problem.name()}")

@@ -62,6 +62,11 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Warning: could not generate front plot: {e}")
 
+    # Save a PNG visualization of the front (and optional HTML if Plotly available)
+    png = save_plt_to_file(front, "FUN." + algorithm.label, out_dir='.', html_plotly=True)
+    print(f"Saved front plot to: {png}")
+
+
     print(f"Algorithm: {algorithm.get_name()}")
     print(f"Problem: {problem.name()}")
     print(f"Archive size: {len(front)} solutions")

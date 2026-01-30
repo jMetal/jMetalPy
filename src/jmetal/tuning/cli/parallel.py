@@ -194,8 +194,6 @@ Examples:
     seed = args.seed if args.seed is not None else config.seed
     population_size = args.population_size if args.population_size is not None else config.population_size
     
-    args = parser.parse_args()
-    
     # Build extra arguments to pass to workers
     extra_args = [
         "--trials", str(n_trials),

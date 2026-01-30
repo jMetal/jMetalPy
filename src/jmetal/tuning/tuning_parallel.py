@@ -385,12 +385,21 @@ def main():
         problems = None
     
     # Apply config values with CLI overrides
-    algorithm = args.algorithm if args.algorithm != "NSGAII" or config is None else config.algorithm
-    total_trials = args.trials if config is None else config.n_trials
-    max_evaluations = args.evaluations if config is None else config.n_evaluations
-    sampler = args.sampler if config is None else config.sampler
-    seed = args.seed if config is None else config.seed
-    population_size = args.population_size if config is None else config.population_size
+    # CLI arguments take precedence over config file
+    if config is not None:
+        algorithm = args.algorithm if args.algorithm != "NSGAII" else config.algorithm
+        total_trials = args.trials if args.trials != NUMBER_OF_TRIALS else config.n_trials
+        max_evaluations = args.evaluations if args.evaluations != TRAINING_EVALUATIONS else config.n_evaluations
+        sampler = args.sampler if args.sampler != "tpe" else config.sampler
+        seed = args.seed if args.seed != SEED else config.seed
+        population_size = args.population_size if args.population_size != POPULATION_SIZE else config.population_size
+    else:
+        algorithm = args.algorithm
+        total_trials = args.trials
+        max_evaluations = args.evaluations
+        sampler = args.sampler
+        seed = args.seed
+        population_size = args.population_size
     
     # Create observers based on argument
     # Note: plot observer only enabled on worker 0 to show global progress
