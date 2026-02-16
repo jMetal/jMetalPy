@@ -1,0 +1,30 @@
+{
+  "algorithm": "NSGAII",
+  "best_value": 0.14680583792060328,
+  "best_params": {
+    "offspring_population_size": 100,
+    "crossover_type": "sbx",
+    "crossover_probability": 0.7876433945605654,
+    "crossover_eta": 149.71292810100823,
+    "mutation_type": "uniform",
+    "mutation_probability_factor": 0.7995106732375397,
+    "mutation_perturbation": 1.077045432985862
+  },
+  "population_size": 100,
+  "training_evaluations": 10000,
+  "validation_evaluations": 20000,
+  "training_problems": [
+    "ZDT1",
+    "ZDT2",
+    "ZDT3",
+    "ZDT4",
+    "ZDT6"
+  ],
+  "ref_point_offset": 0.1,
+  "n_trials": 9,
+  "n_repeats": 1,
+  "elapsed_seconds": 9.715731041040272,
+  "sampler": "tpe",
+  "mode": "categorical",
+  "timestamp": "2025-12-03T12:36:38.608033"
+}
