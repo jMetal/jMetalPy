@@ -15,3 +15,6 @@ optuna/optuna_nsgaii.db
 validation_results/
 tuning_output/
 *.prof
+
+# Auto-generated build artifacts
+*.egg-info/
