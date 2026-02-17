@@ -242,7 +242,8 @@ The current release of jMetalPy (v1.9.0) contains the following components:
 | ![Parallel coordinates](docs/source/_static/p-c.gif) | ![Interactive chord plot](docs/source/_static/chordplot.gif) |
 
 ## Changelog
-
+* [Current]
+  * Added the ZDT benchmark problems. Contributed by Nicolás Rodríguez Uribe.
 * [1.9.0]
   * Add RE benchmark  
   * Refactor algorithm SPEA2 
