@@ -224,14 +224,14 @@ class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
                     
                     # Resolve mappings with cycle detection
                     visited1 = set()
-                    while val1 in mapping and val1 not in visited1:
+                    while val1 in mapping_child1 and val1 not in visited1:
                         visited1.add(val1)
-                        val1 = mapping[val1]
+                        val1 = mapping_child1[val1]
                     
                     visited2 = set()
-                    while val2 in mapping and val2 not in visited2:
+                    while val2 in mapping_child2 and val2 not in visited2:
                         visited2.add(val2)
-                        val2 = mapping[val2]
+                        val2 = mapping_child2[val2]
                         
                     offspring[0].variables[i] = val1
                     offspring[1].variables[i] = val2
