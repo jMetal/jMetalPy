@@ -90,53 +90,113 @@ class RouletteWheelSelection(Selection[List[S], S]):
         return "Roulette wheel selection"
 
 
-class BinaryTournamentSelection(Selection[List[S], S]):
-    """Performs binary tournament selection between two random solutions.
+class TournamentSelection(Selection[List[S], S]):
+    """Performs k-ary tournament selection.
     
-    This selection operator randomly selects two solutions from the population
-    and returns the better one according to the provided comparator.
-    If the comparator returns 0 (tie), a random solution is chosen.
+    This selection operator randomly selects k solutions from the population
+    and returns the best one according to the provided comparator. It's a
+    generalization of binary tournament selection that allows controlling
+    selection pressure through the tournament size.
+    
+    A larger tournament size (k) increases selection pressure, favoring
+    better solutions more strongly. A smaller k provides more diversity
+    but slower convergence.
     
     Args:
-        comparator: Comparator used to compare solutions (default: DominanceComparator)
+        tournament_size: Number of solutions to participate in each tournament (default: 2).
+                        Must be at least 2.
+        comparator: Comparator used to compare solutions (default: DominanceComparator).
+    
+    Example:
+        >>> from jmetal.operator import TournamentSelection
+        >>> from jmetal.util.comparator import DominanceComparator
+        >>> 
+        >>> # Create a tournament selection with size 5
+        >>> selector = TournamentSelection(tournament_size=5)
+        >>> 
+        >>> # Select from a population
+        >>> winner = selector.execute(population)
     """
     
-    def __init__(self, comparator: Comparator = DominanceComparator()):
+    def __init__(self, tournament_size: int = 2, comparator: Comparator = DominanceComparator()):
         super().__init__()
+        if tournament_size < 2:
+            raise ValueError(f"Tournament size must be at least 2, got {tournament_size}")
+        self.tournament_size = tournament_size
         self.comparator = comparator
 
     def execute(self, front: List[S]) -> S:
-        """Execute the binary tournament selection.
+        """Execute the k-ary tournament selection.
         
         Args:
             front: List of solutions to select from.
             
         Returns:
-            The selected solution.
+            The best solution among the tournament participants.
             
         Raises:
-            ValueError: If front is None or empty.
+            ValueError: If front is None, empty, or smaller than tournament size.
         """
         if not front:
             raise ValueError("The front is empty")
 
         if len(front) == 1:
             return front[0]
-
-        # Sample without replacement
-        idx1, idx2 = random.sample(range(len(front)), 2)
-        solution1 = front[idx1]
-        solution2 = front[idx2]
-
-        # Compare solutions
-        comparison = self.comparator.compare(solution1, solution2)
         
-        if comparison == -1:
-            return solution1
-        elif comparison == 1:
-            return solution2
-        else:  # Tie - choose randomly
-            return solution1 if random.random() < 0.5 else solution2
+        # Adjust tournament size if population is smaller
+        effective_size = min(self.tournament_size, len(front))
+        
+        # Sample k solutions without replacement
+        tournament_indices = random.sample(range(len(front)), effective_size)
+        tournament_solutions = [front[i] for i in tournament_indices]
+        
+        # Find the best solution in the tournament
+        winner = tournament_solutions[0]
+        for i in range(1, len(tournament_solutions)):
+            candidate = tournament_solutions[i]
+            comparison = self.comparator.compare(candidate, winner)
+            if comparison < 0:  # candidate is better
+                winner = candidate
+            elif comparison == 0:  # tie - randomly decide
+                if random.random() < 0.5:
+                    winner = candidate
+        
+        return winner
+
+    def get_name(self) -> str:
+        return f"Tournament selection (k={self.tournament_size})"
+
+
+class BinaryTournamentSelection(TournamentSelection):
+    """Performs binary tournament selection between two random solutions.
+    
+    This is a specialization of TournamentSelection with tournament_size=2.
+    It randomly selects two solutions from the population and returns the
+    better one according to the provided comparator. If the comparator
+    returns 0 (tie), a random solution is chosen.
+    
+    This class is provided for convenience and backward compatibility.
+    For more control over tournament size, use TournamentSelection directly.
+    
+    Args:
+        comparator: Comparator used to compare solutions (default: DominanceComparator).
+    
+    Example:
+        >>> from jmetal.operator import BinaryTournamentSelection
+        >>> from jmetal.util.comparator import DominanceComparator
+        >>> 
+        >>> # Create binary tournament selection
+        >>> selector = BinaryTournamentSelection()
+        >>> 
+        >>> # Or with a custom comparator
+        >>> selector = BinaryTournamentSelection(comparator=DominanceComparator())
+        >>> 
+        >>> # Select from a population
+        >>> winner = selector.execute(population)
+    """
+    
+    def __init__(self, comparator: Comparator = DominanceComparator()):
+        super().__init__(tournament_size=2, comparator=comparator)
 
     def get_name(self) -> str:
         return "Binary tournament selection"
@@ -207,7 +267,7 @@ class BestSolutionSelection(Selection[List[S], S]):
         return "Best solution selection"
 
 
-class NaryRandomSolutionSelection(Selection[List[S], S]):
+class NaryRandomSolutionSelection(Selection[List[S], List[S]]):
     """Performs random selection of multiple solutions from a population.
     
     This selection operator randomly selects a specified number of distinct solutions
@@ -217,6 +277,13 @@ class NaryRandomSolutionSelection(Selection[List[S], S]):
     Args:
         number_of_solutions_to_be_returned: Number of distinct solutions to select (default: 1).
                                           Must be a positive integer.
+    
+    Example:
+        >>> from jmetal.operator import NaryRandomSolutionSelection
+        >>> 
+        >>> # Select 3 random solutions
+        >>> selector = NaryRandomSolutionSelection(number_of_solutions_to_be_returned=3)
+        >>> selected = selector.execute(population)  # Returns List[S] with 3 solutions
     """
     
     def __init__(self, number_of_solutions_to_be_returned: int = 1):
@@ -250,6 +317,11 @@ class NaryRandomSolutionSelection(Selection[List[S], S]):
                 "The front size ({}) is smaller than the number of requested solutions: {}"
                 .format(len(front), self.number_of_solutions_to_be_returned)
             )
+        
+        # Optimization: use random.choice for single selection
+        if self.number_of_solutions_to_be_returned == 1:
+            return [random.choice(front)]
+        
         return random.sample(front, self.number_of_solutions_to_be_returned)
 
     def get_name(self) -> str:

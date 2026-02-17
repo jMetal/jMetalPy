@@ -5,6 +5,7 @@ from jmetal.problem.multiobjective.dtlz import DTLZ2
 from jmetal.util.archive import DistanceBasedArchive
 from jmetal.util.distance import DistanceMetric
 from jmetal.util.evaluator import SequentialEvaluatorWithArchive
+from jmetal.util.plotting import save_plt_to_file
 from jmetal.util.solution import (
     print_function_values_to_file,
     print_variables_to_file, read_solutions,
@@ -31,7 +32,11 @@ if __name__ == "__main__":
     archive = DistanceBasedArchive(maximum_size=100, metric=DistanceMetric.L2_SQUARED, use_vectorized=True)
     evaluator = SequentialEvaluatorWithArchive(archive)
 
-    max_evaluations = 30000
+<<<<<<< HEAD
+    max_evaluations = 50000
+=======
+    max_evaluations = 40000
+>>>>>>> 6f4d831 (Add Optuna hyperparameter tuning package)
     algorithm = NSGAII(
         problem=problem,
         population_size=100,
@@ -50,6 +55,17 @@ if __name__ == "__main__":
     # Save results to file
     print_function_values_to_file(front, "FUN." + algorithm.label)
     print_variables_to_file(front, "VAR." + algorithm.label)
+    # Save a PNG visualization of the front (and optional HTML if Plotly available)
+    try:
+        png = save_plt_to_file(front, "FUN." + algorithm.label, out_dir='.', html_plotly=True)
+        print(f"Saved front plot to: {png}")
+    except Exception as e:
+        print(f"Warning: could not generate front plot: {e}")
+
+    # Save a PNG visualization of the front (and optional HTML if Plotly available)
+    png = save_plt_to_file(front, "FUN." + algorithm.label, out_dir='.', html_plotly=True)
+    print(f"Saved front plot to: {png}")
+
 
     print(f"Algorithm: {algorithm.get_name()}")
     print(f"Problem: {problem.name()}")

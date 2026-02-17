@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.smsemoa import SMSEMOA
 from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.mutation import PolynomialMutation
-from jmetal.problem.multiobjective.dtlz import DTLZ1, DTLZ3
+from jmetal.problem.multiobjective.dtlz import DTLZ3
 from jmetal.util.solution import (
     get_non_dominated_solutions,
     print_function_values_to_file,

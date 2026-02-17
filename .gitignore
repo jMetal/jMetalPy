@@ -5,3 +5,16 @@ dist
 .vscode
 FUN.*
 VAR.*
+.RData
+.Rhistory
+db.sqlite3
+optuna/optuna_nsgaii.db
+
+# Tuning output files
+*_tuned_config.json
+validation_results/
+tuning_output/
+*.prof
+
+# Auto-generated build artifacts
+*.egg-info/

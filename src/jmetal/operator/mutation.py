@@ -3,6 +3,7 @@ import random
 from typing import Callable, Optional, List
 
 import numpy as np
+from jmetal.operator.repair import ensure_float_repair, ensure_integer_repair
 
 from jmetal.core.operator import Mutation
 from jmetal.core.solution import (
@@ -148,6 +149,7 @@ class PolynomialMutation(Mutation[FloatSolution]):
         probability: float = 0.01,
         distribution_index: float = 20.0,
         repair_operator: Optional[Callable[[float, float, float], float]] = None,
+        rng: Optional[object] = None,
     ):
         if not 0 <= probability <= 1:
             raise ValueError("probability must be in [0, 1]")
@@ -156,15 +158,16 @@ class PolynomialMutation(Mutation[FloatSolution]):
             
         super(PolynomialMutation, self).__init__(probability=probability)
         self.distribution_index = distribution_index
-        self.repair_operator = repair_operator
+        # Normalize repair operator to a FloatRepairOperator instance
+        self.repair_operator = ensure_float_repair(repair_operator)
+        # RNG generator (np.random.Generator) for reproducibility
+        self.rng = rng if rng is not None else np.random.default_rng()
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
         Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
                 
         for i in range(len(solution._variables)):
-            rand = random.random()
-
-            if rand <= self.probability:
+            if self.rng.random() <= self.probability:
                 y = solution._variables[i]
                 yl, yu = solution.lower_bound[i], solution.upper_bound[i]
 
@@ -173,7 +176,7 @@ class PolynomialMutation(Mutation[FloatSolution]):
                 else:
                     delta1 = (y - yl) / (yu - yl)
                     delta2 = (yu - y) / (yu - yl)
-                    rnd = random.random()
+                    rnd = self.rng.random()
                     mut_pow = 1.0 / (self.distribution_index + 1.0)
                     if rnd <= 0.5:
                         xy = 1.0 - delta1
@@ -185,8 +188,8 @@ class PolynomialMutation(Mutation[FloatSolution]):
                         deltaq = 1.0 - pow(val, mut_pow)
 
                     y += deltaq * (yu - yl)
-                    y = max(yl, min(y, yu))  # Clamp to bounds
-                    
+                    # Use repair scalar API to enforce bounds / custom repair
+                    y = self.repair_operator.repair_scalar(y, yl, yu)
                     solution._variables[i] = y
         
         return solution
@@ -229,16 +232,21 @@ class IntegerPolynomialMutation(Mutation[IntegerSolution]):
         >>> mutated = mutation.execute(solution)
         >>> # Variables will be mutated with integer values within [0, 10]
     """
-    def __init__(self, probability: float, distribution_index: float = 20.0):
+    def __init__(self, probability: float, distribution_index: float = 20.0,
+                 repair_operator: Optional[Callable[[float, int, int], int]] = None,
+                 rng: Optional[object] = None):
         super(IntegerPolynomialMutation, self).__init__(probability=probability)
         self.distribution_index = distribution_index
+        # Normalize integer repair operator
+        self.repair_operator = ensure_integer_repair(repair_operator)
+        self.rng = rng if rng is not None else np.random.default_rng()
 
     def execute(self, solution: IntegerSolution) -> IntegerSolution:
         Check.that(issubclass(type(solution), IntegerSolution), "Solution type invalid")
         
         
         for i in range(len(solution._variables)):
-            if random.random() <= self.probability:
+            if self.rng.random() <= self.probability:
                 y = solution._variables[i]
                 yl, yu = solution.lower_bound[i], solution.upper_bound[i]
 
@@ -248,7 +256,7 @@ class IntegerPolynomialMutation(Mutation[IntegerSolution]):
                     delta1 = (y - yl) / (yu - yl)
                     delta2 = (yu - y) / (yu - yl)
                     mut_pow = 1.0 / (self.distribution_index + 1.0)
-                    rnd = random.random()
+                    rnd = self.rng.random()
                     if rnd <= 0.5:
                         xy = 1.0 - delta1
                         val = 2.0 * rnd + (1.0 - 2.0 * rnd) * (xy ** (self.distribution_index + 1.0))
@@ -259,8 +267,8 @@ class IntegerPolynomialMutation(Mutation[IntegerSolution]):
                         deltaq = 1.0 - val**mut_pow
 
                     y += deltaq * (yu - yl)
-                    y = max(yl, min(y, yu))  # Clamp to bounds
-                    y = int(round(y))  # Convert to integer and round to nearest
+                    # Use integer repair operator to round and clamp
+                    y = self.repair_operator.repair_scalar(y, yl, yu)
                 
                 solution._variables[i] = y
                     
@@ -313,19 +321,19 @@ class SimpleRandomMutation(Mutation[FloatSolution]):
         ValueError: If probability is not in [0,1].
     """
     
-    def __init__(self, probability: float):
+    def __init__(self, probability: float, rng: Optional[object] = None):
         if not 0 <= probability <= 1:
             raise ValueError("probability must be in [0, 1]")
         super(SimpleRandomMutation, self).__init__(probability=probability)
+        self.rng = rng if rng is not None else np.random.default_rng()
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
         Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
                 
         for i in range(len(solution._variables)):
-            if random.random() <= self.probability:
-                new_value = random.uniform(solution.lower_bound[i], solution.upper_bound[i])
-                
-                solution._variables[i] = new_value        
+            if self.rng.random() <= self.probability:
+                new_value = self.rng.uniform(solution.lower_bound[i], solution.upper_bound[i])
+                solution._variables[i] = new_value
         
         return solution
 
@@ -351,7 +359,9 @@ class UniformMutation(Mutation[FloatSolution]):
         ValueError: If probability is not in [0,1] or perturbation is not positive.
     """
     
-    def __init__(self, probability: float, perturbation: float = 0.5):
+    def __init__(self, probability: float, perturbation: float = 0.5,
+                 repair_operator: Optional[Callable[[float, float, float], float]] = None,
+                 rng: Optional[object] = None):
         if not 0 <= probability <= 1:
             raise ValueError("probability must be in [0, 1]")
         if perturbation <= 0:
@@ -359,22 +369,40 @@ class UniformMutation(Mutation[FloatSolution]):
             
         super(UniformMutation, self).__init__(probability=probability)
         self.perturbation = perturbation
-
+        # Normalize repair operator and store RNG generator (np.random.Generator)
+        self.repair_operator = ensure_float_repair(repair_operator)
+        self.rng = rng if rng is not None else np.random.default_rng()
     def execute(self, solution: FloatSolution) -> FloatSolution:
         Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
                 
-        for i in range(len(solution._variables)):
-            if random.random() <= self.probability:
-                # Calculate perturbation scaled by variable range
-                var_range = solution.upper_bound[i] - solution.lower_bound[i]
-                delta = (random.random() - 0.5) * self.perturbation * var_range
-                
-                # Apply perturbation and ensure bounds
-                new_value = solution._variables[i] + delta
-                new_value = max(solution.lower_bound[i], 
-                             min(solution.upper_bound[i], new_value))
-                
-                solution._variables[i] = new_value
+        # Vectorized path: compute mask of mutated indices and apply perturbations in bulk
+        n = len(solution._variables)
+        if n == 0:
+            return solution
+
+        # Convert to numpy arrays for vectorized operations
+        vars_arr = np.asarray(solution._variables, dtype=float)
+        lbs = np.asarray(solution.lower_bound, dtype=float)
+        ubs = np.asarray(solution.upper_bound, dtype=float)
+
+        # Use configured repair operator and RNG
+        repair = self.repair_operator
+
+        # Draw random mask for which variables mutate (use configured RNG)
+        mask = self.rng.random(n) < self.probability
+        if not mask.any():
+            return solution
+
+        # Compute perturbations for all variables then select mutated ones
+        ranges = ubs - lbs
+        deltas = (self.rng.random(n) - 0.5) * self.perturbation * ranges
+        candidate = vars_arr + deltas
+        # Keep original where not mutated
+        candidate = np.where(mask, candidate, vars_arr)
+
+        # Repair vectorized
+        repaired = repair.repair_vector(candidate, lbs, ubs)
+        solution._variables = repaired.tolist()
             
         return solution
 
@@ -442,7 +470,9 @@ class NonUniformMutation(Mutation[FloatSolution]):
         ValueError: If probability is not in [0,1] or parameters are not positive.
     """
     
-    def __init__(self, probability: float, perturbation: float = 0.5, max_iterations: int = 1000):
+    def __init__(self, probability: float, perturbation: float = 0.5, max_iterations: int = 1000,
+                 repair_operator: Optional[Callable[[float, float, float], float]] = None,
+                 rng: Optional[object] = None):
         if not 0 <= probability <= 1:
             raise ValueError("probability must be in [0, 1]")
         if perturbation <= 0:
@@ -454,6 +484,9 @@ class NonUniformMutation(Mutation[FloatSolution]):
         self.perturbation = perturbation
         self.max_iterations = max_iterations
         self.current_iteration = 0
+        # Normalize repair operator
+        self.repair_operator = ensure_float_repair(repair_operator)
+        self.rng = rng if rng is not None else np.random.default_rng()
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
         """Execute the non-uniform mutation on a solution.
@@ -467,11 +500,11 @@ class NonUniformMutation(Mutation[FloatSolution]):
         Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
 
         for i in range(len(solution.variables)):
-            if random.random() <= self.probability:
+            if self.rng.random() <= self.probability:
                 current_value = solution.variables[i]
-                
+
                 # Calculate delta based on direction
-                if random.random() <= 0.5:
+                if self.rng.random() <= 0.5:
                     delta = self.__delta(
                         solution.upper_bound[i] - current_value,
                         self.perturbation,
@@ -482,10 +515,10 @@ class NonUniformMutation(Mutation[FloatSolution]):
                         self.perturbation,
                     )
 
-                # Apply mutation and ensure bounds
+                # Apply mutation and repair
                 new_value = current_value + delta
-                solution._variables[i] = max(solution.lower_bound[i],
-                                         min(solution.upper_bound[i], new_value))
+                new_value = self.repair_operator.repair_scalar(new_value, solution.lower_bound[i], solution.upper_bound[i])
+                solution._variables[i] = new_value
 
         return solution
 
@@ -512,7 +545,7 @@ class NonUniformMutation(Mutation[FloatSolution]):
         if y == 0:
             return 0
             
-        r = random.random()
+        r = self.rng.random()
         iter_frac = min(self.current_iteration / self.max_iterations, 1.0)
         
         # Calculate mutation strength based on current iteration
@@ -561,13 +594,18 @@ class PermutationSwapMutation(Mutation[PermutationSolution]):
         >>> mutated = mutation.execute(solution)
         >>> # Two random positions will be swapped, e.g., [2, 1, 0, 3, 4]
     """
+    def __init__(self, probability: float, rng: Optional[object] = None):
+        super(PermutationSwapMutation, self).__init__(probability=probability)
+        self.rng = rng if rng is not None else np.random.default_rng()
+
     def execute(self, solution: PermutationSolution) -> PermutationSolution:
         Check.that(issubclass(type(solution), PermutationSolution), "Solution type invalid")
 
-        rand = random.random()
-
-        if rand <= self.probability:
-            pos_one, pos_two = random.sample(range(len(solution.variables)), 2)
+        if self.rng.random() <= self.probability:
+            size = len(solution.variables)
+            # choose two distinct indices without replacement
+            idx = self.rng.choice(size, size=2, replace=False)
+            pos_one, pos_two = int(idx[0]), int(idx[1])
             solution.variables[pos_one], solution.variables[pos_two] = (
                 solution.variables[pos_two],
                 solution.variables[pos_one],
@@ -676,13 +714,17 @@ class ScrambleMutation(Mutation[PermutationSolution]):
         >>> mutated = mutation.execute(solution)
         >>> # A random subsequence will be scrambled, e.g., [0, 1, 4, 3, 2, 5, 6, 7, 8, 9]
     """
+    def __init__(self, probability: float, rng: Optional[object] = None):
+        super(ScrambleMutation, self).__init__(probability=probability)
+        self.rng = rng if rng is not None else np.random.default_rng()
+
     def execute(self, solution: PermutationSolution) -> PermutationSolution:
         Check.that(issubclass(type(solution), PermutationSolution), "Solution type invalid")
-        rand = random.random()
 
-        if rand <= self.probability:
-            point1 = random.randint(0, len(solution.variables))
-            point2 = random.randint(0, len(solution.variables) - 1)
+        if self.rng.random() <= self.probability:
+            n = len(solution.variables)
+            point1 = int(self.rng.integers(0, n + 1))
+            point2 = int(self.rng.integers(0, n))
 
             if point2 >= point1:
                 point2 += 1
@@ -693,7 +735,9 @@ class ScrambleMutation(Mutation[PermutationSolution]):
                 point2 = point1 + 20
 
             values = solution.variables[point1:point2]
-            solution.variables[point1:point2] = random.sample(values, len(values))
+            # shuffle subsequence with RNG
+            permuted = list(self.rng.permutation(values))
+            solution.variables[point1:point2] = permuted
 
         return solution
 
@@ -737,7 +781,8 @@ class LevyFlightMutation(Mutation[FloatSolution]):
     """
     
     def __init__(self, mutation_probability: float = 0.01, beta: float = 1.5,
-                 step_size: float = 0.01, repair_operator: Optional[Callable[[float, float, float], float]] = None):
+                 step_size: float = 0.01, repair_operator: Optional[Callable[[float, float, float], float]] = None,
+                 rng: Optional[object] = None):
         if not 0 <= mutation_probability <= 1:
             raise ValueError("mutation_probability must be in [0, 1]")
         if not 1 < beta <= 2:
@@ -748,11 +793,13 @@ class LevyFlightMutation(Mutation[FloatSolution]):
         super().__init__(probability=mutation_probability)
         self.beta = beta
         self.step_size = step_size
-        self.repair_operator = repair_operator
+        # Normalize repair operator to a FloatRepairOperator instance
+        self.repair_operator = ensure_float_repair(repair_operator)
+        self.rng = rng if rng is not None else np.random.default_rng()
 
     def execute(self, solution: FloatSolution) -> FloatSolution:        
         for i in range(len(solution._variables)):
-            if np.random.rand() <= self.probability:
+            if self.rng.random() <= self.probability:
                 current_value = solution._variables[i]
                 lower_bound = solution.lower_bound[i]
                 upper_bound = solution.upper_bound[i]
@@ -762,12 +809,8 @@ class LevyFlightMutation(Mutation[FloatSolution]):
                 perturbation = levy_step * self.step_size * (upper_bound - lower_bound)
                 new_value = current_value + perturbation
 
-                # Repair if out of bounds
-                if self.repair_operator:
-                    new_value = self.repair_operator(new_value, lower_bound, upper_bound)
-                else:
-                    new_value = min(max(new_value, lower_bound), upper_bound)
-                
+                # Repair using scalar API
+                new_value = self.repair_operator.repair_scalar(new_value, lower_bound, upper_bound)
                 solution._variables[i] = new_value
             
         return solution
@@ -775,8 +818,8 @@ class LevyFlightMutation(Mutation[FloatSolution]):
     def _generate_levy_step(self):
         # Mantegna algorithm
         sigma_u = self._sigma_u(self.beta)
-        u = np.random.normal(0, sigma_u)
-        v = np.random.normal(0, 1)
+        u = self.rng.normal(0, sigma_u)
+        v = self.rng.normal(0, 1)
         return u / (abs(v) ** (1 / self.beta))
 
     def _sigma_u(self, beta):
@@ -816,7 +859,8 @@ class PowerLawMutation(Mutation[FloatSolution]):
     """
     
     def __init__(self, probability: float = 0.01, delta: float = 1.0, 
-                 repair_operator: Optional[Callable[[float, float, float], float]] = None):
+                 repair_operator: Optional[Callable[[float, float, float], float]] = None,
+                 rng: Optional[object] = None):
         if not 0 <= probability <= 1:
             raise ValueError("probability must be in [0, 1]")
         if delta <= 0:
@@ -824,26 +868,28 @@ class PowerLawMutation(Mutation[FloatSolution]):
             
         super().__init__(probability=probability)
         self.delta = delta
-        self.repair_operator = repair_operator if repair_operator is not None else self._default_repair
+        # Normalize repair operator to a FloatRepairOperator instance
+        self.repair_operator = ensure_float_repair(repair_operator if repair_operator is not None else None)
+        self.rng = rng if rng is not None else np.random.default_rng()
 
     def execute(self, solution: FloatSolution) -> FloatSolution:
         Check.that(issubclass(type(solution), FloatSolution), "Solution type invalid")
                 
         for i in range(len(solution._variables)):
-            if random.random() <= self.probability:
+            if self.rng.random() <= self.probability:
                 current_value = solution._variables[i]
                 lower_bound = solution.lower_bound[i]
                 upper_bound = solution.upper_bound[i]
                 
                 # Generate power-law perturbation
-                rnd = random.random()
+                rnd = self.rng.random()
                 rnd = min(max(rnd, 1e-10), 1 - 1e-10)
                 temp_delta = math.pow(rnd, -self.delta)
                 deltaq = 0.5 * (rnd - 0.5) * (1 - temp_delta)
                 new_value = current_value + deltaq * (upper_bound - lower_bound)
                 
-                # Repair if out of bounds
-                new_value = self.repair_operator(new_value, lower_bound, upper_bound)
+                # Repair using scalar API
+                new_value = self.repair_operator.repair_scalar(new_value, lower_bound, upper_bound)
                 
                 solution._variables[i] = new_value
             

@@ -1,0 +1,8 @@
+Problem: UF1
+Variables: 30
+Objectives: 2
+Constraints: 0
+Algorithm: MOEAD-DRA
+Computing time: 51.70s
+Evaluations: 300000
+Non-dominated solutions: 294

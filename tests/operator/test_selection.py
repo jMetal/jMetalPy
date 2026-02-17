@@ -9,7 +9,8 @@ from jmetal.operator.selection import (
     RandomSelection,
     DifferentialEvolutionSelection,
     NaryRandomSolutionSelection,
-    RankingAndCrowdingDistanceSelection
+    RankingAndCrowdingDistanceSelection,
+    TournamentSelection,
 )
 
 # Dummy solution class for testing
@@ -72,6 +73,86 @@ class TestBinaryTournamentSelection:
         selection = selector.execute(solutions)
         
         assert selection in solutions
+
+class TestTournamentSelection:
+    """Tests for TournamentSelection operator (k-ary tournament)."""
+    
+    def test_should_initialize_with_default_parameters(self):
+        selector = TournamentSelection()
+        assert selector is not None
+        assert selector.tournament_size == 2
+    
+    def test_should_initialize_with_custom_tournament_size(self):
+        selector = TournamentSelection(tournament_size=5)
+        assert selector.tournament_size == 5
+    
+    def test_should_raise_exception_for_tournament_size_less_than_2(self):
+        with pytest.raises(ValueError) as exc_info:
+            TournamentSelection(tournament_size=1)
+        assert "Tournament size must be at least 2" in str(exc_info.value)
+    
+    @pytest.mark.parametrize("invalid_input", [None, []])
+    def test_should_raise_exception_for_invalid_input(self, invalid_input):
+        selector = TournamentSelection()
+        with pytest.raises(Exception):
+            selector.execute(invalid_input)
+    
+    def test_should_return_single_solution_when_list_has_one_solution(self, float_solution_factory):
+        solution = float_solution_factory([1.0, 2.0])
+        selector = TournamentSelection(tournament_size=3)
+        
+        result = selector.execute([solution])
+        
+        assert result == solution
+    
+    def test_should_adjust_tournament_size_if_population_is_smaller(self, float_solution_factory):
+        solutions = [float_solution_factory([float(i), float(i)]) for i in range(3)]
+        selector = TournamentSelection(tournament_size=10)  # Larger than population
+        
+        # Should not raise an exception
+        result = selector.execute(solutions)
+        assert result in solutions
+    
+    @patch('random.sample')
+    def test_should_select_best_from_tournament(self, mock_sample, float_solution_factory):
+        # Create solutions where solution at index 3 dominates others
+        solutions = [
+            float_solution_factory([5.0, 5.0]),  # 0 - dominated
+            float_solution_factory([4.0, 4.0]),  # 1 - dominated
+            float_solution_factory([3.0, 3.0]),  # 2 - dominated
+            float_solution_factory([1.0, 1.0]),  # 3 - dominates all others
+            float_solution_factory([6.0, 6.0]),  # 4 - dominated
+        ]
+        # Mock sample to return indices 0, 1, 3 (tournament participants)
+        mock_sample.return_value = [0, 1, 3]
+        
+        selector = TournamentSelection(tournament_size=3)
+        result = selector.execute(solutions)
+        
+        # Should select solution 3 as it dominates 0 and 1
+        assert result == solutions[3]
+    
+    def test_should_return_solution_from_population(self, float_solution_factory):
+        solutions = [float_solution_factory([float(i), float(i)]) for i in range(10)]
+        selector = TournamentSelection(tournament_size=4)
+        
+        for _ in range(20):  # Run multiple times to test randomness
+            result = selector.execute(solutions)
+            assert result in solutions
+    
+    def test_should_have_correct_name(self):
+        selector = TournamentSelection(tournament_size=5)
+        assert selector.get_name() == "Tournament selection (k=5)"
+    
+    def test_should_work_with_custom_comparator(self, float_solution_factory):
+        from jmetal.util.comparator import DominanceComparator
+        
+        solutions = [float_solution_factory([float(i), float(i)]) for i in range(5)]
+        selector = TournamentSelection(tournament_size=3, comparator=DominanceComparator())
+        
+        result = selector.execute(solutions)
+        assert result in solutions
+
 
 class TestBestSolutionSelection:
     """Tests for BestSolutionSelection operator."""

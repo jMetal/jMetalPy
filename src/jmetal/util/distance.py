@@ -3,6 +3,14 @@ from enum import Enum
 from typing import List, Union, Optional
 
 import numpy
+import numpy as np
+
+# Optional Numba acceleration for hot distance kernels
+try:
+    from numba import njit, prange
+    _NUMBA_AVAILABLE = True
+except Exception:
+    _NUMBA_AVAILABLE = False
 from scipy.spatial import distance
 
 """
@@ -285,6 +293,15 @@ class DistanceCalculator:
     @staticmethod
     def _min_l2_squared_distances(points: numpy.ndarray, selected_points: numpy.ndarray) -> numpy.ndarray:
         """Calculate minimum squared L2 distances to selected points."""
+        # Fast path: if Numba is available, use the compiled kernel which is
+        # significantly faster for large point sets and tight loops.
+        if _NUMBA_AVAILABLE:
+            # ensure contiguous float64 arrays for the numba kernel
+            pts = np.ascontiguousarray(points, dtype=np.float64)
+            sels = np.ascontiguousarray(selected_points, dtype=np.float64)
+            return _min_l2_squared_distances_numba(pts, sels)
+
+        # Fallback vectorized NumPy implementation
         # Calculate distances from each point to each selected point
         # points: (n_points, n_dims), selected_points: (n_selected, n_dims)
         
@@ -305,7 +322,7 @@ class DistanceCalculator:
         
         # Return minimum distance for each point
         return numpy.min(distances, axis=1)
-    
+
     @staticmethod
     def _min_linf_distances(points: numpy.ndarray, selected_points: numpy.ndarray) -> numpy.ndarray:
         """Calculate minimum L-infinity distances to selected points."""
@@ -336,6 +353,29 @@ class DistanceCalculator:
         
         # Return minimum distance for each point
         return numpy.min(distances, axis=1)
+
+
+if _NUMBA_AVAILABLE:
+    # Numba-compiled kernel for minimum squared L2 distances. Uses plain loops
+    # to avoid temporary allocation overhead and to run at native speed.
+    @njit(fastmath=True)
+    def _min_l2_squared_distances_numba(points, selected_points):
+        n_points = points.shape[0]
+        n_selected = selected_points.shape[0]
+        n_dim = points.shape[1]
+        out = np.empty(n_points, dtype=np.float64)
+        for i in range(n_points):
+            minv = 1.7976931348623157e+308  # large float
+            for j in range(n_selected):
+                s = 0.0
+                for k in range(n_dim):
+                    d = points[i, k] - selected_points[j, k]
+                    s += d * d
+                if s < minv:
+                    minv = s
+            out[i] = minv
+        return out
+    
 
 
 class Distance(ABC):

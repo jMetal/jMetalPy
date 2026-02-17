@@ -127,7 +127,8 @@ class MOEAD(GeneticAlgorithm):
             f2 = self.fitness_function.compute(new_solution.objectives, self.neighbourhood.weight_vectors[k])
 
             if f2 < f1:
-                population[k] = copy.deepcopy(new_solution)
+                # Use copy.copy to create a solution copy (delegates to __copy__)
+                population[k] = copy.copy(new_solution)
                 replacements += 1
 
             if replacements >= self.max_number_of_replaced_solutions:
@@ -138,7 +139,8 @@ class MOEAD(GeneticAlgorithm):
     def generate_permutation_of_neighbors(self, subproblem_id):
         if self.neighbor_type == "NEIGHBOR":
             neighbors = self.neighbourhood.get_neighborhood()[subproblem_id]
-            permuted_array = copy.deepcopy(neighbors.tolist())
+            # neighbors.tolist() already produces a new Python list; no deepcopy needed
+            permuted_array = neighbors.tolist()
         else:
             permuted_array = Permutation(self.population_size).get_permutation()
 
@@ -373,14 +375,15 @@ class MOEADIEpsilon(MOEAD):
 
             if cons1 < self.epsilon_k and cons2 <= self.epsilon_k:
                 if f2 < f1:
-                    population[k] = copy.deepcopy(new_solution)
+                    # Use copy.copy to create a copy according to solution.__copy__
+                    population[k] = copy.copy(new_solution)
                     replacements += 1
             elif cons1 == cons2:
                 if f2 < f1:
-                    population[k] = copy.deepcopy(new_solution)
+                    population[k] = copy.copy(new_solution)
                     replacements += 1
             elif cons2 < cons1:
-                population[k] = copy.deepcopy(new_solution)
+                population[k] = copy.copy(new_solution)
                 replacements += 1
 
             if replacements >= self.max_number_of_replaced_solutions:
@@ -392,7 +395,7 @@ class MOEADIEpsilon(MOEAD):
         feasible_solutions = []
         for solution in self.solutions:
             if is_feasible(solution):
-                feasible_solutions.append(copy.deepcopy(solution))
+                feasible_solutions.append(copy.copy(solution))
 
         if len(feasible_solutions) > 0:
             feasible_solutions = feasible_solutions + self.archive
@@ -403,7 +406,7 @@ class MOEADIEpsilon(MOEAD):
             if len(first_rank_solutions) <= self.population_size:
                 self.archive = []
                 for solution in first_rank_solutions:
-                    self.archive.append(copy.deepcopy(solution))
+                    self.archive.append(copy.copy(solution))
             else:
                 crowding_distance = CrowdingDistanceDensityEstimator()
                 while len(first_rank_solutions) > self.population_size:
@@ -415,7 +418,7 @@ class MOEADIEpsilon(MOEAD):
 
                 self.archive = []
                 for solution in first_rank_solutions:
-                    self.archive.append(copy.deepcopy(solution))
+                    self.archive.append(copy.copy(solution))
 
     def result(self):
         return self.archive

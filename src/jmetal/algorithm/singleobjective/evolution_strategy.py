@@ -76,7 +76,7 @@ class EvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         else:
             population_pool.extend(offspring_population)
 
-        population_pool.sort(key=lambda s: (overall_constraint_violation_degree(s), s.objectives[0]))
+        population_pool.sort(key=lambda s: (- overall_constraint_violation_degree(s), s.objectives[0]))
 
         new_population = []
         for i in range(self.mu):
@@ -88,4 +88,7 @@ class EvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         return self.solutions[0]
 
     def get_name(self) -> str:
-        return "Elitist evolution Strategy"
+        if self.elitist:
+            return "(mu + lambda) Evolution Strategy"
+        else:
+            return "(mu, lambda) Evolution Strategy"

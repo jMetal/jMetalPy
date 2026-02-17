@@ -111,7 +111,8 @@ class MOCell(GeneticAlgorithm[S, R]):
 
         if result == 1:  # the offspring individual dominates the current one
             population[self.current_individual] = offspring_population[0]
-            self.archive.add(copy.deepcopy(offspring_population[0]))
+            # Use copy.copy to leverage Solution.__copy__ implementations
+            self.archive.add(copy.copy(offspring_population[0]))
         elif result == 0:  # the offspring and current individuals are non-dominated
             new_individual = offspring_population[0]
 
@@ -127,7 +128,8 @@ class MOCell(GeneticAlgorithm[S, R]):
             self.current_neighbors.sort(key=cmp_to_key(self.comparator.compare))
             worst_solution = self.current_neighbors[-1]
 
-            self.archive.add(copy.deepcopy(new_individual))
+            # Store a copy via copy.copy (uses solution-specific __copy__)
+            self.archive.add(copy.copy(new_individual))
             if worst_solution != new_individual:
                 population[self.current_individual] = new_individual
 

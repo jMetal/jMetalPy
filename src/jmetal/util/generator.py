@@ -30,7 +30,8 @@ class RandomGenerator(Generator):
 class InjectorGenerator(Generator):
     def __init__(self, solutions: List[Solution]):
         super(InjectorGenerator, self).__init__()
-        self.population = copy.deepcopy(solutions)
+        # Make copies of provided solutions using their __copy__ implementations
+        self.population = [copy.copy(s) for s in solutions]
 
     def new(self, problem: Problem):
         if len(self.population) > 0:

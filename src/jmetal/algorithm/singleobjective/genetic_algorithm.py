@@ -1,3 +1,4 @@
+import math
 from functools import cmp_to_key
 from typing import List, TypeVar
 
@@ -24,16 +25,16 @@ R = TypeVar("R")
 
 class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
     def __init__(
-        self,
-        problem: Problem,
-        population_size: int,
-        offspring_population_size: int,
-        mutation: Mutation,
-        crossover: Crossover,
-        selection: Selection = BinaryTournamentSelection(ObjectiveComparator(0)),
-        termination_criterion: TerminationCriterion = store.default_termination_criteria,
-        population_generator: Generator = store.default_generator,
-        population_evaluator: Evaluator = store.default_evaluator,
+            self,
+            problem: Problem,
+            population_size: int,
+            offspring_population_size: int,
+            mutation: Mutation,
+            crossover: Crossover,
+            selection: Selection = BinaryTournamentSelection(ObjectiveComparator(0)),
+            termination_criterion: TerminationCriterion = store.default_termination_criteria,
+            population_generator: Generator = store.default_generator,
+            population_evaluator: Evaluator = store.default_evaluator,
             solution_comparator: Comparator = ObjectiveComparator(0)
     ):
         super(GeneticAlgorithm, self).__init__(
@@ -51,14 +52,8 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         self.termination_criterion = termination_criterion
         self.observable.register(termination_criterion)
 
-        self.mating_pool_size = (
-            self.offspring_population_size
-            * self.crossover_operator.get_number_of_parents()
-            // self.crossover_operator.get_number_of_children()
-        )
-
-        if self.mating_pool_size < self.crossover_operator.get_number_of_children():
-            self.mating_pool_size = self.crossover_operator.get_number_of_children()
+        self.mating_pool_size = self.crossover_operator.get_number_of_parents() * math.ceil(
+            self.offspring_population_size / self.crossover_operator.get_number_of_children())
 
     def create_initial_solutions(self) -> List[S]:
         return [self.population_generator.new(self.problem) for _ in range(self.population_size)]

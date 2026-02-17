@@ -13,6 +13,10 @@ from jmetal.util.solution import (
 )
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
+# Use shared plotting utility from package
+from jmetal.util.plotting import save_plt_to_file
+
+
 if __name__ == "__main__":
     problem = DTLZ2()
     reference_front = read_solutions(filename="resources/reference_fronts/DTLZ2.3D.pf")
@@ -34,6 +38,13 @@ if __name__ == "__main__":
     # Save results to file
     print_function_values_to_file(front, "FUN." + algorithm.label)
     print_variables_to_file(front, "VAR." + algorithm.label)
+
+    # Save a PNG visualization of the front (and optional HTML if Plotly available)
+    try:
+        png = save_plt_to_file(front, "FUN." + algorithm.label, out_dir='.', html_plotly=True)
+        print(f"Saved front plot to: {png}")
+    except Exception as e:
+        print(f"Warning: could not generate front plot: {e}")
 
     print(f"Algorithm: {algorithm.get_name()}")
     print(f"Problem: {problem.name()}")
