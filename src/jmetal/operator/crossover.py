@@ -206,11 +206,14 @@ class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
             pts = self._rng.choice(permutation_length, size=2, replace=False)
             point1, point2 = sorted(pts.tolist())
             
-            # Create mapping between parents
-            mapping = {}
+            # Create directional mappings to resolve conflicts without cycles
+            mapping_child1 = {}  # parent2 segment value -> parent1 segment value
+            mapping_child2 = {}  # parent1 segment value -> parent2 segment value
             for i in range(point1, point2 + 1):
-                mapping[parents[0].variables[i]] = parents[1].variables[i]
-                mapping[parents[1].variables[i]] = parents[0].variables[i]
+                value_parent1 = parents[0].variables[i]
+                value_parent2 = parents[1].variables[i]
+                mapping_child1[value_parent2] = value_parent1
+                mapping_child2[value_parent1] = value_parent2
             
             # Apply PMX crossover
             for i in range(permutation_length):
