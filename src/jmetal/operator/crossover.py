@@ -191,11 +191,14 @@ class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
             # Select two distinct random points for crossover
             point1, point2 = sorted(random.sample(range(permutation_length), 2))
             
-            # Create mapping between parents
-            mapping = {}
+            # Create directional mappings to resolve conflicts without cycles
+            mapping_child1 = {}  # parent2 segment value -> parent1 segment value
+            mapping_child2 = {}  # parent1 segment value -> parent2 segment value
             for i in range(point1, point2 + 1):
-                mapping[parents[0].variables[i]] = parents[1].variables[i]
-                mapping[parents[1].variables[i]] = parents[0].variables[i]
+                value_parent1 = parents[0].variables[i]
+                value_parent2 = parents[1].variables[i]
+                mapping_child1[value_parent2] = value_parent1
+                mapping_child2[value_parent1] = value_parent2
             
             # Apply PMX crossover
             for i in range(permutation_length):
@@ -205,10 +208,10 @@ class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
                     val2 = parents[1].variables[i]
                     
                     # Resolve mappings
-                    while val1 in mapping:
-                        val1 = mapping[val1]
-                    while val2 in mapping:
-                        val2 = mapping[val2]
+                    while val1 in mapping_child1:
+                        val1 = mapping_child1[val1]
+                    while val2 in mapping_child2:
+                        val2 = mapping_child2[val2]
                         
                     offspring[0].variables[i] = val1
                     offspring[1].variables[i] = val2
