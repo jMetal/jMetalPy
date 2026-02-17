@@ -12,7 +12,7 @@ A paper introducing jMetalPy is available at: https://doi.org/10.1016/j.swevo.20
 ### Table of Contents
 - [Installation](#installation)
 - [Usage](#hello-world-)
-- [Hyperparameter Tuning](#hyperparameter-tuning-)
+
 - [Agents](#agents)
 - [Features](#features)
 - [Changelog](#changelog)
@@ -102,127 +102,11 @@ plot_front.plot(front, label='NSGAII-ZDT1', filename='NSGAII-ZDT1', format='png'
 
 <img src=docs/source/_static/NSGAII-ZDT1.png width=450 alt="Pareto front approximation">
 
-## Hyperparameter Tuning 🎛️
-
-jMetalPy includes an Optuna-based hyperparameter tuning system that allows you to automatically find optimal algorithm configurations.
-
-### Quick Start
-
-```python
-from jmetal.tuning import tune
-
-# Basic tuning with default settings
-result = tune("NSGAII", n_trials=50)
-print(f"Best parameters: {result.best_params}")
-```
-
-### Using YAML Configuration Files
-
-The recommended way to configure tuning experiments is through YAML files:
-
-```bash
-# Run with a configuration file
-python -m jmetal.tuning.cli.sequential --config examples/tuning/configs/default.yaml
-
-# Override specific settings via CLI
-python -m jmetal.tuning.cli.sequential --config examples/tuning/configs/quick_demo.yaml --trials 30
-```
-
-### Example YAML Configurations
-
-**Quick Demo** (`examples/tuning/configs/quick_demo.yaml`):
-```yaml
-algorithm: NSGAII
-n_trials: 20
-n_evaluations: 5000
-
-problems:
-  - name: ZDT1
-    reference_front: ZDT1.pf
-  - name: ZDT2
-    reference_front: ZDT2.pf
-```
-
-**SBX-Only Configuration** (`examples/tuning/configs/sbx_only.yaml`):
-```yaml
-algorithm: NSGAII
-n_trials: 100
-n_evaluations: 10000
-
-parameter_space:
-  offspring_population_size:
-    values: [50, 100, 150, 200]
-  
-  crossover:
-    type: sbx  # Only explore SBX crossover
-    probability: {min: 0.8, max: 1.0}
-    distribution_index: {min: 5.0, max: 100.0}
-  
-  mutation:
-    type: polynomial  # Only explore polynomial mutation
-    probability_factor: {min: 0.5, max: 2.0}
-    distribution_index: {min: 5.0, max: 100.0}
-```
-
-**Narrow Search Space** (`examples/tuning/configs/narrow_search.yaml`):
-```yaml
-algorithm: NSGAII
-n_trials: 50
-
-parameter_space:
-  crossover:
-    probability: {min: 0.9, max: 1.0}
-    distribution_index: {min: 10.0, max: 30.0}
-  mutation:
-    probability_factor: {min: 0.8, max: 1.2}
-```
-
-### Parallel Tuning
-
-For large-scale tuning experiments, use parallel execution with PostgreSQL:
-
-```bash
-# Launch 4 parallel workers
-python -m jmetal.tuning.cli.parallel --config examples/tuning/configs/default.yaml --workers 4
-
-# With progress observer
-python -m jmetal.tuning.cli.parallel --config my_config.yaml --workers 8 --observer progress
-```
-
-### Programmatic Usage with Custom Config
-
-```python
-from jmetal.tuning import tune, TuningConfig
-
-# Load configuration from YAML
-config = TuningConfig.from_yaml("my_config.yaml")
-
-# Run tuning with config
-result = tune(
-    algorithm=config.algorithm,
-    problems=config.get_problems_as_tuples(),
-    n_trials=config.n_trials,
-    n_evaluations=config.n_evaluations,
-    parameter_space=config.parameter_space,
-)
-
-print(f"Best score: {result.best_score}")
-print(f"Best params: {result.best_params}")
-```
 
 ## Agents
 
 If you use AI assistants (e.g., Copilot, Codex) while working on this project, please follow the guidelines in [AGENTS.md](AGENTS.md).
 
-### Available Example Configurations
-
-| File | Description |
-|------|-------------|
-| `default.yaml` | Standard ZDT benchmark with 100 trials |
-| `quick_demo.yaml` | Fast demo with 20 trials, 2 problems |
-| `sbx_only.yaml` | SBX crossover + polynomial mutation only |
-| `narrow_search.yaml` | Narrow parameter ranges for fine-tuning |
-| `dtlz_3obj.yaml` | DTLZ problems with 3 objectives |
 
 ## Features
 The current release of jMetalPy (v1.9.0) contains the following components:
