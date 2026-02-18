@@ -32,11 +32,7 @@ if __name__ == "__main__":
     archive = DistanceBasedArchive(maximum_size=100, metric=DistanceMetric.L2_SQUARED, use_vectorized=True)
     evaluator = SequentialEvaluatorWithArchive(archive)
 
-<<<<<<< HEAD
-    max_evaluations = 50000
-=======
     max_evaluations = 40000
->>>>>>> 6f4d831 (Add Optuna hyperparameter tuning package)
     algorithm = NSGAII(
         problem=problem,
         population_size=100,
