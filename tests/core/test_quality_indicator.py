@@ -20,7 +20,8 @@ from jmetal.core.quality_indicator import (EpsilonIndicator, AdditiveEpsilonIndi
                                            GenerationalDistance, HyperVolume,
                                            InvertedGenerationalDistance,
                                            InvertedGenerationalDistancePlus,
-                                           NormalizedHyperVolume)
+                                           NormalizedHyperVolume,
+                                           AverageHausdorffDistance)
 
 DIRNAME = os.path.dirname(os.path.abspath(__file__))
 EPSILON_TEST_ATOL = 1e-12
@@ -37,114 +38,121 @@ class GenerationalDistanceTestCases(unittest.TestCase):
     def test_get_short_name_return_the_right_value(self):
         self.assertEqual("GD", GenerationalDistance([]).get_short_name())
 
-    def test_case1(self):
-        """
-        Case 1. Reference front: [[1.0, 1.0]], front: [[1.0, 1.0]]
-        Expected result: the distance to the nearest point of the reference front is 0.0
+    def test_identical_fronts_should_return_zero(self):
+        """Identical fronts: GD = 0"""
+        identical_fronts = np.array([[1.0, 1.0]])
+        identical_reference = np.array([[1.0, 1.0]])
+        indicator = GenerationalDistance(identical_reference)
 
-        :return:
-        """
-        indicator = GenerationalDistance(np.array([[1.0, 1.0]]))
-        front = np.array([[1.0, 1.0]])
-
-        result = indicator.compute(front)
-
+        result = indicator.compute(identical_fronts)
         self.assertEqual(0.0, result)
 
-    def test_case2(self):
-        """
-        Case 2. Reference front: [[1.0, 1.0], [2.0, 2.0], front: [[1.0, 1.0]]
-        Expected result: the distance to the nearest point of the reference front is 0.0
+    def test_identical_fronts_multiple_points_should_return_zero(self):
+        """Identical fronts with multiple points: GD = 0"""
+        identical_fronts = np.array([[1.0, 1.0], [2.0, 2.0]])
+        identical_reference = np.array([[1.0, 1.0], [2.0, 2.0]])
+        indicator = GenerationalDistance(identical_reference)
 
-        :return:
-        """
-        indicator = GenerationalDistance(np.array([[1.0, 1.0], [2.0, 2.0]]))
-        front = np.array([[1.0, 1.0]])
-
-        result = indicator.compute(front)
-
+        result = indicator.compute(identical_fronts)
         self.assertEqual(0.0, result)
 
-    def test_case3(self):
-        """
-        Case 3. Reference front: [[1.0, 1.0, 1.0], [2.0, 2.0, 2.0]], front: [[1.0, 1.0, 1.0]]
-        Expected result: the distance to the nearest point of the reference front is 0.0. Example with three objectives
+    def test_identical_fronts_three_objectives_should_return_zero(self):
+        """Identical fronts with three objectives: GD = 0"""
+        identical_fronts = np.array([[1.0, 1.0, 1.0], [2.0, 2.0, 2.0]])
+        identical_reference = np.array([[1.0, 1.0, 1.0], [2.0, 2.0, 2.0]])
+        indicator = GenerationalDistance(identical_reference)
 
-        :return:
-        """
-        indicator = GenerationalDistance(np.array([[1.0, 1.0, 1.0], [2.0, 2.0, 2.0]]))
-        front = np.array([[1.0, 1.0, 1.0]])
-
-        result = indicator.compute(front)
-
+        result = indicator.compute(identical_fronts)
         self.assertEqual(0.0, result)
 
-    def test_case4(self):
+    def test_single_point_front_distance(self):
         """
-        Case 4. reference front: [[1.0, 1.0], [2.0, 2.0]], front: [[1.5, 1.5]]
-        Expected result: the distance to the nearest point of the reference front is the euclidean distance to any of the
-        points of the reference front
-
-        :return:
+        Distance to the nearest point of the reference front is the euclidean distance to 
+        the nearest point of the reference front.
+        Reference: [[1.0, 1.0], [2.0, 2.0]], Front: [[1.5, 1.5]]
+        Nearest point strategies:
+        - to [1.0, 1.0]: sqrt(0.5^2 + 0.5^2) = sqrt(0.5)
+        - to [2.0, 2.0]: sqrt(0.5^2 + 0.5^2) = sqrt(0.5)
         """
-        indicator = GenerationalDistance(np.array([[1.0, 1.0], [2.0, 2.0]]))
         front = np.array([[1.5, 1.5]])
+        reference = np.array([[1.0, 1.0], [2.0, 2.0]])
+        indicator = GenerationalDistance(reference)
 
         result = indicator.compute(front)
+        expected = np.sqrt(pow(1.0 - 1.5, 2) + pow(1.0 - 1.5, 2))
+        
+        self.assertEqual(expected, result)
 
-        self.assertEqual(np.sqrt(pow(1.0 - 1.5, 2) + pow(1.0 - 1.5, 2)), result)
-        self.assertEqual(np.sqrt(pow(2.0 - 1.5, 2) + pow(2.0 - 1.5, 2)), result)
-
-    def test_case5(self):
+    def test_single_point_front_nearest_reference(self):
         """
-        Case 5. reference front: [[1.0, 1.0], [2.1, 2.1]], front: [[1.5, 1.5]]
-        Expected result: the distance to the nearest point of the reference front is the euclidean distance
-        to the nearest point of the reference front ([1.0, 1.0])
-
-        :return:
+        Distance to the nearest point of the reference front.
+        Reference: [[1.0, 1.0], [2.1, 2.1]], Front: [[1.5, 1.5]]
+        Nearest point is [1.0, 1.0].
         """
-        indicator = GenerationalDistance(np.array([[1.0, 1.0], [2.1, 2.1]]))
         front = np.array([[1.5, 1.5]])
+        reference = np.array([[1.0, 1.0], [2.1, 2.1]])
+        indicator = GenerationalDistance(reference)
 
         result = indicator.compute(front)
+        expected = np.sqrt(pow(1.0 - 1.5, 2) + pow(1.0 - 1.5, 2))
+        
+        self.assertEqual(expected, result)
 
-        self.assertEqual(np.sqrt(pow(1.0 - 1.5, 2) + pow(1.0 - 1.5, 2)), result)
-        self.assertEqual(np.sqrt(pow(2.0 - 1.5, 2) + pow(2.0 - 1.5, 2)), result)
-
-    def test_case6(self):
+    def test_multiple_points_front_average_distance(self):
         """
-        Case 6. reference front: [[1.0, 1.0], [2.1, 2.1]], front: [[1.5, 1.5], [2.2, 2.2]]
-        Expected result: the distance to the nearest point of the reference front is the average of the sum of each point
-        of the front to the nearest point of the reference front
-
-        :return:
+        GD is the average of distances from each point in the front to its nearest point in reference front.
+        Reference: [[1.0, 1.0], [2.1, 2.1]]
+        Front: [[1.5, 1.5], [2.2, 2.2]]
+        - point [1.5, 1.5] is closest to [1.0, 1.0] (dist = sqrt(0.5))
+        - point [2.2, 2.2] is closest to [2.1, 2.1] (dist = sqrt(0.02))
         """
-        indicator = GenerationalDistance(np.array([[1.0, 1.0], [2.1, 2.1]]))
         front = np.array([[1.5, 1.5], [2.2, 2.2]])
+        reference = np.array([[1.0, 1.0], [2.1, 2.1]])
+        indicator = GenerationalDistance(reference)
 
         result = indicator.compute(front)
-        distance_of_first_point = np.sqrt(pow(1.0 - 1.5, 2) + pow(1.0 - 1.5, 2))
-        distance_of_second_point = np.sqrt(pow(2.1 - 2.2, 2) + pow(2.1 - 2.2, 2))
+        
+        distance_1 = np.sqrt(pow(1.0 - 1.5, 2) + pow(1.0 - 1.5, 2))
+        distance_2 = np.sqrt(pow(2.1 - 2.2, 2) + pow(2.1 - 2.2, 2))
+        expected = (distance_1 + distance_2) / 2.0
 
-        self.assertEqual((distance_of_first_point + distance_of_second_point) / 2.0, result)
+        self.assertEqual(expected, result)
 
-    def test_case7(self):
+    def test_three_points_front_average_distance(self):
         """
-        Case 7. reference front: [[1.0, 1.0], [2.1, 2.1]], front: [[1.5, 1.5], [2.2, 2.2], [1.9, 1.9]]
-        Expected result: the distance to the nearest point of the reference front is the sum of each point of the front to the
-        nearest point of the reference front
-
-        :return:
+        GD with three points in the front.
+        Reference: [[1.0, 1.0], [2.1, 2.1]]
+        Front: [[1.5, 1.5], [2.2, 2.2], [1.9, 1.9]]
         """
-        indicator = GenerationalDistance(np.array([[1.0, 1.0], [2.1, 2.1]]))
         front = np.array([[1.5, 1.5], [2.2, 2.2], [1.9, 1.9]])
+        reference = np.array([[1.0, 1.0], [2.1, 2.1]])
+        indicator = GenerationalDistance(reference)
 
         result = indicator.compute(front)
-        distance_of_first_point = np.sqrt(pow(1.0 - 1.5, 2) + pow(1.0 - 1.5, 2))
-        distance_of_second_point = np.sqrt(pow(2.1 - 2.2, 2) + pow(2.1 - 2.2, 2))
-        distance_of_third_point = np.sqrt(pow(2.1 - 1.9, 2) + pow(2.1 - 1.9, 2))
+        
+        distance_1 = np.sqrt(pow(1.0 - 1.5, 2) + pow(1.0 - 1.5, 2)) # to [1.0, 1.0]
+        distance_2 = np.sqrt(pow(2.1 - 2.2, 2) + pow(2.1 - 2.2, 2)) # to [2.1, 2.1]
+        distance_3 = np.sqrt(pow(2.1 - 1.9, 2) + pow(2.1 - 1.9, 2)) # to [2.1, 2.1]
+        
+        expected = (distance_1 + distance_2 + distance_3) / 3.0
 
-        self.assertEqual((distance_of_first_point + distance_of_second_point + distance_of_third_point) / 3.0, result)
+        self.assertEqual(expected, result)
+
+    def test_none_reference_front_should_raise_error(self):
+        """None reference front passed to compute should raise error (if constructor allowed None)"""
+        # Note: current implementation allows None in constructor but fails in compute
+        indicator = GenerationalDistance(None)
+        front = np.array([[1.0, 1.0]])
+        with self.assertRaises(ValueError):
+            indicator.compute(front)
+            
+    def test_empty_solutions_should_raise_error(self):
+        """Empty solutions array should raise error"""
+        reference = np.array([[1.0, 1.0]])
+        indicator = GenerationalDistance(reference)
+        front = np.array([])
+        with self.assertRaises(ValueError):
+            indicator.compute(front)
 
 
 class InvertedGenerationalDistanceTestCases(unittest.TestCase):
@@ -462,6 +470,130 @@ class InvertedGenerationalDistancePlusTestCases(unittest.TestCase):
         """Empty reference front should raise error"""
         with self.assertRaises(ValueError):
             InvertedGenerationalDistancePlus(np.array([]).reshape(0, 2))
+
+
+class AverageHausdorffDistanceTestCases(unittest.TestCase):
+    def test_should_constructor_create_a_non_null_object(self) -> None:
+        indicator = AverageHausdorffDistance(np.array([[1.0, 1.0]]))
+        self.assertIsNotNone(indicator)
+
+    def test_get_name_return_the_right_value(self):
+        self.assertEqual("Average Hausdorff Distance", AverageHausdorffDistance(np.array([[1.0, 1.0]])).get_name())
+
+    def test_get_short_name_return_the_right_value(self):
+        self.assertEqual("AHD", AverageHausdorffDistance(np.array([[1.0, 1.0]])).get_short_name())
+
+    def test_identical_fronts_should_return_zero(self):
+        """Identical fronts: AHD = max(GD, IGD) = max(0, 0) = 0"""
+        identical_fronts = np.array([[1.0, 1.0]])
+        identical_reference = np.array([[1.0, 1.0]])
+        indicator = AverageHausdorffDistance(identical_reference)
+
+        result = indicator.compute(identical_fronts)
+        self.assertEqual(0.0, result)
+
+    def test_simple_case_gd_equals_igd(self):
+        """
+        Simple symmetric case where GD = IGD.
+        Reference: [[0, 0], [1, 1]]
+        Front: [[0.1, 0.1], [0.9, 0.9]]
+        
+        GD:
+        - [0.1, 0.1] to [0, 0] is closest (d=sqrt(0.02))
+        - [0.9, 0.9] to [1, 1] is closest (d=sqrt(0.02))
+        - GD = sqrt(0.02)
+        
+        IGD:
+        - [0, 0] to [0.1, 0.1] is closest (d=sqrt(0.02))
+        - [1, 1] to [0.9, 0.9] is closest (d=sqrt(0.02))
+        - IGD = sqrt(0.02)
+        
+        AHD = max(GD, IGD) = sqrt(0.02)
+        """
+        reference = np.array([[0.0, 0.0], [1.0, 1.0]])
+        front = np.array([[0.1, 0.1], [0.9, 0.9]])
+        indicator = AverageHausdorffDistance(reference)
+
+        result = indicator.compute(front)
+        expected = np.sqrt(0.1**2 + 0.1**2)
+        
+        self.assertAlmostEqual(expected, result, delta=EPSILON_TEST_ATOL)
+
+    def test_case_where_gd_is_greater_than_igd(self):
+        """
+        Case where GD > IGD.
+        Reference: [[0, 0]]
+        Front: [[1, 0], [2, 0]]
+        
+        GD:
+        - [1, 0] to [0, 0]: dist = 1
+        - [2, 0] to [0, 0]: dist = 2
+        - GD = (1 + 2) / 2 = 1.5
+        
+        IGD:
+        - [0, 0] to closest in front ([1, 0]): dist = 1
+        - IGD = 1 / 1 = 1
+        
+        AHD = max(1.5, 1) = 1.5
+        """
+        reference = np.array([[0.0, 0.0]])
+        front = np.array([[1.0, 0.0], [2.0, 0.0]])
+        indicator = AverageHausdorffDistance(reference)
+        
+        result = indicator.compute(front)
+        
+        self.assertEqual(1.5, result)
+
+    def test_case_where_igd_is_greater_than_gd(self):
+        """
+        Case where IGD > GD.
+        Reference: [[1, 0], [2, 0]]
+        Front: [[0, 0]]
+        
+        GD:
+        - [0, 0] to closest in ref ([1, 0]): dist = 1
+        - GD = 1 / 1 = 1
+        
+        IGD:
+        - [1, 0] to [0, 0]: dist = 1
+        - [2, 0] to [0, 0]: dist = 2
+        - IGD = (1 + 2) / 2 = 1.5
+        
+        AHD = max(1, 1.5) = 1.5
+        """
+        reference = np.array([[1.0, 0.0], [2.0, 0.0]])
+        front = np.array([[0.0, 0.0]])
+        indicator = AverageHausdorffDistance(reference)
+        
+        result = indicator.compute(front)
+        
+        self.assertEqual(1.5, result)
+
+    def test_dimension_mismatch_should_raise_error(self):
+        """Dimension mismatch should throw error"""
+        front_2d = np.array([[0.1, 0.2]])
+        reference_3d = np.array([[0.1, 0.2, 0.3]])
+        indicator = AverageHausdorffDistance(reference_3d)
+        with self.assertRaises(ValueError):
+            indicator.compute(front_2d)
+
+    def test_empty_front_should_raise_error(self):
+        """Empty front should throw error"""
+        empty_front = np.array([]).reshape(0, 2)
+        non_empty_reference = np.array([[0.1, 0.2]])
+        indicator = AverageHausdorffDistance(non_empty_reference)
+        with self.assertRaises(ValueError):
+            indicator.compute(empty_front)
+
+    def test_none_reference_front_should_raise_error(self):
+        """None reference front should raise error"""
+        with self.assertRaises(ValueError):
+            AverageHausdorffDistance(None)
+
+    def test_empty_reference_front_should_raise_error(self):
+        """Empty reference front should raise error"""
+        with self.assertRaises(ValueError):
+            AverageHausdorffDistance(np.array([]).reshape(0, 2))
 
 
 class AdditiveEpsilonIndicatorTestCases(unittest.TestCase):

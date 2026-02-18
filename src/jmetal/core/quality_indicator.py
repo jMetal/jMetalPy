@@ -349,6 +349,78 @@ class InvertedGenerationalDistancePlus(QualityIndicator):
         return "Inverted Generational Distance Plus"
 
 
+class AverageHausdorffDistance(QualityIndicator):
+    """
+    Average Hausdorff Distance (AHD) quality indicator.
+    
+    AHD measures the average distance between the solution front and the reference front.
+    It is defined as the maximum of GD and IGD.
+    
+    Reference:
+    Schutze, O., Esquivel, X., Lara, A., & Coello Coello, C. A. (2012). 
+    Using the averaged Hausdorff distance as a performance measure in evolutionary multiobjective optimization. 
+    IEEE Transactions on Evolutionary Computation, 16(4), 504-522.
+    """
+    
+    def __init__(self, reference_front: np.ndarray = None):
+        """
+        Initialize the AHD indicator.
+        
+        Args:
+            reference_front: Reference front matrix (each row is a solution)
+        
+        Raises:
+            ValueError: If reference_front is None or empty
+        """
+        super(AverageHausdorffDistance, self).__init__(is_minimization=True)
+        if reference_front is None:
+            raise ValueError("Reference front cannot be None")
+        if len(reference_front) == 0:
+            raise ValueError("Reference front cannot be empty")
+        
+        self.reference_front = reference_front
+
+    def compute(self, solutions: np.ndarray) -> float:
+        """
+        Compute the AHD indicator value.
+        
+        Args:
+            solutions: Solution front matrix (each row is a solution)
+            
+        Returns:
+            The AHD indicator value
+            
+        Raises:
+            ValueError: If solutions is empty or has different dimensionality than reference front
+        """
+        if solutions is None or len(solutions) == 0:
+            raise ValueError("Solutions front cannot be None or empty")
+        
+        if solutions.shape[1] != self.reference_front.shape[1]:
+            raise ValueError("Solutions and reference front must have the same number of objectives")
+
+        # Compute pairwise distances between solutions and reference front
+        distances = spatial.distance.cdist(solutions, self.reference_front)
+        
+        # GD: average of minimum distances from solutions to reference front
+        # axis=1 finds min distance for each solution to any point in reference front
+        min_distances_gd = np.min(distances, axis=1)
+        gd = np.mean(min_distances_gd)
+        
+        # IGD: average of minimum distances from reference front to solutions
+        # axis=0 finds min distance for each reference point to any point in solutions
+        min_distances_igd = np.min(distances, axis=0)
+        igd = np.mean(min_distances_igd)
+        
+        return max(gd, igd)
+
+    def get_short_name(self) -> str:
+        return "AHD"
+
+    def get_name(self) -> str:
+        return "Average Hausdorff Distance"
+
+
 class AdditiveEpsilonIndicator(QualityIndicator):
     """
     Additive Epsilon (ε) quality indicator.
