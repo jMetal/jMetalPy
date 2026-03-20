@@ -601,8 +601,12 @@ class PermutationSwapMutation(Mutation[PermutationSolution]):
     def execute(self, solution: PermutationSolution) -> PermutationSolution:
         Check.that(issubclass(type(solution), PermutationSolution), "Solution type invalid")
 
+        size = len(solution.variables)
+        # nothing to do for trivial permutations
+        if size < 2:
+            return solution
+
         if self.rng.random() <= self.probability:
-            size = len(solution.variables)
             # choose two distinct indices without replacement
             idx = self.rng.choice(size, size=2, replace=False)
             pos_one, pos_two = int(idx[0]), int(idx[1])

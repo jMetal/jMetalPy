@@ -2,6 +2,7 @@ from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.mutation import PolynomialMutation
 from jmetal.problem.singleobjective.unconstrained import Rastrigin
+from jmetal.util.observer import PrintObjectivesObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":
@@ -15,6 +16,8 @@ if __name__ == "__main__":
         crossover=SBXCrossover(0.9, 5.0),
         termination_criterion=StoppingByEvaluations(max_evaluations=150000),
     )
+
+    algorithm.observable.register(observer=PrintObjectivesObserver(5000))
 
     algorithm.run()
     result = algorithm.result()

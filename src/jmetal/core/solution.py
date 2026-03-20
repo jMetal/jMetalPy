@@ -667,7 +667,8 @@ class PermutationSolution(Solution[int]):
         Returns:
             A list representing the current permutation.
         """
-        return self._variables.copy()
+        # Return the internal list so operators can mutate in-place (consistent with jMetal Java)
+        return self._variables
     
     @variables.setter
     def variables(self, values: List[int]) -> None:
