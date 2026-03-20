@@ -6,7 +6,7 @@ from jmetal.util.observer import PrintObjectivesObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":
-    problem = TSP(instance="resources/TSP_instances/kroA100.tsp")
+    problem = TSP(instance="kroA100.tsp")
 
     print("Cities: ", problem.number_of_variables())
 
