@@ -127,6 +127,7 @@ The current release of jMetalPy (v1.9.0) contains the following components:
 
 ## Changelog
 * [Current]
+  * Added the multi-objective TSP problem
   * Added the Average Hausdorff Distance (AHD) quality indicator.
   * Added the ZDT benchmark problems. Contributed by Nicolás Rodríguez Uribe.
 * [1.9.0]

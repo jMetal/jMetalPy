@@ -57,7 +57,7 @@ def main(max_evaluations: int):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--max-evals", type=int, default=25000, help="Maximum number of evaluations")
+    parser.add_argument("--max-evals", type=int, default=250000, help="Maximum number of evaluations")
     args = parser.parse_args()
 
     main(args.max_evals)
