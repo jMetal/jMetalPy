@@ -1,0 +1,2983 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.khaos.uma.es/perception/bigowl#"
+     xml:base="http://www.khaos.uma.es/perception/bigowl"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+     xmlns:swrlb="http://www.w3.org/2003/11/swrlb#">
+    <owl:Ontology rdf:about="http://www.khaos.uma.es/perception/bigowl"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#compatibleWith -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#compatibleWith">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Task"/>
+        <rdfs:range rdf:resource="http://www.khaos.uma.es/perception/bigowl#Task"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#connectedTo -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#connectedTo">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Task"/>
+        <rdfs:range rdf:resource="http://www.khaos.uma.es/perception/bigowl#Task"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#encodedBy -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#encodedBy">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Problem"/>
+        <rdfs:range rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataType"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasAlgorithm -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasAlgorithm">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Component"/>
+        <rdfs:range rdf:resource="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasColumn -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasColumn">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataSetTabularClass"/>
+        <rdfs:range rdf:resource="http://www.khaos.uma.es/perception/bigowl#Column"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasComponent -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasComponent">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Task"/>
+        <rdfs:range rdf:resource="http://www.khaos.uma.es/perception/bigowl#Component"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasDataType -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasDataType">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Parameter"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Data"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataType"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasDataTypePrimitive -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasDataTypePrimitive">
+        <rdfs:domain rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Parameter"/>
+        <rdfs:range rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PrimitiveType"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasDataTypeStructured -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasDataTypeStructured">
+        <rdfs:domain rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Parameter"/>
+        <rdfs:range rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#StructuredType"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasParameter -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasParameter">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Workflow"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Component"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Parameter"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasPrimitiveType -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasPrimitiveType">
+        <rdfs:domain rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#StructuredType"/>
+        <rdfs:range rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PrimitiveType"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasProblem -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasProblem">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#DataCollection"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#DataProcessing"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#MachineLearningProblem"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Data"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Problem"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:range>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasTask -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasTask">
+        <rdfs:domain rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Workflow"/>
+        <rdfs:range rdf:resource="http://www.khaos.uma.es/perception/bigowl#Task"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasWorkflow -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasWorkflow">
+        <rdfs:domain rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Workflow"/>
+        <rdfs:range rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Workflow"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#implements -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#implements">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+        <rdfs:range rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Strategy"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#isConnected -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#isConnected">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Component"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Task"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range rdf:resource="http://www.khaos.uma.es/perception/bigowl#Data"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#isCorrect -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#isCorrect">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Component"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range rdf:resource="http://www.khaos.uma.es/perception/bigowl#Data"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#manages -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#manages">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+        <rdfs:range rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataType"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#optimizes -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#optimizes">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Component"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Task"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#MachineLearningProblem"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.khaos.uma.es/perception/bigowl#hasComponent"/>
+                        <owl:allValuesFrom rdf:resource="http://www.khaos.uma.es/perception/bigowl#MachineLearningProblem"/>
+                    </owl:Restriction>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:range>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#representsIndividual -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#representsIndividual">
+        <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#solves -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#solves">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+        <rdfs:range rdf:resource="http://www.khaos.uma.es/perception/bigowl#Problem"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#specifiesInputClass -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#specifiesInputClass">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Component"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Task"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range rdf:resource="http://www.khaos.uma.es/perception/bigowl#Data"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#specifiesOutputClass -->
+
+    <owl:ObjectProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#specifiesOutputClass">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Component"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Task"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range rdf:resource="http://www.khaos.uma.es/perception/bigowl#Data"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#author -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#author">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Workflow"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Component"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Problem"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Software"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#columnDelimiter -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#columnDelimiter">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataSetTabularClass"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#commentChar -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#commentChar">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataSetTabularClass"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#dealWith -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#dealWith">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#description -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#description">
+        <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#encoding -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#encoding">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataSetTabularClass"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasColumnHeader -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasColumnHeader">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataSetTabularClass"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasDataValue -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasDataValue">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataType"/>
+                    <rdf:Description rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#IO-Class"/>
+                    <rdf:Description rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Parameter"/>
+                    <rdf:Description rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Workflow"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Component"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Problem"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasFeature -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasFeature">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Problem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasLibraries -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasLibraries">
+        <rdfs:domain rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#IO-Class"/>
+        <rdfs:domain rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Workflow"/>
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Component"/>
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Task"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasName -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasName">
+        <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasPosition -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasPosition">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Column"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasRowHeader -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasRowHeader">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataSetTabularClass"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasSemanticMeaning -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasSemanticMeaning">
+        <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasTopic -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasTopic">
+        <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasType -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasType">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Column"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#hasURL -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#hasURL">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataType"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#DataIngestion"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#isCorrectWorkflow -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#isCorrectWorkflow">
+        <rdfs:domain rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Workflow"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#isLabel -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#isLabel">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Column"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#isMultiobjective -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#isMultiobjective">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#OptimizationAlgorithm"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#isParallel -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#isParallel">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Component"/>
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Task"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#isSpark -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#isSpark">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Component"/>
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Task"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#isStreamingStructured -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#isStreamingStructured">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#StreamingProcessing"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#license -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#license">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Software"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#limitRows -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#limitRows">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataSetTabularClass"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#numTask -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#numTask">
+        <rdfs:domain rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Workflow"/>
+        <rdfs:range>
+            <rdfs:Datatype>
+                <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+                <owl:withRestrictions rdf:parseType="Collection">
+                    <rdf:Description>
+                        <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</xsd:minInclusive>
+                    </rdf:Description>
+                </owl:withRestrictions>
+            </rdfs:Datatype>
+        </rdfs:range>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#numberOfColumns -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#numberOfColumns">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataSetTabularClass"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#numberOfInputs -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#numberOfInputs">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Component"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range>
+            <rdfs:Datatype>
+                <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+                <owl:withRestrictions rdf:parseType="Collection">
+                    <rdf:Description>
+                        <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</xsd:minInclusive>
+                    </rdf:Description>
+                </owl:withRestrictions>
+            </rdfs:Datatype>
+        </rdfs:range>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#numberOfOutputs -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#numberOfOutputs">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Component"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range>
+            <rdfs:Datatype>
+                <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+                <owl:withRestrictions rdf:parseType="Collection">
+                    <rdf:Description>
+                        <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</xsd:minInclusive>
+                    </rdf:Description>
+                </owl:withRestrictions>
+            </rdfs:Datatype>
+        </rdfs:range>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#order -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#order">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Task"/>
+        <rdfs:range>
+            <rdfs:Datatype>
+                <owl:onDatatype rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+                <owl:withRestrictions rdf:parseType="Collection">
+                    <rdf:Description>
+                        <xsd:minInclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</xsd:minInclusive>
+                    </rdf:Description>
+                </owl:withRestrictions>
+            </rdfs:Datatype>
+        </rdfs:range>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#package -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#package">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Component"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#passwordLogin -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#passwordLogin">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Component"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Software"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#path -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#path">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#IO-Class"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Component"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Problem"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#programmingLanguage -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#programmingLanguage">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Component"/>
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Data"/>
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#Task"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#quoteChar -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#quoteChar">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataSetTabularClass"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#range -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#range">
+        <rdfs:domain rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Parameter"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#rowDelimiter -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#rowDelimiter">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataSetTabularClass"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#scanLimit -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#scanLimit">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataSetTabularClass"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#skipFirstLines -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#skipFirstLines">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataSetTabularClass"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#supportShortLines -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#supportShortLines">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataSetTabularClass"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#timeOut -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#timeOut">
+        <rdfs:domain rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataSetTabularClass"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#userLogin -->
+
+    <owl:DatatypeProperty rdf:about="http://www.khaos.uma.es/perception/bigowl#userLogin">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Component"/>
+                    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Software"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#AssociationDiscoveryAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#AssociationDiscoveryAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PatternDiscoveryAlgorithm"/>
+        <rdfs:label> Association Discovery Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#BayesNetAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#BayesNetAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#BayesianAlgorithm"/>
+        <rdfs:label> Bayes Net Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#BayesianAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#BayesianAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationModelingAlgorithm"/>
+        <rdfs:label> Bayesian Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Bottom-UpClusteringAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Bottom-UpClusteringAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClusteringModelingAlgorithm"/>
+        <rdfs:label> Bottom- Up Clustering Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#CSVC-Algorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#CSVC-Algorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SVC-Algorithm"/>
+        <rdfs:label>CSV C- Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationModelingAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationModelingAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationModelingAlgorithm"/>
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelingAlgorithm"/>
+        <rdfs:label> Classification Modeling Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationRuleInductionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationRuleInductionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationModelingAlgorithm"/>
+        <rdfs:label> Classification Rule Induction Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationTreeInductionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationTreeInductionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationModelingAlgorithm"/>
+        <rdfs:label> Classification Tree Induction Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClusteringModelingAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClusteringModelingAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelingAlgorithm"/>
+        <rdfs:label> Clustering Modeling Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ContinuousOptimizationStrategy -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ContinuousOptimizationStrategy">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#OptimizationStrategy"/>
+        <rdfs:label> Continuous Optimization Strategy</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#CrossValidation -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#CrossValidation">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelEvaluationAlgorithm"/>
+        <rdfs:label> Cross Validation</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DM-Algorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DM-Algorithm">
+        <owl:equivalentClass rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataMiningAlgorithm"/>
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+        <rdfs:label>D M- Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DM-DataClass -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DM-DataClass">
+        <owl:equivalentClass rdf:resource="http://www.khaos.uma.es/perception/bigowl#DMDataClass"/>
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#Data"/>
+        <rdfs:label>DM- Data Class</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DM-Software -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DM-Software">
+        <owl:equivalentClass rdf:resource="http://www.khaos.uma.es/perception/bigowl#DMSoftware"/>
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#Software"/>
+        <rdfs:label>D M- Software</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataAbstractionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataAbstractionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataProcessingAlgorithm"/>
+        <rdfs:label>Data Abstraction Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataProcessingAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataProcessingAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataMiningAlgorithm"/>
+        <rdfs:label>Data Processing Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataSetClass -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataSetClass">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DMDataClass"/>
+        <rdfs:label> Data Set Class</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataTableClass -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataTableClass">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DMDataClass"/>
+        <rdfs:label> Data Table Class</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataType -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataType">
+        <rdfs:label> Data Type</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DecisionStrategy -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DecisionStrategy">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Strategy"/>
+        <rdfs:label> Decision Strategy</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DependencyModelingAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DependencyModelingAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelingAlgorithm"/>
+        <rdfs:label> Dependency Modeling Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DescriptiveModelingAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DescriptiveModelingAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelingAlgorithm"/>
+        <rdfs:label> Descriptive Modeling Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DiscreteOptimizationStrategy -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DiscreteOptimizationStrategy">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#OptimizationStrategy"/>
+        <rdfs:label> Discrete Optimization Strategy</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DiscriminantAnalysisAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DiscriminantAnalysisAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationModelingAlgorithm"/>
+        <rdfs:label> Discriminant Analysis Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DiscriminantFunctionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DiscriminantFunctionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationModelingAlgorithm"/>
+        <rdfs:label> Discriminant Function Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DiscriminativeAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DiscriminativeAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationModelingAlgorithm"/>
+        <rdfs:label> Discriminative Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#EmbeddedFSAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#EmbeddedFSAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureSelectionAlgorithm"/>
+        <rdfs:label>Embedded FS Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#EntropyBasedFSAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#EntropyBasedFSAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureSelectionAlgorithm"/>
+        <rdfs:label>Entropy Based FS Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#EntropyBasedFWAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#EntropyBasedFWAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnivariateFWAlgorithm"/>
+        <rdfs:label> Entropy BasedFW Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ExactContinuousOptimizationStrategy -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ExactContinuousOptimizationStrategy">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ContinuousOptimizationStrategy"/>
+        <rdfs:label> Exact Continuous Optimization Strategy</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureClass -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureClass">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DMDataClass"/>
+        <rdfs:label> Feature Class</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureDiscretizationAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureDiscretizationAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataProcessingAlgorithm"/>
+        <rdfs:label>Feature Discretization Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureExtractionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureExtractionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataProcessingAlgorithm"/>
+        <rdfs:label>Feature Extraction Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureLinearTransformAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureLinearTransformAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureTransformationAlgorithm"/>
+        <rdfs:label> Feature Linear Transform Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureLogTransformAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureLogTransformAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureTransformationAlgorithm"/>
+        <rdfs:label> Feature Log Transform Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureNormalizationAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureNormalizationAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureTransformationAlgorithm"/>
+        <rdfs:label> Feature Normalization Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureRankingAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureRankingAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataProcessingAlgorithm"/>
+        <rdfs:label>Feature Ranking Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureSelectionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureSelectionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataProcessingAlgorithm"/>
+        <rdfs:label>Feature Selection Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureSqrtTansformAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureSqrtTansformAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureTransformationAlgorithm"/>
+        <rdfs:label> Feature Sqrt Tansform Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureSquashToIntervalAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureSquashToIntervalAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureTransformationAlgorithm"/>
+        <rdfs:label> Feature Squash To Interval Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureStandardizationAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureStandardizationAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureTransformationAlgorithm"/>
+        <rdfs:label> Feature Standardization Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureSubsetWeightingAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureSubsetWeightingAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureWeightingAlgorithm"/>
+        <rdfs:label> Feature Subset Weighting Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureTransformationAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureTransformationAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataProcessingAlgorithm"/>
+        <rdfs:label> Feature Transformation Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureWeightingAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureWeightingAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataProcessingAlgorithm"/>
+        <rdfs:label> Feature Weighting Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeedforwardNNAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeedforwardNNAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#NeuralNetworkAlgorithm"/>
+        <rdfs:label> FeedforwardNN Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FilterFSAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FilterFSAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureSelectionAlgorithm"/>
+        <rdfs:label>Filter FS Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ForwardWrapperFSAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ForwardWrapperFSAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#WrapperFSAlgorithm"/>
+        <rdfs:label>Forward Wrapper FS Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#GAwithFSSEvaluatorFSAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#GAwithFSSEvaluatorFSAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#GeneticFSAlgorithm"/>
+        <rdfs:label>GA with FS Evaluator FS Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#GAwithWrappedLearnerFSAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#GAwithWrappedLearnerFSAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#GeneticFSAlgorithm"/>
+        <rdfs:label>GA with Wrapped Learned FS Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#GenerativeAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#GenerativeAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationModelingAlgorithm"/>
+        <rdfs:label> Generative Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#GeneticFSAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#GeneticFSAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureSelectionAlgorithm"/>
+        <rdfs:label>Genetic FS Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Graph -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Graph">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#StructuredType"/>
+        <rdfs:label>Graph</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#GraphTheoreticClusteringAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#GraphTheoreticClusteringAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClusteringModelingAlgorithm"/>
+        <rdfs:label> Graph Theoretic Clustering Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HardMarginSVC-Algorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HardMarginSVC-Algorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SVC-Algorithm"/>
+        <rdfs:label> Hard MarginSV C- Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HeuristicContinuousOptimizationStrategy -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HeuristicContinuousOptimizationStrategy">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ContinuousOptimizationStrategy"/>
+        <rdfs:label> Heuristic Continuous Optimization Strategy</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HierarchicalClusteringAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HierarchicalClusteringAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClusteringModelingAlgorithm"/>
+        <rdfs:label> Hierarchical Clustering Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HypothesisApplicationAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HypothesisApplicationAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataMiningAlgorithm"/>
+        <rdfs:label>Hypothesis Application Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HypothesisComplexityControlStrategy -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HypothesisComplexityControlStrategy">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Strategy"/>
+        <rdfs:label> Hypothesis Complexity Control Strategy</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HypothesisProcessingAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HypothesisProcessingAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataMiningAlgorithm"/>
+        <rdfs:label> Hypothesis Processing Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HypothesisTestBasedFSAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HypothesisTestBasedFSAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureSelectionAlgorithm"/>
+        <rdfs:label>Hypothesis Test Based FS Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#IO-Class -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#IO-Class">
+        <owl:equivalentClass rdf:resource="http://www.khaos.uma.es/perception/bigowl#Data"/>
+        <rdfs:label>IO- Class</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#IncrementalClusteringAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#IncrementalClusteringAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClusteringModelingAlgorithm"/>
+        <rdfs:label> Incremental Clustering Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#IncrementalReducedErrorPruningAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#IncrementalReducedErrorPruningAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#RulePruningAlgorithm"/>
+        <rdfs:label> Incremental Reduced Error Pruning Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#InductionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#InductionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataMiningAlgorithm"/>
+        <rdfs:label> Induction Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#K-MeansAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#K-MeansAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PartitionalClusteringAlgorithm"/>
+        <rdfs:label> K- Means Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#KNearestNeighborAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#KNearestNeighborAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelingAlgorithm"/>
+        <rdfs:label>K Nearest Neighbor Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#LabeledDataSetClass -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#LabeledDataSetClass">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataSetClass"/>
+        <rdfs:label> Labeled Data Set Class</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#LearnerBasedFWAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#LearnerBasedFWAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureWeightingAlgorithm"/>
+        <rdfs:label> Learner BasedFW Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#LearnerFreeFWAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#LearnerFreeFWAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureWeightingAlgorithm"/>
+        <rdfs:label> Learner FreeFW Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#List -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#List">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#StructuredType"/>
+        <rdfs:label>List</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ManifoldFeatureExtractionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ManifoldFeatureExtractionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnsupervisedFeatureExtractionAlgorithm"/>
+        <rdfs:label>Manifold Feature Extraction Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#MeasureClass -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#MeasureClass">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DMDataClass"/>
+        <rdfs:label> Measure Class</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#MetricLearningApproach -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#MetricLearningApproach">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SupervisedFeatureExtractionAlgorithm"/>
+        <rdfs:label>Metric Learning Approach</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#MissingValueImputationAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#MissingValueImputationAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataProcessingAlgorithm"/>
+        <rdfs:label> Missing Value Imputation Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelAggregationAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelAggregationAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelProcessingAlgorithm"/>
+        <rdfs:label> Model Aggregation Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelApplicationAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelApplicationAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HypothesisApplicationAlgorithm"/>
+        <rdfs:label> Model Application Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelEvaluationAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelEvaluationAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataMiningAlgorithm"/>
+        <rdfs:label> Model Evaluation Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelProcessingAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelProcessingAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HypothesisProcessingAlgorithm"/>
+        <rdfs:label> Model Processing Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelPruningAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelPruningAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelProcessingAlgorithm"/>
+        <rdfs:label> Model Pruning Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelingAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelingAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#InductionAlgorithm"/>
+        <rdfs:label> Modeling Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#MultilayerPerceptronAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#MultilayerPerceptronAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeedforwardNNAlgorithm"/>
+        <rdfs:label> Multilayer Perceptron Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#MultivariateFSAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#MultivariateFSAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureSelectionAlgorithm"/>
+        <rdfs:label>Multivariate FS Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#MultivariateFWAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#MultivariateFWAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureWeightingAlgorithm"/>
+        <rdfs:label> MultivariateFW Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#MultivariateLearnerBasedFWAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#MultivariateLearnerBasedFWAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureWeightingAlgorithm"/>
+        <rdfs:label> Multivariate Learner BasedFW Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#MultivariateLearnerFreeFWAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#MultivariateLearnerFreeFWAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureWeightingAlgorithm"/>
+        <rdfs:label> Multivariate Learner FreeFW Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#MultivariateTreeInductionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#MultivariateTreeInductionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationTreeInductionAlgorithm"/>
+        <rdfs:label> Multivariate Tree Induction Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#NaiveBayesAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#NaiveBayesAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#BayesianAlgorithm"/>
+        <rdfs:label> Naive Bayes Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#NeuralNetworkAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#NeuralNetworkAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelingAlgorithm"/>
+        <rdfs:label> Neural Network Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Non-IncrementalClusteringAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Non-IncrementalClusteringAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClusteringModelingAlgorithm"/>
+        <rdfs:label> Non- Incremental Clustering Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#NonParametricTestBasedFSAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#NonParametricTestBasedFSAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HypothesisTestBasedFSAlgorithm"/>
+        <rdfs:label>Non Parametric Test Based FS Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#NuSVC-Algorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#NuSVC-Algorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SVC-Algorithm"/>
+        <rdfs:label> NuSV C- Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#OneClassSVC-Algorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#OneClassSVC-Algorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SVC-Algorithm"/>
+        <rdfs:label> One ClassSV C- Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#OptimizationProblem -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#OptimizationProblem">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#Problem"/>
+        <rdfs:label> Optimization Problem</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#OptimizationStrategy -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#OptimizationStrategy">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Strategy"/>
+        <rdfs:label> Optimization Strategy</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Parameter -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Parameter">
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.khaos.uma.es/perception/bigowl#hasDataType"/>
+                        <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                        <owl:onClass rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataType"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.khaos.uma.es/perception/bigowl#hasDataValue"/>
+                        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxCardinality>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+        <rdfs:label>Parameter</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ParametricTestBasedFSAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ParametricTestBasedFSAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HypothesisTestBasedFSAlgorithm"/>
+        <rdfs:label>Parametric Test Based FS Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PartitionalClusteringAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PartitionalClusteringAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClusteringModelingAlgorithm"/>
+        <rdfs:label> Partitional Clustering Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PatternDiscoveryAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PatternDiscoveryAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#InductionAlgorithm"/>
+        <rdfs:label> Pattern Discovery Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PatternProcessingAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PatternProcessingAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HypothesisProcessingAlgorithm"/>
+        <rdfs:label> Pattern Processing Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PatternPruningAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PatternPruningAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PatternProcessingAlgorithm"/>
+        <rdfs:label> Pattern Pruning Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PatternSetApplicationAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PatternSetApplicationAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#HypothesisApplicationAlgorithm"/>
+        <rdfs:label> Pattern Set Application Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PatternSetBasedClassifModelingAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PatternSetBasedClassifModelingAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationModelingAlgorithm"/>
+        <rdfs:label> Pattern Set Based Classif Modeling Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PerformanceBoundsAnalysis -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PerformanceBoundsAnalysis">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelEvaluationAlgorithm"/>
+        <rdfs:label> Performance Bounds Analysis</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PredictiveModelingAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PredictiveModelingAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelingAlgorithm"/>
+        <rdfs:label> Predictive Modeling Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PrimitiveType -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PrimitiveType">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataType"/>
+        <rdfs:label> Primitive Type</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ProbabilisticClusteringAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ProbabilisticClusteringAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClusteringModelingAlgorithm"/>
+        <rdfs:label> Probabilistic Clustering Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ProbabilityEstimationAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ProbabilityEstimationAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelingAlgorithm"/>
+        <rdfs:label> Probability Estimation Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ProjectiveFeatureExtractionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ProjectiveFeatureExtractionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnsupervisedFeatureExtractionAlgorithm"/>
+        <rdfs:label>Projective Feature Extraction Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#RadialBasisFunctionNetworkAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#RadialBasisFunctionNetworkAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeedforwardNNAlgorithm"/>
+        <rdfs:label> Radial Basis Function Network Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#RecurrentNNAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#RecurrentNNAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#NeuralNetworkAlgorithm"/>
+        <rdfs:label> RecurrentNN Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#RegressionModelingAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#RegressionModelingAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelingAlgorithm"/>
+        <rdfs:label> Regression Modeling Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#RegressionTreeInductionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#RegressionTreeInductionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#RegressionModelingAlgorithm"/>
+        <rdfs:label> Regression Tree Induction Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#RuleEnsembleInductionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#RuleEnsembleInductionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationRuleInductionAlgorithm"/>
+        <rdfs:label> Rule Ensemble Induction Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#RulePruningAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#RulePruningAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PatternPruningAlgorithm"/>
+        <rdfs:label> Rule Pruning Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#RulesetPruningAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#RulesetPruningAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelPruningAlgorithm"/>
+        <rdfs:label> Ruleset Pruning Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SVC-Algorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SVC-Algorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationModelingAlgorithm"/>
+        <rdfs:label>SV C- Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SelfConfiguringNNAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SelfConfiguringNNAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#NeuralNetworkAlgorithm"/>
+        <rdfs:label> Self ConfiguringNN Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SemiSupervisedInductionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SemiSupervisedInductionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#InductionAlgorithm"/>
+        <rdfs:label> Semi Supervised Induction Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SetCoveringAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SetCoveringAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationRuleInductionAlgorithm"/>
+        <rdfs:label> Set Covering Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SetorBag -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SetorBag">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#StructuredType"/>
+        <rdfs:label> Setor Bag</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SingleFeatureWeightingAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SingleFeatureWeightingAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureWeightingAlgorithm"/>
+        <rdfs:label> Single Feature Weighting Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#StatisticBasedFWAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#StatisticBasedFWAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnivariateFWAlgorithm"/>
+        <rdfs:label> Statistic BasedFW Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Strategy -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Strategy">
+        <rdfs:label>Strategy</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#StructuredPredictionModelingAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#StructuredPredictionModelingAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelingAlgorithm"/>
+        <rdfs:label> Structured Prediction Modeling Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#StructuredType -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#StructuredType">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataType"/>
+        <rdfs:label> Structured Type</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SupervisedDiscretizationAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SupervisedDiscretizationAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureDiscretizationAlgorithm"/>
+        <rdfs:label>Supervised Discretization Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SupervisedFeatureExtractionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SupervisedFeatureExtractionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureExtractionAlgorithm"/>
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SupervisedFeatureExtractionAlgorithm"/>
+        <rdfs:label>Supervised Feature Extraction Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SupervisedInductionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#SupervisedInductionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#InductionAlgorithm"/>
+        <rdfs:label> Supervised Induction Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Top-DownClusteringAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Top-DownClusteringAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClusteringModelingAlgorithm"/>
+        <rdfs:label> Top- Down Clustering Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#TreeBasedRuleInductionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#TreeBasedRuleInductionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationRuleInductionAlgorithm"/>
+        <rdfs:label> Tree Based Rule Induction Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#TreePruningAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#TreePruningAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ModelPruningAlgorithm"/>
+        <rdfs:label> Tree Pruning Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnivariateFSAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnivariateFSAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureSelectionAlgorithm"/>
+        <rdfs:label>Univariate FS Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnivariateFWAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnivariateFWAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureWeightingAlgorithm"/>
+        <rdfs:label> UnivariateFW Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnivariateLearnerBasedFWAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnivariateLearnerBasedFWAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureWeightingAlgorithm"/>
+        <rdfs:label> Univariate Learner BasedFW Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnivariateLearnerFreeFWAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnivariateLearnerFreeFWAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureWeightingAlgorithm"/>
+        <rdfs:label> Univariate Learner FreeFW Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnivariateTreeInductionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnivariateTreeInductionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#ClassificationTreeInductionAlgorithm"/>
+        <rdfs:label> Univariate Tree Induction Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnlabeledDataSetClass -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnlabeledDataSetClass">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataSetClass"/>
+        <rdfs:label> Unlabeled Data Set Class</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnsupervisedDiscretizationAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnsupervisedDiscretizationAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureDiscretizationAlgorithm"/>
+        <rdfs:label>Unsupervised Discretization Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnsupervisedFeatureExtractionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnsupervisedFeatureExtractionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureExtractionAlgorithm"/>
+        <rdfs:label>Unsupervised Feature Extraction Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnsupervisedInductionAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UnsupervisedInductionAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#InductionAlgorithm"/>
+        <rdfs:label> Unsupervised Induction Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UtilityAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#UtilityAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataMiningAlgorithm"/>
+        <rdfs:label> Utility Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Workflow -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Workflow">
+        <rdfs:label>Workflow</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#WrapperFSAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#WrapperFSAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureSelectionAlgorithm"/>
+        <rdfs:label>Wrapper FS Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#WrapperFWAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#WrapperFWAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#FeatureWeightingAlgorithm"/>
+        <rdfs:label> WrapperFW Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/PD.owl#AssociationRuleGenerationAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/PD.owl#AssociationRuleGenerationAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PatternProcessingAlgorithm"/>
+        <rdfs:label> Association Rule Generation Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.e-lico.eu/ontologies/dmo/DMOP/PD.owl#SubgroupDiscoveryAlgorithm -->
+
+    <owl:Class rdf:about="http://www.e-lico.eu/ontologies/dmo/DMOP/PD.owl#SubgroupDiscoveryAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PatternDiscoveryAlgorithm"/>
+        <rdfs:label> Subgroup Discovery Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Algorithm -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#Algorithm">
+        <owl:disjointWith rdf:resource="http://www.khaos.uma.es/perception/bigowl#Problem"/>
+        <rdfs:label>Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Column -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#Column"/>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Component -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#Component">
+        <rdfs:label>Component</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#DMDataClass -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#DMDataClass">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#Data"/>
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#Matrix"/>
+        <rdfs:label>DM Data Class</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#DMSoftware -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#DMSoftware">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#Software"/>
+        <rdfs:label>DM Software</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Data -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#Data">
+        <rdfs:label>Data</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#DataAnalysing -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#DataAnalysing">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#Component"/>
+        <rdfs:label> Data Analysing</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#DataCollection -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#DataCollection">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#Component"/>
+        <rdfs:label> Data Collection</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#DataIngestion -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#DataIngestion">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataCollection"/>
+        <rdfs:label> Data Ingestion</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#DataMining -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#DataMining">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#MachineLearning"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.khaos.uma.es/perception/bigowl#hasAlgorithm"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataMiningAlgorithm"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:label> Data Mining</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#DataMiningAlgorithm -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#DataMiningAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.khaos.uma.es/perception/bigowl#manages"/>
+                <owl:someValuesFrom rdf:resource="http://www.khaos.uma.es/perception/bigowl#DMDataClass"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:label>Data Mining Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#DataProcessing -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#DataProcessing">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#Component"/>
+        <rdfs:label> Data Processing</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#DataSetJsonClass -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#DataSetJsonClass">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataSetClass"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#DataSetTabularClass -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#DataSetTabularClass">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#DataSetClass"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#DataSink -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#DataSink">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#Component"/>
+        <rdfs:label> Data Sink</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#DatabaseQueryEvaluation -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#DatabaseQueryEvaluation">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataProcessing"/>
+        <rdfs:label> Database Query Evaluation</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#DatabaseRead -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#DatabaseRead">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataCollection"/>
+        <rdfs:label> Database Read</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#DatabaseWrite -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#DatabaseWrite">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataSink"/>
+        <rdfs:label> Database Write</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#DeepLearning -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#DeepLearning">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataAnalysing"/>
+        <rdfs:label> Deep Learning</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#EvolutionStrategy -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#EvolutionStrategy">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#Evolutionary"/>
+        <rdfs:label> Evolution Strategy</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Evolutionary -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#Evolutionary">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#PopulationBased"/>
+        <rdfs:label>Evolutionary</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Exact -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#Exact">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#OptimizationAlgorithm"/>
+        <rdfs:label>Exact</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#GeneticAlgorithm -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#GeneticAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#Evolutionary"/>
+        <rdfs:label> Genetic Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#GeoData -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#GeoData">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#StructuredType"/>
+        <rdfs:label> Geo Data</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Heuristic -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#Heuristic">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#OptimizationAlgorithm"/>
+        <rdfs:label>Heuristic</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#MachineLearning -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#MachineLearning">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataAnalysing"/>
+        <rdfs:label> Machine Learning</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#MachineLearningProblem -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#MachineLearningProblem">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataAnalysing"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.khaos.uma.es/perception/bigowl#hasProblem"/>
+                <owl:allValuesFrom rdf:resource="http://www.khaos.uma.es/perception/bigowl#Problem"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:label>Machine Learning Problem</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Matrix -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#Matrix">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#StructuredType"/>
+        <rdfs:label>Matrix</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Metaheuristic -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#Metaheuristic">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#OptimizationAlgorithm"/>
+        <rdfs:label>Metaheuristic</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Optimization -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#Optimization">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#MachineLearning"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.khaos.uma.es/perception/bigowl#solves"/>
+                <owl:allValuesFrom rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#OptimizationProblem"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.khaos.uma.es/perception/bigowl#hasAlgorithm"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.khaos.uma.es/perception/bigowl#OptimizationAlgorithm"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:label>Optimization</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#OptimizationAlgorithm -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#OptimizationAlgorithm">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#Algorithm"/>
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.khaos.uma.es/perception/bigowl#implements"/>
+                        <owl:someValuesFrom rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#OptimizationStrategy"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.khaos.uma.es/perception/bigowl#solves"/>
+                        <owl:someValuesFrom rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#OptimizationProblem"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+        <rdfs:label> Optimization Algorithm</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#OptimizationSoftware -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#OptimizationSoftware">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#Software"/>
+        <rdfs:label> Optimization Software</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Permutation -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#Permutation">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#StructuredType"/>
+        <rdfs:label>Permutation</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#PopulationBased -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#PopulationBased">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#Metaheuristic"/>
+        <rdfs:label> Population Based</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Problem -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#Problem">
+        <rdfs:label>Problem</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Search -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#Search">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#PopulationBased"/>
+        <rdfs:label>Search</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Software -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#Software">
+        <rdfs:label>Software</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#StreamingProcessing -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#StreamingProcessing">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataProcessing"/>
+        <rdfs:label> Streaming Processing</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#SwarmIntelligence -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#SwarmIntelligence">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#PopulationBased"/>
+        <rdfs:label> Swarm Intelligence</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Task -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#Task">
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="http://www.khaos.uma.es/perception/bigowl#specifiesInputClass"/>
+                                <owl:allValuesFrom rdf:resource="http://www.khaos.uma.es/perception/bigowl#Data"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="http://www.khaos.uma.es/perception/bigowl#specifiesOutputClass"/>
+                                <owl:allValuesFrom rdf:resource="http://www.khaos.uma.es/perception/bigowl#Data"/>
+                            </owl:Restriction>
+                        </owl:unionOf>
+                    </owl:Class>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.khaos.uma.es/perception/bigowl#hasComponent"/>
+                        <owl:allValuesFrom rdf:resource="http://www.khaos.uma.es/perception/bigowl#Component"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+        <rdfs:label>Task</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#TrajectoryMethod -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#TrajectoryMethod">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#Metaheuristic"/>
+        <rdfs:label> Trajectory Method</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Tree -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#Tree">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#StructuredType"/>
+        <rdfs:label>Tree</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Tuple -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#Tuple">
+        <rdfs:subClassOf rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#StructuredType"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Visualization -->
+
+    <owl:Class rdf:about="http://www.khaos.uma.es/perception/bigowl#Visualization">
+        <rdfs:subClassOf rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataSink"/>
+        <rdfs:label>Visualization</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#Thing -->
+
+    <rdf:Description rdf:about="http://www.w3.org/2002/07/owl#Thing">
+        <rdfs:label>Thing</rdfs:label>
+    </rdf:Description>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Boolean -->
+
+    <owl:NamedIndividual rdf:about="http://www.khaos.uma.es/perception/bigowl#Boolean">
+        <rdf:type rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PrimitiveType"/>
+        <rdfs:label>Boolean</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Date -->
+
+    <owl:NamedIndividual rdf:about="http://www.khaos.uma.es/perception/bigowl#Date">
+        <rdf:type rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PrimitiveType"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Double -->
+
+    <owl:NamedIndividual rdf:about="http://www.khaos.uma.es/perception/bigowl#Double">
+        <rdf:type rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PrimitiveType"/>
+        <owl:sameAs rdf:resource="http://www.khaos.uma.es/perception/bigowl#Real"/>
+        <rdfs:label>Double</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Integer -->
+
+    <owl:NamedIndividual rdf:about="http://www.khaos.uma.es/perception/bigowl#Integer">
+        <rdf:type rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PrimitiveType"/>
+        <rdfs:label>Integer</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#List -->
+
+    <owl:NamedIndividual rdf:about="http://www.khaos.uma.es/perception/bigowl#List">
+        <rdf:type rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#List"/>
+        <rdfs:label>List</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#ParameterSparkRunnerExecutorCores -->
+
+    <owl:NamedIndividual rdf:about="http://www.khaos.uma.es/perception/bigowl#ParameterSparkRunnerExecutorCores">
+        <rdf:type rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Parameter"/>
+        <hasDataType rdf:resource="http://www.khaos.uma.es/perception/bigowl#String"/>
+        <hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">executor-cores</hasName>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Parameter Spark Runner Executor Cores</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#ParameterSparkRunnerExecutorMemory -->
+
+    <owl:NamedIndividual rdf:about="http://www.khaos.uma.es/perception/bigowl#ParameterSparkRunnerExecutorMemory">
+        <rdf:type rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Parameter"/>
+        <hasDataType rdf:resource="http://www.khaos.uma.es/perception/bigowl#String"/>
+        <hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">executor-memory</hasName>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Parameter Spark Runner Executor Memory</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#ParameterSparkRunnerMaster -->
+
+    <owl:NamedIndividual rdf:about="http://www.khaos.uma.es/perception/bigowl#ParameterSparkRunnerMaster">
+        <rdf:type rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Parameter"/>
+        <hasDataType rdf:resource="http://www.khaos.uma.es/perception/bigowl#String"/>
+        <hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">master</hasName>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Parameter Spark Runner Master</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#ParameterSparkRunnerNumExecutor -->
+
+    <owl:NamedIndividual rdf:about="http://www.khaos.uma.es/perception/bigowl#ParameterSparkRunnerNumExecutor">
+        <rdf:type rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Parameter"/>
+        <hasDataType rdf:resource="http://www.khaos.uma.es/perception/bigowl#String"/>
+        <hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">num-executor</hasName>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Parameter Spark Runner Num Executor</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#ParameterSparkRunnerTotalExecutorCores -->
+
+    <owl:NamedIndividual rdf:about="http://www.khaos.uma.es/perception/bigowl#ParameterSparkRunnerTotalExecutorCores">
+        <rdf:type rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Parameter"/>
+        <hasDataType rdf:resource="http://www.khaos.uma.es/perception/bigowl#String"/>
+        <hasName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">total-executor-cores</hasName>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Parameter Spark Runner Total Executor Cores</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Real -->
+
+    <owl:NamedIndividual rdf:about="http://www.khaos.uma.es/perception/bigowl#Real">
+        <rdf:type rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PrimitiveType"/>
+        <rdfs:label>Real</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#String -->
+
+    <owl:NamedIndividual rdf:about="http://www.khaos.uma.es/perception/bigowl#String">
+        <rdf:type rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PrimitiveType"/>
+        <rdfs:label>String</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Timestamp -->
+
+    <owl:NamedIndividual rdf:about="http://www.khaos.uma.es/perception/bigowl#Timestamp">
+        <rdf:type rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#PrimitiveType"/>
+        <rdfs:label>Timestamp</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.khaos.uma.es/perception/bigowl#Tuple -->
+
+    <owl:NamedIndividual rdf:about="http://www.khaos.uma.es/perception/bigowl#Tuple">
+        <rdf:type rdf:resource="http://www.khaos.uma.es/perception/bigowl#Tuple"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotations
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description rdf:about="http://www.khaos.uma.es/perception/bigowl#Tuple">
+        <rdfs:label>Tuple</rdfs:label>
+    </rdf:Description>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Rules
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description rdf:about="urn:swrl#w">
+        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="urn:swrl#dataIn">
+        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="urn:swrl#dataOut">
+        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="urn:swrl#alg">
+        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="urn:swrl#comp">
+        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="urn:swrl#task">
+        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Imp"/>
+        <swrl:body>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                <rdf:first>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#ClassAtom"/>
+                        <swrl:classPredicate rdf:resource="http://www.e-lico.eu/ontologies/dmo/DMOP/DMOP.owl#Workflow"/>
+                        <swrl:argument1 rdf:resource="urn:swrl#w"/>
+                    </rdf:Description>
+                </rdf:first>
+                <rdf:rest>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                        <rdf:first>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#ClassAtom"/>
+                                <swrl:classPredicate rdf:resource="http://www.khaos.uma.es/perception/bigowl#Data"/>
+                                <swrl:argument1 rdf:resource="urn:swrl#dataIn"/>
+                            </rdf:Description>
+                        </rdf:first>
+                        <rdf:rest>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                                <rdf:first>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#ClassAtom"/>
+                                        <swrl:classPredicate rdf:resource="http://www.khaos.uma.es/perception/bigowl#Data"/>
+                                        <swrl:argument1 rdf:resource="urn:swrl#dataOut"/>
+                                    </rdf:Description>
+                                </rdf:first>
+                                <rdf:rest>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                                        <rdf:first>
+                                            <rdf:Description>
+                                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#ClassAtom"/>
+                                                <swrl:classPredicate rdf:resource="http://www.khaos.uma.es/perception/bigowl#DataMiningAlgorithm"/>
+                                                <swrl:argument1 rdf:resource="urn:swrl#alg"/>
+                                            </rdf:Description>
+                                        </rdf:first>
+                                        <rdf:rest>
+                                            <rdf:Description>
+                                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                                                <rdf:first>
+                                                    <rdf:Description>
+                                                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
+                                                        <swrl:propertyPredicate rdf:resource="http://www.khaos.uma.es/perception/bigowl#hasAlgorithm"/>
+                                                        <swrl:argument1 rdf:resource="urn:swrl#comp"/>
+                                                        <swrl:argument2 rdf:resource="urn:swrl#alg"/>
+                                                    </rdf:Description>
+                                                </rdf:first>
+                                                <rdf:rest>
+                                                    <rdf:Description>
+                                                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                                                        <rdf:first>
+                                                            <rdf:Description>
+                                                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
+                                                                <swrl:propertyPredicate rdf:resource="http://www.khaos.uma.es/perception/bigowl#hasComponent"/>
+                                                                <swrl:argument1 rdf:resource="urn:swrl#task"/>
+                                                                <swrl:argument2 rdf:resource="urn:swrl#comp"/>
+                                                            </rdf:Description>
+                                                        </rdf:first>
+                                                        <rdf:rest>
+                                                            <rdf:Description>
+                                                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                                                                <rdf:first>
+                                                                    <rdf:Description>
+                                                                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
+                                                                        <swrl:propertyPredicate rdf:resource="http://www.khaos.uma.es/perception/bigowl#hasTask"/>
+                                                                        <swrl:argument1 rdf:resource="urn:swrl#w"/>
+                                                                        <swrl:argument2 rdf:resource="urn:swrl#task"/>
+                                                                    </rdf:Description>
+                                                                </rdf:first>
+                                                                <rdf:rest>
+                                                                    <rdf:Description>
+                                                                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                                                                        <rdf:first>
+                                                                            <rdf:Description>
+                                                                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
+                                                                                <swrl:propertyPredicate rdf:resource="http://www.khaos.uma.es/perception/bigowl#specifiesInputClass"/>
+                                                                                <swrl:argument1 rdf:resource="urn:swrl#task"/>
+                                                                                <swrl:argument2 rdf:resource="urn:swrl#dataIn"/>
+                                                                            </rdf:Description>
+                                                                        </rdf:first>
+                                                                        <rdf:rest>
+                                                                            <rdf:Description>
+                                                                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                                                                                <rdf:first>
+                                                                                    <rdf:Description>
+                                                                                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
+                                                                                        <swrl:propertyPredicate rdf:resource="http://www.khaos.uma.es/perception/bigowl#specifiesOutputClass"/>
+                                                                                        <swrl:argument1 rdf:resource="urn:swrl#task"/>
+                                                                                        <swrl:argument2 rdf:resource="urn:swrl#dataOut"/>
+                                                                                    </rdf:Description>
+                                                                                </rdf:first>
+                                                                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                                                            </rdf:Description>
+                                                                        </rdf:rest>
+                                                                    </rdf:Description>
+                                                                </rdf:rest>
+                                                            </rdf:Description>
+                                                        </rdf:rest>
+                                                    </rdf:Description>
+                                                </rdf:rest>
+                                            </rdf:Description>
+                                        </rdf:rest>
+                                    </rdf:Description>
+                                </rdf:rest>
+                            </rdf:Description>
+                        </rdf:rest>
+                    </rdf:Description>
+                </rdf:rest>
+            </rdf:Description>
+        </swrl:body>
+        <swrl:head>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                <rdf:first>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
+                        <swrl:propertyPredicate rdf:resource="http://www.khaos.uma.es/perception/bigowl#specifiesInputClass"/>
+                        <swrl:argument1 rdf:resource="urn:swrl#alg"/>
+                        <swrl:argument2 rdf:resource="urn:swrl#dataIn"/>
+                    </rdf:Description>
+                </rdf:first>
+                <rdf:rest>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                        <rdf:first>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
+                                <swrl:propertyPredicate rdf:resource="http://www.khaos.uma.es/perception/bigowl#specifiesInputClass"/>
+                                <swrl:argument1 rdf:resource="urn:swrl#comp"/>
+                                <swrl:argument2 rdf:resource="urn:swrl#dataIn"/>
+                            </rdf:Description>
+                        </rdf:first>
+                        <rdf:rest>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                                <rdf:first>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
+                                        <swrl:propertyPredicate rdf:resource="http://www.khaos.uma.es/perception/bigowl#specifiesOutputClass"/>
+                                        <swrl:argument1 rdf:resource="urn:swrl#alg"/>
+                                        <swrl:argument2 rdf:resource="urn:swrl#dataOut"/>
+                                    </rdf:Description>
+                                </rdf:first>
+                                <rdf:rest>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
+                                        <rdf:first>
+                                            <rdf:Description>
+                                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
+                                                <swrl:propertyPredicate rdf:resource="http://www.khaos.uma.es/perception/bigowl#specifiesOutputClass"/>
+                                                <swrl:argument1 rdf:resource="urn:swrl#comp"/>
+                                                <swrl:argument2 rdf:resource="urn:swrl#dataOut"/>
+                                            </rdf:Description>
+                                        </rdf:first>
+                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                    </rdf:Description>
+                                </rdf:rest>
+                            </rdf:Description>
+                        </rdf:rest>
+                    </rdf:Description>
+                </rdf:rest>
+            </rdf:Description>
+        </swrl:head>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+
