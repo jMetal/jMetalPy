@@ -166,8 +166,8 @@ class SubsetSum(BinaryProblem):
         self.W = np.array(W, dtype=float)  # Convert to numpy array for vectorized operations
         
         self.number_of_bits = len(self.W)
-        self.number_of_objectives = 2
-        self.number_of_constraints = 0
+        self._number_of_objectives = 2
+        self._number_of_constraints = 0
 
         # Objective 1: Maximize sum (minimize negative sum)
         # Objective 2: Minimize number of selected objects
@@ -178,10 +178,10 @@ class SubsetSum(BinaryProblem):
         return self.number_of_bits  # Each bit represents whether an item is selected
 
     def number_of_objectives(self) -> int:
-        return self.number_of_objectives
+        return self._number_of_objectives
 
     def number_of_constraints(self) -> int:
-        return self.number_of_constraints
+        return self._number_of_constraints
 
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
         # Get the mask of selected items (bits that are True)
