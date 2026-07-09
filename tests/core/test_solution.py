@@ -52,7 +52,7 @@ class TestSolution:
     def solution(self) -> Solution:
         return DummySolution(number_of_variables=2, number_of_objectives=3, number_of_constraints=1)
 
-    def test_given_initial_parameters_when_creating_solution_then_properties_are_set_correctly(
+    def test_should_properties_are_set_correctly_when_creating_solution(
         self, solution: Solution
     ) -> None:
         """Test that a solution is properly initialized with the given parameters."""
@@ -65,9 +65,7 @@ class TestSolution:
         assert len(solution.constraints) == 1
         assert isinstance(solution.attributes, dict)
 
-    def test_given_valid_objectives_list_when_setting_objectives_then_they_are_stored(
-        self, solution: Solution
-    ) -> None:
+    def test_should_they_are_stored_when_setting_objectives(self, solution: Solution) -> None:
         """Test that objectives are correctly stored when a valid list is provided."""
         # Arrange
         objectives = [1.0, 2.0, 3.0]
@@ -78,17 +76,13 @@ class TestSolution:
         # Assert
         assert solution.objectives == objectives
 
-    def test_given_invalid_objectives_length_when_setting_objectives_then_raises_error(
-        self, solution: Solution
-    ) -> None:
+    def test_should_raises_error_when_setting_objectives(self, solution: Solution) -> None:
         """Test that setting objectives with incorrect length raises ValueError."""
         # Act & Assert
         with pytest.raises(ValueError):
             solution.objectives = [1.0, 2.0]  # Should be 3 objectives
 
-    def test_given_valid_constraints_list_when_setting_constraints_then_they_are_stored(
-        self, solution: Solution
-    ) -> None:
+    def test_should_they_are_stored_when_setting_constraints(self, solution: Solution) -> None:
         """Test that constraints are correctly stored when a valid list is provided."""
         # Arrange
         constraints = [0.5]
@@ -99,17 +93,13 @@ class TestSolution:
         # Assert
         assert solution.constraints == constraints
 
-    def test_given_invalid_constraints_length_when_setting_constraints_then_raises_error(
-        self, solution: Solution
-    ) -> None:
+    def test_should_raises_error_when_setting_constraints(self, solution: Solution) -> None:
         """Test that setting constraints with incorrect length raises ValueError."""
         # Act & Assert
         with pytest.raises(ValueError):
             solution.constraints = [0.5, 0.6]  # Should be 1 constraint
 
-    def test_given_solution_with_data_when_copying_then_creates_deep_copy(
-        self, solution: Solution
-    ) -> None:
+    def test_should_creates_deep_copy_when_copying(self, solution: Solution) -> None:
         """Test that copying a solution creates a deep copy with all attributes."""
         # Arrange
         solution.variables = [1, 2]
@@ -143,7 +133,7 @@ class TestBinarySolution:
         solution.variables = [True, False]  # Initialize with valid bit array
         return solution
 
-    def test_given_number_of_variables_when_creating_binary_solution_then_initializes_correctly(
+    def test_should_initializes_correctly_when_creating_binary_solution(
         self,
     ) -> None:
         """Test that a binary solution is properly initialized with the given number of variables."""
@@ -155,9 +145,7 @@ class TestBinarySolution:
         assert len(solution.variables) == 2
         assert solution.bits.size == 2  # Should be a 1D array with 2 elements
 
-    def test_given_binary_variables_when_accessed_then_returns_correct_values(
-        self, solution: BinarySolution
-    ) -> None:
+    def test_should_returns_correct_values_when_accessed(self, solution: BinarySolution) -> None:
         """Test that binary variables can be set and retrieved correctly."""
         # Arrange & Act
         solution.variables = [True, False]  # Set as a flat list of booleans
@@ -166,7 +154,7 @@ class TestBinarySolution:
         assert solution.variables[0] is True
         assert solution.variables[1] is False
 
-    def test_given_binary_solution_when_calculating_total_bits_then_returns_correct_count(
+    def test_should_returns_correct_count_when_calculating_total_bits(
         self, solution: BinarySolution
     ) -> None:
         """Test that the total number of bits is calculated correctly."""
@@ -176,7 +164,7 @@ class TestBinarySolution:
         # Act & Assert
         assert solution.get_total_number_of_bits() == 2
 
-    def test_given_binary_solution_when_calculating_cardinality_then_returns_correct_count(
+    def test_should_returns_correct_count_when_calculating_cardinality(
         self, solution: BinarySolution
     ) -> None:
         """Test that the number of set bits is calculated correctly."""
@@ -186,9 +174,7 @@ class TestBinarySolution:
         # Act & Assert
         assert solution.cardinality() == 1  # Only first bit is True
 
-    def test_given_bit_index_when_flipping_bit_then_bit_is_inverted(
-        self, solution: BinarySolution
-    ) -> None:
+    def test_should_bit_is_inverted_when_flipping_bit(self, solution: BinarySolution) -> None:
         """Test that flipping a bit inverts its value."""
         # Arrange
         solution.variables = [True, False]
@@ -200,7 +186,7 @@ class TestBinarySolution:
         # Assert - First bit should be back to original
         assert solution.variables[0] is True
 
-    def test_given_binary_solution_when_getting_binary_string_then_returns_correct_representation(
+    def test_should_returns_correct_representation_when_getting_binary_string(
         self, solution: BinarySolution
     ) -> None:
         """Test that the binary string representation is generated correctly."""
@@ -210,7 +196,7 @@ class TestBinarySolution:
         # Act & Assert
         assert solution.get_binary_string() == "10"
 
-    def test_given_two_binary_solutions_when_calculating_hamming_distance_then_returns_correct_value(
+    def test_should_returns_correct_value_when_calculating_hamming_distance(
         self,
     ) -> None:
         """Test that Hamming distance is calculated correctly between two binary solutions."""
@@ -223,7 +209,7 @@ class TestBinarySolution:
         # Act & Assert
         assert solution1.hamming_distance(solution2) == 1  # Only first bit differs
 
-    def test_given_binary_solutions_with_different_lengths_when_calculating_hamming_distance_then_raises_error(
+    def test_should_raises_error_when_calculating_hamming_distance(
         self,
     ) -> None:
         """Test that Hamming distance calculation raises error for solutions with different lengths."""
@@ -250,7 +236,7 @@ class TestIntegerSolution:
             number_of_constraints=1,
         )
 
-    def test_given_initial_parameters_when_creating_integer_solution_then_initializes_correctly(
+    def test_should_initializes_correctly_when_creating_integer_solution(
         self, solution: IntegerSolution
     ) -> None:
         """Test that an integer solution is properly initialized with the given parameters."""
@@ -262,9 +248,7 @@ class TestIntegerSolution:
         assert solution.lower_bound == [0, 5]
         assert solution.upper_bound == [10, 15]
 
-    def test_given_valid_integer_values_when_setting_variables_then_they_are_stored(
-        self, solution: IntegerSolution
-    ) -> None:
+    def test_should_they_are_stored_when_setting_variables(self, solution: IntegerSolution) -> None:
         """Test that integer variables can be set and retrieved correctly."""
         # Arrange
         variables = [5, 10]
@@ -275,7 +259,7 @@ class TestIntegerSolution:
         # Assert
         assert solution.variables == variables
 
-    def test_given_float_values_when_setting_variables_then_they_are_converted_to_integers(
+    def test_should_they_are_converted_to_integers_when_setting_variables(
         self, solution: IntegerSolution
     ) -> None:
         """Test that float values are properly converted to integers when setting variables."""
@@ -285,7 +269,7 @@ class TestIntegerSolution:
         # Assert
         assert solution.variables == [5, 10]
 
-    def test_given_invalid_length_when_setting_variables_then_raises_error(
+    def test_should_raises_error_when_setting_variables_with_invalid_length(
         self, solution: IntegerSolution
     ) -> None:
         """Test that setting variables with incorrect length raises ValueError."""
@@ -293,7 +277,7 @@ class TestIntegerSolution:
         with pytest.raises(ValueError):
             solution.variables = [5]  # Too few variables
 
-    def test_given_values_outside_bounds_when_setting_variables_then_they_are_clipped(
+    def test_should_they_are_clipped_when_setting_variables(
         self, solution: IntegerSolution
     ) -> None:
         """Test that variable values can be set and retrieved correctly."""
@@ -339,7 +323,7 @@ class TestCompositeSolution:
             ),
         ]
 
-    def test_given_list_of_solutions_when_creating_composite_solution_then_initializes_correctly(
+    def test_should_initializes_correctly_when_creating_composite_solution(
         self, solutions: list[Solution]
     ) -> None:
         """Test that a composite solution is properly initialized with the given list of solutions."""
@@ -354,7 +338,7 @@ class TestCompositeSolution:
         assert isinstance(composite.variables[0], FloatSolution)
         assert isinstance(composite.variables[1], IntegerSolution)
 
-    def test_given_solutions_with_different_objectives_when_creating_composite_then_raises_error(
+    def test_should_raises_error_when_creating_composite(
         self,
     ) -> None:
         """Test that creating a composite with solutions of different objective counts raises an error."""
@@ -366,9 +350,7 @@ class TestCompositeSolution:
         with pytest.raises(ValueError):
             CompositeSolution([sol1, sol2])
 
-    def test_given_composite_solution_when_copying_then_creates_deep_copy(
-        self, solutions: list[Solution]
-    ) -> None:
+    def test_should_creates_deep_copy_when_copying(self, solutions: list[Solution]) -> None:
         """Test that copying a composite solution creates a deep copy of all components."""
         # Arrange
         composite = CompositeSolution(solutions)
@@ -404,7 +386,7 @@ class TestPermutationSolution:
             number_of_variables=5, number_of_objectives=2, number_of_constraints=1
         )
 
-    def test_given_initial_parameters_when_creating_permutation_solution_then_initializes_identity_permutation(
+    def test_should_initializes_identity_permutation_when_creating_permutation_solution(
         self, solution: PermutationSolution
     ) -> None:
         """Test that a permutation solution is properly initialized with an identity permutation."""
@@ -414,7 +396,7 @@ class TestPermutationSolution:
         assert solution.number_of_constraints == 1
         assert solution.variables == [0, 1, 2, 3, 4]  # Identity permutation
 
-    def test_given_valid_permutation_when_setting_variables_then_they_are_stored(
+    def test_should_they_are_stored_when_setting_variables(
         self, solution: PermutationSolution
     ) -> None:
         """Test that a valid permutation can be set and retrieved correctly."""
@@ -427,7 +409,7 @@ class TestPermutationSolution:
         # Assert
         assert solution.variables == perm
 
-    def test_given_duplicate_values_when_setting_variables_then_raises_error(
+    def test_should_raises_error_when_setting_variables_with_duplicate_values(
         self, solution: PermutationSolution
     ) -> None:
         """Test that setting variables with duplicate values raises an error."""
@@ -435,7 +417,7 @@ class TestPermutationSolution:
         with pytest.raises(ValueError):
             solution.variables = [0, 1, 2, 2, 4]  # Duplicate value 2
 
-    def test_given_invalid_length_when_setting_variables_then_raises_error(
+    def test_should_raises_error_when_setting_variables_with_invalid_length(
         self, solution: PermutationSolution
     ) -> None:
         """Test that setting variables with incorrect length raises an error."""
@@ -443,9 +425,7 @@ class TestPermutationSolution:
         with pytest.raises(ValueError):
             solution.variables = [0, 1, 2, 3]  # Too few variables
 
-    def test_given_permutation_solution_when_copying_then_creates_deep_copy(
-        self, solution: PermutationSolution
-    ) -> None:
+    def test_should_creates_deep_copy_when_copying(self, solution: PermutationSolution) -> None:
         """Test that copying a permutation solution creates a deep copy with all attributes."""
         # Arrange
         solution.variables = [4, 3, 2, 1, 0]

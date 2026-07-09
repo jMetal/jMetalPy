@@ -9,7 +9,7 @@ from jmetal.operator.mutation import BitFlipMutation
 
 
 class TestSPXCrossover:
-    def test_given_valid_probability_when_initializing_then_probability_is_set_correctly(self):
+    def test_should_probability_is_set_correctly_when_initializing(self):
         """Test initialization with valid probability values."""
         # Test with minimum probability
         crossover = SPXCrossover(0.0)
@@ -23,7 +23,7 @@ class TestSPXCrossover:
         crossover = SPXCrossover(0.5)
         assert crossover.probability == 0.5
 
-    def test_given_invalid_probability_when_initializing_then_raises_value_error(self):
+    def test_should_raises_value_error_when_initializing(self):
         """Test initialization with invalid probability values."""
         # Test negative probability
         with pytest.raises(ValueError, match="Probability must be between 0.0 and 1.0"):
@@ -33,17 +33,17 @@ class TestSPXCrossover:
         with pytest.raises(ValueError, match="Probability must be between 0.0 and 1.0"):
             SPXCrossover(1.1)
 
-    def test_given_spx_crossover_when_getting_name_then_returns_correct_string(self):
+    def test_should_returns_correct_string_when_getting_name(self):
         """Test the get_name method returns the correct string."""
         crossover = SPXCrossover(0.5)
         assert crossover.get_name() == "Single point crossover"
 
-    def test_given_spx_crossover_when_getting_number_of_parents_then_returns_two(self):
+    def test_should_returns_two_when_getting_number_of_parents(self):
         """Test get_number_of_parents returns 2."""
         crossover = SPXCrossover(0.5)
         assert crossover.get_number_of_parents() == 2
 
-    def test_given_spx_crossover_when_getting_number_of_children_then_returns_two(self):
+    def test_should_returns_two_when_getting_number_of_children(self):
         """Test get_number_of_children returns 2."""
         crossover = SPXCrossover(0.5)
         assert crossover.get_number_of_children() == 2
@@ -56,7 +56,7 @@ class TestSPXCrossover:
         solution.variables = [v.copy() for v in variables]
         return solution
 
-    def test_given_probability_one_when_executing_then_always_performs_crossover(self):
+    def test_should_always_performs_crossover_when_executing(self):
         """Test that crossover is performed when random value is less than probability."""
         # Create mock solutions with bits
         parent1 = self.create_mock_solution(
@@ -88,7 +88,7 @@ class TestSPXCrossover:
             assert np.array_equal(offspring[0].bits, expected_offspring1)
             assert np.array_equal(offspring[1].bits, expected_offspring2)
 
-    def test_given_probability_zero_when_executing_then_never_performs_crossover(self):
+    def test_should_never_performs_crossover_when_executing(self):
         """Test that crossover is never performed when random value is not less than probability."""
         parent1 = self.create_mock_solution(
             bits=np.array([0, 1, 0, 1], dtype=bool),
@@ -115,7 +115,7 @@ class TestSPXCrossover:
             assert np.array_equal(offspring[0].bits, parent1.bits)
             assert np.array_equal(offspring[1].bits, parent2.bits)
 
-    def test_given_single_bit_solution_when_executing_then_no_crossover_happens(self):
+    def test_should_no_crossover_happens_when_executing(self):
         """Test that crossover doesn't happen with single-bit solutions."""
         parent1 = self.create_mock_solution(
             bits=np.array([True], dtype=bool), variables=[np.array([True], dtype=bool)]
@@ -145,7 +145,7 @@ class TestSPXCrossover:
 
 
 class TestBitFlipMutation:
-    def test_given_valid_probability_when_initializing_then_probability_is_set_correctly(self):
+    def test_should_probability_is_set_correctly_when_initializing(self):
         """Test initialization with valid probability values."""
         # Test with minimum probability
         # Arrange
@@ -177,7 +177,7 @@ class TestBitFlipMutation:
         # Assert
         assert mutation.probability == mid_probability
 
-    def test_given_negative_probability_when_initializing_then_raises_value_error(self):
+    def test_should_raises_value_error_when_initializing_with_negative_probability(self):
         """Test initialization with negative probability."""
         # Arrange
         negative_probability = -0.1
@@ -188,7 +188,7 @@ class TestBitFlipMutation:
         ):
             BitFlipMutation(negative_probability)
 
-    def test_given_probability_above_one_when_initializing_then_raises_value_error(self):
+    def test_should_raises_value_error_when_initializing_with_probability_above_one(self):
         """Test initialization with probability greater than 1.0."""
         # Arrange
         high_probability = 1.1
@@ -197,7 +197,7 @@ class TestBitFlipMutation:
         with pytest.raises(ValueError, match=r"Probability must be in range \[0.0, 1.0\], got 1.1"):
             BitFlipMutation(high_probability)
 
-    def test_given_bit_flip_mutation_when_getting_name_then_returns_correct_string(self):
+    def test_should_returns_correct_string_when_getting_name(self):
         """Test the get_name method returns the correct string."""
         # Arrange
         mutation = BitFlipMutation(0.5)
@@ -209,7 +209,7 @@ class TestBitFlipMutation:
         # Assert
         assert name == expected_name
 
-    def test_given_valid_binary_solution_when_executing_mutation_then_bits_are_flipped_according_to_probability(
+    def test_should_bits_are_flipped_according_to_probability_when_executing_mutation(
         self,
     ):
         """Test mutation with a valid binary solution."""
@@ -231,7 +231,7 @@ class TestBitFlipMutation:
             assert result is solution  # Should return the same instance
             assert np.all(solution.bits == True)  # All bits should be flipped
 
-    def test_given_zero_variables_when_executing_mutation_then_raises_value_error(self):
+    def test_should_raises_value_error_when_executing_mutation(self):
         """Test mutation with a solution that has zero variables."""
         # Arrange
         solution = MagicMock(spec=BinarySolution)
@@ -243,7 +243,7 @@ class TestBitFlipMutation:
         with pytest.raises(ValueError, match="Solution must have at least one variable"):
             mutation.execute(solution)
 
-    def test_given_non_binary_solution_when_executing_mutation_then_raises_type_error(self):
+    def test_should_raises_type_error_when_executing_mutation(self):
         """Test mutation with an invalid solution type."""
 
         # Arrange
@@ -257,7 +257,7 @@ class TestBitFlipMutation:
         with pytest.raises(TypeError, match="Expected BinarySolution, got OtherSolution"):
             mutation.execute(invalid_solution)
 
-    def test_given_solution_without_bits_attribute_when_executing_mutation_then_raises_attribute_error(
+    def test_should_raises_attribute_error_when_solution_has_no_bits_attribute(
         self,
     ):
         """Test mutation with a solution missing the bits attribute."""
@@ -271,7 +271,7 @@ class TestBitFlipMutation:
         with pytest.raises(AttributeError, match="must have a 'bits' attribute"):
             mutation.execute(solution)
 
-    def test_given_solution_with_non_numpy_bits_when_executing_mutation_then_raises_attribute_error(
+    def test_should_raises_attribute_error_when_solution_has_non_numpy_bits(
         self,
     ):
         """Test mutation with a solution where bits is not a numpy array."""
@@ -287,7 +287,7 @@ class TestBitFlipMutation:
         ):
             mutation.execute(solution)
 
-    def test_given_zero_mutation_probability_when_executing_mutation_then_no_bits_flip(self):
+    def test_should_no_bits_flip_when_executing_mutation(self):
         """Test that with zero probability, no bits are flipped."""
         # Arrange
         solution = MagicMock(spec=BinarySolution)
@@ -302,7 +302,7 @@ class TestBitFlipMutation:
         # Assert
         assert np.sum(result.bits) == 0
 
-    def test_given_full_mutation_probability_when_executing_mutation_then_all_bits_flip(self):
+    def test_should_all_bits_flip_when_executing_mutation(self):
         """Test that with probability 1.0, all bits are flipped."""
         # Arrange
         solution = MagicMock(spec=BinarySolution)
@@ -317,7 +317,7 @@ class TestBitFlipMutation:
         # Assert
         assert np.all(result.bits == True)
 
-    def test_given_large_solution_when_executing_mutation_then_mutation_rate_matches_probability(
+    def test_should_mutation_rate_matches_probability_when_executing_mutation(
         self,
     ):
         """Test that the actual mutation rate matches the specified probability."""

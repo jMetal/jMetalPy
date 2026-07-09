@@ -4,7 +4,6 @@ Covers unit tests for each public method and a lightweight integration test
 that runs the algorithm on the Sphere problem.
 """
 
-
 import pytest
 
 from jmetal.algorithm.singleobjective.evolution_strategy import EvolutionStrategy
@@ -86,7 +85,7 @@ def _make_solution(
 class TestEvolutionStrategyConstruction:
     """Tests for correct initialisation of the algorithm."""
 
-    def test_given_valid_params_when_created_then_stores_mu_and_lambda(
+    def test_should_stores_mu_and_lambda_when_created(
         self, sphere_problem, mutation, termination
     ) -> None:
         algorithm = _build_algorithm(sphere_problem, mutation, termination, mu=10, lambda_=20)
@@ -94,16 +93,12 @@ class TestEvolutionStrategyConstruction:
         assert algorithm.mu == 10
         assert algorithm.lambda_ == 20
 
-    def test_given_elitist_true_when_created_then_flag_is_true(
-        self, sphere_problem, mutation, termination
-    ) -> None:
+    def test_should_flag_is_true_when_created(self, sphere_problem, mutation, termination) -> None:
         algorithm = _build_algorithm(sphere_problem, mutation, termination, elitist=True)
 
         assert algorithm.elitist is True
 
-    def test_given_elitist_false_when_created_then_flag_is_false(
-        self, sphere_problem, mutation, termination
-    ) -> None:
+    def test_should_flag_is_false_when_created(self, sphere_problem, mutation, termination) -> None:
         algorithm = _build_algorithm(sphere_problem, mutation, termination, elitist=False)
 
         assert algorithm.elitist is False
@@ -117,14 +112,14 @@ class TestEvolutionStrategyConstruction:
 class TestGetName:
     """Tests for the get_name method returning the correct variant label."""
 
-    def test_given_elitist_when_get_name_then_returns_mu_plus_lambda(
+    def test_should_returns_mu_plus_lambda_when_get_name(
         self, sphere_problem, mutation, termination
     ) -> None:
         algorithm = _build_algorithm(sphere_problem, mutation, termination, elitist=True)
 
         assert algorithm.get_name() == "(mu + lambda) Evolution Strategy"
 
-    def test_given_non_elitist_when_get_name_then_returns_mu_comma_lambda(
+    def test_should_returns_mu_comma_lambda_when_get_name(
         self, sphere_problem, mutation, termination
     ) -> None:
         algorithm = _build_algorithm(sphere_problem, mutation, termination, elitist=False)
@@ -140,7 +135,7 @@ class TestGetName:
 class TestSelection:
     """Tests for the selection operator (identity in ES)."""
 
-    def test_given_population_when_selection_then_returns_same_population(
+    def test_should_returns_same_population_when_selection(
         self, sphere_problem, mutation, termination
     ) -> None:
         algorithm = _build_algorithm(sphere_problem, mutation, termination)
@@ -159,7 +154,7 @@ class TestSelection:
 class TestReproduction:
     """Tests for offspring generation via mutation."""
 
-    def test_given_population_when_reproduction_then_offspring_size_equals_lambda(
+    def test_should_offspring_size_equals_lambda_when_reproduction(
         self, sphere_problem, mutation, termination
     ) -> None:
         mu, lambda_ = 5, 10
@@ -172,7 +167,7 @@ class TestReproduction:
 
         assert len(offspring) == lambda_
 
-    def test_given_mu_equals_lambda_when_reproduction_then_one_child_per_parent(
+    def test_should_one_child_per_parent_when_reproduction(
         self, sphere_problem, mutation, termination
     ) -> None:
         mu = lambda_ = 4
@@ -194,7 +189,7 @@ class TestReproduction:
 class TestReplacement:
     """Tests for the replacement step, including elitist vs non-elitist behaviour."""
 
-    def test_given_elitist_when_replacement_then_pool_contains_parents_and_offspring(
+    def test_should_pool_contains_parents_and_offspring_when_replacement(
         self, sphere_problem, mutation, termination
     ) -> None:
         algorithm = _build_algorithm(
@@ -210,7 +205,7 @@ class TestReplacement:
         assert result[0].objectives[0] == 5.0
         assert result[1].objectives[0] == 10.0
 
-    def test_given_non_elitist_when_replacement_then_pool_contains_only_offspring(
+    def test_should_pool_contains_only_offspring_when_replacement(
         self, sphere_problem, mutation, termination
     ) -> None:
         algorithm = _build_algorithm(
@@ -226,7 +221,7 @@ class TestReplacement:
         assert result[0].objectives[0] == 5.0
         assert result[1].objectives[0] == 8.0
 
-    def test_given_replacement_when_called_then_returns_mu_solutions(
+    def test_should_returns_mu_solutions_when_called(
         self, sphere_problem, mutation, termination
     ) -> None:
         mu = 3
@@ -249,7 +244,7 @@ class TestReplacement:
 class TestConstraintHandling:
     """Tests verifying that feasible solutions are preferred over infeasible ones."""
 
-    def test_given_feasible_and_infeasible_when_replacement_then_feasible_first(
+    def test_should_feasible_first_when_replacement(
         self, sphere_problem, mutation, termination
     ) -> None:
         """A feasible solution with a worse objective must be preferred over
@@ -265,7 +260,7 @@ class TestConstraintHandling:
         assert len(result) == 1
         assert result[0].objectives[0] == 100.0  # feasible wins
 
-    def test_given_two_infeasible_when_replacement_then_less_violated_first(
+    def test_should_less_violated_first_when_replacement(
         self, sphere_problem, mutation, termination
     ) -> None:
         """Between two infeasible solutions, the one with smaller violation
@@ -281,7 +276,7 @@ class TestConstraintHandling:
         # Slightly violated (violation degree -1.0) should rank before heavily violated (-10.0)
         assert result[0].constraints[0] == -1.0
 
-    def test_given_two_feasible_when_replacement_then_best_objective_first(
+    def test_should_best_objective_first_when_replacement(
         self, sphere_problem, mutation, termination
     ) -> None:
         """When both solutions are feasible the objective value decides the ranking."""
@@ -296,7 +291,7 @@ class TestConstraintHandling:
         assert result[0].objectives[0] == 3.0
         assert result[1].objectives[0] == 7.0
 
-    def test_given_no_constraints_when_replacement_then_sorted_by_objective(
+    def test_should_sorted_by_objective_when_replacement(
         self, sphere_problem, mutation, termination
     ) -> None:
         """For unconstrained problems the ordering should be purely by objective."""
@@ -319,7 +314,7 @@ class TestConstraintHandling:
 class TestEvolutionStrategyIntegration:
     """Lightweight integration tests that run the full algorithm loop."""
 
-    def test_given_sphere_when_elitist_es_runs_then_finds_near_optimal_solution(
+    def test_should_finds_near_optimal_solution_when_elitist_es_runs(
         self,
     ) -> None:
         problem = Sphere(number_of_variables=3)
@@ -341,7 +336,7 @@ class TestEvolutionStrategyIntegration:
         # Sphere optimum is 0.0; after 5 000 evaluations we expect a value < 1.0
         assert result.objectives[0] < 1.0
 
-    def test_given_sphere_when_non_elitist_es_runs_then_completes_without_error(
+    def test_should_completes_without_error_when_non_elitist_es_runs(
         self,
     ) -> None:
         problem = Sphere(number_of_variables=3)
