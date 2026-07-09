@@ -119,8 +119,75 @@ complete = [
     "pyspark>=3.4.0"
 ]
 
+dev = [
+    "tqdm",
+    "numpy>=2.2.5",
+    "pandas>=2.2.3",
+    "plotly>=5.22.0",
+    "matplotlib>=3.0.2",
+    "scipy>=1.15.3",
+    "statsmodels>=0.9.0",
+    "mockito",
+    "PyHamcrest",
+    "moocore>=0.1.9",
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.6.0",
+    "mypy>=1.11.0"
+]
 
+[tool.ruff]
+target-version = "py311"
+line-length = 100
 
+[tool.ruff.lint]
+# Legacy codebase (6+ years): keep to mechanical, low-conflict checks.
+# ANN/D are deliberately excluded — type-annotation completeness is mypy's
+# job, not ruff's, to avoid the two tools disagreeing over the same lines.
+select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM"]
 
+# Pre-existing findings on legacy code as of the 2026-07 ruff rollout, not yet
+# reviewed case by case (wildcard imports, mutable defaults, type comparisons,
+# etc.). New code must not introduce these; remove codes here as each is
+# cleaned up. Do not add new codes to this list going forward.
+ignore = [
+    "E501",   # line-too-long
+    "E711",   # none-comparison
+    "E712",   # true-false-comparison
+    "E721",   # type-comparison
+    "E731",   # lambda-assignment
+    "F401",   # unused-import
+    "F403",   # undefined-local-with-import-star
+    "F405",   # undefined-local-with-import-star-usage
+    "F841",   # unused-variable
+    "B006",   # mutable-argument-default
+    "B007",   # unused-loop-control-variable
+    "B008",   # function-call-in-default-argument
+    "B017",   # assert-raises-exception
+    "B028",   # no-explicit-stacklevel
+    "B904",   # raise-without-from-inside-except
+    "B905",   # zip-without-explicit-strict
+    "C400",   # unnecessary-generator-list
+    "C403",   # unnecessary-list-comprehension-set
+    "C408",   # unnecessary-collection-call
+    "C416",   # unnecessary-comprehension
+    "C417",   # unnecessary-map
+    "SIM102", # collapsible-if
+    "SIM103", # needless-bool
+    "SIM105", # suppressible-exception
+    "SIM108", # if-else-block-instead-of-if-exp
+    "SIM110", # reimplemented-builtin
+    "SIM113", # enumerate-for-loop
+    "SIM118", # in-dict-keys
+    "SIM201", # negate-equal-op
+    "UP007",  # non-pep604-annotation-union
+    "UP030",  # format-literals
+    "UP031",  # printf-string-formatting
+    "UP035",  # deprecated-import
+    "E741",   # ambiguous-variable-name
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
 
 

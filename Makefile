@@ -16,12 +16,13 @@ help:
 	@echo "  test         run all tests"
 	@echo "  test-verbose run tests with verbose output"
 	@echo "  test-coverage run tests with coverage report"
-	@echo "  lint         run code linting"
-	@echo "  format       format code with black"
+	@echo "  lint         run ruff linting (blocking)"
+	@echo "  format       format code with ruff"
+	@echo "  typecheck    run mypy (informative, not a merge gate)"
 	@echo "  clean-build  clean build artifacts"
 	@echo "  install-dev  install development dependencies"
 
-.PHONY: help Makefile test test-verbose test-coverage lint format clean-build install-dev
+.PHONY: help Makefile test test-verbose test-coverage lint format typecheck clean-build install-dev
 
 # Development commands
 test:
@@ -34,12 +35,14 @@ test-coverage:
 	python -m pytest --cov=src/jmetal --cov-report=html --cov-report=term tests/
 
 lint:
-	python -m flake8 src/ tests/ examples/
-	python -m mypy src/jmetal --ignore-missing-imports
+	python -m ruff check src/ tests/ examples/
 
 format:
-	python -m black src/ tests/ examples/
-	python -m isort src/ tests/ examples/
+	python -m ruff format src/ tests/ examples/
+	python -m ruff check --fix src/ tests/ examples/
+
+typecheck:
+	python -m mypy src/jmetal --ignore-missing-imports
 
 clean-build:
 	rm -rf build/

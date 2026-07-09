@@ -29,8 +29,17 @@ jobs:
       shell: bash
       run: |
         python -m pip install --upgrade pip
-        python -m pip install -e .[test]
+        python -m pip install -e .[dev]
+    - name: Lint with ruff
+      shell: bash
+      run: |
+        ruff check src/ tests/ examples/
+    - name: Type check with mypy (informative only)
+      shell: bash
+      continue-on-error: true
+      run: |
+        mypy src/jmetal --ignore-missing-imports
     - name: Test with pytest
       shell: bash
-      run: | 
+      run: |
         pytest tests/ -v --tb=short
