@@ -185,7 +185,7 @@ class TestBitFlipMutation:
         negative_probability = -0.1
         
         # Act & Assert
-        with pytest.raises(ValueError, match="Probability must be in range \[0.0, 1.0\], got -0.1"):
+        with pytest.raises(ValueError, match=r"Probability must be in range \[0.0, 1.0\], got -0.1"):
             BitFlipMutation(negative_probability)
     
     def test_given_probability_above_one_when_initializing_then_raises_value_error(self):
@@ -194,7 +194,7 @@ class TestBitFlipMutation:
         high_probability = 1.1
         
         # Act & Assert
-        with pytest.raises(ValueError, match="Probability must be in range \[0.0, 1.0\], got 1.1"):
+        with pytest.raises(ValueError, match=r"Probability must be in range \[0.0, 1.0\], got 1.1"):
             BitFlipMutation(high_probability)
 
     def test_given_bit_flip_mutation_when_getting_name_then_returns_correct_string(self):
