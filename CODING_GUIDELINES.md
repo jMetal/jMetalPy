@@ -61,11 +61,17 @@ one tool's findings doesn't create work for the other:
 
 - Framework: **pytest**
 - Follow **AAA pattern** (Arrange–Act–Assert)
-- Use **given-when-then** naming convention: test_given_valid_input_when_process_then_returns_ok()
+- Name tests `test_should_<behavior>` (e.g. `test_should_raise_error_on_negative_probability`);
+  put given/when/then detail in a one-line docstring, not in the function name.
+  `given_when_then`-style names are a Java/BDD import, not idiomatic pytest, and are not
+  required — this is descriptive, not enforced by tooling
+- Group related scenarios under `class Test<Subject>:` rather than flat module-level functions
+- Prefer `@pytest.mark.parametrize` over hand-written near-duplicate tests for scenario variants
 - Each test should focus on a single behavior
 - Use fixtures for setup
 - Always include both success and failure paths
 - Exception checks use `pytest.raises`
+- Use plain `assert` (pytest rewrites it for rich failure diffs); no matcher library
 
 ## 7. AI-Aware Design
 
