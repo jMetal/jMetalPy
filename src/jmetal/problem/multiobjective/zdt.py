@@ -1,8 +1,8 @@
 import random
-from math import cos, pi, pow, sin, sqrt, exp
+from math import cos, exp, pi, pow, sin, sqrt
 
-from jmetal.core.problem import FloatProblem, BinaryProblem
-from jmetal.core.solution import FloatSolution, BinarySolution
+from jmetal.core.problem import BinaryProblem, FloatProblem
+from jmetal.core.solution import BinarySolution, FloatSolution
 
 """
 .. module:: ZDT
@@ -22,7 +22,7 @@ class ZDT1(FloatProblem):
 
     def __init__(self, number_of_variables: int = 30):
         """:param number_of_variables: Number of decision variables of the problem."""
-        super(ZDT1, self).__init__()
+        super().__init__()
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["x", "y"]
@@ -32,7 +32,7 @@ class ZDT1(FloatProblem):
 
     def number_of_objectives(self) -> int:
         return len(self.obj_directions)
-    
+
     def number_of_variables(self) -> int:
         return len(self.lower_bound)
 
@@ -69,25 +69,9 @@ class ZDT1Modified(ZDT1):
     """
 
     def __init__(self, number_of_variables=30):
-        super(ZDT1Modified, self).__init__(number_of_variables)
+        super().__init__(number_of_variables)
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
-        s: float = 0.0
-        for i in range(1000):
-            for j in range(10000):
-                s += i * 0.235 / 1.234 + 1.23525 * j
-        return super().evaluate(solution)
-
-
-class ZDT1Modified(ZDT1):
-    """ Problem ZDT1Modified.
-
-    .. note:: Version including a loop for increasing the computing time of the evaluation functions.
-    """
-    def __init__(self, number_of_variables = 30):
-        super(ZDT1Modified, self).__init__(number_of_variables)
-
-    def evaluate(self, solution:FloatSolution) -> FloatSolution:
         s: float = 0.0
         for i in range(1000):
             for j in range(10000):
@@ -132,7 +116,7 @@ class ZDT4(ZDT1):
 
     def __init__(self, number_of_variables: int = 10):
         """:param number_of_variables: Number of decision variables of the problem."""
-        super(ZDT4, self).__init__()
+        super().__init__()
         self.lower_bound = number_of_variables * [-5.0]
         self.upper_bound = number_of_variables * [5.0]
         self.lower_bound[0] = 0.0
@@ -159,7 +143,7 @@ class ZDT5(BinaryProblem):
     """Problem ZDT5.
 
     .. note:: Bi-objective binary unconstrained problem. The default number of variables is 11.
-    
+
     In this implementation, each variable is represented by a single boolean value in the solution,
     and the number_of_bits_per_variable attribute is used to track how many bits each variable
     conceptually represents for evaluation purposes.
@@ -169,18 +153,18 @@ class ZDT5(BinaryProblem):
         """
         :param number_of_variables: Number of variables in the problem.
         """
-        super(ZDT5, self).__init__()
+        super().__init__()
 
         # Track how many bits each variable conceptually represents
         self.number_of_bits_per_variable = [5 for _ in range(number_of_variables)]
         self.number_of_bits_per_variable[0] = 30
-        
+
         # Total number of bits is the sum of all bits per variable
         self.total_number_of_bits = sum(self.number_of_bits_per_variable)
-        
+
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["x", "y"]
-        
+
         # For compatibility with the original implementation
         self.number_of_bits = self.total_number_of_bits
 
@@ -217,15 +201,15 @@ class ZDT5(BinaryProblem):
         """
         result = 0.0
         bit_index = 30  # Start after the first variable (30 bits)
-        
+
         # Process remaining variables (each 5 bits)
         for bits in self.number_of_bits_per_variable[1:]:
             # Count true bits in this variable's range
-            var_bits = solution.variables[bit_index:bit_index + bits]
+            var_bits = solution.variables[bit_index : bit_index + bits]
             ones_count = sum(var_bits)
             result += self.eval_v(ones_count)
             bit_index += bits
-            
+
         return result
 
     def eval_v(self, value: int) -> float:
@@ -243,13 +227,13 @@ class ZDT5(BinaryProblem):
         solution = BinarySolution(
             number_of_variables=self.total_number_of_bits,
             number_of_objectives=self.number_of_objectives(),
-            number_of_constraints=self.number_of_constraints()
+            number_of_constraints=self.number_of_constraints(),
         )
-        
+
         # Initialize with random bits
         for i in range(self.total_number_of_bits):
             solution.variables[i] = random.random() < 0.5
-            
+
         return solution
 
     def name(self) -> str:
@@ -265,7 +249,7 @@ class ZDT6(ZDT1):
 
     def __init__(self, number_of_variables: int = 10):
         """:param number_of_variables: Number of decision variables of the problem."""
-        super(ZDT6, self).__init__(number_of_variables=number_of_variables)
+        super().__init__(number_of_variables=number_of_variables)
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         solution.objectives[0] = (
