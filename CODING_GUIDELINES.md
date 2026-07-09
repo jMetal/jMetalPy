@@ -18,9 +18,10 @@ All source code, identifiers, and comments **must be written in English**.
   mutable containers that algorithms modify in place (crossover, mutation, repair);
   freezing them would force copy-on-write in hot evolutionary loops
 - Prefer `Enum` for discrete choices
-- Public functions should be typed, but this is enforced by mypy informatively
-  (see [Enforcement](#enforcement)), not as a merge gate — most of the codebase
-  predates strict typing and is typed incrementally
+- Public functions should be typed on new/modified code. This is a style
+  convention, not tool-enforced — the project doesn't run a static type
+  checker (see [Enforcement](#enforcement)); most of the codebase predates
+  strict typing and retrofitting it wholesale isn't worth the churn
 - Cognitive complexity ≤ 10 (enforced by ruff on new/modified code)
 
 ## 3. Function Rules
@@ -44,16 +45,15 @@ All source code, identifiers, and comments **must be written in English**.
 
 ## 5. Style, Tooling, and Documentation
 
-Ruff and mypy check different things and are kept from overlapping so that fixing
-one tool's findings doesn't create work for the other:
-
 - **ruff**: linting, formatting, import order, and complexity — the blocking gate
-  in CI (`make lint`, `make format`). Annotation-completeness rules (`ANN*`) and
-  docstring rules (`D*`) are intentionally **not** enabled in ruff; see below.
-- **mypy**: type checking (`make typecheck`) — runs in CI but is informative only
-  (`continue-on-error`), not a merge gate. Most of the codebase is 6+ years old
-  and predates strict typing; retrofitting it wholesale has a poor cost/benefit
-  ratio. Type new and modified code properly; don't block on pre-existing gaps.
+  in CI (`make lint`, `make format`).
+- No static type checker (mypy) runs in CI. It was tried and dropped: most of
+  the codebase is 6+ years old and predates strict typing, and chasing its
+  findings to zero had a poor cost/benefit ratio — the bulk were mypy failing
+  to follow deliberate duck-typing and generics, not real bugs, concentrated
+  in internal plumbing rather than the public API surface users actually call.
+  Nothing stops a contributor from running `mypy` locally out of personal
+  preference, but it isn't part of the project's enforced workflow.
 - Use **Google-style docstrings** with Args / Returns / Raises
 - Clarity over cleverness — no "smart" one-liners
 
@@ -85,5 +85,4 @@ one tool's findings doesn't create work for the other:
 ## Enforcement
 
 - **ruff** (style, imports, complexity) — blocking in CI
-- **mypy** (typing) — runs in CI, informative only, does not fail the build
 - **pytest** (tests) — blocking in CI

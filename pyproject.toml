@@ -130,7 +130,6 @@ dev = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
     "ruff>=0.6.0",
-    "mypy>=1.11.0",
     "build>=1.2.0",
     "twine>=5.0.0"
 ]
@@ -141,8 +140,10 @@ line-length = 100
 
 [tool.ruff.lint]
 # Legacy codebase (6+ years): keep to mechanical, low-conflict checks.
-# ANN/D are deliberately excluded — type-annotation completeness is mypy's
-# job, not ruff's, to avoid the two tools disagreeing over the same lines.
+# ANN/D are deliberately excluded — enabling them would flag type-annotation
+# and docstring completeness across the whole legacy codebase as blocking
+# CI failures, which is exactly the cost/benefit problem that got mypy
+# dropped from this project (see CODING_GUIDELINES.md #5).
 select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM"]
 
 # Pre-existing findings on legacy code as of the 2026-07 ruff rollout, not yet

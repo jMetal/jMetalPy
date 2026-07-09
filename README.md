@@ -1,7 +1,6 @@
 ![jMetalPy](docs/source/jmetalpy.png)
 
 [![Lint](https://github.com/jMetal/jMetalPy/actions/workflows/lint.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/lint.yml)
-[![Typecheck](https://github.com/jMetal/jMetalPy/actions/workflows/typecheck.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/typecheck.yml)
 [![Test](https://github.com/jMetal/jMetalPy/actions/workflows/test.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/test.yml)
 [![Build](https://github.com/jMetal/jMetalPy/actions/workflows/build.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/build.yml)
 [![Python Version](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)](https://www.python.org/downloads/)

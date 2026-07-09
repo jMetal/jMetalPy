@@ -61,7 +61,7 @@ Each commit must represent **one single logical change**. Guidelines:
 - If the commit message needs "and" to describe what it does, split it into two commits.
 - Before committing, run the checks relevant to the change:
   - `make test` (or `pytest tests/ -x`) — tests pass
-  - `make lint` — `ruff`/`flake8` and `mypy` are clean
+  - `make lint` — `ruff` is clean
 - Never mix production code changes with test changes in the same commit.
 - Never mix code changes with documentation changes in the same commit.
 

@@ -22,8 +22,9 @@ runnable examples live in `examples/`, Sphinx docs in `docs/`. Target: Python 3.
 **ALWAYS follow the rules in [`CODING_GUIDELINES.md`](CODING_GUIDELINES.md).** Short version:
 
 - English-only identifiers, comments, and docstrings (Google style: Args/Returns/Raises)
-- Type new/modified code; don't chase full-repo type coverage — most of the codebase predates
-  strict typing (see the ruff/mypy split below)
+- Type new/modified code as a style convention — there's no static type checker in CI (tried
+  mypy, dropped it: findings were mostly it failing to follow deliberate duck-typing/generics
+  in 6+ year old internal code, not real bugs; see `CODING_GUIDELINES.md` §5)
 - `@dataclass(slots=True, frozen=True)` only for stateless data (config, DTOs) — never for
   `Solution` and other containers algorithms mutate in place
 - One `return` per function except guard clauses; keep functions small; avoid nested conditionals
@@ -47,12 +48,11 @@ runnable examples live in `examples/`, Sphinx docs in `docs/`. Target: Python 3.
 ## Tooling and Commands
 
 - Environment: `pip install -e ".[dev]"` (or the project's `jmetalpy` conda env) installs
-  everything needed for development, including ruff, mypy, pytest, build, and twine.
+  everything needed for development, including ruff, pytest, build, and twine.
 - Use the `Makefile` targets over ad hoc commands: `make lint` (ruff, blocking), `make format`
-  (ruff), `make typecheck` (mypy, informative — see [Enforcement](CODING_GUIDELINES.md#enforcement)),
-  `make test`, `make test-coverage`, `make package` (build + twine check).
-- CI mirrors this as four independent, parallel GitHub Actions workflows in
-  `.github/workflows/`: `lint`, `typecheck`, `test`, `build`.
+  (ruff), `make test`, `make test-coverage`, `make package` (build + twine check).
+- CI mirrors this as three independent, parallel GitHub Actions workflows in
+  `.github/workflows/`: `lint`, `test`, `build`.
 - Summarize command output instead of dumping raw logs.
 
 ## Safety and Privacy
@@ -76,8 +76,7 @@ runnable examples live in `examples/`, Sphinx docs in `docs/`. Target: Python 3.
 ## Pre-Submission Checklist
 
 - [ ] Code complies with `CODING_GUIDELINES.md`; commit messages comply with `GIT_GUIDELINES.md`.
-- [ ] `make lint` and `make test` pass; `make typecheck` run and any new findings noted (it does
-      not need to be clean to submit).
+- [ ] `make lint` and `make test` pass.
 - [ ] No secrets, credentials, or private data added; no destructive actions taken.
 - [ ] Summary of changes and affected files prepared for the reviewer.
 

@@ -18,12 +18,11 @@ help:
 	@echo "  test-coverage run tests with coverage report"
 	@echo "  lint         run ruff linting (blocking)"
 	@echo "  format       format code with ruff"
-	@echo "  typecheck    run mypy (informative, not a merge gate)"
 	@echo "  package      build sdist and wheel, then check them with twine"
 	@echo "  clean-build  clean build artifacts"
 	@echo "  install-dev  install development dependencies"
 
-.PHONY: help Makefile test test-verbose test-coverage lint format typecheck package clean-build install-dev
+.PHONY: help Makefile test test-verbose test-coverage lint format package clean-build install-dev
 
 # Development commands
 test:
@@ -41,9 +40,6 @@ lint:
 format:
 	python -m ruff format src/ tests/ examples/
 	python -m ruff check --fix src/ tests/ examples/
-
-typecheck:
-	python -m mypy src/jmetal --ignore-missing-imports
 
 package:
 	python -m build
