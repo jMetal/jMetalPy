@@ -1,11 +1,13 @@
 ![jMetalPy](docs/source/jmetalpy.png)
 
-[![CI](https://github.com/jMetal/jMetalPy/actions/workflows/ci.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/ci.yml)
+[![Lint](https://github.com/jMetal/jMetalPy/actions/workflows/lint.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/lint.yml)
+[![Typecheck](https://github.com/jMetal/jMetalPy/actions/workflows/typecheck.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/typecheck.yml)
+[![Test](https://github.com/jMetal/jMetalPy/actions/workflows/test.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/test.yml)
+[![Build](https://github.com/jMetal/jMetalPy/actions/workflows/build.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/build.yml)
 [![Python Version](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)](https://www.python.org/downloads/)
 [![PyPI Version](https://img.shields.io/pypi/v/jMetalPy.svg)](https://pypi.org/project/jMetalPy/)
 [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.swevo.2019.100598-blue)](https://doi.org/10.1016/j.swevo.2019.100598)
 [![PyPI License](https://img.shields.io/pypi/l/jMetalPy.svg)](https://pypi.org/project/jMetalPy/)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 A paper introducing jMetalPy is available at: https://doi.org/10.1016/j.swevo.2019.100598
 
