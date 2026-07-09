@@ -16,7 +16,7 @@ class Ranking(list[S], ABC):
     def __init__(self, comparator: Comparator = DominanceComparator()):
         super().__init__()
         self.number_of_comparisons = 0
-        self.ranked_sublists = []
+        self.ranked_sublists: list[list[S]] = []
         self.comparator = comparator
 
     @abstractmethod
@@ -68,7 +68,7 @@ class FastNonDominatedRanking(Ranking[list[S]]):
         dominating_ith = [0] * num_solutions
 
         # list of solutions dominated by solution ith
-        ith_dominated = [[] for _ in range(num_solutions)]
+        ith_dominated: list[list[int]] = [[] for _ in range(num_solutions)]
 
         # Try a vectorized dominance computation when using the default
         # DominanceComparator to avoid Python-level loops and many calls

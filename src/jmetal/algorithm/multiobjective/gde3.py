@@ -37,7 +37,7 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
             offspring_population_size=population_size,
         )
         self.dominance_comparator = dominance_comparator
-        self.selection_operator = DifferentialEvolutionSelection()
+        self.selection_operator: DifferentialEvolutionSelection = DifferentialEvolutionSelection()
         self.crossover_operator = DifferentialEvolutionCrossover(cr, f, k)
 
         self.population_generator = population_generator
@@ -47,7 +47,7 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
         self.observable.register(termination_criterion)
 
     def selection(self, population: list[FloatSolution]) -> list[FloatSolution]:
-        mating_pool = []
+        mating_pool: list[FloatSolution] = []
 
         for i in range(self.population_size):
             self.selection_operator.set_index_to_exclude(i)

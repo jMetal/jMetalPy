@@ -54,8 +54,8 @@ class BoundedArchive(Archive[S]):
         self.maximum_size = maximum_size
         self.comparator = comparator
         self.density_estimator = density_estimator
-        self.non_dominated_solution_archive = NonDominatedSolutionsArchive(
-            dominance_comparator=dominance_comparator
+        self.non_dominated_solution_archive: NonDominatedSolutionsArchive[S] = (
+            NonDominatedSolutionsArchive(dominance_comparator=dominance_comparator)
         )
         self.solution_list = self.non_dominated_solution_archive.solution_list
 

@@ -30,7 +30,7 @@ class RandomSearch(Algorithm[S, R]):
         self.termination_criterion = termination_criterion
         self.observable.register(termination_criterion)
 
-        self.archive = NonDominatedSolutionsArchive()
+        self.archive: NonDominatedSolutionsArchive[S] = NonDominatedSolutionsArchive()
 
     def observable_data(self) -> dict:
         ctime = time.time() - self.start_computing_time

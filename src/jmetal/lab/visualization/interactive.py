@@ -1,5 +1,5 @@
 import logging
-from typing import TypeVar
+from typing import Any, TypeVar
 
 import pandas as pd
 from plotly import graph_objs as go
@@ -24,7 +24,7 @@ class InteractivePlot(Plot):
         super().__init__(title, reference_front, reference_point, axis_labels)
         self.figure = None
         self.layout = None
-        self.data = []
+        self.data: list[Any] = []
 
     def plot(
         self, front, label=None, normalize: bool = False, filename: str = None, format: str = "HTML"

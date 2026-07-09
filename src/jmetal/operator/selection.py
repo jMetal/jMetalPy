@@ -489,12 +489,12 @@ class RankingAndCrowdingDistanceSelection(Selection[list[S], list[S]]):
         if len(front) <= self.max_population_size:
             return front.copy()
 
-        ranking = FastNonDominatedRanking(self.dominance_comparator)
-        crowding_distance = CrowdingDistanceDensityEstimator()
+        ranking: FastNonDominatedRanking[S] = FastNonDominatedRanking(self.dominance_comparator)
+        crowding_distance: CrowdingDistanceDensityEstimator[S] = CrowdingDistanceDensityEstimator()
         ranking.compute_ranking(front)
 
         ranking_index = 0
-        new_solution_list = []
+        new_solution_list: list[S] = []
         number_of_subfronts = ranking.get_number_of_subfronts()
 
         while (
@@ -678,11 +678,11 @@ class RankingAndFitnessSelection(Selection[list[S], list[S]]):
             raise ValueError("The front is empty")
 
         # Perform non-dominated sorting
-        ranking = FastNonDominatedRanking(self.dominance_comparator)
+        ranking: FastNonDominatedRanking[S] = FastNonDominatedRanking(self.dominance_comparator)
         ranking.compute_ranking(front)
 
         ranking_index = 0
-        new_solution_list = []
+        new_solution_list: list[S] = []
 
         # Fill the new population with solutions from the best ranks
         while len(new_solution_list) < self.max_population_size:

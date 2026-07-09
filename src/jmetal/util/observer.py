@@ -9,6 +9,7 @@ from tqdm import tqdm
 from jmetal.core.observer import Observer
 from jmetal.core.problem import DynamicProblem
 from jmetal.core.quality_indicator import InvertedGenerationalDistance
+from jmetal.core.solution import Solution
 from jmetal.lab.visualization import Plot, StreamingPlot
 from jmetal.util.solution import print_function_values_to_file
 
@@ -135,8 +136,8 @@ class PlotFrontToFileObserver(Observer):
         """
         self.directory = output_directory
         self.plot_front = Plot(title="Pareto front approximation", **kwargs)
-        self.last_front = []
-        self.fronts = []
+        self.last_front: list[Solution] = []
+        self.fronts: list[Solution] = []
         self.counter = 0
         self.step = step
 

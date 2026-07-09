@@ -93,7 +93,7 @@ class RankingAndDensityEstimatorReplacement:
         self.ranking.compute_ranking(join_population)
 
         if self.removal_policy is RemovalPolicyType.SEQUENTIAL:
-            result_list = self.sequential_truncation(0, len(solution_list))
+            result_list: list[S] = self.sequential_truncation(0, len(solution_list))
         else:
             result_list = self.one_shot_truncation(0, len(solution_list))
 
@@ -338,12 +338,14 @@ class SMSEMOAReplacement:
         population = solution_list + offspring_list
 
         # Compute non-dominated ranking
-        ranking = FastNonDominatedRanking()
+        ranking: FastNonDominatedRanking[S] = FastNonDominatedRanking()
         ranking.compute_ranking(population)
         first_front = ranking.get_subfront(0)
 
         # Compute hypervolume contributions for first front
-        hv_estimator = HypervolumeContributionDensityEstimator(reference_point=self.reference_point)
+        hv_estimator: HypervolumeContributionDensityEstimator[S] = (
+            HypervolumeContributionDensityEstimator(reference_point=self.reference_point)
+        )
         hv_estimator.compute_density_estimator(first_front)
 
         # Find solution with minimum hypervolume contribution

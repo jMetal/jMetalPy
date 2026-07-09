@@ -80,7 +80,7 @@ class SMSEMOA(GeneticAlgorithm[S, R]):
         merged_population = population + offspring_population
 
         # Compute non-dominated ranking
-        ranking = FastNonDominatedRanking(self.dominance_comparator)
+        ranking: FastNonDominatedRanking[S] = FastNonDominatedRanking(self.dominance_comparator)
         ranking.compute_ranking(merged_population)
 
         num_subfronts = ranking.get_number_of_subfronts()
@@ -109,8 +109,8 @@ class SMSEMOA(GeneticAlgorithm[S, R]):
         reference_point = np.max(objectives_array, axis=0) + offset
 
         # Compute HV contribution directly on last subfront (without normalization)
-        hv_estimator = HypervolumeContributionDensityEstimator(
-            reference_point=reference_point.tolist()
+        hv_estimator: HypervolumeContributionDensityEstimator[S] = (
+            HypervolumeContributionDensityEstimator(reference_point=reference_point.tolist())
         )
         hv_estimator.compute_density_estimator(last_subfront)
 

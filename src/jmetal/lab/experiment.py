@@ -3,6 +3,7 @@ import os
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 from statistics import median
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -65,7 +66,7 @@ class Experiment:
         self.jobs = jobs
         self.m_workers = m_workers
         self.output_dir = output_dir
-        self.job_data = []
+        self.job_data: list[Any] = []
 
     def run(self) -> None:
         with ProcessPoolExecutor(max_workers=self.m_workers) as executor:

@@ -104,7 +104,7 @@ class KNearestNeighborDensityEstimator(DensityEstimator[list[S]]):
     def __init__(self, k: int = 1):
         super().__init__()
         self.k = k
-        self.distance_matrix = []
+        self.distance_matrix: np.ndarray = np.empty((0, 0))
 
     def compute_density_estimator(self, solutions: list[S]):
         solutions_size = len(solutions)

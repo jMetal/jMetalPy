@@ -96,8 +96,8 @@ class NSGAII(GeneticAlgorithm[S, R]):
         :param offspring_population: Offspring population.
         :return: New population after ranking and crowding distance selection is applied.
         """
-        ranking = FastNonDominatedRanking(self.dominance_comparator)
-        density_estimator = CrowdingDistanceDensityEstimator()
+        ranking: FastNonDominatedRanking[S] = FastNonDominatedRanking(self.dominance_comparator)
+        density_estimator: CrowdingDistanceDensityEstimator[S] = CrowdingDistanceDensityEstimator()
 
         r = RankingAndDensityEstimatorReplacement(
             ranking, density_estimator, RemovalPolicyType.ONE_SHOT
@@ -259,7 +259,7 @@ class DistributedNSGAII(Algorithm[S, R]):
 
         batches = task_pool.batches()
 
-        auxiliar_population = []
+        auxiliar_population: list[S] = []
         while len(auxiliar_population) < self.population_size:
             batch = next(batches)
             for _, received_solution in batch:
@@ -286,8 +286,12 @@ class DistributedNSGAII(Algorithm[S, R]):
                 offspring_population = [received_solution]
 
                 # replacement
-                ranking = FastNonDominatedRanking(self.dominance_comparator)
-                density_estimator = CrowdingDistanceDensityEstimator()
+                ranking: FastNonDominatedRanking[S] = FastNonDominatedRanking(
+                    self.dominance_comparator
+                )
+                density_estimator: CrowdingDistanceDensityEstimator[S] = (
+                    CrowdingDistanceDensityEstimator()
+                )
 
                 r = RankingAndDensityEstimatorReplacement(
                     ranking, density_estimator, RemovalPolicyType.ONE_SHOT

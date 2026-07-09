@@ -65,7 +65,7 @@ class UniformReferenceDirectionFactory(ReferenceDirectionFactory):
         return self.uniform_reference_directions(self.n_partitions, self.n_dim)
 
     def uniform_reference_directions(self, n_partitions: int, n_dim: int):
-        ref_dirs = []
+        ref_dirs: list[np.ndarray] = []
         ref_dir = np.full(n_dim, np.inf)
         self.__uniform_reference_directions(ref_dirs, ref_dir, n_partitions, n_partitions, 0)
         return np.concatenate(ref_dirs, axis=0)
@@ -151,7 +151,7 @@ def get_nadir_point(extreme_points, ideal_point, worst_point, worst_of_front, wo
 
 
 def niching(pop: list[S], n_remaining: int, niche_count, niche_of_individuals, dist_to_niche):
-    survivors = []
+    survivors: list[int] = []
 
     # boolean array of elements that are considered for each iteration
     mask = np.full(len(pop), True)
@@ -299,7 +299,7 @@ class NSGAIII(NSGAII):
         self.worst_point = np.max(np.vstack((self.worst_point, F)), axis=0)
 
         # calculate the fronts of the population
-        ranking = FastNonDominatedRanking(self.dominance_comparator)
+        ranking: FastNonDominatedRanking = FastNonDominatedRanking(self.dominance_comparator)
         ranking.compute_ranking(population + offspring_population, k=self.population_size)
 
         fronts, non_dominated = ranking.ranked_sublists, ranking.get_subfront(0)
@@ -325,7 +325,7 @@ class NSGAIII(NSGAII):
         )
 
         #  consider only the population until we come to the splitting front
-        pop = np.concatenate(ranking.ranked_sublists)
+        pop: np.ndarray = np.concatenate(ranking.ranked_sublists)
         F = np.array([s.objectives for s in pop])
 
         # update the front indices for the current population
@@ -374,7 +374,7 @@ class NSGAIII(NSGAII):
 
     def result(self):
         """Return only non dominated solutions."""
-        ranking = FastNonDominatedRanking(self.dominance_comparator)
+        ranking: FastNonDominatedRanking = FastNonDominatedRanking(self.dominance_comparator)
         ranking.compute_ranking(self.solutions, k=self.population_size)
 
         return ranking.get_subfront(0)

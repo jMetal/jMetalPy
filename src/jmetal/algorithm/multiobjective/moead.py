@@ -10,6 +10,7 @@ from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
+from jmetal.core.solution import Solution
 from jmetal.operator.crossover import DifferentialEvolutionCrossover
 from jmetal.operator.selection import NaryRandomSolutionSelection
 from jmetal.util.aggregation_function import AggregationFunction
@@ -323,7 +324,7 @@ class MOEADIEpsilon(MOEAD):
             population_generator=population_generator,
             termination_criterion=termination_criterion,
         )
-        self.constraints = []
+        self.constraints: list[float] = []
         self.epsilon_k = 0
         self.phi_max = -1e30
         self.epsilon_zero = 0
@@ -331,7 +332,7 @@ class MOEADIEpsilon(MOEAD):
         self.tao = 0.05
         self.rk = 0
         self.generation_counter = 0
-        self.archive = []
+        self.archive: list[Solution] = []
 
     def init_progress(self) -> None:
         super().init_progress()
@@ -413,7 +414,7 @@ class MOEADIEpsilon(MOEAD):
 
         if len(feasible_solutions) > 0:
             feasible_solutions = feasible_solutions + self.archive
-            ranking = FastNonDominatedRanking()
+            ranking: FastNonDominatedRanking = FastNonDominatedRanking()
             ranking.compute_ranking(feasible_solutions)
 
             first_rank_solutions = ranking.get_subfront(0)
@@ -422,7 +423,7 @@ class MOEADIEpsilon(MOEAD):
                 for solution in first_rank_solutions:
                     self.archive.append(copy.copy(solution))
             else:
-                crowding_distance = CrowdingDistanceDensityEstimator()
+                crowding_distance: CrowdingDistanceDensityEstimator = CrowdingDistanceDensityEstimator()
                 while len(first_rank_solutions) > self.population_size:
                     crowding_distance.compute_density_estimator(first_rank_solutions)
                     first_rank_solutions = sorted(

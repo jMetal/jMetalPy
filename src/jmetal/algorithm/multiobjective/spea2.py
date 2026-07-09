@@ -77,8 +77,8 @@ class SPEA2(GeneticAlgorithm[S, R]):
         :param offspring_population: Offspring population.
         :return: New population after ranking and crowding distance selection is applied.
         """
-        ranking = StrengthRanking(self.dominance_comparator)
-        density_estimator = KNearestNeighborDensityEstimator()
+        ranking: StrengthRanking[S] = StrengthRanking(self.dominance_comparator)
+        density_estimator: KNearestNeighborDensityEstimator[S] = KNearestNeighborDensityEstimator()
 
         replacement = RankingAndDensityEstimatorReplacement(
             ranking, density_estimator, RemovalPolicyType.SEQUENTIAL

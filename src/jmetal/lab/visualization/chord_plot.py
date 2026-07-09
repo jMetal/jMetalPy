@@ -1,4 +1,5 @@
 import colorsys
+from typing import Any
 
 import numpy as np
 from matplotlib import patches
@@ -216,7 +217,7 @@ def chord_diagram(
         )
         start_angle = end_angle + pad
 
-    arc_points = []
+    arc_points: list[list[tuple[float, float]]] = []
     for point in points_matrix:
         arc_points.append([])
         idim = 0
@@ -230,8 +231,8 @@ def chord_diagram(
             idim = idim + 1
 
     max_hist_values = []
-    handle_tickers = []
-    handle_plots = []
+    handle_tickers: list[list[Any]] = []
+    handle_plots: list[list[Any]] = []
 
     for iobj in tqdm(range(NOBJ), ascii=True, desc="Chord diagram"):
         draw_sector(

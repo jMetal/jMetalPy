@@ -64,7 +64,9 @@ class OMOPSO(ParticleSwarmOptimization):
         self.leaders = leaders
 
         self.epsilon = epsilon
-        self.epsilon_archive = NonDominatedSolutionsArchive(EpsilonDominanceComparator(epsilon))
+        self.epsilon_archive: NonDominatedSolutionsArchive[FloatSolution] = (
+            NonDominatedSolutionsArchive(EpsilonDominanceComparator(epsilon))
+        )
 
         self.c1_min = 1.5
         self.c1_max = 2.0

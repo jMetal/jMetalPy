@@ -73,7 +73,7 @@ class MOCell(GeneticAlgorithm[S, R]):
         self.neighborhood = neighborhood
         self.archive = archive
         self.current_individual = 0
-        self.current_neighbors = []
+        self.current_neighbors: list[S] = []
 
         self.comparator = MultiComparator(
             [
