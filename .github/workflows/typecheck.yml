@@ -1,0 +1,31 @@
+name: Typecheck
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  mypy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .[dev]
+      # Not required for merging (see branch protection settings): most of the
+      # codebase predates strict typing. This badge tracks type-checking debt
+      # without blocking PRs on it.
+      - name: Type check with mypy
+        run: mypy src/jmetal --ignore-missing-imports
