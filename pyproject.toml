@@ -34,7 +34,6 @@ dependencies = [
     "scipy>=1.15.3",
     "statsmodels>=0.9.0",
     "mockito",
-    "PyHamcrest",
     "moocore>=0.1.8"
 ]
 
@@ -97,7 +96,6 @@ test = [
     "scipy>=1.15.3",
     "statsmodels>=0.9.0",
     "mockito",
-    "PyHamcrest",
     "moocore>=0.1.9",
     "pytest>=7.0",
     "pytest-cov>=4.0"
@@ -128,7 +126,6 @@ dev = [
     "scipy>=1.15.3",
     "statsmodels>=0.9.0",
     "mockito",
-    "PyHamcrest",
     "moocore>=0.1.9",
     "pytest>=7.0",
     "pytest-cov>=4.0",
