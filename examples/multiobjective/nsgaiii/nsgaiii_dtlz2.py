@@ -5,6 +5,9 @@ from jmetal.algorithm.multiobjective.nsgaiii import (
 from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.mutation import PolynomialMutation
 from jmetal.problem import DTLZ2
+
+# Use shared plotting utility from package
+from jmetal.util.plotting import save_plt_to_file
 from jmetal.util.solution import (
     get_non_dominated_solutions,
     print_function_values_to_file,
@@ -12,10 +15,6 @@ from jmetal.util.solution import (
     read_solutions,
 )
 from jmetal.util.termination_criterion import StoppingByEvaluations
-
-# Use shared plotting utility from package
-from jmetal.util.plotting import save_plt_to_file
-
 
 if __name__ == "__main__":
     problem = DTLZ2()
@@ -27,7 +26,9 @@ if __name__ == "__main__":
         problem=problem,
         population_size=92,
         reference_directions=UniformReferenceDirectionFactory(3, n_points=91),
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
+        mutation=PolynomialMutation(
+            probability=1.0 / problem.number_of_variables(), distribution_index=20
+        ),
         crossover=SBXCrossover(probability=1.0, distribution_index=30),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
     )
@@ -41,7 +42,7 @@ if __name__ == "__main__":
 
     # Save a PNG visualization of the front (and optional HTML if Plotly available)
     try:
-        png = save_plt_to_file(front, "FUN." + algorithm.label, out_dir='.', html_plotly=True)
+        png = save_plt_to_file(front, "FUN." + algorithm.label, out_dir=".", html_plotly=True)
         print(f"Saved front plot to: {png}")
     except Exception as e:
         print(f"Warning: could not generate front plot: {e}")

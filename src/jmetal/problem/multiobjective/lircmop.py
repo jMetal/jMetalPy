@@ -1,5 +1,4 @@
 from math import cos, pi, sin, sqrt
-from typing import List
 
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
@@ -13,7 +12,7 @@ class LIRCMOP1(FloatProblem):
     """
 
     def __init__(self, number_of_variables: int = 30):
-        super(LIRCMOP1, self).__init__()
+        super().__init__()
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
@@ -51,14 +50,14 @@ class LIRCMOP1(FloatProblem):
 
         return solution
 
-    def g1(self, x: List[float]) -> float:
+    def g1(self, x: list[float]) -> float:
         result = 0
         for i in range(2, self.number_of_variables(), 2):
             result += pow(x[i] - sin(0.5 * pi * x[0]), 2.0)
 
         return result
 
-    def g2(self, x: List[float]) -> float:
+    def g2(self, x: list[float]) -> float:
         result = 0
         for i in range(1, self.number_of_variables(), 2):
             result += pow(x[i] - cos(0.5 * pi * x[0]), 2.0)
@@ -77,7 +76,7 @@ class LIRCMOP2(LIRCMOP1):
     """
 
     def __init__(self, number_of_variables: int = 30):
-        super(LIRCMOP2, self).__init__(number_of_variables)
+        super().__init__(number_of_variables)
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
@@ -101,7 +100,7 @@ class LIRCMOP3(LIRCMOP1):
     """
 
     def __init__(self, number_of_variables: int = 30):
-        super(LIRCMOP3, self).__init__(number_of_variables)
+        super().__init__(number_of_variables)
 
     def number_of_constraints(self) -> int:
         return 3
@@ -134,7 +133,7 @@ class LIRCMOP4(LIRCMOP2):
     """
 
     def __init__(self, number_of_variables: int = 30):
-        super(LIRCMOP4, self).__init__(number_of_variables)
+        super().__init__(number_of_variables)
 
     def number_of_constraints(self) -> int:
         return 3
@@ -167,7 +166,7 @@ class LIRCMOP5(FloatProblem):
     """
 
     def __init__(self, number_of_variables: int = 30):
-        super(LIRCMOP5, self).__init__()
+        super().__init__()
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
@@ -205,8 +204,16 @@ class LIRCMOP5(FloatProblem):
 
         for i in range(len(x_offset)):
             constraints[i] = (
-                pow(((f1 - x_offset[i]) * cos(theta) - (f2 - y_offset[i]) * sin(theta)) / a_array[i], 2)
-                + pow(((f1 - x_offset[i]) * sin(theta) + (f2 - y_offset[i]) * cos(theta)) / b_array[i], 2)
+                pow(
+                    ((f1 - x_offset[i]) * cos(theta) - (f2 - y_offset[i]) * sin(theta))
+                    / a_array[i],
+                    2,
+                )
+                + pow(
+                    ((f1 - x_offset[i]) * sin(theta) + (f2 - y_offset[i]) * cos(theta))
+                    / b_array[i],
+                    2,
+                )
                 - r
             )
 
@@ -240,7 +247,7 @@ class LIRCMOP6(LIRCMOP5):
     """
 
     def __init__(self, number_of_variables: int = 30):
-        super(LIRCMOP6, self).__init__(number_of_variables)
+        super().__init__(number_of_variables)
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
@@ -266,8 +273,16 @@ class LIRCMOP6(LIRCMOP5):
 
         for i in range(len(x_offset)):
             constraints[i] = (
-                pow(((f1 - x_offset[i]) * cos(theta) - (f2 - y_offset[i]) * sin(theta)) / a_array[i], 2)
-                + pow(((f1 - x_offset[i]) * sin(theta) + (f2 - y_offset[i]) * cos(theta)) / b_array[i], 2)
+                pow(
+                    ((f1 - x_offset[i]) * cos(theta) - (f2 - y_offset[i]) * sin(theta))
+                    / a_array[i],
+                    2,
+                )
+                + pow(
+                    ((f1 - x_offset[i]) * sin(theta) + (f2 - y_offset[i]) * cos(theta))
+                    / b_array[i],
+                    2,
+                )
                 - r
             )
 
@@ -287,7 +302,7 @@ class LIRCMOP7(LIRCMOP5):
     """
 
     def __init__(self, number_of_variables: int = 30):
-        super(LIRCMOP7, self).__init__(number_of_variables)
+        super().__init__(number_of_variables)
 
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
         constraints = [0.0 for _ in range(self.number_of_constraints())]
@@ -303,8 +318,16 @@ class LIRCMOP7(LIRCMOP5):
 
         for i in range(len(x_offset)):
             constraints[i] = (
-                pow(((f1 - x_offset[i]) * cos(theta) - (f2 - y_offset[i]) * sin(theta)) / a_array[i], 2)
-                + pow(((f1 - x_offset[i]) * sin(theta) + (f2 - y_offset[i]) * cos(theta)) / b_array[i], 2)
+                pow(
+                    ((f1 - x_offset[i]) * cos(theta) - (f2 - y_offset[i]) * sin(theta))
+                    / a_array[i],
+                    2,
+                )
+                + pow(
+                    ((f1 - x_offset[i]) * sin(theta) + (f2 - y_offset[i]) * cos(theta))
+                    / b_array[i],
+                    2,
+                )
                 - r
             )
 
@@ -324,7 +347,7 @@ class LIRCMOP8(LIRCMOP6):
     """
 
     def __init__(self, number_of_variables: int = 30):
-        super(LIRCMOP8, self).__init__(number_of_variables)
+        super().__init__(number_of_variables)
 
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
         constraints = [0.0 for _ in range(self.number_of_constraints())]
@@ -340,8 +363,16 @@ class LIRCMOP8(LIRCMOP6):
 
         for i in range(len(x_offset)):
             constraints[i] = (
-                pow(((f1 - x_offset[i]) * cos(theta) - (f2 - y_offset[i]) * sin(theta)) / a_array[i], 2)
-                + pow(((f1 - x_offset[i]) * sin(theta) + (f2 - y_offset[i]) * cos(theta)) / b_array[i], 2)
+                pow(
+                    ((f1 - x_offset[i]) * cos(theta) - (f2 - y_offset[i]) * sin(theta))
+                    / a_array[i],
+                    2,
+                )
+                + pow(
+                    ((f1 - x_offset[i]) * sin(theta) + (f2 - y_offset[i]) * cos(theta))
+                    / b_array[i],
+                    2,
+                )
                 - r
             )
 
@@ -361,7 +392,7 @@ class LIRCMOP9(LIRCMOP8):
     """
 
     def __init__(self, number_of_variables: int = 30):
-        super(LIRCMOP9, self).__init__(number_of_variables)
+        super().__init__(number_of_variables)
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
@@ -382,7 +413,12 @@ class LIRCMOP9(LIRCMOP8):
         f0 = solution.objectives[0]
         f1 = solution.objectives[1]
 
-        constraints[0] = f0 * sin(theta) + f1 * cos(theta) - sin(n * pi * (f0 * cos(theta) - f1 * sin(theta))) - 2
+        constraints[0] = (
+            f0 * sin(theta)
+            + f1 * cos(theta)
+            - sin(n * pi * (f0 * cos(theta) - f1 * sin(theta)))
+            - 2
+        )
 
         x_offset = 1.40
         y_offset = 1.40
@@ -412,7 +448,7 @@ class LIRCMOP10(LIRCMOP8):
     """
 
     def __init__(self, number_of_variables: int = 30):
-        super(LIRCMOP10, self).__init__(number_of_variables)
+        super().__init__(number_of_variables)
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
@@ -432,7 +468,12 @@ class LIRCMOP10(LIRCMOP8):
         f0 = solution.objectives[0]
         f1 = solution.objectives[1]
 
-        constraints[0] = f0 * sin(theta) + f1 * cos(theta) - sin(n * pi * (f0 * cos(theta) - f1 * sin(theta))) - 1
+        constraints[0] = (
+            f0 * sin(theta)
+            + f1 * cos(theta)
+            - sin(n * pi * (f0 * cos(theta) - f1 * sin(theta)))
+            - 1
+        )
 
         x_offset = 1.1
         y_offset = 1.2
@@ -462,7 +503,7 @@ class LIRCMOP11(LIRCMOP10):
     """
 
     def __init__(self, number_of_variables: int = 30):
-        super(LIRCMOP11, self).__init__(number_of_variables)
+        super().__init__(number_of_variables)
 
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
         constraints = [0.0 for _ in range(self.number_of_constraints())]
@@ -472,7 +513,12 @@ class LIRCMOP11(LIRCMOP10):
         f0 = solution.objectives[0]
         f1 = solution.objectives[1]
 
-        constraints[0] = f0 * sin(theta) + f1 * cos(theta) - sin(n * pi * (f0 * cos(theta) - f1 * sin(theta))) - 2.1
+        constraints[0] = (
+            f0 * sin(theta)
+            + f1 * cos(theta)
+            - sin(n * pi * (f0 * cos(theta) - f1 * sin(theta)))
+            - 2.1
+        )
 
         x_offset = 1.2
         y_offset = 1.2
@@ -502,7 +548,7 @@ class LIRCMOP12(LIRCMOP9):
     """
 
     def __init__(self, number_of_variables: int = 30):
-        super(LIRCMOP12, self).__init__(number_of_variables)
+        super().__init__(number_of_variables)
 
     def evaluate_constraints(self, solution: FloatSolution) -> FloatSolution:
         constraints = [0.0 for _ in range(self.number_of_constraints())]
@@ -512,7 +558,12 @@ class LIRCMOP12(LIRCMOP9):
         f0 = solution.objectives[0]
         f1 = solution.objectives[1]
 
-        constraints[0] = f0 * sin(theta) + f1 * cos(theta) - sin(n * pi * (f0 * cos(theta) - f1 * sin(theta))) - 2.5
+        constraints[0] = (
+            f0 * sin(theta)
+            + f1 * cos(theta)
+            - sin(n * pi * (f0 * cos(theta) - f1 * sin(theta)))
+            - 2.5
+        )
 
         x_offset = 1.6
         y_offset = 1.6
@@ -542,7 +593,7 @@ class LIRCMOP13(FloatProblem):
     """
 
     def __init__(self, number_of_variables: int = 30):
-        super(LIRCMOP13, self).__init__()
+        super().__init__()
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
@@ -555,6 +606,7 @@ class LIRCMOP13(FloatProblem):
 
     def number_of_constraints(self) -> int:
         return 2
+
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
 
@@ -597,7 +649,7 @@ class LIRCMOP14(LIRCMOP13):
     """
 
     def __init__(self, number_of_variables: int = 30):
-        super(LIRCMOP14, self).__init__(number_of_variables)
+        super().__init__(number_of_variables)
 
     def number_of_objectives(self) -> int:
         return len(self.obj_directions)

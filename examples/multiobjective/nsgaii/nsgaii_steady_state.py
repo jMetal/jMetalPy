@@ -11,7 +11,7 @@ from jmetal.util.solution import (
 )
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
-"""  
+"""
 Program to configure and run a steady-state version of the NSGA-II algorithm (configured with standard settings).
 """
 
@@ -24,7 +24,9 @@ if __name__ == "__main__":
         problem=problem,
         population_size=100,
         offspring_population_size=1,
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
+        mutation=PolynomialMutation(
+            probability=1.0 / problem.number_of_variables(), distribution_index=20
+        ),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
     )
@@ -35,11 +37,10 @@ if __name__ == "__main__":
     # Save results to file
     print_function_values_to_file(front, "FUN." + algorithm.label)
     print_variables_to_file(front, "VAR." + algorithm.label)
-    
-    # Save a PNG visualization of the front (and optional HTML if Plotly available)
-    png = save_plt_to_file(front, "FUN." + algorithm.label, out_dir='.', html_plotly=True)
-    print(f"Saved front plot to: {png}")
 
+    # Save a PNG visualization of the front (and optional HTML if Plotly available)
+    png = save_plt_to_file(front, "FUN." + algorithm.label, out_dir=".", html_plotly=True)
+    print(f"Saved front plot to: {png}")
 
     print(f"Algorithm: {algorithm.get_name()}")
     print(f"Problem: {problem.name()}")

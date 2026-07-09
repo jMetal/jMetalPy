@@ -42,22 +42,22 @@ def create_many_objective_solutions(num_solutions: int = 20, num_objectives: int
 def demonstrate_2d_archive():
     """Demonstrate DistanceBasedArchive with 2-objective problems (uses crowding distance)."""
     print("=== 2-Objective Problem Demo ===")
-    
+
     # Create archive with maximum size of 5
     archive = DistanceBasedArchive(maximum_size=5)
-    
+
     # Generate 10 solutions on a Pareto front
     solutions = create_2d_pareto_front_solutions(10)
-    
+
     print(f"Generated {len(solutions)} solutions")
     print("Solutions before filtering:")
     for i, sol in enumerate(solutions):
         print(f"  Solution {i}: {sol.objectives}")
-    
+
     # Add solutions to archive
     for solution in solutions:
         archive.add(solution)
-    
+
     print(f"\nArchive size after adding all solutions: {archive.size()}")
     print("Selected solutions (using crowding distance):")
     for i in range(archive.size()):
@@ -69,38 +69,38 @@ def demonstrate_2d_archive():
 def demonstrate_many_objective_archive():
     """Demonstrate DistanceBasedArchive with many-objective problems (uses distance-based selection)."""
     print("\n=== Many-Objective Problem Demo ===")
-    
+
     # Create archive with maximum size of 5
     archive = DistanceBasedArchive(maximum_size=5, distance_measure=EuclideanDistance())
-    
+
     # Generate 15 solutions in 4-objective space
     random.seed(42)  # For reproducible results
     solutions = create_many_objective_solutions(15, 4)
-    
+
     print(f"Generated {len(solutions)} solutions in 4-objective space")
     print("First 5 solutions before filtering:")
     for i in range(min(5, len(solutions))):
         print(f"  Solution {i}: {[f'{obj:.3f}' for obj in solutions[i].objectives]}")
-    
+
     # Add solutions to archive
     for solution in solutions:
         archive.add(solution)
-    
+
     print(f"\nArchive size after adding all solutions: {archive.size()}")
     print("Selected solutions (using distance-based selection):")
     for i in range(archive.size()):
         sol = archive.get(i)
-        obj_str = [f'{obj:.3f}' for obj in sol.objectives]
+        obj_str = [f"{obj:.3f}" for obj in sol.objectives]
         print(f"  Solution {i}: {obj_str}")
 
 
 def demonstrate_custom_distance():
     """Demonstrate using DistanceBasedArchive with custom distance measure."""
     print("\n=== Custom Distance Measure Demo ===")
-    
+
     # Create archive with EuclideanDistance explicitly
     archive = DistanceBasedArchive(maximum_size=3, distance_measure=EuclideanDistance())
-    
+
     # Create solutions that are best in each objective
     solutions = []
     for i in range(3):
@@ -109,37 +109,37 @@ def demonstrate_custom_distance():
         objectives[i] = 0.0  # Best in objective i
         solution.objectives = objectives
         solutions.append(solution)
-    
+
     # Add a few more diverse solutions
     for _ in range(3):
         solution = FloatSolution([], [], 3)
         solution.objectives = [random.uniform(0.2, 0.8) for _ in range(3)]
         solutions.append(solution)
-    
+
     print(f"Generated {len(solutions)} solutions")
     print("All solutions:")
     for i, sol in enumerate(solutions):
-        obj_str = [f'{obj:.3f}' for obj in sol.objectives]
+        obj_str = [f"{obj:.3f}" for obj in sol.objectives]
         print(f"  Solution {i}: {obj_str}")
-    
+
     # Add solutions to archive
     for solution in solutions:
         archive.add(solution)
-    
+
     print(f"\nArchive size: {archive.size()}")
     print("Selected solutions:")
     for i in range(archive.size()):
         sol = archive.get(i)
-        obj_str = [f'{obj:.3f}' for obj in sol.objectives]
+        obj_str = [f"{obj:.3f}" for obj in sol.objectives]
         print(f"  Solution {i}: {obj_str}")
 
 
 if __name__ == "__main__":
     print("DistanceBasedArchive Example")
     print("=" * 40)
-    
+
     demonstrate_2d_archive()
     demonstrate_many_objective_archive()
     demonstrate_custom_distance()
-    
+
     print("\nExample completed successfully!")

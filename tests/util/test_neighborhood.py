@@ -11,7 +11,9 @@ class WeightVectorNeighborhoodTestCases(unittest.TestCase):
     def test_should_constructor_work_properly(self) -> None:
         number_of_weight_vectors = 100
         neighborhood_size = 20
-        neighborhood: WeightVectorNeighborhood = WeightVectorNeighborhood(number_of_weight_vectors, neighborhood_size)
+        neighborhood: WeightVectorNeighborhood = WeightVectorNeighborhood(
+            number_of_weight_vectors, neighborhood_size
+        )
 
         self.assertEqual(number_of_weight_vectors, neighborhood.number_of_weight_vectors)
         self.assertEqual(neighborhood_size, neighborhood.neighborhood_size)
@@ -32,7 +34,9 @@ class WeightVectorNeighborhoodTestCases(unittest.TestCase):
         )
         self.assertTrue(
             numpy.array_equal(
-                numpy.array([69, 70, 68, 71, 67, 72, 66, 73, 65, 64, 74, 75, 63, 76, 62, 77, 61, 78, 60, 79]),
+                numpy.array(
+                    [69, 70, 68, 71, 67, 72, 66, 73, 65, 64, 74, 75, 63, 76, 62, 77, 61, 78, 60, 79]
+                ),
                 neighborhood.neighborhood[69],
             )
         )
@@ -40,9 +44,13 @@ class WeightVectorNeighborhoodTestCases(unittest.TestCase):
     def test_should_get_neighbors_work_properly_with_two_objectives(self):
         number_of_weight_vectors = 100
         neighborhood_size = 20
-        neighborhood: WeightVectorNeighborhood = WeightVectorNeighborhood(number_of_weight_vectors, neighborhood_size)
+        neighborhood: WeightVectorNeighborhood = WeightVectorNeighborhood(
+            number_of_weight_vectors, neighborhood_size
+        )
 
-        solution_list = [FloatSolution([0.0, 0.0], [1.0, 1.0], 2) for _ in range(number_of_weight_vectors)]
+        solution_list = [
+            FloatSolution([0.0, 0.0], [1.0, 1.0], 2) for _ in range(number_of_weight_vectors)
+        ]
 
         neighbors = neighborhood.get_neighbors(0, solution_list)
         self.assertEqual(neighborhood_size, len(neighbors))
@@ -275,15 +283,15 @@ class L5TestCases(unittest.TestCase):
 
         result = neighborhood.get_neighbors(0, solution_list)
         self.assertEqual(4, len(result))
-        
+
         # The neighborhood should contain the solution itself and its neighbors
         self.assertTrue(solution_list[0] in result)  # The solution itself is included
         self.assertTrue(solution_list[1] in result)  # Right neighbor
         self.assertTrue(solution_list[2] in result)  # Bottom neighbor
-        
+
         # The diagonal neighbor (index 3) might or might not be included
         # depending on the implementation
-        
+
         # Check that all elements in the result are from the solution list
         self.assertTrue(all(s in solution_list for s in result))
 

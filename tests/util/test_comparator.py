@@ -6,10 +6,11 @@ from jmetal.core.solution import FloatSolution
 from jmetal.util.comparator import (
     Comparator,
     DominanceComparator,
+    DominanceWithConstraintsComparator,
     MultiComparator,
     OverallConstraintViolationComparator,
     RankingAndCrowdingDistanceComparator,
-    SolutionAttributeComparator, DominanceWithConstraintsComparator,
+    SolutionAttributeComparator,
 )
 
 
@@ -23,7 +24,9 @@ class OverallConstraintViolationComparatorTestCases(unittest.TestCase):
 
         self.assertEqual(0, self.comparator.compare(solution1, solution2))
 
-    def test_should_comparator_return_0_if_the_solutions_have_the_same_constraint_violation_degree(self):
+    def test_should_comparator_return_0_if_the_solutions_have_the_same_constraint_violation_degree(
+        self,
+    ):
         solution1 = FloatSolution([0.0], [1.0], 1, 2)
         solution2 = FloatSolution([0.0], [1.0], 1, 2)
         solution1.constraints[0] = -2
@@ -33,7 +36,9 @@ class OverallConstraintViolationComparatorTestCases(unittest.TestCase):
 
         self.assertEqual(0, self.comparator.compare(solution1, solution2))
 
-    def test_should_comparator_return_minus_1_if_solution_2_has_lower_constraint_violation_degree(self):
+    def test_should_comparator_return_minus_1_if_solution_2_has_lower_constraint_violation_degree(
+        self,
+    ):
         solution1 = FloatSolution([0.0], [1.0], 1, 1)
         solution2 = FloatSolution([0.0], [1.0], 1, 1)
         solution1.constraints[0] = -2
@@ -66,7 +71,9 @@ class DominanceComparatorTestCases(unittest.TestCase):
         with self.assertRaises(Exception):
             self.comparator.compare(solution, solution2)
 
-    def test_should_dominance_comparator_return_zero_if_the_two_solutions_have_one_objective_with_the_same_value(self):
+    def test_should_dominance_comparator_return_zero_if_the_two_solutions_have_one_objective_with_the_same_value(
+        self,
+    ):
         solution = FloatSolution([0.0], [1.0], 1)
         solution2 = FloatSolution([0.0], [1.0], 1)
         solution.objectives = [1.0]
@@ -75,7 +82,7 @@ class DominanceComparatorTestCases(unittest.TestCase):
         self.assertEqual(0, self.comparator.compare(solution, solution2))
 
     def test_should_dominance_comparator_return_one_if_the_two_solutions_have_one_objective_and_the_second_one_is_lower(
-            self,
+        self,
     ):
         solution = FloatSolution([0.0], [1.0], 1)
         solution2 = FloatSolution([0.0], [1.0], 1)
@@ -85,7 +92,7 @@ class DominanceComparatorTestCases(unittest.TestCase):
         self.assertEqual(1, self.comparator.compare(solution, solution2))
 
     def test_should_dominance_comparator_return_minus_one_if_the_two_solutions_have_one_objective_and_the_first_one_is_lower(
-            self,
+        self,
     ):
         solution = FloatSolution([0.0], [1.0], 1)
         solution2 = FloatSolution([0.0], [1.0], 1)
@@ -160,7 +167,7 @@ class DominanceWithConstraintsComparatorTestCases(unittest.TestCase):
         """Case 2: solution1 has no constraint violation while solution2 does"""
         solution1 = FloatSolution([0.0, 0.0, 0.0], [1.0, 1.0, 1.0], 3, 1)
         solution2 = FloatSolution([0.0, 0.0, 0.0], [1.0, 1.0, 1.0], 3, 1)
-        solution1.constraints = [0.0]   # No constraint violation
+        solution1.constraints = [0.0]  # No constraint violation
         solution2.constraints = [-1.0]  # Constraint violation
         solution1.objectives = [1.0, 2.0, 3.0]
         solution2.objectives = [4.0, 5.0, 6.0]
@@ -326,8 +333,8 @@ class MultiComparatorTestCases(unittest.TestCase):
 
     def test_should_compare_work_properly_case_2(self):
         """Case 2: two comparators; the first returns 1 and the second one returns 0.
-            Expected result: 1
-            """
+        Expected result: 1
+        """
         solution1 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution2 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
 
@@ -344,8 +351,8 @@ class MultiComparatorTestCases(unittest.TestCase):
 
     def test_should_compare_work_properly_case_3(self):
         """Case 2: two comparators; the first returns 0 and the second one returns -1.
-            Expected result: -1
-            """
+        Expected result: -1
+        """
         solution1 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution2 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
 

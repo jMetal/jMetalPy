@@ -1,7 +1,6 @@
 import logging
 import os
 from pathlib import Path
-from typing import List
 
 from jmetal.core.solution import FloatSolution, Solution
 from jmetal.util.archive import Archive, NonDominatedSolutionsArchive
@@ -18,7 +17,7 @@ logger = logging.getLogger(__name__)
 """
 
 
-def get_non_dominated_solutions(solutions: List[Solution]) -> List[Solution]:
+def get_non_dominated_solutions(solutions: list[Solution]) -> list[Solution]:
     archive: Archive = NonDominatedSolutionsArchive()
 
     for solution in solutions:
@@ -27,7 +26,7 @@ def get_non_dominated_solutions(solutions: List[Solution]) -> List[Solution]:
     return archive.solution_list
 
 
-def read_solutions(filename: str) -> List[FloatSolution]:
+def read_solutions(filename: str) -> list[FloatSolution]:
     """Reads a reference front from a file.
 
     :param filename: File path where the front is located.
@@ -44,7 +43,7 @@ def read_solutions(filename: str) -> List[FloatSolution]:
 
                 front.append(solution)
     else:
-        logger.warning("Reference front file was not found at {}".format(filename))
+        logger.warning(f"Reference front file was not found at {filename}")
 
     return front
 

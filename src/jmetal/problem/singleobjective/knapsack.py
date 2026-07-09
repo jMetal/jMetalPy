@@ -24,7 +24,7 @@ class Knapsack(BinaryProblem):
         from_file: bool = False,
         filename: str = None,
     ):
-        super(Knapsack, self).__init__()
+        super().__init__()
 
         if from_file:
             self.__read_from_file(filename)
@@ -93,9 +93,9 @@ class Knapsack(BinaryProblem):
     def create_solution(self) -> BinarySolution:
         new_solution = BinarySolution(
             number_of_variables=self.number_of_bits,
-            number_of_objectives=self.number_of_objectives()
+            number_of_objectives=self.number_of_objectives(),
         )
-        
+
         # The BinarySolution initializes with empty variables, we need to set the bits
         # The bits will be stored in variables[0] as a numpy array
         new_solution.variables[0] = np.random.choice([True, False], size=self.number_of_bits)

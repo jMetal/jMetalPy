@@ -318,9 +318,7 @@ def shaffer(p_values):
     elif type(p_values) == np.ndarray:
         algorithms = np.array(["Alg%d" % alg for alg in range(p_values.shape[1])])
 
-    if p_values.ndim != 2:
-        raise ValueError("Initialization ERROR. Incorrect number of array dimensions.")
-    elif p_values.shape[0] != p_values.shape[1]:
+    if p_values.ndim != 2 or p_values.shape[0] != p_values.shape[1]:
         raise ValueError("Initialization ERROR. Incorrect number of array dimensions.")
 
     # define parameters
@@ -371,9 +369,7 @@ def nemenyi(p_values):
     elif type(p_values) == np.ndarray:
         algorithms = np.array(["Alg%d" % alg for alg in range(p_values.shape[1])])
 
-    if p_values.ndim != 2:
-        raise ValueError("Initialization ERROR. Incorrect number of array dimensions.")
-    elif p_values.shape[0] != p_values.shape[1]:
+    if p_values.ndim != 2 or p_values.shape[0] != p_values.shape[1]:
         raise ValueError("Initialization ERROR. Incorrect number of array dimensions.")
 
     # define parameters

@@ -153,8 +153,8 @@ if __name__ == "__main__":
     algorithm.run()
     subset = algorithm.result()
 
-    print("Algorithm: {}".format(algorithm.get_name()))
-    print("Problem: {}".format(problem.name()))
-    print("Solution: {}".format(subset.variables))
-    print("Fitness: {}".format(subset.objectives[0]))
-    print("Computing time: {}".format(algorithm.total_computing_time))
+    print(f"Algorithm: {algorithm.get_name()}")
+    print(f"Problem: {problem.name()}")
+    print(f"Solution: {subset.variables}")
+    print(f"Fitness: {subset.objectives[0]}")
+    print(f"Computing time: {algorithm.total_computing_time}")

@@ -10,7 +10,7 @@ class InvalidConditionException(Exception):
 
 class EmptyCollectionException(RuntimeError):
     def __init__(self):
-        super(EmptyCollectionException, self).__init__("The collection is empty")
+        super().__init__("The collection is empty")
 
 
 # class InvalidConditionException(RuntimeError):
@@ -20,14 +20,14 @@ class EmptyCollectionException(RuntimeError):
 
 class InvalidProbabilityValueException(RuntimeError):
     def __init__(self, value: float):
-        super(InvalidProbabilityValueException, self).__init__(
-
-            "The parameter " + str(value) + " is not a valid probability value")
+        super().__init__(
+            "The parameter " + str(value) + " is not a valid probability value"
+        )
 
 
 class ValueOutOfRangeException(RuntimeError):
     def __init__(self, value: float, lowest_value: float, highest_value: float):
-        super(ValueOutOfRangeException, self).__init__(
+        super().__init__(
             "The parameter "
             + str(value)
             + " is not in the range ("
@@ -36,6 +36,7 @@ class ValueOutOfRangeException(RuntimeError):
             + str(highest_value)
             + ")"
         )
+
 
 class Check:
     @staticmethod

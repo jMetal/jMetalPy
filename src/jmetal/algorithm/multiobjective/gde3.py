@@ -1,18 +1,21 @@
-from typing import List, TypeVar
+from typing import TypeVar
 
 from jmetal.config import store
 from jmetal.core.algorithm import DynamicAlgorithm, EvolutionaryAlgorithm
 from jmetal.core.problem import DynamicProblem, Problem
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import DifferentialEvolutionCrossover
-from jmetal.operator.selection import DifferentialEvolutionSelection, RankingAndCrowdingDistanceSelection
+from jmetal.operator.selection import (
+    DifferentialEvolutionSelection,
+    RankingAndCrowdingDistanceSelection,
+)
 from jmetal.util.comparator import Comparator, DominanceComparator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar("S")
-R = List[S]
+R = list[S]
 
 
 class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
@@ -28,8 +31,10 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
         population_evaluator: Evaluator = store.default_evaluator,
         dominance_comparator: Comparator = store.default_comparator,
     ):
-        super(GDE3, self).__init__(
-            problem=problem, population_size=population_size, offspring_population_size=population_size
+        super().__init__(
+            problem=problem,
+            population_size=population_size,
+            offspring_population_size=population_size,
         )
         self.dominance_comparator = dominance_comparator
         self.selection_operator = DifferentialEvolutionSelection()
@@ -41,7 +46,7 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
         self.termination_criterion = termination_criterion
         self.observable.register(termination_criterion)
 
-    def selection(self, population: List[FloatSolution]) -> List[FloatSolution]:
+    def selection(self, population: list[FloatSolution]) -> list[FloatSolution]:
         mating_pool = []
 
         for i in range(self.population_size):
@@ -51,7 +56,7 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
 
         return mating_pool
 
-    def reproduction(self, mating_pool: List[S]) -> List[S]:
+    def reproduction(self, mating_pool: list[S]) -> list[S]:
         offspring_population = []
         first_parent_index = 0
 
@@ -64,7 +69,9 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
 
         return offspring_population
 
-    def replacement(self, population: List[S], offspring_population: List[FloatSolution]) -> List[List[FloatSolution]]:
+    def replacement(
+        self, population: list[S], offspring_population: list[FloatSolution]
+    ) -> list[list[FloatSolution]]:
         tmp_list = []
 
         for solution1, solution2 in zip(self.solutions, offspring_population):
@@ -83,16 +90,16 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
             self.population_size, dominance_comparator=self.dominance_comparator
         ).execute(join_population)
 
-    def create_initial_solutions(self) -> List[FloatSolution]:
+    def create_initial_solutions(self) -> list[FloatSolution]:
         return [self.population_generator.new(self.problem) for _ in range(self.population_size)]
 
-    def evaluate(self, solution_list: List[FloatSolution]) -> List[FloatSolution]:
+    def evaluate(self, solution_list: list[FloatSolution]) -> list[FloatSolution]:
         return self.population_evaluator.evaluate(solution_list, self.problem)
 
     def stopping_condition_is_met(self) -> bool:
         return self.termination_criterion.is_met
 
-    def result(self) -> List[FloatSolution]:
+    def result(self) -> list[FloatSolution]:
         return self.solutions
 
     def get_name(self) -> str:
@@ -112,7 +119,7 @@ class DynamicGDE3(GDE3, DynamicAlgorithm):
         population_evaluator: Evaluator = store.default_evaluator,
         dominance_comparator: Comparator = DominanceComparator(),
     ):
-        super(DynamicGDE3, self).__init__(
+        super().__init__(
             problem,
             population_size,
             cr,

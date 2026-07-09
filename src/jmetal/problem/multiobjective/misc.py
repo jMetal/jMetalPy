@@ -1,5 +1,5 @@
 import math
-from math import ceil, fabs, copysign
+from math import ceil, copysign, fabs
 
 import numpy as np
 
@@ -22,22 +22,22 @@ class CONV2(FloatProblem):
         self.upper_bound = [10.0, 10.0]
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f1', 'f2']
+        self.obj_labels = ["f1", "f2"]
 
     # Evaluates a solution by computing its two objectives
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x1 = solution.variables[0]
         x2 = solution.variables[1]
 
-        f1 = x1 ** 2 + x2 ** 2
-        f2 = (x1 - 10) ** 2 + x2 ** 2
+        f1 = x1**2 + x2**2
+        f2 = (x1 - 10) ** 2 + x2**2
 
         solution.objectives[0] = f1
         solution.objectives[1] = f2
         return solution
 
     def name(self) -> str:
-        return 'CONV2'
+        return "CONV2"
 
     # Accessor methods for problem metadata
     def number_of_variables(self):
@@ -63,7 +63,7 @@ class CONV3_4(FloatProblem):
         self.upper_bound = [3.0] * 3
 
         self.obj_directions = [self.MINIMIZE] * 3
-        self.obj_labels = ['f1', 'f2', 'f3']
+        self.obj_labels = ["f1", "f2", "f3"]
 
         self.a1 = [-1.0, -1.0, -1.0]
         self.a2 = [1.0, 1.0, 1.0]
@@ -84,14 +84,17 @@ class CONV3_4(FloatProblem):
         return solution
 
     def name(self) -> str:
-        return 'CONV3_4'
+        return "CONV3_4"
 
     # Accessor methods
-    def number_of_variables(self): return self._number_of_variables
+    def number_of_variables(self):
+        return self._number_of_variables
 
-    def number_of_objectives(self): return self._number_of_objectives
+    def number_of_objectives(self):
+        return self._number_of_objectives
 
-    def number_of_constraints(self): return self._number_of_constraints
+    def number_of_constraints(self):
+        return self._number_of_constraints
 
 
 class CONV3(FloatProblem):
@@ -109,7 +112,7 @@ class CONV3(FloatProblem):
         self.upper_bound = [3.0, 3.0, 3.0]
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f1', 'f2', 'f3']
+        self.obj_labels = ["f1", "f2", "f3"]
 
     # Compute the three objective values for a solution
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
@@ -131,7 +134,7 @@ class CONV3(FloatProblem):
         return solution
 
     def name(self) -> str:
-        return 'CONV3'
+        return "CONV3"
 
     # Accessor methods for problem properties
     def number_of_variables(self):
@@ -156,33 +159,32 @@ class CONV4_2F(FloatProblem):
         self.upper_bound = [3.0] * 4
 
         self.obj_directions = [self.MINIMIZE] * 4
-        self.obj_labels = ['f1', 'f2', 'f3', 'f4']
+        self.obj_labels = ["f1", "f2", "f3", "f4"]
 
         # Canonical basis vectors in R^4
-        self.A = np.array([
-            [1, 0, 0, 0],
-            [0, 1, 0, 0],
-            [0, 0, 1, 0],
-            [0, 0, 0, 1]
-        ])
+        self.A = np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
 
         self.ones_vec = np.ones(4)
 
         a1 = self.A[0]
         a4 = self.A[3]
 
-        phi1 = np.array([
-            0,
-            np.linalg.norm(a1 - self.A[1]) ** 2,
-            np.linalg.norm(a1 - self.A[2]) ** 2,
-            np.linalg.norm(a1 - self.A[3]) ** 2
-        ])
-        phi4 = np.array([
-            np.linalg.norm(a4 - self.A[0]) ** 2,
-            np.linalg.norm(a4 - self.A[1]) ** 2,
-            np.linalg.norm(a4 - self.A[2]) ** 2,
-            0
-        ])
+        phi1 = np.array(
+            [
+                0,
+                np.linalg.norm(a1 - self.A[1]) ** 2,
+                np.linalg.norm(a1 - self.A[2]) ** 2,
+                np.linalg.norm(a1 - self.A[3]) ** 2,
+            ]
+        )
+        phi4 = np.array(
+            [
+                np.linalg.norm(a4 - self.A[0]) ** 2,
+                np.linalg.norm(a4 - self.A[1]) ** 2,
+                np.linalg.norm(a4 - self.A[2]) ** 2,
+                0,
+            ]
+        )
 
         self.sigma = phi4 - phi1
 
@@ -195,12 +197,12 @@ class CONV4_2F(FloatProblem):
             # If all x_i < 0, compute convex formulation
             for j in range(4):
                 diff = x + self.ones_vec - self.A[j]
-                f[j] = np.sum(diff ** 2) - 3.5 * self.sigma[j]
+                f[j] = np.sum(diff**2) - 3.5 * self.sigma[j]
         else:
             # Otherwise, compute product-based formulation
             for j in range(4):
                 prod = x * self.A[j]
-                f[j] = np.sum(prod ** 2)
+                f[j] = np.sum(prod**2)
 
         # Assign objectives to solution
         for j in range(4):
@@ -209,7 +211,7 @@ class CONV4_2F(FloatProblem):
         return solution
 
     def name(self) -> str:
-        return 'CONV4-2F'
+        return "CONV4-2F"
 
     def number_of_variables(self):
         return self._number_of_variables
@@ -236,7 +238,7 @@ class DENT(FloatProblem):
         self.upper_bound = [2.0, 2.0]
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f1', 'f2']
+        self.obj_labels = ["f1", "f2"]
 
     # Evaluate the solution by computing the two objectives
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
@@ -246,7 +248,7 @@ class DENT(FloatProblem):
 
         term1 = math.sqrt(1 + (x1 + x2) ** 2)
         term2 = math.sqrt(1 + (x1 - x2) ** 2)
-        exp_term = alpha * math.exp(-(x1 - x2) ** 2)
+        exp_term = alpha * math.exp(-((x1 - x2) ** 2))
 
         f1 = 0.5 * (term1 + term2 + x1 - x2) + exp_term
         f2 = 0.5 * (term1 + term2 - x1 + x2) + exp_term
@@ -256,7 +258,7 @@ class DENT(FloatProblem):
         return solution
 
     def name(self) -> str:
-        return 'DENT'
+        return "DENT"
 
     # Accessor methods
     def number_of_variables(self):
@@ -283,7 +285,7 @@ class SYM_PART(FloatProblem):
         self.upper_bound = [0.5, 0.5]
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f1', 'f2']
+        self.obj_labels = ["f1", "f2"]
 
     # Evaluate the solution using discrete shifting rules
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
@@ -306,7 +308,7 @@ class SYM_PART(FloatProblem):
         return solution
 
     def name(self) -> str:
-        return 'SYM-PART'
+        return "SYM-PART"
 
     # Accessor methods
     def number_of_variables(self):
@@ -317,6 +319,7 @@ class SYM_PART(FloatProblem):
 
     def number_of_constraints(self):
         return self._number_of_constraints
+
 
 class SSW(FloatProblem):
     def __init__(self):
@@ -333,7 +336,7 @@ class SSW(FloatProblem):
 
         # Objective directions: minimization
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f1', 'f2']
+        self.obj_labels = ["f1", "f2"]
 
     # Evaluate a single solution using the SSW formulation
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
@@ -344,10 +347,10 @@ class SSW(FloatProblem):
         product_term = 1.0
         for j in range(len(x)):
             if j in [0, 1]:
-                wj = 0.01 * math.exp(-(x[j] / 20) ** 2.5)
+                wj = 0.01 * math.exp(-((x[j] / 20) ** 2.5))
             else:
                 wj = 0.01 * math.exp(-x[j] / 15)
-            product_term *= (1 - wj)
+            product_term *= 1 - wj
 
         f2 = 1 - product_term
 
@@ -356,7 +359,7 @@ class SSW(FloatProblem):
         return solution
 
     def name(self) -> str:
-        return 'SSW'
+        return "SSW"
 
     # Accessor methods
     def number_of_variables(self):
@@ -384,7 +387,7 @@ class TWO_ON_ONE(FloatProblem):
 
         # Objective directions: minimization
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f1', 'f2']
+        self.obj_labels = ["f1", "f2"]
 
     # Evaluate a single solution using the TWO_ON_ONE formulation
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
@@ -398,16 +401,15 @@ class TWO_ON_ONE(FloatProblem):
         x1 = x[0]
         x2 = x[1]
 
-
         f1 = x1**4 + x2**4 - x1**2 + x2**2 - c * x1 * x2 + d * x1 + 20
-        f2 = (x1 - k)**2 + (x2 - l)**2
+        f2 = (x1 - k) ** 2 + (x2 - l) ** 2
 
         solution.objectives[0] = f1
         solution.objectives[1] = f2
         return solution
 
     def name(self) -> str:
-        return 'TWO_ON_ONE'
+        return "TWO_ON_ONE"
 
     # Accessor methods
     def number_of_variables(self):
@@ -435,12 +437,11 @@ class OMNI_TEST(FloatProblem):
 
         # Objective directions: minimization
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
-        self.obj_labels = ['f1', 'f2']
+        self.obj_labels = ["f1", "f2"]
 
     # Evaluate a single solution using the OMNI-TEST formulation
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
-
 
         f1 = sum(math.sin(math.pi * xi) for xi in x)
         f2 = sum(math.cos(math.pi * xi) for xi in x)
@@ -450,7 +451,7 @@ class OMNI_TEST(FloatProblem):
         return solution
 
     def name(self) -> str:
-        return 'OMNI_TEST'
+        return "OMNI_TEST"
 
     # Accessor methods
     def number_of_variables(self):

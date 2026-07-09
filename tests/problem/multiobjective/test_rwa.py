@@ -1,7 +1,17 @@
 import unittest
 
-from jmetal.problem.multiobjective.rwa import Ahmad2017, Chen2015, Ganesan2013, Gao2020, Goel2007, Liao2008, Padhi2016, \
-    Subasi2016, Vaidyanathan2004, Xu2020
+from jmetal.problem.multiobjective.rwa import (
+    Ahmad2017,
+    Chen2015,
+    Ganesan2013,
+    Gao2020,
+    Goel2007,
+    Liao2008,
+    Padhi2016,
+    Subasi2016,
+    Vaidyanathan2004,
+    Xu2020,
+)
 
 
 class Ahmad2017TestCases(unittest.TestCase):
@@ -61,6 +71,7 @@ class Chen2015TestCases(unittest.TestCase):
     def test_name(self):
         self.assertEqual("Chen2015", self.problem.name())
 
+
 class Ganesan2013TestCases(unittest.TestCase):
     def setUp(self):
         self.problem = Ganesan2013()
@@ -105,7 +116,7 @@ class Gao2020TestCases(unittest.TestCase):
         self.assertEqual(0.35, self.problem.lower_bound[1])
         self.assertEqual(333.0, self.problem.lower_bound[2])
         self.assertEqual(20.0, self.problem.lower_bound[3])
-        self.assertEqual(3000., self.problem.lower_bound[4])
+        self.assertEqual(3000.0, self.problem.lower_bound[4])
         self.assertEqual(0.1, self.problem.lower_bound[5])
         self.assertEqual(308.0, self.problem.lower_bound[6])
         self.assertEqual(150.0, self.problem.lower_bound[7])
@@ -139,11 +150,12 @@ class Goel2007TestCases(unittest.TestCase):
         self.assertEqual(0, self.problem.number_of_constraints())
 
     def test_variable_bounds(self):
-        self.assertEqual([0.0]*4, self.problem.lower_bound)
-        self.assertEqual([1.0]*4, self.problem.upper_bound)
+        self.assertEqual([0.0] * 4, self.problem.lower_bound)
+        self.assertEqual([1.0] * 4, self.problem.upper_bound)
 
     def test_name(self):
         self.assertEqual("Goel2007", self.problem.name())
+
 
 class Liao2008TestCases(unittest.TestCase):
     def setUp(self):
@@ -159,8 +171,8 @@ class Liao2008TestCases(unittest.TestCase):
         self.assertEqual(0, self.problem.number_of_constraints())
 
     def test_variable_bounds(self):
-        self.assertEqual([1.0]*5, self.problem.lower_bound)
-        self.assertEqual([3.0]*5, self.problem.upper_bound)
+        self.assertEqual([1.0] * 5, self.problem.lower_bound)
+        self.assertEqual([3.0] * 5, self.problem.upper_bound)
 
     def test_name(self):
         self.assertEqual("Liao2008", self.problem.name())
@@ -240,8 +252,8 @@ class Vaidyanathan2004TestCases(unittest.TestCase):
         self.assertEqual(0, self.problem.number_of_constraints())
 
     def test_variable_bounds(self):
-        self.assertEqual([0.0]*4, self.problem.lower_bound)
-        self.assertEqual([1.0]*4, self.problem.upper_bound)
+        self.assertEqual([0.0] * 4, self.problem.lower_bound)
+        self.assertEqual([1.0] * 4, self.problem.upper_bound)
 
     def test_name(self):
         self.assertEqual("Vaidyanathan2004", self.problem.name())

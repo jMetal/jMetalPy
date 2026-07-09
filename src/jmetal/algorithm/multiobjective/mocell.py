@@ -1,6 +1,6 @@
 import copy
 from functools import cmp_to_key
-from typing import List, TypeVar
+from typing import TypeVar
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
@@ -37,7 +37,12 @@ class MOCell(GeneticAlgorithm[S, R]):
         mutation: Mutation,
         crossover: Crossover,
         selection: Selection = BinaryTournamentSelection(
-            MultiComparator([FastNonDominatedRanking.get_comparator(), CrowdingDistanceDensityEstimator.get_comparator()])
+            MultiComparator(
+                [
+                    FastNonDominatedRanking.get_comparator(),
+                    CrowdingDistanceDensityEstimator.get_comparator(),
+                ]
+            )
         ),
         termination_criterion: TerminationCriterion = store.default_termination_criteria,
         population_generator: Generator = store.default_generator,
@@ -53,7 +58,7 @@ class MOCell(GeneticAlgorithm[S, R]):
         :param crossover: Crossover operator (see :py:mod:`jmetal.operator.crossover`).
         :param selection: Selection operator (see :py:mod:`jmetal.operator.selection`).
         """
-        super(MOCell, self).__init__(
+        super().__init__(
             problem=problem,
             population_size=population_size,
             offspring_population_size=1,
@@ -70,7 +75,12 @@ class MOCell(GeneticAlgorithm[S, R]):
         self.current_individual = 0
         self.current_neighbors = []
 
-        self.comparator = MultiComparator([FastNonDominatedRanking.get_comparator(), CrowdingDistanceDensityEstimator.get_comparator()])
+        self.comparator = MultiComparator(
+            [
+                FastNonDominatedRanking.get_comparator(),
+                CrowdingDistanceDensityEstimator.get_comparator(),
+            ]
+        )
 
     def init_progress(self) -> None:
         super().init_progress()
@@ -81,10 +91,12 @@ class MOCell(GeneticAlgorithm[S, R]):
         super().update_progress()
         self.current_individual = (self.current_individual + 1) % self.population_size
 
-    def selection(self, population: List[S]):
+    def selection(self, population: list[S]):
         parents = []
 
-        self.current_neighbors = self.neighborhood.get_neighbors(self.current_individual, population)
+        self.current_neighbors = self.neighborhood.get_neighbors(
+            self.current_individual, population
+        )
         self.current_neighbors.append(self.solutions[self.current_individual])
 
         parents.append(self.selection_operator.execute(self.current_neighbors))
@@ -95,7 +107,7 @@ class MOCell(GeneticAlgorithm[S, R]):
 
         return parents
 
-    def reproduction(self, mating_population: List[S]) -> List[S]:
+    def reproduction(self, mating_population: list[S]) -> list[S]:
         number_of_parents_to_combine = self.crossover_operator.get_number_of_parents()
 
         if len(mating_population) % number_of_parents_to_combine != 0:
@@ -106,8 +118,10 @@ class MOCell(GeneticAlgorithm[S, R]):
 
         return [offspring_population[0]]
 
-    def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
-        result = self.dominance_comparator.compare(population[self.current_individual], offspring_population[0])
+    def replacement(self, population: list[S], offspring_population: list[S]) -> list[list[S]]:
+        result = self.dominance_comparator.compare(
+            population[self.current_individual], offspring_population[0]
+        )
 
         if result == 1:  # the offspring individual dominates the current one
             population[self.current_individual] = offspring_population[0]

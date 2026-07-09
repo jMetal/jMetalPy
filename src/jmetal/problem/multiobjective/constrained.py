@@ -16,7 +16,7 @@ class Srinivas(FloatProblem):
     """Class representing problem Srinivas."""
 
     def __init__(self):
-        super(Srinivas, self).__init__()
+        super().__init__()
         number_of_variables = 2
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
@@ -57,7 +57,7 @@ class Tanaka(FloatProblem):
     """Class representing problem Tanaka."""
 
     def __init__(self):
-        super(Tanaka, self).__init__()
+        super().__init__()
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
@@ -101,7 +101,7 @@ class Osyczka2(FloatProblem):
     """Class representing problem Osyczka2."""
 
     def __init__(self):
-        super(Osyczka2, self).__init__()
+        super().__init__()
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
@@ -118,7 +118,11 @@ class Osyczka2(FloatProblem):
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x = solution.variables
         solution.objectives[0] = -(
-            25.0 * (x[0] - 2.0) ** 2 + (x[1] - 2.0) ** 2 + (x[2] - 1.0) ** 2 + (x[3] - 4.0) ** 2 + (x[4] - 1.0) ** 2
+            25.0 * (x[0] - 2.0) ** 2
+            + (x[1] - 2.0) ** 2
+            + (x[2] - 1.0) ** 2
+            + (x[3] - 4.0) ** 2
+            + (x[4] - 1.0) ** 2
         )
 
         solution.objectives[1] = sum([x[i] ** 2 for i in range(len(x))])
@@ -148,7 +152,7 @@ class Binh2(FloatProblem):
     """Class representing problem Binh2."""
 
     def __init__(self):
-        super(Binh2, self).__init__()
+        super().__init__()
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]

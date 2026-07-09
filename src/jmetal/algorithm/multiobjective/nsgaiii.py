@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, TypeVar
+from typing import TypeVar
 
 import numpy as np
 from numpy.linalg import LinAlgError
@@ -49,7 +49,9 @@ class ReferenceDirectionFactory(ABC):
 
 
 class UniformReferenceDirectionFactory(ReferenceDirectionFactory):
-    def __init__(self, n_dim: int, scaling=None, n_points: int = None, n_partitions: int = None) -> None:
+    def __init__(
+        self, n_dim: int, scaling=None, n_points: int = None, n_partitions: int = None
+    ) -> None:
         super().__init__(n_dim, scaling)
         if n_points is not None:
             self.n_partitions = self.get_partition_closest_to_points(n_points, n_dim)
@@ -68,14 +70,18 @@ class UniformReferenceDirectionFactory(ReferenceDirectionFactory):
         self.__uniform_reference_directions(ref_dirs, ref_dir, n_partitions, n_partitions, 0)
         return np.concatenate(ref_dirs, axis=0)
 
-    def __uniform_reference_directions(self, ref_dirs, ref_dir, n_partitions: int, beta: int, depth: int):
+    def __uniform_reference_directions(
+        self, ref_dirs, ref_dir, n_partitions: int, beta: int, depth: int
+    ):
         if depth == len(ref_dir) - 1:
             ref_dir[depth] = beta / (1.0 * n_partitions)
             ref_dirs.append(ref_dir[None, :])
         else:
             for i in range(beta + 1):
                 ref_dir[depth] = 1.0 * i / (1.0 * n_partitions)
-                self.__uniform_reference_directions(ref_dirs, np.copy(ref_dir), n_partitions, beta - i, depth + 1)
+                self.__uniform_reference_directions(
+                    ref_dirs, np.copy(ref_dir), n_partitions, beta - i, depth + 1
+                )
 
     @staticmethod
     def get_partition_closest_to_points(n_points, n_dim):
@@ -129,7 +135,11 @@ def get_nadir_point(extreme_points, ideal_point, worst_point, worst_of_front, wo
 
         nadir_point = ideal_point + intercepts
 
-        if not np.allclose(np.dot(M, plane), b) or np.any(intercepts <= 1e-6) or np.any(nadir_point > worst_point):
+        if (
+            not np.allclose(np.dot(M, plane), b)
+            or np.any(intercepts <= 1e-6)
+            or np.any(nadir_point > worst_point)
+        ):
             raise LinAlgError()
     except LinAlgError:
         nadir_point = worst_of_front
@@ -140,7 +150,7 @@ def get_nadir_point(extreme_points, ideal_point, worst_point, worst_of_front, wo
     return nadir_point
 
 
-def niching(pop: List[S], n_remaining: int, niche_count, niche_of_individuals, dist_to_niche):
+def niching(pop: list[S], n_remaining: int, niche_count, niche_of_individuals, dist_to_niche):
     survivors = []
 
     # boolean array of elements that are considered for each iteration
@@ -235,7 +245,12 @@ class NSGAIII(NSGAII):
         crossover: Crossover,
         population_size: int = None,
         selection: Selection = BinaryTournamentSelection(
-            MultiComparator([FastNonDominatedRanking.get_comparator(), CrowdingDistanceDensityEstimator.get_comparator()])
+            MultiComparator(
+                [
+                    FastNonDominatedRanking.get_comparator(),
+                    CrowdingDistanceDensityEstimator.get_comparator(),
+                ]
+            )
         ),
         termination_criterion: TerminationCriterion = store.default_termination_criteria,
         population_generator: Generator = store.default_generator,
@@ -247,9 +262,11 @@ class NSGAIII(NSGAII):
         if not population_size:
             population_size = len(self.reference_directions)
         if self.reference_directions.shape[1] != problem.number_of_objectives():
-            raise Exception("Dimensionality of reference points must be equal to the number of objectives")
+            raise Exception(
+                "Dimensionality of reference points must be equal to the number of objectives"
+            )
 
-        super(NSGAIII, self).__init__(
+        super().__init__(
             problem=problem,
             population_size=population_size,
             offspring_population_size=population_size,
@@ -266,7 +283,7 @@ class NSGAIII(NSGAII):
         self.ideal_point = np.full(self.problem.number_of_objectives(), np.inf)
         self.worst_point = np.full(self.problem.number_of_objectives(), -np.inf)
 
-    def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
+    def replacement(self, population: list[S], offspring_population: list[S]) -> list[S]:
         """Implements NSGA-III environmental selection based on reference points as described in:
 
         * Deb, K., & Jain, H. (2014). An Evolutionary Many-Objective Optimization
@@ -321,7 +338,10 @@ class NSGAIII(NSGAII):
 
         # associate individuals to niches
         niche_of_individuals, dist_to_niche = associate_to_niches(
-            F=F, niches=self.reference_directions, ideal_point=self.ideal_point, nadir_point=nadir_point
+            F=F,
+            niches=self.reference_directions,
+            ideal_point=self.ideal_point,
+            nadir_point=nadir_point,
         )
 
         # if we need to select individuals to survive

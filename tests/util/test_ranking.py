@@ -17,7 +17,9 @@ class FastNonDominatedRankingTestCases(unittest.TestCase):
 
         self.assertEqual(0, len(self.ranking.compute_ranking(solution_list)))
 
-    def test_should_compute_ranking_return_a_subfront_if_the_solution_list_contains_one_solution(self):
+    def test_should_compute_ranking_return_a_subfront_if_the_solution_list_contains_one_solution(
+        self,
+    ):
         solution = FloatSolution([0.0, 0.0], [1.0, 1.0], 3)
         solution_list = [solution]
 
@@ -26,7 +28,9 @@ class FastNonDominatedRankingTestCases(unittest.TestCase):
         self.assertEqual(1, self.ranking.get_number_of_subfronts())
         self.assertEqual(solution, ranking[0][0])
 
-    def test_should_compute_ranking_return_a_subfront_if_the_solution_list_contains_two_nondominated_solutions(self):
+    def test_should_compute_ranking_return_a_subfront_if_the_solution_list_contains_two_nondominated_solutions(
+        self,
+    ):
         solution = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution.objectives = [1, 2]
         solution2 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
@@ -56,7 +60,9 @@ class FastNonDominatedRankingTestCases(unittest.TestCase):
         self.assertEqual(solution, ranking[0][0])
         self.assertEqual(solution2, ranking[1][0])
 
-    def test_should_ranking_of_a_population_with_three_dominated_solutions_return_three_subfronts(self):
+    def test_should_ranking_of_a_population_with_three_dominated_solutions_return_three_subfronts(
+        self,
+    ):
         solution = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
         solution.objectives = [2, 3]
         solution2 = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)

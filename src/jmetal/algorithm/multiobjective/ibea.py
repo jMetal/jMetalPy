@@ -1,4 +1,4 @@
-from typing import List, TypeVar
+from typing import TypeVar
 
 import numpy as np
 
@@ -55,7 +55,7 @@ class IBEA(GeneticAlgorithm[S, R]):
         )
         self.kappa = kappa
 
-        super(IBEA, self).__init__(
+        super().__init__(
             problem=problem,
             population_size=population_size,
             offspring_population_size=offspring_population_size,
@@ -67,7 +67,7 @@ class IBEA(GeneticAlgorithm[S, R]):
             population_generator=population_generator,
         )
 
-    def compute_fitness_values(self, population: List[S], kappa: float) -> List[S]:
+    def compute_fitness_values(self, population: list[S], kappa: float) -> list[S]:
         for i in range(len(population)):
             population[i].attributes["fitness"] = 0
 
@@ -83,14 +83,14 @@ class IBEA(GeneticAlgorithm[S, R]):
                     )
         return population
 
-    def evaluate(self, population: List[S]):
+    def evaluate(self, population: list[S]):
         evaluated = super().evaluate(population)
         return self.compute_fitness_values(evaluated, self.kappa)
 
-    def create_initial_solutions(self) -> List[S]:
+    def create_initial_solutions(self) -> list[S]:
         return [self.population_generator.new(self.problem) for _ in range(self.population_size)]
 
-    def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
+    def replacement(self, population: list[S], offspring_population: list[S]) -> list[list[S]]:
         join_population = population + offspring_population
         join_population_size = len(join_population)
         join_population = self.compute_fitness_values(join_population, self.kappa)

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Callable, Optional, Union
+from collections.abc import Callable
+from typing import Union
 
 import numpy as np
 
@@ -40,10 +41,10 @@ class FloatRepairOperator:
 
     def __call__(
         self,
-        values: Union[float, NumericArray],
-        lower_bounds: Union[float, NumericArray],
-        upper_bounds: Union[float, NumericArray],
-    ) -> Union[float, np.ndarray]:
+        values: float | NumericArray,
+        lower_bounds: float | NumericArray,
+        upper_bounds: float | NumericArray,
+    ) -> float | np.ndarray:
         """Convenience dispatcher: if `values` is array-like, call `repair_vector`,
         otherwise call `repair_scalar`.
         """
@@ -62,7 +63,9 @@ class ClampFloatRepair(FloatRepairOperator):
     def repair_scalar(self, value: float, lower_bound: float, upper_bound: float) -> float:
         return float(max(lower_bound, min(upper_bound, value)))
 
-    def repair_vector(self, values: NumericArray, lower_bounds: NumericArray, upper_bounds: NumericArray) -> np.ndarray:
+    def repair_vector(
+        self, values: NumericArray, lower_bounds: NumericArray, upper_bounds: NumericArray
+    ) -> np.ndarray:
         vals = np.asarray(values, dtype=float)
         lbs = np.asarray(lower_bounds, dtype=float)
         ubs = np.asarray(upper_bounds, dtype=float)
@@ -80,7 +83,9 @@ class IntegerRepairOperator:
         v = int(round(value))
         return int(max(lower_bound, min(upper_bound, v)))
 
-    def repair_vector(self, values: NumericArray, lower_bounds: NumericArray, upper_bounds: NumericArray) -> np.ndarray:
+    def repair_vector(
+        self, values: NumericArray, lower_bounds: NumericArray, upper_bounds: NumericArray
+    ) -> np.ndarray:
         vals = np.rint(np.asarray(values, dtype=float)).astype(int)
         lbs = np.asarray(lower_bounds, dtype=int)
         ubs = np.asarray(upper_bounds, dtype=int)
@@ -106,7 +111,7 @@ class RandomUniformRepair(FloatRepairOperator):
     inside the provided bounds. Uses a NumPy Generator for reproducibility.
     """
 
-    def __init__(self, rng: Optional[np.random.Generator] = None):
+    def __init__(self, rng: np.random.Generator | None = None):
         self._rng = rng or np.random.default_rng()
 
     def repair_scalar(self, value: float, lower_bound: float, upper_bound: float) -> float:
@@ -116,7 +121,9 @@ class RandomUniformRepair(FloatRepairOperator):
             return float(value)
         return float(self._rng.uniform(lower_bound, upper_bound))
 
-    def repair_vector(self, values: NumericArray, lower_bounds: NumericArray, upper_bounds: NumericArray) -> np.ndarray:
+    def repair_vector(
+        self, values: NumericArray, lower_bounds: NumericArray, upper_bounds: NumericArray
+    ) -> np.ndarray:
         vals = np.asarray(values, dtype=float)
         lbs = np.asarray(lower_bounds, dtype=float)
         ubs = np.asarray(upper_bounds, dtype=float)
@@ -152,7 +159,9 @@ class ReflectiveRepair(FloatRepairOperator):
             return lb + m
         return ub - (m - rng)
 
-    def repair_vector(self, values: NumericArray, lower_bounds: NumericArray, upper_bounds: NumericArray) -> np.ndarray:
+    def repair_vector(
+        self, values: NumericArray, lower_bounds: NumericArray, upper_bounds: NumericArray
+    ) -> np.ndarray:
         vals = np.asarray(values, dtype=float)
         lbs = np.asarray(lower_bounds, dtype=float)
         ubs = np.asarray(upper_bounds, dtype=float)
@@ -189,7 +198,9 @@ class BoundSwapRepair(FloatRepairOperator):
             return float(upper_bound)
         return float(value)
 
-    def repair_vector(self, values: NumericArray, lower_bounds: NumericArray, upper_bounds: NumericArray) -> np.ndarray:
+    def repair_vector(
+        self, values: NumericArray, lower_bounds: NumericArray, upper_bounds: NumericArray
+    ) -> np.ndarray:
         vals = np.asarray(values, dtype=float)
         lbs = np.asarray(lower_bounds, dtype=float)
         ubs = np.asarray(upper_bounds, dtype=float)
@@ -199,7 +210,9 @@ class BoundSwapRepair(FloatRepairOperator):
         return out
 
 
-def ensure_float_repair(repair: Optional[Union[FloatRepairOperator, Callable]]) -> FloatRepairOperator:
+def ensure_float_repair(
+    repair: FloatRepairOperator | Callable | None,
+) -> FloatRepairOperator:
     """Normalize a `repair` argument into a `FloatRepairOperator` instance.
 
     Rules:
@@ -228,7 +241,9 @@ def ensure_float_repair(repair: Optional[Union[FloatRepairOperator, Callable]]) 
     raise TypeError("repair must be None, callable or FloatRepairOperator")
 
 
-def ensure_integer_repair(repair: Optional[Union[IntegerRepairOperator, Callable]]) -> IntegerRepairOperator:
+def ensure_integer_repair(
+    repair: IntegerRepairOperator | Callable | None,
+) -> IntegerRepairOperator:
     if repair is None:
         return IntegerRepairOperator()
     if isinstance(repair, IntegerRepairOperator):

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Generic, List, TypeVar
+from typing import Generic, TypeVar
 
 import numpy
 
@@ -21,7 +21,7 @@ S = TypeVar("S")
 
 class Neighborhood(Generic[S], ABC):
     @abstractmethod
-    def get_neighbors(self, index: int, solution_list: List[S]) -> List[S]:
+    def get_neighbors(self, index: int, solution_list: list[S]) -> list[S]:
         pass
 
 
@@ -50,13 +50,15 @@ class WeightVectorNeighborhood(WeightNeighborhood):
         weight_vector_size: int = 2,
         weights_path: str = None,
     ):
-        super(WeightVectorNeighborhood, self).__init__(
+        super().__init__(
             number_of_weight_vectors, neighborhood_size, weight_vector_size, weights_path
         )
         self.__initialize_uniform_weight(weight_vector_size, number_of_weight_vectors)
         self.__initialize_neighborhood()
 
-    def __initialize_uniform_weight(self, weight_vector_size: int, number_of_weight_vectors: int) -> None:
+    def __initialize_uniform_weight(
+        self, weight_vector_size: int, number_of_weight_vectors: int
+    ) -> None:
         """Precomputed weights from
 
         * Zhang, Multiobjective Optimization Problems With Complicated Pareto Sets, MOEA/D and NSGA-II
@@ -71,7 +73,7 @@ class WeightVectorNeighborhood(WeightNeighborhood):
                 self.weight_vectors[i, 0] = v
                 self.weight_vectors[i, 1] = 1 - v
         else:
-            file_name = "W{}D_{}.dat".format(weight_vector_size, number_of_weight_vectors)
+            file_name = f"W{weight_vector_size}D_{number_of_weight_vectors}.dat"
             file_path = self.weights_path + "/" + file_name
 
             if Path(file_path).is_file():
@@ -80,7 +82,9 @@ class WeightVectorNeighborhood(WeightNeighborhood):
                         vector = [float(x) for x in line.split()]
                         self.weight_vectors[index][:] = vector
             else:
-                raise FileNotFoundError("Failed to initialize weights: {} not found".format(file_path))
+                raise FileNotFoundError(
+                    f"Failed to initialize weights: {file_path} not found"
+                )
 
     def __initialize_neighborhood(self) -> None:
         distance = numpy.zeros((len(self.weight_vectors), len(self.weight_vectors)))
@@ -92,7 +96,7 @@ class WeightVectorNeighborhood(WeightNeighborhood):
             indexes = numpy.argsort(distance[i, :])
             self.neighborhood[i, :] = indexes[0 : self.neighborhood_size]
 
-    def get_neighbors(self, index: int, solution_list: List[Solution]) -> List[Solution]:
+    def get_neighbors(self, index: int, solution_list: list[Solution]) -> list[Solution]:
         neighbors_indexes = self.neighborhood[index]
 
         if any(i > len(solution_list) for i in neighbors_indexes):
@@ -187,7 +191,7 @@ class TwoDimensionalMesh(Neighborhood):
 
         return neighbors
 
-    def get_neighbors(self, index: int, solution_list: List[Solution]) -> List[Solution]:
+    def get_neighbors(self, index: int, solution_list: list[Solution]) -> list[Solution]:
         Check.is_not_none(solution_list)
         Check.that(len(solution_list) != 0, "The list of solutions is empty")
 
@@ -216,7 +220,9 @@ class C9(TwoDimensionalMesh):
     """
 
     def __init__(self, rows: int, columns: int):
-        super(C9, self).__init__(rows, columns, [[-1, 0], [1, 0], [0, 1], [0, -1], [-1, 1], [-1, -1], [1, 1], [1, -1]])
+        super().__init__(
+            rows, columns, [[-1, 0], [1, 0], [0, 1], [0, -1], [-1, 1], [-1, -1], [1, 1], [1, -1]]
+        )
 
 
 class L5(TwoDimensionalMesh):
@@ -235,4 +241,4 @@ class L5(TwoDimensionalMesh):
     """
 
     def __init__(self, rows: int, columns: int):
-        super(L5, self).__init__(rows, columns, [[-1, 0], [1, 0], [0, 1], [0, -1]])
+        super().__init__(rows, columns, [[-1, 0], [1, 0], [0, 1], [0, -1]])

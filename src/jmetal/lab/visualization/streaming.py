@@ -1,5 +1,5 @@
 import logging
-from typing import List, TypeVar
+from typing import TypeVar
 
 import matplotlib
 from matplotlib import pyplot as plt
@@ -9,7 +9,7 @@ from jmetal.lab.visualization.plotting import Plot
 
 logger = logging.getLogger(__name__)
 
-S = TypeVar("S") 
+S = TypeVar("S")
 
 """
 .. module:: streaming
@@ -24,7 +24,7 @@ class StreamingPlot:
     def __init__(
         self,
         plot_title: str = "Pareto front approximation",
-        reference_front: List[S] = None,
+        reference_front: list[S] = None,
         reference_point: list = None,
         axis_labels: list = None,
     ):
@@ -62,7 +62,9 @@ class StreamingPlot:
         # If any reference point, plot
         if self.reference_point:
             for point in self.reference_point:
-                (self.scp,) = self.ax.plot(*[[p] for p in point], c="r", ls="None", marker="*", markersize=3)
+                (self.scp,) = self.ax.plot(
+                    *[[p] for p in point], c="r", ls="None", marker="*", markersize=3
+                )
 
         # If any reference front, plot
         if self.reference_front:
@@ -72,18 +74,21 @@ class StreamingPlot:
                 c="k",
                 ls="None",
                 marker="*",
-                markersize=1
+                markersize=1,
             )
 
         # Plot data
         (self.sc,) = self.ax.plot(
-            *[points[column].tolist() for column in points.columns.values], ls="None", marker="o", markersize=4
+            *[points[column].tolist() for column in points.columns.values],
+            ls="None",
+            marker="o",
+            markersize=4,
         )
 
         # Show plot
         plt.show(block=False)
 
-    def update(self, front: List[S], reference_point: list = None) -> None:
+    def update(self, front: list[S], reference_point: list = None) -> None:
         if self.sc is None:
             raise Exception("Figure is none")
 

@@ -1,7 +1,7 @@
 import numpy as np
 
 from jmetal.core.solution import FloatSolution
-from jmetal.util.archive import VectorizedNonDominatedSolutionsArchive, NonDominatedSolutionsArchive
+from jmetal.util.archive import NonDominatedSolutionsArchive, VectorizedNonDominatedSolutionsArchive
 
 
 def make_solution(obj0, obj1):
@@ -32,7 +32,10 @@ def test_two_objective_parity_with_original():
     o_sorted = np.sort(o_objs, axis=0)
 
     assert v_sorted.shape == o_sorted.shape
-    assert np.allclose(np.sort(v_objs.view(float).reshape(v_objs.shape), axis=0), np.sort(o_objs.view(float).reshape(o_objs.shape), axis=0))
+    assert np.allclose(
+        np.sort(v_objs.view(float).reshape(v_objs.shape), axis=0),
+        np.sort(o_objs.view(float).reshape(o_objs.shape), axis=0),
+    )
 
 
 def test_two_objective_invariant_ordering():

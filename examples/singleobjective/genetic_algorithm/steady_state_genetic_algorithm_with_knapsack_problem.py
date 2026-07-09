@@ -6,7 +6,9 @@ from jmetal.problem.singleobjective.knapsack import Knapsack
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":
-    problem = Knapsack(from_file=True, filename="resources/Knapsack_instances/KnapsackInstance_50_0_0.kp")
+    problem = Knapsack(
+        from_file=True, filename="resources/Knapsack_instances/KnapsackInstance_50_0_0.kp"
+    )
 
     algorithm = GeneticAlgorithm(
         problem=problem,
@@ -21,9 +23,9 @@ if __name__ == "__main__":
     algorithm.run()
     subset = algorithm.result()
 
-    print("Algorithm: {}".format(algorithm.get_name()))
-    print("Problem: {}".format(problem.name()))
-    print("Solution: {}".format(subset.variables))
-    print("Fitness: {}".format(-subset.objectives[0]))
-    print("Computing time: {}".format(algorithm.total_computing_time))
+    print(f"Algorithm: {algorithm.get_name()}")
+    print(f"Problem: {problem.name()}")
+    print(f"Solution: {subset.variables}")
+    print(f"Fitness: {-subset.objectives[0]}")
+    print(f"Computing time: {algorithm.total_computing_time}")
     print(f"Problem Maximum Capacity: {problem.capacity}")

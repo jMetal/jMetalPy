@@ -1,4 +1,4 @@
-from typing import List, TypeVar
+from typing import TypeVar
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
@@ -20,11 +20,11 @@ R = TypeVar("R")
 .. module:: SPEA2
    :platform: Unix, Windows
    :synopsis: SPEA2  implementation. Note that we do not follow the structure of the original SPEA2 code. We consider
-   SPEA2 as a genetic algorithm with binary tournament selection, with a comparator based on the strength fitness and 
-   the KNN distance, and a sequential replacement strategy based in iteratively (sequentially) 
-   removing the worst solution of the population + offspring population. The worst solutions is selected again 
-   considering the strength fitness and KNN distance. Note that the implementation is exactly the same of NSGA-II, 
-   but using the fast nondominated sorting and the crowding distance density estimator, and the replacement follows a 
+   SPEA2 as a genetic algorithm with binary tournament selection, with a comparator based on the strength fitness and
+   the KNN distance, and a sequential replacement strategy based in iteratively (sequentially)
+   removing the worst solution of the population + offspring population. The worst solutions is selected again
+   considering the strength fitness and KNN distance. Note that the implementation is exactly the same of NSGA-II,
+   but using the fast nondominated sorting and the crowding distance density estimator, and the replacement follows a
    one-shot scheme (once the solutions are ordered, the best ones are selected without recomputing the ranking and
    density estimator).
 
@@ -56,7 +56,7 @@ class SPEA2(GeneticAlgorithm[S, R]):
         )
         selection = BinaryTournamentSelection(comparator=multi_comparator)
 
-        super(SPEA2, self).__init__(
+        super().__init__(
             problem=problem,
             population_size=population_size,
             offspring_population_size=offspring_population_size,
@@ -69,7 +69,7 @@ class SPEA2(GeneticAlgorithm[S, R]):
         )
         self.dominance_comparator = dominance_comparator
 
-    def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
+    def replacement(self, population: list[S], offspring_population: list[S]) -> list[list[S]]:
         """This method joins the current and offspring populations to produce the population of the next generation
         by applying the ranking and crowding distance selection.
 
@@ -80,7 +80,9 @@ class SPEA2(GeneticAlgorithm[S, R]):
         ranking = StrengthRanking(self.dominance_comparator)
         density_estimator = KNearestNeighborDensityEstimator()
 
-        replacement = RankingAndDensityEstimatorReplacement(ranking, density_estimator, RemovalPolicyType.SEQUENTIAL)
+        replacement = RankingAndDensityEstimatorReplacement(
+            ranking, density_estimator, RemovalPolicyType.SEQUENTIAL
+        )
         solutions = replacement.replace(population, offspring_population)
 
         return solutions

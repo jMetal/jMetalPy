@@ -1,4 +1,3 @@
-from typing import List
 
 from jmetal.core.solution import Solution
 from jmetal.util.ckecking import Check
@@ -31,7 +30,7 @@ def overall_constraint_violation_degree(solution: Solution) -> float:
     return sum([value for value in solution.constraints if value < 0])
 
 
-def feasibility_ratio(solutions: List[Solution]):
+def feasibility_ratio(solutions: list[Solution]):
     """
     Returns the percentage of feasible solutions in a solution list
     :param solutions:

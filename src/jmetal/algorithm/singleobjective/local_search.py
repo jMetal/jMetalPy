@@ -2,7 +2,7 @@ import copy
 import random
 import threading
 import time
-from typing import List, TypeVar
+from typing import TypeVar
 
 from jmetal.config import store
 from jmetal.core.algorithm import Algorithm
@@ -32,18 +32,18 @@ class LocalSearch(Algorithm[S, R], threading.Thread):
         termination_criterion: TerminationCriterion = store.default_termination_criteria,
         comparator: Comparator = store.default_comparator,
     ):
-        super(LocalSearch, self).__init__()
+        super().__init__()
         self.comparator = comparator
         self.problem = problem
         self.mutation = mutation
         self.termination_criterion = termination_criterion
         self.observable.register(termination_criterion)
 
-    def create_initial_solutions(self) -> List[S]:
+    def create_initial_solutions(self) -> list[S]:
         self.solutions.append(self.problem.create_solution())
         return self.solutions
 
-    def evaluate(self, solutions: List[S]) -> List[S]:
+    def evaluate(self, solutions: list[S]) -> list[S]:
         return [self.problem.evaluate(solutions[0])]
 
     def stopping_condition_is_met(self) -> bool:

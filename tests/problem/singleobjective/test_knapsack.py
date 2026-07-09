@@ -33,7 +33,7 @@ class KnapsackTestCases(unittest.TestCase):
         problem = Knapsack(256)
         solution = problem.create_solution()
         # Check that the solution has a bits attribute with the correct length
-        self.assertTrue(hasattr(solution, 'bits'))
+        self.assertTrue(hasattr(solution, "bits"))
         self.assertEqual(256, len(solution.bits))
 
     def test_should_create_solution_from_file(self) -> None:
@@ -46,7 +46,9 @@ class KnapsackTestCases(unittest.TestCase):
             "932 848\n546 889\n723 342\n830 250\n617 748\n924 334\n151 721\n318 892\n102 65 \n748 196\n76 940 \n"
             "921 582\n871 228\n701 245\n339 823\n484 991\n574 146\n104 823\n363 557"
         )
-        with mock.patch("jmetal.problem.singleobjective.knapsack.open", new=mock.mock_open(read_data=data)):
+        with mock.patch(
+            "jmetal.problem.singleobjective.knapsack.open", new=mock.mock_open(read_data=data)
+        ):
             problem = Knapsack(from_file=True, filename=filename)
             self.assertEqual(50, problem.number_of_variables())  # Each bit is a separate variable
             self.assertEqual(1, problem.number_of_objectives())

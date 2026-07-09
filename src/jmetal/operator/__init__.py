@@ -46,8 +46,8 @@ Example usage:
 """
 
 from .crossover import (
-    BLXAlphaCrossover,
     BLXAlphaBetaCrossover,
+    BLXAlphaCrossover,
     CXCrossover,
     DifferentialEvolutionCrossover,
     IntegerSBXCrossover,

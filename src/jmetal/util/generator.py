@@ -1,6 +1,6 @@
 import copy
 from abc import ABC, abstractmethod
-from typing import Generic, List, TypeVar
+from typing import Generic, TypeVar
 
 from jmetal.core.problem import Problem
 from jmetal.core.solution import Solution
@@ -28,8 +28,8 @@ class RandomGenerator(Generator):
 
 
 class InjectorGenerator(Generator):
-    def __init__(self, solutions: List[Solution]):
-        super(InjectorGenerator, self).__init__()
+    def __init__(self, solutions: list[Solution]):
+        super().__init__()
         # Make copies of provided solutions using their __copy__ implementations
         self.population = [copy.copy(s) for s in solutions]
 

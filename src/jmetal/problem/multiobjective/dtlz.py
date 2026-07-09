@@ -20,17 +20,17 @@ class DTLZ1(FloatProblem):
 
     def __init__(self, number_of_variables: int = 7, number_of_objectives=3):
         """:param number_of_variables: number of decision variables of the problem."""
-        super(DTLZ1, self).__init__()
+        super().__init__()
 
         self.obj_directions = [self.MINIMIZE] * number_of_objectives
-        self.obj_labels = ["$ f_{} $".format(i) for i in range(number_of_objectives)]
+        self.obj_labels = [f"$ f_{i} $" for i in range(number_of_objectives)]
 
         self.lower_bound = number_of_variables * [0.0]
         self.upper_bound = number_of_variables * [1.0]
 
     def number_of_objectives(self) -> int:
         return len(self.obj_directions)
-    
+
     def number_of_variables(self) -> int:
         return len(self.lower_bound)
 
@@ -56,7 +56,9 @@ class DTLZ1(FloatProblem):
                 solution.objectives[i] *= solution.variables[j]
 
             if i != 0:
-                solution.objectives[i] *= 1 - solution.variables[self.number_of_objectives() - (i + 1)]
+                solution.objectives[i] *= (
+                    1 - solution.variables[self.number_of_objectives() - (i + 1)]
+                )
 
         return solution
 
@@ -72,12 +74,14 @@ class DTLZ2(DTLZ1):
 
     def __init__(self, number_of_variables: int = 12, number_of_objectives=3):
         """:param number_of_variables: number of decision variables of the problem"""
-        super(DTLZ2, self).__init__(number_of_variables, number_of_objectives)
+        super().__init__(number_of_variables, number_of_objectives)
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         k = self.number_of_variables() - self.number_of_objectives() + 1
 
-        g = sum([(x - 0.5) * (x - 0.5) for x in solution.variables[self.number_of_variables() - k :]])
+        g = sum(
+            [(x - 0.5) * (x - 0.5) for x in solution.variables[self.number_of_variables() - k :]]
+        )
 
         solution.objectives = [1.0 + g] * self.number_of_objectives()
 
@@ -86,7 +90,9 @@ class DTLZ2(DTLZ1):
                 solution.objectives[i] *= cos(solution.variables[j] * 0.5 * pi)
 
             if i != 0:
-                solution.objectives[i] *= sin(0.5 * pi * solution.variables[self.number_of_objectives() - (i + 1)])
+                solution.objectives[i] *= sin(
+                    0.5 * pi * solution.variables[self.number_of_objectives() - (i + 1)]
+                )
 
         return solution
 
@@ -102,13 +108,16 @@ class DTLZ3(DTLZ1):
 
     def __init__(self, number_of_variables: int = 12, number_of_objectives=3):
         """:param number_of_variables: number of decision variables of the problem"""
-        super(DTLZ3, self).__init__(number_of_variables, number_of_objectives)
+        super().__init__(number_of_variables, number_of_objectives)
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         k = self.number_of_variables() - self.number_of_objectives() + 1
 
         g = sum(
-            [(x - 0.5) ** 2 - cos(20.0 * pi * (x - 0.5)) for x in solution.variables[self.number_of_variables() - k :]]
+            [
+                (x - 0.5) ** 2 - cos(20.0 * pi * (x - 0.5))
+                for x in solution.variables[self.number_of_variables() - k :]
+            ]
         )
         g = 100.0 * (k + g)
 
@@ -138,7 +147,7 @@ class DTLZ4(DTLZ1):
 
     def __init__(self, number_of_variables: int = 12, number_of_objectives=3):
         """:param number_of_variables: number of decision variables of the problem"""
-        super(DTLZ4, self).__init__(number_of_variables, number_of_objectives)
+        super().__init__(number_of_variables, number_of_objectives)
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         alpha = 100.0
@@ -171,7 +180,7 @@ class DTLZ5(DTLZ1):
 
     def __init__(self, number_of_variables: int = 12, number_of_objectives=3):
         """:param number_of_variables: number of decision variables of the problem"""
-        super(DTLZ5, self).__init__(number_of_variables, number_of_objectives)
+        super().__init__(number_of_variables, number_of_objectives)
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         k = self.number_of_variables() - self.number_of_objectives() + 1
@@ -181,7 +190,10 @@ class DTLZ5(DTLZ1):
 
         theta = [0.0] * (self.number_of_objectives() - 1)
         theta[0] = solution.variables[0] * pi / 2.0
-        theta[1:] = [t * (1.0 + 2.0 * g * solution.variables[i]) for i in range(1, self.number_of_objectives() - 1)]
+        theta[1:] = [
+            t * (1.0 + 2.0 * g * solution.variables[i])
+            for i in range(1, self.number_of_objectives() - 1)
+        ]
 
         f = [1.0 + g for _ in range(self.number_of_objectives())]
 
@@ -209,7 +221,7 @@ class DTLZ6(DTLZ1):
 
     def __init__(self, number_of_variables: int = 12, number_of_objectives=3):
         """:param number_of_variables: number of decision variables of the problem"""
-        super(DTLZ6, self).__init__(number_of_variables, number_of_objectives)
+        super().__init__(number_of_variables, number_of_objectives)
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         k = self.number_of_variables() - self.number_of_objectives() + 1
@@ -219,7 +231,10 @@ class DTLZ6(DTLZ1):
 
         theta = [0.0] * (self.number_of_objectives() - 1)
         theta[0] = solution.variables[0] * pi / 2.0
-        theta[1:] = [t * (1.0 + 2.0 * g * solution.variables[i]) for i in range(1, self.number_of_objectives() - 1)]
+        theta[1:] = [
+            t * (1.0 + 2.0 * g * solution.variables[i])
+            for i in range(1, self.number_of_objectives() - 1)
+        ]
 
         f = [1.0 + g for _ in range(self.number_of_objectives())]
 
@@ -247,7 +262,7 @@ class DTLZ7(DTLZ1):
 
     def __init__(self, number_of_variables: int = 22, number_of_objectives=3):
         """:param number_of_variables: number of decision variables of the problem"""
-        super(DTLZ7, self).__init__(number_of_variables, number_of_objectives)
+        super().__init__(number_of_variables, number_of_objectives)
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         k = self.number_of_variables() - self.number_of_objectives() + 1
@@ -256,11 +271,16 @@ class DTLZ7(DTLZ1):
         g = 1.0 + (9.0 * g) / k
 
         h = sum(
-            [(x / (1.0 + g)) * (1 + sin(3.0 * pi * x)) for x in solution.variables[: self.number_of_objectives() - 1]]
+            [
+                (x / (1.0 + g)) * (1 + sin(3.0 * pi * x))
+                for x in solution.variables[: self.number_of_objectives() - 1]
+            ]
         )
         h = self.number_of_objectives() - h
 
-        solution.objectives[: self.number_of_objectives() - 1] = solution.variables[: self.number_of_objectives() - 1]
+        solution.objectives[: self.number_of_objectives() - 1] = solution.variables[
+            : self.number_of_objectives() - 1
+        ]
         solution.objectives[-1] = (1.0 + g) * h
 
         return solution

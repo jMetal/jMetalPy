@@ -3,7 +3,12 @@ import pandas as pd
 
 
 def bayesian_sign_test(
-    data, rope_limits=[-0.01, 0.01], prior_strength=0.5, prior_place="rope", sample_size=50000, return_sample=False
+    data,
+    rope_limits=[-0.01, 0.01],
+    prior_strength=0.5,
+    prior_place="rope",
+    sample_size=50000,
+    return_sample=False,
 ):
     """Bayesian version of the sign test.
 
@@ -40,9 +45,9 @@ def bayesian_sign_test(
     Z = sample1 - sample2
 
     # Compute the number of pairs diff > right_limit
-    Nright = sum(Z > rope_limits[1])
+    Nright = sum(rope_limits[1] < Z)
     # Compute the number of pairs diff < right_lelft
-    Nleft = sum(Z < rope_limits[0])
+    Nleft = sum(rope_limits[0] > Z)
     # Compute the number of pairs diff in rope_limits
     Nequiv = n - Nright - Nleft
 
@@ -68,7 +73,12 @@ def bayesian_sign_test(
 
 
 def bayesian_signed_rank_test(
-    data, rope_limits=[-0.01, 0.01], prior_strength=1.0, prior_place="rope", sample_size=10000, return_sample=False
+    data,
+    rope_limits=[-0.01, 0.01],
+    prior_strength=1.0,
+    prior_place="rope",
+    sample_size=10000,
+    return_sample=False,
 ):
     """Bayesian version of the signed rank test.
 

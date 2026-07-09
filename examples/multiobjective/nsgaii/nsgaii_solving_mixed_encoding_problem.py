@@ -1,8 +1,10 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.operator.crossover import CompositeCrossover, IntegerSBXCrossover
-from jmetal.operator.crossover import SBXCrossover
-from jmetal.operator.mutation import CompositeMutation
-from jmetal.operator.mutation import IntegerPolynomialMutation, PolynomialMutation
+from jmetal.operator.crossover import CompositeCrossover, IntegerSBXCrossover, SBXCrossover
+from jmetal.operator.mutation import (
+    CompositeMutation,
+    IntegerPolynomialMutation,
+    PolynomialMutation,
+)
 from jmetal.problem.multiobjective.unconstrained import MixedIntegerFloatProblem
 from jmetal.util.observer import VisualizerObserver
 from jmetal.util.solution import (
@@ -20,7 +22,9 @@ if __name__ == "__main__":
         problem=problem,
         population_size=100,
         offspring_population_size=100,
-        mutation=CompositeMutation([IntegerPolynomialMutation(0.01, 20), PolynomialMutation(0.01, 20.0)]),
+        mutation=CompositeMutation(
+            [IntegerPolynomialMutation(0.01, 20), PolynomialMutation(0.01, 20.0)]
+        ),
         crossover=CompositeCrossover(
             [
                 IntegerSBXCrossover(probability=1.0, distribution_index=20),

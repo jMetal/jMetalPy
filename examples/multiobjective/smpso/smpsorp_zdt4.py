@@ -29,14 +29,18 @@ if __name__ == "__main__":
     algorithm = SMPSORP(
         problem=problem,
         swarm_size=swarm_size,
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
+        mutation=PolynomialMutation(
+            probability=1.0 / problem.number_of_variables(), distribution_index=20
+        ),
         reference_points=reference_point,
         leaders=archives_with_reference_points,
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
     )
 
     algorithm.observable.register(
-        observer=VisualizerObserver(reference_front=reference_front, reference_point=reference_point)
+        observer=VisualizerObserver(
+            reference_front=reference_front, reference_point=reference_point
+        )
     )
 
     algorithm.run()

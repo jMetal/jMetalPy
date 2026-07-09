@@ -1,12 +1,11 @@
-from typing import List, TypeVar
+from typing import TypeVar
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
 from jmetal.core.operator import Crossover, Mutation
 from jmetal.core.problem import Problem
 from jmetal.core.solution import Solution
-from jmetal.operator.selection import BinaryTournamentSelection
-from jmetal.operator.selection import RankingAndFitnessSelection
+from jmetal.operator.selection import BinaryTournamentSelection, RankingAndFitnessSelection
 from jmetal.util.comparator import Comparator, SolutionAttributeComparator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
@@ -52,12 +51,14 @@ class HYPE(GeneticAlgorithm[S, R]):
             comparator=SolutionAttributeComparator(key="fitness", lowest_is_best=False)
         )
         self.ranking_fitness = RankingAndFitnessSelection(
-            population_size, dominance_comparator=dominance_comparator, reference_point=reference_point
+            population_size,
+            dominance_comparator=dominance_comparator,
+            reference_point=reference_point,
         )
         self.reference_point = reference_point
         self.dominance_comparator = dominance_comparator
 
-        super(HYPE, self).__init__(
+        super().__init__(
             problem=problem,
             population_size=population_size,
             offspring_population_size=offspring_population_size,
@@ -69,14 +70,14 @@ class HYPE(GeneticAlgorithm[S, R]):
             population_generator=population_generator,
         )
 
-    def evaluate(self, population: List[S]):
+    def evaluate(self, population: list[S]):
         population = self.population_evaluator.evaluate(population, self.problem)
         population = self.ranking_fitness.compute_hypervol_fitness_values(
             population, self.reference_point, len(population)
         )
         return population
 
-    def replacement(self, population: List[S], offspring_population: List[S]) -> List[List[S]]:
+    def replacement(self, population: list[S], offspring_population: list[S]) -> list[list[S]]:
         join_population = population + offspring_population
         return self.ranking_fitness.execute(join_population)
 

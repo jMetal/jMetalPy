@@ -5,9 +5,7 @@ import unittest
 
 from numpy.testing import assert_allclose
 
-from jmetal.problem.multiobjective.misc import (
-    CONV2, CONV3_4, CONV3, CONV4_2F, DENT, SYM_PART
-)
+from jmetal.problem.multiobjective.misc import CONV2, CONV3, CONV3_4, CONV4_2F, DENT, SYM_PART
 
 
 class CONV2Test(unittest.TestCase):
@@ -26,26 +24,26 @@ class CONV2Test(unittest.TestCase):
         self.assertEqual(self.problem.lower_bound, [0.0, 0.0])
         self.assertEqual(self.problem.upper_bound, [10.0, 10.0])
         self.assertEqual(self.problem.obj_directions, [self.problem.MINIMIZE] * 2)
-        self.assertEqual(self.problem.obj_labels, ['f1', 'f2'])
-    
+        self.assertEqual(self.problem.obj_labels, ["f1", "f2"])
+
     def test_name(self):
-        self.assertEqual(self.problem.name(), 'CONV2')
-    
+        self.assertEqual(self.problem.name(), "CONV2")
+
     def test_evaluate_at_origin(self):
         self.solution.variables = [0.0, 0.0]
         self.problem.evaluate(self.solution)
         assert_allclose(self.solution.objectives, [0.0, 100.0])
-    
+
     def test_evaluate_at_upper_bound(self):
         self.solution.variables = [10.0, 10.0]
         self.problem.evaluate(self.solution)
         assert_allclose(self.solution.objectives, [200.0, 100.0])
-    
+
     def test_evaluate_at_midpoint(self):
         self.solution.variables = [5.0, 5.0]
         self.problem.evaluate(self.solution)
         assert_allclose(self.solution.objectives, [50.0, 50.0])
-    
+
     def test_solution_independence(self):
         sol1 = self.problem.create_solution()
         sol2 = self.problem.create_solution()
@@ -70,11 +68,11 @@ class CONV3_4Test(unittest.TestCase):
         self.assertEqual(self.problem.lower_bound, [-3.0] * 3)
         self.assertEqual(self.problem.upper_bound, [3.0] * 3)
         self.assertEqual(self.problem.obj_directions, [self.problem.MINIMIZE] * 3)
-        self.assertEqual(self.problem.obj_labels, ['f1', 'f2', 'f3'])
-    
+        self.assertEqual(self.problem.obj_labels, ["f1", "f2", "f3"])
+
     def test_name(self):
-        self.assertEqual(self.problem.name(), 'CONV3_4')
-    
+        self.assertEqual(self.problem.name(), "CONV3_4")
+
     def test_evaluate_at_reference_points(self):
         # Test at reference point a1 = [-1, -1, -1]
         self.solution.variables = self.problem.a1.copy()
@@ -83,7 +81,7 @@ class CONV3_4Test(unittest.TestCase):
         # f2 = 4 + 16 + 4 = 24
         # f3 = 0 + 4 + 0 = 4
         assert_allclose(self.solution.objectives, [0.0, 24.0, 4.0])
-    
+
         # Test at reference point a2 = [1, 1, 1]
         self.solution.variables = self.problem.a2.copy()
         self.problem.evaluate(self.solution)
@@ -91,7 +89,7 @@ class CONV3_4Test(unittest.TestCase):
         # f2 = 0 (at a2) + 0 + 0 = 0
         # f3 = 4 + 0 + 16 = 20
         assert_allclose(self.solution.objectives, [24.0, 0.0, 20.0])
-    
+
         # Test at reference point a3 = [-1, 1, -1]
         self.solution.variables = self.problem.a3.copy()
         self.problem.evaluate(self.solution)
@@ -99,6 +97,7 @@ class CONV3_4Test(unittest.TestCase):
         # f2 = 4 + 0 + 4 = 8
         # f3 = 0 (at a3) + 0 + 0 = 0
         assert_allclose(self.solution.objectives, [4.0, 8.0, 0.0])
+
 
 class CONV3Test(unittest.TestCase):
     def setUp(self):
@@ -112,11 +111,11 @@ class CONV3Test(unittest.TestCase):
         self.assertEqual(self.problem.lower_bound, [-3.0] * 3)
         self.assertEqual(self.problem.upper_bound, [3.0] * 3)
         self.assertEqual(self.problem.obj_directions, [self.problem.MINIMIZE] * 3)
-        self.assertEqual(self.problem.obj_labels, ['f1', 'f2', 'f3'])
-    
+        self.assertEqual(self.problem.obj_labels, ["f1", "f2", "f3"])
+
     def test_name(self):
-        self.assertEqual(self.problem.name(), 'CONV3')
-    
+        self.assertEqual(self.problem.name(), "CONV3")
+
     def test_evaluate_at_origin(self):
         self.solution.variables = [0.0, 0.0, 0.0]
         self.problem.evaluate(self.solution)
@@ -138,18 +137,18 @@ class CONV4_2FTest(unittest.TestCase):
         self.assertEqual(self.problem.lower_bound, [-3.0] * 4)
         self.assertEqual(self.problem.upper_bound, [3.0] * 4)
         self.assertEqual(self.problem.obj_directions, [self.problem.MINIMIZE] * 4)
-        self.assertEqual(self.problem.obj_labels, ['f1', 'f2', 'f3', 'f4'])
-    
+        self.assertEqual(self.problem.obj_labels, ["f1", "f2", "f3", "f4"])
+
     def test_name(self):
-        self.assertEqual(self.problem.name(), 'CONV4-2F')
-    
+        self.assertEqual(self.problem.name(), "CONV4-2F")
+
     def test_evaluate_all_negative(self):
         self.solution.variables = [-1.0, -1.0, -1.0, -1.0]
         self.problem.evaluate(self.solution)
         # With all x_i < 0, it uses the convex formulation
         # This is a basic check, exact values would require calculating the sigma terms
         self.assertEqual(len(self.solution.objectives), 4)
-    
+
     def test_evaluate_some_positive(self):
         self.solution.variables = [1.0, -1.0, 1.0, -1.0]
         self.problem.evaluate(self.solution)
@@ -175,11 +174,11 @@ class DENTTest(unittest.TestCase):
         self.assertEqual(self.problem.lower_bound, [-2.0, -2.0])
         self.assertEqual(self.problem.upper_bound, [2.0, 2.0])
         self.assertEqual(self.problem.obj_directions, [self.problem.MINIMIZE] * 2)
-        self.assertEqual(self.problem.obj_labels, ['f1', 'f2'])
-    
+        self.assertEqual(self.problem.obj_labels, ["f1", "f2"])
+
     def test_name(self):
-        self.assertEqual(self.problem.name(), 'DENT')
-    
+        self.assertEqual(self.problem.name(), "DENT")
+
     def test_evaluate_at_origin(self):
         self.solution.variables = [0.0, 0.0]
         self.problem.evaluate(self.solution)
@@ -204,11 +203,11 @@ class SYM_PARTTest(unittest.TestCase):
         self.assertEqual(self.problem.lower_bound, [-0.5, -0.5])
         self.assertEqual(self.problem.upper_bound, [0.5, 0.5])
         self.assertEqual(self.problem.obj_directions, [self.problem.MINIMIZE] * 2)
-        self.assertEqual(self.problem.obj_labels, ['f1', 'f2'])
-    
+        self.assertEqual(self.problem.obj_labels, ["f1", "f2"])
+
     def test_name(self):
-        self.assertEqual(self.problem.name(), 'SYM-PART')
-    
+        self.assertEqual(self.problem.name(), "SYM-PART")
+
     def test_evaluate_at_origin(self):
         self.solution.variables = [0.0, 0.0]
         self.problem.evaluate(self.solution)

@@ -1,4 +1,5 @@
 import numpy as np
+
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.mutation import UniformMutation
 from jmetal.operator.repair import ensure_float_repair
@@ -40,7 +41,9 @@ def test_uniform_mutation_vectorized_matches_reference():
     mask = rng_ref.random(n) < prob
     ranges = np.asarray(solution_ref.upper_bound) - np.asarray(solution_ref.lower_bound)
     deltas = (rng_ref.random(n) - 0.5) * perturb * ranges
-    candidate = np.where(mask, np.asarray(solution_ref._variables) + deltas, np.asarray(solution_ref._variables))
+    candidate = np.where(
+        mask, np.asarray(solution_ref._variables) + deltas, np.asarray(solution_ref._variables)
+    )
 
     # Apply scalar repair per element for reference
     repaired_ref = []

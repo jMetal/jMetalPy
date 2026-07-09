@@ -165,7 +165,9 @@ def _g7(y: np.ndarray, m: int, n: int) -> np.ndarray:
     denominator = 1.0 + _E - math.exp(-1.0)
     for j in range(1, size + 1):
         angle = _theta_j(j, m, n)
-        g[j - 1] = (mu + math.exp(math.sin(7.0 * _PI * mu - _PI / 2.0 + angle)) - math.exp(-1.0)) / denominator
+        g[j - 1] = (
+            mu + math.exp(math.sin(7.0 * _PI * mu - _PI / 2.0 + angle)) - math.exp(-1.0)
+        ) / denominator
     return g
 
 
@@ -282,7 +284,9 @@ def _zbias(z_value: float) -> float:
     return abs(z_value) ** 0.05
 
 
-def _get_j(objective_index: int, number_of_objectives: int, w: np.ndarray, w_size: int) -> np.ndarray:
+def _get_j(
+    objective_index: int, number_of_objectives: int, w: np.ndarray, w_size: int
+) -> np.ndarray:
     values = []
     for j in range(1, w_size + 1):
         if (j - objective_index) % number_of_objectives == 0:
@@ -405,7 +409,9 @@ def _f6(y: np.ndarray, n_obj: int) -> np.ndarray:
         mu += float(y[j - 1])
     mu /= n_obj - 1.0
 
-    numerator = (1.0 + math.exp(2.0 * k * mu - k)) ** -1.0 - r * mu - (1.0 + math.exp(k)) ** -1.0 + r
+    numerator = (
+        (1.0 + math.exp(2.0 * k * mu - k)) ** -1.0 - r * mu - (1.0 + math.exp(k)) ** -1.0 + r
+    )
     denominator = (1.0 + math.exp(-k)) ** -1.0 - (1.0 + math.exp(k)) ** -1.0 + r
     f[n_obj - 1] = numerator / denominator
     return f
@@ -493,7 +499,9 @@ def _f11(y: np.ndarray, n_obj: int) -> np.ndarray:
         f[j - 1] = total / (n_obj - j + 1.0)
 
     y0 = float(y[0])
-    f[n_obj - 1] = (math.cos((2.0 * k - 1.0) * y0 * _PI) + 2.0 * y0 + 4.0 * k * (1.0 - y0) - 1.0) / (4.0 * k)
+    f[n_obj - 1] = (
+        math.cos((2.0 * k - 1.0) * y0 * _PI) + 2.0 * y0 + 4.0 * k * (1.0 - y0) - 1.0
+    ) / (4.0 * k)
     return f
 
 
@@ -514,7 +522,9 @@ def _f12(y: np.ndarray, n_obj: int) -> np.ndarray:
         f[j - 1] = 1.0 - value
 
     y0 = float(y[0])
-    f[n_obj - 1] = (math.cos((2.0 * k - 1.0) * y0 * _PI) + 2.0 * y0 + 4.0 * k * (1.0 - y0) - 1.0) / (4.0 * k)
+    f[n_obj - 1] = (
+        math.cos((2.0 * k - 1.0) * y0 * _PI) + 2.0 * y0 + 4.0 * k * (1.0 - y0) - 1.0
+    ) / (4.0 * k)
     return f
 
 
@@ -565,7 +575,9 @@ def _f15(y: np.ndarray, n_obj: int) -> np.ndarray:
     for j in range(1, n_obj):
         f[j - 1] = y0 ** (1.0 + (j - 1.0) / (4.0 * n_obj))
 
-    f[n_obj - 1] = (math.cos((2.0 * k - 1.0) * y0 * _PI) + 2.0 * y0 + 4.0 * k * (1.0 - y0) - 1.0) / (4.0 * k)
+    f[n_obj - 1] = (
+        math.cos((2.0 * k - 1.0) * y0 * _PI) + 2.0 * y0 + 4.0 * k * (1.0 - y0) - 1.0
+    ) / (4.0 * k)
     return f
 
 
@@ -582,7 +594,9 @@ def _f16(y: np.ndarray, n_obj: int) -> np.ndarray:
     if n_obj > 2:
         f[n_obj - 2] = 0.5 * (1.0 + math.sin(10.0 * y0 * _PI / 2.0 - _PI / 2.0))
 
-    f[n_obj - 1] = (math.cos((2.0 * k - 1.0) * y0 * _PI) + 2.0 * y0 + 4.0 * k * (1.0 - y0) - 1.0) / (4.0 * k)
+    f[n_obj - 1] = (
+        math.cos((2.0 * k - 1.0) * y0 * _PI) + 2.0 * y0 + 4.0 * k * (1.0 - y0) - 1.0
+    ) / (4.0 * k)
     return f
 
 
@@ -788,7 +802,9 @@ class ZCAT(FloatProblem):
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         x = np.asarray(solution.variables, dtype=float)
         if x.size != self.number_of_variables():
-            raise ValueError(f"Expected {self.number_of_variables()} decision variables, got {x.size}.")
+            raise ValueError(
+                f"Expected {self.number_of_variables()} decision variables, got {x.size}."
+            )
 
         lower = np.asarray(self.lower_bound, dtype=float)
         upper = np.asarray(self.upper_bound, dtype=float)
@@ -803,7 +819,9 @@ class ZCAT(FloatProblem):
         beta = np.zeros(self.number_of_objectives(), dtype=float)
 
         if pareto_set_dimension != self.number_of_variables():
-            g_values = _evaluate_g(self._g_function_id(), y, pareto_set_dimension, self.number_of_variables())
+            g_values = _evaluate_g(
+                self._g_function_id(), y, pareto_set_dimension, self.number_of_variables()
+            )
             z_values = y[pareto_set_dimension:] - g_values
 
             for idx in range(z_values.shape[0]):

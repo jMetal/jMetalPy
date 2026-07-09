@@ -1,4 +1,5 @@
 """Unit tests for repair operator classes."""
+
 import numpy as np
 
 from jmetal.operator.repair import (
@@ -53,7 +54,7 @@ def test_integer_repair():
 
 
 def test_bound_swap_and_reflective_and_random_uniform():
-    from jmetal.operator.repair import RandomUniformRepair, ReflectiveRepair, BoundSwapRepair
+    from jmetal.operator.repair import BoundSwapRepair, RandomUniformRepair, ReflectiveRepair
 
     # BoundSwapRepair scalar and vector
     bs = BoundSwapRepair()

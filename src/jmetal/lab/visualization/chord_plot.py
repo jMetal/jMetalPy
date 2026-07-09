@@ -1,5 +1,4 @@
 import colorsys
-from typing import List
 
 import numpy as np
 from matplotlib import patches
@@ -15,7 +14,16 @@ def polar_to_cartesian(r, theta):
 
 
 def draw_sector(
-    start_angle=0, end_angle=60, radius=1.0, width=0.2, lw=2, ls="-", ax=None, fc=(1, 0, 0), ec=(0, 0, 0), z_order=1
+    start_angle=0,
+    end_angle=60,
+    radius=1.0,
+    width=0.2,
+    lw=2,
+    ls="-",
+    ax=None,
+    fc=(1, 0, 0),
+    ec=(0, 0, 0),
+    z_order=1,
 ):
     if start_angle > end_angle:
         start_angle, end_angle = end_angle, start_angle
@@ -28,12 +36,15 @@ def draw_sector(
 
     vertsPath = [
         polar_to_cartesian(radius, start_angle),
-        polar_to_cartesian(radius, start_angle) + polar_to_cartesian(opt, start_angle + 0.5 * np.pi),
+        polar_to_cartesian(radius, start_angle)
+        + polar_to_cartesian(opt, start_angle + 0.5 * np.pi),
         polar_to_cartesian(radius, end_angle) + polar_to_cartesian(opt, end_angle - 0.5 * np.pi),
         polar_to_cartesian(radius, end_angle),
         polar_to_cartesian(inner, end_angle),
-        polar_to_cartesian(inner, end_angle) + polar_to_cartesian(opt * (1 - width), end_angle - 0.5 * np.pi),
-        polar_to_cartesian(inner, start_angle) + polar_to_cartesian(opt * (1 - width), start_angle + 0.5 * np.pi),
+        polar_to_cartesian(inner, end_angle)
+        + polar_to_cartesian(opt * (1 - width), end_angle - 0.5 * np.pi),
+        polar_to_cartesian(inner, start_angle)
+        + polar_to_cartesian(opt * (1 - width), start_angle + 0.5 * np.pi),
         polar_to_cartesian(inner, start_angle),
         polar_to_cartesian(radius, start_angle),
     ]
@@ -54,7 +65,9 @@ def draw_sector(
         return vertsPath, codesPaths
     else:
         path = Path(vertsPath, codesPaths)
-        patch = patches.PathPatch(path, facecolor=fc, edgecolor=ec, lw=lw, linestyle=ls, zorder=z_order)
+        patch = patches.PathPatch(
+            path, facecolor=fc, edgecolor=ec, lw=lw, linestyle=ls, zorder=z_order
+        )
         ax.add_patch(patch)
         return patch
 
@@ -85,14 +98,18 @@ def draw_chord(
 
     vertsPath = [
         polar_to_cartesian(radius, start_angle1),
-        polar_to_cartesian(radius, start_angle1) + polar_to_cartesian(optAngle1, start_angle1 + 0.5 * np.pi),
-        polar_to_cartesian(radius, end_angle1) + polar_to_cartesian(optAngle1, end_angle1 - 0.5 * np.pi),
+        polar_to_cartesian(radius, start_angle1)
+        + polar_to_cartesian(optAngle1, start_angle1 + 0.5 * np.pi),
+        polar_to_cartesian(radius, end_angle1)
+        + polar_to_cartesian(optAngle1, end_angle1 - 0.5 * np.pi),
         polar_to_cartesian(radius, end_angle1),
         polar_to_cartesian(rchord, end_angle1),
         polar_to_cartesian(rchord, start_angle2),
         polar_to_cartesian(radius, start_angle2),
-        polar_to_cartesian(radius, start_angle2) + polar_to_cartesian(optAngle2, start_angle2 + 0.5 * np.pi),
-        polar_to_cartesian(radius, end_angle2) + polar_to_cartesian(optAngle2, end_angle2 - 0.5 * np.pi),
+        polar_to_cartesian(radius, start_angle2)
+        + polar_to_cartesian(optAngle2, start_angle2 + 0.5 * np.pi),
+        polar_to_cartesian(radius, end_angle2)
+        + polar_to_cartesian(optAngle2, end_angle2 - 0.5 * np.pi),
         polar_to_cartesian(radius, end_angle2),
         polar_to_cartesian(rchord, end_angle2),
         polar_to_cartesian(rchord, start_angle1),
@@ -119,7 +136,9 @@ def draw_chord(
         return vertsPath, codesPath
     else:
         path = Path(vertsPath, codesPath)
-        patch = patches.PathPatch(path, facecolor=color + (0.5,), edgecolor=color + (0.4,), lw=2, alpha=0.5)
+        patch = patches.PathPatch(
+            path, facecolor=color + (0.5,), edgecolor=color + (0.4,), lw=2, alpha=0.5
+        )
         ax.add_patch(patch)
         return patch
 
@@ -147,7 +166,7 @@ def hover_over_bin(event, handle_tickers, handle_plots, colors, fig):
 
 
 def chord_diagram(
-    solutions: List[FloatSolution],
+    solutions: list[FloatSolution],
     nbins="auto",
     ax=None,
     obj_labels=None,
@@ -203,7 +222,10 @@ def chord_diagram(
         idim = 0
 
         for _ in point:
-            anglePoint = sector_angles[idim][0] + (sector_angles[idim][1] - sector_angles[idim][0]) * point[idim]
+            anglePoint = (
+                sector_angles[idim][0]
+                + (sector_angles[idim][1] - sector_angles[idim][0]) * point[idim]
+            )
             arc_points[-1].append((anglePoint, anglePoint))
             idim = idim + 1
 
@@ -255,10 +277,12 @@ def chord_diagram(
 
         for indexBin in range(len(histValues)):
             startAngleBin = (
-                sector_angles[iobj][0] + (sector_angles[iobj][1] - sector_angles[iobj][0]) * binsDim[indexBin]
+                sector_angles[iobj][0]
+                + (sector_angles[iobj][1] - sector_angles[iobj][0]) * binsDim[indexBin]
             )
             endAngleBin = (
-                sector_angles[iobj][0] + (sector_angles[iobj][1] - sector_angles[iobj][0]) * binsDim[indexBin + 1]
+                sector_angles[iobj][0]
+                + (sector_angles[iobj][1] - sector_angles[iobj][0]) * binsDim[indexBin + 1]
             )
             relativeHeightBin = 0.15 * histValues[indexBin] / max(histValues)
             handle_tickers[-1].append(
@@ -286,19 +310,44 @@ def chord_diagram(
                     fc=colors[iobj],
                     ec=colors[iobj],
                 )
-                plotPoint1 = polar_to_cartesian(0.7 + relativeHeightBinPre, startAngleBin * np.pi / 180.0)
-                plotPoint2 = polar_to_cartesian(0.7 + relativeHeightBin, startAngleBin * np.pi / 180.0)
-                plt.plot([plotPoint1[0], plotPoint2[0]], [plotPoint1[1], plotPoint2[1]], c=colors[iobj], lw=1)
+                plotPoint1 = polar_to_cartesian(
+                    0.7 + relativeHeightBinPre, startAngleBin * np.pi / 180.0
+                )
+                plotPoint2 = polar_to_cartesian(
+                    0.7 + relativeHeightBin, startAngleBin * np.pi / 180.0
+                )
+                plt.plot(
+                    [plotPoint1[0], plotPoint2[0]],
+                    [plotPoint1[1], plotPoint2[1]],
+                    c=colors[iobj],
+                    lw=1,
+                )
                 relativeHeightBinPre = relativeHeightBin
             else:
-                plotPoint1 = polar_to_cartesian(0.7 + relativeHeightBinPre, startAngleBin * np.pi / 180.0)
-                plotPoint2 = polar_to_cartesian(0.725 + relativeHeightBin, startAngleBin * np.pi / 180.0)
-                plt.plot([plotPoint1[0], plotPoint2[0]], [plotPoint1[1], plotPoint2[1]], c=colors[iobj], lw=1)
+                plotPoint1 = polar_to_cartesian(
+                    0.7 + relativeHeightBinPre, startAngleBin * np.pi / 180.0
+                )
+                plotPoint2 = polar_to_cartesian(
+                    0.725 + relativeHeightBin, startAngleBin * np.pi / 180.0
+                )
+                plt.plot(
+                    [plotPoint1[0], plotPoint2[0]],
+                    [plotPoint1[1], plotPoint2[1]],
+                    c=colors[iobj],
+                    lw=1,
+                )
                 relativeHeightBinPre = 0.025
             if indexBin == len(histValues) - 1:
-                plotPoint1 = polar_to_cartesian(0.7 + relativeHeightBin, endAngleBin * np.pi / 180.0)
+                plotPoint1 = polar_to_cartesian(
+                    0.7 + relativeHeightBin, endAngleBin * np.pi / 180.0
+                )
                 plotPoint2 = polar_to_cartesian(0.725, endAngleBin * np.pi / 180.0)
-                plt.plot([plotPoint1[0], plotPoint2[0]], [plotPoint1[1], plotPoint2[1]], c=colors[iobj], lw=1)
+                plt.plot(
+                    [plotPoint1[0], plotPoint2[0]],
+                    [plotPoint1[1], plotPoint2[1]],
+                    c=colors[iobj],
+                    lw=1,
+                )
 
             for ipoint in range(len(points_matrix)):
                 plotPoint1 = polar_to_cartesian(0.6, arc_points[ipoint][iobj][0] * np.pi / 180.0)
@@ -343,7 +392,7 @@ def chord_diagram(
                     handle_plots[iobj][indexBin][-1].set_visible(False)
 
     if obj_labels is None:
-        obj_labels = ["$f_{" + str(i) + "}(\mathbf{x})$" for i in range(NOBJ)]
+        obj_labels = ["$f_{" + str(i) + r"}(\mathbf{x})$" for i in range(NOBJ)]
 
     prop_legend_bins = dict(fontsize=9, ha="center", va="center")
 
@@ -357,19 +406,26 @@ def chord_diagram(
             labels_pos_and_ros[i][1],
             obj_labels[i],
             rotation=labels_pos_and_ros[i][2],
-            **prop_labels
+            **prop_labels,
         )
-        ax.text(labels_pos_and_ros[i][3], labels_pos_and_ros[i][4], "0", **prop_legend_bins, color=colors[i])
+        ax.text(
+            labels_pos_and_ros[i][3],
+            labels_pos_and_ros[i][4],
+            "0",
+            **prop_legend_bins,
+            color=colors[i],
+        )
         ax.text(
             labels_pos_and_ros[i][6],
             labels_pos_and_ros[i][7],
             str(max_hist_values[i]),
             **prop_legend_bins,
-            color=colors[i]
+            color=colors[i],
         )
 
     plt.axis([-1.2, 1.2, -1.2, 1.2])
     fig.canvas.mpl_connect(
-        "motion_notify_event", lambda event: hover_over_bin(event, handle_tickers, handle_plots, colors, fig)
+        "motion_notify_event",
+        lambda event: hover_over_bin(event, handle_tickers, handle_plots, colors, fig),
     )
     plt.show()

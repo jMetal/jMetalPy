@@ -11,7 +11,13 @@ if __name__ == "__main__":
     problem = ZDT1()
     problem.reference_front = read_solutions(filename="resources/reference_fronts/ZDT1.pf")
 
-    algorithm = GDE3(problem=problem, population_size=100, cr=0.5, f=0.5, termination_criterion=StoppingByKeyboard())
+    algorithm = GDE3(
+        problem=problem,
+        population_size=100,
+        cr=0.5,
+        f=0.5,
+        termination_criterion=StoppingByKeyboard(),
+    )
 
     algorithm.run()
     front = algorithm.result()

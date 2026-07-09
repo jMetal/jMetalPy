@@ -1,5 +1,5 @@
 import logging
-from typing import List, Tuple, TypeVar
+from typing import TypeVar
 
 import numpy as np
 import pandas as pd
@@ -14,7 +14,7 @@ class Plot:
     def __init__(
         self,
         title: str = "Pareto front approximation",
-        reference_front: List[S] = None,
+        reference_front: list[S] = None,
         reference_point: list = None,
         axis_labels: list = None,
     ):
@@ -35,7 +35,7 @@ class Plot:
         self.dimension = None
 
     @staticmethod
-    def get_points(solutions: List[S]) -> Tuple[pd.DataFrame, int]:
+    def get_points(solutions: list[S]) -> tuple[pd.DataFrame, int]:
         """Get points for each solution of the front.
 
         :param solutions: List of solutions.
@@ -47,7 +47,9 @@ class Plot:
         points = pd.DataFrame(list(solution.objectives for solution in solutions))
         return points, points.shape[1]
 
-    def plot(self, front, label="", normalize: bool = False, filename: str = None, format: str = "eps"):
+    def plot(
+        self, front, label="", normalize: bool = False, filename: str = None, format: str = "eps"
+    ):
         """Plot any arbitrary number of fronts in 2D, 3D or p-coords.
 
         :param front: Pareto front or a list of them.
@@ -74,7 +76,13 @@ class Plot:
         else:
             self.pcoords(front, normalize, filename, format)
 
-    def two_dim(self, fronts: List[list], labels: List[str] = None, filename: str = None, format: str = "eps"):
+    def two_dim(
+        self,
+        fronts: list[list],
+        labels: list[str] = None,
+        filename: str = None,
+        format: str = "eps",
+    ):
         """Plot any arbitrary number of fronts in 2D.
 
         :param fronts: List of fronts (containing solutions).
@@ -121,7 +129,13 @@ class Plot:
 
         plt.close(fig=fig)
 
-    def three_dim(self, fronts: List[list], labels: List[str] = None, filename: str = None, format: str = "eps"):
+    def three_dim(
+        self,
+        fronts: list[list],
+        labels: list[str] = None,
+        filename: str = None,
+        format: str = "eps",
+    ):
         """Plot any arbitrary number of fronts in 3D.
 
         :param fronts: List of fronts (containing solutions).
@@ -169,7 +183,9 @@ class Plot:
 
         plt.close(fig=fig)
 
-    def pcoords(self, fronts: List[list], normalize: bool = False, filename: str = None, format: str = "eps"):
+    def pcoords(
+        self, fronts: list[list], normalize: bool = False, filename: str = None, format: str = "eps"
+    ):
         """Plot any arbitrary number of fronts in parallel coordinates.
 
         :param fronts: List of fronts (containing solutions).

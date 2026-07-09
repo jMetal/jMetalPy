@@ -1,7 +1,6 @@
-import numpy as np
 
-from jmetal.util.archive import NonDominatedSolutionsArchive, VectorizedNonDominatedSolutionsArchive
 from jmetal.core.solution import BinarySolution
+from jmetal.util.archive import NonDominatedSolutionsArchive, VectorizedNonDominatedSolutionsArchive
 
 
 def make_solution(objs):
@@ -57,8 +56,10 @@ def test_vectorized_removes_existing_when_new_dominates():
     s1 = make_solution([2.0, 0.5])
     s2 = make_solution([1.5, 1.5])
 
-    na.add(s1); na.add(s2)
-    va.add(s1); va.add(s2)
+    na.add(s1)
+    na.add(s2)
+    va.add(s1)
+    va.add(s2)
 
     # new solution dominates s1 and s2
     s_new = make_solution([0.5, 0.4])

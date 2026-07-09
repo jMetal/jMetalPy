@@ -8,7 +8,7 @@ creating problems on the fly.
 
 import random
 from abc import ABC, abstractmethod
-from typing import Generic, List, TypeVar
+from typing import Generic, TypeVar
 
 from jmetal.core.observer import Observer
 from jmetal.core.solution import (
@@ -28,16 +28,16 @@ S = TypeVar("S")  # Generic type for solutions
 
 class Problem(Generic[S], ABC):
     """Abstract base class for all optimization problems.
-    
+
     This class defines the common interface that all optimization problems must implement.
     It serves as the foundation for defining problems with different variable types
     (binary, float, integer, permutation) and characteristics (single/multi-objective,
     constrained/unconstrained).
-    
+
     Class constants:
         MINIMIZE: Constant indicating minimization of an objective.
         MAXIMIZE: Constant indicating maximization of an objective.
-    
+
     Attributes:
         reference_front: List of solutions representing the Pareto front (for multi-objective problems).
         directions: List indicating optimization direction (minimize/maximize) for each objective.
@@ -50,9 +50,9 @@ class Problem(Generic[S], ABC):
 
     def __init__(self):
         """Initialize the problem with empty reference front, directions, and labels."""
-        self.reference_front: List[S] = []
-        self.directions: List[int] = []
-        self.labels: List[str] = []
+        self.reference_front: list[S] = []
+        self.directions: list[int] = []
+        self.labels: list[str] = []
 
     @abstractmethod
     def number_of_variables(self) -> int:
@@ -88,21 +88,21 @@ class Problem(Generic[S], ABC):
 
 class DynamicProblem(Problem[S], Observer, ABC):
     """Abstract base class for dynamic optimization problems.
-    
+
     Dynamic problems are those where the fitness landscape, constraints, or other
     characteristics may change over time. This class extends the base Problem
     interface with methods to detect and handle such changes.
-    
+
     This class also implements the Observer pattern to allow the problem to be
     notified of changes in the environment or other components.
-    
+
     The type parameter S represents the type of the solution this problem works with.
     """
-    
+
     @abstractmethod
     def the_problem_has_changed(self) -> bool:
         """Check if the problem has changed since the last check.
-        
+
         Returns:
             bool: True if the problem has changed, False otherwise.
         """
@@ -111,7 +111,7 @@ class DynamicProblem(Problem[S], Observer, ABC):
     @abstractmethod
     def clear_changed(self) -> None:
         """Clear the changed flag after handling a change event.
-        
+
         This method should be called after the algorithm has responded to a change
         in the problem to reset the change detection mechanism.
         """
@@ -120,18 +120,18 @@ class DynamicProblem(Problem[S], Observer, ABC):
 
 class BinaryProblem(Problem[BinarySolution], ABC):
     """Abstract base class for binary-encoded optimization problems.
-    
+
     This class is designed for problems where solutions are represented as bit strings.
     Each variable in the problem is encoded using a fixed number of bits, which can
     vary between variables.
-    
+
     Attributes:
         number_of_bits_per_variable: List specifying the number of bits used to encode each variable.
     """
 
     def __init__(self):
         """Initialize a binary problem with an empty list of bits per variable."""
-        super(BinaryProblem, self).__init__()
+        super().__init__()
         self.number_of_bits_per_variable = []
 
     def number_of_bits_per_variable_list(self):
@@ -143,11 +143,11 @@ class BinaryProblem(Problem[BinarySolution], ABC):
 
 class FloatProblem(Problem[FloatSolution], ABC):
     """Abstract base class for continuous optimization problems with float variables.
-    
+
     This class is designed for problems where decision variables can take any real
     value within specified lower and upper bounds. It's suitable for continuous
     optimization problems in any number of dimensions.
-    
+
     Attributes:
         lower_bound: List of lower bounds for each decision variable.
         upper_bound: List of upper bounds for each decision variable.
@@ -155,7 +155,7 @@ class FloatProblem(Problem[FloatSolution], ABC):
 
     def __init__(self):
         """Initialize a float problem with empty bounds."""
-        super(FloatProblem, self).__init__()
+        super().__init__()
         self.lower_bound = []
         self.upper_bound = []
 
@@ -164,7 +164,10 @@ class FloatProblem(Problem[FloatSolution], ABC):
 
     def create_solution(self) -> FloatSolution:
         new_solution = FloatSolution(
-            self.lower_bound, self.upper_bound, self.number_of_objectives(), self.number_of_constraints()
+            self.lower_bound,
+            self.upper_bound,
+            self.number_of_objectives(),
+            self.number_of_constraints(),
         )
         new_solution.variables = [
             random.uniform(self.lower_bound[i] * 1.0, self.upper_bound[i] * 1.0)
@@ -176,11 +179,11 @@ class FloatProblem(Problem[FloatSolution], ABC):
 
 class IntegerProblem(Problem[IntegerSolution], ABC):
     """Abstract base class for integer-constrained optimization problems.
-    
+
     This class is designed for problems where decision variables must take integer
     values within specified lower and upper bounds. It's suitable for discrete
     optimization problems, combinatorial problems, and mixed-integer problems.
-    
+
     Attributes:
         lower_bound: List of lower bounds (inclusive) for each decision variable.
         upper_bound: List of upper bounds (inclusive) for each decision variable.
@@ -188,7 +191,7 @@ class IntegerProblem(Problem[IntegerSolution], ABC):
 
     def __init__(self):
         """Initialize an integer problem with empty bounds."""
-        super(IntegerProblem, self).__init__()
+        super().__init__()
         self.lower_bound = []
         self.upper_bound = []
 
@@ -197,7 +200,10 @@ class IntegerProblem(Problem[IntegerSolution], ABC):
 
     def create_solution(self) -> IntegerSolution:
         new_solution = IntegerSolution(
-            self.lower_bound, self.upper_bound, self.number_of_objectives(), self.number_of_constraints()
+            self.lower_bound,
+            self.upper_bound,
+            self.number_of_objectives(),
+            self.number_of_constraints(),
         )
         new_solution.variables = [
             round(random.uniform(self.lower_bound[i] * 1.0, self.upper_bound[i] * 1.0))
@@ -209,42 +215,42 @@ class IntegerProblem(Problem[IntegerSolution], ABC):
 
 class PermutationProblem(Problem[PermutationSolution], ABC):
     """Abstract base class for permutation-based optimization problems.
-    
+
     This class is designed for problems where solutions are represented as permutations
     of a set of elements. Common applications include routing problems (like TSP),
     scheduling problems, and other combinatorial optimization problems where the order
     of elements is significant.
-    
+
     The permutation is represented as a list of integers from 0 to n-1, where n is
     the number of elements in the permutation.
     """
 
     def __init__(self):
         """Initialize a permutation problem."""
-        super(PermutationProblem, self).__init__()
+        super().__init__()
 
 
 class OnTheFlyFloatProblem(FloatProblem):
     """A utility class for defining float optimization problems dynamically at runtime.
-    
+
     This class allows users to define optimization problems programmatically by
     specifying the problem's variables, objectives, and constraints through method
     chaining. It's particularly useful for quick prototyping and testing.
-    
+
     Example:
         # Define the problem's objective functions and constraints
         def f1(x: List[float]) -> float:
             return 2.0 + (x[0] - 2.0)**2 + (x[1] - 1.0)**2
-            
+
         def f2(x: List[float]) -> float:
             return 9.0 * x[0] - (x[1] - 1.0)**2
-            
+
         def c1(x: List[float]) -> float:
             return 1.0 - (x[0]**2 + x[1]**2) / 225.0
-            
+
         def c2(x: List[float]) -> float:
             return (3.0 * x[1] - x[0]) / 10.0 - 1.0
-        
+
         # Create the problem with method chaining
         problem = (OnTheFlyFloatProblem()
                   .set_name("Srinivas")
@@ -254,7 +260,7 @@ class OnTheFlyFloatProblem(FloatProblem):
                   .add_function(f2)            # Second objective
                   .add_constraint(c1)          # First constraint (g1(x) ≤ 0)
                   .add_constraint(c2))         # Second constraint (g2(x) ≤ 0)
-    
+
     Attributes:
         functions: List of objective functions to be minimized.
         constraints: List of constraint functions (≤ 0).
@@ -262,7 +268,7 @@ class OnTheFlyFloatProblem(FloatProblem):
     """
 
     def __init__(self):
-        super(OnTheFlyFloatProblem, self).__init__()
+        super().__init__()
         self.functions = []
         self.constraints = []
         self.problem_name = None

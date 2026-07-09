@@ -17,7 +17,7 @@ from jmetal.core.solution import FloatSolution
 
 class FDA(DynamicProblem, FloatProblem, ABC):
     def __init__(self):
-        super(FDA, self).__init__()
+        super().__init__()
         self.tau_T = 5
         self.nT = 10
         self.time = 1.0
@@ -47,7 +47,7 @@ class FDA1(FDA):
 
     def __init__(self, number_of_variables: int = 100):
         """:param number_of_variables: Number of decision variables of the problem."""
-        super(FDA1, self).__init__()
+        super().__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -90,7 +90,7 @@ class FDA2(FDA):
 
     def __init__(self, number_of_variables: int = 31):
         """:param number_of_variables: Number of decision variables of the problem."""
-        super(FDA2, self).__init__()
+        super().__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -134,7 +134,7 @@ class FDA3(FDA):
 
     def __init__(self, number_of_variables: int = 30):
         """:param number_of_variables: Number of decision variables of the problem."""
-        super(FDA3, self).__init__()
+        super().__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 2
         self.number_of_constraints = 0
@@ -192,7 +192,7 @@ class FDA4(FDA):
 
     def __init__(self, number_of_variables: int = 12):
         """:param number_of_variables: Number of decision variables of the problem."""
-        super(FDA4, self).__init__()
+        super().__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 3
         self.number_of_constraints = 0
@@ -251,7 +251,7 @@ class FDA5(FDA):
 
     def __init__(self, number_of_variables: int = 12):
         """:param number_of_variables: Number of decision variables of the problem."""
-        super(FDA5, self).__init__()
+        super().__init__()
         self.number_of_variables = number_of_variables
         self.number_of_objectives = 3
         self.number_of_constraints = 0

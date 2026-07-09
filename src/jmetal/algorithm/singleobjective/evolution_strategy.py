@@ -1,5 +1,5 @@
 from copy import copy
-from typing import List, TypeVar
+from typing import TypeVar
 
 from jmetal.core.algorithm import EvolutionaryAlgorithm
 from jmetal.core.operator import Mutation
@@ -33,7 +33,9 @@ class EvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         population_generator: Generator = RandomGenerator(),
         population_evaluator: Evaluator = SequentialEvaluator(),
     ):
-        super(EvolutionStrategy, self).__init__(problem=problem, population_size=mu, offspring_population_size=lambda_)
+        super().__init__(
+            problem=problem, population_size=mu, offspring_population_size=lambda_
+        )
         self.mu = mu
         self.lambda_ = lambda_
         self.elitist = elitist
@@ -46,19 +48,19 @@ class EvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         self.termination_criterion = termination_criterion
         self.observable.register(termination_criterion)
 
-    def create_initial_solutions(self) -> List[S]:
+    def create_initial_solutions(self) -> list[S]:
         return [self.population_generator.new(self.problem) for _ in range(self.population_size)]
 
-    def evaluate(self, solution_list: List[S]):
+    def evaluate(self, solution_list: list[S]):
         return self.population_evaluator.evaluate(solution_list, self.problem)
 
     def stopping_condition_is_met(self) -> bool:
         return self.termination_criterion.is_met
 
-    def selection(self, population: List[S]) -> List[S]:
+    def selection(self, population: list[S]) -> list[S]:
         return population
 
-    def reproduction(self, population: List[S]) -> List[S]:
+    def reproduction(self, population: list[S]) -> list[S]:
         offspring_population = []
         for solution in population:
             for j in range(int(self.lambda_ / self.mu)):
@@ -67,7 +69,7 @@ class EvolutionStrategy(EvolutionaryAlgorithm[S, R]):
 
         return offspring_population
 
-    def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
+    def replacement(self, population: list[S], offspring_population: list[S]) -> list[S]:
         population_pool = []
 
         if self.elitist:
@@ -76,7 +78,9 @@ class EvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         else:
             population_pool.extend(offspring_population)
 
-        population_pool.sort(key=lambda s: (- overall_constraint_violation_degree(s), s.objectives[0]))
+        population_pool.sort(
+            key=lambda s: (-overall_constraint_violation_degree(s), s.objectives[0])
+        )
 
         new_population = []
         for i in range(self.mu):

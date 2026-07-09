@@ -7,7 +7,7 @@ from jmetal.util.evaluator import MapEvaluator, SequentialEvaluator
 
 class MockedProblem(FloatProblem):
     def __init__(self, number_of_variables: int = 3):
-        super(MockedProblem, self).__init__()
+        super().__init__()
 
         self.lower_bound = [-5.0 for _ in range(number_of_variables)]
         self.upper_bound = [5.0 for _ in range(number_of_variables)]

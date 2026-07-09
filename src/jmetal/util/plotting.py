@@ -1,22 +1,26 @@
 import argparse
 import os
 import sys
-from typing import Iterable
+from collections.abc import Iterable
 
-import numpy as np
 import matplotlib
+import numpy as np
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 try:
     import plotly.express as px
     import plotly.offline as pyoff
+
     _PLOTLY_AVAILABLE = True
 except Exception:
     _PLOTLY_AVAILABLE = False
 
 
-def save_plt_to_file(solutions: Iterable, filename: str, out_dir: str = "results", html_plotly: bool = False) -> str:
+def save_plt_to_file(
+    solutions: Iterable, filename: str, out_dir: str = "results", html_plotly: bool = False
+) -> str:
     """Save a visualization of a solution front to a PNG file.
 
     Parameters
@@ -64,15 +68,20 @@ def save_plt_to_file(solutions: Iterable, filename: str, out_dir: str = "results
             try:
                 import pandas as pd
 
-                df = pd.DataFrame(arr, columns=[f"f{i+1}" for i in range(n_obj)])
-                figly = px.scatter(df, x=df.columns[0], y=df.columns[1], title=f"{filename} approximation front (2D)")
+                df = pd.DataFrame(arr, columns=[f"f{i + 1}" for i in range(n_obj)])
+                figly = px.scatter(
+                    df,
+                    x=df.columns[0],
+                    y=df.columns[1],
+                    title=f"{filename} approximation front (2D)",
+                )
                 html_path = os.path.join(out_dir, f"{filename}_front.html")
                 pyoff.plot(figly, filename=html_path, auto_open=False)
             except Exception:
                 pass
 
     elif n_obj == 3:
-        axis_labels = [f"f{i+1}" for i in range(n_obj)]
+        axis_labels = [f"f{i + 1}" for i in range(n_obj)]
         fig = plt.figure(figsize=(6, 6))
         ax = fig.add_subplot(111, projection="3d")
         ax.scatter(arr[:, 0], arr[:, 1], arr[:, 2], s=8, c="C0", alpha=0.8)
@@ -90,8 +99,20 @@ def save_plt_to_file(solutions: Iterable, filename: str, out_dir: str = "results
                 import pandas as pd
 
                 df = pd.DataFrame(arr, columns=axis_labels)
-                figly = px.scatter_3d(df, x=axis_labels[0], y=axis_labels[1], z=axis_labels[2], title=f"{filename} approximation front (3D)")
-                figly.update_layout(scene=dict(xaxis_title=axis_labels[0], yaxis_title=axis_labels[1], zaxis_title=axis_labels[2]))
+                figly = px.scatter_3d(
+                    df,
+                    x=axis_labels[0],
+                    y=axis_labels[1],
+                    z=axis_labels[2],
+                    title=f"{filename} approximation front (3D)",
+                )
+                figly.update_layout(
+                    scene=dict(
+                        xaxis_title=axis_labels[0],
+                        yaxis_title=axis_labels[1],
+                        zaxis_title=axis_labels[2],
+                    )
+                )
                 html_path = os.path.join(out_dir, f"{filename}_front.html")
                 pyoff.plot(figly, filename=html_path, auto_open=False)
             except Exception:
@@ -99,13 +120,15 @@ def save_plt_to_file(solutions: Iterable, filename: str, out_dir: str = "results
 
     else:
         # Parallel coordinates (matplotlib): small stacked plots
-        fig, axes = plt.subplots(nrows=n_obj, ncols=1, figsize=(8, max(3, n_obj * 1.2)), sharex=True)
+        fig, axes = plt.subplots(
+            nrows=n_obj, ncols=1, figsize=(8, max(3, n_obj * 1.2)), sharex=True
+        )
         if n_obj == 1:
             axes = [axes]
         for i in range(n_obj):
             ax = axes[i]
             ax.plot(arr[:, i], color="C0", alpha=0.6)
-            ax.set_ylabel(f"f{i+1}")
+            ax.set_ylabel(f"f{i + 1}")
         axes[-1].set_xlabel("solution index")
         fig.suptitle(f"{filename} approximation front (parallel coordinates)")
         plt.tight_layout()
@@ -117,7 +140,7 @@ def save_plt_to_file(solutions: Iterable, filename: str, out_dir: str = "results
             try:
                 import pandas as pd
 
-                df = pd.DataFrame(arr, columns=[f"f{i+1}" for i in range(n_obj)])
+                df = pd.DataFrame(arr, columns=[f"f{i + 1}" for i in range(n_obj)])
                 figly = px.parallel_coordinates(df, color=df.columns[0])
                 html_path = os.path.join(out_dir, f"{filename}_front.html")
                 pyoff.plot(figly, filename=html_path, auto_open=False)
@@ -164,11 +187,22 @@ def _read_numeric_csv(csv_path: str) -> np.ndarray:
 
 def _cli() -> None:
     """Entry point for plotting approximation fronts from CSV files."""
-    parser = argparse.ArgumentParser(description="Generate approximation front plots from a numeric CSV file.")
+    parser = argparse.ArgumentParser(
+        description="Generate approximation front plots from a numeric CSV file."
+    )
     parser.add_argument("csv_file", help="Path to a CSV file containing numeric columns to plot.")
-    parser.add_argument("--out-dir", default="results", help="Directory where output files will be written (default: results).")
-    parser.add_argument("--base-name", help="Base name for generated files (defaults to CSV filename without extension).")
-    parser.add_argument("--html", action="store_true", help="Also generate an interactive Plotly HTML if available.")
+    parser.add_argument(
+        "--out-dir",
+        default="results",
+        help="Directory where output files will be written (default: results).",
+    )
+    parser.add_argument(
+        "--base-name",
+        help="Base name for generated files (defaults to CSV filename without extension).",
+    )
+    parser.add_argument(
+        "--html", action="store_true", help="Also generate an interactive Plotly HTML if available."
+    )
     args = parser.parse_args()
 
     base_name = args.base_name or os.path.splitext(os.path.basename(args.csv_file))[0]

@@ -8,6 +8,7 @@ class FakeObserver(Observer):
     """
     Fake class used only for testing purposes.
     """
+
     def update(self, *args, **kwargs):
         pass
 

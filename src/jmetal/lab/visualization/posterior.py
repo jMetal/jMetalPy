@@ -59,8 +59,20 @@ def plot_posterior(
             ax.text(x=0.85, y=0.175 / np.sqrt(3) - 0.005, s="P(alg1>alg2)", ha="left", va="top")
         else:
             ax.text(x=0.5, y=1.4 / np.sqrt(3) + 0.005, s="P(rope)", ha="center", va="bottom")
-            ax.text(x=0.15, y=0.175 / np.sqrt(3) - 0.005, s="P(" + alg_names[0] + ")", ha="right", va="top")
-            ax.text(x=0.85, y=0.175 / np.sqrt(3) - 0.005, s="P(" + alg_names[1] + ")", ha="left", va="top")
+            ax.text(
+                x=0.15,
+                y=0.175 / np.sqrt(3) - 0.005,
+                s="P(" + alg_names[0] + ")",
+                ha="right",
+                va="top",
+            )
+            ax.text(
+                x=0.85,
+                y=0.175 / np.sqrt(3) - 0.005,
+                s="P(" + alg_names[1] + ")",
+                ha="left",
+                va="top",
+            )
     else:
         if not alg_names:
             ax.text(x=0.5, y=1.4 / np.sqrt(3) + 0.005, s="P(rope)", ha="center", va="bottom")
@@ -68,8 +80,20 @@ def plot_posterior(
             ax.text(x=0.85, y=0.175 / np.sqrt(3) - 0.005, s="P(alg2>alg1)", ha="left", va="top")
         else:
             ax.text(x=0.5, y=1.4 / np.sqrt(3) + 0.005, s="P(rope)", ha="center", va="bottom")
-            ax.text(x=0.15, y=0.175 / np.sqrt(3) - 0.005, s="P(" + alg_names[1] + ")", ha="right", va="top")
-            ax.text(x=0.85, y=0.175 / np.sqrt(3) - 0.005, s="P(" + alg_names[0] + ")", ha="left", va="top")
+            ax.text(
+                x=0.15,
+                y=0.175 / np.sqrt(3) - 0.005,
+                s="P(" + alg_names[1] + ")",
+                ha="right",
+                va="top",
+            )
+            ax.text(
+                x=0.85,
+                y=0.175 / np.sqrt(3) - 0.005,
+                s="P(" + alg_names[0] + ")",
+                ha="left",
+                va="top",
+            )
 
     # Conversion between barycentric and Cartesian coordinates
     sample2d = np.zeros((sample.shape[0], 2))

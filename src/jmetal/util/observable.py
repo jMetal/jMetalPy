@@ -37,7 +37,7 @@ class DefaultObservable(Observable):
 
 class TimeCounter(threading.Thread):
     def __init__(self, delay: int, observable: Observable = DefaultObservable()):
-        super(TimeCounter, self).__init__()
+        super().__init__()
         self.observable = observable
         self.delay = delay
 

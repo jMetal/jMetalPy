@@ -18,7 +18,9 @@ class DTLZ1TestCases(unittest.TestCase):
         self.assertEqual(7 * [0.0], problem.lower_bound)
         self.assertEqual(7 * [1.0], problem.upper_bound)
 
-    def test_should_constructor_create_a_valid_problem_with_5_variables_and_4_objectives(self) -> None:
+    def test_should_constructor_create_a_valid_problem_with_5_variables_and_4_objectives(
+        self,
+    ) -> None:
         problem = DTLZ1(5, 4)
         self.assertEqual(5, problem.number_of_variables())
         self.assertEqual(4, problem.number_of_objectives())
@@ -57,7 +59,9 @@ class DTLZ2TestCases(unittest.TestCase):
         self.assertEqual(12 * [0.0], problem.lower_bound)
         self.assertEqual(12 * [1.0], problem.upper_bound)
 
-    def test_should_constructor_create_a_valid_problem_with_10_variables_and_4_objectives(self) -> None:
+    def test_should_constructor_create_a_valid_problem_with_10_variables_and_4_objectives(
+        self,
+    ) -> None:
         problem = DTLZ2(10, 4)
         self.assertEqual(10, problem.number_of_variables())
         self.assertEqual(4, problem.number_of_objectives())
@@ -81,6 +85,7 @@ class DTLZ2TestCases(unittest.TestCase):
         problem = DTLZ2()
         self.assertEqual("DTLZ2", problem.name())
 
+
 class DTLZ3TestCases(unittest.TestCase):
     def test_should_constructor_create_a_non_null_object(self) -> None:
         problem = DTLZ3()
@@ -94,7 +99,9 @@ class DTLZ3TestCases(unittest.TestCase):
         self.assertEqual(12 * [0.0], problem.lower_bound)
         self.assertEqual(12 * [1.0], problem.upper_bound)
 
-    def test_should_constructor_create_a_valid_problem_with_10_variables_and_4_objectives(self) -> None:
+    def test_should_constructor_create_a_valid_problem_with_10_variables_and_4_objectives(
+        self,
+    ) -> None:
         problem = DTLZ3(10, 4)
         self.assertEqual(10, problem.number_of_variables())
         self.assertEqual(4, problem.number_of_objectives())
@@ -132,7 +139,9 @@ class DTLZ4TestCases(unittest.TestCase):
         self.assertEqual(12 * [0.0], problem.lower_bound)
         self.assertEqual(12 * [1.0], problem.upper_bound)
 
-    def test_should_constructor_create_a_valid_problem_with_10_variables_and_4_objectives(self) -> None:
+    def test_should_constructor_create_a_valid_problem_with_10_variables_and_4_objectives(
+        self,
+    ) -> None:
         problem = DTLZ4(10, 4)
         self.assertEqual(10, problem.number_of_variables())
         self.assertEqual(4, problem.number_of_objectives())
@@ -156,6 +165,7 @@ class DTLZ4TestCases(unittest.TestCase):
         problem = DTLZ4()
         self.assertEqual("DTLZ4", problem.name())
 
+
 class DTLZ5TestCases(unittest.TestCase):
     def test_should_constructor_create_a_non_null_object(self) -> None:
         problem = DTLZ5()
@@ -169,7 +179,9 @@ class DTLZ5TestCases(unittest.TestCase):
         self.assertEqual(12 * [0.0], problem.lower_bound)
         self.assertEqual(12 * [1.0], problem.upper_bound)
 
-    def test_should_constructor_create_a_valid_problem_with_10_variables_and_4_objectives(self) -> None:
+    def test_should_constructor_create_a_valid_problem_with_10_variables_and_4_objectives(
+        self,
+    ) -> None:
         problem = DTLZ5(10, 4)
         self.assertEqual(10, problem.number_of_variables())
         self.assertEqual(4, problem.number_of_objectives())
@@ -207,7 +219,9 @@ class DTLZ6TestCases(unittest.TestCase):
         self.assertEqual(12 * [0.0], problem.lower_bound)
         self.assertEqual(12 * [1.0], problem.upper_bound)
 
-    def test_should_constructor_create_a_valid_problem_with_10_variables_and_4_objectives(self) -> None:
+    def test_should_constructor_create_a_valid_problem_with_10_variables_and_4_objectives(
+        self,
+    ) -> None:
         problem = DTLZ6(10, 4)
         self.assertEqual(10, problem.number_of_variables())
         self.assertEqual(4, problem.number_of_objectives())
@@ -231,6 +245,7 @@ class DTLZ6TestCases(unittest.TestCase):
         problem = DTLZ6()
         self.assertEqual("DTLZ6", problem.name())
 
+
 class DTLZ7TestCases(unittest.TestCase):
     def test_should_constructor_create_a_non_null_object(self) -> None:
         problem = DTLZ7()
@@ -244,7 +259,9 @@ class DTLZ7TestCases(unittest.TestCase):
         self.assertEqual(22 * [0.0], problem.lower_bound)
         self.assertEqual(22 * [1.0], problem.upper_bound)
 
-    def test_should_constructor_create_a_valid_problem_with_10_variables_and_4_objectives(self) -> None:
+    def test_should_constructor_create_a_valid_problem_with_10_variables_and_4_objectives(
+        self,
+    ) -> None:
         problem = DTLZ7(10, 4)
         self.assertEqual(10, problem.number_of_variables())
         self.assertEqual(4, problem.number_of_objectives())

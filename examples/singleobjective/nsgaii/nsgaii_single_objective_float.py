@@ -14,7 +14,9 @@ if __name__ == "__main__":
         problem=problem,
         population_size=100,
         offspring_population_size=100,
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20.0),
+        mutation=PolynomialMutation(
+            probability=1.0 / problem.number_of_variables(), distribution_index=20.0
+        ),
         crossover=SBXCrossover(probability=0.9, distribution_index=20.0),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
         dominance_comparator=DominanceComparator(),

@@ -11,7 +11,9 @@ if __name__ == "__main__":
 
     algorithm = SimulatedAnnealing(
         problem=problem,
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20.0),
+        mutation=PolynomialMutation(
+            probability=1.0 / problem.number_of_variables(), distribution_index=20.0
+        ),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
     )
 

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from functools import cmp_to_key
-from typing import List, TypeVar
+from typing import TypeVar
 
 import numpy
 import numpy as np
@@ -23,15 +23,15 @@ S = TypeVar("S")
 """
 
 
-class DensityEstimator(List[S], ABC):
+class DensityEstimator(list[S], ABC):
     """This is the interface of any density estimator algorithm."""
 
     @abstractmethod
-    def compute_density_estimator(self, solutions: List[S]) -> float:
+    def compute_density_estimator(self, solutions: list[S]) -> float:
         pass
 
     @abstractmethod
-    def sort(self, solutions: List[S]) -> List[S]:
+    def sort(self, solutions: list[S]) -> list[S]:
         pass
 
     @classmethod
@@ -39,10 +39,10 @@ class DensityEstimator(List[S], ABC):
         pass
 
 
-class CrowdingDistanceDensityEstimator(DensityEstimator[List[S]]):
+class CrowdingDistanceDensityEstimator(DensityEstimator[list[S]]):
     """This class implements a DensityEstimator based on the crowding distance of algorithm NSGA-II."""
 
-    def compute_density_estimator(self, front: List[S]):
+    def compute_density_estimator(self, front: list[S]):
         """This function performs the computation of the crowding density estimation over the solution list.
 
         .. note::
@@ -90,7 +90,7 @@ class CrowdingDistanceDensityEstimator(DensityEstimator[List[S]]):
                 distance += front[j].attributes["crowding_distance"]
                 front[j].attributes["crowding_distance"] = distance
 
-    def sort(self, solutions: List[S]) -> List[S]:
+    def sort(self, solutions: list[S]) -> list[S]:
         solutions.sort(key=cmp_to_key(self.get_comparator().compare))
 
     @classmethod
@@ -98,7 +98,7 @@ class CrowdingDistanceDensityEstimator(DensityEstimator[List[S]]):
         return SolutionAttributeComparator("crowding_distance", lowest_is_best=False)
 
 
-class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
+class KNearestNeighborDensityEstimator(DensityEstimator[list[S]]):
     """This class implements a density estimator based on the distance to the k-th nearest solution."""
 
     def __init__(self, k: int = 1):
@@ -106,26 +106,26 @@ class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
         self.k = k
         self.distance_matrix = []
 
-    def compute_density_estimator(self, solutions: List[S]):
+    def compute_density_estimator(self, solutions: list[S]):
         solutions_size = len(solutions)
         if solutions_size <= self.k:
             return
 
         # Extract objectives as a 2D numpy array for vectorized operations
         objectives = np.array([s.objectives for s in solutions])
-        
+
         # Compute pairwise distances using cdist (much faster than nested loops)
-        self.distance_matrix = cdist(objectives, objectives, 'euclidean')
-        
+        self.distance_matrix = cdist(objectives, objectives, "euclidean")
+
         # Get k-th nearest neighbor distance for each solution
         # Using np.partition which is O(n) instead of full sort O(n log n)
         k_distances = np.partition(self.distance_matrix, kth=self.k, axis=1)[:, self.k]
-        
+
         # Assign knn_density attribute
         for i, dist in enumerate(k_distances):
             solutions[i].attributes["knn_density"] = dist
 
-    def sort(self, solutions: List[S]) -> List[S]:
+    def sort(self, solutions: list[S]) -> list[S]:
         """
         Sort solutions by knn_density (highest first).
         """
@@ -135,7 +135,8 @@ class KNearestNeighborDensityEstimator(DensityEstimator[List[S]]):
     def get_comparator(cls) -> Comparator:
         return SolutionAttributeComparator("knn_density", lowest_is_best=False)
 
-class HypervolumeContributionDensityEstimator(DensityEstimator[List[S]]):
+
+class HypervolumeContributionDensityEstimator(DensityEstimator[list[S]]):
     """Density estimator based on the hypervolume contribution of each solution."""
 
     def __init__(self, reference_point=None):
@@ -146,7 +147,7 @@ class HypervolumeContributionDensityEstimator(DensityEstimator[List[S]]):
             raise ValueError("reference_point for hypervolume contribution cannot be empty.")
         self.reference_point = reference_point
 
-    def compute_density_estimator(self, solutions: List[S]):
+    def compute_density_estimator(self, solutions: list[S]):
         """
         Computes the hypervolume contribution for each solution in the list.
         Stores the value in solution.attributes["hv_contribution"].
@@ -164,11 +165,13 @@ class HypervolumeContributionDensityEstimator(DensityEstimator[List[S]]):
         for sol, hv in zip(solutions, contributions):
             sol.attributes["hv_contribution"] = hv
 
-    def sort(self, solutions: List[S]) -> List[S]:
+    def sort(self, solutions: list[S]) -> list[S]:
         """
         Sorts solutions by their hypervolume contribution (highest first).
         """
-        solutions.sort(key=lambda s: s.attributes.get("hv_contribution", float('-inf')), reverse=True)
+        solutions.sort(
+            key=lambda s: s.attributes.get("hv_contribution", float("-inf")), reverse=True
+        )
 
     @classmethod
     def get_comparator(cls) -> Comparator:

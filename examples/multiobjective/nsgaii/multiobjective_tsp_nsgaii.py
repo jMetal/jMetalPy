@@ -3,7 +3,6 @@ import argparse
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.lab.visualization import Plot
 from jmetal.operator.crossover import PMXCrossover
-from jmetal.operator.mutation import PermutationSwapMutation
 from jmetal.problem.multiobjective.multiobjective_tsp import MultiObjectiveTSP
 from jmetal.util.observer import ProgressBarObserver, VisualizerObserver
 from jmetal.util.solution import print_function_values_to_file, print_variables_to_file
@@ -12,10 +11,12 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
 
 def main(max_evaluations: int):
     # two-objective TSP using two distance matrices
-    problem = MultiObjectiveTSP([
-        "kroA100.tsp",
-        "kroB100.tsp",
-    ])
+    problem = MultiObjectiveTSP(
+        [
+            "kroA100.tsp",
+            "kroB100.tsp",
+        ]
+    )
 
     print("Cities:", problem.number_of_variables())
 
@@ -32,7 +33,9 @@ def main(max_evaluations: int):
 
     algorithm.observable.register(observer=ProgressBarObserver(max=max_evaluations))
     algorithm.observable.register(
-        observer=VisualizerObserver(reference_front=None, display_frequency=max(1, max_evaluations // 50))
+        observer=VisualizerObserver(
+            reference_front=None, display_frequency=max(1, max_evaluations // 50)
+        )
     )
 
     algorithm.run()
@@ -51,13 +54,15 @@ def main(max_evaluations: int):
     plot_front.plot(front, label=algorithm.label, filename=algorithm.get_name())
 
     print(f"Algorithm: {algorithm.get_name()}")
-    print(f"Problem: MultiObjectiveTSP (kroA100, kroB100)")
+    print("Problem: MultiObjectiveTSP (kroA100, kroB100)")
     print(f"Computing time: {algorithm.total_computing_time}")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--max-evals", type=int, default=250000, help="Maximum number of evaluations")
+    parser.add_argument(
+        "--max-evals", type=int, default=250000, help="Maximum number of evaluations"
+    )
     args = parser.parse_args()
 
     main(args.max_evals)

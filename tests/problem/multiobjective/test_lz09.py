@@ -1,7 +1,16 @@
 import unittest
 
-from jmetal.problem.multiobjective.lz09 import LZ09_F1, LZ09_F2, LZ09_F3, LZ09_F4, LZ09_F5, LZ09_F6, LZ09_F7, LZ09_F8, \
-    LZ09_F9
+from jmetal.problem.multiobjective.lz09 import (
+    LZ09_F1,
+    LZ09_F2,
+    LZ09_F3,
+    LZ09_F4,
+    LZ09_F5,
+    LZ09_F6,
+    LZ09_F7,
+    LZ09_F8,
+    LZ09_F9,
+)
 
 
 class LZ09F1TestCases(unittest.TestCase):
@@ -14,7 +23,7 @@ class LZ09F1TestCases(unittest.TestCase):
         self.assertEqual(10, problem.number_of_variables())
         self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(10* [0.0], problem.lower_bound)
+        self.assertEqual(10 * [0.0], problem.lower_bound)
         self.assertEqual(10 * [1.0], problem.upper_bound)
 
     def test_should_constructor_create_a_valid_problem_with_50(self) -> None:
@@ -54,7 +63,7 @@ class LZ09F2TestCases(unittest.TestCase):
         self.assertEqual(30, problem.number_of_variables())
         self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(30* [0.0], problem.lower_bound)
+        self.assertEqual(30 * [0.0], problem.lower_bound)
         self.assertEqual(30 * [1.0], problem.upper_bound)
 
     def test_should_constructor_create_a_valid_problem_with_50_variables(self) -> None:
@@ -94,7 +103,7 @@ class LZ09F3TestCases(unittest.TestCase):
         self.assertEqual(30, problem.number_of_variables())
         self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(30* [0.0], problem.lower_bound)
+        self.assertEqual(30 * [0.0], problem.lower_bound)
         self.assertEqual(30 * [1.0], problem.upper_bound)
 
     def test_should_constructor_create_a_valid_problem_with_50_variables(self) -> None:
@@ -134,7 +143,7 @@ class LZ09F4TestCases(unittest.TestCase):
         self.assertEqual(30, problem.number_of_variables())
         self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(30* [0.0], problem.lower_bound)
+        self.assertEqual(30 * [0.0], problem.lower_bound)
         self.assertEqual(30 * [1.0], problem.upper_bound)
 
     def test_should_constructor_create_a_valid_problem_with_50_variables(self) -> None:
@@ -174,7 +183,7 @@ class LZ09F5TestCases(unittest.TestCase):
         self.assertEqual(30, problem.number_of_variables())
         self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(30* [0.0], problem.lower_bound)
+        self.assertEqual(30 * [0.0], problem.lower_bound)
         self.assertEqual(30 * [1.0], problem.upper_bound)
 
     def test_should_constructor_create_a_valid_problem_with_50_variables(self) -> None:
@@ -214,7 +223,7 @@ class LZ09F6TestCases(unittest.TestCase):
         self.assertEqual(10, problem.number_of_variables())
         self.assertEqual(3, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(10* [0.0], problem.lower_bound)
+        self.assertEqual(10 * [0.0], problem.lower_bound)
         self.assertEqual(10 * [1.0], problem.upper_bound)
 
     def test_should_constructor_create_a_valid_problem_with_50_variables(self) -> None:
@@ -254,7 +263,7 @@ class LZ09F7TestCases(unittest.TestCase):
         self.assertEqual(10, problem.number_of_variables())
         self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(10* [0.0], problem.lower_bound)
+        self.assertEqual(10 * [0.0], problem.lower_bound)
         self.assertEqual(10 * [1.0], problem.upper_bound)
 
     def test_should_constructor_create_a_valid_problem_with_50_variables(self) -> None:
@@ -294,7 +303,7 @@ class LZ09F8TestCases(unittest.TestCase):
         self.assertEqual(10, problem.number_of_variables())
         self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(10* [0.0], problem.lower_bound)
+        self.assertEqual(10 * [0.0], problem.lower_bound)
         self.assertEqual(10 * [1.0], problem.upper_bound)
 
     def test_should_constructor_create_a_valid_problem_with_50_variables(self) -> None:
@@ -334,7 +343,7 @@ class LZ09F9TestCases(unittest.TestCase):
         self.assertEqual(30, problem.number_of_variables())
         self.assertEqual(2, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())
-        self.assertEqual(30* [0.0], problem.lower_bound)
+        self.assertEqual(30 * [0.0], problem.lower_bound)
         self.assertEqual(30 * [1.0], problem.upper_bound)
 
     def test_should_constructor_create_a_valid_problem_with_50_variables(self) -> None:

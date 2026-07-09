@@ -1,11 +1,10 @@
-
 import unittest
 from functools import cmp_to_key
 
 from jmetal.util.density_estimator import (
     CrowdingDistanceDensityEstimator,
-    KNearestNeighborDensityEstimator,
     HypervolumeContributionDensityEstimator,
+    KNearestNeighborDensityEstimator,
 )
 
 
@@ -19,6 +18,7 @@ class DummySolution:
         self.number_of_constraints = 0
         self.constraints = []
         self.constraint_violation = 0.0
+
 
 class TestCrowdingDistanceDensityEstimator(unittest.TestCase):
     def test_multiple_objectives(self):
@@ -50,9 +50,12 @@ class TestCrowdingDistanceDensityEstimator(unittest.TestCase):
             DummySolution([3, 4]),
         ]
         self.estimator.compute_density_estimator(solutions)
-        sorted_solutions = sorted(solutions, key=cmp_to_key(self.estimator.get_comparator().compare))
+        sorted_solutions = sorted(
+            solutions, key=cmp_to_key(self.estimator.get_comparator().compare)
+        )
         cd_values = [sol.attributes["crowding_distance"] for sol in sorted_solutions]
         self.assertEqual(cd_values, sorted(cd_values, reverse=True))
+
     def setUp(self):
         self.estimator = CrowdingDistanceDensityEstimator()
 
@@ -93,6 +96,7 @@ class TestCrowdingDistanceDensityEstimator(unittest.TestCase):
         self.estimator.sort(solutions)
         cd_values = [sol.attributes["crowding_distance"] for sol in solutions]
         self.assertEqual(cd_values, sorted(cd_values, reverse=True))
+
 
 class TestKNearestNeighborDensityEstimator(unittest.TestCase):
     def test_different_k_values(self):
@@ -139,9 +143,12 @@ class TestKNearestNeighborDensityEstimator(unittest.TestCase):
             DummySolution([3, 4]),
         ]
         self.estimator.compute_density_estimator(solutions)
-        sorted_solutions = sorted(solutions, key=cmp_to_key(self.estimator.get_comparator().compare))
+        sorted_solutions = sorted(
+            solutions, key=cmp_to_key(self.estimator.get_comparator().compare)
+        )
         knn_values = [sol.attributes["knn_density"] for sol in sorted_solutions]
         self.assertEqual(knn_values, sorted(knn_values, reverse=True))
+
     def setUp(self):
         self.estimator = KNearestNeighborDensityEstimator(k=1)
 
@@ -183,6 +190,7 @@ class TestKNearestNeighborDensityEstimator(unittest.TestCase):
         estimator.compute_density_estimator(solutions)
         for sol in solutions:
             self.assertNotIn("knn_density", sol.attributes)
+
 
 class TestHypervolumeContributionDensityEstimator(unittest.TestCase):
     def test_different_reference_points(self):
@@ -228,12 +236,17 @@ class TestHypervolumeContributionDensityEstimator(unittest.TestCase):
             DummySolution([4, 2]),
         ]
         self.estimator.compute_density_estimator(solutions)
-        sorted_solutions = sorted(solutions, key=cmp_to_key(self.estimator.get_comparator().compare))
+        sorted_solutions = sorted(
+            solutions, key=cmp_to_key(self.estimator.get_comparator().compare)
+        )
         hv_values = [sol.attributes["hv_contribution"] for sol in sorted_solutions]
         self.assertEqual(hv_values, sorted(hv_values, reverse=True))
+
     def setUp(self):
         self.reference_point = [6, 6]
-        self.estimator = HypervolumeContributionDensityEstimator(reference_point=self.reference_point)
+        self.estimator = HypervolumeContributionDensityEstimator(
+            reference_point=self.reference_point
+        )
 
     def test_empty_list(self):
         solutions = []
@@ -278,6 +291,7 @@ class TestHypervolumeContributionDensityEstimator(unittest.TestCase):
     def test_invalid_reference_point_empty(self):
         with self.assertRaises(ValueError):
             HypervolumeContributionDensityEstimator(reference_point=[])
+
 
 if __name__ == "__main__":
     unittest.main()

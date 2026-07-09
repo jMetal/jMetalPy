@@ -1,6 +1,6 @@
 import random
 from copy import copy
-from typing import List, Optional, TypeVar
+from typing import TypeVar
 
 import numpy
 
@@ -8,8 +8,7 @@ from jmetal.config import store
 from jmetal.core.algorithm import ParticleSwarmOptimization
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
-from jmetal.operator.mutation import NonUniformMutation
-from jmetal.operator.mutation import UniformMutation
+from jmetal.operator.mutation import NonUniformMutation, UniformMutation
 from jmetal.util.archive import BoundedArchive, NonDominatedSolutionsArchive
 from jmetal.util.comparator import DominanceComparator, EpsilonDominanceComparator
 from jmetal.util.evaluator import Evaluator
@@ -34,7 +33,7 @@ class OMOPSO(ParticleSwarmOptimization):
         swarm_size: int,
         uniform_mutation: UniformMutation,
         non_uniform_mutation: NonUniformMutation,
-        leaders: Optional[BoundedArchive],
+        leaders: BoundedArchive | None,
         epsilon: float,
         termination_criterion: TerminationCriterion,
         swarm_generator: Generator = store.default_generator,
@@ -52,7 +51,7 @@ class OMOPSO(ParticleSwarmOptimization):
         :param swarm_size: Size of the swarm.
         :param leaders: Archive for leaders.
         """
-        super(OMOPSO, self).__init__(problem=problem, swarm_size=swarm_size)
+        super().__init__(problem=problem, swarm_size=swarm_size)
         self.swarm_generator = swarm_generator
         self.swarm_evaluator = swarm_evaluator
 
@@ -84,30 +83,30 @@ class OMOPSO(ParticleSwarmOptimization):
 
         self.speed = numpy.zeros((self.swarm_size, self.problem.number_of_variables()), dtype=float)
 
-    def create_initial_solutions(self) -> List[FloatSolution]:
+    def create_initial_solutions(self) -> list[FloatSolution]:
         return [self.swarm_generator.new(self.problem) for _ in range(self.swarm_size)]
 
-    def evaluate(self, solution_list: List[FloatSolution]):
+    def evaluate(self, solution_list: list[FloatSolution]):
         return self.swarm_evaluator.evaluate(solution_list, self.problem)
 
     def stopping_condition_is_met(self) -> bool:
         return self.termination_criterion.is_met
 
-    def initialize_global_best(self, swarm: List[FloatSolution]) -> None:
+    def initialize_global_best(self, swarm: list[FloatSolution]) -> None:
         for particle in swarm:
             if self.leaders.add(particle):
                 self.epsilon_archive.add(copy(particle))
 
-    def initialize_particle_best(self, swarm: List[FloatSolution]) -> None:
+    def initialize_particle_best(self, swarm: list[FloatSolution]) -> None:
         for particle in swarm:
             particle.attributes["local_best"] = copy(particle)
 
-    def initialize_velocity(self, swarm: List[FloatSolution]) -> None:
+    def initialize_velocity(self, swarm: list[FloatSolution]) -> None:
         for i in range(self.swarm_size):
             for j in range(self.problem.number_of_variables()):
                 self.speed[i][j] = 0.0
 
-    def update_velocity(self, swarm: List[FloatSolution]) -> None:
+    def update_velocity(self, swarm: list[FloatSolution]) -> None:
         for i in range(self.swarm_size):
             best_particle = copy(swarm[i].attributes["local_best"])
             best_global = self.select_global_best()
@@ -130,7 +129,7 @@ class OMOPSO(ParticleSwarmOptimization):
                     + (c2 * r2 * (best_global_vars[var] - particle_vars[var]))
                 )
 
-    def update_position(self, swarm: List[FloatSolution]) -> None:
+    def update_position(self, swarm: list[FloatSolution]) -> None:
         for i in range(self.swarm_size):
             particle = swarm[i]
             particle_vars = particle._variables  # Direct access to internal list
@@ -149,18 +148,18 @@ class OMOPSO(ParticleSwarmOptimization):
                     particle_vars[j] = upper_bounds[j]
                     self.speed[i][j] *= self.change_velocity2
 
-    def update_global_best(self, swarm: List[FloatSolution]) -> None:
+    def update_global_best(self, swarm: list[FloatSolution]) -> None:
         for particle in swarm:
             if self.leaders.add(copy(particle)):
                 self.epsilon_archive.add(copy(particle))
 
-    def update_particle_best(self, swarm: List[FloatSolution]) -> None:
+    def update_particle_best(self, swarm: list[FloatSolution]) -> None:
         for i in range(self.swarm_size):
             flag = self.dominance_comparator.compare(swarm[i], swarm[i].attributes["local_best"])
             if flag != 1:
                 swarm[i].attributes["local_best"] = copy(swarm[i])
 
-    def perturbation(self, swarm: List[FloatSolution]) -> None:
+    def perturbation(self, swarm: list[FloatSolution]) -> None:
         self.non_uniform_mutation.set_current_iteration(self.evaluations / self.swarm_size)
         for i in range(self.swarm_size):
             if (i % 3) == 0:
@@ -199,7 +198,7 @@ class OMOPSO(ParticleSwarmOptimization):
         observable_data["SOLUTIONS"] = self.epsilon_archive.solution_list
         self.observable.notify_all(**observable_data)
 
-    def result(self) -> List[FloatSolution]:
+    def result(self) -> list[FloatSolution]:
         return self.epsilon_archive.solution_list
 
     def get_name(self) -> str:

@@ -30,7 +30,10 @@ class _Store:
 
     @property
     def default_mutation(self):
-        return {"real": PolynomialMutation(probability=0.15, distribution_index=20), "binary": BitFlipMutation(0.15)}
+        return {
+            "real": PolynomialMutation(probability=0.15, distribution_index=20),
+            "binary": BitFlipMutation(0.15),
+        }
 
 
 store = _Store()

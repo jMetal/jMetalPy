@@ -10,18 +10,23 @@ This module contains comprehensive test cases for quality indicators including:
 Test cases are inspired by the Julia implementation in MetaJul to ensure
 mathematical correctness and comprehensive coverage of edge cases.
 """
+
 import os
 import unittest
 from pathlib import Path
 
 import numpy as np
 
-from jmetal.core.quality_indicator import (EpsilonIndicator, AdditiveEpsilonIndicator,
-                                           GenerationalDistance, HyperVolume,
-                                           InvertedGenerationalDistance,
-                                           InvertedGenerationalDistancePlus,
-                                           NormalizedHyperVolume,
-                                           AverageHausdorffDistance)
+from jmetal.core.quality_indicator import (
+    AdditiveEpsilonIndicator,
+    AverageHausdorffDistance,
+    EpsilonIndicator,
+    GenerationalDistance,
+    HyperVolume,
+    InvertedGenerationalDistance,
+    InvertedGenerationalDistancePlus,
+    NormalizedHyperVolume,
+)
 
 DIRNAME = os.path.dirname(os.path.abspath(__file__))
 EPSILON_TEST_ATOL = 1e-12
@@ -67,7 +72,7 @@ class GenerationalDistanceTestCases(unittest.TestCase):
 
     def test_single_point_front_distance(self):
         """
-        Distance to the nearest point of the reference front is the euclidean distance to 
+        Distance to the nearest point of the reference front is the euclidean distance to
         the nearest point of the reference front.
         Reference: [[1.0, 1.0], [2.0, 2.0]], Front: [[1.5, 1.5]]
         Nearest point strategies:
@@ -80,7 +85,7 @@ class GenerationalDistanceTestCases(unittest.TestCase):
 
         result = indicator.compute(front)
         expected = np.sqrt(pow(1.0 - 1.5, 2) + pow(1.0 - 1.5, 2))
-        
+
         self.assertEqual(expected, result)
 
     def test_single_point_front_nearest_reference(self):
@@ -95,7 +100,7 @@ class GenerationalDistanceTestCases(unittest.TestCase):
 
         result = indicator.compute(front)
         expected = np.sqrt(pow(1.0 - 1.5, 2) + pow(1.0 - 1.5, 2))
-        
+
         self.assertEqual(expected, result)
 
     def test_multiple_points_front_average_distance(self):
@@ -111,7 +116,7 @@ class GenerationalDistanceTestCases(unittest.TestCase):
         indicator = GenerationalDistance(reference)
 
         result = indicator.compute(front)
-        
+
         distance_1 = np.sqrt(pow(1.0 - 1.5, 2) + pow(1.0 - 1.5, 2))
         distance_2 = np.sqrt(pow(2.1 - 2.2, 2) + pow(2.1 - 2.2, 2))
         expected = (distance_1 + distance_2) / 2.0
@@ -129,11 +134,11 @@ class GenerationalDistanceTestCases(unittest.TestCase):
         indicator = GenerationalDistance(reference)
 
         result = indicator.compute(front)
-        
-        distance_1 = np.sqrt(pow(1.0 - 1.5, 2) + pow(1.0 - 1.5, 2)) # to [1.0, 1.0]
-        distance_2 = np.sqrt(pow(2.1 - 2.2, 2) + pow(2.1 - 2.2, 2)) # to [2.1, 2.1]
-        distance_3 = np.sqrt(pow(2.1 - 1.9, 2) + pow(2.1 - 1.9, 2)) # to [2.1, 2.1]
-        
+
+        distance_1 = np.sqrt(pow(1.0 - 1.5, 2) + pow(1.0 - 1.5, 2))  # to [1.0, 1.0]
+        distance_2 = np.sqrt(pow(2.1 - 2.2, 2) + pow(2.1 - 2.2, 2))  # to [2.1, 2.1]
+        distance_3 = np.sqrt(pow(2.1 - 1.9, 2) + pow(2.1 - 1.9, 2))  # to [2.1, 2.1]
+
         expected = (distance_1 + distance_2 + distance_3) / 3.0
 
         self.assertEqual(expected, result)
@@ -145,7 +150,7 @@ class GenerationalDistanceTestCases(unittest.TestCase):
         front = np.array([[1.0, 1.0]])
         with self.assertRaises(ValueError):
             indicator.compute(front)
-            
+
     def test_empty_solutions_should_raise_error(self):
         """Empty solutions array should raise error"""
         reference = np.array([[1.0, 1.0]])
@@ -161,10 +166,15 @@ class InvertedGenerationalDistanceTestCases(unittest.TestCase):
         self.assertIsNotNone(indicator)
 
     def test_get_name_return_the_right_value(self):
-        self.assertEqual("Inverted Generational Distance", InvertedGenerationalDistance(np.array([[1.0, 1.0]])).get_name())
+        self.assertEqual(
+            "Inverted Generational Distance",
+            InvertedGenerationalDistance(np.array([[1.0, 1.0]])).get_name(),
+        )
 
     def test_get_short_name_return_the_right_value(self):
-        self.assertEqual("IGD", InvertedGenerationalDistance(np.array([[1.0, 1.0]])).get_short_name())
+        self.assertEqual(
+            "IGD", InvertedGenerationalDistance(np.array([[1.0, 1.0]])).get_short_name()
+        )
 
     def test_identical_fronts_should_return_zero(self):
         """Identical 2D fronts: IGD = 0"""
@@ -192,7 +202,7 @@ class InvertedGenerationalDistanceTestCases(unittest.TestCase):
         single_reference = np.array([[0.2, 0.3]])
         indicator = InvertedGenerationalDistance(single_reference)
         result = indicator.compute(single_front)
-        expected = np.sqrt((0.5-0.2)**2 + (0.5-0.3)**2)
+        expected = np.sqrt((0.5 - 0.2) ** 2 + (0.5 - 0.3) ** 2)
         self.assertAlmostEqual(expected, result, delta=EPSILON_TEST_ATOL)
 
     def test_three_objective_identical_fronts(self):
@@ -247,7 +257,9 @@ class InvertedGenerationalDistanceTestCases(unittest.TestCase):
     def test_sparse_approximation_2d(self):
         """Sparse approximation of continuous front in 2D using corrected IGD formula"""
         sparse_fronts = np.array([[0.0, 1.0], [0.5, 0.5], [1.0, 0.0]])
-        sparse_reference = np.array([[0.0, 1.0], [0.25, 0.75], [0.5, 0.5], [0.75, 0.25], [1.0, 0.0]])
+        sparse_reference = np.array(
+            [[0.0, 1.0], [0.25, 0.75], [0.5, 0.5], [0.75, 0.25], [1.0, 0.0]]
+        )
         indicator = InvertedGenerationalDistance(sparse_reference)
         result = indicator.compute(sparse_fronts)
         # Using L2 norm formula: sqrt(sum(d²))/N
@@ -255,7 +267,9 @@ class InvertedGenerationalDistanceTestCases(unittest.TestCase):
         # = 0, sqrt(0.0625 + 0.0625), 0, sqrt(0.0625 + 0.0625), 0
         # = 0, sqrt(0.125), 0, sqrt(0.125), 0 = 0, 0.3535..., 0, 0.3535..., 0
         # IGD = sqrt(0 + 0.125 + 0 + 0.125 + 0) / 5 = sqrt(0.25) / 5 = 0.5 / 5 = 0.1
-        distance_middle = np.sqrt((0.25-0.5)**2 + (0.75-0.5)**2)  # For [0.25, 0.75] and [0.75, 0.25]
+        distance_middle = np.sqrt(
+            (0.25 - 0.5) ** 2 + (0.75 - 0.5) ** 2
+        )  # For [0.25, 0.75] and [0.75, 0.25]
         expected = np.sqrt(2 * distance_middle**2) / 5  # Using L2 norm formula
         self.assertAlmostEqual(expected, result, delta=EPSILON_TEST_ATOL)
 
@@ -297,7 +311,7 @@ class InvertedGenerationalDistanceTestCases(unittest.TestCase):
         """Test IGD with different power parameters"""
         igd_fronts = np.array([[0.0, 1.0], [1.0, 0.0]])
         igd_reference = np.array([[0.0, 0.0], [0.0, 1.0], [1.0, 0.0], [1.0, 1.0]])
-        
+
         # pow=1: Taxicab distance, summed then divided by N
         # Distances: 1, 0, 0, 1
         # IGD = (1 + 0 + 0 + 1) / 4 = 0.5
@@ -305,7 +319,7 @@ class InvertedGenerationalDistanceTestCases(unittest.TestCase):
         result_pow1 = indicator_pow1.compute(igd_fronts)
         expected_pow1 = 0.5
         self.assertAlmostEqual(expected_pow1, result_pow1, delta=EPSILON_TEST_ATOL)
-        
+
         # pow=2: L2 norm formula: sqrt(sum(d²))/N
         # Distances squared: 1, 0, 0, 1
         # IGD = sqrt(1 + 0 + 0 + 1) / 4 = sqrt(2) / 4
@@ -336,7 +350,9 @@ class InvertedGenerationalDistanceTestCases(unittest.TestCase):
         front = np.array([[1.0, 1.0, 1.0]])
         result = indicator.compute(front)
         distance_of_first_point = np.sqrt(pow(1.0 - 1.0, 2) + pow(1.0 - 1.0, 2) + pow(1.0 - 1.0, 2))
-        distance_of_second_point = np.sqrt(pow(2.0 - 1.0, 2) + pow(2.0 - 1.0, 2) + pow(2.0 - 1.0, 2))
+        distance_of_second_point = np.sqrt(
+            pow(2.0 - 1.0, 2) + pow(2.0 - 1.0, 2) + pow(2.0 - 1.0, 2)
+        )
         self.assertEqual((distance_of_first_point + distance_of_second_point) / 2.0, result)
 
     def test_case4(self):
@@ -368,10 +384,15 @@ class InvertedGenerationalDistancePlusTestCases(unittest.TestCase):
         self.assertIsNotNone(indicator)
 
     def test_get_name_return_the_right_value(self):
-        self.assertEqual("Inverted Generational Distance Plus", InvertedGenerationalDistancePlus(np.array([[1.0, 1.0]])).get_name())
+        self.assertEqual(
+            "Inverted Generational Distance Plus",
+            InvertedGenerationalDistancePlus(np.array([[1.0, 1.0]])).get_name(),
+        )
 
     def test_get_short_name_return_the_right_value(self):
-        self.assertEqual("IGD+", InvertedGenerationalDistancePlus(np.array([[1.0, 1.0]])).get_short_name())
+        self.assertEqual(
+            "IGD+", InvertedGenerationalDistancePlus(np.array([[1.0, 1.0]])).get_short_name()
+        )
 
     def test_identical_fronts_should_return_zero(self):
         """Identical fronts: IGD+ = 0"""
@@ -411,27 +432,37 @@ class InvertedGenerationalDistancePlusTestCases(unittest.TestCase):
         front_b = np.array([[0.5, 0.5]])
         indicator_a = InvertedGenerationalDistancePlus(front_b)
         indicator_b = InvertedGenerationalDistancePlus(front_a)
-        
+
         result_a = indicator_a.compute(front_a)
         result_b = indicator_b.compute(front_b)
-        
+
         self.assertGreaterEqual(result_a, 0.0)
         self.assertGreaterEqual(result_b, 0.0)
 
     def test_asymmetry(self):
         """Test asymmetry with very different sized fronts"""
         single_point_front = np.array([[0.4, 0.6]])
-        large_reference = np.array([
-            [0.0, 0.0], [0.1, 0.9], [0.2, 0.8], [0.3, 0.7], [0.5, 0.5],
-            [0.6, 0.4], [0.7, 0.3], [0.8, 0.2], [0.9, 0.1], [1.0, 1.0]
-        ])
-        
+        large_reference = np.array(
+            [
+                [0.0, 0.0],
+                [0.1, 0.9],
+                [0.2, 0.8],
+                [0.3, 0.7],
+                [0.5, 0.5],
+                [0.6, 0.4],
+                [0.7, 0.3],
+                [0.8, 0.2],
+                [0.9, 0.1],
+                [1.0, 1.0],
+            ]
+        )
+
         indicator_single_to_large = InvertedGenerationalDistancePlus(large_reference)
         indicator_large_to_single = InvertedGenerationalDistancePlus(single_point_front)
-        
+
         igdplus_single_to_large = indicator_single_to_large.compute(single_point_front)
         igdplus_large_to_single = indicator_large_to_single.compute(large_reference)
-        
+
         # With 1 vs 10 points and no exact match, these should be different
         self.assertNotEqual(igdplus_single_to_large, igdplus_large_to_single)
         self.assertGreater(igdplus_single_to_large, 0.0)
@@ -478,7 +509,10 @@ class AverageHausdorffDistanceTestCases(unittest.TestCase):
         self.assertIsNotNone(indicator)
 
     def test_get_name_return_the_right_value(self):
-        self.assertEqual("Average Hausdorff Distance", AverageHausdorffDistance(np.array([[1.0, 1.0]])).get_name())
+        self.assertEqual(
+            "Average Hausdorff Distance",
+            AverageHausdorffDistance(np.array([[1.0, 1.0]])).get_name(),
+        )
 
     def test_get_short_name_return_the_right_value(self):
         self.assertEqual("AHD", AverageHausdorffDistance(np.array([[1.0, 1.0]])).get_short_name())
@@ -497,17 +531,17 @@ class AverageHausdorffDistanceTestCases(unittest.TestCase):
         Simple symmetric case where GD = IGD.
         Reference: [[0, 0], [1, 1]]
         Front: [[0.1, 0.1], [0.9, 0.9]]
-        
+
         GD:
         - [0.1, 0.1] to [0, 0] is closest (d=sqrt(0.02))
         - [0.9, 0.9] to [1, 1] is closest (d=sqrt(0.02))
         - GD = sqrt(0.02)
-        
+
         IGD:
         - [0, 0] to [0.1, 0.1] is closest (d=sqrt(0.02))
         - [1, 1] to [0.9, 0.9] is closest (d=sqrt(0.02))
         - IGD = sqrt(0.02)
-        
+
         AHD = max(GD, IGD) = sqrt(0.02)
         """
         reference = np.array([[0.0, 0.0], [1.0, 1.0]])
@@ -516,7 +550,7 @@ class AverageHausdorffDistanceTestCases(unittest.TestCase):
 
         result = indicator.compute(front)
         expected = np.sqrt(0.1**2 + 0.1**2)
-        
+
         self.assertAlmostEqual(expected, result, delta=EPSILON_TEST_ATOL)
 
     def test_case_where_gd_is_greater_than_igd(self):
@@ -524,24 +558,24 @@ class AverageHausdorffDistanceTestCases(unittest.TestCase):
         Case where GD > IGD.
         Reference: [[0, 0]]
         Front: [[1, 0], [2, 0]]
-        
+
         GD:
         - [1, 0] to [0, 0]: dist = 1
         - [2, 0] to [0, 0]: dist = 2
         - GD = (1 + 2) / 2 = 1.5
-        
+
         IGD:
         - [0, 0] to closest in front ([1, 0]): dist = 1
         - IGD = 1 / 1 = 1
-        
+
         AHD = max(1.5, 1) = 1.5
         """
         reference = np.array([[0.0, 0.0]])
         front = np.array([[1.0, 0.0], [2.0, 0.0]])
         indicator = AverageHausdorffDistance(reference)
-        
+
         result = indicator.compute(front)
-        
+
         self.assertEqual(1.5, result)
 
     def test_case_where_igd_is_greater_than_gd(self):
@@ -549,24 +583,24 @@ class AverageHausdorffDistanceTestCases(unittest.TestCase):
         Case where IGD > GD.
         Reference: [[1, 0], [2, 0]]
         Front: [[0, 0]]
-        
+
         GD:
         - [0, 0] to closest in ref ([1, 0]): dist = 1
         - GD = 1 / 1 = 1
-        
+
         IGD:
         - [1, 0] to [0, 0]: dist = 1
         - [2, 0] to [0, 0]: dist = 2
         - IGD = (1 + 2) / 2 = 1.5
-        
+
         AHD = max(1, 1.5) = 1.5
         """
         reference = np.array([[1.0, 0.0], [2.0, 0.0]])
         front = np.array([[0.0, 0.0]])
         indicator = AverageHausdorffDistance(reference)
-        
+
         result = indicator.compute(front)
-        
+
         self.assertEqual(1.5, result)
 
     def test_dimension_mismatch_should_raise_error(self):
@@ -602,7 +636,9 @@ class AdditiveEpsilonIndicatorTestCases(unittest.TestCase):
         self.assertIsNotNone(indicator)
 
     def test_get_name_return_the_right_value(self):
-        self.assertEqual("Additive Epsilon", AdditiveEpsilonIndicator(np.array([[1.0, 1.0]])).get_name())
+        self.assertEqual(
+            "Additive Epsilon", AdditiveEpsilonIndicator(np.array([[1.0, 1.0]])).get_name()
+        )
 
     def test_get_short_name_return_the_right_value(self):
         self.assertEqual("EP", AdditiveEpsilonIndicator(np.array([[1.0, 1.0]])).get_short_name())
@@ -710,13 +746,13 @@ class AdditiveEpsilonIndicatorTestCases(unittest.TestCase):
         """Non-negativity (but epsilon can be negative when dominating)"""
         front_a = np.array([[0.0, 1.0], [1.0, 0.0]])
         front_b = np.array([[0.5, 0.5]])
-        
+
         indicator_a = AdditiveEpsilonIndicator(front_b)
         indicator_b = AdditiveEpsilonIndicator(front_a)
-        
+
         eps_a_to_b = indicator_a.compute(front_a)
         eps_b_to_a = indicator_b.compute(front_b)
-        
+
         # Allow reasonable negative values when dominating
         self.assertGreaterEqual(eps_a_to_b, -1.0)
         self.assertGreaterEqual(eps_b_to_a, 0.0)
@@ -724,15 +760,19 @@ class AdditiveEpsilonIndicatorTestCases(unittest.TestCase):
     def test_asymmetry_property(self):
         """Test asymmetry with fronts where dominating front just covers the reference"""
         reference_front = np.array([[0.2, 0.2]])  # Single point
-        covering_front = np.array([[0.2, 0.2], [0.1, 0.3], [0.3, 0.1]])  # Includes the reference point exactly
-        
+        covering_front = np.array(
+            [[0.2, 0.2], [0.1, 0.3], [0.3, 0.1]]
+        )  # Includes the reference point exactly
+
         indicator_covering_to_ref = AdditiveEpsilonIndicator(reference_front)
         indicator_ref_to_covering = AdditiveEpsilonIndicator(covering_front)
-        
+
         eps_covering_to_ref = indicator_covering_to_ref.compute(covering_front)
         eps_ref_to_covering = indicator_ref_to_covering.compute(reference_front)
-        
-        self.assertAlmostEqual(eps_covering_to_ref, 0.0, delta=EPSILON_TEST_ATOL)  # Should be exactly 0
+
+        self.assertAlmostEqual(
+            eps_covering_to_ref, 0.0, delta=EPSILON_TEST_ATOL
+        )  # Should be exactly 0
         self.assertGreater(eps_ref_to_covering, 0.0)  # Reverse should be positive
         self.assertNotEqual(eps_covering_to_ref, eps_ref_to_covering)  # Should be different
 
@@ -747,6 +787,7 @@ class AdditiveEpsilonIndicatorTestCases(unittest.TestCase):
 
 class EpsilonIndicatorTestCases(unittest.TestCase):
     """Test cases for backwards compatibility alias"""
+
     def test_should_constructor_create_a_non_null_object(self) -> None:
         indicator = EpsilonIndicator(np.array([[1.0, 1.0], [2.0, 2.0]]))
         self.assertIsNotNone(indicator)
@@ -755,13 +796,13 @@ class EpsilonIndicatorTestCases(unittest.TestCase):
         """Test that EpsilonIndicator is an alias for AdditiveEpsilonIndicator"""
         reference = np.array([[1.0, 2.0], [2.0, 1.0]])
         front = np.array([[1.5, 1.5]])
-        
+
         additive_indicator = AdditiveEpsilonIndicator(reference)
         epsilon_indicator = EpsilonIndicator(reference)
-        
+
         result_additive = additive_indicator.compute(front)
         result_epsilon = epsilon_indicator.compute(front)
-        
+
         self.assertEqual(result_additive, result_epsilon)
         self.assertEqual(additive_indicator.get_name(), epsilon_indicator.get_name())
         self.assertEqual(additive_indicator.get_short_name(), epsilon_indicator.get_short_name())
@@ -778,7 +819,9 @@ class HyperVolumeTestCases(unittest.TestCase):
 
         self.assertEqual(5.0, value)
 
-    def test_should_hypervolume_return_the_correct_value_when_applied_to_the_ZDT1_reference_front(self):
+    def test_should_hypervolume_return_the_correct_value_when_applied_to_the_ZDT1_reference_front(
+        self,
+    ):
         filepath = Path(DIRNAME, "ZDT1.pf")
         front = []
 

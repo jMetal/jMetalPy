@@ -1,6 +1,6 @@
 import unittest
 
-from jmetal.problem.multiobjective.zdt import ZDT1, ZDT2, ZDT3, ZDT4, ZDT6, ZDT5
+from jmetal.problem.multiobjective.zdt import ZDT1, ZDT2, ZDT3, ZDT4, ZDT5, ZDT6
 
 
 class ZDT1TestCases(unittest.TestCase):
@@ -217,25 +217,27 @@ class ZDT5TestCases(unittest.TestCase):
         self.assertEqual(0, problem.number_of_constraints())
         self.assertEqual(80, problem.total_number_of_bits)  # Access as property, not method
         self.assertEqual(11, len(problem.number_of_bits_per_variable))  # 11 variables
-        self.assertEqual(30, problem.number_of_bits_per_variable[0])    # First var has 30 bits
-        self.assertTrue(all(bits == 5 for bits in problem.number_of_bits_per_variable[1:]))  # Rest have 5 bits
+        self.assertEqual(30, problem.number_of_bits_per_variable[0])  # First var has 30 bits
+        self.assertTrue(
+            all(bits == 5 for bits in problem.number_of_bits_per_variable[1:])
+        )  # Rest have 5 bits
 
     def test_should_create_solution_a_valid_binary_solution(self) -> None:
         problem = ZDT5()
         solution = problem.create_solution()
-        
+
         # Check total number of bits
         self.assertEqual(80, len(solution.variables))
-        
+
         # Check first variable (30 bits)
         first_var_bits = solution.variables[:30]
         self.assertEqual(30, len(first_var_bits))
         self.assertTrue(all(isinstance(bit, bool) for bit in first_var_bits))
-        
+
         # Check remaining variables (5 bits each)
         bit_index = 30
         for bits in problem.number_of_bits_per_variable[1:]:
-            var_bits = solution.variables[bit_index:bit_index + bits]
+            var_bits = solution.variables[bit_index : bit_index + bits]
             self.assertEqual(5, len(var_bits))
             self.assertTrue(all(isinstance(bit, bool) for bit in var_bits))
             bit_index += bits

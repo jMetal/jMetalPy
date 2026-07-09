@@ -112,7 +112,9 @@ class StrengthAndKNNDistanceComparator(Comparator):
         result = SolutionAttributeComparator("dominance_ranking").compare(solution1, solution2)
 
         if result == 0:
-            result = SolutionAttributeComparator("knn_density", lowest_is_best=False).compare(solution1, solution2)
+            result = SolutionAttributeComparator("knn_density", lowest_is_best=False).compare(
+                solution1, solution2
+            )
 
         return result
 
@@ -172,8 +174,8 @@ class DominanceComparator(Comparator):
 
 
 class ObjectiveComparator(Comparator):
-    """ Compares two solutions according to a particular objective
-    """
+    """Compares two solutions according to a particular objective"""
+
     def __init__(self, objectiveId):
         self.objectiveId = objectiveId
 
@@ -192,7 +194,7 @@ class GDominanceComparator(DominanceComparator):
         self,
         reference_point: (),
     ):
-        super(GDominanceComparator, self).__init__()
+        super().__init__()
         self.reference_point = reference_point
 
     def compare(self, solution1: Solution, solution2: Solution):
@@ -201,7 +203,7 @@ class GDominanceComparator(DominanceComparator):
         elif self.__flag(solution1) < self.__flag(solution2):
             result = 1
         else:
-            result = super(GDominanceComparator, self).compare(solution1, solution2)
+            result = super().compare(solution1, solution2)
 
         return result
 

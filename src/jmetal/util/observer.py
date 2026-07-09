@@ -1,7 +1,7 @@
 import logging
 import os
 from pathlib import Path
-from typing import List, TypeVar
+from typing import TypeVar
 
 import numpy as np
 from tqdm import tqdm
@@ -67,7 +67,7 @@ class BasicObserver(Observer):
                 fitness = solutions.objectives
 
             LOGGER.info(
-                "Evaluations: {} \n Best fitness: {} \n Computing time: {}".format(evaluations, fitness, computing_time)
+                f"Evaluations: {evaluations} \n Best fitness: {fitness} \n Computing time: {computing_time}"
             )
 
 
@@ -88,7 +88,7 @@ class PrintObjectivesObserver(Observer):
             else:
                 fitness = solutions.objectives
 
-            LOGGER.info("Evaluations: {}. fitness: {}".format(evaluations, fitness))
+            LOGGER.info(f"Evaluations: {evaluations}. fitness: {fitness}")
 
 
 class WriteFrontToFileObserver(Observer):
@@ -100,11 +100,11 @@ class WriteFrontToFileObserver(Observer):
         self.directory = output_directory
 
         if Path(self.directory).is_dir():
-            LOGGER.warning("Directory {} exists. Removing contents.".format(self.directory))
+            LOGGER.warning(f"Directory {self.directory} exists. Removing contents.")
             for file in os.listdir(self.directory):
-                os.remove("{0}/{1}".format(self.directory, file))
+                os.remove(f"{self.directory}/{file}")
         else:
-            LOGGER.warning("Directory {} does not exist. Creating it.".format(self.directory))
+            LOGGER.warning(f"Directory {self.directory} does not exist. Creating it.")
             Path(self.directory).mkdir(parents=True)
 
     def update(self, *args, **kwargs):
@@ -113,13 +113,17 @@ class WriteFrontToFileObserver(Observer):
 
         if solutions:
             if isinstance(problem, DynamicProblem):
-                termination_criterion_is_met = kwargs.get("TERMINATION_CRITERIA_IS_MET", None)
+                termination_criterion_is_met = kwargs.get("TERMINATION_CRITERIA_IS_MET")
 
                 if termination_criterion_is_met:
-                    print_function_values_to_file(solutions, "{}/FUN.{}".format(self.directory, self.counter))
+                    print_function_values_to_file(
+                        solutions, f"{self.directory}/FUN.{self.counter}"
+                    )
                     self.counter += 1
             else:
-                print_function_values_to_file(solutions, "{}/FUN.{}".format(self.directory, self.counter))
+                print_function_values_to_file(
+                    solutions, f"{self.directory}/FUN.{self.counter}"
+                )
                 self.counter += 1
 
 
@@ -137,11 +141,11 @@ class PlotFrontToFileObserver(Observer):
         self.step = step
 
         if Path(self.directory).is_dir():
-            LOGGER.warning("Directory {} exists. Removing contents.".format(self.directory))
+            LOGGER.warning(f"Directory {self.directory} exists. Removing contents.")
             for file in os.listdir(self.directory):
-                os.remove("{0}/{1}".format(self.directory, file))
+                os.remove(f"{self.directory}/{file}")
         else:
-            LOGGER.warning("Directory {} does not exist. Creating it.".format(self.directory))
+            LOGGER.warning(f"Directory {self.directory} does not exist. Creating it.")
             Path(self.directory).mkdir(parents=True)
 
     def update(self, *args, **kwargs):
@@ -152,11 +156,13 @@ class PlotFrontToFileObserver(Observer):
         if solutions:
             if (evaluations % self.step) == 0:
                 if isinstance(problem, DynamicProblem):
-                    termination_criterion_is_met = kwargs.get("TERMINATION_CRITERIA_IS_MET", None)
+                    termination_criterion_is_met = kwargs.get("TERMINATION_CRITERIA_IS_MET")
 
                     if termination_criterion_is_met:
                         if self.counter > 0:
-                            igd = InvertedGenerationalDistance(np.array([s.objectives for s in self.last_front]))
+                            igd = InvertedGenerationalDistance(
+                                np.array([s.objectives for s in self.last_front])
+                            )
                             igd_value = igd.compute(np.array([s.objectives for s in solutions]))
                         else:
                             igd_value = 1
@@ -181,7 +187,10 @@ class PlotFrontToFileObserver(Observer):
 
 class VisualizerObserver(Observer):
     def __init__(
-        self, reference_front: List[S] = None, reference_point: list = None, display_frequency: int = 1
+        self,
+        reference_front: list[S] = None,
+        reference_point: list = None,
+        display_frequency: int = 1,
     ) -> None:
         self.figure = None
         self.display_frequency = display_frequency
@@ -195,12 +204,14 @@ class VisualizerObserver(Observer):
 
         if solutions:
             if self.figure is None:
-                self.figure = StreamingPlot(reference_point=self.reference_point, reference_front=self.reference_front)
+                self.figure = StreamingPlot(
+                    reference_point=self.reference_point, reference_front=self.reference_front
+                )
                 self.figure.plot(solutions)
 
             if (evaluations % self.display_frequency) == 0:
                 # check if reference point has changed
-                reference_point = kwargs.get("REFERENCE_POINT", None)
+                reference_point = kwargs.get("REFERENCE_POINT")
 
                 if reference_point:
                     self.reference_point = reference_point
@@ -208,4 +219,4 @@ class VisualizerObserver(Observer):
                 else:
                     self.figure.update(solutions)
 
-                self.figure.ax.set_title("Eval: {}".format(evaluations), fontsize=13)
+                self.figure.ax.set_title(f"Eval: {evaluations}", fontsize=13)

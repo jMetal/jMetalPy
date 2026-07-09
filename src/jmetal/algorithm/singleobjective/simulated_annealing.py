@@ -2,7 +2,7 @@ import copy
 import random
 import threading
 import time
-from typing import List, TypeVar
+from typing import TypeVar
 
 import numpy
 
@@ -34,7 +34,7 @@ class SimulatedAnnealing(Algorithm[S, R], threading.Thread):
         termination_criterion: TerminationCriterion,
         solution_generator: Generator = store.default_generator,
     ):
-        super(SimulatedAnnealing, self).__init__()
+        super().__init__()
         self.problem = problem
         self.mutation = mutation
         self.termination_criterion = termination_criterion
@@ -45,10 +45,10 @@ class SimulatedAnnealing(Algorithm[S, R], threading.Thread):
         self.alpha = 0.95
         self.counter = 0
 
-    def create_initial_solutions(self) -> List[S]:
+    def create_initial_solutions(self) -> list[S]:
         return [self.solution_generator.new(self.problem)]
 
-    def evaluate(self, solutions: List[S]) -> List[S]:
+    def evaluate(self, solutions: list[S]) -> list[S]:
         return [self.problem.evaluate(solutions[0])]
 
     def stopping_condition_is_met(self) -> bool:
@@ -72,7 +72,9 @@ class SimulatedAnnealing(Algorithm[S, R], threading.Thread):
 
         self.temperature *= self.alpha
 
-    def compute_acceptance_probability(self, current: float, new: float, temperature: float) -> float:
+    def compute_acceptance_probability(
+        self, current: float, new: float, temperature: float
+    ) -> float:
         if new < current:
             return 1.0
         else:

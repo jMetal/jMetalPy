@@ -18,8 +18,12 @@ if __name__ == "__main__":
     algorithm = SMPSO(
         problem=problem,
         swarm_size=100,
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
-        leaders=CrowdingDistanceArchive(100, dominance_comparator = DominanceWithConstraintsComparator()),
+        mutation=PolynomialMutation(
+            probability=1.0 / problem.number_of_variables(), distribution_index=20
+        ),
+        leaders=CrowdingDistanceArchive(
+            100, dominance_comparator=DominanceWithConstraintsComparator()
+        ),
         dominance_comparator=DominanceWithConstraintsComparator(),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
     )

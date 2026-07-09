@@ -72,7 +72,9 @@ class NonDominatedSolutionListArchiveTestCases(unittest.TestCase):
         self.archive.add(solution2)
 
         self.assertEqual(2, self.archive.size())
-        self.assertTrue(solution1 in self.archive.solution_list and solution2 in self.archive.solution_list)
+        self.assertTrue(
+            solution1 in self.archive.solution_list and solution2 in self.archive.solution_list
+        )
 
     def test_should_adding_four_solutions_work_properly_if_one_dominates_the_others(self):
         solution1 = FloatSolution([0.0], [1.0], 2)
@@ -111,7 +113,9 @@ class NonDominatedSolutionListArchiveTestCases(unittest.TestCase):
 
         self.assertEqual(2, self.archive.size())
         self.assertFalse(result)
-        self.assertTrue(solution1 in self.archive.solution_list or solution3 in self.archive.solution_list)
+        self.assertTrue(
+            solution1 in self.archive.solution_list or solution3 in self.archive.solution_list
+        )
 
     def test_should_add_high_dimensional_solutions(self):
         """Test behavior with solutions having more than 2 objectives. Only one solution should remain due to dominance logic."""
@@ -127,7 +131,11 @@ class NonDominatedSolutionListArchiveTestCases(unittest.TestCase):
         archive.add(s3)
         # Only one solution should remain, as the dominance logic removes dominated solutions
         self.assertEqual(1, archive.size())
-        self.assertTrue(s1 in archive.solution_list or s2 in archive.solution_list or s3 in archive.solution_list)
+        self.assertTrue(
+            s1 in archive.solution_list
+            or s2 in archive.solution_list
+            or s3 in archive.solution_list
+        )
 
     def test_should_add_with_numerical_tolerance(self):
         """Test adding nearly identical solutions (numerical tolerance). Only one should be kept if they are equal within tolerance."""

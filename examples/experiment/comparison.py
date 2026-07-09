@@ -26,7 +26,9 @@ def configure_experiment(problems: dict, n_run: int):
                             probability=1.0 / problem.number_of_variables, distribution_index=20
                         ),
                         crossover=SBXCrossover(probability=1.0, distribution_index=20),
-                        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
+                        termination_criterion=StoppingByEvaluations(
+                            max_evaluations=max_evaluations
+                        ),
                     ),
                     algorithm_tag="NSGAII",
                     problem_tag=problem_tag,
@@ -40,7 +42,9 @@ def configure_experiment(problems: dict, n_run: int):
                         population_size=100,
                         cr=0.5,
                         f=0.5,
-                        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
+                        termination_criterion=StoppingByEvaluations(
+                            max_evaluations=max_evaluations
+                        ),
                     ),
                     algorithm_tag="GDE3",
                     problem_tag=problem_tag,
@@ -56,7 +60,9 @@ def configure_experiment(problems: dict, n_run: int):
                             probability=1.0 / problem.number_of_variables, distribution_index=20
                         ),
                         leaders=CrowdingDistanceArchive(100),
-                        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
+                        termination_criterion=StoppingByEvaluations(
+                            max_evaluations=max_evaluations
+                        ),
                     ),
                     algorithm_tag="SMPSO",
                     problem_tag=problem_tag,

@@ -1,9 +1,17 @@
-import numpy as np
 import random
-from typing import cast, Callable
+from collections.abc import Callable
+from typing import cast
+
+import numpy as np
+
 from jmetal.core.solution import FloatSolution, IntegerSolution
-from jmetal.operator.mutation import PolynomialMutation, IntegerPolynomialMutation, NonUniformMutation, UniformMutation
-from jmetal.operator.repair import ensure_float_repair, ensure_integer_repair
+from jmetal.operator.mutation import (
+    IntegerPolynomialMutation,
+    NonUniformMutation,
+    PolynomialMutation,
+    UniformMutation,
+)
+from jmetal.operator.repair import ensure_float_repair
 
 
 def make_float_solution(n, lower=0.0, upper=1.0, values=None):
@@ -50,7 +58,9 @@ def test_integer_polynomial_mutation_uses_integer_repair():
     def to_upper(v, lb, ub):
         return ub
 
-    op = IntegerPolynomialMutation(probability=1.0, distribution_index=20.0, repair_operator=to_upper)
+    op = IntegerPolynomialMutation(
+        probability=1.0, distribution_index=20.0, repair_operator=to_upper
+    )
     op.execute(s)
     assert s._variables[0] == 5
 
@@ -63,7 +73,9 @@ def test_nonuniform_mutation_uses_repair_operator():
     def to_upper(v, lb, ub):
         return ub
 
-    op = NonUniformMutation(probability=1.0, perturbation=1.0, max_iterations=100, repair_operator=to_upper)
+    op = NonUniformMutation(
+        probability=1.0, perturbation=1.0, max_iterations=100, repair_operator=to_upper
+    )
     op.set_current_iteration(10)
     op.execute(s)
     assert s._variables[0] == 1.0
@@ -82,14 +94,18 @@ def test_uniform_mutation_accepts_repair_instance_and_callable():
         return lb
 
     # Using callable
-    op_callable = UniformMutation(probability=1.0, perturbation=1.0, repair_operator=to_lower, rng=rng)
+    op_callable = UniformMutation(
+        probability=1.0, perturbation=1.0, repair_operator=to_lower, rng=rng
+    )
     op_callable.execute(s1)
 
     # Using instance
     repair_inst = ensure_float_repair(to_lower)
     rng2 = np.random.default_rng(seed)
     # cast to satisfy type checkers in tests (repair instance is accepted at runtime)
-    op_inst = UniformMutation(probability=1.0, perturbation=1.0, repair_operator=cast(Callable, repair_inst), rng=rng2)
+    op_inst = UniformMutation(
+        probability=1.0, perturbation=1.0, repair_operator=cast(Callable, repair_inst), rng=rng2
+    )
     op_inst.execute(s2)
 
     assert all(v == 0.0 for v in s1._variables)

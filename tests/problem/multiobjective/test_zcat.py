@@ -26,8 +26,12 @@ class ZCAT1TestCases(unittest.TestCase):
 
         self.assertEqual(30, len(solution.variables))
         self.assertEqual(2, len(solution.objectives))
-        self.assertTrue(all(problem.lower_bound[i] <= value for i, value in enumerate(solution.variables)))
-        self.assertTrue(all(value <= problem.upper_bound[i] for i, value in enumerate(solution.variables)))
+        self.assertTrue(
+            all(problem.lower_bound[i] <= value for i, value in enumerate(solution.variables))
+        )
+        self.assertTrue(
+            all(value <= problem.upper_bound[i] for i, value in enumerate(solution.variables))
+        )
 
     def test_should_get_name_return_the_right_name(self) -> None:
         problem = ZCAT1()
@@ -45,7 +49,9 @@ class ZCAT1TestCases(unittest.TestCase):
 
 
 class ZCATOptionsTestCases(unittest.TestCase):
-    def test_should_allow_problem_with_one_decision_variable_when_pareto_set_is_one_dimensional(self) -> None:
+    def test_should_allow_problem_with_one_decision_variable_when_pareto_set_is_one_dimensional(
+        self,
+    ) -> None:
         problem = ZCAT14(number_of_variables=1, number_of_objectives=3)
         solution = problem.create_solution()
         solution.variables = [0.0]

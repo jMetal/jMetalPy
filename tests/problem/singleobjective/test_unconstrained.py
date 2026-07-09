@@ -17,7 +17,7 @@ class OneMaxTestCases(unittest.TestCase):
         self.assertEqual(256, problem.number_of_bits)
 
     def test_should_constructor_create_a_valid_problem_with_512_bits(self) -> None:
-        problem : BinaryProblem = OneMax(512)
+        problem: BinaryProblem = OneMax(512)
         self.assertEqual(512, problem.number_of_variables())  # Each bit is a variable
         self.assertEqual(1, problem.number_of_objectives())
         self.assertEqual(0, problem.number_of_constraints())

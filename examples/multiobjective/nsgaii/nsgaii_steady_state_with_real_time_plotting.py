@@ -12,7 +12,7 @@ from jmetal.util.solution import (
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 """
-Program to configure and run the steady-state NSGA-II algorithm with a real-time plotting observer. The display 
+Program to configure and run the steady-state NSGA-II algorithm with a real-time plotting observer. The display
 update frequency is set to 100 evaluations.
 """
 
@@ -25,7 +25,9 @@ if __name__ == "__main__":
         problem=problem,
         population_size=100,
         offspring_population_size=1,
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
+        mutation=PolynomialMutation(
+            probability=1.0 / problem.number_of_variables(), distribution_index=20
+        ),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
         termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
     )

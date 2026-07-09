@@ -1,7 +1,8 @@
 import copy
 import random
+from collections.abc import Generator
 from math import ceil
-from typing import Generator, List, TypeVar
+from typing import TypeVar
 
 import numpy as np
 
@@ -27,7 +28,7 @@ from jmetal.util.termination_criterion import (
 )
 
 S = TypeVar("S")
-R = List[S]
+R = list[S]
 
 
 class MOEAD(GeneticAlgorithm):
@@ -51,7 +52,7 @@ class MOEAD(GeneticAlgorithm):
         :param neighbourhood_selection_probability: Probability of mating with a solution in the neighborhood rather
                than the entire population (Delta in Zhang & Li paper).
         """
-        super(MOEAD, self).__init__(
+        super().__init__(
             problem=problem,
             population_size=population_size,
             offspring_population_size=1,
@@ -85,7 +86,7 @@ class MOEAD(GeneticAlgorithm):
         observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
 
-    def selection(self, population: List[S]):
+    def selection(self, population: list[S]):
         self.current_subproblem = self.permutation.get_next_value()
         self.neighbor_type = self.choose_neighbor_type()
 
@@ -99,7 +100,7 @@ class MOEAD(GeneticAlgorithm):
 
         return mating_population
 
-    def reproduction(self, mating_population: List[S]) -> List[S]:
+    def reproduction(self, mating_population: list[S]) -> list[S]:
         self.crossover_operator.current_individual = self.solutions[self.current_subproblem]
 
         offspring_population = self.crossover_operator.execute(mating_population)
@@ -107,7 +108,7 @@ class MOEAD(GeneticAlgorithm):
 
         return offspring_population
 
-    def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
+    def replacement(self, population: list[S], offspring_population: list[S]) -> list[S]:
         new_solution = offspring_population[0]
 
         self.fitness_function.update(new_solution.objectives)
@@ -123,8 +124,12 @@ class MOEAD(GeneticAlgorithm):
         for i in range(len(permuted_neighbors_indexes)):
             k = permuted_neighbors_indexes[i]
 
-            f1 = self.fitness_function.compute(population[k].objectives, self.neighbourhood.weight_vectors[k])
-            f2 = self.fitness_function.compute(new_solution.objectives, self.neighbourhood.weight_vectors[k])
+            f1 = self.fitness_function.compute(
+                population[k].objectives, self.neighbourhood.weight_vectors[k]
+            )
+            f2 = self.fitness_function.compute(
+                new_solution.objectives, self.neighbourhood.weight_vectors[k]
+            )
 
             if f2 < f1:
                 # Use copy.copy to create a solution copy (delegates to __copy__)
@@ -179,7 +184,7 @@ class MOEAD_DRA(MOEAD):
         population_generator=store.default_generator,
         population_evaluator=store.default_evaluator,
     ):
-        super(MOEAD_DRA, self).__init__(
+        super().__init__(
             problem,
             population_size,
             mutation,
@@ -227,7 +232,7 @@ class MOEAD_DRA(MOEAD):
         if self.generation_counter % 30 == 0:
             self.__utility_function()
 
-    def selection(self, population: List[S]):
+    def selection(self, population: list[S]):
         self.current_subproblem = self.order[self.current_order_index]
         self.current_order_index += 1
         self.frequency[self.current_subproblem] += 1
@@ -249,8 +254,12 @@ class MOEAD_DRA(MOEAD):
 
     def __utility_function(self):
         for i in range(len(self.solutions)):
-            f1 = self.fitness_function.compute(self.solutions[i].objectives, self.neighbourhood.weight_vectors[i])
-            f2 = self.fitness_function.compute(self.saved_values[i].objectives, self.neighbourhood.weight_vectors[i])
+            f1 = self.fitness_function.compute(
+                self.solutions[i].objectives, self.neighbourhood.weight_vectors[i]
+            )
+            f2 = self.fitness_function.compute(
+                self.saved_values[i].objectives, self.neighbourhood.weight_vectors[i]
+            )
             delta = f2 - f1
             if delta > 0.001:
                 self.utility[i] = 1.0
@@ -300,7 +309,7 @@ class MOEADIEpsilon(MOEAD):
         :param neighbourhood_selection_probability: Probability of mating with a solution in the neighborhood rather
                than the entire population (Delta in Zhang & Li paper).
         """
-        super(MOEADIEpsilon, self).__init__(
+        super().__init__(
             problem=problem,
             population_size=population_size,
             mutation=mutation,
@@ -330,7 +339,8 @@ class MOEADIEpsilon(MOEAD):
         # for i in range(self.population_size):
         #    self.constraints[i] = get_overall_constraint_violation_degree(self.permutation[i])
         self.constraints = [
-            overall_constraint_violation_degree(self.solutions[i]) for i in range(0, self.population_size)
+            overall_constraint_violation_degree(self.solutions[i])
+            for i in range(0, self.population_size)
         ]
 
         sorted(self.constraints)
@@ -367,8 +377,12 @@ class MOEADIEpsilon(MOEAD):
         for i in range(len(permuted_neighbors_indexes)):
             k = permuted_neighbors_indexes[i]
 
-            f1 = self.fitness_function.compute(population[k].objectives, self.neighbourhood.weight_vectors[k])
-            f2 = self.fitness_function.compute(new_solution.objectives, self.neighbourhood.weight_vectors[k])
+            f1 = self.fitness_function.compute(
+                population[k].objectives, self.neighbourhood.weight_vectors[k]
+            )
+            f2 = self.fitness_function.compute(
+                new_solution.objectives, self.neighbourhood.weight_vectors[k]
+            )
 
             cons1 = abs(overall_constraint_violation_degree(self.solutions[k]))
             cons2 = abs(overall_constraint_violation_degree(new_solution))
@@ -412,7 +426,9 @@ class MOEADIEpsilon(MOEAD):
                 while len(first_rank_solutions) > self.population_size:
                     crowding_distance.compute_density_estimator(first_rank_solutions)
                     first_rank_solutions = sorted(
-                        first_rank_solutions, key=lambda x: x.attributes["crowding_distance"], reverse=True
+                        first_rank_solutions,
+                        key=lambda x: x.attributes["crowding_distance"],
+                        reverse=True,
                     )
                     first_rank_solutions.pop()
 

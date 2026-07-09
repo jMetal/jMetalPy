@@ -1,4 +1,5 @@
-from typing import Generator, List, TypeVar
+from collections.abc import Generator
+from typing import TypeVar
 
 import numpy as np
 
@@ -24,6 +25,7 @@ R = TypeVar("R")
 .. moduleauthor:: Antonio J. Nebro <ajnebro@uma.es>
 """
 
+
 class SMSEMOA(GeneticAlgorithm[S, R]):
     def __init__(
         self,
@@ -42,7 +44,7 @@ class SMSEMOA(GeneticAlgorithm[S, R]):
         """
         if selection is None:
             selection = RandomSelection()
-        super(SMSEMOA, self).__init__(
+        super().__init__(
             problem=problem,
             population_size=population_size,
             offspring_population_size=1,
@@ -57,7 +59,7 @@ class SMSEMOA(GeneticAlgorithm[S, R]):
 
     from typing import List
 
-    def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
+    def replacement(self, population: list[S], offspring_population: list[S]) -> list[S]:
         """
         SMS-EMOA replacement strategy.
 
@@ -84,7 +86,7 @@ class SMSEMOA(GeneticAlgorithm[S, R]):
         num_subfronts = ranking.get_number_of_subfronts()
 
         # Collect all subfronts except the last
-        result_population: List[S] = []
+        result_population: list[S] = []
         for i in range(num_subfronts - 1):
             result_population.extend(ranking.get_subfront(i))
 
@@ -114,13 +116,11 @@ class SMSEMOA(GeneticAlgorithm[S, R]):
 
         # Sort by HV contribution (descending: largest contributions first)
         sorted_last_subfront = sorted(
-            last_subfront,
-            key=lambda s: s.attributes["hv_contribution"],
-            reverse=True
+            last_subfront, key=lambda s: s.attributes["hv_contribution"], reverse=True
         )
 
         # Add all but one from the last subfront (remove the worst)
-        result_population.extend(sorted_last_subfront[:len(last_subfront) - 1])
+        result_population.extend(sorted_last_subfront[: len(last_subfront) - 1])
 
         return result_population
 
@@ -129,4 +129,3 @@ class SMSEMOA(GeneticAlgorithm[S, R]):
 
     def get_name(self) -> str:
         return "SMSEMOA"
-

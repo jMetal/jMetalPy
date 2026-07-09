@@ -4,9 +4,9 @@ import pytest
 from jmetal.problem.multiobjective.unconstrained import (
     Fonseca,
     Kursawe,
+    OneZeroMax,
     Schaffer,
     Viennet2,
-    OneZeroMax,
 )
 
 # Test data
@@ -44,26 +44,32 @@ ONE_ZERO_MAX_TEST_CASES = [
     ([True] * 10, [-10.0, 0.0]),  # 10 ones, 0 zeros
 ]
 
+
 # Fixtures
 @pytest.fixture
 def fonseca():
     return Fonseca()
 
+
 @pytest.fixture
 def kursawe():
     return Kursawe()
+
 
 @pytest.fixture
 def schaffer():
     return Schaffer()
 
+
 @pytest.fixture
 def viennet2():
     return Viennet2()
 
+
 @pytest.fixture
 def one_zero_max():
     return OneZeroMax()
+
 
 # Parameterized tests
 @pytest.mark.parametrize("variables, expected_objectives", FONSECA_TEST_CASES)
@@ -72,10 +78,11 @@ def test_fonseca_evaluate(fonseca, variables, expected_objectives):
     solution = fonseca.create_solution()
     solution.variables = variables
     fonseca.evaluate(solution)
-    
+
     assert len(solution.objectives) == 2
     for i, (obj, expected) in enumerate(zip(solution.objectives, expected_objectives)):
         assert obj == pytest.approx(expected, rel=1e-6), f"Objective {i} mismatch"
+
 
 @pytest.mark.parametrize("variables, expected_objectives", KURSAWE_TEST_CASES)
 def test_kursawe_evaluate(kursawe, variables, expected_objectives):
@@ -83,11 +90,12 @@ def test_kursawe_evaluate(kursawe, variables, expected_objectives):
     solution = kursawe.create_solution()
     solution.variables = variables.copy()
     kursawe.evaluate(solution)
-    
+
     assert len(solution.objectives) == 2
     for i, (obj, expected) in enumerate(zip(solution.objectives, expected_objectives)):
         if not np.isinf(expected):
             assert obj == pytest.approx(expected, rel=1e-6), f"Objective {i} mismatch"
+
 
 @pytest.mark.parametrize("variables, expected_objectives", SCHAFFER_TEST_CASES)
 def test_schaffer_evaluate(schaffer, variables, expected_objectives):
@@ -95,10 +103,11 @@ def test_schaffer_evaluate(schaffer, variables, expected_objectives):
     solution = schaffer.create_solution()
     solution.variables = variables.copy()
     schaffer.evaluate(solution)
-    
+
     assert len(solution.objectives) == 2
     for i, (obj, expected) in enumerate(zip(solution.objectives, expected_objectives)):
         assert obj == pytest.approx(expected, rel=1e-6), f"Objective {i} mismatch"
+
 
 @pytest.mark.parametrize("variables, expected_objectives", VIENNET2_TEST_CASES)
 def test_viennet2_evaluate(viennet2, variables, expected_objectives):
@@ -106,10 +115,11 @@ def test_viennet2_evaluate(viennet2, variables, expected_objectives):
     solution = viennet2.create_solution()
     solution.variables = variables.copy()
     viennet2.evaluate(solution)
-    
+
     assert len(solution.objectives) == 3
     for i, (obj, expected) in enumerate(zip(solution.objectives, expected_objectives)):
         assert obj == pytest.approx(expected, rel=1e-6), f"Objective {i} mismatch"
+
 
 # OneZeroMax specific tests
 def test_one_zero_max_initialization(one_zero_max):
@@ -119,6 +129,7 @@ def test_one_zero_max_initialization(one_zero_max):
     assert one_zero_max.number_of_constraints() == 0
     assert one_zero_max.name() == "OneZeroMax"
 
+
 @pytest.mark.parametrize("bits, expected_objectives", ONE_ZERO_MAX_TEST_CASES)
 def test_one_zero_max_evaluate(one_zero_max, bits, expected_objectives):
     """Test OneZeroMax problem evaluation."""
@@ -126,18 +137,20 @@ def test_one_zero_max_evaluate(one_zero_max, bits, expected_objectives):
     problem = OneZeroMax(number_of_bits=len(bits))
     solution = problem.create_solution()
     solution.variables = bits
-    
+
     problem.evaluate(solution)
-    
+
     assert len(solution.objectives) == 2
     for i, (obj, expected) in enumerate(zip(solution.objectives, expected_objectives)):
         assert obj == pytest.approx(expected, rel=1e-6), f"Objective {i} mismatch"
+
 
 def test_one_zero_max_create_solution(one_zero_max):
     """Test OneZeroMax solution creation."""
     solution = one_zero_max.create_solution()
     assert len(solution.variables) == 256
     assert all(isinstance(bit, bool) for bit in solution.variables)
+
 
 # Test problem properties
 def test_problem_properties():
@@ -148,7 +161,7 @@ def test_problem_properties():
     assert len(fonseca.upper_bound) == 3
     assert all(lb == -4 for lb in fonseca.lower_bound)
     assert all(ub == 4 for ub in fonseca.upper_bound)
-    
+
     # Test Viennet2 bounds
     viennet2 = Viennet2()
     assert len(viennet2.lower_bound) == 2
@@ -156,11 +169,12 @@ def test_problem_properties():
     assert all(lb == -4 for lb in viennet2.lower_bound)
     assert all(ub == 4 for ub in viennet2.upper_bound)
 
+
 # Test solution creation
 def test_solution_creation():
     """Test that solutions are created with valid values within bounds."""
     problem = Fonseca()
     solution = problem.create_solution()
-    
+
     for var, lb, ub in zip(solution.variables, problem.lower_bound, problem.upper_bound):
         assert lb <= var <= ub

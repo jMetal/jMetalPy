@@ -1,5 +1,5 @@
 import time
-from typing import List, TypeVar
+from typing import TypeVar
 
 from jmetal.config import store
 from jmetal.core.algorithm import Algorithm
@@ -21,7 +21,9 @@ R = TypeVar("R")
 
 class RandomSearch(Algorithm[S, R]):
     def __init__(
-        self, problem: Problem[S], termination_criterion: TerminationCriterion = store.default_termination_criteria
+        self,
+        problem: Problem[S],
+        termination_criterion: TerminationCriterion = store.default_termination_criteria,
     ):
         super().__init__()
         self.problem = problem
@@ -39,10 +41,10 @@ class RandomSearch(Algorithm[S, R]):
             "COMPUTING_TIME": ctime,
         }
 
-    def create_initial_solutions(self) -> List[S]:
+    def create_initial_solutions(self) -> list[S]:
         return [self.problem.create_solution()]
 
-    def evaluate(self, solution_list: List[S]) -> List[S]:
+    def evaluate(self, solution_list: list[S]) -> list[S]:
         return [self.problem.evaluate(solution_list[0])]
 
     def init_progress(self) -> None:
@@ -65,7 +67,7 @@ class RandomSearch(Algorithm[S, R]):
         observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
 
-    def result(self) -> List[S]:
+    def result(self) -> list[S]:
         return self.archive.solution_list
 
     def get_name(self) -> str:

@@ -10,7 +10,7 @@ class FakeIntegerProblem(IntegerProblem):
     """
 
     def __init__(self):
-        super(FakeIntegerProblem, self).__init__()
+        super().__init__()
 
     def number_of_objectives(self) -> int:
         return 2
@@ -31,7 +31,7 @@ class FakeFloatProblem(FloatProblem):
     """
 
     def __init__(self):
-        super(FakeFloatProblem, self).__init__()
+        super().__init__()
 
     def number_of_objectives(self) -> int:
         return 2

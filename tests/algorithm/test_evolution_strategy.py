@@ -4,8 +4,6 @@ Covers unit tests for each public method and a lightweight integration test
 that runs the algorithm on the Sphere problem.
 """
 
-from copy import copy
-from unittest.mock import MagicMock
 
 import pytest
 
@@ -15,10 +13,10 @@ from jmetal.operator.mutation import PolynomialMutation
 from jmetal.problem import Sphere
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture
 def sphere_problem() -> Sphere:
@@ -84,15 +82,14 @@ def _make_solution(
 # Unit tests – construction
 # ---------------------------------------------------------------------------
 
+
 class TestEvolutionStrategyConstruction:
     """Tests for correct initialisation of the algorithm."""
 
     def test_given_valid_params_when_created_then_stores_mu_and_lambda(
         self, sphere_problem, mutation, termination
     ) -> None:
-        algorithm = _build_algorithm(
-            sphere_problem, mutation, termination, mu=10, lambda_=20
-        )
+        algorithm = _build_algorithm(sphere_problem, mutation, termination, mu=10, lambda_=20)
 
         assert algorithm.mu == 10
         assert algorithm.lambda_ == 20
@@ -100,18 +97,14 @@ class TestEvolutionStrategyConstruction:
     def test_given_elitist_true_when_created_then_flag_is_true(
         self, sphere_problem, mutation, termination
     ) -> None:
-        algorithm = _build_algorithm(
-            sphere_problem, mutation, termination, elitist=True
-        )
+        algorithm = _build_algorithm(sphere_problem, mutation, termination, elitist=True)
 
         assert algorithm.elitist is True
 
     def test_given_elitist_false_when_created_then_flag_is_false(
         self, sphere_problem, mutation, termination
     ) -> None:
-        algorithm = _build_algorithm(
-            sphere_problem, mutation, termination, elitist=False
-        )
+        algorithm = _build_algorithm(sphere_problem, mutation, termination, elitist=False)
 
         assert algorithm.elitist is False
 
@@ -120,24 +113,21 @@ class TestEvolutionStrategyConstruction:
 # Unit tests – get_name
 # ---------------------------------------------------------------------------
 
+
 class TestGetName:
     """Tests for the get_name method returning the correct variant label."""
 
     def test_given_elitist_when_get_name_then_returns_mu_plus_lambda(
         self, sphere_problem, mutation, termination
     ) -> None:
-        algorithm = _build_algorithm(
-            sphere_problem, mutation, termination, elitist=True
-        )
+        algorithm = _build_algorithm(sphere_problem, mutation, termination, elitist=True)
 
         assert algorithm.get_name() == "(mu + lambda) Evolution Strategy"
 
     def test_given_non_elitist_when_get_name_then_returns_mu_comma_lambda(
         self, sphere_problem, mutation, termination
     ) -> None:
-        algorithm = _build_algorithm(
-            sphere_problem, mutation, termination, elitist=False
-        )
+        algorithm = _build_algorithm(sphere_problem, mutation, termination, elitist=False)
 
         assert algorithm.get_name() == "(mu, lambda) Evolution Strategy"
 
@@ -145,6 +135,7 @@ class TestGetName:
 # ---------------------------------------------------------------------------
 # Unit tests – selection
 # ---------------------------------------------------------------------------
+
 
 class TestSelection:
     """Tests for the selection operator (identity in ES)."""
@@ -164,6 +155,7 @@ class TestSelection:
 # Unit tests – reproduction
 # ---------------------------------------------------------------------------
 
+
 class TestReproduction:
     """Tests for offspring generation via mutation."""
 
@@ -171,9 +163,7 @@ class TestReproduction:
         self, sphere_problem, mutation, termination
     ) -> None:
         mu, lambda_ = 5, 10
-        algorithm = _build_algorithm(
-            sphere_problem, mutation, termination, mu=mu, lambda_=lambda_
-        )
+        algorithm = _build_algorithm(sphere_problem, mutation, termination, mu=mu, lambda_=lambda_)
         population = [sphere_problem.create_solution() for _ in range(mu)]
         for s in population:
             sphere_problem.evaluate(s)
@@ -186,9 +176,7 @@ class TestReproduction:
         self, sphere_problem, mutation, termination
     ) -> None:
         mu = lambda_ = 4
-        algorithm = _build_algorithm(
-            sphere_problem, mutation, termination, mu=mu, lambda_=lambda_
-        )
+        algorithm = _build_algorithm(sphere_problem, mutation, termination, mu=mu, lambda_=lambda_)
         population = [sphere_problem.create_solution() for _ in range(mu)]
         for s in population:
             sphere_problem.evaluate(s)
@@ -201,6 +189,7 @@ class TestReproduction:
 # ---------------------------------------------------------------------------
 # Unit tests – replacement
 # ---------------------------------------------------------------------------
+
 
 class TestReplacement:
     """Tests for the replacement step, including elitist vs non-elitist behaviour."""
@@ -256,6 +245,7 @@ class TestReplacement:
 # Unit tests – constraint handling in replacement
 # ---------------------------------------------------------------------------
 
+
 class TestConstraintHandling:
     """Tests verifying that feasible solutions are preferred over infeasible ones."""
 
@@ -286,9 +276,7 @@ class TestConstraintHandling:
         slightly_violated = _make_solution(objective=50.0, constraint_violation=-1.0)
         heavily_violated = _make_solution(objective=10.0, constraint_violation=-10.0)
 
-        result = algorithm.replacement(
-            [slightly_violated], [heavily_violated]
-        )
+        result = algorithm.replacement([slightly_violated], [heavily_violated])
 
         # Slightly violated (violation degree -1.0) should rank before heavily violated (-10.0)
         assert result[0].constraints[0] == -1.0
@@ -326,6 +314,7 @@ class TestConstraintHandling:
 # ---------------------------------------------------------------------------
 # Integration test – run on Sphere
 # ---------------------------------------------------------------------------
+
 
 class TestEvolutionStrategyIntegration:
     """Lightweight integration tests that run the full algorithm loop."""

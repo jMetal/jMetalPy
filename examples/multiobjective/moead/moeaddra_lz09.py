@@ -21,7 +21,9 @@ if __name__ == "__main__":
         problem=problem,
         population_size=600,
         crossover=DifferentialEvolutionCrossover(CR=1.0, F=0.5),
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
+        mutation=PolynomialMutation(
+            probability=1.0 / problem.number_of_variables(), distribution_index=20
+        ),
         aggregation_function=Tschebycheff(dimension=problem.number_of_objectives()),
         neighbor_size=20,
         neighbourhood_selection_probability=0.9,
@@ -34,7 +36,9 @@ if __name__ == "__main__":
     front = algorithm.result()
 
     hypervolume = HyperVolume([2.0, 2.0])
-    print("Hypervolume: " + str(hypervolume.compute([front[i].objectives for i in range(len(front))])))
+    print(
+        "Hypervolume: " + str(hypervolume.compute([front[i].objectives for i in range(len(front))]))
+    )
 
     # Save results to file
     print_function_values_to_file(front, "FUN." + algorithm.label)

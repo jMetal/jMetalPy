@@ -1,4 +1,3 @@
-import random
 
 from jmetal.core.problem import PermutationProblem
 from jmetal.core.solution import PermutationSolution
@@ -23,7 +22,7 @@ class TSP(PermutationProblem):
     """
 
     def __init__(self, instance: str = None):
-        super(TSP, self).__init__()
+        super().__init__()
 
         if instance is None:
             raise FileNotFoundError("Filename can not be None")

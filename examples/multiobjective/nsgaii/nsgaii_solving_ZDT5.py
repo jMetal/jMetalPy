@@ -5,8 +5,8 @@ from jmetal.problem import ZDT5
 from jmetal.util.solution import print_function_values_to_file, print_variables_to_file
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
-"""  
-Program to  configure and run the NSGA-II algorithm configured to solve a binary problem, OneZeroMax, which is 
+"""
+Program to  configure and run the NSGA-II algorithm configured to solve a binary problem, OneZeroMax, which is
 multiobjective version of the ONE_MAX problem where the numbers of 1s and 0s have to be maximized at the same time.
 """
 

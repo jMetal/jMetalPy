@@ -1,8 +1,7 @@
 import math
-import re
 import os
+import re
 from pathlib import Path
-from typing import List, Tuple
 
 from jmetal.core.problem import PermutationProblem
 from jmetal.core.solution import PermutationSolution
@@ -25,13 +24,13 @@ class MultiObjectiveTSP(PermutationProblem):
       at `EOF`/`TOUR_SECTION` markers.
     """
 
-    def __init__(self, distance_files: List[str]):
-        super(MultiObjectiveTSP, self).__init__()
+    def __init__(self, distance_files: list[str]):
+        super().__init__()
 
         if not distance_files:
             raise ValueError("distance_files must be a non-empty list of file paths")
 
-        self.distance_matrices: List[List[List[float]]] = []
+        self.distance_matrices: list[list[list[float]]] = []
         self.number_of_cities = None
 
         for f in distance_files:
@@ -54,7 +53,7 @@ class MultiObjectiveTSP(PermutationProblem):
     def number_of_constraints(self) -> int:
         return 0
 
-    def _read_problem(self, filename: str) -> Tuple[List[List[float]], int]:
+    def _read_problem(self, filename: str) -> tuple[list[list[float]], int]:
         """Read a single TSPLIB-like file and return (matrix, dimension).
 
         The reader expects a line containing "DIMENSION" and a section with
@@ -89,7 +88,9 @@ class MultiObjectiveTSP(PermutationProblem):
         # Locate the start of coordinates. Prefer explicit NODE_COORD_SECTION
         start_idx = None
         for i, ln in enumerate(lines):
-            if ln.upper().startswith("NODE_COORD_SECTION") or ln.upper().startswith("NODE_COORDS_SECTION"):
+            if ln.upper().startswith("NODE_COORD_SECTION") or ln.upper().startswith(
+                "NODE_COORDS_SECTION"
+            ):
                 start_idx = i + 1
                 break
 
@@ -155,11 +156,13 @@ class MultiObjectiveTSP(PermutationProblem):
             return str(candidate)
 
         # try with .tsp extension
-        candidate2 = candidate.with_suffix('.tsp')
+        candidate2 = candidate.with_suffix(".tsp")
         if candidate2.exists():
             return str(candidate2)
 
-        raise FileNotFoundError(f"File {filename} not found and not present in resources/TSP_instances")
+        raise FileNotFoundError(
+            f"File {filename} not found and not present in resources/TSP_instances"
+        )
 
     def evaluate(self, solution: PermutationSolution) -> PermutationSolution:
         fitness = [0.0] * self.number_of_objectives()
@@ -189,7 +192,9 @@ class MultiObjectiveTSP(PermutationProblem):
         # random permutation
         import random
 
-        new_solution.variables = random.sample(range(self.number_of_variables()), k=self.number_of_variables())
+        new_solution.variables = random.sample(
+            range(self.number_of_variables()), k=self.number_of_variables()
+        )
 
         return new_solution
 

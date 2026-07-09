@@ -56,7 +56,10 @@ if __name__ == "__main__":
 
     print("-------- Bayesian Sign Test --------")
     bst, DProcess = bayesian_sign_test(
-        avg[["NSGAII", "SMPSO"]], rope_limits=[-0.002, 0.002], prior_strength=0.5, return_sample=True
+        avg[["NSGAII", "SMPSO"]],
+        rope_limits=[-0.002, 0.002],
+        prior_strength=0.5,
+        return_sample=True,
     )
     plot_posterior(DProcess, higher_is_better=True, alg_names=["NSGAII", "SMPSO"])
 
@@ -66,7 +69,10 @@ if __name__ == "__main__":
 
     print("-------- Bayesian Signed Rank Test --------")
     bst, DProcess = bayesian_signed_rank_test(
-        avg[["NSGAII", "SMPSO"]], rope_limits=[-0.002, 0.002], prior_strength=0.5, return_sample=True
+        avg[["NSGAII", "SMPSO"]],
+        rope_limits=[-0.002, 0.002],
+        prior_strength=0.5,
+        return_sample=True,
     )
     plot_posterior(DProcess, higher_is_better=True, alg_names=["NSGAII", "SMPSO"])
 

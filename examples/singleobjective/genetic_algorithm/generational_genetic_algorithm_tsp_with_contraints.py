@@ -4,14 +4,19 @@ from jmetal.operator.crossover import PMXCrossover
 from jmetal.operator.mutation import PermutationSwapMutation
 from jmetal.operator.selection import BinaryTournamentSelection
 from jmetal.problem.singleobjective.tsp import TSP
-from jmetal.util.comparator import MultiComparator, OverallConstraintViolationComparator, ObjectiveComparator
+from jmetal.util.comparator import (
+    MultiComparator,
+    ObjectiveComparator,
+    OverallConstraintViolationComparator,
+)
 from jmetal.util.observer import PrintObjectivesObserver
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":
+
     class TSPWithConstraints(TSP):
         def __init__(self, instance: str):
-            super(TSPWithConstraints, self).__init__(instance)
+            super().__init__(instance)
 
         def number_of_constraints(self) -> int:
             return 1
@@ -23,8 +28,7 @@ if __name__ == "__main__":
             return solution
 
         def __evaluate_constraints__(self, solution: PermutationSolution):
-            """ Constraint: city 17 must be in the first position of the tour
-            """
+            """Constraint: city 17 must be in the first position of the tour"""
             city = 17
             position = solution.variables.index(city)
 
@@ -34,10 +38,11 @@ if __name__ == "__main__":
 
             return solution
 
-
     problem = TSPWithConstraints(instance="resources/TSP_instances/kroA100.tsp")
 
-    solution_comparator = MultiComparator([OverallConstraintViolationComparator(), ObjectiveComparator(0)])
+    solution_comparator = MultiComparator(
+        [OverallConstraintViolationComparator(), ObjectiveComparator(0)]
+    )
     algorithm = GeneticAlgorithm(
         problem=problem,
         population_size=100,
@@ -46,7 +51,7 @@ if __name__ == "__main__":
         crossover=PMXCrossover(0.9),
         selection=BinaryTournamentSelection(solution_comparator),
         termination_criterion=StoppingByEvaluations(max_evaluations=50000),
-        solution_comparator=solution_comparator
+        solution_comparator=solution_comparator,
     )
 
     algorithm.observable.register(observer=PrintObjectivesObserver(1000))
@@ -54,8 +59,8 @@ if __name__ == "__main__":
     algorithm.run()
     result = algorithm.result()
 
-    print("Algorithm: {}".format(algorithm.get_name()))
-    print("Problem: {}".format(problem.name()))
-    print("Solution: {}".format(result.variables))
-    print("Fitness: {}".format(result.objectives[0]))
-    print("Computing time: {}".format(algorithm.total_computing_time))
+    print(f"Algorithm: {algorithm.get_name()}")
+    print(f"Problem: {problem.name()}")
+    print(f"Solution: {result.variables}")
+    print(f"Fitness: {result.objectives[0]}")
+    print(f"Computing time: {algorithm.total_computing_time}")

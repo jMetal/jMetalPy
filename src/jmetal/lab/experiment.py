@@ -3,12 +3,11 @@ import os
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 from statistics import median
-from typing import List
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from scipy.stats import mannwhitneyu, iqr, ks_2samp
+from scipy.stats import iqr, ks_2samp, mannwhitneyu
 
 from jmetal.core.algorithm import Algorithm
 from jmetal.core.quality_indicator import QualityIndicator
@@ -41,13 +40,13 @@ class Job:
         self.algorithm.run()
 
         if output_path:
-            file_name = os.path.join(output_path, "FUN.{}.tsv".format(self.run_tag))
+            file_name = os.path.join(output_path, f"FUN.{self.run_tag}.tsv")
             print_function_values_to_file(self.algorithm.result(), filename=file_name)
 
-            file_name = os.path.join(output_path, "VAR.{}.tsv".format(self.run_tag))
+            file_name = os.path.join(output_path, f"VAR.{self.run_tag}.tsv")
             print_variables_to_file(self.algorithm.result(), filename=file_name)
 
-            file_name = os.path.join(output_path, "TIME.{}".format(self.run_tag))
+            file_name = os.path.join(output_path, f"TIME.{self.run_tag}")
             with open(file_name, "w+") as of:
                 of.write(str(self.algorithm.total_computing_time))
 
@@ -56,7 +55,7 @@ class Job:
 
 
 class Experiment:
-    def __init__(self, output_dir: str, jobs: List[Job], m_workers: int = 6):
+    def __init__(self, output_dir: str, jobs: list[Job], m_workers: int = 6):
         """Run an experiment to execute a list of jobs.
 
         :param output_dir: Base directory where each job will save its results.
@@ -77,7 +76,7 @@ class Experiment:
 
 
 def generate_summary_from_experiment(
-        input_dir: str, quality_indicators: List[QualityIndicator], reference_fronts: str = ""
+    input_dir: str, quality_indicators: list[QualityIndicator], reference_fronts: str = ""
 ):
     """Compute a list of quality indicators. The input data directory *must* met the following structure (this is generated
     automatically by the Experiment class):
@@ -118,7 +117,7 @@ def generate_summary_from_experiment(
             if "TIME" in filename:
                 run_tag = [s for s in filename.split(".") if s.isdigit()].pop()
 
-                with open(os.path.join(dirname, filename), "r") as content_file:
+                with open(os.path.join(dirname, filename)) as content_file:
                     content = content_file.read()
 
                 with open("QualityIndicatorSummary.csv", "a+") as of:
@@ -143,11 +142,23 @@ def generate_summary_from_experiment(
                         else:
                             logger.warning("Reference front not found at", reference_front_file)
 
-                    result = indicator.compute([solutions[i].objectives for i in range(len(solutions))])
+                    result = indicator.compute(
+                        [solutions[i].objectives for i in range(len(solutions))]
+                    )
 
                     # Save quality indicator value to file
                     with open("QualityIndicatorSummary.csv", "a+") as of:
-                        of.write(",".join([algorithm, problem, run_tag, indicator.get_short_name(), str(result)]))
+                        of.write(
+                            ",".join(
+                                [
+                                    algorithm,
+                                    problem,
+                                    run_tag,
+                                    indicator.get_short_name(),
+                                    str(result),
+                                ]
+                            )
+                        )
                         of.write("\n")
 
 
@@ -163,11 +174,11 @@ def generate_boxplot(filename: str, output_dir: str = "boxplot"):
         raise Exception("Wrong number of columns")
 
     if Path(output_dir).is_dir():
-        logger.warning("Directory {} exists. Removing contents.".format(output_dir))
+        logger.warning(f"Directory {output_dir} exists. Removing contents.")
         for file in os.listdir(output_dir):
-            os.remove("{0}/{1}".format(output_dir, file))
+            os.remove(f"{output_dir}/{file}")
     else:
-        logger.warning("Directory {} does not exist. Creating it.".format(output_dir))
+        logger.warning(f"Directory {output_dir} does not exist. Creating it.")
         Path(output_dir).mkdir(parents=True)
 
     algorithms = pd.unique(df["Algorithm"])
@@ -184,7 +195,9 @@ def generate_boxplot(filename: str, output_dir: str = "boxplot"):
 
             for alg in algorithms:
                 data_to_plot.append(
-                    data["IndicatorValue"][np.logical_and(data["Algorithm"] == alg, data["Problem"] == pr)]
+                    data["IndicatorValue"][
+                        np.logical_and(data["Algorithm"] == alg, data["Problem"] == pr)
+                    ]
                 )
 
             # Create a figure instance
@@ -197,8 +210,14 @@ def generate_boxplot(filename: str, output_dir: str = "boxplot"):
             ax.set_xticklabels(algorithms)
             ax.tick_params(labelsize=20)
 
-            plt.savefig(os.path.join(output_dir, "boxplot-{}-{}.png".format(pr, indicator_name)), bbox_inches="tight")
-            plt.savefig(os.path.join(output_dir, "boxplot-{}-{}.eps".format(pr, indicator_name)), bbox_inches="tight")
+            plt.savefig(
+                os.path.join(output_dir, f"boxplot-{pr}-{indicator_name}.png"),
+                bbox_inches="tight",
+            )
+            plt.savefig(
+                os.path.join(output_dir, f"boxplot-{pr}-{indicator_name}.eps"),
+                bbox_inches="tight",
+            )
             plt.close(fig)
 
 
@@ -214,11 +233,11 @@ def generate_latex_tables(filename: str, output_dir: str = "latex/statistical"):
         raise Exception("Wrong number of columns")
 
     if Path(output_dir).is_dir():
-        logger.warning("Directory {} exists. Removing contents.".format(output_dir))
+        logger.warning(f"Directory {output_dir} exists. Removing contents.")
         for file in os.listdir(output_dir):
-            os.remove("{0}/{1}".format(output_dir, file))
+            os.remove(f"{output_dir}/{file}")
     else:
-        logger.warning("Directory {} does not exist. Creating it.".format(output_dir))
+        logger.warning(f"Directory {output_dir} does not exist. Creating it.")
         Path(output_dir).mkdir(parents=True)
 
     # Generate median & iqr tables
@@ -234,7 +253,9 @@ def generate_latex_tables(filename: str, output_dir: str = "latex/statistical"):
         median_ = subset.groupby(level=[0, 1]).median()
         median = pd.concat([median, median_], axis=1)
 
-        iqr_ = subset.groupby(level=[0, 1]).quantile(0.75) - subset.groupby(level=[0, 1]).quantile(0.25)
+        iqr_ = subset.groupby(level=[0, 1]).quantile(0.75) - subset.groupby(level=[0, 1]).quantile(
+            0.25
+        )
         iqr = pd.concat([iqr, iqr_], axis=1)
 
         # Compute Mean and Standard deviation
@@ -248,19 +269,35 @@ def generate_latex_tables(filename: str, output_dir: str = "latex/statistical"):
     for indicator_name, subset in std.groupby("IndicatorName", sort=False):
         subset = median.groupby("IndicatorName", sort=False).get_group(indicator_name)
         subset.index = subset.index.droplevel(1)
-        subset.to_csv(os.path.join(output_dir, "Median-{}.csv".format(indicator_name)), sep="\t", encoding="utf-8")
+        subset.to_csv(
+            os.path.join(output_dir, f"Median-{indicator_name}.csv"),
+            sep="\t",
+            encoding="utf-8",
+        )
 
         subset = iqr.groupby("IndicatorName", sort=False).get_group(indicator_name)
         subset.index = subset.index.droplevel(1)
-        subset.to_csv(os.path.join(output_dir, "IQR-{}.csv".format(indicator_name)), sep="\t", encoding="utf-8")
+        subset.to_csv(
+            os.path.join(output_dir, f"IQR-{indicator_name}.csv"),
+            sep="\t",
+            encoding="utf-8",
+        )
 
         subset = mean.groupby("IndicatorName", sort=False).get_group(indicator_name)
         subset.index = subset.index.droplevel(1)
-        subset.to_csv(os.path.join(output_dir, "Mean-{}.csv".format(indicator_name)), sep="\t", encoding="utf-8")
+        subset.to_csv(
+            os.path.join(output_dir, f"Mean-{indicator_name}.csv"),
+            sep="\t",
+            encoding="utf-8",
+        )
 
         subset = std.groupby("IndicatorName", sort=False).get_group(indicator_name)
         subset.index = subset.index.droplevel(1)
-        subset.to_csv(os.path.join(output_dir, "Std-{}.csv".format(indicator_name)), sep="\t", encoding="utf-8")
+        subset.to_csv(
+            os.path.join(output_dir, f"Std-{indicator_name}.csv"),
+            sep="\t",
+            encoding="utf-8",
+        )
 
     # Generate LaTeX tables
     for indicator_name in df.groupby("IndicatorName", sort=False).groups.keys():
@@ -271,14 +308,16 @@ def generate_latex_tables(filename: str, output_dir: str = "latex/statistical"):
         i = iqr.groupby("IndicatorName", sort=False).get_group(indicator_name)
         i.index = i.index.droplevel(1)
 
-        with open(os.path.join(output_dir, "MedianIQR-{}.tex".format(indicator_name)), "w") as latex:
+        with open(
+            os.path.join(output_dir, f"MedianIQR-{indicator_name}.tex"), "w"
+        ) as latex:
             latex.write(
                 __averages_to_latex(
                     md,
                     i,
-                    caption="Median and Interquartile Range of the {} quality indicator.".format(indicator_name),
+                    caption=f"Median and Interquartile Range of the {indicator_name} quality indicator.",
                     minimization=check_minimization(indicator_name),
-                    label="table:{}".format(indicator_name),
+                    label=f"table:{indicator_name}",
                 )
             )
 
@@ -289,14 +328,14 @@ def generate_latex_tables(filename: str, output_dir: str = "latex/statistical"):
         s = std.groupby("IndicatorName", sort=False).get_group(indicator_name)
         s.index = s.index.droplevel(1)
 
-        with open(os.path.join(output_dir, "MeanStd-{}.tex".format(indicator_name)), "w") as latex:
+        with open(os.path.join(output_dir, f"MeanStd-{indicator_name}.tex"), "w") as latex:
             latex.write(
                 __averages_to_latex(
                     mn,
                     s,
-                    caption="Mean and Standard Deviation of the {} quality indicator.".format(indicator_name),
+                    caption=f"Mean and Standard Deviation of the {indicator_name} quality indicator.",
                     minimization=check_minimization(indicator_name),
-                    label="table:{}".format(indicator_name),
+                    label=f"table:{indicator_name}",
                 )
             )
 
@@ -312,11 +351,11 @@ def compute_wilcoxon(filename: str, output_dir: str = "latex/wilcoxon"):
         raise Exception("Wrong number of columns")
 
     if Path(output_dir).is_dir():
-        logger.warning("Directory {} exists. Removing contents.".format(output_dir))
+        logger.warning(f"Directory {output_dir} exists. Removing contents.")
         for file in os.listdir(output_dir):
-            os.remove("{0}/{1}".format(output_dir, file))
+            os.remove(f"{output_dir}/{file}")
     else:
-        logger.warning("Directory {} does not exist. Creating it.".format(output_dir))
+        logger.warning(f"Directory {output_dir} does not exist. Creating it.")
         Path(output_dir).mkdir(parents=True)
 
     algorithms = pd.unique(df["Algorithm"])
@@ -337,12 +376,12 @@ def compute_wilcoxon(filename: str, output_dir: str = "latex/wilcoxon"):
                             (df["Algorithm"] == row_algorithm)
                             & (df["Problem"] == problem)
                             & (df["IndicatorName"] == indicator_name)
-                            ]
+                        ]
                         df2 = df[
                             (df["Algorithm"] == col_algorithm)
                             & (df["Problem"] == problem)
                             & (df["IndicatorName"] == indicator_name)
-                            ]
+                        ]
 
                         data1 = df1["IndicatorValue"]
                         data2 = df2["IndicatorValue"]
@@ -371,16 +410,20 @@ def compute_wilcoxon(filename: str, output_dir: str = "latex/wilcoxon"):
                 wilcoxon = [""] * (len(algorithms) - len(wilcoxon) - 1) + wilcoxon
             table.loc[row_algorithm] = wilcoxon
 
-        table.to_csv(os.path.join(output_dir, "Wilcoxon-{}.csv".format(indicator_name)), sep="\t", encoding="utf-8")
+        table.to_csv(
+            os.path.join(output_dir, f"Wilcoxon-{indicator_name}.csv"),
+            sep="\t",
+            encoding="utf-8",
+        )
 
-        with open(os.path.join(output_dir, "Wilcoxon-{}.tex".format(indicator_name)), "w") as latex:
+        with open(os.path.join(output_dir, f"Wilcoxon-{indicator_name}.tex"), "w") as latex:
             latex.write(
                 __wilcoxon_to_latex(
                     table,
                     caption="Wilcoxon values of the {} quality indicator ({}).".format(
                         indicator_name, ", ".join(problems)
                     ),
-                    label="table:{}".format(indicator_name),
+                    label=f"table:{indicator_name}",
                 )
             )
 
@@ -420,7 +463,9 @@ def compute_mean_indicator(filename: str, indicator_name: str):
     return df
 
 
-def generate_median_and_wilcoxon_latex_tables(filename: str, output_dir: str = "latex/meansAndWilcoxon"):
+def generate_median_and_wilcoxon_latex_tables(
+    filename: str, output_dir: str = "latex/meansAndWilcoxon"
+):
     """Generate Latex tables including medians and IQRs. Additionally, the last algorithm is considered as the reference
         algorithm, and the cells include a symbol indicating whether the differences with the reference algorithm
         are significant or not according to the Wilcoxon rank sum test.
@@ -434,11 +479,11 @@ def generate_median_and_wilcoxon_latex_tables(filename: str, output_dir: str = "
         raise Exception("Wrong number of columns")
 
     if Path(output_dir).is_dir():
-        logger.warning("Directory {} exists. Removing contents.".format(output_dir))
+        logger.warning(f"Directory {output_dir} exists. Removing contents.")
         for file in os.listdir(output_dir):
-            os.remove("{0}/{1}".format(output_dir, file))
+            os.remove(f"{output_dir}/{file}")
     else:
-        logger.warning("Directory {} does not exist. Creating it.".format(output_dir))
+        logger.warning(f"Directory {output_dir} does not exist. Creating it.")
         Path(output_dir).mkdir(parents=True)
 
     algorithms = pd.unique(data["Algorithm"])
@@ -449,63 +494,90 @@ def generate_median_and_wilcoxon_latex_tables(filename: str, output_dir: str = "
 
     # Compute medians and IQRs
     medians = data.groupby(["Algorithm", "Problem", "IndicatorName"])["IndicatorValue"].median()
-    iqrs = data.groupby(["Algorithm", "Problem", "IndicatorName"])["IndicatorValue"].apply(lambda x: iqr(x))
+    iqrs = data.groupby(["Algorithm", "Problem", "IndicatorName"])["IndicatorValue"].apply(
+        lambda x: iqr(x)
+    )
 
     # Create data frame to store the Wilcoxon test results
-    wilcoxon_data = pd.DataFrame(columns=["Indicator", "Algorithm", "Problem", "PValue", "Median", "TestResult"])
+    wilcoxon_data = pd.DataFrame(
+        columns=["Indicator", "Algorithm", "Problem", "PValue", "Median", "TestResult"]
+    )
 
     for indicator in indicators:
         for algorithm in algorithms:
             for problem in problems:
-                algorithm_data = data[(data["Problem"] == problem) & (data["Algorithm"] == algorithm) & (
-                        data["IndicatorName"] == indicator)]
-                ref_data = data[(data["Problem"] == problem) & (data["Algorithm"] == control_algorithm) & (
-                        data["IndicatorName"] == indicator)]
-                stat, p_value = mannwhitneyu(algorithm_data["IndicatorValue"], ref_data["IndicatorValue"])
+                algorithm_data = data[
+                    (data["Problem"] == problem)
+                    & (data["Algorithm"] == algorithm)
+                    & (data["IndicatorName"] == indicator)
+                ]
+                ref_data = data[
+                    (data["Problem"] == problem)
+                    & (data["Algorithm"] == control_algorithm)
+                    & (data["IndicatorName"] == indicator)
+                ]
+                stat, p_value = mannwhitneyu(
+                    algorithm_data["IndicatorValue"], ref_data["IndicatorValue"]
+                )
 
                 test_result = ""
                 if p_value <= 0.05:
                     if check_minimization(indicator):
-                        if medians[algorithm][problem][indicator] <= medians[control_algorithm][problem][indicator]:
-                            test_result = '+'
+                        if (
+                            medians[algorithm][problem][indicator]
+                            <= medians[control_algorithm][problem][indicator]
+                        ):
+                            test_result = "+"
                         else:
-                            test_result = '-'
+                            test_result = "-"
                     else:
-                        if medians[algorithm][problem][indicator] >= medians[control_algorithm][problem][indicator]:
-                            test_result = '+'
+                        if (
+                            medians[algorithm][problem][indicator]
+                            >= medians[control_algorithm][problem][indicator]
+                        ):
+                            test_result = "+"
                         else:
-                            test_result = '-'
+                            test_result = "-"
                 else:
-                    test_result = '='
+                    test_result = "="
 
-                new_row = {'Indicator': indicator, 'Algorithm': algorithm, "Problem": problem,
-                           "PValue": p_value,
-                           "Median": medians[algorithm][problem][indicator],
-                           "IQR": iqrs[algorithm][problem][indicator],
-                           "TestResult": test_result
-                           }
+                new_row = {
+                    "Indicator": indicator,
+                    "Algorithm": algorithm,
+                    "Problem": problem,
+                    "PValue": p_value,
+                    "Median": medians[algorithm][problem][indicator],
+                    "IQR": iqrs[algorithm][problem][indicator],
+                    "TestResult": test_result,
+                }
                 wilcoxon_data = wilcoxon_data._append(new_row, ignore_index=True)
 
     # Generate LaTeX tables
-    caption = "Median and interquartile range (IQR) of the results of the {} quality indicator. " + \
-              "Cells with dark and light gray background highlights, respectively, the best and second best indicator values. " + \
-              "The algorithm in the last column is the reference " + \
-              "algorithm, and the symbols $+$, $-$ and $\\approx$ indicate that the differences with the reference " + \
-              "algorithm are significantly better, worse, or there is no difference according to the Wilcoxon rank " + \
-              "sum test (confidence level: 95\%)."
+    caption = (
+        "Median and interquartile range (IQR) of the results of the {} quality indicator. "
+        + "Cells with dark and light gray background highlights, respectively, the best and second best indicator values. "
+        + "The algorithm in the last column is the reference "
+        + "algorithm, and the symbols $+$, $-$ and $\\approx$ indicate that the differences with the reference "
+        + "algorithm are significantly better, worse, or there is no difference according to the Wilcoxon rank "
+        + r"sum test (confidence level: 95\%)."
+    )
     for indicator_name in indicators:
-        with open(os.path.join(output_dir, "MedianIQRWilcoxon-{}.tex".format(indicator_name)), "w") as latex:
+        with open(
+            os.path.join(output_dir, f"MedianIQRWilcoxon-{indicator_name}.tex"), "w"
+        ) as latex:
             latex.write(
                 __median_wilcoxon_to_latex(
                     indicator_name,
                     wilcoxon_data,
                     caption=caption.format(indicator_name),
-                    label="table:{}".format(indicator_name),
+                    label=f"table:{indicator_name}",
                 )
             )
 
 
-def generate_kolmogorov_smirnov_latex_tables(filename: str, output_dir: str = "latex/KolmogorovSmirnov"):
+def generate_kolmogorov_smirnov_latex_tables(
+    filename: str, output_dir: str = "latex/KolmogorovSmirnov"
+):
     """Generate Latex tables with the results of the Kolmogorov-Smirnov test. The last algorithm is considered as
         the reference algorithm, and the cells include a symbol with the p-value < 0.05.
 
@@ -518,11 +590,11 @@ def generate_kolmogorov_smirnov_latex_tables(filename: str, output_dir: str = "l
         raise Exception("Wrong number of columns")
 
     if Path(output_dir).is_dir():
-        logger.warning("Directory {} exists. Removing contents.".format(output_dir))
+        logger.warning(f"Directory {output_dir} exists. Removing contents.")
         for file in os.listdir(output_dir):
-            os.remove("{0}/{1}".format(output_dir, file))
+            os.remove(f"{output_dir}/{file}")
     else:
-        logger.warning("Directory {} does not exist. Creating it.".format(output_dir))
+        logger.warning(f"Directory {output_dir} does not exist. Creating it.")
         Path(output_dir).mkdir(parents=True)
 
     algorithms = pd.unique(data["Algorithm"])
@@ -537,45 +609,60 @@ def generate_kolmogorov_smirnov_latex_tables(filename: str, output_dir: str = "l
     for indicator in indicators:
         for algorithm in algorithms:
             for problem in problems:
-                algorithm_data = data[(data["Problem"] == problem) & (data["Algorithm"] == algorithm) & (
-                        data["IndicatorName"] == indicator)]
-                ref_data = data[(data["Problem"] == problem) & (data["Algorithm"] == control_algorithm) & (
-                        data["IndicatorName"] == indicator)]
-                stat, p_value = ks_2samp(algorithm_data["IndicatorValue"], ref_data["IndicatorValue"])
+                algorithm_data = data[
+                    (data["Problem"] == problem)
+                    & (data["Algorithm"] == algorithm)
+                    & (data["IndicatorName"] == indicator)
+                ]
+                ref_data = data[
+                    (data["Problem"] == problem)
+                    & (data["Algorithm"] == control_algorithm)
+                    & (data["IndicatorName"] == indicator)
+                ]
+                stat, p_value = ks_2samp(
+                    algorithm_data["IndicatorValue"], ref_data["IndicatorValue"]
+                )
 
                 test_result = stat
 
-                new_row = {'Indicator': indicator, 'Algorithm': algorithm, "Problem": problem,
-                           "PValue": p_value,
-                           "TestResult": test_result
-                           }
+                new_row = {
+                    "Indicator": indicator,
+                    "Algorithm": algorithm,
+                    "Problem": problem,
+                    "PValue": p_value,
+                    "TestResult": test_result,
+                }
                 test_data = test_data._append(new_row, ignore_index=True)
 
     # Generate LaTeX tables
-    caption = "Kolmogorov-Smirnov Test of the {} quality indicator. " \
-              "The algorithm in the last column is the reference " + \
-              "algorithm and each cell contain the p-value obtained when applying the test with the reference " \
-              "algorithm. Cells with gray background highlight p-values less than 0.05 (i.e., the null hypothesis" \
-              " -- the two distributions are identical -- is rejected)."
+    caption = (
+        "Kolmogorov-Smirnov Test of the {} quality indicator. "
+        "The algorithm in the last column is the reference "
+        + "algorithm and each cell contain the p-value obtained when applying the test with the reference "
+        "algorithm. Cells with gray background highlight p-values less than 0.05 (i.e., the null hypothesis"
+        " -- the two distributions are identical -- is rejected)."
+    )
     for indicator_name in indicators:
-        with open(os.path.join(output_dir, "KolmogorovSmirnov-{}.tex".format(indicator_name)), "w") as latex:
+        with open(
+            os.path.join(output_dir, f"KolmogorovSmirnov-{indicator_name}.tex"), "w"
+        ) as latex:
             latex.write(
                 __kolmogorov_smirnov_to_latex(
                     indicator_name,
                     test_data,
                     caption=caption.format(indicator_name),
-                    label="table:{}".format(indicator_name),
+                    label=f"table:{indicator_name}",
                 )
             )
 
 
 def __averages_to_latex(
-        central_tendency: pd.DataFrame,
-        dispersion: pd.DataFrame,
-        caption: str,
-        label: str,
-        minimization=True,
-        alignment: str = "c",
+    central_tendency: pd.DataFrame,
+    dispersion: pd.DataFrame,
+    caption: str,
+    label: str,
+    minimization=True,
+    alignment: str = "c",
 ):
     """Convert a pandas DataFrame to a LaTeX tabular. Prints labels in bold and does use math mode.
 
@@ -586,8 +673,10 @@ def __averages_to_latex(
     num_columns, num_rows = central_tendency.shape[1], central_tendency.shape[0]
     output = io.StringIO()
 
-    col_format = "{}|{}".format(alignment, alignment * num_columns)
-    column_labels = ["\\textbf{{{0}}}".format(label.replace("_", "\\_")) for label in central_tendency.columns]
+    col_format = f"{alignment}|{alignment * num_columns}"
+    column_labels = [
+        "\\textbf{{{0}}}".format(label.replace("_", "\\_")) for label in central_tendency.columns
+    ]
 
     # Write header
     output.write("\\documentclass{article}\n")
@@ -609,8 +698,8 @@ def __averages_to_latex(
     output.write("\\section{Table}\n")
 
     output.write("\\begin{table}[!htp]\n")
-    output.write("  \\caption{{{}}}\n".format(caption))
-    output.write("  \\label{{{}}}\n".format(label))
+    output.write(f"  \\caption{{{caption}}}\n")
+    output.write(f"  \\label{{{label}}}\n")
     output.write("  \\centering\n")
     output.write("  \\begin{scriptsize}\n")
     output.write("  \\begin{tabular}{%s}\n" % col_format)
@@ -624,7 +713,8 @@ def __averages_to_latex(
         # Sort mean/median values (the lower the better if minimization)
         # Note that mean/median values could be the same: in that case, sort by Std/IQR (the lower the better)
         sorted_values = sorted(
-            zip(central_values, dispersion_values, [i for i in range(len(central_values))]), key=lambda v: (v[0], -v[1])
+            zip(central_values, dispersion_values, [i for i in range(len(central_values))]),
+            key=lambda v: (v[0], -v[1]),
         )
 
         if minimization:
@@ -634,7 +724,8 @@ def __averages_to_latex(
 
         # Compose cell
         values = [
-            "{:.2e}_{{{:.2e}}}".format(central_values[i], dispersion_values[i]) for i in range(len(central_values))
+            f"{central_values[i]:.2e}_{{{dispersion_values[i]:.2e}}}"
+            for i in range(len(central_values))
         ]
 
         # Highlight values
@@ -657,7 +748,9 @@ def __averages_to_latex(
     return output.getvalue()
 
 
-def __wilcoxon_to_latex(df: pd.DataFrame, caption: str, label: str, minimization=True, alignment: str = "c"):
+def __wilcoxon_to_latex(
+    df: pd.DataFrame, caption: str, label: str, minimization=True, alignment: str = "c"
+):
     """Convert a pandas DataFrame to a LaTeX tabular. Prints labels in bold and does use math mode.
 
     :param df: Pandas dataframe.
@@ -668,7 +761,7 @@ def __wilcoxon_to_latex(df: pd.DataFrame, caption: str, label: str, minimization
     num_columns, num_rows = df.shape[1], df.shape[0]
     output = io.StringIO()
 
-    col_format = "{}|{}".format(alignment, alignment * num_columns)
+    col_format = f"{alignment}|{alignment * num_columns}"
     column_labels = ["\\textbf{{{0}}}".format(label.replace("_", "\\_")) for label in df.columns]
 
     # Write header
@@ -688,24 +781,29 @@ def __wilcoxon_to_latex(df: pd.DataFrame, caption: str, label: str, minimization
     output.write("\\section{Table}\n")
 
     output.write("\\begin{table}[!htp]\n")
-    output.write("  \\caption{{{}}}\n".format(caption))
-    output.write("  \\label{{{}}}\n".format(label))
+    output.write(f"  \\caption{{{caption}}}\n")
+    output.write(f"  \\label{{{label}}}\n")
     output.write("  \\centering\n")
     output.write("  \\begin{scriptsize}\n")
     output.write("  \\begin{tabular}{%s}\n" % col_format)
     output.write("      & {} \\\\\\hline\n".format(" & ".join(column_labels)))
 
-    symbolo = "\\triangledown\ "
-    symbolplus = "\\blacktriangle\ "
+    symbolo = "\\triangledown\\ "
+    symbolplus = "\\blacktriangle\\ "
 
     if not minimization:
         symbolo, symbolplus = symbolplus, symbolo
 
     # Write data lines
     for i in range(num_rows):
-        values = [val.replace("-", "\\text{--}\ ").replace("o", symbolo).replace("+", symbolplus) for val in df.iloc[i]]
+        values = [
+            val.replace("-", "\\text{--}\\ ").replace("o", symbolo).replace("+", symbolplus)
+            for val in df.iloc[i]
+        ]
         output.write(
-            "      \\textbf{{{0}}} & ${1}$ \\\\\n".format(df.index[i], " $ & $ ".join([str(val) for val in values]))
+            "      \\textbf{{{0}}} & ${1}$ \\\\\n".format(
+                df.index[i], " $ & $ ".join([str(val) for val in values])
+            )
         )
 
     # Write footer
@@ -719,10 +817,8 @@ def __wilcoxon_to_latex(df: pd.DataFrame, caption: str, label: str, minimization
 
 
 def __median_wilcoxon_to_latex(
-        indicator_name: str,
-        wilcoxon_data: pd.DataFrame,
-        caption: str,
-        label):
+    indicator_name: str, wilcoxon_data: pd.DataFrame, caption: str, label
+):
     indicator_data = wilcoxon_data[wilcoxon_data["Indicator"] == indicator_name]
 
     problems = pd.unique(indicator_data["Problem"])
@@ -732,7 +828,7 @@ def __median_wilcoxon_to_latex(
     columns = algorithms
 
     alignment = "c"
-    col_format = "{}|{}".format(alignment, alignment * num_columns)
+    col_format = f"{alignment}|{alignment * num_columns}"
     column_labels = ["\\textbf{{{0}}}".format(label.replace("_", "\\_")) for label in columns]
 
     output = io.StringIO()
@@ -756,8 +852,8 @@ def __median_wilcoxon_to_latex(
     output.write("\\section{Table}\n")
 
     output.write("\\begin{table}[!htp]\n")
-    output.write("  \\caption{{{}}}\n".format(caption))
-    output.write("  \\label{{{}}}\n".format(label))
+    output.write(f"  \\caption{{{caption}}}\n")
+    output.write(f"  \\label{{{label}}}\n")
     output.write("  \\centering\n")
     output.write("  \\begin{tiny}\n")
     output.write("  \\begin{tabular}{%s}\n" % col_format)
@@ -772,19 +868,21 @@ def __median_wilcoxon_to_latex(
         values = []
 
         for algorithm in algorithms:
-            row = indicator_data[(indicator_data["Problem"] == problem) & (indicator_data["Algorithm"] == algorithm)]
+            row = indicator_data[
+                (indicator_data["Problem"] == problem) & (indicator_data["Algorithm"] == algorithm)
+            ]
             value = "{:.2e}({:.2e})".format(row["Median"].tolist()[0], row["IQR"].tolist()[0])
 
             # Include the symbol according to the Wilcoxon rank sum test with the reference algorithm
             if algorithm != algorithms[-1]:
                 if row["TestResult"].tolist()[0] == "-":
-                    value = "{{{}-}}".format(value)
+                    value = f"{{{value}-}}"
                     counters[algorithm][2] = counters[algorithm][2] + 1
                 elif row["TestResult"].tolist()[0] == "+":
-                    value = "{{{}+}}".format(value)
+                    value = f"{{{value}+}}"
                     counters[algorithm][0] = counters[algorithm][0] + 1
                 else:
-                    value = "{{{}\\approx}}".format(value)
+                    value = f"{{{value}\\approx}}"
                     counters[algorithm][1] = counters[algorithm][1] + 1
             values.append(value)
 
@@ -805,9 +903,17 @@ def __median_wilcoxon_to_latex(
         values[second_best] = "\\cellcolor{gray25} " + values[second_best]
 
         output.write(
-            "\\textbf{{{0}}} & ${1}$ \\\\\n".format(problem, " $ & $ ".join(
-                [str(val).replace("e-", "e\makebox[0.1cm]{-}").replace("e+", "e\makebox[0.1cm]{+}") for val in values])
-                                                    )
+            "\\textbf{{{0}}} & ${1}$ \\\\\n".format(
+                problem,
+                " $ & $ ".join(
+                    [
+                        str(val)
+                        .replace("e-", r"e\makebox[0.1cm]{-}")
+                        .replace("e+", r"e\makebox[0.1cm]{+}")
+                        for val in values
+                    ]
+                ),
+            )
         )
 
     # Select all but the last counter
@@ -817,8 +923,13 @@ def __median_wilcoxon_to_latex(
 
     output.write("  \\hline\n")
     output.write(
-        "\\textbf{{{0}}} & ${1}$ \\\\\n".format("$+/\\approx/-$", " $ & $ ".join(
-            [str(val[0]) + "/" + str(val[1]) + "/" + str(val[2]) for val in counter_summary])))
+        "\\textbf{{{0}}} & ${1}$ \\\\\n".format(
+            "$+/\\approx/-$",
+            " $ & $ ".join(
+                [str(val[0]) + "/" + str(val[1]) + "/" + str(val[2]) for val in counter_summary]
+            ),
+        )
+    )
 
     # Write footer
     output.write("  \\end{tabular}\n")
@@ -830,7 +941,9 @@ def __median_wilcoxon_to_latex(
     return output.getvalue()
 
 
-def __kolmogorov_smirnov_to_latex(indicator_name: str, test_data: pd.DataFrame, caption: str, label: str):
+def __kolmogorov_smirnov_to_latex(
+    indicator_name: str, test_data: pd.DataFrame, caption: str, label: str
+):
     indicator_data = test_data[test_data["Indicator"] == indicator_name]
 
     problems = pd.unique(indicator_data["Problem"])
@@ -839,8 +952,8 @@ def __kolmogorov_smirnov_to_latex(indicator_name: str, test_data: pd.DataFrame, 
     num_columns = len(algorithms)
     columns = algorithms
 
-    alignment = "c" 
-    col_format = "{}|{}".format(alignment, alignment * num_columns)
+    alignment = "c"
+    col_format = f"{alignment}|{alignment * num_columns}"
     column_labels = ["\\textbf{{{0}}}".format(label.replace("_", "\\_")) for label in columns]
 
     output = io.StringIO()
@@ -864,8 +977,8 @@ def __kolmogorov_smirnov_to_latex(indicator_name: str, test_data: pd.DataFrame, 
     output.write("\\section{Table}\n")
 
     output.write("\\begin{table}[!htp]\n")
-    output.write("  \\caption{{{}}}\n".format(caption))
-    output.write("  \\label{{{}}}\n".format(label))
+    output.write(f"  \\caption{{{caption}}}\n")
+    output.write(f"  \\label{{{label}}}\n")
     output.write("  \\centering\n")
     output.write("  \\begin{tiny}\n")
     output.write("  \\begin{tabular}{%s}\n" % col_format)
@@ -875,19 +988,29 @@ def __kolmogorov_smirnov_to_latex(indicator_name: str, test_data: pd.DataFrame, 
         values = []
 
         for algorithm in algorithms[:-1]:
-            row = indicator_data[(indicator_data["Problem"] == problem) & (indicator_data["Algorithm"] == algorithm)]
+            row = indicator_data[
+                (indicator_data["Problem"] == problem) & (indicator_data["Algorithm"] == algorithm)
+            ]
             value = "{:.2e}".format(row["PValue"].tolist()[0])
 
-            if (row["PValue"].tolist()[0] < 0.05):
+            if row["PValue"].tolist()[0] < 0.05:
                 value = "\\cellcolor{gray25} " + value
 
             values.append(value)
         values.append("-")
 
         output.write(
-            "\\textbf{{{0}}} & ${1}$ \\\\\n".format(problem, " $ & $ ".join(
-                [str(val).replace("e-", "e\makebox[0.1cm]{-}").replace("e+", "e\makebox[0.1cm]{+}") for val in values])
-                                                    )
+            "\\textbf{{{0}}} & ${1}$ \\\\\n".format(
+                problem,
+                " $ & $ ".join(
+                    [
+                        str(val)
+                        .replace("e-", r"e\makebox[0.1cm]{-}")
+                        .replace("e+", r"e\makebox[0.1cm]{+}")
+                        for val in values
+                    ]
+                ),
+            )
         )
 
     output.write("  \\hline\n")

@@ -30,6 +30,7 @@ def test_multiobjective_tsp_basic(tmp_path):
     solution = problem.evaluate(solution)
 
     assert problem.number_of_objectives() == 2
+
     # compute expected objectives using the same rounding rule
     def tour_length(coords):
         dist = 0

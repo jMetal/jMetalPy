@@ -9,7 +9,7 @@ for both single-objective and multi-objective optimization problems.
 import threading
 import time
 from abc import ABC, abstractmethod
-from typing import Generic, List, TypeVar
+from typing import Generic, TypeVar
 
 from jmetal.config import store
 from jmetal.core.problem import Problem
@@ -26,11 +26,11 @@ R = TypeVar("R")  # Type of the result returned by the algorithm
 
 class Algorithm(Generic[S, R], threading.Thread, ABC):
     """Abstract base class for all optimization algorithms in JMetalPy.
-    
+
     This class serves as the foundation for implementing various optimization algorithms.
     It extends threading.Thread to support concurrent execution and implements the
     template method pattern through its abstract methods.
-    
+
     Attributes:
         solutions: List of solutions found by the algorithm.
         evaluations: Number of solution evaluations performed.
@@ -38,24 +38,24 @@ class Algorithm(Generic[S, R], threading.Thread, ABC):
         total_computing_time: Total time taken by the algorithm (in seconds).
         observable: Observer pattern implementation for monitoring algorithm progress.
     """
-    
+
     def __init__(self):
         """Initialize the algorithm with default values."""
         threading.Thread.__init__(self)
 
-        self.solutions: List[S] = []
+        self.solutions: list[S] = []
         self.evaluations = 0
         self.start_computing_time = 0
         self.total_computing_time = 0
         self.observable = store.default_observable
 
     @abstractmethod
-    def create_initial_solutions(self) -> List[S]:
+    def create_initial_solutions(self) -> list[S]:
         """Creates the initial list of solutions of a metaheuristic."""
         pass
 
     @abstractmethod
-    def evaluate(self, solution_list: List[S]) -> List[S]:
+    def evaluate(self, solution_list: list[S]) -> list[S]:
         """Evaluates a solution list."""
         pass
 
@@ -117,19 +117,19 @@ class Algorithm(Generic[S, R], threading.Thread, ABC):
 
 class DynamicAlgorithm(Algorithm[S, R], ABC):
     """Abstract base class for algorithms that can handle dynamic optimization problems.
-    
+
     Dynamic optimization problems are those where the fitness function, constraints,
     or other problem characteristics may change over time. This class extends the
     base Algorithm with methods to handle such changes.
-    
+
     Subclasses must implement the restart method to define how the algorithm should
     respond to changes in the problem definition.
     """
-    
+
     @abstractmethod
     def restart(self) -> None:
         """Restart the algorithm in response to changes in the problem.
-        
+
         This method is called when a change in the problem is detected. Implementations
         should reset or adapt the algorithm's state to handle the new problem conditions.
         """
@@ -138,42 +138,42 @@ class DynamicAlgorithm(Algorithm[S, R], ABC):
 
 class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
     """Abstract base class for evolutionary algorithms.
-    
+
     This class implements the core structure of an evolutionary algorithm, including
     the evolutionary cycle of selection, reproduction, and replacement. Subclasses
     must implement the specific selection, reproduction, and replacement strategies.
-    
+
     Attributes:
         problem: The optimization problem to solve.
         population_size: Number of solutions in the population.
         offspring_population_size: Number of offspring solutions generated each generation.
     """
-    
+
     def __init__(self, problem: Problem[S], population_size: int, offspring_population_size: int):
         """Initialize the evolutionary algorithm.
-        
+
         Args:
             problem: The optimization problem to solve.
             population_size: Number of solutions in the population.
             offspring_population_size: Number of offspring solutions to generate each generation.
         """
-        super(EvolutionaryAlgorithm, self).__init__()
+        super().__init__()
         self.problem = problem
         self.population_size = population_size
         self.offspring_population_size = offspring_population_size
 
     @abstractmethod
-    def selection(self, population: List[S]) -> List[S]:
+    def selection(self, population: list[S]) -> list[S]:
         """Select the best-fit individuals for reproduction (parents)."""
         pass
 
     @abstractmethod
-    def reproduction(self, population: List[S]) -> List[S]:
+    def reproduction(self, population: list[S]) -> list[S]:
         """Breed new individuals through crossover and mutation operations to give birth to offspring."""
         pass
 
     @abstractmethod
-    def replacement(self, population: List[S], offspring_population: List[S]) -> List[S]:
+    def replacement(self, population: list[S], offspring_population: list[S]) -> list[S]:
         """Replace least-fit population with new individuals."""
         pass
 
@@ -209,59 +209,59 @@ class EvolutionaryAlgorithm(Algorithm[S, R], ABC):
         return f"{self.get_name()}.{self.problem.name()}"
 
 
-class ParticleSwarmOptimization(Algorithm[FloatSolution, List[FloatSolution]], ABC):
+class ParticleSwarmOptimization(Algorithm[FloatSolution, list[FloatSolution]], ABC):
     """Abstract base class for Particle Swarm Optimization (PSO) algorithms.
-    
+
     This class implements the core structure of a PSO algorithm, where a population
     of candidate solutions (particles) move through the search space according to
     simple mathematical formulae over the particle's position and velocity.
-    
+
     Attributes:
         problem: The optimization problem to solve.
         swarm_size: Number of particles in the swarm.
     """
-    
+
     def __init__(self, problem: Problem[S], swarm_size: int):
         """Initialize the PSO algorithm.
-        
+
         Args:
             problem: The optimization problem to solve.
             swarm_size: Number of particles in the swarm.
         """
-        super(ParticleSwarmOptimization, self).__init__()
+        super().__init__()
         self.problem = problem
         self.swarm_size = swarm_size
 
     @abstractmethod
-    def initialize_velocity(self, swarm: List[FloatSolution]) -> None:
+    def initialize_velocity(self, swarm: list[FloatSolution]) -> None:
         pass
 
     @abstractmethod
-    def initialize_particle_best(self, swarm: List[FloatSolution]) -> None:
+    def initialize_particle_best(self, swarm: list[FloatSolution]) -> None:
         pass
 
     @abstractmethod
-    def initialize_global_best(self, swarm: List[FloatSolution]) -> None:
+    def initialize_global_best(self, swarm: list[FloatSolution]) -> None:
         pass
 
     @abstractmethod
-    def update_velocity(self, swarm: List[FloatSolution]) -> None:
+    def update_velocity(self, swarm: list[FloatSolution]) -> None:
         pass
 
     @abstractmethod
-    def update_particle_best(self, swarm: List[FloatSolution]) -> None:
+    def update_particle_best(self, swarm: list[FloatSolution]) -> None:
         pass
 
     @abstractmethod
-    def update_global_best(self, swarm: List[FloatSolution]) -> None:
+    def update_global_best(self, swarm: list[FloatSolution]) -> None:
         pass
 
     @abstractmethod
-    def update_position(self, swarm: List[FloatSolution]) -> None:
+    def update_position(self, swarm: list[FloatSolution]) -> None:
         pass
 
     @abstractmethod
-    def perturbation(self, swarm: List[FloatSolution]) -> None:
+    def perturbation(self, swarm: list[FloatSolution]) -> None:
         pass
 
     def observable_data(self) -> dict:

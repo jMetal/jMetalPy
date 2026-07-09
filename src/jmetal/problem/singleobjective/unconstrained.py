@@ -16,15 +16,16 @@ from jmetal.core.solution import BinarySolution, FloatSolution
 
 class OneMax(BinaryProblem):
     """The OneMax problem is a simple optimization problem that counts the number of ones in a binary string.
-    
+
     The objective is to maximize the number of ones in the binary string, which is equivalent to
     minimizing the negative count of ones.
-    
+
     Args:
         number_of_bits: The length of the binary string (default: 256)
     """
+
     def __init__(self, number_of_bits: int = 256):
-        super(OneMax, self).__init__()
+        super().__init__()
         self.number_of_bits = number_of_bits
         self.number_of_bits_per_variable = [number_of_bits]  # For backward compatibility
 
@@ -43,7 +44,7 @@ class OneMax(BinaryProblem):
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
         # Count the number of ones in the binary string
         counter_of_ones = np.count_nonzero(solution.bits)
-        
+
         # Store the negative count to be minimized (equivalent to maximizing the positive count)
         solution.objectives[0] = -float(counter_of_ones)
         return solution
@@ -52,9 +53,9 @@ class OneMax(BinaryProblem):
         # Create a new binary solution with the specified number of bits
         solution = BinarySolution(
             number_of_variables=self.number_of_bits,
-            number_of_objectives=self.number_of_objectives()
+            number_of_objectives=self.number_of_objectives(),
         )
-        
+
         # Initialize with random bits (using numpy for better performance)
         solution.bits = np.random.choice([True, False], size=self.number_of_bits)
         return solution
@@ -65,7 +66,7 @@ class OneMax(BinaryProblem):
 
 class Sphere(FloatProblem):
     def __init__(self, number_of_variables: int = 10):
-        super(Sphere, self).__init__()
+        super().__init__()
 
         self.obj_directions = [self.MINIMIZE]
         self.obj_labels = ["f(x)"]
@@ -97,7 +98,7 @@ class Sphere(FloatProblem):
 
 class Rastrigin(FloatProblem):
     def __init__(self, number_of_variables: int = 10):
-        super(Rastrigin, self).__init__()
+        super().__init__()
 
         self.obj_directions = [self.MINIMIZE]
         self.obj_labels = ["f(x)"]
@@ -133,18 +134,18 @@ class Rastrigin(FloatProblem):
 class SubsetSum(BinaryProblem):
     def __init__(self, C: int, W: list):
         """The goal is to find a subset S of W whose elements sum is closest to (without exceeding) C.
-        
+
         This is a single-objective problem where we want to:
         1. Maximize the sum of selected elements (without exceeding C)
-        
+
         Args:
             C: The target sum (large integer)
             W: List of non-negative integers to select from
         """
-        super(SubsetSum, self).__init__()
+        super().__init__()
         self.C = C
         self.W = np.array(W, dtype=float)  # Convert to numpy array for vectorized operations
-        
+
         self.number_of_bits = len(self.W)
         self.obj_directions = [self.MAXIMIZE]
         self.obj_labels = ["Sum"]
@@ -161,17 +162,17 @@ class SubsetSum(BinaryProblem):
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
         # Get the mask of selected items (bits that are True)
         selected_mask = solution.bits
-        
+
         # Calculate total sum of selected items
         total_sum = np.sum(self.W[selected_mask])
-        
+
         # Penalize solutions that exceed the target sum C
         if total_sum > self.C:
             # Apply a penalty that increases with how much we exceed C
             total_sum = self.C - (total_sum - self.C)
             if total_sum < 0.0:
                 total_sum = 0.0
-        
+
         # Store the negative sum to be maximized
         solution.objectives[0] = -total_sum
         return solution
@@ -180,9 +181,9 @@ class SubsetSum(BinaryProblem):
         # Create a new binary solution with one bit per item in W
         solution = BinarySolution(
             number_of_variables=self.number_of_bits,
-            number_of_objectives=self.number_of_objectives()
+            number_of_objectives=self.number_of_objectives(),
         )
-        
+
         # Initialize with random bits (each bit represents whether an item is selected)
         solution.bits = np.random.choice([True, False], size=self.number_of_bits)
         return solution

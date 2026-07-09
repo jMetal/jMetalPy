@@ -46,7 +46,9 @@ def CDplot(
         # get all pairs
         sets = (-1) * np.ones((num_alg, 2))
         for i in range(num_alg):
-            elements = np.where(np.logical_and(avranks - avranks[i] > 0, avranks - avranks[i] < cd))[0]
+            elements = np.where(
+                np.logical_and(avranks - avranks[i] > 0, avranks - avranks[i] < cd)
+            )[0]
             if elements.size > 0:
                 sets[i, :] = [avranks[i], avranks[elements[-1]]]
         sets = np.delete(sets, np.where(sets[:, 0] < 0)[0], axis=0)
@@ -132,11 +134,19 @@ def CDplot(
     for xi in range(highest - lowest + 1):
         # Plot mayor ticks
         ax.vlines(
-            x=sleft + (lline * xi) / (highest - lowest), ymin=stop, ymax=stop + 0.05, color="black", linewidth=0.7
+            x=sleft + (lline * xi) / (highest - lowest),
+            ymin=stop,
+            ymax=stop + 0.05,
+            color="black",
+            linewidth=0.7,
         )
         # Mayor ticks labels
         ax.text(
-            x=sleft + (lline * xi) / (highest - lowest), y=stop + 0.06, s=str(lowest + xi), ha="center", va="bottom"
+            x=sleft + (lline * xi) / (highest - lowest),
+            y=stop + 0.06,
+            s=str(lowest + xi),
+            ha="center",
+            va="bottom",
         )
         # Minor ticks
         if xi < highest - lowest:
@@ -165,7 +175,13 @@ def CDplot(
             color="black",
             linewidth=0.7,
         )
-        ax.text(x=sleft - 0.01, y=sbottom + (spoint - 1 - i) * vspace, s=alg_names[indices][i], ha="right", va="center")
+        ax.text(
+            x=sleft - 0.01,
+            y=sbottom + (spoint - 1 - i) * vspace,
+            s=alg_names[indices][i],
+            ha="right",
+            va="center",
+        )
 
     # Plot lines/names for right models
     vspace = 0.5 * (stop - sbottom) / (num_alg - spoint + 1)
@@ -184,13 +200,25 @@ def CDplot(
             color="black",
             linewidth=0.7,
         )
-        ax.text(x=sright + 0.01, y=sbottom + i * vspace, s=alg_names[indices][spoint + i], ha="left", va="center")
+        ax.text(
+            x=sright + 0.01,
+            y=sbottom + i * vspace,
+            s=alg_names[indices][spoint + i],
+            ha="left",
+            va="center",
+        )
 
     # Plot critical difference rule
     if sleft + (cd * lline) / (highest - lowest) <= sright:
-        ax.hlines(y=stop + 0.2, xmin=sleft, xmax=sleft + (cd * lline) / (highest - lowest), linewidth=1.5)
+        ax.hlines(
+            y=stop + 0.2, xmin=sleft, xmax=sleft + (cd * lline) / (highest - lowest), linewidth=1.5
+        )
         ax.text(
-            x=sleft + 0.5 * (cd * lline) / (highest - lowest), y=stop + 0.21, s="CD=%.3f" % cd, ha="center", va="bottom"
+            x=sleft + 0.5 * (cd * lline) / (highest - lowest),
+            y=stop + 0.21,
+            s="CD=%.3f" % cd,
+            ha="center",
+            va="bottom",
         )
     else:
         ax.text(x=(sleft + sright) / 2, y=stop + 0.2, s="CD=%.3f" % cd, ha="center", va="bottom")

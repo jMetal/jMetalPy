@@ -71,7 +71,9 @@ def sign_test(data):
     p_value = 2 * min([p_value_minus, p_value_plus])
 
     return pd.DataFrame(
-        data=np.array([Wminus, Wplus, p_value]), index=["Num X<Y", "Num X>Y", "p-value"], columns=["Results"]
+        data=np.array([Wminus, Wplus, p_value]),
+        index=["Num X<Y", "Num X>Y", "p-value"],
+        columns=["Results"],
     )
 
 
@@ -103,13 +105,17 @@ def friedman_test(data):
     avranks = np.mean(datarank, axis=0)
 
     # Get Friedman statistics
-    friedman_stat = (12.0 * n_samples) / (k * (k + 1.0)) * (np.sum(avranks**2) - (k * (k + 1) ** 2) / 4.0)
+    friedman_stat = (
+        (12.0 * n_samples) / (k * (k + 1.0)) * (np.sum(avranks**2) - (k * (k + 1) ** 2) / 4.0)
+    )
 
     # Compute p-value
     p_value = 1.0 - chi2.cdf(friedman_stat, df=(k - 1))
 
     return pd.DataFrame(
-        data=np.array([friedman_stat, p_value]), index=["Friedman-statistic", "p-value"], columns=["Results"]
+        data=np.array([friedman_stat, p_value]),
+        index=["Friedman-statistic", "p-value"],
+        columns=["Results"],
     )
 
 
@@ -156,7 +162,9 @@ def friedman_aligned_rank_test(data):
     p_value = 1 - chi2.cdf(alignedRanks_stat, df=k - 1)
 
     return pd.DataFrame(
-        data=np.array([alignedRanks_stat, p_value]), index=["Aligned Rank stat", "p-value"], columns=["Results"]
+        data=np.array([alignedRanks_stat, p_value]),
+        index=["Aligned Rank stat", "p-value"],
+        columns=["Results"],
     )
 
 
@@ -206,7 +214,9 @@ def quade_test(data):
         Fq = (n_samples - 1.0) * B / (A - B)
         p_value = 1 - f.cdf(Fq, k - 1, (k - 1) * (n_samples - 1))
 
-    return pd.DataFrame(data=np.array([Fq, p_value]), index=["Quade Test statistic", "p-value"], columns=["Results"])
+    return pd.DataFrame(
+        data=np.array([Fq, p_value]), index=["Quade Test statistic", "p-value"], columns=["Results"]
+    )
 
 
 def friedman_ph_test(data, control=None, apv_procedure=None):
@@ -478,7 +488,9 @@ def quade_ph_test(data, control=None, apv_procedure=None):
         W[i, :] = problemRank[i] * datarank[i, :]
     avranks = 2 * np.sum(W, axis=0) / (n_samples * (n_samples + 1))
     # Compute test statistics
-    aux = 1.0 / np.sqrt(k * (k + 1) * (2 * n_samples + 1) * (k - 1) / (18.0 * n_samples * (n_samples + 1)))
+    aux = 1.0 / np.sqrt(
+        k * (k + 1) * (2 * n_samples + 1) * (k - 1) / (18.0 * n_samples * (n_samples + 1))
+    )
     if control is None:
         z = np.zeros((k, k))
         for i in range(k):

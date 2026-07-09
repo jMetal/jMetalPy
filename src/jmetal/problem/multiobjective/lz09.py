@@ -14,7 +14,6 @@ from jmetal.core.solution import FloatSolution
 
 
 class LZ09(FloatProblem):
-
     __metaclass__ = ABCMeta
 
     def __init__(
@@ -29,7 +28,7 @@ class LZ09(FloatProblem):
         * H. Li and Q. Zhang. Multiobjective optimization problems with complicated pareto sets, MOEA/D and NSGA-II.
         IEEE Transactions on Evolutionary Computation, 12(2):284-302, April 2009.
         """
-        super(LZ09, self).__init__()
+        super().__init__()
 
         self.lower_bound = number_of_variables * [0.0]
         self.upper_bound = number_of_variables * [1.0]
@@ -61,7 +60,10 @@ class LZ09(FloatProblem):
 
         if type == 21:
             xy = 2 * (x - 0.5)
-            beta = xy - math.pow(t1, 0.5 * (self.number_of_variables() + 3 * dim - 8) / (self.number_of_variables() - 2))
+            beta = xy - math.pow(
+                t1,
+                0.5 * (self.number_of_variables() + 3 * dim - 8) / (self.number_of_variables() - 2),
+            )
         if type == 22:
             theta = 6 * math.pi * t1 + dim * math.pi / self.number_of_variables()
             xy = 2 * (x - 0.5)
@@ -135,7 +137,11 @@ class LZ09(FloatProblem):
                 alpha[1] = 1 - x[0] * x[0]
             if type == 23:
                 alpha[0] = x[0]
-                alpha[1] = 1 - math.sqrt(alpha[0]) - alpha[0] * math.sin(10 * alpha[0] * alpha[0] * math.pi)
+                alpha[1] = (
+                    1
+                    - math.sqrt(alpha[0])
+                    - alpha[0] * math.sin(10 * alpha[0] * alpha[0] * math.pi)
+                )
             if type == 24:
                 alpha[0] = x[0]
                 alpha[1] = 1 - x[0] - 0.05 * math.sin(4 * math.pi * x[0])
@@ -151,7 +157,9 @@ class LZ09(FloatProblem):
             if type == 33:
                 alpha[0] = x[0]
                 alpha[1] = x[1]
-                alpha[2] = 3 - (math.sin(3 * math.pi * x[0]) + math.sin(3 * math.pi * x[1]) - 2 * (x[0] + x[1]))
+                alpha[2] = 3 - (
+                    math.sin(3 * math.pi * x[0]) + math.sin(3 * math.pi * x[1]) - 2 * (x[0] + x[1])
+                )
             if type == 34:
                 alpha[0] = x[0] - x[1]
                 alpha[1] = x[0] * (1 - x[1])
@@ -239,9 +247,10 @@ class LZ09(FloatProblem):
 
         if self.number_of_objectives() == 3:
             if self.ltype == 31 or self.ltype == 32:
-
                 for n in range(2, self.number_of_variables()):
-                    a = self.__ps_func3(x_variables[n], x_variables[0], x_variables[1], n, self.ltype)
+                    a = self.__ps_func3(
+                        x_variables[n], x_variables[0], x_variables[1], n, self.ltype
+                    )
 
                     if n % 3 == 0:
                         aa.append(a)
@@ -268,9 +277,7 @@ class LZ09(FloatProblem):
 
 class LZ09_F1(LZ09):
     def __init__(self, number_of_variables=10):
-        super(LZ09_F1, self).__init__(
-            number_of_variables, dtype=1, ltype=21, ptype=21
-        )
+        super().__init__(number_of_variables, dtype=1, ltype=21, ptype=21)
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
 
@@ -283,9 +290,7 @@ class LZ09_F1(LZ09):
 
 class LZ09_F2(LZ09):
     def __init__(self, number_of_variables=30):
-        super(LZ09_F2, self).__init__(
-            number_of_variables, dtype=1, ltype=22, ptype=21
-        )
+        super().__init__(number_of_variables, dtype=1, ltype=22, ptype=21)
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
@@ -299,9 +304,7 @@ class LZ09_F2(LZ09):
 
 class LZ09_F3(LZ09):
     def __init__(self, number_of_variables=30):
-        super(LZ09_F3, self).__init__(
-            number_of_variables, dtype=1, ltype=23, ptype=21
-        )
+        super().__init__(number_of_variables, dtype=1, ltype=23, ptype=21)
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
 
@@ -314,9 +317,7 @@ class LZ09_F3(LZ09):
 
 class LZ09_F4(LZ09):
     def __init__(self, number_of_variables=30):
-        super(LZ09_F4, self).__init__(
-            number_of_variables, dtype=1, ltype=24, ptype=21
-        )
+        super().__init__(number_of_variables, dtype=1, ltype=24, ptype=21)
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
 
@@ -329,9 +330,7 @@ class LZ09_F4(LZ09):
 
 class LZ09_F5(LZ09):
     def __init__(self, number_of_variables=30):
-        super(LZ09_F5, self).__init__(
-            number_of_variables, dtype=1, ltype=26, ptype=21
-        )
+        super().__init__(number_of_variables, dtype=1, ltype=26, ptype=21)
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
 
@@ -344,9 +343,7 @@ class LZ09_F5(LZ09):
 
 class LZ09_F6(LZ09):
     def __init__(self, number_of_variables=10):
-        super(LZ09_F6, self).__init__(
-            number_of_variables, dtype=1, ltype=32, ptype=31
-        )
+        super().__init__(number_of_variables, dtype=1, ltype=32, ptype=31)
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)", "f(z)"]
 
@@ -359,9 +356,7 @@ class LZ09_F6(LZ09):
 
 class LZ09_F7(LZ09):
     def __init__(self, number_of_variables=10):
-        super(LZ09_F7, self).__init__(
-            number_of_variables, dtype=3, ltype=21, ptype=21
-        )
+        super().__init__(number_of_variables, dtype=3, ltype=21, ptype=21)
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
@@ -375,9 +370,7 @@ class LZ09_F7(LZ09):
 
 class LZ09_F8(LZ09):
     def __init__(self, number_of_variables=10):
-        super(LZ09_F8, self).__init__(
-            number_of_variables, dtype=4, ltype=21, ptype=21
-        )
+        super().__init__(number_of_variables, dtype=4, ltype=21, ptype=21)
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
 
@@ -390,9 +383,7 @@ class LZ09_F8(LZ09):
 
 class LZ09_F9(LZ09):
     def __init__(self, number_of_variables=30):
-        super(LZ09_F9, self).__init__(
-            number_of_variables, dtype=1, ltype=22, ptype=22
-        )
+        super().__init__(number_of_variables, dtype=1, ltype=22, ptype=22)
 
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]

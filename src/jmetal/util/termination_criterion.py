@@ -26,7 +26,7 @@ class TerminationCriterion(Observer, ABC):
 
 class StoppingByEvaluations(TerminationCriterion):
     def __init__(self, max_evaluations: int):
-        super(StoppingByEvaluations, self).__init__()
+        super().__init__()
         self.max_evaluations = max_evaluations
         self.evaluations = 0
 
@@ -40,7 +40,7 @@ class StoppingByEvaluations(TerminationCriterion):
 
 class StoppingByTime(TerminationCriterion):
     def __init__(self, max_seconds: int):
-        super(StoppingByTime, self).__init__()
+        super().__init__()
         self.max_seconds = max_seconds
         self.seconds = 0.0
 
@@ -59,7 +59,7 @@ def key_has_been_pressed(stopping_by_keyboard):
 
 class StoppingByKeyboard(TerminationCriterion):
     def __init__(self):
-        super(StoppingByKeyboard, self).__init__()
+        super().__init__()
         self.key_pressed = False
         thread = threading.Thread(target=key_has_been_pressed, args=(self,))
         thread.start()
@@ -74,7 +74,7 @@ class StoppingByKeyboard(TerminationCriterion):
 
 class StoppingByQualityIndicator(TerminationCriterion):
     def __init__(self, quality_indicator: QualityIndicator, expected_value: float, degree: float):
-        super(StoppingByQualityIndicator, self).__init__()
+        super().__init__()
         self.quality_indicator = quality_indicator
         self.expected_value = expected_value
         self.degree = degree

@@ -1,4 +1,5 @@
 import numpy as np
+
 from jmetal.core.quality_indicator import HyperVolume, NormalizedHyperVolume
 
 
@@ -19,7 +20,9 @@ def test_hypervolume_derived_reference_from_front_and_offset():
 def test_hypervolume_explicit_reference_has_priority_over_front():
     ref_front = np.array([[1.0, 2.0], [0.5, 1.5]])
     # explicit reference point provided -> it should be used instead of deriving from front
-    hv = HyperVolume(reference_point=[2.0, 3.0], reference_front=ref_front, reference_point_offset=0.0)
+    hv = HyperVolume(
+        reference_point=[2.0, 3.0], reference_front=ref_front, reference_point_offset=0.0
+    )
     assert hv._reference_point == [2.0, 3.0]
 
     # hv.compute of the ref_front should be positive because ref is worse

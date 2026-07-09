@@ -4,8 +4,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 import numpy as np
 
 from jmetal.core.problem import FloatProblem
@@ -15,10 +13,10 @@ from jmetal.core.solution import FloatSolution
 class WFG(FloatProblem):
     def __init__(
         self,
-        number_of_variables: Optional[int] = None,
+        number_of_variables: int | None = None,
         number_of_objectives: int = 2,
-        k: Optional[int] = None,
-        l: Optional[int] = None,
+        k: int | None = None,
+        l: int | None = None,
     ) -> None:
         super().__init__()
 
@@ -47,7 +45,7 @@ class WFG(FloatProblem):
         self.n_obj = number_of_objectives
 
         self.obj_directions = [self.MINIMIZE] * number_of_objectives
-        self.obj_labels = ["$ f_{} $".format(i) for i in range(number_of_objectives)]
+        self.obj_labels = [f"$ f_{i} $" for i in range(number_of_objectives)]
 
         self.lower_bound = [0.0] * number_of_variables
         self.upper_bound = [float(2 * (i + 1)) for i in range(number_of_variables)]
@@ -61,9 +59,13 @@ class WFG(FloatProblem):
         if n_obj < 2:
             raise ValueError("WFG problems must have two or more objectives.")
         if k % (n_obj - 1) != 0:
-            raise ValueError("Position parameter (k) must be divisible by number_of_objectives - 1.")
+            raise ValueError(
+                "Position parameter (k) must be divisible by number_of_objectives - 1."
+            )
         if k + l < n_obj:
-            raise ValueError("Sum of distance and position parameters must be >= number_of_objectives.")
+            raise ValueError(
+                "Sum of distance and position parameters must be >= number_of_objectives."
+            )
         if k + l != n_var:
             raise ValueError("Number of variables must equal k + l.")
 
@@ -170,7 +172,10 @@ class WFG2(WFG):
         ind_r_sum = k + (n - k) // 2
         gap = k // (m_obj - 1)
 
-        t = [_reduction_weighted_sum_uniform(x[:, (idx - 1) * gap: idx * gap]) for idx in range(1, m_obj)]
+        t = [
+            _reduction_weighted_sum_uniform(x[:, (idx - 1) * gap : idx * gap])
+            for idx in range(1, m_obj)
+        ]
         t.append(_reduction_weighted_sum_uniform(x[:, k:ind_r_sum]))
 
         return np.column_stack(t)
@@ -221,7 +226,10 @@ class WFG4(WFG):
     @staticmethod
     def t2(x: np.ndarray, m_obj: int, k: int) -> np.ndarray:
         gap = k // (m_obj - 1)
-        t = [_reduction_weighted_sum_uniform(x[:, (idx - 1) * gap: idx * gap]) for idx in range(1, m_obj)]
+        t = [
+            _reduction_weighted_sum_uniform(x[:, (idx - 1) * gap : idx * gap])
+            for idx in range(1, m_obj)
+        ]
         t.append(_reduction_weighted_sum_uniform(x[:, k:]))
         return np.column_stack(t)
 
@@ -262,7 +270,7 @@ class WFG6(WFG):
     @staticmethod
     def t2(x: np.ndarray, m_obj: int, n: int, k: int) -> np.ndarray:
         gap = k // (m_obj - 1)
-        t = [_reduction_non_sep(x[:, (idx - 1) * gap: idx * gap], gap) for idx in range(1, m_obj)]
+        t = [_reduction_non_sep(x[:, (idx - 1) * gap : idx * gap], gap) for idx in range(1, m_obj)]
         t.append(_reduction_non_sep(x[:, k:], n - k))
         return np.column_stack(t)
 
@@ -310,7 +318,9 @@ class WFG8(WFG):
         ret = []
         for i in range(k, n):
             aux = _reduction_weighted_sum_uniform(x[:, :i])
-            ret.append(_transformation_param_dependent(x[:, i], aux, A=0.98 / 49.98, B=0.02, C=50.0))
+            ret.append(
+                _transformation_param_dependent(x[:, i], aux, A=0.98 / 49.98, B=0.02, C=50.0)
+            )
         return np.column_stack(ret)
 
     def _evaluate(self, x: np.ndarray) -> np.ndarray:
@@ -346,7 +356,7 @@ class WFG9(WFG):
     @staticmethod
     def t3(x: np.ndarray, m_obj: int, n: int, k: int) -> np.ndarray:
         gap = k // (m_obj - 1)
-        t = [_reduction_non_sep(x[:, (idx - 1) * gap: idx * gap], gap) for idx in range(1, m_obj)]
+        t = [_reduction_non_sep(x[:, (idx - 1) * gap : idx * gap], gap) for idx in range(1, m_obj)]
         t.append(_reduction_non_sep(x[:, k:], n - k))
         return np.column_stack(t)
 
@@ -369,7 +379,9 @@ def _transformation_shift_linear(value: np.ndarray, shift: float = 0.35) -> np.n
     return correct_to_01(ret)
 
 
-def _transformation_shift_deceptive(y: np.ndarray, A: float = 0.35, B: float = 0.005, C: float = 0.05) -> np.ndarray:
+def _transformation_shift_deceptive(
+    y: np.ndarray, A: float = 0.35, B: float = 0.005, C: float = 0.05
+) -> np.ndarray:
     tmp1 = np.floor(y - A + B) * (1.0 - C + (A - B) / B) / (A - B)
     tmp2 = np.floor(A + B - y) * (1.0 - C + (1.0 - A - B) / B) / (1.0 - A - B)
     ret = 1.0 + (np.fabs(y - A) - B) * (tmp1 + tmp2 + 1.0 / B)
@@ -384,14 +396,16 @@ def _transformation_shift_multi_modal(y: np.ndarray, A: float, B: float, C: floa
 
 
 def _transformation_bias_flat(y: np.ndarray, a: float, b: float, c: float) -> np.ndarray:
-    ret = a + np.minimum(0, np.floor(y - b)) * (a * (b - y) / b) - np.minimum(0, np.floor(c - y)) * (
-        (1.0 - a) * (y - c) / (1.0 - c)
+    ret = (
+        a
+        + np.minimum(0, np.floor(y - b)) * (a * (b - y) / b)
+        - np.minimum(0, np.floor(c - y)) * ((1.0 - a) * (y - c) / (1.0 - c))
     )
     return correct_to_01(ret)
 
 
 def _transformation_bias_poly(y: np.ndarray, alpha: float) -> np.ndarray:
-    return correct_to_01(y ** alpha)
+    return correct_to_01(y**alpha)
 
 
 def _transformation_param_dependent(
@@ -402,7 +416,9 @@ def _transformation_param_dependent(
     return correct_to_01(ret)
 
 
-def _transformation_param_deceptive(y: np.ndarray, A: float = 0.35, B: float = 0.001, C: float = 0.05) -> np.ndarray:
+def _transformation_param_deceptive(
+    y: np.ndarray, A: float = 0.35, B: float = 0.001, C: float = 0.05
+) -> np.ndarray:
     tmp1 = np.floor(y - A + B) * (1.0 - C + (A - B) / B) / (A - B)
     tmp2 = np.floor(A + B - y) * (1.0 - C + (1.0 - A - B) / B) / (1.0 - A - B)
     ret = 1.0 + (np.fabs(y - A) - B) * (tmp1 + tmp2 + 1.0 / B)
@@ -474,9 +490,11 @@ def _shape_mixed(x: np.ndarray, A: float = 5.0, alpha: float = 1.0) -> np.ndarra
     return correct_to_01(ret)
 
 
-def _shape_disconnected(x: np.ndarray, alpha: float = 1.0, beta: float = 1.0, A: float = 5.0) -> np.ndarray:
-    aux = np.cos(A * np.pi * x ** beta)
-    return correct_to_01(1.0 - x ** alpha * aux ** 2)
+def _shape_disconnected(
+    x: np.ndarray, alpha: float = 1.0, beta: float = 1.0, A: float = 5.0
+) -> np.ndarray:
+    aux = np.cos(A * np.pi * x**beta)
+    return correct_to_01(1.0 - x**alpha * aux**2)
 
 
 def validate_wfg2_wfg3(l: int) -> None:
