@@ -144,7 +144,19 @@ class StreamingPlot:
 def pause(interval: float):
     backend = plt.rcParams["backend"]
 
-    if backend in matplotlib.rcsetup.interactive_bk:
+    try:
+        interactive_backends = matplotlib.rcsetup.interactive_bk
+    except AttributeError:
+        # Matplotlib >= 3.9 removed rcsetup.interactive_bk.
+        # Use the backend registry as a compatibility fallback.
+        try:
+            from matplotlib.backends import BackendFilter, backend_registry
+
+            interactive_backends = backend_registry.list_builtin(BackendFilter.INTERACTIVE)
+        except Exception:
+            interactive_backends = []
+
+    if backend.lower() in [item.lower() for item in interactive_backends]:
         figManager = matplotlib._pylab_helpers.Gcf.get_active()
         if figManager is not None:
             canvas = figManager.canvas
