@@ -1,7 +1,7 @@
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.mutation import PolynomialMutation
-from jmetal.problem import ZDT4
+from jmetal.problem.multiobjective.dtlz import DTLZ1
 from jmetal.util.archive import DistanceBasedArchive
 from jmetal.util.distance import DistanceMetric
 from jmetal.util.evaluator import SequentialEvaluatorWithArchive
@@ -18,15 +18,15 @@ from jmetal.util.termination_criterion import StoppingByEvaluations
  This example demonstrates the use of L-infinity (maximum) distance metric for maintaining diversity.
 """
 if __name__ == "__main__":
-    problem = ZDT4()
+    problem = DTLZ1()
 
-    problem.reference_front = read_solutions(filename="resources/reference_fronts/ZDT4.pf")
+    problem.reference_front = read_solutions(filename="resources/reference_fronts/DTLZ1.3D.pf")
 
     # Create distance-based archive
     archive = DistanceBasedArchive(maximum_size=100, metric=DistanceMetric.L2_SQUARED)
     evaluator = SequentialEvaluatorWithArchive(archive)
 
-    max_evaluations = 25000
+    max_evaluations = 30000
     algorithm = NSGAII(
         problem=problem,
         population_size=100,
