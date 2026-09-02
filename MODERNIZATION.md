@@ -63,7 +63,6 @@ this is fixing a divergence, not guessing at intent.
   - [ ] `docs: fix 5 broken cross-references and 2 orphaned pages` — `api/util/{archive,distance}.rst` reference `../distance`/`../comparator`/`../normalization`/`../archive`/`../../algorithm/multiobjective` as documents that don't exist at those paths; `tutorials.rst` and `api/jmetal.lab.statistical_test.rst` exist but aren't in any toctree.
   - [ ] `docs: fix "Title underline too short" in advanced-topics/advanced-selection-strategies.rst:55`
 - [ ] `docs: write the missing api/core and api/util reference pages` — 7 pages referenced by `docs/source/api-reference.rst`
-- [ ] `docs: write the missing api/core and api/util reference pages` — 7 pages referenced by `docs/source/api-reference.rst`
 - [ ] `docs: prune toctree entries pointing at non-existent pages` — remaining ~29 dead links across `getting-started.rst`, `user-guide.rst`, `advanced-topics.rst`
 - [ ] `docs: document the statistical analysis module` — replace the `ToDo` in `docs/source/tutorials/statistics.rst`
 
