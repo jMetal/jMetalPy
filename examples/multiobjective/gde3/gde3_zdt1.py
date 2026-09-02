@@ -5,7 +5,7 @@ from jmetal.util.solution import (
     print_variables_to_file,
     read_solutions,
 )
-from jmetal.util.termination_criterion import StoppingByKeyboard
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
 if __name__ == "__main__":
     problem = ZDT1()
@@ -16,7 +16,7 @@ if __name__ == "__main__":
         population_size=100,
         cr=0.5,
         f=0.5,
-        termination_criterion=StoppingByKeyboard(),
+        termination_criterion=StoppingByEvaluations(max_evaluations=25000),
     )
 
     algorithm.run()
