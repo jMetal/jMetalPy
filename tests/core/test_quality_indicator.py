@@ -16,6 +16,7 @@ import unittest
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 from jmetal.core.quality_indicator import (
     AdditiveEpsilonIndicator,
@@ -298,14 +299,16 @@ class InvertedGenerationalDistanceTestCases(unittest.TestCase):
             indicator.compute(empty_front)
 
     def test_none_reference_front_should_raise_error(self):
-        """None reference front should raise error"""
+        """None reference front passed to compute should raise error (constructor allows None)"""
+        indicator = InvertedGenerationalDistance(None)
         with self.assertRaises(ValueError):
-            InvertedGenerationalDistance(None)
+            indicator.compute(np.array([[1.0, 1.0]]))
 
     def test_empty_reference_front_should_raise_error(self):
-        """Empty reference front should raise error"""
+        """Empty reference front should raise error when computing"""
+        indicator = InvertedGenerationalDistance(np.array([]).reshape(0, 2))
         with self.assertRaises(ValueError):
-            InvertedGenerationalDistance(np.array([]).reshape(0, 2))
+            indicator.compute(np.array([[1.0, 1.0]]))
 
     def test_igd_with_power_parameter(self):
         """Test IGD with different power parameters"""
@@ -493,14 +496,16 @@ class InvertedGenerationalDistancePlusTestCases(unittest.TestCase):
             indicator.compute(empty_front)
 
     def test_none_reference_front_should_raise_error(self):
-        """None reference front should raise error"""
+        """None reference front passed to compute should raise error (constructor allows None)"""
+        indicator = InvertedGenerationalDistancePlus(None)
         with self.assertRaises(ValueError):
-            InvertedGenerationalDistancePlus(None)
+            indicator.compute(np.array([[1.0, 1.0]]))
 
     def test_empty_reference_front_should_raise_error(self):
-        """Empty reference front should raise error"""
+        """Empty reference front should raise error when computing"""
+        indicator = InvertedGenerationalDistancePlus(np.array([]).reshape(0, 2))
         with self.assertRaises(ValueError):
-            InvertedGenerationalDistancePlus(np.array([]).reshape(0, 2))
+            indicator.compute(np.array([[1.0, 1.0]]))
 
 
 class AverageHausdorffDistanceTestCases(unittest.TestCase):
@@ -620,14 +625,16 @@ class AverageHausdorffDistanceTestCases(unittest.TestCase):
             indicator.compute(empty_front)
 
     def test_none_reference_front_should_raise_error(self):
-        """None reference front should raise error"""
+        """None reference front passed to compute should raise error (constructor allows None)"""
+        indicator = AverageHausdorffDistance(None)
         with self.assertRaises(ValueError):
-            AverageHausdorffDistance(None)
+            indicator.compute(np.array([[1.0, 1.0]]))
 
     def test_empty_reference_front_should_raise_error(self):
-        """Empty reference front should raise error"""
+        """Empty reference front should raise error when computing"""
+        indicator = AverageHausdorffDistance(np.array([]).reshape(0, 2))
         with self.assertRaises(ValueError):
-            AverageHausdorffDistance(np.array([]).reshape(0, 2))
+            indicator.compute(np.array([[1.0, 1.0]]))
 
 
 class AdditiveEpsilonIndicatorTestCases(unittest.TestCase):
@@ -733,14 +740,16 @@ class AdditiveEpsilonIndicatorTestCases(unittest.TestCase):
             indicator.compute(empty_front)
 
     def test_none_reference_front_should_raise_error(self):
-        """None reference front should raise error"""
+        """None reference front passed to compute should raise error (constructor allows None)"""
+        indicator = AdditiveEpsilonIndicator(None)
         with self.assertRaises(ValueError):
-            AdditiveEpsilonIndicator(None)
+            indicator.compute(np.array([[1.0, 1.0]]))
 
     def test_empty_reference_front_should_raise_error(self):
-        """Empty reference front should raise error"""
+        """Empty reference front should raise error when computing"""
+        indicator = AdditiveEpsilonIndicator(np.array([]).reshape(0, 2))
         with self.assertRaises(ValueError):
-            AdditiveEpsilonIndicator(np.array([]).reshape(0, 2))
+            indicator.compute(np.array([[1.0, 1.0]]))
 
     def test_non_negativity_with_allowance_for_dominating_fronts(self):
         """Non-negativity (but epsilon can be negative when dominating)"""
@@ -870,6 +879,47 @@ class NormalizedHyperVolumeTestCases(unittest.TestCase):
         # Update test to expect ValueError which better describes invalid input.
         with self.assertRaises(ValueError):
             hv.set_reference_front(reference_front)
+
+
+# Indicators whose constructor must accept a missing reference front, matching
+# GenerationalDistance: an Experiment reuses one indicator instance across several
+# problems and assigns indicator.reference_front per problem before each compute()
+# call, so the reference front is not always known at construction time.
+DEFERRED_VALIDATION_INDICATORS = [
+    InvertedGenerationalDistance,
+    InvertedGenerationalDistancePlus,
+    AverageHausdorffDistance,
+    AdditiveEpsilonIndicator,
+    EpsilonIndicator,
+]
+
+
+class TestIndicatorsWithDeferredReferenceFrontValidation:
+    @pytest.mark.parametrize("indicator_class", DEFERRED_VALIDATION_INDICATORS)
+    def test_should_construct_without_a_reference_front(self, indicator_class):
+        indicator = indicator_class()
+
+        assert indicator.reference_front is None
+
+    @pytest.mark.parametrize("indicator_class", DEFERRED_VALIDATION_INDICATORS)
+    def test_should_raise_value_error_on_compute_when_reference_front_still_unset(
+        self, indicator_class
+    ):
+        indicator = indicator_class()
+
+        with pytest.raises(ValueError):
+            indicator.compute(np.array([[0.5, 0.5]]))
+
+    @pytest.mark.parametrize("indicator_class", DEFERRED_VALIDATION_INDICATORS)
+    def test_should_compute_after_setting_reference_front_post_construction(
+        self, indicator_class
+    ):
+        indicator = indicator_class()
+        indicator.reference_front = np.array([[0.0, 1.0], [1.0, 0.0]])
+
+        result = indicator.compute(np.array([[0.0, 1.0], [1.0, 0.0]]))
+
+        assert result == pytest.approx(0.0, abs=1e-9)
 
 
 if __name__ == "__main__":
