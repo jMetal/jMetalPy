@@ -39,7 +39,7 @@ test`.
 The quick-start snippets are broken; `README.md` and `examples/` already use the correct API, so
 this is fixing a divergence, not guessing at intent.
 
-- [ ] `docs: fix broken API calls in the quick-start snippets` — `docs/source/getting-started.rst:52,60`, `docs/source/index.rst:61,63`
+- [x] `docs: fix broken API calls in the quick-start snippets` — `docs/source/getting-started.rst:52,60`, `docs/source/index.rst:61,63`; also fixed the stale `python setup.py install` in `getting-started.rst` and the missing required `offspring_population_size`/`mutation`/`crossover` args in `index.rst`'s example. Both snippets executed end-to-end to confirm.
 - [ ] `docs: update the experiment tutorial to the current problem API` — `docs/source/tutorials/experiment.rst:37,66`
 - [ ] `docs: rewrite the problem tutorial against the post-1.6 Problem API` — `docs/source/tutorials/problem.rst`
 - [ ] `docs: generate algorithm API pages from the maintained examples` — replace the 17 stale `docs/source/api/algorithm/multiobjective/{eas,psos}/*.ipynb`

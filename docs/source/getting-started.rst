@@ -26,7 +26,8 @@ Via source code:
 .. code-block:: console
 
     $ git clone https://github.com/jMetal/jMetalPy.git
-    $ python setup.py install
+    $ cd jMetalPy
+    $ pip install .
 
 Quick Start
 -----------
@@ -49,7 +50,7 @@ Here's a simple example to get you started with jMetalPy:
         problem=problem,
         population_size=100,
         offspring_population_size=100,
-        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables, distribution_index=20),
+        mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
         crossover=SBXCrossover(probability=1.0, distribution_index=20),
         selection=BinaryTournamentSelection(),
         termination_criterion=StoppingByEvaluations(max_evaluations=25000)
@@ -57,7 +58,7 @@ Here's a simple example to get you started with jMetalPy:
 
     # Run the algorithm
     algorithm.run()
-    solutions = algorithm.get_result()
+    solutions = algorithm.result()
 
     # Print results
     print(f"Found {len(solutions)} solutions")
