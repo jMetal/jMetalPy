@@ -20,6 +20,20 @@ Education tooling and the SoftwareX write-up are explicitly out of scope for thi
 
 ## L0 — Hygiene (`chore/l0-hygiene`)
 
+### Tooling baseline
+
+Found while starting this branch, not in the original scope — recorded here because it blocked
+the "clean lint before every commit" rule from `GIT_GUIDELINES.md` for everything that follows.
+
+- [x] `fix: use PEP 604 unions in isinstance checks to satisfy ruff UP038` — `ruff>=0.6.0` resolves
+  to 0.12.0 today, which flags two tuple-form `isinstance()` calls
+  (`src/jmetal/operator/repair.py:51`, `src/jmetal/util/density_estimator.py:146`) not covered by
+  the ignore list; `make lint`/CI lint currently fail on `main` because of this.
+
+Also note for future commands in this repo: `make test` needs the `jmetalpy` conda env
+(`moocore` is not on the base env's `python`) — `conda activate jmetalpy` before `make lint`/`make
+test`.
+
 ### Getting-started documentation
 
 The quick-start snippets are broken; `README.md` and `examples/` already use the correct API, so
