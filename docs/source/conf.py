@@ -27,7 +27,6 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
-    'nbsphinx'
 ]
 
 templates_path = ['_templates']
@@ -61,12 +60,6 @@ htmlhelp_basename = 'jMetalPy'
 # -- Options for Sphinx output -------------------------------------------------
 
 exclude_patterns = ['_build', '**.ipynb_checkpoints']
-
-nbsphinx_execute_arguments = [
-    "--InlineBackend.figure_formats={'svg', 'pdf'}",
-    "--InlineBackend.rc={'figure.dpi': 96}",
-]
-nbsphinx_execute = 'never'
 
 # -- Options for LaTeX output ------------------------------------------------
 
