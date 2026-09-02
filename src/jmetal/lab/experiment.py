@@ -132,19 +132,19 @@ def generate_summary_from_experiment(
                     reference_front_file = os.path.join(reference_fronts, problem + ".pf")
 
                     # Add reference front if any
-                    if hasattr(indicator, "reference_fronts"):
+                    if hasattr(indicator, "reference_front"):
                         if Path(reference_front_file).is_file():
                             reference_front = []
                             with open(reference_front_file) as file:
                                 for line in file:
                                     reference_front.append([float(x) for x in line.split()])
 
-                            indicator.reference_front = reference_front
+                            indicator.reference_front = np.array(reference_front)
                         else:
                             logger.warning("Reference front not found at", reference_front_file)
 
                     result = indicator.compute(
-                        [solutions[i].objectives for i in range(len(solutions))]
+                        np.array([solutions[i].objectives for i in range(len(solutions))])
                     )
 
                     # Save quality indicator value to file
