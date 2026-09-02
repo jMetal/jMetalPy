@@ -34,10 +34,10 @@ The hypervolume, generational distance and epsilon indicators are used for perfo
                             problem=problem,
                             population_size=100,
                             offspring_population_size=100,
-                            mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables,
+                            mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(),
                                                         distribution_index=20),
                             crossover=SBXCrossover(probability=1.0, distribution_index=20),
-                            termination_criterion=StoppingByEvaluations(max=max_evaluations)
+                            termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations)
                         ),
                         algorithm_tag='NSGAII',
                         problem_tag=problem_tag,
@@ -51,7 +51,7 @@ The hypervolume, generational distance and epsilon indicators are used for perfo
                             population_size=100,
                             cr=0.5,
                             f=0.5,
-                            termination_criterion=StoppingByEvaluations(max=max_evaluations)
+                            termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations)
                         ),
                         algorithm_tag='GDE3',
                         problem_tag=problem_tag,
@@ -63,10 +63,10 @@ The hypervolume, generational distance and epsilon indicators are used for perfo
                         algorithm=SMPSO(
                             problem=problem,
                             swarm_size=100,
-                            mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables,
+                            mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(),
                                                         distribution_index=20),
                             leaders=CrowdingDistanceArchive(100),
-                            termination_criterion=StoppingByEvaluations(max=max_evaluations)
+                            termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations)
                         ),
                         algorithm_tag='SMPSO',
                         problem_tag=problem_tag,
@@ -99,7 +99,7 @@ The results of this experiment can be summarized to a CSV file as follows:
         # Generate summary file
         generate_summary_from_experiment(
             input_dir=output_directory,
-            reference_fronts='/home/user/jMetalPy/resources/reference_front',
+            reference_fronts='resources/reference_fronts',
             quality_indicators=[GenerationalDistance(), EpsilonIndicator(), HyperVolume([1.0, 1.0])]
         )
 
@@ -109,9 +109,9 @@ The summary file is the input of all the statistical tests, so that they can be 
 .. code-block:: console
 
     $ head QualityIndicatorSummary.csv
-    Algorithm,Problem,IndicatorName,ExecutionId,IndicatorValue
-    NSGAII,ZDT1,EP,0,0.015705992620067832
-    NSGAII,ZDT1,EP,1,0.012832504015918067
+    Algorithm,Problem,ExecutionId,IndicatorName,IndicatorValue
+    NSGAII,ZDT1,0,EP,0.015705992620067832
+    NSGAII,ZDT1,1,EP,0.012832504015918067
     ...
 
 API
