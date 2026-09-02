@@ -9,25 +9,35 @@ Use case: Subset Sum
 The goal is to find a subset S of W (list of non-negative integers) whose elements sum is closest to (without exceeding) C.
 For example, for the input :math:`W=\{3, 34, 4, 12, 5, 2\}` and :math:`C=9`, one output could be :math:`S=\{4, 5\}` (as it is a subset with sum 9).
 
-In jMetalPy, this problem can be encoded as a binary problem with one objective (to be maximized) and one variable
-(a binary array representing whethever the ith element of W is selected or not):
+In jMetalPy, this problem can be encoded as a binary problem with one objective (to be maximized) and one bit per element
+of W, indicating whether that element is selected:
 
 .. code-block:: python
 
-   class SubsetSum(BinaryProblem):
+   import numpy as np
 
+   from jmetal.core.problem import BinaryProblem
+   from jmetal.core.solution import BinarySolution
+
+
+   class SubsetSum(BinaryProblem):
       def __init__(self, C: int, W: list):
-         super(SubsetSum, self).__init__(reference_front=None)
+         super().__init__()
          self.C = C
-         self.W = W
+         self.W = np.array(W, dtype=float)
 
          self.number_of_bits = len(self.W)
-         self.number_of_objectives = 1
-         self.number_of_variables = 1
-         self.number_of_constraints = 0
-
          self.obj_directions = [self.MAXIMIZE]
          self.obj_labels = ['Sum']
+
+      def number_of_variables(self) -> int:
+         return self.number_of_bits
+
+      def number_of_objectives(self) -> int:
+         return 1
+
+      def number_of_constraints(self) -> int:
+         return 0
 
       def evaluate(self, solution: BinarySolution) -> BinarySolution:
          pass
@@ -35,7 +45,7 @@ In jMetalPy, this problem can be encoded as a binary problem with one objective 
       def create_solution(self) -> BinarySolution:
          pass
 
-      def get_name(self) -> str:
+      def name(self) -> str:
          return 'Subset Sum'
 
 Now we have to define the abstract methods :code:`evaluate` and :code:`create_solution` from the :py:mod:`jmetal.core.problem.Problem` class.
@@ -49,34 +59,34 @@ Taking this into account, one solution could be created and evaluated as follows
 
 .. note::
 
-   jMetalPy assumes minimization by default. Therefore, we will have to multiply the solution objective by :math:`-1.0`.
+   jMetalPy assumes minimization by default. Therefore, we will have to negate the solution objective.
 
 .. code-block:: python
 
    def evaluate(self, solution: BinarySolution) -> BinarySolution:
-       total_sum = 0.0
-
-       for index, bits in enumerate(solution.variables[0]):
-           if bits:
-               total_sum += self.W[index]
+       selected_mask = solution.bits
+       total_sum = np.sum(self.W[selected_mask])
 
        if total_sum > self.C:
-           total_sum = self.C - total_sum * 0.1
-
+           total_sum = self.C - (total_sum - self.C)
            if total_sum < 0.0:
                total_sum = 0.0
 
-       solution.objectives[0] = -1.0 * total_sum
+       solution.objectives[0] = -total_sum
 
        return solution
 
    def create_solution(self) -> BinarySolution:
-       new_solution = BinarySolution(number_of_variables=self.number_of_variables,
-                                     number_of_objectives=self.number_of_objectives)
-       new_solution.variables[0] = \
-           [True if random.randint(0, 1) == 0 else False for _ in range(self.number_of_bits)]
+       solution = BinarySolution(
+           number_of_variables=self.number_of_bits,
+           number_of_objectives=self.number_of_objectives(),
+       )
+       solution.bits = np.random.choice([True, False], size=self.number_of_bits)
 
-       return new_solution
+       return solution
+
+:code:`BinarySolution` stores its bits as a NumPy boolean array. Use the :code:`bits` property to read or assign the
+whole array at once (as above), or the list-based :code:`variables` property for element-by-element access.
 
 Use case: Multi-objective Subset Sum
 ------------------------------------
@@ -86,44 +96,50 @@ The former problem can be formulated as a multi-objective binary problem whose o
 1. Maximize the sum of subsets to be as close as possible to :math:`C` and
 2. Minimize the number of elements selected from :math:`W`.
 
-This can be done by incorporating the objective function and increasing the number of objectives in consecuence:
+This can be done by returning 2 from :code:`number_of_objectives`, setting a second objective direction and label,
+and computing both objectives in :code:`evaluate`:
 
 .. code-block:: diff
 
-   class SubsetSum(BinaryProblem):
+    class SubsetSum(BinaryProblem):
+       def __init__(self, C: int, W: list):
+          super().__init__()
+          self.C = C
+          self.W = np.array(W, dtype=float)
 
-      def __init__(self, C: int, W: list):
-         super(SubsetSum, self).__init__(reference_front=None)
-         self.C = C
-         self.W = W
+          self.number_of_bits = len(self.W)
+   -      self.obj_directions = [self.MAXIMIZE]
+   -      self.obj_labels = ['Sum']
+   +      self.obj_directions = [self.MAXIMIZE, self.MINIMIZE]
+   +      self.obj_labels = ['Sum', 'No. of Objects']
 
-         self.number_of_bits = len(self.W)
-   +     self.number_of_objectives = 2
-         self.number_of_variables = 1
-         self.number_of_constraints = 0
+       def number_of_variables(self) -> int:
+          return self.number_of_bits
 
-   +     self.obj_directions = [self.MAXIMIZE, self.MINIMIZE]
-   +     self.obj_labels = ['Sum', 'No. of Objects']
+       def number_of_objectives(self) -> int:
+   -      return 1
+   +      return 2
 
-      def evaluate(self, solution: BinarySolution) -> BinarySolution:
-         total_sum = 0.0
-   +     number_of_objects = 0
+       def number_of_constraints(self) -> int:
+          return 0
 
-   +     for index, bits in enumerate(solution.variables[0]):
-   +        if bits:
-   +           total_sum += self.W[index]
-   +              number_of_objects += 1
+       def evaluate(self, solution: BinarySolution) -> BinarySolution:
+          selected_mask = solution.bits
+          total_sum = np.sum(self.W[selected_mask])
+   +      number_of_objects = np.count_nonzero(selected_mask)
 
-         if total_sum > self.C:
-            total_sum = self.C - total_sum * 0.1
+          if total_sum > self.C:
+             total_sum = self.C - (total_sum - self.C)
+             if total_sum < 0.0:
+                 total_sum = 0.0
 
-            if total_sum < 0.0:
-                total_sum = 0.0
+          solution.objectives[0] = -total_sum
+   +      solution.objectives[1] = number_of_objects
 
-         solution.objectives[0] = -1.0 * total_sum
-   +     solution.objectives[1] = number_of_objects
+          return solution
 
-         return solution
+Both variants are available out of the box as :code:`jmetal.problem.singleobjective.unconstrained.SubsetSum` and
+:code:`jmetal.problem.multiobjective.unconstrained.SubsetSum`.
 
 API
 ------------------------
