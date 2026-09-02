@@ -143,7 +143,7 @@ class HypervolumeContributionDensityEstimator(DensityEstimator[list[S]]):
         super().__init__()
         if reference_point is None:
             raise ValueError("reference_point for hypervolume contribution cannot be None.")
-        if isinstance(reference_point, (list, tuple, numpy.ndarray)) and len(reference_point) == 0:
+        if isinstance(reference_point, list | tuple | numpy.ndarray) and len(reference_point) == 0:
             raise ValueError("reference_point for hypervolume contribution cannot be empty.")
         self.reference_point = reference_point
 

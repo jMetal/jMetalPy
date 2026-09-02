@@ -48,7 +48,7 @@ class FloatRepairOperator:
         """Convenience dispatcher: if `values` is array-like, call `repair_vector`,
         otherwise call `repair_scalar`.
         """
-        if isinstance(values, (list, tuple, np.ndarray)):
+        if isinstance(values, list | tuple | np.ndarray):
             return self.repair_vector(values, lower_bounds, upper_bounds)
         return self.repair_scalar(float(values), float(lower_bounds), float(upper_bounds))
 
