@@ -198,18 +198,12 @@ class InvertedGenerationalDistance(QualityIndicator):
         Initialize the IGD indicator.
 
         Args:
-            reference_front: Reference front matrix (each row is a solution)
+            reference_front: Reference front matrix (each row is a solution). May be left
+                            as None and set later (e.g. by an Experiment that assigns a
+                            different reference front per problem before each compute() call).
             pow: Power parameter for the Lp-norm (default: 2.0 for Euclidean distance)
-
-        Raises:
-            ValueError: If reference_front is None or empty
         """
         super().__init__(is_minimization=True)
-        if reference_front is None:
-            raise ValueError("Reference front cannot be None")
-        if len(reference_front) == 0:
-            raise ValueError("Reference front cannot be empty")
-
         self.reference_front = reference_front
         self.pow = pow
 
@@ -224,8 +218,13 @@ class InvertedGenerationalDistance(QualityIndicator):
             The IGD indicator value
 
         Raises:
-            ValueError: If solutions is empty or has different dimensionality than reference front
+            ValueError: If the reference front is not set, or if solutions is empty or has
+                      different dimensionality than reference front
         """
+        if self.reference_front is None:
+            raise ValueError("Reference front must be set before computing IGD")
+        if len(self.reference_front) == 0:
+            raise ValueError("Reference front cannot be empty")
         if solutions is None or len(solutions) == 0:
             raise ValueError("Solutions front cannot be None or empty")
 
@@ -269,17 +268,11 @@ class InvertedGenerationalDistancePlus(QualityIndicator):
         Initialize the IGD+ indicator.
 
         Args:
-            reference_front: Reference front matrix (each row is a solution)
-
-        Raises:
-            ValueError: If reference_front is None or empty
+            reference_front: Reference front matrix (each row is a solution). May be left
+                            as None and set later (e.g. by an Experiment that assigns a
+                            different reference front per problem before each compute() call).
         """
         super().__init__(is_minimization=True)
-        if reference_front is None:
-            raise ValueError("Reference front cannot be None")
-        if len(reference_front) == 0:
-            raise ValueError("Reference front cannot be empty")
-
         self.reference_front = reference_front
 
     def _dominance_distance(self, reference_point: np.array, solution_point: np.array) -> float:
@@ -329,8 +322,13 @@ class InvertedGenerationalDistancePlus(QualityIndicator):
             The IGD+ indicator value
 
         Raises:
-            ValueError: If solutions is empty or has different dimensionality than reference front
+            ValueError: If the reference front is not set, or if solutions is empty or has
+                      different dimensionality than reference front
         """
+        if self.reference_front is None:
+            raise ValueError("Reference front must be set before computing IGD+")
+        if len(self.reference_front) == 0:
+            raise ValueError("Reference front cannot be empty")
         if solutions is None or len(solutions) == 0:
             raise ValueError("Solutions front cannot be None or empty")
 
@@ -374,17 +372,11 @@ class AverageHausdorffDistance(QualityIndicator):
         Initialize the AHD indicator.
 
         Args:
-            reference_front: Reference front matrix (each row is a solution)
-
-        Raises:
-            ValueError: If reference_front is None or empty
+            reference_front: Reference front matrix (each row is a solution). May be left
+                            as None and set later (e.g. by an Experiment that assigns a
+                            different reference front per problem before each compute() call).
         """
         super().__init__(is_minimization=True)
-        if reference_front is None:
-            raise ValueError("Reference front cannot be None")
-        if len(reference_front) == 0:
-            raise ValueError("Reference front cannot be empty")
-
         self.reference_front = reference_front
 
     def compute(self, solutions: np.ndarray) -> float:
@@ -398,8 +390,13 @@ class AverageHausdorffDistance(QualityIndicator):
             The AHD indicator value
 
         Raises:
-            ValueError: If solutions is empty or has different dimensionality than reference front
+            ValueError: If the reference front is not set, or if solutions is empty or has
+                      different dimensionality than reference front
         """
+        if self.reference_front is None:
+            raise ValueError("Reference front must be set before computing AHD")
+        if len(self.reference_front) == 0:
+            raise ValueError("Reference front cannot be empty")
         if solutions is None or len(solutions) == 0:
             raise ValueError("Solutions front cannot be None or empty")
 
@@ -450,17 +447,11 @@ class AdditiveEpsilonIndicator(QualityIndicator):
         Initialize the Additive Epsilon indicator.
 
         Args:
-            reference_front: Reference front matrix (each row is a solution)
-
-        Raises:
-            ValueError: If reference_front is None or empty
+            reference_front: Reference front matrix (each row is a solution). May be left
+                            as None and set later (e.g. by an Experiment that assigns a
+                            different reference front per problem before each compute() call).
         """
         super().__init__(is_minimization=True)
-        if reference_front is None:
-            raise ValueError("Reference front cannot be None")
-        if len(reference_front) == 0:
-            raise ValueError("Reference front cannot be empty")
-
         self.reference_front = reference_front
 
     def compute(self, front: np.array) -> float:
@@ -474,8 +465,13 @@ class AdditiveEpsilonIndicator(QualityIndicator):
             The additive epsilon indicator value
 
         Raises:
-            ValueError: If front is empty or has different dimensionality than reference front
+            ValueError: If the reference front is not set, or if front is empty or has
+                      different dimensionality than reference front
         """
+        if self.reference_front is None:
+            raise ValueError("Reference front must be set before computing EP")
+        if len(self.reference_front) == 0:
+            raise ValueError("Reference front cannot be empty")
         if front is None or len(front) == 0:
             raise ValueError("Solution front cannot be None or empty")
 
