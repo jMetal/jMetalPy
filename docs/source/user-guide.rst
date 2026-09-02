@@ -22,9 +22,8 @@ Working with Algorithms
    :maxdepth: 2
    :caption: Algorithm Usage:
 
-   tutorials/single-objective-algorithms
-   tutorials/multi-objective-algorithms
-   tutorials/choosing-parameters
+   singleobjective.algorithms
+   multiobjective.algorithms
 
 Experimental Studies
 --------------------
@@ -36,25 +35,3 @@ Experimental Studies
    tutorials/experiment
    tutorials/statistics
    tutorials/quality_indicators_cli
-
-Common Use Cases
-----------------
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Practical Examples:
-
-   tutorials/portfolio-optimization
-   tutorials/engineering-design
-   tutorials/machine-learning-hyperparameters
-
-Best Practices
---------------
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Guidelines:
-
-   tutorials/performance-tuning
-   tutorials/parallel-computing
-   tutorials/result-interpretation

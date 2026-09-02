@@ -70,10 +70,9 @@ First Steps
    :maxdepth: 2
    :caption: Essential tutorials:
 
-   tutorials/your-first-optimization
-   tutorials/understanding-problems
-   tutorials/choosing-algorithms
-   tutorials/analyzing-results
+   tutorials/problem
+   multiobjective.algorithms
+   tutorials/experiment
 
 What's Next?
 ------------
