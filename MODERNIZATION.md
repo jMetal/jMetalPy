@@ -53,6 +53,61 @@ this is fixing a divergence, not guessing at intent.
 - [ ] `fix(lab): propagate worker exceptions instead of discarding the futures`
 - [ ] `test(lab): cover Experiment.run parallelism and error propagation`
 
+### Adopt SAES for statistical analysis, retire the redundant half of `lab`
+
+Compared `src/jmetal/lab/` against the real code of `github.com/jMetal/SAES` (checked out locally
+at `/Users/ajnebro/Softw/SAES`), not just its description. SAES is Nebro & Carreira's own successor
+project for cross-algorithm statistical analysis, and its `apv_procedures.py` implements the same 8
+post-hoc adjustment procedures as jMetalPy's module of the same name — this is a genuine, verified
+duplication, not a superficial one.
+
+**Redundant, to remove** — SAES covers these at least as well, plus adds t-test/ANOVA tables
+jMetalPy never had:
+- `src/jmetal/lab/statistical_test/{functions,apv_procedures,bayesian,critical_distance}.py` → `SAES/statistical_tests/*`, `SAES/plots/cdplot.py`
+- `Experiment.generate_boxplot` → `SAES/plots/boxplot.py::Boxplot`
+- `Experiment.generate_latex_tables`, `generate_median_and_wilcoxon_latex_tables`, `compute_wilcoxon`, `compute_mean_indicator` → `SAES/latex_generation/stats_table.py` (`MeanMedian`, `Wilcoxon`, `WilcoxonPivot`, `Friedman`, `FriedmanPValues`)
+- Side effect: `critical_distance.py` is the *only* user of `statsmodels` in the whole codebase — removing it drops `statsmodels` from the core (required) dependencies entirely.
+
+**Not redundant — kept as-is, no action:**
+- `lab/visualization/{plotting,interactive,streaming}.py` — live/single-run visualization wired to
+  the Observer pattern (`VisualizerObserver`, `PlotFrontToFileObserver`). SAES only analyzes
+  already-completed multi-run results already written to disk; it has nothing for execution-time
+  monitoring.
+- `lab/visualization/chord_plot.py` — no SAES equivalent.
+- `lab/visualization/posterior.py::plot_posterior` — script-callable, returns a figure directly;
+  SAES's Bayesian output (`SAES/html/html_generator.py::notebook_bayesian`) instead shells out to
+  `papermill`/`nbconvert` to render a whole notebook-based HTML report. Different usage pattern, not
+  a clean substitute.
+- `Job`, `Experiment`, `generate_summary_from_experiment` — SAES never runs algorithms, it only
+  consumes CSVs already on disk. This is the part of `lab` that produces those CSVs; it stays
+  (including the `Experiment.run()` parallelism fix below, independent of this decision).
+
+**Decided: remove `generate_kolmogorov_smirnov_latex_tables` outright.** SAES has no
+Kolmogorov-Smirnov test (only Friedman/Friedman-aligned/Quade/Wilcoxon/t-test/ANOVA), so this is a
+real capability loss, not pure de-duplication — accepted anyway, since nothing in `tests/` covers it
+today.
+
+**Two blockers found, one resolved:**
+1. **License**: SAES is GPLv3 (`/Users/ajnebro/Softw/SAES/LICENSE`); jMetalPy is MIT. `saes` must
+   never be a core/required dependency — optional extra only, documented as pulling in GPLv3 code.
+2. ~~**numpy conflict**: SAES pins `numpy<2`, jMetalPy requires `numpy>=2.2.5`.~~ **Resolved by
+   investigation, not a real incompatibility.** Installed SAES's exact dependency set with
+   numpy forced to 2.5.2 and ran its test suite: 79/85 passed. Of the 6 failures, 5 were a missing
+   Jupyter kernel in the throwaway test venv (unrelated to numpy); the 1 real failure is
+   `np.reshape(..., newshape=...)` in `SAES/statistical_tests/non_parametrical.py:174` and
+   `apv_procedures.py:194` — NumPy 2.0 renamed the `newshape` keyword to `shape`. Confirmed `shape=`
+   is a drop-in replacement. `scikit-posthocs==0.10.0` (the more likely suspect) had no issue.
+   Fix requested in a separate agent session against `/Users/ajnebro/Softw/SAES` (2-line change +
+   relax the `numpy<2` pin + run its test suite); not tracked here since it's a different repo.
+
+- [ ] `refactor(lab): remove the statistical-test modules superseded by SAES` — `statistical_test/{functions,apv_procedures,bayesian,critical_distance}.py`
+- [ ] `refactor(lab)!: remove the Experiment methods superseded by SAES` — `generate_boxplot`, `generate_latex_tables`, `generate_median_and_wilcoxon_latex_tables`, `compute_wilcoxon`, `compute_mean_indicator`
+- [ ] `refactor(lab)!: remove generate_kolmogorov_smirnov_latex_tables` — no SAES equivalent; accepted capability loss
+- [ ] `build: drop statsmodels from the core dependencies` — only used by the removed `critical_distance.py`
+- [ ] `build: add saes as an optional extra, never a core dependency` — blocked until the SAES fix above is published to PyPI with a relaxed numpy pin
+- [ ] `docs: point the experiment tutorial and examples at SAES for statistical analysis` — `docs/source/tutorials/experiment.rst`, `examples/experiment/{statistical_analysis.py,generateKolmogorovSmirnovLatexTables.py,generateMedianAndWilcoxonLatexTables.py}`
+- [ ] `docs: document the GPLv3 licensing implication of the optional saes extra` — README
+
 ### Tests
 
 - [ ] `test(algorithm): rename the integration test file so pytest discovers it` — `tests/algorithm/ittest_algorithm.py`
