@@ -1,4 +1,0 @@
-Statistical analysis
-========================
-
-ToDo
