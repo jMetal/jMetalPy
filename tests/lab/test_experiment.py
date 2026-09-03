@@ -1,11 +1,60 @@
 import numpy as np
 import pytest
 
+from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.core.quality_indicator import EpsilonIndicator, GenerationalDistance
-from jmetal.lab.experiment import generate_summary_from_experiment
+from jmetal.lab.experiment import Experiment, Job, generate_summary_from_experiment
+from jmetal.operator import PolynomialMutation, SBXCrossover
+from jmetal.problem import ZDT1
+from jmetal.util.termination_criterion import StoppingByEvaluations
 
 FUN_CONTENTS = "0.0 1.0\n0.5 0.5\n1.0 0.0\n"
 REFERENCE_FRONT_CONTENTS = "0.0 1.0\n0.5 0.5\n1.0 0.0\n"
+
+
+def _make_nsgaii_job(run: int, population_size: int = 10, max_evaluations: int = 40) -> Job:
+    problem = ZDT1()
+    algorithm = NSGAII(
+        problem=problem,
+        population_size=population_size,
+        offspring_population_size=population_size,
+        mutation=PolynomialMutation(
+            probability=1.0 / problem.number_of_variables(), distribution_index=20
+        ),
+        crossover=SBXCrossover(probability=1.0, distribution_index=20),
+        termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
+    )
+    return Job(algorithm=algorithm, algorithm_tag="NSGAII", problem_tag="ZDT1", run=run)
+
+
+class TestExperimentRun:
+    def test_should_run_jobs_across_multiple_processes_and_collect_real_results(
+        self, tmp_path
+    ):
+        jobs = [_make_nsgaii_job(run) for run in range(2)]
+        experiment = Experiment(output_dir=str(tmp_path), jobs=jobs, m_workers=2)
+
+        experiment.run()
+
+        assert len(experiment.job_data) == 2
+        for data in experiment.job_data:
+            # A stale/never-run algorithm would report 0 evaluations -- this is the
+            # exact bug that shipped when Experiment.run() executed jobs eagerly in
+            # the parent instead of actually submitting them to the pool.
+            assert data["EVALUATIONS"] >= 40
+            assert len(data["SOLUTIONS"]) == 10
+        for run in range(2):
+            assert (tmp_path / "NSGAII" / "ZDT1" / f"FUN.{run}.tsv").exists()
+
+    def test_should_propagate_an_exception_raised_inside_a_job(self, tmp_path):
+        # Force Job.execute()'s output directory creation to fail deterministically:
+        # a real, plain file sitting where the algorithm_tag directory needs to go.
+        (tmp_path / "NSGAII").write_text("not a directory")
+        jobs = [_make_nsgaii_job(run=0)]
+        experiment = Experiment(output_dir=str(tmp_path), jobs=jobs, m_workers=1)
+
+        with pytest.raises((NotADirectoryError, FileExistsError)):
+            experiment.run()
 
 
 @pytest.fixture
