@@ -3,6 +3,7 @@
 [![Lint](https://github.com/jMetal/jMetalPy/actions/workflows/lint.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/lint.yml)
 [![Test](https://github.com/jMetal/jMetalPy/actions/workflows/test.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/test.yml)
 [![Build](https://github.com/jMetal/jMetalPy/actions/workflows/build.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/build.yml)
+[![Docs](https://github.com/jMetal/jMetalPy/actions/workflows/docs.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/docs.yml)
 [![Python Version](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)](https://www.python.org/downloads/)
 [![PyPI Version](https://img.shields.io/pypi/v/jMetalPy.svg)](https://pypi.org/project/jMetalPy/)
 [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.swevo.2019.100598-blue)](https://doi.org/10.1016/j.swevo.2019.100598)
