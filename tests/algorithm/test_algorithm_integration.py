@@ -1,4 +1,4 @@
-import unittest
+import pytest
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.algorithm.multiobjective.smpso import SMPSO
@@ -10,44 +10,54 @@ from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.termination_criterion import StoppingByEvaluations
 
 
-class RunningAlgorithmsTestCases(unittest.TestCase):
-    def setUp(self):
-        self.problem = ZDT1()
-        self.population_size = 100
-        self.offspring_size = 100
-        self.mating_pool_size = 100
-        self.max_evaluations = 100
-        self.mutation = PolynomialMutation(
-            probability=1.0 / self.problem.number_of_variables(), distribution_index=20
-        )
-        self.crossover = SBXCrossover(probability=1.0, distribution_index=20)
+@pytest.fixture
+def zdt1_mutation_and_crossover():
+    problem = ZDT1()
+    mutation = PolynomialMutation(
+        probability=1.0 / problem.number_of_variables(), distribution_index=20
+    )
+    crossover = SBXCrossover(probability=1.0, distribution_index=20)
+    return problem, mutation, crossover
 
-    def test_NSGAII(self):
+
+@pytest.mark.smoke
+class TestAlgorithmsRunWithoutErrors:
+    """Quick sanity check that each algorithm completes a short run, no correctness
+    assertions beyond that -- see TestAlgorithmsReachExpectedHypervolume for those.
+    """
+
+    def test_should_nsgaii_complete_a_short_run(self, zdt1_mutation_and_crossover):
+        problem, mutation, crossover = zdt1_mutation_and_crossover
+
         NSGAII(
-            problem=self.problem,
-            population_size=self.population_size,
-            offspring_population_size=self.offspring_size,
-            mutation=self.mutation,
-            crossover=self.crossover,
+            problem=problem,
+            population_size=100,
+            offspring_population_size=100,
+            mutation=mutation,
+            crossover=crossover,
             termination_criterion=StoppingByEvaluations(max_evaluations=1000),
         ).run()
 
-    def test_SMPSO(self):
+    def test_should_smpso_complete_a_short_run(self, zdt1_mutation_and_crossover):
+        problem, mutation, _ = zdt1_mutation_and_crossover
+
         SMPSO(
-            problem=self.problem,
-            swarm_size=self.population_size,
-            mutation=self.mutation,
+            problem=problem,
+            swarm_size=100,
+            mutation=mutation,
             leaders=CrowdingDistanceArchive(100),
             termination_criterion=StoppingByEvaluations(max_evaluations=1000),
         ).run()
 
 
-class IntegrationTestCases(unittest.TestCase):
-    def test_should_NSGAII_work_when_solving_problem_ZDT1_with_standard_settings(self):
+@pytest.mark.integration
+class TestAlgorithmsReachExpectedHypervolume:
+    """Full-length runs on ZDT1 with standard settings, checked against a known-good
+    hypervolume floor rather than just "it ran".
+    """
+
+    def test_should_nsgaii_exceed_the_expected_hypervolume_on_zdt1(self):
         problem = ZDT1()
-
-        max_evaluations = 25000
-
         algorithm = NSGAII(
             problem=problem,
             population_size=100,
@@ -56,7 +66,7 @@ class IntegrationTestCases(unittest.TestCase):
                 probability=1.0 / problem.number_of_variables(), distribution_index=20
             ),
             crossover=SBXCrossover(probability=1.0, distribution_index=20),
-            termination_criterion=StoppingByEvaluations(max_evaluations=max_evaluations),
+            termination_criterion=StoppingByEvaluations(max_evaluations=25000),
         )
 
         algorithm.run()
@@ -65,11 +75,10 @@ class IntegrationTestCases(unittest.TestCase):
         hv = HyperVolume(reference_point=[1, 1])
         value = hv.compute([front[i].objectives for i in range(len(front))])
 
-        self.assertGreater(value, 0.65)
+        assert value > 0.65
 
-    def test_should_SMPSO_work_when_solving_problem_ZDT1_with_standard_settings(self):
+    def test_should_smpso_exceed_the_expected_hypervolume_on_zdt1(self):
         problem = ZDT1()
-
         algorithm = SMPSO(
             problem=problem,
             swarm_size=100,
@@ -86,8 +95,4 @@ class IntegrationTestCases(unittest.TestCase):
         hv = HyperVolume(reference_point=[1, 1])
         value = hv.compute([front[i].objectives for i in range(len(front))])
 
-        self.assertTrue(value >= 0.655)
-
-
-if __name__ == "__main__":
-    unittest.main()
+        assert value >= 0.655
