@@ -111,19 +111,27 @@ Kolmogorov-Smirnov test (only Friedman/Friedman-aligned/Quade/Wilcoxon/t-test/AN
 real capability loss, not pure de-duplication — accepted anyway, since nothing in `tests/` covers it
 today.
 
-**Two blockers found, one resolved:**
+**Two blockers found, one resolved (in the SAES repo, not yet released):**
 1. **License**: SAES is GPLv3 (`/Users/ajnebro/Softw/SAES/LICENSE`); jMetalPy is MIT. `saes` must
    never be a core/required dependency — optional extra only, documented as pulling in GPLv3 code.
-2. ~~**numpy conflict**: SAES pins `numpy<2`, jMetalPy requires `numpy>=2.2.5`.~~ **Resolved by
-   investigation, not a real incompatibility.** Installed SAES's exact dependency set with
-   numpy forced to 2.5.2 and ran its test suite: 79/85 passed. Of the 6 failures, 5 were a missing
-   Jupyter kernel in the throwaway test venv (unrelated to numpy); the 1 real failure is
-   `np.reshape(..., newshape=...)` in `SAES/statistical_tests/non_parametrical.py:174` and
-   `apv_procedures.py:194` — NumPy 2.0 renamed the `newshape` keyword to `shape`. Confirmed `shape=`
-   is a drop-in replacement. `scikit-posthocs==0.10.0` (the more likely suspect) had no issue.
-   Fix requested in a separate agent session against `/Users/ajnebro/Softw/SAES` (2-line change +
-   relax the `numpy<2` pin + run its test suite); not tracked here since it's a different repo.
+2. ~~**numpy conflict**: SAES pins `numpy<2`, jMetalPy requires `numpy>=2.2.5`.~~ **Fixed, on a
+   local branch in `/Users/ajnebro/Softw/SAES`, not merged or released.** Confirmed by a dedicated
+   agent session (separate repo, not tracked step-by-step here): `np.reshape(..., newshape=...)` in
+   `non_parametrical.py:174` and `apv_procedures.py:194` needed the shape argument passed
+   **positionally**, not as `shape=` — that keyword doesn't exist on numpy 1.23.x, so `shape=` would
+   have traded the numpy-2 failure for a numpy-1 one. Verified across numpy 1.23.5/2.2.6/2.5.1
+   directly. Pin relaxed to `numpy>=1.23` (matches `matplotlib==3.9.2`'s own floor, not a guess).
+   Along the way, found and fixed an unrelated, pre-existing bug that would break any fresh SAES
+   install today regardless of numpy: `scikit-posthocs==0.10.0`'s unpinned `statsmodels` dependency
+   imports a shim `statsmodels>=0.15.0` removed; pinned `statsmodels<0.15`. Full suite: 85/85,
+   confirmed two independent ways. Branch `fix/numpy2-compatibility`, 2 commits, **local only, not
+   pushed** — merging/releasing is Antonio's call on that repo, not done here.
+   Also flagged (not fixed, correctly out of scope for that task): 5 gitignored `.ipynb` files under
+   SAES's `tests/htmls/` were accidentally committed in an earlier SAES commit; and SAES's own `main`
+   CI is currently red but on an unrelated, pre-existing failure.
 
+**Still blocked below until the SAES fix above is actually merged and released to PyPI** — do not
+wire `saes` into `pyproject.toml` before then, since PyPI still only has the old `numpy<2` 1.5.0:
 - [ ] `refactor(lab): remove the statistical-test modules superseded by SAES` — `statistical_test/{functions,apv_procedures,bayesian,critical_distance}.py`
 - [ ] `refactor(lab)!: remove the Experiment methods superseded by SAES` — `generate_boxplot`, `generate_latex_tables`, `generate_median_and_wilcoxon_latex_tables`, `compute_wilcoxon`, `compute_mean_indicator`
 - [ ] `refactor(lab)!: remove generate_kolmogorov_smirnov_latex_tables` — no SAES equivalent; accepted capability loss
