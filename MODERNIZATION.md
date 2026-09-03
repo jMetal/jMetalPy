@@ -176,7 +176,7 @@ wire `saes` into `pyproject.toml` before then, since PyPI still only has the old
 ### CI
 
 - [x] `ci: build the documentation with warnings as errors` — new `.github/workflows/docs.yml`, matching the existing lint/test/build workflows. Added a Docs badge to the README too.
-- [ ] `ci: execute the notebooks and examples`
+- [x] `ci: execute the notebooks and examples` — new `.github/workflows/notebooks.yml` runs the 4 lighter tutorial notebooks via `nbconvert --execute` plus 9 representative example scripts (same set linked from the algorithm API pages). Two heavy ones excluded on purpose and documented in the workflow: `NSGAIISolvingZCAT_3obj.ipynb` (20 ZCAT problems × 100k evaluations — verified correct via a reduced scratch copy, just too slow for CI) and `hype_zdt1.py` (HYPE's exact-hypervolume fitness assignment, several minutes at documented settings). Verified every command locally before committing.
 - [x] `ci: report test coverage` — `test.yml` now runs with `--cov` and uploads `coverage.xml` as a build artifact (Python 3.12 leg). No external service (Codecov etc.) wired up — that needs an account/token, a separate decision. Current total: 43%, confirming `lab/`/`algorithm/` are the weak spots already known.
 
 ---
