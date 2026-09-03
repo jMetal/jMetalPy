@@ -162,7 +162,7 @@ class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
             rng: Optional NumPy Generator for reproducible randomness.
         """
         super().__init__(probability=probability)
-        self._rng = rng or np.random
+        self._rng = rng or np.random.default_rng()
 
     def execute(self, parents: list[PermutationSolution]) -> list[PermutationSolution]:
         """Execute the PMX crossover operation.
@@ -446,7 +446,7 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
             raise ValueError("The distribution index cannot be negative")
         # Normalize/ensure the repair operator provides scalar and vector APIs
         self.repair_operator = ensure_float_repair(repair_operator)
-        self._rng = rng or np.random
+        self._rng = rng or np.random.default_rng()
 
     def execute(self, parents: list[FloatSolution]) -> list[FloatSolution]:
         Check.that(
@@ -558,7 +558,7 @@ class IntegerSBXCrossover(Crossover[IntegerSolution, IntegerSolution]):
     ):
         super().__init__(probability=probability)
         self.distribution_index = distribution_index
-        self._rng = rng or np.random
+        self._rng = rng or np.random.default_rng()
 
     def execute(self, parents: list[IntegerSolution]) -> list[IntegerSolution]:
         Check.that(issubclass(type(parents[0]), IntegerSolution), "Solution type invalid")
@@ -805,7 +805,7 @@ class BLXAlphaCrossover(Crossover[FloatSolution, FloatSolution]):
         self.alpha = alpha
         # Normalize repair operator to FloatRepairOperator for scalar/vector API
         self.repair_operator = ensure_float_repair(repair_operator)
-        self._rng = rng or np.random
+        self._rng = rng or np.random.default_rng()
 
     def execute(self, parents: list[FloatSolution]) -> list[FloatSolution]:
         Check.that(len(parents) == 2, "BLXAlphaCrossover requires exactly two parents")
@@ -935,7 +935,7 @@ class BLXAlphaBetaCrossover(Crossover[FloatSolution, FloatSolution]):
         self.beta = beta
         # Normalize repair operator to FloatRepairOperator for scalar/vector API
         self.repair_operator = ensure_float_repair(repair_operator)
-        self._rng = rng or np.random
+        self._rng = rng or np.random.default_rng()
 
     def execute(self, parents: list[FloatSolution]) -> list[FloatSolution]:
         Check.that(len(parents) == 2, "BLXAlphaBetaCrossover requires exactly two parents")
@@ -1048,7 +1048,7 @@ class ArithmeticCrossover(Crossover[FloatSolution, FloatSolution]):
         super().__init__(probability=probability)
         # Normalize repair operator to FloatRepairOperator for scalar/vector API
         self.repair_operator = ensure_float_repair(repair_operator)
-        self._rng = np.random
+        self._rng = np.random.default_rng()
 
     def execute(self, parents: list[FloatSolution]) -> list[FloatSolution]:
         Check.that(len(parents) == 2, "Arithmetic Crossover requires exactly two parents")
@@ -1176,7 +1176,7 @@ class UnimodalNormalDistributionCrossover(Crossover[FloatSolution, FloatSolution
         self.eta = eta
         # Normalize repair operator to FloatRepairOperator for scalar/vector API
         self.repair_operator = ensure_float_repair(repair_operator)
-        self._rng = np.random
+        self._rng = np.random.default_rng()
 
     def execute(self, parents: list[FloatSolution]) -> list[FloatSolution]:
         Check.that(len(parents) >= 3, "UNDX requires at least three parents")
@@ -1307,7 +1307,7 @@ class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
         self.CR = CR
         self.F = F
         self.K = K
-        self._rng = rng or np.random
+        self._rng = rng or np.random.default_rng()
 
         self.current_individual: FloatSolution | None = None
 
