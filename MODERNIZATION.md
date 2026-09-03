@@ -156,9 +156,9 @@ wire `saes` into `pyproject.toml` before then, since PyPI still only has the old
 
 ### Packaging and metadata
 
-- [ ] `docs: sync Sphinx conf release, copyright and src-layout path` — `docs/source/conf.py:6,14`
-- [ ] `build: move mockito to the test extra` — only used by `tests/util/test_comparator.py`
-- [ ] `build: unify the moocore version pin across dependency groups` — `>=0.1.8` base vs `>=0.1.9` extras
+- [x] `docs: sync Sphinx conf release, copyright and src-layout path` — `docs/source/conf.py:6,14`. `release` was `'1.7.0'` (package is 1.9.0), `sys.path` pointed at the repo root from before the `src/` layout move. Author/copyright synced against `pyproject.toml`'s actual authors list. Verified: same 61-warning build.
+- [x] `build: move mockito to the test extra` — only used by `tests/util/test_comparator.py`; removed from base `dependencies`, `core`, `docs`, `distributed`, `complete`.
+- [x] `build: unify the moocore version pin across dependency groups` — `>=0.1.8` base vs `>=0.1.9` extras, unified on `>=0.1.9`. Verified the package still builds and passes `twine check`.
 - [ ] `build: expose the quality indicator CLI as a console script` — `src/jmetal/util/quality_indicator_cli.py` has no `[project.scripts]` entry
 - [ ] `docs: add CITATION.cff`
 - [ ] `docs: add CONTRIBUTING.md pointing at the coding and git guidelines`
