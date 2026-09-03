@@ -1,18 +1,9 @@
-# Minimal makefile for Sphinx documentation and development tasks
-#
+# Development tasks for jMetalPy.
 
-# You can set these variables from the command line.
-SPHINXOPTS    =
-SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = jMetalPy
-SOURCEDIR     = docs/source
-BUILDDIR      = build
+.PHONY: help test test-verbose test-coverage lint format package clean-build install-dev docs docs-build
 
-# Put it first so that "make" without argument is like "make help".
 help:
-	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
-	@echo ""
-	@echo "Additional development commands:"
+	@echo "Available commands:"
 	@echo "  test         run all tests"
 	@echo "  test-verbose run tests with verbose output"
 	@echo "  test-coverage run tests with coverage report"
@@ -21,10 +12,9 @@ help:
 	@echo "  package      build sdist and wheel, then check them with twine"
 	@echo "  clean-build  clean build artifacts"
 	@echo "  install-dev  install development dependencies"
+	@echo "  docs         serve the documentation locally with live reload"
+	@echo "  docs-build   build the documentation, failing on any warning"
 
-.PHONY: help Makefile test test-verbose test-coverage lint format package clean-build install-dev
-
-# Development commands
 test:
 	python -m pytest tests/ -x
 
@@ -55,15 +45,8 @@ clean-build:
 install-dev:
 	pip install -e ".[dev]"
 
-# "make github" option to build gh-pages
-github:
-	@make html
-	@cp -a $(BUILDDIR)/html/. docs
-	@rm -r $(BUILDDIR)
+docs:
+	mkdocs serve
 
-# Catch-all target: route all unknown targets to Sphinx using the new
-# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-%: Makefile
-	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
-	cp -R $(BUILDDIR)/html/* docs
-
+docs-build:
+	mkdocs build --strict

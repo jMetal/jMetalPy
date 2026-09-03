@@ -1,4 +1,4 @@
-![jMetalPy](docs/source/jmetalpy.png)
+![jMetalPy](docs/assets/jmetalpy.png)
 
 [![Lint](https://github.com/jMetal/jMetalPy/actions/workflows/lint.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/lint.yml)
 [![Test](https://github.com/jMetal/jMetalPy/actions/workflows/test.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/test.yml)
@@ -102,7 +102,7 @@ plot_front = Plot(title='Pareto front approximation', axis_labels=['x', 'y'])
 plot_front.plot(front, label='NSGAII-ZDT1', filename='NSGAII-ZDT1', format='png')
 ```
 
-<img src=docs/source/_static/NSGAII-ZDT1.png width=450 alt="Pareto front approximation">
+<img src=docs/assets/NSGAII-ZDT1.png width=450 alt="Pareto front approximation">
 
 
 ## Agents
@@ -123,9 +123,9 @@ The current release of jMetalPy (v1.9.0) contains the following components:
 * Experiment class for performing studies either alone or alongside [jMetal](https://github.com/jMetal/jMetal).
 * Pairwise and multiple hypothesis testing for statistical analysis, including several frequentist and Bayesian testing methods, critical distance plots and posterior diagrams.
 
-| ![Scatter plot 2D](docs/source/_static/2D.gif) | ![Scatter plot 3D](docs/source/_static/3D.gif) |
+| ![Scatter plot 2D](docs/assets/2D.gif) | ![Scatter plot 3D](docs/assets/3D.gif) |
 |-------------- | ----------------  |
-| ![Parallel coordinates](docs/source/_static/p-c.gif) | ![Interactive chord plot](docs/source/_static/chordplot.gif) |
+| ![Parallel coordinates](docs/assets/p-c.gif) | ![Interactive chord plot](docs/assets/chordplot.gif) |
 
 ## Changelog
 

@@ -10,7 +10,7 @@ on:
       - main
 
 jobs:
-  sphinx:
+  mkdocs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -25,4 +25,4 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -e .[docs]
       - name: Build the documentation with warnings as errors
-        run: sphinx-build -b html -W docs/source /tmp/docs-build
+        run: mkdocs build --strict
