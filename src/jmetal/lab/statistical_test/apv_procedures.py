@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 
-def bonferroni_dunn(p_values, control):
+def bonferroni_dunn(p_values: pd.DataFrame | np.ndarray, control: int | str) -> pd.DataFrame:
     """Bonferroni-Dunn's procedure for the adjusted p-value computation.
 
     Args:
@@ -38,7 +38,7 @@ def bonferroni_dunn(p_values, control):
     return pd.DataFrame(data=APVs, index=comparison, columns=["Bonferroni"])
 
 
-def holland(p_values, control):
+def holland(p_values: pd.DataFrame | np.ndarray, control: int | str) -> pd.DataFrame:
     """Holland's procedure for the adjusted p-value computation.
 
     Args:
@@ -79,7 +79,7 @@ def holland(p_values, control):
     return pd.DataFrame(data=APVs, index=comparison, columns=["Holland"])
 
 
-def finner(p_values, control):
+def finner(p_values: pd.DataFrame | np.ndarray, control: int | str) -> pd.DataFrame:
     """Finner's procedure for the adjusted p-value computation.
 
     Args:
@@ -117,7 +117,7 @@ def finner(p_values, control):
     return pd.DataFrame(data=APVs, index=comparison, columns=["Finner"])
 
 
-def hochberg(p_values, control):
+def hochberg(p_values: pd.DataFrame | np.ndarray, control: int | str) -> pd.DataFrame:
     """Hochberg's procedure for the adjusted p-value computation.
 
     Args:
@@ -155,7 +155,7 @@ def hochberg(p_values, control):
     return pd.DataFrame(data=APVs, index=comparison, columns=["Hochberg"])
 
 
-def li(p_values, control):
+def li(p_values: pd.DataFrame | np.ndarray, control: int | str) -> pd.DataFrame:
     """Li's procedure for the adjusted p-value computation.
 
     Args:
@@ -198,7 +198,7 @@ def li(p_values, control):
     return pd.DataFrame(data=APVs, index=comparison, columns=["Li"])
 
 
-def holm(p_values, control=None):
+def holm(p_values: pd.DataFrame | np.ndarray, control: int | str | None = None) -> pd.DataFrame:
     """Holm's procedure for the adjusted p-value computation.
 
     Args:
@@ -255,7 +255,7 @@ def holm(p_values, control=None):
     return pd.DataFrame(data=APVs, index=comparison, columns=["Holm"])
 
 
-def shaffer(p_values):
+def shaffer(p_values: pd.DataFrame | np.ndarray) -> pd.DataFrame:
     """Shaffer's procedure for adjusted p-value computation.
 
     Args:
@@ -321,7 +321,7 @@ def shaffer(p_values):
     return pd.DataFrame(data=APVs, index=comparison, columns=["Shaffer"])
 
 
-def nemenyi(p_values):
+def nemenyi(p_values: pd.DataFrame | np.ndarray) -> pd.DataFrame:
     """Nemenyi's procedure for adjusted p-value computation.
 
     Args:

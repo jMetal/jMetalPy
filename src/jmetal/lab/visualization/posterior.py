@@ -8,12 +8,12 @@ logger = logging.getLogger(__name__)
 
 
 def plot_posterior(
-    sample,
+    sample: pd.DataFrame | np.ndarray,
     higher_is_better: bool = False,
     min_points_per_hexbin: int = 2,
     alg_names: list = None,
     filename: str = "posterior.eps",
-):
+) -> plt.Figure:
     """Plots the sample from posterior distribution of a Bayesian statistical test.
 
     Args:

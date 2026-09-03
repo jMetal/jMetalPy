@@ -3,12 +3,16 @@ from scipy.stats import binom, chi2, f, norm
 from jmetal.lab.statistical_test.apv_procedures import *
 
 
-def ranks(data: np.array, descending=False):
+def ranks(data: np.array, descending: bool = False) -> np.array:
     """Computes the rank of the elements in data.
 
-    :param data: 2-D matrix
-    :param descending: boolean (default False). If true, rank is sorted in descending order.
-    :return: ranks, where ranks[i][j] == rank of the i-th row w.r.t the j-th column.
+    Args:
+        data: 2-D matrix.
+        descending: If true, rank is sorted in descending order.
+
+    Returns:
+        A matrix of the same shape as ``data`` where entry `(i, j)` is the rank of the i-th row
+        with respect to the j-th column.
     """
     s = 0 if (descending is False) else 1
 
