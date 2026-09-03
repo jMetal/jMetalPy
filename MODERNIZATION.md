@@ -167,7 +167,7 @@ wire `saes` into `pyproject.toml` before then, since PyPI still only has the old
 - [x] `build: unify the moocore version pin across dependency groups` — `>=0.1.8` base vs `>=0.1.9` extras, unified on `>=0.1.9`. Verified the package still builds and passes `twine check`.
 - [x] `build: expose the quality indicator CLI as a console script` — added `jmetalpy-quality-indicator`, verified with a real install + `--help`. Documented alongside the existing `python -m` form.
 - [x] `docs: add CITATION.cff` — matches `pyproject.toml`'s authors and the existing SWEVO BibTeX in `about.rst` field for field; validated as parseable YAML.
-- [ ] `docs: add CONTRIBUTING.md pointing at the coding and git guidelines`
+- [x] `docs: add CONTRIBUTING.md pointing at the coding and git guidelines` — also rewrote the stale `docs/source/contributing.rst` (a master/develop/feature/hotfix git-flow this repo never used, Python 3.6, and 8 screenshot references that point at files which don't exist in the repo) to point at the new file instead. `sphinx-build`: 61 warnings before, 39 after.
 - [ ] `docs: extract the changelog from README into CHANGELOG.md`
 - [ ] `docs: list the full algorithm and problem catalogue in the README` — currently omits MOCell, WFG1-9, ZCAT1-20, DTLZ3-7, eqDTLZ, `misc.py`
 
