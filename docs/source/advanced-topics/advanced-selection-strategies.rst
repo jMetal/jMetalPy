@@ -52,7 +52,7 @@ Examples to be Covered
 * **Dynamic Population Sizing**: Adaptive archive and population sizes
 
 Current Implementation
----------------------
+-----------------------
 
 The :doc:`distance-based-archive` demonstrates several advanced concepts:
 

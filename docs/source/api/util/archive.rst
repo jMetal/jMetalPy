@@ -134,7 +134,5 @@ Performance Considerations
 See Also
 --------
 
-* :doc:`../distance` - Distance measures and metrics
-* :doc:`../comparator` - Solution comparison utilities
-* :doc:`../normalization` - Objective normalization functions
-* :doc:`../../algorithm/multiobjective` - Multi-objective algorithms using archives
+* :doc:`distance` - Distance measures and metrics
+* :doc:`/multiobjective.algorithms` - Multi-objective algorithms using archives

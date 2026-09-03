@@ -91,5 +91,5 @@ Traditional Distance Classes
 See Also
 --------
 
-* :doc:`../archive` - Archive implementations that use distance metrics
+* :doc:`archive` - Archive implementations that use distance metrics
 * :doc:`../../advanced-topics/distance-based-archive` - Tutorial on distance-based selection
