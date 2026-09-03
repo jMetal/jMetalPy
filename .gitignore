@@ -21,3 +21,8 @@ tuning_output/
 
 # Generated output from local runs (front plots, summaries, etc.)
 /results/
+.ipynb_checkpoints/
+examples/experiment/boxplot/
+examples/experiment/latex/
+examples/experiment/*.csv
+examples/experiment/*.eps
