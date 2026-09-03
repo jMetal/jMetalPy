@@ -99,6 +99,12 @@ test = [
     "pytest-cov>=4.0"
 ]
 
+notebooks = [
+    "jupyter",
+    "nbconvert>=7.0",
+    "ipykernel>=6.0"
+]
+
 complete = [
     "tqdm",
     "numpy>=2.2.5",

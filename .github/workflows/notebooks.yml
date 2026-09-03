@@ -1,0 +1,62 @@
+name: Notebooks and examples
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[test,notebooks]"
+          python -m ipykernel install --user --name jmetalpy-ci
+      - name: Execute the tutorial notebooks
+        run: |
+          for nb in NSGAIINotebook NSGAIISolvingZCAT Operators_FloatSolutions_Full SolvingConstrainedProblems; do
+            echo "::group::$nb"
+            jupyter nbconvert --to notebook --execute --stdout \
+              --ExecutePreprocessor.kernel_name=jmetalpy-ci \
+              --ExecutePreprocessor.timeout=300 \
+              "notebooks/$nb.ipynb" > /dev/null
+            echo "::endgroup::"
+          done
+          # NSGAIISolvingZCAT_3obj.ipynb is excluded: 20 ZCAT problems x 100,000
+          # evaluations each, several minutes even on a fast machine. Its lighter
+          # sibling above (NSGAIISolvingZCAT.ipynb, single-objective count, 25,000
+          # evaluations) exercises the same NSGA-II/ZCAT/DistanceBasedArchive code
+          # path and is run here instead.
+      - name: Run representative examples
+        run: |
+          examples=(
+            "multiobjective/gde3/gde3_zdt1.py"
+            "multiobjective/ibea/ibea_dtlz1.py"
+            "multiobjective/mocell/mocell_zdt1.py"
+            "multiobjective/moead/moead_dtlz1.py"
+            "multiobjective/nsgaii/nsgaii_standard_settings.py"
+            "multiobjective/nsgaiii/nsgaiii_dtlz2.py"
+            "multiobjective/omopso/omopso_zdt1.py"
+            "multiobjective/smpso/smpso_zdt3.py"
+            "multiobjective/spea2/spea2_zdt1.py"
+          )
+          # hype_zdt1.py is excluded: HYPE's exact-hypervolume fitness assignment
+          # takes several minutes at its documented population/evaluation budget.
+          for example in "${examples[@]}"; do
+            echo "::group::$example"
+            python "examples/$example"
+            echo "::endgroup::"
+          done
