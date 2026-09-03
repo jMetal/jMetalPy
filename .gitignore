@@ -18,6 +18,9 @@ tuning_output/
 
 # Auto-generated build artifacts
 *.egg-info/
+.coverage
+coverage.xml
+htmlcov/
 
 # Generated output from local runs (front plots, summaries, etc.)
 /results/
