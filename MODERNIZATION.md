@@ -79,6 +79,12 @@ this is fixing a divergence, not guessing at intent.
 
 ### Adopt SAES for statistical analysis, retire the redundant half of `lab`
 
+**Frozen (2026-09-03): SAES is undergoing a deep refactor upstream, so integrating against its
+current shape now would mean redoing this work later.** Do not resume any of the checklist items
+below, and do not touch the SAES repo, until a new SAES release lands on PyPI with the numpy 2
+fix included — re-evaluate the plan against that release's actual API before picking this back up,
+since the refactor may change more than just the numpy pin.
+
 Compared `src/jmetal/lab/` against the real code of `github.com/jMetal/SAES` (checked out locally
 at `/Users/ajnebro/Softw/SAES`), not just its description. SAES is Nebro & Carreira's own successor
 project for cross-algorithm statistical analysis, and its `apv_procedures.py` implements the same 8
@@ -160,7 +166,7 @@ wire `saes` into `pyproject.toml` before then, since PyPI still only has the old
 - [x] `build: move mockito to the test extra` — only used by `tests/util/test_comparator.py`; removed from base `dependencies`, `core`, `docs`, `distributed`, `complete`.
 - [x] `build: unify the moocore version pin across dependency groups` — `>=0.1.8` base vs `>=0.1.9` extras, unified on `>=0.1.9`. Verified the package still builds and passes `twine check`.
 - [x] `build: expose the quality indicator CLI as a console script` — added `jmetalpy-quality-indicator`, verified with a real install + `--help`. Documented alongside the existing `python -m` form.
-- [ ] `docs: add CITATION.cff`
+- [x] `docs: add CITATION.cff` — matches `pyproject.toml`'s authors and the existing SWEVO BibTeX in `about.rst` field for field; validated as parseable YAML.
 - [ ] `docs: add CONTRIBUTING.md pointing at the coding and git guidelines`
 - [ ] `docs: extract the changelog from README into CHANGELOG.md`
 - [ ] `docs: list the full algorithm and problem catalogue in the README` — currently omits MOCell, WFG1-9, ZCAT1-20, DTLZ3-7, eqDTLZ, `misc.py`
