@@ -23,6 +23,12 @@ logger = get_logger(__name__)
 S = TypeVar("S")  # Type of the solutions
 R = TypeVar("R")  # Type of the result returned by the algorithm
 
+# threading.Thread's own instance attributes (locks, Event objects, and other
+# unpicklable internals), captured from a fresh, never-started Thread. Algorithm
+# never actually starts as a thread (run() is called directly), so none of this
+# is meaningful state to carry across a pickle -- __setstate__ regenerates it.
+_THREAD_STATE_ATTRS = frozenset(vars(threading.Thread()).keys())
+
 
 class Algorithm(Generic[S, R], threading.Thread, ABC):
     """Abstract base class for all optimization algorithms in JMetalPy.
@@ -48,6 +54,20 @@ class Algorithm(Generic[S, R], threading.Thread, ABC):
         self.start_computing_time = 0
         self.total_computing_time = 0
         self.observable = store.default_observable
+
+    def __getstate__(self) -> dict:
+        """Exclude threading.Thread's internal locks from pickling.
+
+        Algorithm instances are never actually started as threads (run() is called
+        directly), but the Thread base class still carries unpicklable lock objects
+        in its instance state. This lets an Algorithm be sent across a process
+        boundary, e.g. via ProcessPoolExecutor in jmetal.lab.experiment.
+        """
+        return {k: v for k, v in self.__dict__.items() if k not in _THREAD_STATE_ATTRS}
+
+    def __setstate__(self, state: dict) -> None:
+        threading.Thread.__init__(self)
+        self.__dict__.update(state)
 
     @abstractmethod
     def create_initial_solutions(self) -> list[S]:
