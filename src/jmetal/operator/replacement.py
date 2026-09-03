@@ -64,7 +64,7 @@ class RankingAndDensityEstimatorReplacement:
         self,
         ranking: Ranking,
         density_estimator: DensityEstimator,
-        removal_policy=RemovalPolicyType.ONE_SHOT,
+        removal_policy: RemovalPolicyType = RemovalPolicyType.ONE_SHOT,
     ):
         self.ranking = ranking
         self.density_estimator = density_estimator

@@ -1291,13 +1291,13 @@ class DifferentialEvolutionCrossover(Crossover[FloatSolution, FloatSolution]):
     is the target vector, while the other two are used to compute the difference vector.
 
     Args:
-        cr: Crossover probability (0.0 to 1.0). Controls the probability of each variable being
+        CR: Crossover probability (0.0 to 1.0). Controls the probability of each variable being
             taken from the trial vector versus the target vector.
-        f: Differential weight (mutation factor) for the difference vector. Typically in [0, 2].
-        k: Scaling factor for the difference vector. Typically in [0, 1].
+        F: Differential weight (mutation factor) for the difference vector. Typically in [0, 2].
+        K: Scaling factor for the difference vector. Typically in [0, 1].
 
     Raises:
-        ValueError: If cr is not in [0,1] or f/k are negative.
+        ValueError: If CR is not in [0,1] or F/K are negative.
 
     Reference:
         Storn, R., & Price, K. (1997). Differential evolution - a simple and efficient heuristic for

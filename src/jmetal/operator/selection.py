@@ -626,7 +626,7 @@ class RankingAndFitnessSelection(Selection[list[S], list[S]]):
             population: List of solutions to evaluate.
             reference_point: Reference point for hypervolume calculation.
             k: Number of points to consider for hypervolume approximation.
-               If negative, uses the entire population size.
+                If negative, uses the entire population size.
 
         Returns:
             The input population with updated fitness values in their attributes.
