@@ -177,7 +177,7 @@ wire `saes` into `pyproject.toml` before then, since PyPI still only has the old
 
 - [x] `ci: build the documentation with warnings as errors` — new `.github/workflows/docs.yml`, matching the existing lint/test/build workflows. Added a Docs badge to the README too.
 - [ ] `ci: execute the notebooks and examples`
-- [ ] `ci: report test coverage`
+- [x] `ci: report test coverage` — `test.yml` now runs with `--cov` and uploads `coverage.xml` as a build artifact (Python 3.12 leg). No external service (Codecov etc.) wired up — that needs an account/token, a separate decision. Current total: 43%, confirming `lab/`/`algorithm/` are the weak spots already known.
 
 ---
 
