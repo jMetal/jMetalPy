@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the article describing it (see preferred-citation), and optionally this software release itself."
+title: "jMetalPy"
+type: software
+authors:
+  - given-names: "Antonio J."
+    family-names: "Nebro"
+    email: ajnebro@uma.es
+    affiliation: "Universidad de Málaga"
+  - given-names: "Antonio"
+    family-names: "Benítez-Hidalgo"
+    email: antonio.b@uma.es
+    affiliation: "Universidad de Málaga"
+repository-code: "https://github.com/jMetal/jMetalPy"
+url: "https://github.com/jMetal/jMetalPy"
+license: MIT
+version: 1.9.0
+preferred-citation:
+  type: article
+  title: "jMetalPy: A Python framework for multi-objective optimization with metaheuristics"
+  authors:
+    - given-names: Antonio
+      family-names: "Benítez-Hidalgo"
+    - given-names: "Antonio J."
+      family-names: Nebro
+    - given-names: "José"
+      family-names: "García-Nieto"
+    - given-names: Izaskun
+      family-names: Oregi
+    - given-names: Javier
+      family-names: "Del Ser"
+  journal: "Swarm and Evolutionary Computation"
+  year: 2019
+  pages: "100598"
+  doi: "10.1016/j.swevo.2019.100598"
+  url: "https://doi.org/10.1016/j.swevo.2019.100598"
+  issn: "2210-6502"
+  keywords:
+    - "Multi-objective optimization"
+    - "Metaheuristics"
+    - "Software framework"
+    - "Python"
+    - "Statistical analysis"
+    - "Visualization"
