@@ -889,7 +889,7 @@ def _compute_crowding_distances(objectives: np.ndarray) -> np.ndarray:
 def distance_based_subset_selection(
     solution_list: list[S],
     subset_size: int,
-    distance_measure=None,
+    distance_measure: object | None = None,
     metric: DistanceMetric = DistanceMetric.L2_SQUARED,
     weights: np.ndarray | None = None,
     random_seed: int | None = None,
@@ -930,7 +930,7 @@ class DistanceBasedArchive(BoundedArchive[S]):
         metric: DistanceMetric = DistanceMetric.L2_SQUARED,
         weights: np.ndarray | None = None,
         random_seed: int | None = None,
-        dominance_comparator=None,
+        dominance_comparator: Comparator | None = None,
         use_vectorized: bool = True,
     ):
         """
