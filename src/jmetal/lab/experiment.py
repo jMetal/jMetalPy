@@ -37,7 +37,7 @@ class Job:
         self.problem_tag = problem_tag
         self.run_tag = run
 
-    def execute(self, output_path: str = ""):
+    def execute(self, output_path: str = "") -> dict:
         self.algorithm.run()
 
         if output_path:
@@ -50,6 +50,8 @@ class Job:
             file_name = os.path.join(output_path, f"TIME.{self.run_tag}")
             with open(file_name, "w+") as of:
                 of.write(str(self.algorithm.total_computing_time))
+
+        return self.get_algorithm_data()
 
     def get_algorithm_data(self):
         return self.algorithm.observable_data()
@@ -70,10 +72,13 @@ class Experiment:
 
     def run(self) -> None:
         with ProcessPoolExecutor(max_workers=self.m_workers) as executor:
+            futures = []
             for job in self.jobs:
                 output_path = os.path.join(self.output_dir, job.algorithm_tag, job.problem_tag)
-                executor.submit(job.execute(output_path))
-                self.job_data.append(job.get_algorithm_data())
+                futures.append(executor.submit(job.execute, output_path))
+
+            for future in futures:
+                self.job_data.append(future.result())
 
 
 def generate_summary_from_experiment(
