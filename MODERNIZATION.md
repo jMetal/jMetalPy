@@ -142,9 +142,9 @@ wire `saes` into `pyproject.toml` before then, since PyPI still only has the old
 
 ### Tests
 
-- [ ] `test(algorithm): rename the integration test file so pytest discovers it` — `tests/algorithm/ittest_algorithm.py`
-- [ ] `test(algorithm): migrate the integration tests to pytest conventions` — `unittest.TestCase` → `test_should_<behavior>`
-- [ ] `test: apply the declared smoke/slow/integration markers` — or remove them from `pyproject.toml:44-48` if unused by design
+- [x] `test(algorithm): rename the integration test file so pytest discovers it` — `tests/algorithm/ittest_algorithm.py` → `test_algorithm_integration.py`. All 4 tests passed immediately once discovered.
+- [x] `test(algorithm): migrate the integration tests to pytest conventions` — `unittest.TestCase` → `test_should_<behavior>`, done in the same commit as the rename (the file's old content wasn't worth preserving as an intermediate state).
+- [x] `test: apply the declared smoke/slow/integration markers` — applied `@pytest.mark.smoke`/`@pytest.mark.integration` to the two classes in the file above, which map directly onto that distinction. Other test files weren't audited for `slow`/`integration` candidates — leaving the markers declared and now precedented rather than removed.
 
 ### Repository artifacts
 
