@@ -240,8 +240,9 @@ entirely, not kept as a fallback.
 - [x] `ci: replace the Sphinx docs workflow with mkdocs build --strict`
 - [x] `chore: remove docs/source's Sphinx config and the bundled guzzle theme`
 - [x] `docs: update CONTRIBUTING.md/README references from .rst to the new structure`
-- [ ] `docs_new/ → docs/` rename and `ci: deploy via mkdocs gh-deploy (or the official mkdocs-material Action) to a gh-pages branch` — **blocked on a user decision**: `docs/` root currently holds the live-published Sphinx HTML (GitHub Pages serves it directly from `main`, no `gh-pages` branch, no Actions deploy). Renaming `docs_new/` over it, or switching Pages to a `gh-pages` branch, needs the user to confirm and to change the Pages source setting in GitHub (only they can).
-- [ ] `chore: untrack the built HTML site from docs/` — carried over from L0, resolved as part of the deploy-step decision above
+- [x] `docs: promote the MkDocs staging tree to docs/` — replaced the old Sphinx-built HTML at `docs/` root with the migrated Markdown source; resolves the L0 "untrack the built HTML site from docs/" item too
+- [x] `ci: deploy via mkdocs gh-deploy to a gh-pages branch` — build job unchanged, new deploy job gated to pushes on `main`
+- [ ] **Manual step pending (user, one-time):** after the first successful push to `main` creates the `gh-pages` branch, switch the repo's Pages source in Settings → Pages to "Deploy from a branch" / `gh-pages`
 
 ---
 
