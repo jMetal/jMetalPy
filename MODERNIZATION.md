@@ -148,8 +148,8 @@ wire `saes` into `pyproject.toml` before then, since PyPI still only has the old
 
 ### Repository artifacts
 
-- [ ] `chore: untrack generated result artifacts and ignore them` — `results/` (194 MB)
-- [ ] `chore: untrack notebook checkpoints and experiment output artifacts` — `notebooks/.ipynb_checkpoints/`, `examples/experiment/{boxplot,latex}/`
+- [x] `chore: untrack generated result artifacts and ignore them` — `results/` (194 MB, 80 files, confirmed unreferenced by any source/test/example/doc before removing). Kept on disk, just untracked; `.gitignore` now has `/results/`.
+- [x] `chore: untrack notebook checkpoints and experiment output artifacts` — `notebooks/.ipynb_checkpoints/` (4 files) plus `examples/experiment/{boxplot,latex}/` and 3 more top-level generated files found while checking (`QualityIndicatorSummary.csv`, `cdplot.eps`, `posterior.eps`) — 286 files, ~5.3 MB total. Confirmed only `.py` scripts remain tracked in `examples/experiment/`.
 - [ ] `chore: drop stale tuning entries from .gitignore` — leftovers from the removed `jmetal/tuning` package
 - [ ] `ci: publish the documentation from a gh-pages branch`
 - [ ] `chore: untrack the built HTML site from docs/` — 311 files, 27 MB
