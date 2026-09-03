@@ -158,7 +158,7 @@ wire `saes` into `pyproject.toml` before then, since PyPI still only has the old
 
 - [x] `chore: untrack generated result artifacts and ignore them` — `results/` (194 MB, 80 files, confirmed unreferenced by any source/test/example/doc before removing). Kept on disk, just untracked; `.gitignore` now has `/results/`.
 - [x] `chore: untrack notebook checkpoints and experiment output artifacts` — `notebooks/.ipynb_checkpoints/` (4 files) plus `examples/experiment/{boxplot,latex}/` and 3 more top-level generated files found while checking (`QualityIndicatorSummary.csv`, `cdplot.eps`, `posterior.eps`) — 286 files, ~5.3 MB total. Confirmed only `.py` scripts remain tracked in `examples/experiment/`.
-- [ ] `chore: drop stale tuning entries from .gitignore` — leftovers from the removed `jmetal/tuning` package
+- [x] `chore: drop stale tuning entries from .gitignore` — `db.sqlite3`, `optuna/optuna_nsgaii.db`, `*_tuned_config.json`, `validation_results/`, `tuning_output/`, `*.prof`; confirmed nothing in the current codebase references any of them.
 - [ ] `ci: publish the documentation from a gh-pages branch` — **deliberately deferred, not forgotten.** GitHub Pages currently serves the built HTML committed directly in `docs/` on `main` (no `gh-pages` branch, no Actions deploy). Untracking that HTML without first switching Pages' source in the repo's GitHub Settings (a change only Antonio can make) would 404 the live site. Asked; decided to leave both this and the next item alone for now rather than do the workflow half now and the untracking later.
 - [ ] `chore: untrack the built HTML site from docs/` — 311 files, 27 MB — see above, blocked on the same Pages-source decision
 
