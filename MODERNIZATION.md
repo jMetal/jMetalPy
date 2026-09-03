@@ -175,7 +175,7 @@ wire `saes` into `pyproject.toml` before then, since PyPI still only has the old
 
 ### CI
 
-- [ ] `ci: build the documentation with warnings as errors`
+- [x] `ci: build the documentation with warnings as errors` — new `.github/workflows/docs.yml`, matching the existing lint/test/build workflows. Added a Docs badge to the README too.
 - [ ] `ci: execute the notebooks and examples`
 - [ ] `ci: report test coverage`
 
