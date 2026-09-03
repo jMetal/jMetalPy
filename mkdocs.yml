@@ -1,0 +1,117 @@
+site_name: jMetalPy
+site_description: Python framework for multi-objective optimization with metaheuristics
+site_url: https://jmetal.github.io/jMetalPy/
+repo_url: https://github.com/jMetal/jMetalPy
+repo_name: jMetal/jMetalPy
+edit_uri: edit/main/docs/
+
+docs_dir: docs_new
+site_dir: site
+
+theme:
+  name: material
+  logo: assets/jmetalpy.png
+  favicon: assets/jmetalpy.png
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - content.code.copy
+    - content.action.edit
+    - search.suggest
+    - toc.follow
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - User Guide:
+      - Tutorials:
+          - Defining Problems: tutorials/problem.md
+          - Observers: tutorials/observer.md
+          - Evaluators: tutorials/evaluator.md
+          - Visualization: tutorials/visualization.md
+          - Experiments: tutorials/experiment.md
+          - Statistical Analysis: tutorials/statistics.md
+          - Quality Indicator CLI: tutorials/quality_indicators_cli.md
+      - Algorithms:
+          - Single-objective: algorithms/singleobjective.md
+          - Multi-objective:
+              - GDE3: algorithms/multiobjective/gde3.md
+              - HYPE: algorithms/multiobjective/hype.md
+              - IBEA: algorithms/multiobjective/ibea.md
+              - MOCell: algorithms/multiobjective/mocell.md
+              - MOEA/D: algorithms/multiobjective/moead.md
+              - NSGA-II: algorithms/multiobjective/nsgaii.md
+              - NSGA-III: algorithms/multiobjective/nsgaiii.md
+              - OMOPSO: algorithms/multiobjective/omopso.md
+              - SMPSO: algorithms/multiobjective/smpso.md
+              - SPEA2: algorithms/multiobjective/spea2.md
+  - Advanced Topics:
+      - advanced-topics/index.md
+      - Distance-Based Archive: advanced-topics/distance-based-archive.md
+      - Custom Archives: advanced-topics/custom-archives.md
+      - Advanced Selection Strategies: advanced-topics/advanced-selection-strategies.md
+  - API Reference:
+      - api/index.md
+      - Core: api/core.md
+      - Operators: api/operators.md
+      - Algorithms: api/algorithms.md
+      - Problems: api/problems.md
+      - Utilities: api/util.md
+      - Lab: api/lab.md
+  - Contributing: contributing.md
+  - About: about.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: true
+            show_root_full_path: false
+            merge_init_into_class: true
+            group_by_category: true
+            show_if_no_docstring: false
+            members_order: source
+            filters: ["!^_"]
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path: ["."]
+      check_paths: true
+  - pymdownx.superfences
+
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js

@@ -13,6 +13,7 @@ VAR.*
 .coverage
 coverage.xml
 htmlcov/
+/site/
 
 # Generated output from local runs (front plots, summaries, etc.)
 /results/
