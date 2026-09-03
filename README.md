@@ -112,12 +112,12 @@ If you use AI assistants (e.g., Copilot, Codex) while working on this project, p
 ## Features
 The current release of jMetalPy (v1.9.0) contains the following components:
 
-* Algorithms: local search, genetic algorithm, evolution strategy, simulated annealing, random search, NSGA-II, NSGA-III, SMPSO, OMOPSO, MOEA/D, SMS-EMOA, MOEA/D-DRA, MOEA/D-IEpsilon, GDE3, SPEA2, HYPE, IBEA. Preference articulation-based algorithms (G-NSGA-II, G-GDE3, G-SPEA2, SMPSO/RP); Dynamic versions of NSGA-II, SMPSO, and GDE3.
+* Algorithms: local search, genetic algorithm, evolution strategy, simulated annealing, random search, NSGA-II, NSGA-III, SMPSO, OMOPSO, MOEA/D, SMS-EMOA, MOEA/D-DRA, MOEA/D-IEpsilon, GDE3, SPEA2, HYPE, IBEA, MOCell. Preference articulation-based algorithms (G-NSGA-II, G-GDE3, G-SPEA2, SMPSO/RP); Dynamic versions of NSGA-II, SMPSO, and GDE3.
 * Parallel computing based on Apache Spark and Dask.
-* Benchmark problems: ZDT1-6, DTLZ1-2, FDA, LZ09, LIR-CMOP, RWA, RE, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2), constrained (Srinivas, Tanaka).
+* Benchmark problems: ZDT1-6, DTLZ1-7, WFG1-9, ZCAT1-20, eqDTLZ, FDA, LZ09, UF (CEC'09), LIR-CMOP, RWA, RE, a multi-objective TSP, unconstrained (Kursawe, Fonseca, Schaffer, Viennet2, and the CONV/DENT/SYM-PART/SSW/TWO-ON-ONE/OMNI-TEST family in misc.py), constrained (Srinivas, Tanaka, Osyczka2, Binh2).
 * Encodings: real, integer, binary, permutations.
-* Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX), mutation (bit-blip, polynomial, uniform, random).
-* Quality indicators: hypervolume, additive epsilon, GD, IGD, IGD+.
+* Operators: selection (binary tournament, ranking and crowding distance, random, nary random, best solution), crossover (single-point, SBX, PMX, CX, BLX-Alpha, BLX-Alpha-Beta, arithmetic, UNDX, differential evolution), mutation (bit-flip, polynomial, uniform, random, non-uniform, Levy flight, power-law).
+* Quality indicators: hypervolume, normalized hypervolume, additive epsilon, GD, IGD, IGD+, average Hausdorff distance.
 * Pareto front approximation plotting in real-time, static or interactive.
 * Experiment class for performing studies either alone or alongside [jMetal](https://github.com/jMetal/jMetal).
 * Pairwise and multiple hypothesis testing for statistical analysis, including several frequentist and Bayesian testing methods, critical distance plots and posterior diagrams.
