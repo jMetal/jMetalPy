@@ -36,6 +36,9 @@ dependencies = [
     "moocore>=0.1.9"
 ]
 
+[project.scripts]
+jmetalpy-quality-indicator = "jmetal.util.quality_indicator_cli:main"
+
 [tool.pytest.ini_options]
 addopts = [
     "--import-mode=importlib",

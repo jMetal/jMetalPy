@@ -30,6 +30,9 @@ Basic Usage
 
     python -m jmetal.util.quality_indicator_cli <front.csv> <reference.csv> <indicator> [options]
 
+    # equivalent, installed as a console script
+    jmetalpy-quality-indicator <front.csv> <reference.csv> <indicator> [options]
+
 Examples
 ~~~~~~~~
 
