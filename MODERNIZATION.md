@@ -181,7 +181,7 @@ wire `saes` into `pyproject.toml` before then, since PyPI still only has the old
 
 ---
 
-## Documentation toolchain — migrate Sphinx → MkDocs (decided, not started)
+## Documentation toolchain — migrate Sphinx → MkDocs (decided, in progress)
 
 **Decision:** replace Sphinx (custom `guzzle` theme, RST) with **MkDocs + Material for MkDocs +
 mkdocstrings[python]**. Reasons:
@@ -222,10 +222,13 @@ against `mkdocstrings`/`mkdocs-nav` conventions.
 
 The counter-case — do L1 first, since it's the substantively higher-value work and a tooling swap
 is infrastructure, not user-facing capability — is reasonable too; recorded here so the tradeoff is
-visible, not just the recommendation. **Not yet decided** — Antonio to confirm before either the
-migration or L1 phase 1 starts.
+visible, not just the recommendation.
 
-### Migration checklist (draft, to refine before starting)
+**Decided: migrate now, before L1.** Antonio wants documentation treated as a priority, not an
+afterthought bolted on once L1 lands — confirms the recommendation above. Sphinx is being dropped
+entirely, not kept as a fallback.
+
+### Migration checklist
 
 - [ ] `build: add mkdocs, mkdocs-material, mkdocstrings[python] as a docs dependency group`
 - [ ] `docs: scaffold mkdocs.yml and the new content structure`
