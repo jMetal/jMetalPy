@@ -582,10 +582,8 @@ class CosineDistance(Distance):
             list2: Second point as list or numpy array
 
         Returns:
-            float: Cosine similarity in range [-1, 1]
-                  1 = vectors point in same direction
-                  0 = vectors are orthogonal
-                 -1 = vectors point in opposite directions
+            Cosine similarity in range [-1, 1]: 1 means the vectors point in the same direction,
+            0 means they are orthogonal, and -1 means they point in opposite directions.
         """
         distance = self.get_distance(list1, list2)
         return 1.0 - distance

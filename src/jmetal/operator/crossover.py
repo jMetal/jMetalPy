@@ -120,10 +120,11 @@ class PMXCrossover(Crossover[PermutationSolution, PermutationSolution]):
     commonly used in problems like the Traveling Salesman Problem (TSP) and other ordering problems.
 
     The operator works by:
-    1. Selecting two random cut points in the parent permutations
-    2. Creating an offspring by copying the segment between the cut points from parent1
+
+    1. Selecting two random cut points in the parent permutations.
+    2. Creating an offspring by copying the segment between the cut points from parent1.
     3. Filling the remaining positions with the relative order of elements from parent2,
-       while avoiding duplicates using a mapping relationship
+       while avoiding duplicates using a mapping relationship.
 
     Args:
         probability: The probability of applying the crossover (0.0 to 1.0).
@@ -259,12 +260,13 @@ class CXCrossover(Crossover[PermutationSolution, PermutationSolution]):
     permutations and creating offspring by alternating between the cycles of the parents.
 
     The algorithm works as follows:
+
     1. Start with the first parent and identify a cycle of positions where the elements
-       alternate between the two parents
+       alternate between the two parents.
     2. For the first offspring, take elements from parent 1 at the cycle positions
-       and from parent 2 at all other positions
+       and from parent 2 at all other positions.
     3. For the second offspring, do the opposite (parent 2 at cycle positions,
-       parent 1 elsewhere)
+       parent 1 elsewhere).
 
     This operator is particularly useful for problems where the absolute position of elements
     is important, such as the Traveling Salesman Problem (TSP).
@@ -387,10 +389,12 @@ class SBXCrossover(Crossover[FloatSolution, FloatSolution]):
     around the parent solutions, with the spread of the distribution controlled by the distribution index.
 
     The operator works by:
-    1. For each variable, compute a spread factor β based on a random number and the distribution index
-    2. Use β to compute new variable values that are spread around the parent values
-    3. The distribution index controls whether offspring are likely to be near the parents (high values)
-       or more spread out (low values)
+
+    1. For each variable, compute a spread factor beta based on a random number and the
+       distribution index.
+    2. Use beta to compute new variable values that are spread around the parent values.
+    3. The distribution index controls whether offspring are likely to be near the parents (high
+       values) or more spread out (low values).
 
     Args:
         probability: Crossover probability (0.0 to 1.0). The probability that crossover will be applied
@@ -1017,11 +1021,11 @@ class ArithmeticCrossover(Crossover[FloatSolution, FloatSolution]):
     average of the parent values.
 
     The crossover works by:
-    1. For each variable, generate a random weight alpha in [0, 1]
-    2. Calculate new values as:
-       - child1 = alpha * parent1 + (1 - alpha) * parent2
-       - child2 = (1 - alpha) * parent1 + alpha * parent2
-    3. Apply bounds repair if values fall outside the variable bounds
+
+    1. For each variable, generate a random weight alpha in [0, 1].
+    2. Calculate new values as ``child1 = alpha * parent1 + (1 - alpha) * parent2`` and
+       ``child2 = (1 - alpha) * parent1 + alpha * parent2``.
+    3. Apply bounds repair if values fall outside the variable bounds.
 
     Args:
         probability: Crossover probability (0.0 to 1.0)

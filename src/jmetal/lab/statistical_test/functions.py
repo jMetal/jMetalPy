@@ -224,14 +224,12 @@ def friedman_ph_test(data, control=None, apv_procedure=None):
 
     :param data: An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.
     :param control: optional int or string. Default None. Index or Name of the control algorithm. If control = None all FriedmanPosHocTest considers all possible comparisons among algorithms.
-    :param apv_procedure: optional string. Default None.
-        Name of the procedure for computing adjusted p-values. If apv_procedure
-        is None, adjusted p-value are not computed, else the values are computed
-        according to the specified procedure:
-        For 1 vs all comparisons.
-            {'Bonferroni', 'Holm', 'Hochberg', 'Holland', 'Finner', 'Li'}
-        For all vs all coparisons.
-            {'Shaffer', 'Holm', 'Nemenyi'}
+    :param apv_procedure: optional string. Default None. Name of the procedure for computing
+        adjusted p-values. If ``apv_procedure`` is None, adjusted p-values are not computed;
+        otherwise the values are computed according to the specified procedure: for 1-vs-all
+        comparisons, one of ``'Bonferroni'``, ``'Holm'``, ``'Hochberg'``, ``'Holland'``,
+        ``'Finner'``, ``'Li'``; for all-vs-all comparisons, one of ``'Shaffer'``, ``'Holm'``,
+        ``'Nemenyi'``.
 
     :return z_values: Test statistic.
     :return p_values: The p-value according to the Studentized range distribution.
@@ -333,14 +331,12 @@ def friedman_aligned_ph_test(data, control=None, apv_procedure=None):
 
     :param data: An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.
     :param control: optional int or string. Default None. Index or Name of the control algorithm. If control = None all FriedmanPosHocTest considers all possible comparisons among algorithms.
-    :param apv_procedure: optional string. Default None.
-        Name of the procedure for computing adjusted p-values. If apv_procedure
-        is None, adjusted p-value are not computed, else the values are computed
-        according to the specified procedure:
-        For 1 vs all comparisons.
-            {'Bonferroni', 'Holm', 'Hochberg', 'Holland', 'Finner', 'Li'}
-        For all vs all coparisons.
-            {'Shaffer', 'Holm', 'Nemenyi'}
+    :param apv_procedure: optional string. Default None. Name of the procedure for computing
+        adjusted p-values. If ``apv_procedure`` is None, adjusted p-values are not computed;
+        otherwise the values are computed according to the specified procedure: for 1-vs-all
+        comparisons, one of ``'Bonferroni'``, ``'Holm'``, ``'Hochberg'``, ``'Holland'``,
+        ``'Finner'``, ``'Li'``; for all-vs-all comparisons, one of ``'Shaffer'``, ``'Holm'``,
+        ``'Nemenyi'``.
 
     :return z_values: Test statistic.
     :return p_values: The p-value according to the Studentized range distribution.
@@ -435,14 +431,12 @@ def quade_ph_test(data, control=None, apv_procedure=None):
 
     :param data: An (n x 2) array or DataFrame contaning the results. In data, each column represents an algorithm and, and each row a problem.
     :param control: optional int or string. Default None. Index or Name of the control algorithm. If control = None all FriedmanPosHocTest considers all possible comparisons among algorithms.
-    :param apv_procedure: optional string. Default None.
-        Name of the procedure for computing adjusted p-values. If apv_procedure
-        is None, adjusted p-value are not computed, else the values are computed
-        according to the specified procedure:
-        For 1 vs all comparisons.
-            {'Bonferroni', 'Holm', 'Hochberg', 'Holland', 'Finner', 'Li'}
-        For all vs all coparisons.
-            {'Shaffer', 'Holm', 'Nemenyi'}
+    :param apv_procedure: optional string. Default None. Name of the procedure for computing
+        adjusted p-values. If ``apv_procedure`` is None, adjusted p-values are not computed;
+        otherwise the values are computed according to the specified procedure: for 1-vs-all
+        comparisons, one of ``'Bonferroni'``, ``'Holm'``, ``'Hochberg'``, ``'Holland'``,
+        ``'Finner'``, ``'Li'``; for all-vs-all comparisons, one of ``'Shaffer'``, ``'Holm'``,
+        ``'Nemenyi'``.
 
     :return z_values: Test statistic.
     :return p_values: The p-value according to the Studentized range distribution.

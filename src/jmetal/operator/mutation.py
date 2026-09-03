@@ -303,10 +303,10 @@ class SimpleRandomMutation(Mutation[FloatSolution]):
     exploration, especially in the early stages of optimization.
 
     The mutation works by:
-    1. For each variable, with probability `probability`:
-       - Replace the variable's value with a random value from a uniform distribution
-         between the variable's lower and upper bounds
-    2. Leave the variable unchanged otherwise
+
+    1. For each variable, with probability ``probability``, replace its value with a random
+       value from a uniform distribution between the variable's lower and upper bounds.
+    2. Leave the variable unchanged otherwise.
 
     Args:
         probability: The probability of mutating each variable (0 ≤ p ≤ 1).
@@ -434,15 +434,13 @@ class NonUniformMutation(Mutation[FloatSolution]):
     exploitation in later generations. The mutation strength is controlled by
     the current iteration number relative to the maximum number of iterations.
 
-    The mutation follows the formula:
-        Δ(t, y) = y * (r * (1 - t/T)^b - 1)  if r ≤ 0.5
-        Δ(t, y) = y * (1 - r * (1 - t/T)^b)  if r > 0.5
-    where:
-    - t is the current iteration
-    - T is max_iterations
-    - b is the perturbation index
-    - r is a random number in [0,1]
-    - y is the variable's range
+    The mutation follows the formula::
+
+        delta(t, y) = y * (r * (1 - t/T)^b - 1)  if r <= 0.5
+        delta(t, y) = y * (1 - r * (1 - t/T)^b)  if r > 0.5
+
+    where ``t`` is the current iteration, ``T`` is ``max_iterations``, ``b`` is the perturbation
+    index, ``r`` is a random number in [0, 1], and ``y`` is the variable's range.
 
     The operator is particularly useful for:
     - Fine-tuning solutions in later generations
@@ -797,9 +795,12 @@ class LevyFlightMutation(Mutation[FloatSolution]):
     and the ability to escape local optima through large jumps.
 
     The implementation uses the Mantegna algorithm to generate Lévy-distributed steps:
-    1. Generate u ~ Normal(0, σ_u²) where σ_u = [Γ(1+β)sin(πβ/2)/Γ((1+β)/2)β2^((β-1)/2)]^(1/β)
-    2. Generate v ~ Normal(0, 1)
-    3. Lévy step = u / |v|^(1/β)
+
+    1. Generate ``u`` from a normal distribution scaled by a factor derived from the beta
+       parameter (via the gamma function).
+    2. Generate ``v`` from a standard normal distribution.
+    3. Compute the Lévy step as ``u`` divided by the absolute value of ``v`` raised to the
+       power ``1 / beta``.
 
     Args:
         mutation_probability: The probability of mutating each variable (0 ≤ p ≤ 1).
@@ -883,7 +884,8 @@ class PowerLawMutation(Mutation[FloatSolution]):
     create large jumps while favoring smaller perturbations, which is beneficial for both
     exploration and exploitation in optimization.
 
-    The mutation follows the formula:
+    The mutation follows the formula::
+
         temp_delta = rnd^(-delta)
         deltaq = 0.5 * (rnd - 0.5) * (1 - temp_delta)
         new_value = old_value + deltaq * (upper_bound - lower_bound)
@@ -891,10 +893,10 @@ class PowerLawMutation(Mutation[FloatSolution]):
     Args:
         probability: The probability of mutating each variable (0 ≤ p ≤ 1).
         delta: The power-law exponent parameter (must be > 0). Controls distribution shape:
-            - Values < 1.0: More uniform distributions with moderate perturbations
-            - Values ≈ 1.0: Balanced exploration/exploitation (default)
-            - Values > 1.0: Heavy-tailed distributions favoring small perturbations
-              with occasional large jumps
+            values below 1.0 give more uniform distributions with moderate perturbations,
+            values near 1.0 balance exploration and exploitation (the default), and values
+            above 1.0 give heavy-tailed distributions favoring small perturbations with
+            occasional large jumps.
         repair_operator: Optional function to repair out-of-bounds values.
             If None, values are clamped to the variable bounds.
 

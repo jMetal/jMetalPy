@@ -14,16 +14,14 @@ def plot_posterior(
     alg_names: list = None,
     filename: str = "posterior.eps",
 ):
-    """
-    Plots the sample from posterior distribution of a Bayesian statistical test.
-    Parameters:
-    -----------
-    data: An (n x 3) array or DataFrame contaning the probabilities.
-    alg_names: array of strings. Default np.array(['Alg1', 'Alg2'])
-        Names of the algorithms under evaluation
-    Return:
-    -------
-    Figure
+    """Plots the sample from posterior distribution of a Bayesian statistical test.
+
+    Args:
+        sample: An (n x 3) array or DataFrame containing the probabilities.
+        alg_names: Names of the algorithms under evaluation. Defaults to ``['Alg1', 'Alg2']``.
+
+    Returns:
+        The matplotlib Figure.
     """
 
     # Initial Checking

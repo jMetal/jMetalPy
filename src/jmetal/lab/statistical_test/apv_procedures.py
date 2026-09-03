@@ -3,17 +3,14 @@ import pandas as pd
 
 
 def bonferroni_dunn(p_values, control):
-    """
-    Bonferroni-Dunn's procedure for the adjusted p-value computation.
+    """Bonferroni-Dunn's procedure for the adjusted p-value computation.
 
-    Parameters:
-    -----------
-    p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.
-    control: int or string. Index or Name of the control algorithm.
+    Args:
+        p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.
+        control: Index or name of the control algorithm.
 
     Returns:
-    --------
-    APVs: DataFrame containing the adjusted p-values.
+        DataFrame containing the adjusted p-values.
     """
 
     # Initial Checking
@@ -42,17 +39,14 @@ def bonferroni_dunn(p_values, control):
 
 
 def holland(p_values, control):
-    """
-    Holland's procedure for the adjusted p-value computation.
+    """Holland's procedure for the adjusted p-value computation.
 
-    Parameters:
-    -----------
-    p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.
-    control: int or string. Index or Name of the control algorithm.
+    Args:
+        p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.
+        control: Index or name of the control algorithm.
 
     Returns:
-    --------
-    APVs: DataFrame containing the adjusted p-values.
+        DataFrame containing the adjusted p-values.
     """
 
     # Initial Checking
@@ -86,17 +80,14 @@ def holland(p_values, control):
 
 
 def finner(p_values, control):
-    """
-    Finner's procedure for the adjusted p-value computation.
+    """Finner's procedure for the adjusted p-value computation.
 
-    Parameters:
-    -----------
-    p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.
-    control: int or string. Index or Name of the control algorithm.
+    Args:
+        p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.
+        control: Index or name of the control algorithm.
 
     Returns:
-    --------
-    APVs: DataFrame containing the adjusted p-values.
+        DataFrame containing the adjusted p-values.
     """
 
     # Initial Checking
@@ -127,17 +118,14 @@ def finner(p_values, control):
 
 
 def hochberg(p_values, control):
-    """
-    Hochberg's procedure for the adjusted p-value computation.
+    """Hochberg's procedure for the adjusted p-value computation.
 
-    Parameters:
-    -----------
-    p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.
-    control: int or string. Index or Name of the control algorithm.
+    Args:
+        p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.
+        control: Index or name of the control algorithm.
 
     Returns:
-    --------
-    APVs: DataFrame containing the adjusted p-values.
+        DataFrame containing the adjusted p-values.
     """
 
     # Initial Checking
@@ -168,19 +156,15 @@ def hochberg(p_values, control):
 
 
 def li(p_values, control):
-    """
-    Li's procedure for the adjusted p-value computation.
+    """Li's procedure for the adjusted p-value computation.
 
-    Parameters:
-    -----------
-    p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.
-    control: optional int or string. Default None
-        Index or Name of the control algorithm. If control is provided, control vs all
-        comparisons are considered, else all vs all.
+    Args:
+        p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.
+        control: Index or name of the control algorithm. If provided, control vs all
+            comparisons are considered, else all vs all.
 
     Returns:
-    --------
-    APVs: DataFrame containing the adjusted p-values.
+        DataFrame containing the adjusted p-values.
     """
 
     # Initial Checking
@@ -215,19 +199,15 @@ def li(p_values, control):
 
 
 def holm(p_values, control=None):
-    """
-    Holm's procedure for the adjusted p-value computation.
+    """Holm's procedure for the adjusted p-value computation.
 
-    Parameters:
-    -----------
-    p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.
-    control: optional int or string. Default None
-        Index or Name of the control algorithm. If control is provided, control vs all
-        comparisons are considered, else all vs all.
+    Args:
+        p_values: 2-D array or DataFrame containing the p-values obtained from a ranking test.
+        control: Index or name of the control algorithm. If provided, control vs all
+            comparisons are considered, else all vs all.
 
     Returns:
-    --------
-    APVs: DataFrame containing the adjusted p-values.
+        DataFrame containing the adjusted p-values.
     """
 
     # Initial Checking
@@ -276,30 +256,22 @@ def holm(p_values, control=None):
 
 
 def shaffer(p_values):
-    """
-    Shaffer's procedure for adjusted p_value ccmputation.
+    """Shaffer's procedure for adjusted p-value computation.
 
-    Parameters:
-    -----------
-    data: 2-D array or DataFrame containing the p-values.
+    Args:
+        p_values: 2-D array or DataFrame containing the p-values.
 
     Returns:
-    --------
-    APVs: DataFrame containing the adjusted p-values.
+        DataFrame containing the adjusted p-values.
     """
 
     def S(k):
-        """
-        Computes the set of possible numbers of true hoypotheses.
+        """Computes the set of possible numbers of true hypotheses.
 
-        Parameters:
-        -----------
-        k: int
-            number of algorithms being compared.
+        Args:
+            k: Number of algorithms being compared.
 
-        Returns
-        ----------
-        TrueSet : array-like
+        Returns:
             Set of true hypotheses.
         """
 
@@ -350,16 +322,13 @@ def shaffer(p_values):
 
 
 def nemenyi(p_values):
-    """
-    Nemenyi's procedure for adjusted p_value computation.
+    """Nemenyi's procedure for adjusted p-value computation.
 
-    Parameters:
-    -----------
-    data: 2-D array or DataFrame containing the p-values.
+    Args:
+        p_values: 2-D array or DataFrame containing the p-values.
 
     Returns:
-    --------
-    APVs: DataFrame containing the adjusted p-values.
+        DataFrame containing the adjusted p-values.
     """
 
     # Initial Checking

@@ -212,9 +212,10 @@ class BestSolutionSelection(Selection[list[S], S]):
     the first one encountered in the front.
 
     The comparison is done using the DominanceComparator, which follows these rules:
+
     - Solution A dominates solution B if A is not worse than B in all objectives
-      and A is strictly better than B in at least one objective
-    - If neither solution dominates the other, they are considered non-dominated
+      and A is strictly better than B in at least one objective.
+    - If neither solution dominates the other, they are considered non-dominated.
 
     Example:
         >>> from jmetal.operator import BestSolutionSelection
