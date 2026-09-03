@@ -169,7 +169,7 @@ wire `saes` into `pyproject.toml` before then, since PyPI still only has the old
 - [x] `docs: add CITATION.cff` — matches `pyproject.toml`'s authors and the existing SWEVO BibTeX in `about.rst` field for field; validated as parseable YAML.
 - [x] `docs: add CONTRIBUTING.md pointing at the coding and git guidelines` — also rewrote the stale `docs/source/contributing.rst` (a master/develop/feature/hotfix git-flow this repo never used, Python 3.6, and 8 screenshot references that point at files which don't exist in the repo) to point at the new file instead. `sphinx-build`: 61 warnings before, 39 after.
 - [x] `docs: extract the changelog from README into CHANGELOG.md` — moved verbatim, README now points at it.
-- [ ] `docs: list the full algorithm and problem catalogue in the README` — currently omits MOCell, WFG1-9, ZCAT1-20, DTLZ3-7, eqDTLZ, `misc.py`
+- [x] `docs: list the full algorithm and problem catalogue in the README` — also found missing while verifying against the real class inventory: UF (CEC'09), the multi-objective TSP, Osyczka2/Binh2, NHV and AHD quality indicators, and several crossover/mutation operators (PMX, CX, BLX-Alpha(-Beta), arithmetic, UNDX, differential evolution; non-uniform, Levy flight, power-law). Fixed a "bit-blip" → "bit-flip" typo along the way.
 
 ### CI
 
