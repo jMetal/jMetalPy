@@ -37,11 +37,6 @@ class Problem(Generic[S], ABC):
     Class constants:
         MINIMIZE: Constant indicating minimization of an objective.
         MAXIMIZE: Constant indicating maximization of an objective.
-
-    Attributes:
-        reference_front: List of solutions representing the Pareto front (for multi-objective problems).
-        directions: List indicating optimization direction (minimize/maximize) for each objective.
-        labels: List of descriptive labels for each objective.
     """
 
     # Optimization directions
@@ -50,9 +45,9 @@ class Problem(Generic[S], ABC):
 
     def __init__(self):
         """Initialize the problem with empty reference front, directions, and labels."""
-        self.reference_front: list[S] = []
-        self.directions: list[int] = []
-        self.labels: list[str] = []
+        self.reference_front: list[S] = []  #: List of solutions representing the Pareto front.
+        self.directions: list[int] = []  #: Optimization direction (minimize/maximize) per objective.
+        self.labels: list[str] = []  #: Descriptive label per objective.
 
     @abstractmethod
     def number_of_variables(self) -> int:
@@ -238,40 +233,37 @@ class OnTheFlyFloatProblem(FloatProblem):
     chaining. It's particularly useful for quick prototyping and testing.
 
     Example:
-        # Define the problem's objective functions and constraints
-        def f1(x: List[float]) -> float:
-            return 2.0 + (x[0] - 2.0)**2 + (x[1] - 1.0)**2
+        .. code-block:: python
 
-        def f2(x: List[float]) -> float:
-            return 9.0 * x[0] - (x[1] - 1.0)**2
+            # Define the problem's objective functions and constraints
+            def f1(x: List[float]) -> float:
+                return 2.0 + (x[0] - 2.0)**2 + (x[1] - 1.0)**2
 
-        def c1(x: List[float]) -> float:
-            return 1.0 - (x[0]**2 + x[1]**2) / 225.0
+            def f2(x: List[float]) -> float:
+                return 9.0 * x[0] - (x[1] - 1.0)**2
 
-        def c2(x: List[float]) -> float:
-            return (3.0 * x[1] - x[0]) / 10.0 - 1.0
+            def c1(x: List[float]) -> float:
+                return 1.0 - (x[0]**2 + x[1]**2) / 225.0
 
-        # Create the problem with method chaining
-        problem = (OnTheFlyFloatProblem()
-                  .set_name("Srinivas")
-                  .add_variable(-20.0, 20.0)  # x1 ∈ [-20, 20]
-                  .add_variable(-20.0, 20.0)  # x2 ∈ [-20, 20]
-                  .add_function(f1)            # First objective
-                  .add_function(f2)            # Second objective
-                  .add_constraint(c1)          # First constraint (g1(x) ≤ 0)
-                  .add_constraint(c2))         # Second constraint (g2(x) ≤ 0)
+            def c2(x: List[float]) -> float:
+                return (3.0 * x[1] - x[0]) / 10.0 - 1.0
 
-    Attributes:
-        functions: List of objective functions to be minimized.
-        constraints: List of constraint functions (≤ 0).
-        problem_name: Optional name for the problem.
+            # Create the problem with method chaining
+            problem = (OnTheFlyFloatProblem()
+                      .set_name("Srinivas")
+                      .add_variable(-20.0, 20.0)  # x1 in [-20, 20]
+                      .add_variable(-20.0, 20.0)  # x2 in [-20, 20]
+                      .add_function(f1)            # First objective
+                      .add_function(f2)            # Second objective
+                      .add_constraint(c1)          # First constraint (g1(x) <= 0)
+                      .add_constraint(c2))         # Second constraint (g2(x) <= 0)
     """
 
     def __init__(self):
         super().__init__()
-        self.functions = []
-        self.constraints = []
-        self.problem_name = None
+        self.functions = []  #: List of objective functions to be minimized.
+        self.constraints = []  #: List of constraint functions (<= 0).
+        self.problem_name = None  #: Optional name for the problem.
 
     def set_name(self, name) -> "OnTheFlyFloatProblem":
         self.problem_name = name
