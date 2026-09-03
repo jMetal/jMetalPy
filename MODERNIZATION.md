@@ -230,18 +230,18 @@ entirely, not kept as a fallback.
 
 ### Migration checklist
 
-- [ ] `build: add mkdocs, mkdocs-material, mkdocstrings[python] as a docs dependency group`
-- [ ] `docs: scaffold mkdocs.yml and the new content structure`
-- [ ] `docs: migrate the tutorials to Markdown` — `problem`, `observer`, `evaluator`, `visualization`, `experiment`, `statistics`, `quality_indicators_cli`
-- [ ] `docs: migrate advanced-topics to Markdown` — `distance-based-archive`, `custom-archives`, `advanced-selection-strategies`
-- [ ] `docs: rebuild the api reference on mkdocstrings` — replaces every `automodule`/`autoclass` page (`api/core/*`, `api/util/*`, `api/operator/*`, `api/problem/*`, `api/algorithm/*`, `api/jmetal.lab.statistical_test.rst`)
-- [ ] `docs: migrate archive.rst and distance.rst`, preserving their hand-written content (performance notes, worked examples) — not just their `automodule` blocks
-- [ ] `docs: migrate getting-started, user-guide, api-reference, advanced-topics, contributing, about, index to Markdown nav`
-- [ ] `ci: replace the Sphinx docs workflow with mkdocs build --strict`
-- [ ] `ci: deploy via mkdocs gh-deploy (or the official mkdocs-material Action) to a gh-pages branch`
-- [ ] `chore: remove docs/source's Sphinx config and the bundled guzzle theme`
-- [ ] `chore: untrack the built HTML site from docs/` — carried over from L0, resolved as part of this migration's deploy step
-- [ ] `docs: update CONTRIBUTING.md/README references from .rst to the new structure`
+- [x] `build: add mkdocs, mkdocs-material, mkdocstrings[python] as a docs dependency group`
+- [x] `docs: scaffold mkdocs.yml and the new content structure`
+- [x] `docs: migrate the tutorials to Markdown` — `problem`, `observer`, `evaluator`, `visualization`, `experiment`, `statistics`, `quality_indicators_cli`
+- [x] `docs: migrate advanced-topics to Markdown` — `distance-based-archive`, `custom-archives`, `advanced-selection-strategies`
+- [x] `docs: rebuild the api reference on mkdocstrings` — replaces every `automodule`/`autoclass` page (`api/core/*`, `api/util/*`, `api/operator/*`, `api/problem/*`, `api/algorithm/*`, `api/jmetal.lab.statistical_test.rst`)
+- [x] `docs: migrate archive.rst and distance.rst`, preserving their hand-written content (performance notes, worked examples) — not just their `automodule` blocks
+- [x] `docs: migrate getting-started, user-guide, api-reference, advanced-topics, contributing, about, index to Markdown nav`
+- [x] `ci: replace the Sphinx docs workflow with mkdocs build --strict`
+- [x] `chore: remove docs/source's Sphinx config and the bundled guzzle theme`
+- [x] `docs: update CONTRIBUTING.md/README references from .rst to the new structure`
+- [ ] `docs_new/ → docs/` rename and `ci: deploy via mkdocs gh-deploy (or the official mkdocs-material Action) to a gh-pages branch` — **blocked on a user decision**: `docs/` root currently holds the live-published Sphinx HTML (GitHub Pages serves it directly from `main`, no `gh-pages` branch, no Actions deploy). Renaming `docs_new/` over it, or switching Pages to a `gh-pages` branch, needs the user to confirm and to change the Pages source setting in GitHub (only they can).
+- [ ] `chore: untrack the built HTML site from docs/` — carried over from L0, resolved as part of the deploy-step decision above
 
 ---
 
