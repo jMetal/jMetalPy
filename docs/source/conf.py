@@ -3,15 +3,15 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath('../../'))
+sys.path.insert(0, os.path.abspath('../../src'))
 
 # -- Project information -----------------------------------------------------
 
 project = 'jMetalPy'
-copyright = '2019, Antonio Benítez-Hidalgo'
-author = 'Antonio Benítez-Hidalgo'
+copyright = '2019-2026, Antonio J. Nebro, Antonio Benítez'
+author = 'Antonio J. Nebro, Antonio Benítez'
 version = ''
-release = '1.7.0'
+release = '1.9.0'
 
 
 # -- General configuration ---------------------------------------------------
