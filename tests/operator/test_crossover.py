@@ -1,5 +1,6 @@
 """Tests for crossover operators using pytest."""
 
+import pickle
 import random
 from unittest import mock
 
@@ -12,13 +13,17 @@ from jmetal.core.solution import (
     PermutationSolution,
 )
 from jmetal.operator.crossover import (
+    ArithmeticCrossover,
     BLXAlphaBetaCrossover,
     BLXAlphaCrossover,
     CXCrossover,
+    DifferentialEvolutionCrossover,
+    IntegerSBXCrossover,
     NullCrossover,
     PMXCrossover,
     SBXCrossover,
     SPXCrossover,
+    UnimodalNormalDistributionCrossover,
 )
 from jmetal.operator.repair import ClampFloatRepair
 from jmetal.util.ckecking import (
@@ -283,13 +288,7 @@ class TestSBXCrossover:
 
     def test_callable_vs_instance_repair_equivalence(self):
         """SBX should behave identically when passing a callable repair or a ClampFloatRepair instance."""
-        import random
-
         import numpy as _np
-
-        # deterministic seeds
-        random.seed(42)
-        _np.random.seed(42)
 
         # parents
         s1 = FloatSolution([0.0, 0.0], [1.0, 1.0], 1)
@@ -297,24 +296,25 @@ class TestSBXCrossover:
         s1.variables = [0.2, 0.8]
         s2.variables = [0.8, 0.2]
 
-        # as callable
+        # as callable, with its own seeded rng
         callable_repair = lambda v, lb, ub: min(max(lb, v), ub)
         sbx_callable = SBXCrossover(
-            probability=1.0, distribution_index=20.0, repair_operator=callable_repair
+            probability=1.0,
+            distribution_index=20.0,
+            repair_operator=callable_repair,
+            rng=_np.random.default_rng(42),
         )
 
-        # as instance
+        # as instance, with an identically seeded rng so both draw the same sequence
         sbx_instance = SBXCrossover(
-            probability=1.0, distribution_index=20.0, repair_operator=ClampFloatRepair()
+            probability=1.0,
+            distribution_index=20.0,
+            repair_operator=ClampFloatRepair(),
+            rng=_np.random.default_rng(42),
         )
 
         # execute
         off1 = sbx_callable.execute([s1, s2])
-
-        # reset seeds to reproduce same random draws
-        random.seed(42)
-        _np.random.seed(42)
-
         off2 = sbx_instance.execute([s1, s2])
 
         assert off1[0].variables == off2[0].variables
@@ -832,3 +832,30 @@ class TestBLXAlphaCrossover:
 
 
 # More test classes will be added here for other crossover operators
+
+
+class TestCrossoverOperatorsArePicklable:
+    """Constructing one of these with no explicit `rng` used to default `_rng` to the
+    `numpy.random` module itself rather than a Generator instance, which is not
+    picklable -- this broke sending an algorithm using any of these operators across a
+    process boundary (jmetal.lab.experiment.Experiment via ProcessPoolExecutor).
+    """
+
+    @pytest.mark.parametrize(
+        "operator",
+        [
+            PMXCrossover(probability=1.0),
+            SBXCrossover(probability=1.0),
+            IntegerSBXCrossover(probability=1.0),
+            BLXAlphaCrossover(probability=1.0),
+            BLXAlphaBetaCrossover(probability=1.0),
+            ArithmeticCrossover(probability=1.0),
+            UnimodalNormalDistributionCrossover(probability=1.0),
+            DifferentialEvolutionCrossover(CR=0.5, F=0.5),
+        ],
+        ids=lambda op: type(op).__name__,
+    )
+    def test_should_pickle_with_default_rng(self, operator):
+        restored = pickle.loads(pickle.dumps(operator))
+
+        assert type(restored) is type(operator)
