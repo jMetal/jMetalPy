@@ -181,6 +181,67 @@ wire `saes` into `pyproject.toml` before then, since PyPI still only has the old
 
 ---
 
+## Documentation toolchain — migrate Sphinx → MkDocs (decided, not started)
+
+**Decision:** replace Sphinx (custom `guzzle` theme, RST) with **MkDocs + Material for MkDocs +
+mkdocstrings[python]**. Reasons:
+
+- `mkdocstrings[python]` parses Google-style docstrings directly (via `griffe`) — `CODING_GUIDELINES.md`
+  already mandates that style, so no docstring rewriting is needed.
+- Material for MkDocs is a mature, actively maintained theme configured entirely in `mkdocs.yml` —
+  no more maintaining a bundled custom theme (`docs/source/_templates/guzzle/`).
+- Content moves from RST to Markdown — lower friction for future contributors.
+- CI story is simpler and directly equivalent to what L0 just built: `mkdocs build --strict` fails
+  the build on any warning (broken link, missing page — the same thing `sphinx-build -W` now gates),
+  and `mkdocs gh-deploy` (or the official `mkdocs-material` GitHub Actions recipe) publishes to
+  `gh-pages` in one step — which also finally resolves the deferred `ci: publish the documentation
+  from a gh-pages branch` / `chore: untrack the built HTML site from docs/` items above, since the
+  new toolchain needs that branch-based deploy anyway.
+- Considered and rejected as a smaller step: **Sphinx + MyST-Parser** (write Markdown, keep Sphinx/
+  autodoc/napoleon and the CI already wired up). Less migration work, but keeps the custom theme and
+  Sphinx's heavier configuration surface — doesn't address the actual maintenance burden.
+
+**Real cost, not hidden:** every `.rst` page fixed during L0 (tutorials, advanced-topics, api
+reference, the two hand-written `archive.rst`/`distance.rst` pages) needs re-authoring in Markdown.
+Content, not just format, in the two hand-written pages — Sphinx-specific directives
+(`.. autoclass::`, `.. toctree::`, `:doc:`) have no 1:1 Markdown equivalent and need real rework
+against `mkdocstrings`/`mkdocs-nav` conventions.
+
+**Sequencing — recommendation: migrate before starting L1, not after.**
+
+1. L1 will produce new documentation of its own (a component-architecture tutorial, API pages for
+   the new `jmetal.component` package). Migrating first means that content gets written once, in the
+   final format — migrating after L1 means writing it in RST now and re-migrating it later, doubling
+   that slice of the work for no benefit.
+2. Full context on every page's current content and structure is fresh *right now* (L0 just read and
+   fixed every one of them) — that context decays. Doing the migration while it's cheap to get right
+   is better than reconstructing it later.
+3. The migration is orthogonal to L1's architecture work — no technical dependency runs either
+   direction, so there's no efficiency loss in sequencing it first; it's purely about not paying for
+   the same content twice.
+
+The counter-case — do L1 first, since it's the substantively higher-value work and a tooling swap
+is infrastructure, not user-facing capability — is reasonable too; recorded here so the tradeoff is
+visible, not just the recommendation. **Not yet decided** — Antonio to confirm before either the
+migration or L1 phase 1 starts.
+
+### Migration checklist (draft, to refine before starting)
+
+- [ ] `build: add mkdocs, mkdocs-material, mkdocstrings[python] as a docs dependency group`
+- [ ] `docs: scaffold mkdocs.yml and the new content structure`
+- [ ] `docs: migrate the tutorials to Markdown` — `problem`, `observer`, `evaluator`, `visualization`, `experiment`, `statistics`, `quality_indicators_cli`
+- [ ] `docs: migrate advanced-topics to Markdown` — `distance-based-archive`, `custom-archives`, `advanced-selection-strategies`
+- [ ] `docs: rebuild the api reference on mkdocstrings` — replaces every `automodule`/`autoclass` page (`api/core/*`, `api/util/*`, `api/operator/*`, `api/problem/*`, `api/algorithm/*`, `api/jmetal.lab.statistical_test.rst`)
+- [ ] `docs: migrate archive.rst and distance.rst`, preserving their hand-written content (performance notes, worked examples) — not just their `automodule` blocks
+- [ ] `docs: migrate getting-started, user-guide, api-reference, advanced-topics, contributing, about, index to Markdown nav`
+- [ ] `ci: replace the Sphinx docs workflow with mkdocs build --strict`
+- [ ] `ci: deploy via mkdocs gh-deploy (or the official mkdocs-material Action) to a gh-pages branch`
+- [ ] `chore: remove docs/source's Sphinx config and the bundled guzzle theme`
+- [ ] `chore: untrack the built HTML site from docs/` — carried over from L0, resolved as part of this migration's deploy step
+- [ ] `docs: update CONTRIBUTING.md/README references from .rst to the new structure`
+
+---
+
 ## L1 — Component-based core (`feat/component-architecture`)
 
 ### Phase 1 — EA template and NSGA-II
