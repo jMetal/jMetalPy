@@ -285,16 +285,21 @@ docstring and its unit test in the same commit, not as a follow-up.
 
 ### Phase 1 — EA template and NSGA-II
 
-- [ ] `refactor(operator): introduce a Replacement ABC for the existing replacement classes` — `RankingAndDensityEstimatorReplacement`, `RankingAndCrowdingDistanceReplacement`, `SMSEMOAReplacement` in `src/jmetal/operator/replacement.py` only share `replace()` by convention today
-- [ ] `feat(component): add the SolutionsCreation, Evaluation and Termination protocols and defaults` — `catalogue/common/{solutions_creation,evaluation,termination}.py`
-- [ ] `feat(component): add the Selection, Variation and Replacement protocols and defaults` — `catalogue/ea/{selection,variation,replacement}.py`
-- [ ] `feat(component): add AlgorithmState with a backwards-compatible observer payload`
-- [ ] `feat(component): add the EvolutionaryAlgorithm template`
-- [ ] `feat(component): thread an injectable random generator and seed through the template`
-- [ ] `feat(component): add build_nsgaii()` — factory function in `algorithm/multiobjective/nsgaii.py`, not a builder class
-- [ ] `test(component): assert build_nsgaii matches the classic NSGAII for a fixed seed` — acceptance test for Phase 1: identical fronts on ZDT1 and DTLZ2
-- [ ] `test(component): assert run reproducibility, including with MultiprocessEvaluator`
-- [ ] `docs: document the component-based architecture`
+- [x] `refactor(operator): introduce a Replacement ABC for the existing replacement classes` — `RankingAndDensityEstimatorReplacement`, `RankingAndCrowdingDistanceReplacement`, `SMSEMOAReplacement` in `src/jmetal/operator/replacement.py` only share `replace()` by convention today
+- [x] `feat(component): add the SolutionsCreation, Evaluation and Termination protocols and defaults` — `catalogue/common/{solutions_creation,evaluation,termination}.py`
+- [x] `feat(component): add the Selection, Variation and Replacement protocols and defaults` — `catalogue/ea/{selection,variation,replacement}.py`
+- [x] `feat(component): add AlgorithmState with a backwards-compatible observer payload`
+- [x] `feat(component): add the EvolutionaryAlgorithm template`
+- [x] `feat(component): thread an injectable random generator and seed through the template`
+- [x] `feat(component): add build_nsgaii()` — factory function in `algorithm/multiobjective/nsgaii.py`, not a builder class
+- [x] `test(component): assert build_nsgaii matches the classic NSGAII for a fixed seed` — acceptance test for Phase 1: identical fronts on ZDT1 and DTLZ2, verified passing
+- [x] `test(component): assert run reproducibility, including with MultiprocessEvaluator` — verified passing, including with a real `MultiprocessEvaluator`
+- [x] `docs: document the component-based architecture` — `docs/advanced-topics/component-architecture.md`
+
+**Phase 1 complete.** All nine checklist items landed as separate commits on
+`feat/component-architecture`, each with lint/tests green. The acceptance criterion holds: given the
+same seed, `build_nsgaii(...)` and the classic `NSGAII(...)` produce identical final populations on
+both ZDT1 and DTLZ2.
 
 ### Phase 1b — decouple from threading.Thread
 
