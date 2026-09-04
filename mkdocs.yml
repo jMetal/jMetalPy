@@ -66,6 +66,7 @@ nav:
       - Distance-Based Archive: advanced-topics/distance-based-archive.md
       - Custom Archives: advanced-topics/custom-archives.md
       - Advanced Selection Strategies: advanced-topics/advanced-selection-strategies.md
+      - Component-Based Architecture: advanced-topics/component-architecture.md
   - API Reference:
       - api/index.md
       - Core: api/core.md
