@@ -301,6 +301,15 @@ docstring and its unit test in the same commit, not as a follow-up.
 same seed, `build_nsgaii(...)` and the classic `NSGAII(...)` produce identical final populations on
 both ZDT1 and DTLZ2.
 
+**Ad-hoc addition — catalogue introspection.** `jmetal.component.catalogue_info.describe_catalogue()`
+answers "what components exist, what implementations are available, what are each implementation's
+control parameters (name, type, default)" by inspecting the real classes (`inspect.signature`), not
+from a hand-maintained description — deliberately narrower than Evolver's YAML parameter spaces (no
+ranges/distributions to explore those parameters; that's an auto-configuration concern, out of scope
+for now). Surfaced a real bug: nine `jmetal.operator.mutation` constructors declared `rng: object`
+instead of `rng: np.random.Generator`, fixed in the same round. Documented in
+`docs/advanced-topics/component-architecture.md`.
+
 ### Phase 1b — decouple from threading.Thread
 
 Verified nobody calls `algorithm.start()`/`.join()` anywhere in `src/`, `examples/`, `tests/`,
