@@ -248,41 +248,78 @@ entirely, not kept as a fallback.
 
 ## L1 — Component-based core (`feat/component-architecture`)
 
+Scope for this round: **MOEAs only, starting with NSGA-II.** PSO (catalogue and template) is
+deliberately out of scope until NSGA-II is implemented and validated — see Phase 3.
+
+Package layout, verified against `jmetal-component`
+(`org.uma.jmetal.component`) in the Java codebase:
+
+```text
+src/jmetal/component/
+├── algorithm/
+│   ├── evolutionary_algorithm.py       # EvolutionaryAlgorithm template, a direct translation of
+│   │                                    # algorithm/EvolutionaryAlgorithm.java's run()
+│   └── multiobjective/
+│       └── nsgaii.py                   # build_nsgaii() (Phase 2 adds spea2.py, smsemoa.py, mocell.py)
+└── catalogue/
+    ├── common/
+    │   ├── solutions_creation.py       # Protocol SolutionsCreation + RandomSolutionsCreation
+    │   ├── evaluation.py               # Protocol Evaluation + SequentialEvaluation
+    │   └── termination.py              # Protocol Termination + TerminationByEvaluations
+    └── ea/
+        ├── selection.py                # Protocol Selection + TournamentSelection
+        ├── variation.py                # Protocol Variation + CrossoverAndMutationVariation
+        └── replacement.py              # Replacement ABC + RankingAndDensityEstimatorReplacement
+```
+
+Design decisions (Python idioms over literal Java translation, confirmed with the user):
+`typing.Protocol` for the single-method components (`SolutionsCreation`, `Selection`, `Termination`)
+instead of `ABC` — a plain function already satisfies the contract, no subclassing ceremony; `ABC`
+only where implementations share real state or behavior (`Replacement`, given the three existing
+classes in `operator/replacement.py` share no base today). A factory function
+(`build_nsgaii(problem, population_size, offspring_population_size, crossover, mutation, *,
+selection=None, variation=None, replacement=None, termination=None, rng=None)`) instead of a
+chainable `NSGAIIBuilder` class — Java's builder pattern exists to simulate keyword arguments, which
+Python already has natively. Every component and factory function ships with its Google-style
+docstring and its unit test in the same commit, not as a follow-up.
+
 ### Phase 1 — EA template and NSGA-II
 
 - [ ] `refactor(operator): introduce a Replacement ABC for the existing replacement classes` — `RankingAndDensityEstimatorReplacement`, `RankingAndCrowdingDistanceReplacement`, `SMSEMOAReplacement` in `src/jmetal/operator/replacement.py` only share `replace()` by convention today
-- [ ] `feat(component): add the component protocols for the EA catalogue`
-- [ ] `feat(component): add SolutionsCreation, Evaluation and Termination components`
-- [ ] `feat(component): add MatingPoolSelection, Variation and Replacement components`
+- [ ] `feat(component): add the SolutionsCreation, Evaluation and Termination protocols and defaults` — `catalogue/common/{solutions_creation,evaluation,termination}.py`
+- [ ] `feat(component): add the Selection, Variation and Replacement protocols and defaults` — `catalogue/ea/{selection,variation,replacement}.py`
 - [ ] `feat(component): add AlgorithmState with a backwards-compatible observer payload`
 - [ ] `feat(component): add the EvolutionaryAlgorithm template`
 - [ ] `feat(component): thread an injectable random generator and seed through the template`
-- [ ] `feat(component): add NSGAIIBuilder`
-- [ ] `test(component): assert builder NSGA-II matches the classic one for a fixed seed` — acceptance test for Phase 1: identical fronts on ZDT1 and DTLZ2
+- [ ] `feat(component): add build_nsgaii()` — factory function in `algorithm/multiobjective/nsgaii.py`, not a builder class
+- [ ] `test(component): assert build_nsgaii matches the classic NSGAII for a fixed seed` — acceptance test for Phase 1: identical fronts on ZDT1 and DTLZ2
 - [ ] `test(component): assert run reproducibility, including with MultiprocessEvaluator`
 - [ ] `docs: document the component-based architecture`
 
 ### Phase 1b — decouple from threading.Thread
 
 Verified nobody calls `algorithm.start()`/`.join()` anywhere in `src/`, `examples/`, `tests/`,
-`notebooks/`, or `docs/source` — this is dead coupling, not a used feature.
+`notebooks/`, or `docs/source` — this is dead coupling, not a used feature. `core/algorithm.py`
+already has a `__getstate__`/`__setstate__` pair that strips `threading.Thread`'s unpicklable
+internals so `Algorithm` survives `ProcessPoolExecutor`; removing the `Thread` inheritance lets that
+whole workaround be deleted too.
 
 - [ ] `refactor(core): define an algorithm protocol independent of threading.Thread`
 - [ ] `refactor(lab): type Job against the algorithm protocol`
 - [ ] `refactor(core)!: stop inheriting from threading.Thread` — add an explicit `run_in_thread()` helper for the live-plotting use case
 
-### Phase 2 — widen the catalogue
+### Phase 2 — widen the catalogue (remaining MOEAs)
 
-- [ ] `feat(component): add SMSEMOABuilder`
-- [ ] `feat(component): add SPEA2Builder`
-- [ ] `feat(component): add MOCellBuilder`
-- [ ] `feat(component): add GeneticAlgorithmBuilder`
+- [ ] `feat(component): add build_spea2()`
+- [ ] `feat(component): add build_smsemoa()`
+- [ ] `feat(component): add build_mocell()`
+- [ ] `feat(component): add build_genetic_algorithm()` — secondary, single-objective; only if time remains after the three above
 
-### Phase 3 — PSO
+### Phase 3 — PSO (out of scope for now, not started until NSGA-II is validated)
 
 - [ ] `feat(component): add the PSO catalogue`
 - [ ] `feat(component): add the ParticleSwarmOptimization template`
-- [ ] `feat(component): add SMPSOBuilder`
+- [ ] `feat(component): add build_smpso()`
 
 **Known risk:** MOEA/D does not fit the component model well — Java jMetal's own docs
 (`jmetal-component` design notes) admit needing complex, tightly-coupled components for it. Not
