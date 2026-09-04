@@ -9,9 +9,10 @@ for both single-objective and multi-objective optimization problems.
 import threading
 import time
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar
+from typing import Generic, Protocol, TypeVar, runtime_checkable
 
 from jmetal.config import store
+from jmetal.core.observer import Observable
 from jmetal.core.problem import Problem
 from jmetal.core.solution import FloatSolution
 from jmetal.logger import get_logger
@@ -28,6 +29,39 @@ R = TypeVar("R")  # Type of the result returned by the algorithm
 # never actually starts as a thread (run() is called directly), so none of this
 # is meaningful state to carry across a pickle -- __setstate__ regenerates it.
 _THREAD_STATE_ATTRS = frozenset(vars(threading.Thread()).keys())
+
+
+@runtime_checkable
+class AlgorithmProtocol(Protocol[R]):
+    """Structural contract satisfied by any algorithm, classic or component-based.
+
+    Defined independently of `threading.Thread`, unlike `Algorithm` below (which
+    still inherits from it -- see Phase 1b in `MODERNIZATION.md` for why that
+    inheritance is being retired). Consumers that only need "something that can run
+    and report progress" -- e.g. `jmetal.lab.experiment.Job` -- can type against
+    this instead of requiring a `threading.Thread` subclass. Every `Algorithm`
+    subclass and `jmetal.component.algorithm.evolutionary_algorithm.EvolutionaryAlgorithm`
+    already satisfy it.
+    """
+
+    observable: Observable
+    total_computing_time: float
+
+    def run(self) -> None:
+        """Run the algorithm to completion."""
+        ...
+
+    def result(self) -> R:
+        """Return the algorithm's result."""
+        ...
+
+    def get_name(self) -> str:
+        """Return the algorithm's name."""
+        ...
+
+    def observable_data(self) -> dict:
+        """Return the data broadcast to observers on each progress update."""
+        ...
 
 
 class Algorithm(Generic[S, R], threading.Thread, ABC):

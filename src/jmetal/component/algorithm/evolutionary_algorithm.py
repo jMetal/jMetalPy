@@ -130,6 +130,16 @@ class EvolutionaryAlgorithm(Generic[S]):
         """Return the algorithm's name."""
         return self.name
 
+    def observable_data(self) -> dict:
+        """Return the data broadcast to observers on each progress update.
+
+        Returns:
+            The same `"PROBLEM"`/`"EVALUATIONS"`/`"SOLUTIONS"`/`"COMPUTING_TIME"`
+            mapping `jmetal.core.algorithm.Algorithm` subclasses return, so this
+            template satisfies `jmetal.core.algorithm.AlgorithmProtocol` too.
+        """
+        return self._state().as_dict()
+
     def _state(self) -> AlgorithmState[S]:
         return AlgorithmState(
             problem=self.evaluation.problem,
