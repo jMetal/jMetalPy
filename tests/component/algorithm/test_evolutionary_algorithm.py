@@ -8,6 +8,8 @@ tests).
 
 import threading
 
+import numpy as np
+
 from jmetal.component.algorithm.evolutionary_algorithm import EvolutionaryAlgorithm
 
 
@@ -135,3 +137,76 @@ class TestEvolutionaryAlgorithm:
         algorithm = build_algorithm()
 
         assert not isinstance(algorithm, threading.Thread)
+
+
+class RngAwareSelection(StubSelection):
+    """A component that declares an rng slot but doesn't have one yet."""
+
+    def __init__(self):
+        self.rng: np.random.Generator | None = None
+
+
+class TestRngThreading:
+    def test_defaults_to_a_fresh_generator_when_none_is_given(self):
+        algorithm = build_algorithm()
+
+        assert isinstance(algorithm.rng, np.random.Generator)
+
+    def test_uses_the_given_generator_instead_of_a_fresh_one(self):
+        rng = np.random.default_rng(42)
+
+        algorithm = EvolutionaryAlgorithm(
+            name="StubEA",
+            solutions_creation=StubSolutionsCreation(4),
+            evaluation=StubEvaluation(problem=object()),
+            termination=StubTermination(max_evaluations=4),
+            selection=StubSelection(),
+            variation=StubVariation(4),
+            replacement=StubReplacement(),
+            rng=rng,
+        )
+
+        assert algorithm.rng is rng
+
+    def test_shares_its_rng_with_components_that_declare_an_rng_attribute(self):
+        rng = np.random.default_rng(7)
+        selection = RngAwareSelection()
+
+        algorithm = EvolutionaryAlgorithm(
+            name="StubEA",
+            solutions_creation=StubSolutionsCreation(4),
+            evaluation=StubEvaluation(problem=object()),
+            termination=StubTermination(max_evaluations=4),
+            selection=selection,
+            variation=StubVariation(4),
+            replacement=StubReplacement(),
+            rng=rng,
+        )
+
+        assert selection.rng is rng
+        assert algorithm.selection.rng is algorithm.rng
+
+    def test_does_not_touch_a_component_that_already_has_its_own_rng(self):
+        own_rng = np.random.default_rng(1)
+        selection = RngAwareSelection()
+        selection.rng = own_rng
+
+        algorithm = EvolutionaryAlgorithm(
+            name="StubEA",
+            solutions_creation=StubSolutionsCreation(4),
+            evaluation=StubEvaluation(problem=object()),
+            termination=StubTermination(max_evaluations=4),
+            selection=selection,
+            variation=StubVariation(4),
+            replacement=StubReplacement(),
+            rng=np.random.default_rng(2),
+        )
+
+        assert selection.rng is own_rng
+
+    def test_ignores_components_that_do_not_declare_an_rng_attribute(self):
+        # StubSolutionsCreation, StubEvaluation, StubTermination, StubVariation and
+        # StubReplacement have no rng attribute; construction must not raise.
+        algorithm = build_algorithm()
+
+        assert not hasattr(algorithm.solutions_creation, "rng")

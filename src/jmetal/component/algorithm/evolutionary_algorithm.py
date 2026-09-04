@@ -3,6 +3,8 @@
 import time
 from typing import Generic, TypeVar
 
+import numpy as np
+
 from jmetal.component.algorithm.algorithm_state import AlgorithmState
 from jmetal.component.catalogue.common.evaluation import Evaluation
 from jmetal.component.catalogue.common.solutions_creation import SolutionsCreation
@@ -54,6 +56,7 @@ class EvolutionaryAlgorithm(Generic[S]):
         selection: Selection[S],
         variation: Variation[S],
         replacement: Replacement[S],
+        rng: np.random.Generator | None = None,
     ):
         self.name = name
         self.solutions_creation = solutions_creation
@@ -68,6 +71,31 @@ class EvolutionaryAlgorithm(Generic[S]):
         self.start_computing_time = 0.0
         self.total_computing_time = 0.0
         self.observable = DefaultObservable()
+
+        self.rng = rng if rng is not None else np.random.default_rng()
+        self._thread_rng_into_components()
+
+    def _thread_rng_into_components(self) -> None:
+        """Share this algorithm's rng with every component that accepts one.
+
+        Not every component is RNG-aware yet -- operators are being migrated to the
+        injectable-rng pattern incrementally (see MODERNIZATION.md's L1 notes) -- so
+        this only assigns `rng` on components that already expose it as a plain
+        attribute, leaving the rest untouched. A component built with its own
+        explicit `rng` before being handed to this template is not overridden here;
+        wire it through `build_nsgaii()` (or an equivalent factory) instead if it
+        should share this algorithm's generator.
+        """
+        for component in (
+            self.solutions_creation,
+            self.evaluation,
+            self.termination,
+            self.selection,
+            self.variation,
+            self.replacement,
+        ):
+            if getattr(component, "rng", None) is None and hasattr(component, "rng"):
+                component.rng = self.rng
 
     def run(self) -> None:
         """Run the algorithm to completion.
