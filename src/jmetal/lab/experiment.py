@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import iqr, ks_2samp, mannwhitneyu
 
-from jmetal.core.algorithm import Algorithm
+from jmetal.core.algorithm import AlgorithmProtocol
 from jmetal.core.quality_indicator import QualityIndicator
 from jmetal.logger import get_logger
 from jmetal.util.solution import (
@@ -31,7 +31,7 @@ logger = get_logger(__name__)
 
 
 class Job:
-    def __init__(self, algorithm: Algorithm, algorithm_tag: str, problem_tag: str, run: int):
+    def __init__(self, algorithm: AlgorithmProtocol, algorithm_tag: str, problem_tag: str, run: int):
         self.algorithm = algorithm
         self.algorithm_tag = algorithm_tag
         self.problem_tag = problem_tag

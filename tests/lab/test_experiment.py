@@ -2,6 +2,8 @@ import numpy as np
 import pytest
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
+from jmetal.component.algorithm.multiobjective.nsgaii import build_nsgaii
+from jmetal.component.catalogue.common.termination import TerminationByEvaluations
 from jmetal.core.quality_indicator import EpsilonIndicator, GenerationalDistance
 from jmetal.lab.experiment import Experiment, Job, generate_summary_from_experiment
 from jmetal.operator import PolynomialMutation, SBXCrossover
@@ -55,6 +57,42 @@ class TestExperimentRun:
 
         with pytest.raises((NotADirectoryError, FileExistsError)):
             experiment.run()
+
+
+class TestJobWithAComponentBasedAlgorithm:
+    """Job is typed against AlgorithmProtocol, not the threading.Thread-based
+    Algorithm ABC, specifically so that jmetal.component algorithms -- which don't
+    inherit from either -- work here too, including across the process boundary
+    Experiment.run() sends jobs through.
+    """
+
+    def test_should_run_a_component_based_algorithm_across_multiple_processes(self, tmp_path):
+        def make_job(run: int) -> Job:
+            problem = ZDT1()
+            algorithm = build_nsgaii(
+                problem,
+                population_size=10,
+                offspring_population_size=10,
+                crossover=SBXCrossover(probability=1.0, distribution_index=20),
+                mutation=PolynomialMutation(
+                    probability=1.0 / problem.number_of_variables(), distribution_index=20
+                ),
+                termination=TerminationByEvaluations(max_evaluations=40),
+                rng=np.random.default_rng(run),
+            )
+            return Job(algorithm=algorithm, algorithm_tag="NSGAII", problem_tag="ZDT1", run=run)
+
+        jobs = [make_job(run) for run in range(2)]
+        experiment = Experiment(output_dir=str(tmp_path), jobs=jobs, m_workers=2)
+
+        experiment.run()
+
+        assert len(experiment.job_data) == 2
+        for data in experiment.job_data:
+            assert data["EVALUATIONS"] >= 40
+            assert len(data["SOLUTIONS"]) == 10
+        for run in range(2):
+            assert (tmp_path / "NSGAII" / "ZDT1" / f"FUN.{run}.tsv").exists()
 
 
 @pytest.fixture
