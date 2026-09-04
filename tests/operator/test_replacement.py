@@ -5,8 +5,40 @@ from collections.abc import Callable
 import pytest
 
 from jmetal.core.solution import FloatSolution
-from jmetal.operator.replacement import SMSEMOAReplacement
-from jmetal.util.density_estimator import HypervolumeContributionDensityEstimator
+from jmetal.operator.replacement import (
+    RankingAndCrowdingDistanceReplacement,
+    RankingAndDensityEstimatorReplacement,
+    Replacement,
+    SMSEMOAReplacement,
+)
+from jmetal.util.density_estimator import (
+    CrowdingDistanceDensityEstimator,
+    HypervolumeContributionDensityEstimator,
+)
+from jmetal.util.ranking import FastNonDominatedRanking
+
+
+class TestReplacement:
+    """Tests for the Replacement abstract base class shared by every replacement strategy."""
+
+    @pytest.mark.parametrize(
+        "replacement",
+        [
+            RankingAndDensityEstimatorReplacement(
+                FastNonDominatedRanking(), CrowdingDistanceDensityEstimator()
+            ),
+            RankingAndCrowdingDistanceReplacement(),
+            SMSEMOAReplacement(reference_point=[6, 6]),
+        ],
+    )
+    def test_every_concrete_replacement_is_an_instance_of_replacement(self, replacement):
+        """Every existing replacement strategy should honor the shared Replacement contract."""
+        assert isinstance(replacement, Replacement)
+
+    def test_replacement_cannot_be_instantiated_directly(self):
+        """Replacement is abstract: it only fixes the replace() contract, not an implementation."""
+        with pytest.raises(TypeError):
+            Replacement()
 
 
 class TestSMSEMOAReplacement:

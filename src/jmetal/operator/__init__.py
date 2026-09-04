@@ -68,6 +68,7 @@ from .mutation import (
 )
 from .replacement import (
     RankingAndCrowdingDistanceReplacement,
+    Replacement,
 )
 from .selection import (
     BestSolutionSelection,
@@ -107,4 +108,5 @@ __all__ = [
     "RouletteWheelSelection",
     "TournamentSelection",
     "RankingAndCrowdingDistanceReplacement",
+    "Replacement",
 ]

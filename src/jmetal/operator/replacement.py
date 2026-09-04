@@ -1,5 +1,6 @@
+from abc import ABC, abstractmethod
 from enum import Enum
-from typing import TypeVar
+from typing import Generic, TypeVar
 
 from jmetal.util.density_estimator import (
     CrowdingDistanceDensityEstimator,
@@ -9,6 +10,30 @@ from jmetal.util.density_estimator import (
 from jmetal.util.ranking import FastNonDominatedRanking, Ranking
 
 S = TypeVar("S")
+
+
+class Replacement(ABC, Generic[S]):
+    """Base class for population replacement strategies.
+
+    A replacement strategy decides which solutions from a parent population and an
+    offspring population survive into the next generation. Concrete strategies
+    (ranking-based, crowding-distance-based, hypervolume-based, ...) differ enough in
+    their selection logic that this base class only fixes the shared contract, not any
+    implementation.
+    """
+
+    @abstractmethod
+    def replace(self, solution_list: list[S], offspring_list: list[S]) -> list[S]:
+        """Combine a parent and an offspring population and select the survivors.
+
+        Args:
+            solution_list: The parent population.
+            offspring_list: The offspring population.
+
+        Returns:
+            The population that survives into the next generation.
+        """
+        pass
 
 
 class RemovalPolicyType(Enum):
@@ -25,7 +50,7 @@ class RemovalPolicyType(Enum):
     ONE_SHOT = 2
 
 
-class RankingAndDensityEstimatorReplacement:
+class RankingAndDensityEstimatorReplacement(Replacement[S]):
     """A replacement strategy that combines non-dominated ranking with density estimation.
 
     This replacement strategy is commonly used in multi-objective evolutionary algorithms
@@ -186,7 +211,7 @@ class RankingAndDensityEstimatorReplacement:
         return result_list
 
 
-class RankingAndCrowdingDistanceReplacement:
+class RankingAndCrowdingDistanceReplacement(Replacement[S]):
     """Replacement operator based on non-dominated ranking and crowding distance.
 
     This operator combines the parent and offspring populations, ranks them using
@@ -278,7 +303,7 @@ class RankingAndCrowdingDistanceReplacement:
         return "Ranking and crowding distance replacement"
 
 
-class SMSEMOAReplacement:
+class SMSEMOAReplacement(Replacement[S]):
     """Replacement operator for the SMS-EMOA (S-Metric Selection Evolutionary Multiobjective Algorithm).
 
     This replacement operator is specifically designed for the SMS-EMOA algorithm. It works by:
