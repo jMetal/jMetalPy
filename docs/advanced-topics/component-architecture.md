@@ -112,6 +112,223 @@ global `random` module. Component-based algorithms are reproducible today when b
 RNG-aware operators and a reseeded global `random` state; migrating the remaining operators to the
 injectable-`rng` pattern is ongoing, tracked in `MODERNIZATION.md`.
 
+## Discovering what's available: the catalogue reference
+
+Before this architecture existed, answering "what can I configure in NSGA-II?" meant reading Java
+source by hand. `jmetal.component.catalogue_info.describe_catalogue()` answers it from the running
+code instead: which component slots exist, which implementations are available for each, and each
+implementation's control parameters (name, type, default). It deliberately stops there -- no ranges
+or distributions to *explore* those parameters, which is an automatic-configuration concern kept out
+of scope for now.
+
+```python
+from jmetal.component.catalogue_info import describe_catalogue
+
+for slot, implementations in describe_catalogue().items():
+    print(slot)
+    for implementation in implementations:
+        print(" ", implementation.name, [p.name for p in implementation.parameters])
+```
+
+Everything below is derived from the real classes via `inspect`, not hand-maintained, so it cannot
+drift out of sync with the code the way a separate parameter list could. Current output for the
+NSGA-II catalogue:
+
+### SolutionsCreation
+
+**`RandomSolutionsCreation`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `problem` | `Problem[~S]` | required |
+| `number_of_solutions_to_create` | `int` | required |
+
+### Evaluation
+
+**`SequentialEvaluation`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `problem` | `Problem[~S]` | required |
+| `evaluator` | `Optional[Evaluator[~S]]` | None |
+
+### Termination
+
+**`TerminationByEvaluations`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `max_evaluations` | `int` | required |
+
+### Selection
+
+**`TournamentSelection`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `selection_operator` | `TournamentSelection` | required |
+| `mating_pool_size` | `int` | required |
+
+### Variation
+
+**`CrossoverAndMutationVariation`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `offspring_population_size` | `int` | required |
+| `crossover` | `Crossover` | required |
+| `mutation` | `Mutation` | required |
+
+### Replacement
+
+**`RankingAndDensityEstimatorReplacement`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `ranking` | `Ranking` | required |
+| `density_estimator` | `DensityEstimator` | required |
+| `removal_policy` | `RemovalPolicyType` | RemovalPolicyType.ONE_SHOT |
+
+**`RankingAndCrowdingDistanceReplacement`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `ranking` | `Ranking` | None |
+| `density_estimator` | `DensityEstimator` | None |
+
+**`SMSEMOAReplacement`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `reference_point` | `~S` | required |
+
+### Crossover (`jmetal.operator.crossover`)
+
+**`SBXCrossover`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `probability` | `float` | required |
+| `distribution_index` | `float` | 20.0 |
+| `repair_operator` | `Callable[[float, float, float], float] \| FloatRepairOperator \| None` | ClampFloatRepair() |
+| `rng` | `Generator \| None` | None |
+
+**`IntegerSBXCrossover`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `probability` | `float` | required |
+| `distribution_index` | `float` | 20.0 |
+| `rng` | `Generator \| None` | None |
+
+**`BLXAlphaCrossover`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `probability` | `float` | 0.9 |
+| `alpha` | `float` | 0.5 |
+| `repair_operator` | `Callable[[float, float, float], float] \| None` | None |
+| `rng` | `Generator \| None` | None |
+
+**`BLXAlphaBetaCrossover`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `probability` | `float` | 0.9 |
+| `alpha` | `float` | 0.5 |
+| `beta` | `float` | 0.5 |
+| `repair_operator` | `Callable[[float, float, float], float] \| None` | None |
+| `rng` | `Generator \| None` | None |
+
+**`PMXCrossover`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `probability` | `float` | required |
+| `rng` | `Generator \| None` | None |
+
+**`CXCrossover`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `probability` | `float` | required |
+
+**`SPXCrossover`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `probability` | `float` | required |
+| `rng` | `Generator \| None` | None |
+
+**`DifferentialEvolutionCrossover`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `CR` | `float` | required |
+| `F` | `float` | required |
+| `K` | `float` | 0.5 |
+| `rng` | `Generator \| None` | None |
+
+### Mutation (`jmetal.operator.mutation`)
+
+**`PolynomialMutation`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `probability` | `float` | 0.01 |
+| `distribution_index` | `float` | 20.0 |
+| `repair_operator` | `Callable[[float, float, float], float] \| None` | None |
+| `rng` | `Generator \| None` | None |
+
+**`IntegerPolynomialMutation`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `probability` | `float` | required |
+| `distribution_index` | `float` | 20.0 |
+| `repair_operator` | `Callable[[float, int, int], int] \| None` | None |
+| `rng` | `Generator \| None` | None |
+
+**`BitFlipMutation`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `probability` | `float` | required |
+
+**`PermutationSwapMutation`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `probability` | `float` | required |
+| `rng` | `Generator \| None` | None |
+
+**`ScrambleMutation`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `probability` | `float` | required |
+| `rng` | `Generator \| None` | None |
+
+**`SimpleRandomMutation`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `probability` | `float` | required |
+| `rng` | `Generator \| None` | None |
+
+**`UniformMutation`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `probability` | `float` | required |
+| `perturbation` | `float` | 0.5 |
+| `repair_operator` | `Callable[[float, float, float], float] \| None` | None |
+| `rng` | `Generator \| None` | None |
+
+This table is generated from `describe_catalogue()`'s output and should be regenerated whenever
+`jmetal.component.catalogue_info.CATALOGUE` changes (a new component lands, or a constructor
+signature changes) -- it is not kept in sync automatically.
+
 ## Verified behavioral equivalence
 
 `build_nsgaii(...)` and the classic `NSGAII(...)` produce **identical** final populations on ZDT1
