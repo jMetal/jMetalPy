@@ -309,9 +309,13 @@ already has a `__getstate__`/`__setstate__` pair that strips `threading.Thread`'
 internals so `Algorithm` survives `ProcessPoolExecutor`; removing the `Thread` inheritance lets that
 whole workaround be deleted too.
 
-- [ ] `refactor(core): define an algorithm protocol independent of threading.Thread`
-- [ ] `refactor(lab): type Job against the algorithm protocol`
-- [ ] `refactor(core)!: stop inheriting from threading.Thread` — add an explicit `run_in_thread()` helper for the live-plotting use case
+- [x] `refactor(core): define an algorithm protocol independent of threading.Thread` — `AlgorithmProtocol`, satisfied by both the classic hierarchy and `EvolutionaryAlgorithm`
+- [x] `refactor(lab): type Job against the algorithm protocol` — verified end-to-end with a component-based algorithm run through `Experiment`/`ProcessPoolExecutor`
+- [x] `refactor(core)!: stop inheriting from threading.Thread` — added `run_in_thread()`; also dropped `LocalSearch`'s and `SimulatedAnnealing`'s redundant direct `threading.Thread` inheritance, which would otherwise have been left half-initialized once `Algorithm.__init__` stopped calling `Thread.__init__`
+
+**Phase 1b complete.** `Algorithm` and every subclass are plain objects now — no `threading.Thread`,
+no `__getstate__`/`__setstate__` workaround. Verified: `LocalSearch` and `SimulatedAnnealing` still
+run and pickle correctly; the full suite (925 tests) and lint are green.
 
 ### Phase 2 — widen the catalogue (remaining MOEAs)
 
