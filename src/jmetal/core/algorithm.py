@@ -24,23 +24,16 @@ logger = get_logger(__name__)
 S = TypeVar("S")  # Type of the solutions
 R = TypeVar("R")  # Type of the result returned by the algorithm
 
-# threading.Thread's own instance attributes (locks, Event objects, and other
-# unpicklable internals), captured from a fresh, never-started Thread. Algorithm
-# never actually starts as a thread (run() is called directly), so none of this
-# is meaningful state to carry across a pickle -- __setstate__ regenerates it.
-_THREAD_STATE_ATTRS = frozenset(vars(threading.Thread()).keys())
-
 
 @runtime_checkable
 class AlgorithmProtocol(Protocol[R]):
     """Structural contract satisfied by any algorithm, classic or component-based.
 
-    Defined independently of `threading.Thread`, unlike `Algorithm` below (which
-    still inherits from it -- see Phase 1b in `MODERNIZATION.md` for why that
-    inheritance is being retired). Consumers that only need "something that can run
-    and report progress" -- e.g. `jmetal.lab.experiment.Job` -- can type against
-    this instead of requiring a `threading.Thread` subclass. Every `Algorithm`
-    subclass and `jmetal.component.algorithm.evolutionary_algorithm.EvolutionaryAlgorithm`
+    Defined independently of `threading.Thread`. Consumers that only need
+    "something that can run and report progress" -- e.g.
+    `jmetal.lab.experiment.Job` -- can type against this instead of requiring a
+    `threading.Thread` subclass. Every `Algorithm` subclass and
+    `jmetal.component.algorithm.evolutionary_algorithm.EvolutionaryAlgorithm`
     already satisfy it.
     """
 
@@ -64,12 +57,17 @@ class AlgorithmProtocol(Protocol[R]):
         ...
 
 
-class Algorithm(Generic[S, R], threading.Thread, ABC):
+class Algorithm(Generic[S, R], ABC):
     """Abstract base class for all optimization algorithms in JMetalPy.
 
-    This class serves as the foundation for implementing various optimization algorithms.
-    It extends threading.Thread to support concurrent execution and implements the
-    template method pattern through its abstract methods.
+    This class serves as the foundation for implementing various optimization
+    algorithms, implementing the template method pattern through its abstract
+    methods. It does not inherit from `threading.Thread`: nothing in jMetalPy calls
+    `start()`/`join()` on an algorithm -- `run()` is always called directly -- so
+    that inheritance only added unpicklable internal state (locks, `Event` objects)
+    that `jmetal.lab.experiment.Job` had to work around to send algorithms across a
+    process boundary via `ProcessPoolExecutor`. Use `run_in_thread()` below if an
+    algorithm genuinely needs to run in the background.
 
     Attributes:
         solutions: List of solutions found by the algorithm.
@@ -81,27 +79,11 @@ class Algorithm(Generic[S, R], threading.Thread, ABC):
 
     def __init__(self):
         """Initialize the algorithm with default values."""
-        threading.Thread.__init__(self)
-
         self.solutions: list[S] = []
         self.evaluations = 0
         self.start_computing_time = 0
         self.total_computing_time = 0
         self.observable = store.default_observable
-
-    def __getstate__(self) -> dict:
-        """Exclude threading.Thread's internal locks from pickling.
-
-        Algorithm instances are never actually started as threads (run() is called
-        directly), but the Thread base class still carries unpicklable lock objects
-        in its instance state. This lets an Algorithm be sent across a process
-        boundary, e.g. via ProcessPoolExecutor in jmetal.lab.experiment.
-        """
-        return {k: v for k, v in self.__dict__.items() if k not in _THREAD_STATE_ATTRS}
-
-    def __setstate__(self, state: dict) -> None:
-        threading.Thread.__init__(self)
-        self.__dict__.update(state)
 
     @abstractmethod
     def create_initial_solutions(self) -> list[S]:
@@ -353,3 +335,23 @@ class ParticleSwarmOptimization(Algorithm[FloatSolution, list[FloatSolution]], A
     @property
     def label(self) -> str:
         return f"{self.get_name()}.{self.problem.name()}"
+
+
+def run_in_thread(algorithm: AlgorithmProtocol) -> threading.Thread:
+    """Run an algorithm in a background thread.
+
+    Algorithm no longer inherits from `threading.Thread`, so `algorithm.run()` must
+    be called directly or, if background execution is genuinely needed -- e.g. a
+    live-plotting loop driven from the main thread while the algorithm keeps
+    running -- via this explicit helper instead.
+
+    Args:
+        algorithm: Any object satisfying `AlgorithmProtocol`.
+
+    Returns:
+        The `threading.Thread` running `algorithm.run()`, already started.
+    """
+    thread = threading.Thread(target=algorithm.run)
+    thread.start()
+
+    return thread

@@ -1,6 +1,5 @@
 import copy
 import random
-import threading
 import time
 from typing import TypeVar
 
@@ -26,7 +25,7 @@ R = TypeVar("R")
 """
 
 
-class SimulatedAnnealing(Algorithm[S, R], threading.Thread):
+class SimulatedAnnealing(Algorithm[S, R]):
     def __init__(
         self,
         problem: Problem[S],
