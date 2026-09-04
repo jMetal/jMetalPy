@@ -148,7 +148,7 @@ class PolynomialMutation(Mutation[FloatSolution]):
         probability: float = 0.01,
         distribution_index: float = 20.0,
         repair_operator: Callable[[float, float, float], float] | None = None,
-        rng: object | None = None,
+        rng: np.random.Generator | None = None,
     ):
         if not 0 <= probability <= 1:
             raise ValueError("probability must be in [0, 1]")
@@ -241,7 +241,7 @@ class IntegerPolynomialMutation(Mutation[IntegerSolution]):
         probability: float,
         distribution_index: float = 20.0,
         repair_operator: Callable[[float, int, int], int] | None = None,
-        rng: object | None = None,
+        rng: np.random.Generator | None = None,
     ):
         super().__init__(probability=probability)
         self.distribution_index = distribution_index
@@ -332,7 +332,7 @@ class SimpleRandomMutation(Mutation[FloatSolution]):
         ValueError: If probability is not in [0,1].
     """
 
-    def __init__(self, probability: float, rng: object | None = None):
+    def __init__(self, probability: float, rng: np.random.Generator | None = None):
         if not 0 <= probability <= 1:
             raise ValueError("probability must be in [0, 1]")
         super().__init__(probability=probability)
@@ -375,7 +375,7 @@ class UniformMutation(Mutation[FloatSolution]):
         probability: float,
         perturbation: float = 0.5,
         repair_operator: Callable[[float, float, float], float] | None = None,
-        rng: object | None = None,
+        rng: np.random.Generator | None = None,
     ):
         if not 0 <= probability <= 1:
             raise ValueError("probability must be in [0, 1]")
@@ -490,7 +490,7 @@ class NonUniformMutation(Mutation[FloatSolution]):
         perturbation: float = 0.5,
         max_iterations: int = 1000,
         repair_operator: Callable[[float, float, float], float] | None = None,
-        rng: object | None = None,
+        rng: np.random.Generator | None = None,
     ):
         if not 0 <= probability <= 1:
             raise ValueError("probability must be in [0, 1]")
@@ -620,7 +620,7 @@ class PermutationSwapMutation(Mutation[PermutationSolution]):
         >>> # Two random positions will be swapped, e.g., [2, 1, 0, 3, 4]
     """
 
-    def __init__(self, probability: float, rng: object | None = None):
+    def __init__(self, probability: float, rng: np.random.Generator | None = None):
         super().__init__(probability=probability)
         self.rng = rng if rng is not None else np.random.default_rng()
 
@@ -750,7 +750,7 @@ class ScrambleMutation(Mutation[PermutationSolution]):
         >>> # A random subsequence will be scrambled, e.g., [0, 1, 4, 3, 2, 5, 6, 7, 8, 9]
     """
 
-    def __init__(self, probability: float, rng: object | None = None):
+    def __init__(self, probability: float, rng: np.random.Generator | None = None):
         super().__init__(probability=probability)
         self.rng = rng if rng is not None else np.random.default_rng()
 
@@ -825,7 +825,7 @@ class LevyFlightMutation(Mutation[FloatSolution]):
         beta: float = 1.5,
         step_size: float = 0.01,
         repair_operator: Callable[[float, float, float], float] | None = None,
-        rng: object | None = None,
+        rng: np.random.Generator | None = None,
     ):
         if not 0 <= mutation_probability <= 1:
             raise ValueError("mutation_probability must be in [0, 1]")
@@ -909,7 +909,7 @@ class PowerLawMutation(Mutation[FloatSolution]):
         probability: float = 0.01,
         delta: float = 1.0,
         repair_operator: Callable[[float, float, float], float] | None = None,
-        rng: object | None = None,
+        rng: np.random.Generator | None = None,
     ):
         if not 0 <= probability <= 1:
             raise ValueError("probability must be in [0, 1]")
