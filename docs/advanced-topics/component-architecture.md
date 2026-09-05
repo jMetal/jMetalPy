@@ -8,6 +8,11 @@ algorithms, and no existing example, notebook, or user code is affected.
 This page currently covers evolutionary algorithms (EA/MOEA). A PSO template and catalogue are
 planned but not implemented yet.
 
+For a hands-on walkthrough of every configuration described below -- final fronts, quality
+indicator values, and the observer pattern in action -- see the
+[`notebooks/NSGAIIComponentBased.ipynb`](https://github.com/jMetal/jMetalPy/blob/main/notebooks/NSGAIIComponentBased.ipynb)
+notebook.
+
 ## Why
 
 The classic algorithms hard-wire their steps as methods on a class hierarchy: `GeneticAlgorithm`
