@@ -210,3 +210,79 @@ class TestRngThreading:
         algorithm = build_algorithm()
 
         assert not hasattr(algorithm.solutions_creation, "rng")
+
+
+class StubArchive:
+    """Minimal stand-in for jmetal.util.archive.Archive: just accumulates."""
+
+    def __init__(self):
+        self.solution_list: list[int] = []
+
+    def add(self, solution: int) -> bool:
+        self.solution_list.append(solution)
+        return True
+
+
+class StubEvaluationWithArchive(StubEvaluation):
+    """Mirrors SequentialEvaluationWithArchive: feeds every evaluated solution into
+    an archive as a side effect, independent of what the template keeps as its
+    population.
+    """
+
+    def __init__(self, problem: object, archive: StubArchive):
+        super().__init__(problem)
+        self.archive = archive
+
+    def evaluate(self, solution_list: list[int]) -> list[int]:
+        evaluated = super().evaluate(solution_list)
+        for solution in evaluated:
+            self.archive.add(solution)
+        return evaluated
+
+
+class TestExternalArchive:
+    def test_without_an_archive_result_returns_the_population(self):
+        algorithm = build_algorithm(population_size=4, offspring_size=4, generations=1)
+
+        algorithm.run()
+
+        assert algorithm.result() == algorithm.solutions
+
+    def test_with_an_archive_result_returns_the_archive_contents_instead(self):
+        archive = StubArchive()
+        algorithm = EvolutionaryAlgorithm(
+            name="StubEA",
+            solutions_creation=StubSolutionsCreation(4),
+            evaluation=StubEvaluationWithArchive(problem=object(), archive=archive),
+            termination=StubTermination(max_evaluations=8),
+            selection=StubSelection(),
+            variation=StubVariation(4),
+            replacement=StubReplacement(),
+            archive=archive,
+        )
+
+        algorithm.run()
+
+        assert algorithm.result() is archive.solution_list
+        assert algorithm.result() != algorithm.solutions
+
+    def test_the_archive_accumulates_every_evaluated_solution_not_just_survivors(self):
+        # Population size 4, one generation of 4 offspring: 8 evaluations total,
+        # all of which the archive should have seen even though only 4 survive
+        # into algorithm.solutions.
+        archive = StubArchive()
+        algorithm = EvolutionaryAlgorithm(
+            name="StubEA",
+            solutions_creation=StubSolutionsCreation(4),
+            evaluation=StubEvaluationWithArchive(problem=object(), archive=archive),
+            termination=StubTermination(max_evaluations=8),
+            selection=StubSelection(),
+            variation=StubVariation(4),
+            replacement=StubReplacement(),
+            archive=archive,
+        )
+
+        algorithm.run()
+
+        assert len(archive.solution_list) == 8
+        assert len(algorithm.solutions) == 4

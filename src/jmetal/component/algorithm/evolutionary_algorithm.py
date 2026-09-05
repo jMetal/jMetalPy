@@ -12,6 +12,7 @@ from jmetal.component.catalogue.common.termination import Termination
 from jmetal.component.catalogue.ea.replacement import Replacement
 from jmetal.component.catalogue.ea.selection import Selection
 from jmetal.component.catalogue.ea.variation import Variation
+from jmetal.util.archive import Archive
 from jmetal.util.observable import DefaultObservable
 
 S = TypeVar("S")
@@ -45,6 +46,11 @@ class EvolutionaryAlgorithm(Generic[S]):
         selection: Builds a mating pool from the population.
         variation: Turns a mating pool into an offspring population.
         replacement: Selects survivors from the population and the offspring.
+        archive: An optional external archive. When given, `result()` returns the
+            archive's contents instead of the final population -- pair it with
+            `SequentialEvaluationWithArchive` (or any `Evaluation` that feeds the
+            same archive) so it actually accumulates solutions during the run;
+            the template itself never writes to it.
     """
 
     def __init__(
@@ -57,6 +63,7 @@ class EvolutionaryAlgorithm(Generic[S]):
         variation: Variation[S],
         replacement: Replacement[S],
         rng: np.random.Generator | None = None,
+        archive: Archive[S] | None = None,
     ):
         self.name = name
         self.solutions_creation = solutions_creation
@@ -65,6 +72,7 @@ class EvolutionaryAlgorithm(Generic[S]):
         self.selection = selection
         self.variation = variation
         self.replacement = replacement
+        self.archive = archive
 
         self.solutions: list[S] = []
         self.evaluations = 0
@@ -119,11 +127,16 @@ class EvolutionaryAlgorithm(Generic[S]):
         self.total_computing_time = self._current_computing_time()
 
     def result(self) -> list[S]:
-        """Return the current population.
+        """Return the algorithm's result.
 
         Returns:
-            The population, valid at any point during or after `run()`.
+            The archive's contents if an `archive` was given at construction time,
+            otherwise the current population. Valid at any point during or after
+            `run()`.
         """
+        if self.archive is not None:
+            return self.archive.solution_list
+
         return self.solutions
 
     def get_name(self) -> str:
