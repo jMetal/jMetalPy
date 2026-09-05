@@ -12,7 +12,7 @@ from jmetal.component.catalogue.common.termination import Termination
 from jmetal.component.catalogue.ea.replacement import Replacement
 from jmetal.component.catalogue.ea.selection import Selection
 from jmetal.component.catalogue.ea.variation import Variation
-from jmetal.util.archive import Archive
+from jmetal.util.archive import Archive, distance_based_subset_selection_robust
 from jmetal.util.observable import DefaultObservable
 
 S = TypeVar("S")
@@ -130,14 +130,24 @@ class EvolutionaryAlgorithm(Generic[S]):
         """Return the algorithm's result.
 
         Returns:
-            The archive's contents if an `archive` was given at construction time,
-            otherwise the current population. Valid at any point during or after
-            `run()`.
+            If an `archive` was given at construction time: its contents, reduced
+            to the population size via distance-based subset selection if it grew
+            larger (an unbounded archive can accumulate far more than that -- a
+            bounded one, e.g. `CrowdingDistanceArchive`, never exceeds the
+            population size to begin with, so this is a no-op for it). Otherwise
+            the current population. Valid at any point during or after `run()`.
         """
-        if self.archive is not None:
-            return self.archive.solution_list
+        if self.archive is None:
+            return self.solutions
 
-        return self.solutions
+        archive_solutions = self.archive.solution_list
+        population_size = len(self.solutions)
+        if len(archive_solutions) <= population_size:
+            return archive_solutions
+
+        return distance_based_subset_selection_robust(
+            archive_solutions, population_size, rng=self.rng
+        )
 
     def get_name(self) -> str:
         """Return the algorithm's name."""
