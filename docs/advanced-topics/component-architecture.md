@@ -143,6 +143,15 @@ multi-modal problems like ZDT4, where it guards against the population convergin
 Pareto front. See `examples/component/nsgaii_crowding_distance_archive_zdt4.py` and
 `examples/component/nsgaii_unbounded_archive_dtlz2.py`.
 
+**`result()`'s size.** An unbounded archive can accumulate far more solutions than the population
+size -- into the thousands over a full run. `result()` accounts for this: if the archive holds more
+solutions than the population size, it reduces it to exactly that many via
+`distance_based_subset_selection_robust` before returning, rather than handing back the whole
+(potentially huge) archive. This mirrors jMetal Java's `BestSolutionsArchive`, which wraps an
+otherwise-unbounded archive the same way. A bounded archive (`CrowdingDistanceArchive`, ...) never
+exceeds the population size to begin with, so this is a no-op for it -- `result()` returns its
+contents directly.
+
 `SequentialEvaluationWithArchive` feeds the archive a whole generation at a time via
 `Archive.add_batch()` rather than one solution at a time. For `NonDominatedSolutionsArchive`, whose
 `add()` is O(n) per call, this replaces many individual insertions with a single

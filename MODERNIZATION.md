@@ -329,6 +329,18 @@ archive + incoming batch) and switched `SequentialEvaluationWithArchive` to call
 generation. DTLZ2 case: ~43s → ~1.4s, same archive size and hypervolume. `BoundedArchive`/
 `CrowdingDistanceArchive` untouched (the default loop; that case was never the bottleneck).
 
+**Correctness fix — `result()` with an unbounded archive.** `EvolutionaryAlgorithm.result()` was
+returning the whole archive whenever one was set, including for `NonDominatedSolutionsArchive`,
+which can grow into the thousands over a run -- unlike jMetal Java's `BestSolutionsArchive`, which
+wraps an unbounded archive but reduces it to the population size via distance-based subset selection
+before returning. Fixed to match: `result()` now calls the already-existing
+`distance_based_subset_selection_robust` (`jmetal/util/archive.py`) whenever the archive holds more
+solutions than the population size, a no-op for bounded archives (`CrowdingDistanceArchive`, ...),
+which never exceed that size to begin with. As a side effect, this also fixed the DTLZ2 3D plot in
+`notebooks/NSGAIIComponentBased.ipynb`, which had been unreadable (an opaque ~9500-point scatter
+renders as a solid blob) -- 100 well-distributed points display cleanly with the same
+`jmetal.lab.visualization.Plot` the other sections already use, no custom plotting code needed.
+
 **Analysis on record (not yet acted on): full NSGA-II-Double parameter-space feasibility.** Compared
 jMetal Java's `NSGAIIDouble.yaml` (Evolver) against jMetalPy operator-by-operator. Verdict: nothing
 hits an architectural wall. Already present: most crossover/mutation operators (`SBXCrossover`,

@@ -17,6 +17,12 @@ SequentialEvaluationWithArchive updates it once per generation via
 Archive.add_batch() (moocore.is_nondominated() in a single C-backed call) rather
 than one insertion at a time, so this runs in a couple of seconds at 40,000
 evaluations rather than the tens of seconds a naive one-at-a-time update would take.
+
+Note on the result: algorithm.result() does not return the whole (potentially
+huge) archive -- when it holds more solutions than the population size, it's
+reduced to exactly that many via distance-based subset selection first (the same
+idea as jMetal Java's BestSolutionsArchive), so the result stays a representable,
+well-distributed front.
 """
 
 if __name__ == "__main__":
@@ -39,7 +45,8 @@ if __name__ == "__main__":
 
     algorithm.run()
 
-    # algorithm.result() returns the archive's contents, since an archive was given.
+    # algorithm.result() returns the archive's contents, reduced to population_size
+    # via distance-based subset selection since the archive is unbounded.
     front = algorithm.result()
     label = f"{algorithm.get_name()}.{problem.name()}"
 
@@ -56,5 +63,6 @@ if __name__ == "__main__":
 
     print(f"Algorithm: {algorithm.get_name()}")
     print(f"Problem: {problem.name()}")
-    print(f"Archive size: {len(front)}")
+    print(f"Archive size (before reduction): {len(archive.solution_list)}")
+    print(f"Result size (after reduction):   {len(front)}")
     print(f"Computing time: {algorithm.total_computing_time}")
