@@ -112,6 +112,34 @@ global `random` module. Component-based algorithms are reproducible today when b
 RNG-aware operators and a reseeded global `random` state; migrating the remaining operators to the
 injectable-`rng` pattern is ongoing, tracked in `MODERNIZATION.md`.
 
+## External archives
+
+An external archive collects solutions independently of the population: every evaluated solution
+is copied into it, regardless of what the population/replacement strategy keeps or discards. This
+mirrors jMetal Java's `SequentialEvaluationWithArchive` + `EvolutionaryAlgorithmWithArchive` pair,
+but as a plain constructor parameter rather than a subclass:
+
+```python
+from jmetal.util.archive import CrowdingDistanceArchive
+
+algorithm = build_nsgaii(
+    problem, population_size=100, offspring_population_size=100,
+    crossover=crossover, mutation=mutation,
+    archive=CrowdingDistanceArchive(maximum_size=100),  # bounded
+)
+algorithm.run()
+front = algorithm.result()  # returns the archive's contents, not the final population
+```
+
+Any `jmetal.util.archive.Archive` works, bounded (`CrowdingDistanceArchive`, `DistanceBasedArchive`,
+...) or unbounded (`NonDominatedSolutionsArchive`). The population still drives
+selection/replacement as usual -- the archive is a pure addition, useful in particular for
+multi-modal problems like ZDT4, where it guards against the population converging on a local
+Pareto front. See `examples/component/nsgaii_crowding_distance_archive_zdt4.py` and
+`examples/component/nsgaii_unbounded_archive_dtlz2.py`; the latter is noticeably slower
+(`NonDominatedSolutionsArchive.add()` is O(n) per insertion and the archive can grow into the
+thousands), which is why it isn't a `pytest` integration test.
+
 ## Discovering what's available: the catalogue reference
 
 Before this architecture existed, answering "what can I configure in NSGA-II?" meant reading Java

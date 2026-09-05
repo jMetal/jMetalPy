@@ -310,6 +310,33 @@ for now). Surfaced a real bug: nine `jmetal.operator.mutation` constructors decl
 instead of `rng: np.random.Generator`, fixed in the same round. Documented in
 `docs/advanced-topics/component-architecture.md`.
 
+**Ad-hoc addition — external archives.** `EvolutionaryAlgorithm` and `build_nsgaii()` gained an
+`archive: Archive | None` parameter, paired with `SequentialEvaluationWithArchive` (an `Evaluation`
+decorator that copies every evaluated solution into the archive). Mirrors jMetal Java's
+`SequentialEvaluationWithArchive` + `EvolutionaryAlgorithmWithArchive`, but as a constructor
+parameter rather than a subclass. Verified with two integration tests (bounded
+`CrowdingDistanceArchive` on ZDT4, HV > 0.60 at 20000 evaluations; steady-state ZDT1 with
+`offspring_population_size=1`, HV > 0.63) and four manually-run examples under `examples/component/`
+with inspected front plots — the unbounded-archive-on-DTLZ2 case is a `pytest` no (~40s: `add()` is
+O(n) per insertion and the archive grows into the thousands) but works and produces the expected
+octant-of-a-sphere front as an example. Documented in `docs/advanced-topics/component-architecture.md`.
+
+**Analysis on record (not yet acted on): full NSGA-II-Double parameter-space feasibility.** Compared
+jMetal Java's `NSGAIIDouble.yaml` (Evolver) against jMetalPy operator-by-operator. Verdict: nothing
+hits an architectural wall. Already present: most crossover/mutation operators (`SBXCrossover`,
+`BLXAlphaCrossover`, `BLXAlphaBetaCrossover`, `ArithmeticCrossover`, `UnimodalNormalDistributionCrossover`,
+`PolynomialMutation`, `UniformMutation`, `NonUniformMutation`, `LevyFlightMutation`, `PowerLawMutation`),
+all three repair strategies (`RandomUniformRepair`, `ClampFloatRepair`, `BoundSwapRepair` — the last
+matches Java's "round"/wrap-to-opposite-bound exactly), and the archive machinery above. Missing but
+feasible, roughly in order of effort: a `KNNDistanceArchive` (trivial — `KNearestNeighborDensityEstimator`
+already exists, just needs an ~8-line `BoundedArchive` wrapper like `CrowdingDistanceArchive`);
+`latinHypercubeSampling`/`sobol`/`cauchy`/`oppositionBased`/`scatterSearch` solutions-creation strategies
+(jMetalPy only has random creation today; LHS and Sobol have direct `scipy.stats.qmc` support);
+`wholeArithmetic`/`laplace`/`fuzzyRecombination`/`PCX` crossovers, `linkedPolynomial` mutation, and
+`boltzmann`/`ranking`/`stochasticUniversalSampling` selection strategies (all self-contained, 100-220
+line ports); `spatialSpreadDeviationArchive`/`angleArchive` (need new density estimators, medium
+effort). Not scheduled — recorded here so the next pass doesn't re-derive it.
+
 ### Phase 1b — decouple from threading.Thread
 
 Verified nobody calls `algorithm.start()`/`.join()` anywhere in `src/`, `examples/`, `tests/`,
