@@ -275,45 +275,17 @@ class InvertedGenerationalDistancePlus(QualityIndicator):
         super().__init__(is_minimization=True)
         self.reference_front = reference_front
 
-    def _dominance_distance(self, reference_point: np.array, solution_point: np.array) -> float:
-        """
-        Compute the dominance distance between two vectors used in the IGD+ indicator.
-        The dominance distance considers only the objectives where solution_point is worse
-        than reference_point (i.e., max(solution_point[i] - reference_point[i], 0)).
-
-        Args:
-            reference_point: First vector (reference point)
-            solution_point: Second vector (solution point)
-
-        Returns:
-            The dominance distance between the two vectors
-        """
-        differences = np.maximum(solution_point - reference_point, 0.0)
-        return np.linalg.norm(differences)
-
-    def _distance_to_closest_vector_with_dominance_distance(
-        self, reference_point: np.array, front: np.array
-    ) -> float:
-        """
-        Return the minimum dominance distance from a reference point to any point in the front.
-
-        Args:
-            reference_point: The reference vector
-            front: Matrix where each row represents a point in the front
-
-        Returns:
-            The minimum dominance distance to the closest point in the front
-        """
-        min_distance = float("inf")
-        for solution_point in front:
-            distance = self._dominance_distance(reference_point, solution_point)
-            if distance < min_distance:
-                min_distance = distance
-        return min_distance
-
     def compute(self, solutions: np.array) -> float:
         """
         Compute the IGD+ indicator value.
+
+        Delegates the actual computation to `moocore.igd_plus` for efficiency: the
+        previous implementation was a pure-Python double loop (no numpy
+        vectorization at all), which moocore's C implementation improves on
+        substantially. Kept our own guard clauses in front of it rather than
+        relying on moocore's: `moocore.igd_plus` returns 0.0 for an empty
+        `solutions` front and `inf` for an empty reference front instead of
+        raising, which would silently change this class's documented contract.
 
         Args:
             solutions: Solution front matrix (each row is a solution)
@@ -337,15 +309,7 @@ class InvertedGenerationalDistancePlus(QualityIndicator):
                 "Solutions and reference front must have the same number of objectives"
             )
 
-        # Compute dominance distances from each reference point to closest solution point
-        sum_of_distances = 0.0
-        for reference_point in self.reference_front:
-            distance = self._distance_to_closest_vector_with_dominance_distance(
-                reference_point, solutions
-            )
-            sum_of_distances += distance
-
-        return sum_of_distances / len(self.reference_front)
+        return float(moocore.igd_plus(solutions, ref=self.reference_front))
 
     def get_short_name(self) -> str:
         return "IGD+"
@@ -458,6 +422,14 @@ class AdditiveEpsilonIndicator(QualityIndicator):
         """
         Compute the additive epsilon indicator value.
 
+        Delegates the actual computation to `moocore.epsilon_additive` for
+        efficiency: the previous implementation was a pure-Python double loop with
+        per-point generator expressions, which moocore's C implementation improves
+        on substantially. Our own guard clauses in front of it are not just for a
+        consistent contract but for safety: `moocore.epsilon_additive` segfaults
+        (not a catchable Python exception) on an empty `front` or an empty
+        `reference_front`, so those cases must never reach it.
+
         Args:
             front: Solution front matrix (each row is a solution)
 
@@ -478,14 +450,7 @@ class AdditiveEpsilonIndicator(QualityIndicator):
         if front.shape[1] != self.reference_front.shape[1]:
             raise ValueError("Solution and reference front must have the same number of objectives")
 
-        maximum_epsilon = float("-inf")
-
-        for reference_point in self.reference_front:
-            # For each reference point, find the minimum over the front of the maximum objective-wise difference
-            minimum_epsilon = min(max(solution_point - reference_point) for solution_point in front)
-            maximum_epsilon = max(maximum_epsilon, minimum_epsilon)
-
-        return maximum_epsilon
+        return float(moocore.epsilon_additive(front, ref=self.reference_front))
 
     def get_short_name(self) -> str:
         return "EP"

@@ -507,6 +507,35 @@ class InvertedGenerationalDistancePlusTestCases(unittest.TestCase):
         with self.assertRaises(ValueError):
             indicator.compute(np.array([[1.0, 1.0]]))
 
+    def test_matches_a_brute_force_reference_implementation(self):
+        """Cross-check moocore.igd_plus against an independent, unoptimized
+        reference implementation on random fronts, rather than only the fixed
+        cases above -- catches a subtle disagreement (e.g. wrong axis, wrong
+        clamping direction) that hand-picked cases might not expose.
+        """
+
+        def brute_force_igd_plus(front: np.ndarray, reference: np.ndarray) -> float:
+            total = 0.0
+            for reference_point in reference:
+                best = min(
+                    float(np.linalg.norm(np.maximum(solution_point - reference_point, 0.0)))
+                    for solution_point in front
+                )
+                total += best
+            return total / len(reference)
+
+        rng = np.random.default_rng(1234)
+        for num_objectives in (2, 3, 4):
+            for _ in range(5):
+                front = rng.random((rng.integers(1, 12), num_objectives))
+                reference = rng.random((rng.integers(1, 12), num_objectives))
+
+                indicator = InvertedGenerationalDistancePlus(reference)
+                actual = indicator.compute(front)
+                expected = brute_force_igd_plus(front, reference)
+
+                self.assertAlmostEqual(expected, actual, delta=1e-9)
+
 
 class AverageHausdorffDistanceTestCases(unittest.TestCase):
     def test_should_constructor_create_a_non_null_object(self) -> None:
@@ -732,7 +761,13 @@ class AdditiveEpsilonIndicatorTestCases(unittest.TestCase):
             indicator.compute(front_2d)
 
     def test_empty_front_should_raise_error(self):
-        """Empty front should throw error"""
+        """Empty front should throw error.
+
+        This guard is safety-critical, not just input validation: passing an
+        empty array straight through to moocore.epsilon_additive() segfaults the
+        whole process (not a catchable Python exception) instead of raising. This
+        test must never be removed or weakened.
+        """
         empty_front = np.array([]).reshape(0, 2)
         non_empty_reference = np.array([[0.1, 0.2]])
         indicator = AdditiveEpsilonIndicator(non_empty_reference)
@@ -746,7 +781,12 @@ class AdditiveEpsilonIndicatorTestCases(unittest.TestCase):
             indicator.compute(np.array([[1.0, 1.0]]))
 
     def test_empty_reference_front_should_raise_error(self):
-        """Empty reference front should raise error when computing"""
+        """Empty reference front should raise error when computing.
+
+        Safety-critical like the empty-front case above: an empty reference
+        front reaching moocore.epsilon_additive() segfaults the process instead
+        of raising.
+        """
         indicator = AdditiveEpsilonIndicator(np.array([]).reshape(0, 2))
         with self.assertRaises(ValueError):
             indicator.compute(np.array([[1.0, 1.0]]))
@@ -792,6 +832,34 @@ class AdditiveEpsilonIndicatorTestCases(unittest.TestCase):
         indicator = AdditiveEpsilonIndicator(real_front)
         result = indicator.compute(real_front)
         self.assertAlmostEqual(0.0, result, delta=EPSILON_TEST_ATOL)
+
+    def test_matches_a_brute_force_reference_implementation(self):
+        """Cross-check moocore.epsilon_additive against an independent,
+        unoptimized reference implementation on random fronts, rather than only
+        the fixed cases above -- catches a subtle disagreement (e.g. wrong
+        min/max nesting) that hand-picked cases might not expose.
+        """
+
+        def brute_force_epsilon_additive(front: np.ndarray, reference: np.ndarray) -> float:
+            maximum_epsilon = float("-inf")
+            for reference_point in reference:
+                minimum_epsilon = min(
+                    max(solution_point - reference_point) for solution_point in front
+                )
+                maximum_epsilon = max(maximum_epsilon, minimum_epsilon)
+            return maximum_epsilon
+
+        rng = np.random.default_rng(5678)
+        for num_objectives in (2, 3, 4):
+            for _ in range(5):
+                front = rng.random((rng.integers(1, 12), num_objectives))
+                reference = rng.random((rng.integers(1, 12), num_objectives))
+
+                indicator = AdditiveEpsilonIndicator(reference)
+                actual = indicator.compute(front)
+                expected = brute_force_epsilon_additive(front, reference)
+
+                self.assertAlmostEqual(expected, actual, delta=1e-9)
 
 
 class EpsilonIndicatorTestCases(unittest.TestCase):
