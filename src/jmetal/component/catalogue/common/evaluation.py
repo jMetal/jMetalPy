@@ -92,7 +92,12 @@ class SequentialEvaluationWithArchive(SequentialEvaluation[S]):
         self.archive = archive
 
     def evaluate(self, solution_list: list[S]) -> list[S]:
-        """Evaluate every solution, then copy each one into the archive.
+        """Evaluate every solution, then copy the whole batch into the archive.
+
+        Uses `Archive.add_batch()` rather than calling `add()` once per solution --
+        for `NonDominatedSolutionsArchive`, that turns k one-at-a-time O(n)
+        insertions into a single batch filter, which matters once the archive
+        grows into the thousands (see `docs/advanced-topics/component-architecture.md`).
 
         Args:
             solution_list: The solutions to evaluate.
@@ -101,7 +106,6 @@ class SequentialEvaluationWithArchive(SequentialEvaluation[S]):
             The same list, with each solution's objectives computed.
         """
         evaluated = super().evaluate(solution_list)
-        for solution in evaluated:
-            self.archive.add(copy.copy(solution))
+        self.archive.add_batch([copy.copy(solution) for solution in evaluated])
 
         return evaluated

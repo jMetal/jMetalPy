@@ -23,6 +23,26 @@ class ArchiveTestCases(unittest.TestCase):
     def test_should_constructor_create_an_empty_list(self):
         self.assertEqual(0, len(self.archive.solution_list))
 
+    def test_add_batch_default_implementation_calls_add_once_per_solution(self):
+        added = []
+
+        class RecordingArchive(Archive):
+            def add(self, solution) -> bool:
+                added.append(solution)
+                return True
+
+        archive = RecordingArchive()
+        solutions = [object(), object(), object()]
+
+        archive.add_batch(solutions)
+
+        self.assertEqual(solutions, added)
+
+    def test_add_batch_default_implementation_does_nothing_for_an_empty_list(self):
+        self.archive.add_batch([])
+
+        self.assertEqual(0, len(self.archive.solution_list))
+
 
 class BoundedArchiveTestCases(unittest.TestCase):
     def setUp(self):
@@ -149,6 +169,90 @@ class NonDominatedSolutionListArchiveTestCases(unittest.TestCase):
         # Only one solution should be kept, as they are equal within the tolerance
         self.assertEqual(1, archive.size())
         self.assertTrue(s1 in archive.solution_list or s2 in archive.solution_list)
+
+    def test_add_batch_keeps_every_mutually_non_dominated_solution(self):
+        solutions = []
+        for f1, f2 in [(0.0, 1.0), (0.5, 0.5), (1.0, 0.0)]:
+            solution = FloatSolution([0.0], [1.0], 2)
+            solution.objectives = [f1, f2]
+            solutions.append(solution)
+
+        self.archive.add_batch(solutions)
+
+        self.assertEqual(3, self.archive.size())
+
+    def test_add_batch_filters_out_dominated_solutions_within_the_same_batch(self):
+        dominated = FloatSolution([0.0], [1.0], 2)
+        dominated.objectives = [2.0, 2.0]
+        dominant = FloatSolution([0.0], [1.0], 2)
+        dominant.objectives = [1.0, 1.0]
+
+        self.archive.add_batch([dominated, dominant])
+
+        self.assertEqual(1, self.archive.size())
+        self.assertEqual(dominant, self.archive.solution_list[0])
+
+    def test_add_batch_removes_existing_solutions_dominated_by_the_new_batch(self):
+        existing = FloatSolution([0.0], [1.0], 2)
+        existing.objectives = [2.0, 2.0]
+        self.archive.add(existing)
+
+        dominant = FloatSolution([0.0], [1.0], 2)
+        dominant.objectives = [1.0, 1.0]
+        self.archive.add_batch([dominant])
+
+        self.assertEqual(1, self.archive.size())
+        self.assertEqual(dominant, self.archive.solution_list[0])
+
+    def test_add_batch_does_nothing_for_an_empty_batch(self):
+        existing = FloatSolution([0.0], [1.0], 2)
+        existing.objectives = [1.0, 1.0]
+        self.archive.add(existing)
+
+        self.archive.add_batch([])
+
+        self.assertEqual(1, self.archive.size())
+
+    def test_add_batch_matches_adding_the_same_solutions_one_at_a_time(self):
+        def make_solutions():
+            data = [(0.1, 0.9), (0.9, 0.1), (0.5, 0.5), (0.5, 0.5), (0.9, 0.9)]
+            result = []
+            for f1, f2 in data:
+                solution = FloatSolution([0.0], [1.0], 2)
+                solution.objectives = [f1, f2]
+                result.append(solution)
+            return result
+
+        one_at_a_time_archive = NonDominatedSolutionsArchive()
+        for solution in make_solutions():
+            one_at_a_time_archive.add(solution)
+
+        self.archive.add_batch(make_solutions())
+
+        expected = sorted(tuple(s.objectives) for s in one_at_a_time_archive.solution_list)
+        actual = sorted(tuple(s.objectives) for s in self.archive.solution_list)
+        self.assertEqual(expected, actual)
+
+    def test_add_batch_falls_back_to_the_default_loop_for_a_custom_comparator(self):
+        class AlwaysEqualComparator:
+            """A comparator under which nothing ever dominates anything else."""
+
+            def compare(self, solution1, solution2) -> int:
+                return 0
+
+        archive = NonDominatedSolutionsArchive(dominance_comparator=AlwaysEqualComparator())
+        solution1 = FloatSolution([0.0], [1.0], 2)
+        solution1.objectives = [1.0, 1.0]
+        solution2 = FloatSolution([0.0], [1.0], 2)
+        solution2.objectives = [2.0, 2.0]
+
+        # Under plain Pareto dominance (what moocore.is_nondominated assumes) solution2
+        # would be dropped as dominated; the custom comparator says otherwise, so both
+        # must survive -- this only holds if the custom comparator was actually used
+        # instead of silently falling through to moocore.
+        archive.add_batch([solution1, solution2])
+
+        self.assertEqual(2, archive.size())
 
 
 class CrowdingDistanceArchiveTestCases(unittest.TestCase):

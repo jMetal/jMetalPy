@@ -7,6 +7,7 @@ from abc import ABC, abstractmethod
 from threading import Lock
 from typing import Generic, TypeVar
 
+import moocore
 import numpy as np
 
 from jmetal.util.comparator import Comparator, DominanceComparator, SolutionAttributeComparator
@@ -31,6 +32,22 @@ class Archive(Generic[S], ABC):
     @abstractmethod
     def add(self, solution: S) -> bool:
         pass
+
+    def add_batch(self, solutions: list[S]) -> None:
+        """Add many solutions at once.
+
+        The default implementation just calls `add()` once per solution; it exists
+        so callers that have a whole batch on hand (e.g. an `Evaluation` component
+        adding a generation's worth of evaluated solutions) have one method to call
+        regardless of archive type. Subclasses where checking the whole batch at
+        once is meaningfully faster than one insertion at a time (see
+        `NonDominatedSolutionsArchive`) should override it.
+
+        Args:
+            solutions: The solutions to add.
+        """
+        for solution in solutions:
+            self.add(solution)
 
     def get(self, index: int) -> S:
         return self.solution_list[index]
@@ -184,6 +201,43 @@ class NonDominatedSolutionsArchive(Archive[S]):
         self.solution_list.extend(remaining_solutions)
         self.solution_list.append(solution)
         return True
+
+    def add_batch(self, solutions: list[S]) -> None:
+        """Add many solutions at once, filtering the combined set in a single pass.
+
+        `add()` is O(n) per call (checks the new solution against every existing
+        one), so adding a batch of k solutions one at a time costs O(k * n) --
+        the pattern `SequentialEvaluationWithArchive` used to follow, calling
+        `add()` once per evaluated solution even though a whole generation's worth
+        was available at once. This instead combines the archive's current
+        contents with the batch and filters the result with
+        `moocore.is_nondominated` in one C-backed call, which is much faster than
+        even a single Python-level `add()` call once the archive has more than a
+        handful of solutions. Only meaningful when using the default
+        `DominanceComparator`, matching `add()`'s own accelerated path elsewhere in
+        this module; a custom comparator falls back to the base class's
+        one-at-a-time loop, since `moocore.is_nondominated` only knows Pareto
+        dominance.
+
+        Args:
+            solutions: The solutions to add.
+        """
+        if not solutions:
+            return
+
+        if not isinstance(self.comparator, DominanceComparator):
+            super().add_batch(solutions)
+            return
+
+        combined = self.solution_list + list(solutions)
+        objectives = np.array([solution.objectives for solution in combined], dtype=float)
+        keep = moocore.is_nondominated(objectives)
+
+        # IMPORTANT: Modify list in-place to maintain references from BoundedArchive
+        self.solution_list.clear()
+        self.solution_list.extend(
+            solution for solution, is_kept in zip(combined, keep, strict=True) if is_kept
+        )
 
 
 class VectorizedNonDominatedSolutionsArchive(Archive[S]):
