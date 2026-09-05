@@ -2,8 +2,10 @@ import logging
 import os
 from pathlib import Path
 
+import moocore
+import numpy as np
+
 from jmetal.core.solution import FloatSolution, Solution
-from jmetal.util.archive import Archive, NonDominatedSolutionsArchive
 
 logger = logging.getLogger(__name__)
 
@@ -18,12 +20,29 @@ logger = logging.getLogger(__name__)
 
 
 def get_non_dominated_solutions(solutions: list[Solution]) -> list[Solution]:
-    archive: Archive = NonDominatedSolutionsArchive()
+    """Filter a list of solutions down to its non-dominated subset.
 
-    for solution in solutions:
-        archive.add(solution)
+    Delegates to `moocore.is_nondominated` for efficiency: the previous
+    implementation added solutions one at a time to a `NonDominatedSolutionsArchive`,
+    which is O(n) per insertion (O(n^2) overall) -- noticeably slow for the
+    thousands of solutions an unbounded external archive can accumulate.
+    `moocore.is_nondominated` filters the whole batch at once and already treats
+    solutions with identical objectives as duplicates, keeping only the first
+    occurrence -- the same behavior `NonDominatedSolutionsArchive` had.
 
-    return archive.solution_list
+    Args:
+        solutions: The solutions to filter.
+
+    Returns:
+        The non-dominated subset, in their original relative order.
+    """
+    if not solutions:
+        return []
+
+    objectives = np.array([solution.objectives for solution in solutions], dtype=float)
+    keep = moocore.is_nondominated(objectives)
+
+    return [solution for solution, is_kept in zip(solutions, keep, strict=True) if is_kept]
 
 
 def read_solutions(filename: str) -> list[FloatSolution]:
