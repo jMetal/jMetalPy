@@ -314,12 +314,20 @@ instead of `rng: np.random.Generator`, fixed in the same round. Documented in
 `archive: Archive | None` parameter, paired with `SequentialEvaluationWithArchive` (an `Evaluation`
 decorator that copies every evaluated solution into the archive). Mirrors jMetal Java's
 `SequentialEvaluationWithArchive` + `EvolutionaryAlgorithmWithArchive`, but as a constructor
-parameter rather than a subclass. Verified with two integration tests (bounded
+parameter rather than a subclass. Verified with three integration tests (bounded
 `CrowdingDistanceArchive` on ZDT4, HV > 0.60 at 20000 evaluations; steady-state ZDT1 with
-`offspring_population_size=1`, HV > 0.63) and four manually-run examples under `examples/component/`
-with inspected front plots — the unbounded-archive-on-DTLZ2 case is a `pytest` no (~40s: `add()` is
-O(n) per insertion and the archive grows into the thousands) but works and produces the expected
-octant-of-a-sphere front as an example. Documented in `docs/advanced-topics/component-architecture.md`.
+`offspring_population_size=1`, HV > 0.63; unbounded `NonDominatedSolutionsArchive` on DTLZ2,
+HV > 0.35 at 40000 evaluations) and four manually-run examples under `examples/component/` with
+inspected front plots. Documented in `docs/advanced-topics/component-architecture.md`.
+
+**Ad-hoc addition — `Archive.add_batch()`.** The unbounded-archive-on-DTLZ2 case was originally too
+slow (~43s) for a `pytest` test: `NonDominatedSolutionsArchive.add()` is O(n) per call, and
+`SequentialEvaluationWithArchive` called it once per evaluated solution instead of using the whole
+generation it already had on hand. Added `Archive.add_batch()` (default: loop over `add()`; overridden
+on `NonDominatedSolutionsArchive` with a single `moocore.is_nondominated()` call over the combined
+archive + incoming batch) and switched `SequentialEvaluationWithArchive` to call it once per
+generation. DTLZ2 case: ~43s → ~1.4s, same archive size and hypervolume. `BoundedArchive`/
+`CrowdingDistanceArchive` untouched (the default loop; that case was never the bottleneck).
 
 **Analysis on record (not yet acted on): full NSGA-II-Double parameter-space feasibility.** Compared
 jMetal Java's `NSGAIIDouble.yaml` (Evolver) against jMetalPy operator-by-operator. Verdict: nothing
