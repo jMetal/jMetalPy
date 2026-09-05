@@ -102,7 +102,7 @@ class TestBuildNSGAIIWithAnExternalArchive:
 
         assert len(algorithm.result()) <= 10
 
-    def test_result_returns_archive_contents_not_the_population(self):
+    def test_result_comes_from_the_archive_not_the_population(self):
         archive = NonDominatedSolutionsArchive()
 
         algorithm = _build(
@@ -110,4 +110,24 @@ class TestBuildNSGAIIWithAnExternalArchive:
         )
         algorithm.run()
 
-        assert algorithm.result() is archive.solution_list
+        # Every returned solution must come from the archive; whether it's the
+        # exact same list object depends on whether the archive outgrew the
+        # population size (see the subset-selection test below) -- not asserted
+        # here since either is a valid outcome of "using the archive".
+        assert all(solution in archive.solution_list for solution in algorithm.result())
+
+    def test_result_is_reduced_to_the_population_size_when_the_archive_outgrows_it(self):
+        # An unbounded archive keeps every non-dominated solution ever evaluated,
+        # so over enough generations it exceeds the population size -- when it
+        # does, result() must reduce it via distance-based subset selection
+        # instead of returning the whole (potentially huge) archive.
+        archive = NonDominatedSolutionsArchive()
+
+        algorithm = _build(
+            archive=archive, termination=TerminationByEvaluations(max_evaluations=2000)
+        )
+        algorithm.run()
+
+        assert len(archive.solution_list) > 20
+        assert len(algorithm.result()) == 20
+        assert algorithm.result() is not archive.solution_list

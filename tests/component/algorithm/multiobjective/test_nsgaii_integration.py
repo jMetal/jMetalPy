@@ -68,9 +68,11 @@ class TestBuildNSGAIIReachesExpectedHypervolume:
 
     def test_should_reach_the_expected_hypervolume_on_dtlz2_with_an_unbounded_archive(self):
         # An unbounded archive keeps every non-dominated solution ever evaluated,
-        # growing into the thousands over a full run. Archive.add_batch() (moocore
-        # under the hood) keeps this fast: ~1.4s here rather than the ~43s a
-        # one-insertion-at-a-time update took before it existed.
+        # growing into the thousands over a full run (Archive.add_batch(), moocore
+        # under the hood, keeps updating it fast: ~1.4s here rather than the ~43s a
+        # one-insertion-at-a-time update took before it existed). result() then
+        # reduces it to the population size via distance-based subset selection,
+        # so the front stays representable and doesn't just grow unbounded too.
         problem = DTLZ2()
         archive = NonDominatedSolutionsArchive()
         algorithm = build_nsgaii(
@@ -87,6 +89,9 @@ class TestBuildNSGAIIReachesExpectedHypervolume:
 
         algorithm.run()
         front = algorithm.result()
+
+        assert len(archive.solution_list) > 100
+        assert len(front) == 100
 
         hv = HyperVolume(reference_point=[1, 1, 1])
         value = hv.compute([solution.objectives for solution in front])
