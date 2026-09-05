@@ -1,8 +1,10 @@
 """Component that evaluates a list of solutions."""
 
+import copy
 from typing import Generic, Protocol, TypeVar, runtime_checkable
 
 from jmetal.core.problem import Problem
+from jmetal.util.archive import Archive
 from jmetal.util.evaluator import Evaluator, SequentialEvaluator
 
 S = TypeVar("S")
@@ -66,3 +68,40 @@ class SequentialEvaluation(Generic[S]):
     def computed_evaluations(self) -> int:
         """Return how many evaluations the last `evaluate()` call performed."""
         return self._computed_evaluations
+
+
+class SequentialEvaluationWithArchive(SequentialEvaluation[S]):
+    """`SequentialEvaluation` that also feeds every evaluated solution into an archive.
+
+    A copy of each evaluated solution is added to the archive as a side effect --
+    the archive accumulates independently of whatever the population/replacement
+    strategy decides to keep, which is exactly what makes it "external". Pairing
+    this with `EvolutionaryAlgorithm(..., archive=archive)` makes `result()` return
+    the archive's contents instead of the final population.
+
+    Args:
+        problem: The problem to evaluate solutions against.
+        archive: The archive every evaluated solution is copied into.
+        evaluator: The evaluation strategy. Defaults to `SequentialEvaluator`.
+    """
+
+    def __init__(
+        self, problem: Problem[S], archive: Archive[S], evaluator: Evaluator[S] | None = None
+    ):
+        super().__init__(problem, evaluator)
+        self.archive = archive
+
+    def evaluate(self, solution_list: list[S]) -> list[S]:
+        """Evaluate every solution, then copy each one into the archive.
+
+        Args:
+            solution_list: The solutions to evaluate.
+
+        Returns:
+            The same list, with each solution's objectives computed.
+        """
+        evaluated = super().evaluate(solution_list)
+        for solution in evaluated:
+            self.archive.add(copy.copy(solution))
+
+        return evaluated
