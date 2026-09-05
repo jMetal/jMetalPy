@@ -3,7 +3,10 @@
 import numpy as np
 
 from jmetal.component.algorithm.evolutionary_algorithm import EvolutionaryAlgorithm
-from jmetal.component.catalogue.common.evaluation import SequentialEvaluation
+from jmetal.component.catalogue.common.evaluation import (
+    SequentialEvaluation,
+    SequentialEvaluationWithArchive,
+)
 from jmetal.component.catalogue.common.solutions_creation import RandomSolutionsCreation
 from jmetal.component.catalogue.common.termination import Termination, TerminationByEvaluations
 from jmetal.component.catalogue.ea.replacement import (
@@ -16,6 +19,7 @@ from jmetal.component.catalogue.ea.variation import CrossoverAndMutationVariatio
 from jmetal.core.operator import Crossover, Mutation
 from jmetal.core.problem import Problem
 from jmetal.operator.selection import TournamentSelection as TournamentSelectionOperator
+from jmetal.util.archive import Archive
 from jmetal.util.comparator import MultiComparator
 from jmetal.util.density_estimator import CrowdingDistanceDensityEstimator
 from jmetal.util.ranking import FastNonDominatedRanking
@@ -36,6 +40,7 @@ def build_nsgaii(
     replacement: Replacement | None = None,
     termination: Termination | None = None,
     rng: np.random.Generator | None = None,
+    archive: Archive | None = None,
 ) -> EvolutionaryAlgorithm:
     """Build a component-based NSGA-II.
 
@@ -61,6 +66,12 @@ def build_nsgaii(
         termination: The termination condition. Defaults to 25000 evaluations.
         rng: The random generator shared with every RNG-aware component. Defaults to
             a fresh `np.random.default_rng()`.
+        archive: An optional external archive (e.g. `NonDominatedSolutionsArchive`
+            for an unbounded archive, or `CrowdingDistanceArchive(size)` for a
+            bounded one). When given, every evaluated solution is also copied into
+            it, and `result()` returns the archive's contents instead of the final
+            population -- the population still drives selection/replacement as
+            usual, so the archive is a pure addition, not a change of algorithm.
 
     Returns:
         An `EvolutionaryAlgorithm` configured as NSGA-II, ready to `.run()`.
@@ -88,13 +99,19 @@ def build_nsgaii(
     if termination is None:
         termination = TerminationByEvaluations(max_evaluations=_DEFAULT_MAX_EVALUATIONS)
 
+    if archive is not None:
+        evaluation = SequentialEvaluationWithArchive(problem, archive)
+    else:
+        evaluation = SequentialEvaluation(problem)
+
     return EvolutionaryAlgorithm(
         name="NSGAII",
         solutions_creation=RandomSolutionsCreation(problem, population_size),
-        evaluation=SequentialEvaluation(problem),
+        evaluation=evaluation,
         termination=termination,
         selection=selection,
         variation=variation,
         replacement=replacement,
         rng=rng,
+        archive=archive,
     )

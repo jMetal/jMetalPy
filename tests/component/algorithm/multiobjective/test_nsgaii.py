@@ -4,10 +4,12 @@ import numpy as np
 
 from jmetal.component.algorithm.evolutionary_algorithm import EvolutionaryAlgorithm
 from jmetal.component.algorithm.multiobjective.nsgaii import build_nsgaii
+from jmetal.component.catalogue.common.evaluation import SequentialEvaluationWithArchive
 from jmetal.component.catalogue.common.termination import TerminationByEvaluations
 from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.mutation import PolynomialMutation
 from jmetal.problem.multiobjective.zdt import ZDT1
+from jmetal.util.archive import CrowdingDistanceArchive, NonDominatedSolutionsArchive
 
 
 def _build(**overrides) -> EvolutionaryAlgorithm:
@@ -74,3 +76,38 @@ class TestBuildNSGAII:
         algorithm.run()
 
         assert len(algorithm.result()) == 5
+
+
+class TestBuildNSGAIIWithAnExternalArchive:
+    def test_without_archive_evaluation_is_plain_sequential_evaluation(self):
+        algorithm = _build()
+
+        assert not isinstance(algorithm.evaluation, SequentialEvaluationWithArchive)
+
+    def test_with_an_unbounded_archive_evaluation_feeds_it(self):
+        archive = NonDominatedSolutionsArchive()
+
+        algorithm = _build(archive=archive)
+
+        assert isinstance(algorithm.evaluation, SequentialEvaluationWithArchive)
+        assert algorithm.evaluation.archive is archive
+
+    def test_with_a_bounded_crowding_archive_result_is_bounded_by_its_size(self):
+        archive = CrowdingDistanceArchive(10)
+
+        algorithm = _build(
+            archive=archive, termination=TerminationByEvaluations(max_evaluations=100)
+        )
+        algorithm.run()
+
+        assert len(algorithm.result()) <= 10
+
+    def test_result_returns_archive_contents_not_the_population(self):
+        archive = NonDominatedSolutionsArchive()
+
+        algorithm = _build(
+            archive=archive, termination=TerminationByEvaluations(max_evaluations=100)
+        )
+        algorithm.run()
+
+        assert algorithm.result() is archive.solution_list
