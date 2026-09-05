@@ -9,8 +9,8 @@ from jmetal.component.catalogue.common.termination import TerminationByEvaluatio
 from jmetal.core.quality_indicator import HyperVolume
 from jmetal.operator.crossover import SBXCrossover
 from jmetal.operator.mutation import PolynomialMutation
-from jmetal.problem import ZDT1, ZDT4
-from jmetal.util.archive import CrowdingDistanceArchive
+from jmetal.problem import DTLZ2, ZDT1, ZDT4
+from jmetal.util.archive import CrowdingDistanceArchive, NonDominatedSolutionsArchive
 
 
 @pytest.mark.integration
@@ -65,3 +65,30 @@ class TestBuildNSGAIIReachesExpectedHypervolume:
         value = hv.compute([solution.objectives for solution in front])
 
         assert value > 0.63
+
+    def test_should_reach_the_expected_hypervolume_on_dtlz2_with_an_unbounded_archive(self):
+        # An unbounded archive keeps every non-dominated solution ever evaluated,
+        # growing into the thousands over a full run. Archive.add_batch() (moocore
+        # under the hood) keeps this fast: ~1.4s here rather than the ~43s a
+        # one-insertion-at-a-time update took before it existed.
+        problem = DTLZ2()
+        archive = NonDominatedSolutionsArchive()
+        algorithm = build_nsgaii(
+            problem,
+            population_size=100,
+            offspring_population_size=100,
+            crossover=SBXCrossover(probability=1.0, distribution_index=20),
+            mutation=PolynomialMutation(
+                probability=1.0 / problem.number_of_variables(), distribution_index=20
+            ),
+            termination=TerminationByEvaluations(max_evaluations=40000),
+            archive=archive,
+        )
+
+        algorithm.run()
+        front = algorithm.result()
+
+        hv = HyperVolume(reference_point=[1, 1, 1])
+        value = hv.compute([solution.objectives for solution in front])
+
+        assert value > 0.35

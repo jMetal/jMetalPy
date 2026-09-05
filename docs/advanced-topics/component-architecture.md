@@ -141,9 +141,13 @@ Any `jmetal.util.archive.Archive` works, bounded (`CrowdingDistanceArchive`, `Di
 selection/replacement as usual -- the archive is a pure addition, useful in particular for
 multi-modal problems like ZDT4, where it guards against the population converging on a local
 Pareto front. See `examples/component/nsgaii_crowding_distance_archive_zdt4.py` and
-`examples/component/nsgaii_unbounded_archive_dtlz2.py`; the latter is noticeably slower
-(`NonDominatedSolutionsArchive.add()` is O(n) per insertion and the archive can grow into the
-thousands), which is why it isn't a `pytest` integration test.
+`examples/component/nsgaii_unbounded_archive_dtlz2.py`.
+
+`SequentialEvaluationWithArchive` feeds the archive a whole generation at a time via
+`Archive.add_batch()` rather than one solution at a time. For `NonDominatedSolutionsArchive`, whose
+`add()` is O(n) per call, this replaces many individual insertions with a single
+`moocore.is_nondominated()` call per generation -- on the DTLZ2 example above (an unbounded archive
+growing into the thousands over 40000 evaluations), this took the run from ~43s to ~1.4s.
 
 ## Discovering what's available: the catalogue reference
 

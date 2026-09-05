@@ -12,10 +12,11 @@ Program to configure and run the component-based NSGA-II with an unbounded exter
 archive (every non-dominated solution ever evaluated is kept, so the archive can
 grow much larger than the population) on DTLZ2 (3 objectives).
 
-Note on runtime: NonDominatedSolutionsArchive.add() is O(n) per insertion, and the
-archive can grow into the thousands over a full run, so this takes noticeably
-longer than the bounded-archive example -- tens of seconds at 40,000 evaluations,
-not a couple of seconds.
+Note on runtime: the archive can grow into the thousands over a full run, but
+SequentialEvaluationWithArchive updates it once per generation via
+Archive.add_batch() (moocore.is_nondominated() in a single C-backed call) rather
+than one insertion at a time, so this runs in a couple of seconds at 40,000
+evaluations rather than the tens of seconds a naive one-at-a-time update would take.
 """
 
 if __name__ == "__main__":
