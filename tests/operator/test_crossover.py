@@ -796,18 +796,20 @@ class TestBLXAlphaCrossover:
         assert offspring[1].lower_bound == solution2.lower_bound
         assert offspring[1].upper_bound == solution2.upper_bound
 
-    @mock.patch("random.random")
-    @mock.patch("random.uniform")
-    def test_should_produce_solutions_within_expanded_range(self, mock_uniform, mock_random):
-        """Test that execute produces solutions within the expected expanded range."""
-        # Given
-        mock_random.return_value = 0.05  # Ensure crossover happens (probability=0.9)
-        # Mock uniform to return specific values for deterministic testing
-        # The actual values will depend on the implementation of BLXAlphaCrossover
-        # We'll mock it to return values that we know are within the expected range
-        mock_uniform.side_effect = [2.0, 4.0, 2.0, 4.0]
+    def test_should_produce_solutions_within_expanded_range(self):
+        """Test that execute produces solutions within the expected expanded range.
 
-        operator = BLXAlphaCrossover(probability=0.9, alpha=0.5)
+        BLXAlphaCrossover draws from its own injectable np.random.Generator
+        (self._rng), not the stdlib random module, so mocking random.random()/
+        random.uniform() (as this test used to) has no effect on it at all --
+        every run used real, unseeded randomness, including the once-per-call
+        probability check. With probability=0.9 that meant a genuine ~10% chance
+        of no crossover happening (offspring left identical to their parents),
+        which is exactly what made this test flaky. probability=1.0 plus an
+        explicit seeded rng makes it deterministic instead.
+        """
+        # Given
+        operator = BLXAlphaCrossover(probability=1.0, alpha=0.5, rng=np.random.default_rng(42))
         solution1 = FloatSolution([1.0, 1.0], [5.0, 5.0], 1, 0)
         solution2 = FloatSolution([1.0, 1.0], [5.0, 5.0], 1, 0)
         solution1.variables = [2.0, 4.0]
