@@ -281,6 +281,8 @@ class NaryRandomSolutionSelection(Selection[list[S], list[S]]):
     Args:
         number_of_solutions_to_be_returned: Number of distinct solutions to select (default: 1).
                                           Must be a positive integer.
+        rng: Optional random generator. When None, falls back to the global `random`
+             module (`random.choice`/`random.sample`), as before this parameter existed.
 
     Example:
         >>> from jmetal.operator import NaryRandomSolutionSelection
@@ -290,7 +292,11 @@ class NaryRandomSolutionSelection(Selection[list[S], list[S]]):
         >>> selected = selector.execute(population)  # Returns List[S] with 3 solutions
     """
 
-    def __init__(self, number_of_solutions_to_be_returned: int = 1):
+    def __init__(
+        self,
+        number_of_solutions_to_be_returned: int = 1,
+        rng: np.random.Generator | None = None,
+    ):
         super().__init__()
         if number_of_solutions_to_be_returned < 1:
             raise ValueError(
@@ -298,6 +304,7 @@ class NaryRandomSolutionSelection(Selection[list[S], list[S]]):
             )
 
         self.number_of_solutions_to_be_returned = number_of_solutions_to_be_returned
+        self.rng = rng
 
     def execute(self, front: list[S]) -> list[S]:
         """Randomly select multiple solutions from the front.
@@ -319,6 +326,12 @@ class NaryRandomSolutionSelection(Selection[list[S], list[S]]):
             raise ValueError(
                 f"The front size ({len(front)}) is smaller than the number of requested solutions: {self.number_of_solutions_to_be_returned}"
             )
+
+        if self.rng is not None:
+            indexes = self.rng.choice(
+                len(front), size=self.number_of_solutions_to_be_returned, replace=False
+            )
+            return [front[i] for i in indexes]
 
         # Optimization: use random.choice for single selection
         if self.number_of_solutions_to_be_returned == 1:

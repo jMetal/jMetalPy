@@ -2,6 +2,7 @@
 
 from unittest.mock import patch
 
+import numpy as np
 import pytest
 
 from jmetal.core.solution import Solution
@@ -392,6 +393,36 @@ class TestNaryRandomSolutionSelection:
 
         assert len(result) == len(solutions)
         assert all(s in solutions for s in result)
+
+    def test_rng_produces_deterministic_selection_for_a_fixed_seed(self, float_solution_factory):
+        solutions = [float_solution_factory([float(i), float(i)]) for i in range(10)]
+
+        selector_a = NaryRandomSolutionSelection(3, rng=np.random.default_rng(42))
+        selector_b = NaryRandomSolutionSelection(3, rng=np.random.default_rng(42))
+
+        assert selector_a.execute(solutions) == selector_b.execute(solutions)
+
+    def test_rng_selects_distinct_solutions_from_the_front(self, float_solution_factory):
+        solutions = [float_solution_factory([float(i), float(i)]) for i in range(10)]
+
+        selector = NaryRandomSolutionSelection(4, rng=np.random.default_rng(1))
+        result = selector.execute(solutions)
+
+        assert len(result) == 4
+        assert len({id(s) for s in result}) == 4
+        assert all(s in solutions for s in result)
+
+    def test_without_rng_falls_back_to_the_global_random_module(
+        self, float_solution_factory
+    ):
+        solutions = [float_solution_factory([float(i), float(i)]) for i in range(10)]
+
+        with patch("random.sample") as mock_sample:
+            mock_sample.return_value = solutions[:2]
+            selector = NaryRandomSolutionSelection(2)
+            selector.execute(solutions)
+
+        mock_sample.assert_called_once_with(solutions, 2)
 
 
 class TestRankingAndCrowdingDistanceSelection:
