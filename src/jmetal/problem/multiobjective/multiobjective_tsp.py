@@ -1,7 +1,10 @@
 import math
 import os
+import random
 import re
 from pathlib import Path
+
+import numpy as np
 
 from jmetal.core.problem import PermutationProblem
 from jmetal.core.solution import PermutationSolution
@@ -183,18 +186,18 @@ class MultiObjectiveTSP(PermutationProblem):
 
         return solution
 
-    def create_solution(self) -> PermutationSolution:
+    def create_solution(self, rng: np.random.Generator | None = None) -> PermutationSolution:
         new_solution = PermutationSolution(
             number_of_variables=self.number_of_variables(),
             number_of_objectives=self.number_of_objectives(),
             number_of_constraints=self.number_of_constraints(),
         )
-        # random permutation
-        import random
-
-        new_solution.variables = random.sample(
-            range(self.number_of_variables()), k=self.number_of_variables()
-        )
+        if rng is not None:
+            new_solution.variables = rng.permutation(self.number_of_variables()).tolist()
+        else:
+            new_solution.variables = random.sample(
+                range(self.number_of_variables()), k=self.number_of_variables()
+            )
 
         return new_solution
 

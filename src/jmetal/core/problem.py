@@ -10,6 +10,8 @@ import random
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
+import numpy as np
+
 from jmetal.core.observer import Observer
 from jmetal.core.solution import (
     BinarySolution,
@@ -62,9 +64,17 @@ class Problem(Generic[S], ABC):
         pass
 
     @abstractmethod
-    def create_solution(self) -> S:
+    def create_solution(self, rng: np.random.Generator | None = None) -> S:
         """Creates a random_search solution to the problem.
 
+        :param rng: Optional random generator for reproducible solution creation. When
+            None, falls back to the global `random`/`numpy.random` state (the historical
+            default), not a freshly created generator -- unlike the RNG-aware operators
+            (`SBXCrossover`, etc.), which fall back to a new `np.random.default_rng()`.
+            This asymmetry is deliberate: it keeps `create_solution()` with no arguments
+            behaviorally identical to before this parameter existed, since
+            `random.seed()`-based reproducibility (used throughout the classic algorithm
+            hierarchy and the component-equivalence tests) depends on it.
         :return: Solution."""
         pass
 
@@ -157,17 +167,23 @@ class FloatProblem(Problem[FloatSolution], ABC):
     def number_of_variables(self) -> int:
         return len(self.lower_bound)
 
-    def create_solution(self) -> FloatSolution:
+    def create_solution(self, rng: np.random.Generator | None = None) -> FloatSolution:
         new_solution = FloatSolution(
             self.lower_bound,
             self.upper_bound,
             self.number_of_objectives(),
             self.number_of_constraints(),
         )
-        new_solution.variables = [
-            random.uniform(self.lower_bound[i] * 1.0, self.upper_bound[i] * 1.0)
-            for i in range(self.number_of_variables())
-        ]
+        if rng is not None:
+            new_solution.variables = [
+                rng.uniform(self.lower_bound[i] * 1.0, self.upper_bound[i] * 1.0)
+                for i in range(self.number_of_variables())
+            ]
+        else:
+            new_solution.variables = [
+                random.uniform(self.lower_bound[i] * 1.0, self.upper_bound[i] * 1.0)
+                for i in range(self.number_of_variables())
+            ]
 
         return new_solution
 
@@ -193,17 +209,23 @@ class IntegerProblem(Problem[IntegerSolution], ABC):
     def number_of_variables(self) -> int:
         return len(self.lower_bound)
 
-    def create_solution(self) -> IntegerSolution:
+    def create_solution(self, rng: np.random.Generator | None = None) -> IntegerSolution:
         new_solution = IntegerSolution(
             self.lower_bound,
             self.upper_bound,
             self.number_of_objectives(),
             self.number_of_constraints(),
         )
-        new_solution.variables = [
-            round(random.uniform(self.lower_bound[i] * 1.0, self.upper_bound[i] * 1.0))
-            for i in range(self.number_of_variables())
-        ]
+        if rng is not None:
+            new_solution.variables = [
+                round(rng.uniform(self.lower_bound[i] * 1.0, self.upper_bound[i] * 1.0))
+                for i in range(self.number_of_variables())
+            ]
+        else:
+            new_solution.variables = [
+                round(random.uniform(self.lower_bound[i] * 1.0, self.upper_bound[i] * 1.0))
+                for i in range(self.number_of_variables())
+            ]
 
         return new_solution
 

@@ -1,4 +1,7 @@
+import random
 import unittest
+
+import numpy as np
 
 from jmetal.core.problem import FloatProblem, IntegerProblem
 from jmetal.core.solution import FloatSolution, IntegerSolution
@@ -72,6 +75,31 @@ class FloatProblemTestCases(unittest.TestCase):
         self.assertTrue(-1.0 <= solution.variables[0] <= 1.0)
         self.assertTrue(-2.0 <= solution.variables[1] <= 2.0)
 
+    def test_rng_produces_a_deterministic_solution_for_a_fixed_seed(self):
+        problem = FakeFloatProblem()
+        problem.lower_bound = [-1.0, -2.0]
+        problem.upper_bound = [1.0, 2.0]
+
+        solution_a = problem.create_solution(rng=np.random.default_rng(42))
+        solution_b = problem.create_solution(rng=np.random.default_rng(42))
+
+        self.assertEqual(solution_a.variables, solution_b.variables)
+
+    def test_without_rng_still_falls_back_to_the_global_random_module(self):
+        # Guards the equivalence tests: create_solution() with no rng must keep
+        # consuming the seeded global `random` module exactly as before rng= existed,
+        # not silently switch to an independent generator.
+        problem = FakeFloatProblem()
+        problem.lower_bound = [-1.0, -2.0]
+        problem.upper_bound = [1.0, 2.0]
+
+        random.seed(123)
+        solution_a = problem.create_solution()
+        random.seed(123)
+        solution_b = problem.create_solution()
+
+        self.assertEqual(solution_a.variables, solution_b.variables)
+
 
 class IntegerProblemTestCases(unittest.TestCase):
     def test_should_default_constructor_create_a_valid_problem(self):
@@ -98,6 +126,16 @@ class IntegerProblemTestCases(unittest.TestCase):
         self.assertIsNotNone(solution)
         self.assertTrue(-1 <= solution.variables[0] <= 1)
         self.assertTrue(-2 <= solution.variables[1] <= 2)
+
+    def test_rng_produces_a_deterministic_solution_for_a_fixed_seed(self):
+        problem = FakeIntegerProblem()
+        problem.lower_bound = [-1, -2]
+        problem.upper_bound = [1, 2]
+
+        solution_a = problem.create_solution(rng=np.random.default_rng(42))
+        solution_b = problem.create_solution(rng=np.random.default_rng(42))
+
+        self.assertEqual(solution_a.variables, solution_b.variables)
 
 
 if __name__ == "__main__":

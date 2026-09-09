@@ -1,3 +1,4 @@
+import numpy as np
 
 from jmetal.core.problem import PermutationProblem
 from jmetal.core.solution import PermutationSolution
@@ -46,8 +47,8 @@ class TSP(PermutationProblem):
         # delegate to the multi-objective implementation (single objective case)
         return self._multi.evaluate(solution)
 
-    def create_solution(self) -> PermutationSolution:
-        return self._multi.create_solution()
+    def create_solution(self, rng: np.random.Generator | None = None) -> PermutationSolution:
+        return self._multi.create_solution(rng)
 
     def name(self):
         return "Single Objective TSP"

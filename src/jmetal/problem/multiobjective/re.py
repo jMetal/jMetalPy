@@ -2,6 +2,8 @@ import math
 from collections.abc import Sequence
 from math import sqrt
 
+import numpy as np
+
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 
@@ -1250,8 +1252,8 @@ class RE91(FloatProblem):
     def number_of_constraints(self) -> int:
         return 0
 
-    def create_solution(self) -> FloatSolution:
-        solution = super().create_solution()
+    def create_solution(self, rng: np.random.Generator | None = None) -> FloatSolution:
+        solution = super().create_solution(rng)
         # Initialize the random variables (indices 7-10) with 0.0, they'll be set in evaluate
         for i in range(7, 11):
             solution.variables[i] = 0.0

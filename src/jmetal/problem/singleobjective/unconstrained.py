@@ -49,7 +49,7 @@ class OneMax(BinaryProblem):
         solution.objectives[0] = -float(counter_of_ones)
         return solution
 
-    def create_solution(self) -> BinarySolution:
+    def create_solution(self, rng: np.random.Generator | None = None) -> BinarySolution:
         # Create a new binary solution with the specified number of bits
         solution = BinarySolution(
             number_of_variables=self.number_of_bits,
@@ -57,7 +57,10 @@ class OneMax(BinaryProblem):
         )
 
         # Initialize with random bits (using numpy for better performance)
-        solution.bits = np.random.choice([True, False], size=self.number_of_bits)
+        if rng is not None:
+            solution.bits = rng.choice([True, False], size=self.number_of_bits)
+        else:
+            solution.bits = np.random.choice([True, False], size=self.number_of_bits)
         return solution
 
     def name(self) -> str:
@@ -177,7 +180,7 @@ class SubsetSum(BinaryProblem):
         solution.objectives[0] = -total_sum
         return solution
 
-    def create_solution(self) -> BinarySolution:
+    def create_solution(self, rng: np.random.Generator | None = None) -> BinarySolution:
         # Create a new binary solution with one bit per item in W
         solution = BinarySolution(
             number_of_variables=self.number_of_bits,
@@ -185,7 +188,10 @@ class SubsetSum(BinaryProblem):
         )
 
         # Initialize with random bits (each bit represents whether an item is selected)
-        solution.bits = np.random.choice([True, False], size=self.number_of_bits)
+        if rng is not None:
+            solution.bits = rng.choice([True, False], size=self.number_of_bits)
+        else:
+            solution.bits = np.random.choice([True, False], size=self.number_of_bits)
         return solution
 
     def name(self) -> str:

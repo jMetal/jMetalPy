@@ -90,7 +90,7 @@ class Knapsack(BinaryProblem):
         solution.objectives[0] = -1.0 * total_profits
         return solution
 
-    def create_solution(self) -> BinarySolution:
+    def create_solution(self, rng: np.random.Generator | None = None) -> BinarySolution:
         new_solution = BinarySolution(
             number_of_variables=self.number_of_bits,
             number_of_objectives=self.number_of_objectives(),
@@ -98,7 +98,10 @@ class Knapsack(BinaryProblem):
 
         # The BinarySolution initializes with empty variables, we need to set the bits
         # The bits will be stored in variables[0] as a numpy array
-        new_solution.variables[0] = np.random.choice([True, False], size=self.number_of_bits)
+        if rng is not None:
+            new_solution.variables[0] = rng.choice([True, False], size=self.number_of_bits)
+        else:
+            new_solution.variables[0] = np.random.choice([True, False], size=self.number_of_bits)
         return new_solution
 
     def name(self):

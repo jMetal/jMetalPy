@@ -1,6 +1,8 @@
 import random
 from math import cos, exp, pi, pow, sin, sqrt
 
+import numpy as np
+
 from jmetal.core.problem import BinaryProblem, FloatProblem
 from jmetal.core.solution import BinarySolution, FloatSolution
 
@@ -220,7 +222,7 @@ class ZDT5(BinaryProblem):
             return 2.0 + value
         return 1.0
 
-    def create_solution(self) -> BinarySolution:
+    def create_solution(self, rng: np.random.Generator | None = None) -> BinarySolution:
         """
         Create a new random solution.
         """
@@ -231,8 +233,12 @@ class ZDT5(BinaryProblem):
         )
 
         # Initialize with random bits
-        for i in range(self.total_number_of_bits):
-            solution.variables[i] = random.random() < 0.5
+        if rng is not None:
+            for i in range(self.total_number_of_bits):
+                solution.variables[i] = rng.random() < 0.5
+        else:
+            for i in range(self.total_number_of_bits):
+                solution.variables[i] = random.random() < 0.5
 
         return solution
 

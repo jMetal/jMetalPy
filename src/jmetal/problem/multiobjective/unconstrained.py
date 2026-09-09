@@ -218,7 +218,7 @@ class SubsetSum(BinaryProblem):
 
         return solution
 
-    def create_solution(self) -> BinarySolution:
+    def create_solution(self, rng: np.random.Generator | None = None) -> BinarySolution:
         # Create a new binary solution with one bit per item in W
         solution = BinarySolution(
             number_of_variables=self.number_of_bits,
@@ -226,7 +226,10 @@ class SubsetSum(BinaryProblem):
         )
 
         # Initialize with random bits (each bit represents whether an item is selected)
-        solution.bits = np.random.choice([True, False], size=self.number_of_bits)
+        if rng is not None:
+            solution.bits = rng.choice([True, False], size=self.number_of_bits)
+        else:
+            solution.bits = np.random.choice([True, False], size=self.number_of_bits)
 
         return solution
 
@@ -273,7 +276,7 @@ class OneZeroMax(BinaryProblem):
 
         return solution
 
-    def create_solution(self) -> BinarySolution:
+    def create_solution(self, rng: np.random.Generator | None = None) -> BinarySolution:
         # Create a new binary solution with the specified number of bits
         solution = BinarySolution(
             number_of_variables=self.number_of_bits,
@@ -281,7 +284,10 @@ class OneZeroMax(BinaryProblem):
         )
 
         # Initialize with random bits (using numpy for better performance)
-        solution.bits = np.random.choice([True, False], size=self.number_of_bits)
+        if rng is not None:
+            solution.bits = rng.choice([True, False], size=self.number_of_bits)
+        else:
+            solution.bits = np.random.choice([True, False], size=self.number_of_bits)
 
         return solution
 
@@ -336,7 +342,7 @@ class MixedIntegerFloatProblem(Problem):
 
         return solution
 
-    def create_solution(self) -> CompositeSolution:
+    def create_solution(self, rng: np.random.Generator | None = None) -> CompositeSolution:
         integer_solution = IntegerSolution(
             self.int_lower_bound,
             self.int_upper_bound,
@@ -350,14 +356,24 @@ class MixedIntegerFloatProblem(Problem):
             self.number_of_constraints,
         )
 
-        float_solution.variables = [
-            random.uniform(self.float_lower_bound[i] * 1.0, self.float_upper_bound[i] * 1.0)
-            for i in range(len(self.float_lower_bound))
-        ]
-        integer_solution.variables = [
-            random.uniform(self.int_lower_bound[i], self.int_upper_bound[i])
-            for i in range(len(self.int_lower_bound))
-        ]
+        if rng is not None:
+            float_solution.variables = [
+                rng.uniform(self.float_lower_bound[i] * 1.0, self.float_upper_bound[i] * 1.0)
+                for i in range(len(self.float_lower_bound))
+            ]
+            integer_solution.variables = [
+                rng.uniform(self.int_lower_bound[i], self.int_upper_bound[i])
+                for i in range(len(self.int_lower_bound))
+            ]
+        else:
+            float_solution.variables = [
+                random.uniform(self.float_lower_bound[i] * 1.0, self.float_upper_bound[i] * 1.0)
+                for i in range(len(self.float_lower_bound))
+            ]
+            integer_solution.variables = [
+                random.uniform(self.int_lower_bound[i], self.int_upper_bound[i])
+                for i in range(len(self.int_lower_bound))
+            ]
 
         return CompositeSolution([integer_solution, float_solution])
 
