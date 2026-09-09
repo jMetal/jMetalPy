@@ -409,9 +409,16 @@ the same equivalence-test methodology as Phase 1 (`test_smsemoa_equivalence.py`,
 - [ ] `feat(component): add the ParticleSwarmOptimization template`
 - [ ] `feat(component): add build_smpso()`
 
-**Known risk:** MOEA/D does not fit the component model well — Java jMetal's own docs
-(`jmetal-component` design notes) admit needing complex, tightly-coupled components for it. Not
-attempted in the phases above.
+**Correction (2026-09):** this section previously claimed "MOEA/D does not fit the component model
+well — Java jMetal's own docs admit needing complex, tightly-coupled components for it." Fresh
+investigation of `jmetal-component` disproves this: `MOEADBuilder`/`MOEADDEBuilder` exist there and
+build a plain `EvolutionaryAlgorithm<S>`, the same generic template `NSGAIIBuilder`/
+`SMSEMOABuilder` use, with no modification — and `docs/component.rst` documents MOEA/D with no
+"hard to fit" caveat. No design note backing the original claim was found; it appears to have been
+an unverified assumption. See Phase 2's MOEA/D entry for what actually makes it fit: a small shared
+per-iteration context object, mirroring the `SequenceGenerator<Integer>` `MOEADBuilder`/
+`MOEADDEBuilder` pass by reference between `Selection`, `Variation` and `Replacement` — not a
+protocol change, and not "complex, tightly-coupled components."
 
 ---
 
