@@ -382,6 +382,19 @@ run and pickle correctly; the full suite (925 tests) and lint are green.
 - [x] `feat(component): add build_smsemoa()` — factory function in `algorithm/multiobjective/smsemoa.py`, no `offspring_population_size` parameter (SMS-EMOA is steady-state by definition, always 1)
 - [x] `test(component): assert build_smsemoa matches the classic SMSEMOA for a fixed seed` — identical fronts on ZDT1 and DTLZ2, verified passing
 - [x] `docs: document build_smsemoa() in the component architecture page`
+- [x] `feat(core): add an optional rng to Problem.create_solution()` — prerequisite for MOEA/D single-seed reproducibility, see below
+- [x] `feat(component): thread rng through RandomSolutionsCreation`
+- [x] `feat(operator): add an optional rng to NaryRandomSolutionSelection`
+- [x] `docs: correct the outdated MOEA/D component-fit risk note in MODERNIZATION.md` — see Phase 3's correction note
+- [x] `feat(component): add MOEADContext and the pluggable subproblem sequence generator` — `catalogue/ea/moead.py`
+- [x] `feat(component): add MOEADSelection`
+- [x] `feat(component): add DifferentialEvolutionCrossoverVariation`
+- [x] `feat(component): add MOEADReplacement`
+- [x] `feat(component): add build_moead()` — classic, any crossover, `PenaltyBoundaryIntersection` by default
+- [x] `feat(component): add build_moead_de()` — differential evolution, `Tschebycheff` by default
+- [x] `test(component): assert MOEADReplacement matches the classic replacement logic given identical inputs` — structural equivalence, not full-run (see below)
+- [x] `test(component): reach expected hypervolume floors with build_moead and build_moead_de` — ZDT1 and DTLZ2, both variants
+- [x] `docs: document build_moead()/build_moead_de() in the component architecture page`
 - [ ] `feat(component): add build_mocell()`
 - [ ] `feat(component): add build_genetic_algorithm()` — secondary, single-objective; only if time remains after the three above
 
@@ -402,6 +415,80 @@ iterative-removal draft that preserved original front order (rather than re-sort
 contribution after truncation, like the classic implementation does) produced a different-but-valid
 population that silently diverged from the classic algorithm after ~25 generations. Verified with
 the same equivalence-test methodology as Phase 1 (`test_smsemoa_equivalence.py`, ZDT1 and DTLZ2).
+
+**MOEA/D complete — classic and MOEA/D-DE.** Both `build_moead()` and `build_moead_de()` build on
+the unmodified `EvolutionaryAlgorithm` template (see Phase 3's correction note below for why that
+was ever in doubt). The one genuinely new piece: `MOEADContext`
+(`catalogue/ea/moead.py`) — a small object, constructed once per run and passed by reference into
+`MOEADSelection`, `MOEADReplacement` and (DE variant only) `DifferentialEvolutionCrossoverVariation`,
+carrying the one thing none of the six generic component protocols carry and shouldn't: which
+subproblem the current iteration is processing, and whether its mating pool/replacement scan is
+scoped to that subproblem's neighborhood or the whole population. Mirrors jMetal Java's own
+`SequenceGenerator<Integer>`, shared the same way between `MOEADBuilder`/`MOEADDEBuilder`'s
+components. `build_moead()`'s classic path needed no new `Variation` at all — plain
+`CrossoverAndMutationVariation` already works with SBX, since only the DE variant needs a third
+"parent" (the current subproblem's own solution) that isn't part of the sampled mating pool.
+
+A real, corrected misconception surfaced along the way: jMetalPy's existing (non-component)
+`jmetal.algorithm.multiobjective.moead.MOEAD` — despite the plain name — is *already* MOEA/D-DE
+(`crossover` is typed `DifferentialEvolutionCrossover` and required); there has never been a classic
+SBX-based MOEA/D in jMetalPy. Cross-checked directly against jMetal Java's own legacy (non-component)
+`jmetal-algorithm` module: its `MOEAD.java` has the identical situation — a constructor accepting a
+generic `CrossoverOperator<DoubleSolution>` that gets force-cast to `DifferentialEvolutionCrossover`
+in the same line, so passing SBX there would throw `ClassCastException`, and its own runnable example
+only ever constructs a DE crossover. So the classic/DE split `build_moead()`/`build_moead_de()`
+provide didn't exist anywhere in the jMetal ecosystem outside `jmetal-component`/Evolver before this.
+
+**A deliberate reproducibility redesign, not a like-for-like port.** The classic `MOEAD` mixes three
+incompatible random sources: the global `random` module, *global legacy* `numpy.random` (direct
+`np.random.permutation()` calls, not a `Generator` instance — used by its `Permutation` helper), and
+each operator's own `np.random.Generator`. No seed reconciles a `Generator` (PCG64) with
+`random`/legacy `numpy.random` (Mersenne Twister) — they're different algorithms — so no amount of
+seeding can make it reproducible from one value. `build_moead()`/`build_moead_de()` were built
+"rng-clean" instead: every MOEA/D-specific random decision draws exclusively from the shared `rng`,
+matching the project's already-declared direction ("migrating the remaining operators to the
+injectable-`rng` pattern is ongoing," Phase 1's notes) rather than replicating legacy behavior.
+Getting there required going one level deeper than `build_nsgaii()`/`build_smsemoa()` did:
+`Problem.create_solution()` gained an optional `rng` (10 explicit problem overrides plus
+`FloatProblem`/`IntegerProblem`'s two shared implementations touched; ~130+ other problem classes
+inherit the fix for free), and `RandomSolutionsCreation` now forwards its own `rng` into it — which,
+via `build_nsgaii()`'s/`build_smsemoa()`'s existing `rng=` parameter, makes their population creation
+reproducible too, as a free side effect. One subtlety caught by running the existing equivalence
+tests immediately after a naive first attempt: `EvolutionaryAlgorithm._thread_rng_into_components()`
+would have auto-injected the algorithm's own `rng` into `RandomSolutionsCreation` even when the user
+passed none, silently switching every unseeded `build_nsgaii()`/`build_smsemoa()` call onto a
+different random source for population creation and breaking
+`test_nsgaii_equivalence.py`/`test_smsemoa_equivalence.py`. Fixed by excluding `solutions_creation`
+from that auto-injection loop — population creation only becomes `rng`-reproducible when a factory
+explicitly forwards its own `rng` parameter into it, which `build_nsgaii()`/`build_smsemoa()`/
+`build_moead()`/`build_moead_de()` all now do.
+
+The cost of this choice: no execution-level equivalence test against the classic `MOEAD` is possible
+for `build_moead_de()`, unlike `test_nsgaii_equivalence.py`/`test_smsemoa_equivalence.py`'s
+bit-identical-fronts standard — two runs seeded "the same way" draw from genuinely different PRNG
+streams. Verified instead with two narrower, still-meaningful checks:
+`test_moead_replacement_structural_equivalence.py` (`MOEADReplacement`'s replace/keep decisions match
+the classic `update_current_subproblem_neighborhood()` exactly, given identical inputs — the logic
+that matters, isolated from randomness) and `test_moead_integration.py` (hypervolume floors on ZDT1
+and DTLZ2 for both variants, each fully reproducible from its one fixed seed — no
+`random.seed()`/`np.random.seed()` involved, verified directly by running each test's assembly twice
+and comparing fronts).
+
+**Analysis on record (not yet acted on): a shared `rng=` for the classic algorithm hierarchy.**
+Raised during MOEA/D's reproducibility design (in the form of a proposed project-wide
+`RandomGenerator` class) and deliberately scoped out as too large for this round, but worth acting on
+separately: `Algorithm`/`GeneticAlgorithm` and their subclasses (`NSGAII`, `SMSEMOA`, `MOEAD`, ...)
+have no constructor-level `rng`, unlike the component template's `EvolutionaryAlgorithm(rng=...)` +
+`_thread_rng_into_components()`. A **class-level singleton** version of this (a `RandomGenerator`
+with `_generator` as a class attribute, mutated via a `.seed()` classmethod) was considered and
+rejected: it would reintroduce exactly the problem this project already fixed away from once before
+(operators used to fall back to the bare, shared `numpy.random` module — unpicklable across
+`ProcessPoolExecutor` workers, and coupling unrelated operators' random-draw counts to each other —
+fixed to per-instance `np.random.default_rng()`, see the note above). The instance-based version
+(`rng=` as a plain constructor parameter, threaded to `population_generator`/`selection_operator`/
+`crossover_operator`/`mutation_operator` the same way `_thread_rng_into_components()` already does
+for components) would be a real, low-risk improvement — just project-wide in scope rather than
+MOEA/D-specific, so left for a dedicated pass.
 
 ### Phase 3 — PSO (out of scope for now, not started until NSGA-II is validated)
 
