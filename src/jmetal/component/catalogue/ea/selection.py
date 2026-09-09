@@ -2,6 +2,7 @@
 
 from typing import Generic, Protocol, TypeVar, runtime_checkable
 
+from jmetal.operator.selection import RandomSelection as RandomSelectionOperator
 from jmetal.operator.selection import TournamentSelection as TournamentSelectionOperator
 
 S = TypeVar("S")
@@ -48,6 +49,37 @@ class TournamentSelection(Generic[S]):
 
     def select(self, solution_list: list[S]) -> list[S]:
         """Run the tournament `mating_pool_size` times.
+
+        Args:
+            solution_list: The population to select from.
+
+        Returns:
+            A mating pool of size `mating_pool_size`.
+        """
+        return [self.selection_operator.execute(solution_list) for _ in range(self.mating_pool_size)]
+
+
+class RandomSelection(Generic[S]):
+    """Fills a mating pool by picking a solution uniformly at random, once per slot.
+
+    Wraps `jmetal.operator.selection.RandomSelection`, which selects a single solution
+    per call with no regard for its quality; this component repeats that call
+    `mating_pool_size` times. This is the default mating selection for SMS-EMOA
+    (`jmetal.algorithm.multiobjective.smsemoa.SMSEMOA` also defaults to it), which relies
+    on its replacement strategy alone -- not selection pressure -- to drive convergence.
+
+    Args:
+        selection_operator: The random selection operator to repeat.
+        mating_pool_size: How many solutions to select. Typically set to match the
+            `Variation` component's `mating_pool_size()`.
+    """
+
+    def __init__(self, selection_operator: RandomSelectionOperator, mating_pool_size: int):
+        self.selection_operator = selection_operator
+        self.mating_pool_size = mating_pool_size
+
+    def select(self, solution_list: list[S]) -> list[S]:
+        """Draw `mating_pool_size` solutions uniformly at random, with replacement.
 
         Args:
             solution_list: The population to select from.
