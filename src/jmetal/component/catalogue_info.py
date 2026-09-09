@@ -19,6 +19,11 @@ from dataclasses import dataclass, field
 from jmetal.component.catalogue.common.evaluation import SequentialEvaluation
 from jmetal.component.catalogue.common.solutions_creation import RandomSolutionsCreation
 from jmetal.component.catalogue.common.termination import TerminationByEvaluations
+from jmetal.component.catalogue.ea.moead import (
+    DifferentialEvolutionCrossoverVariation,
+    MOEADReplacement,
+    MOEADSelection,
+)
 from jmetal.component.catalogue.ea.replacement import (
     RankingAndCrowdingDistanceReplacement,
     RankingAndDensityEstimatorReplacement,
@@ -50,12 +55,13 @@ CATALOGUE: dict[str, list[type]] = {
     "solutions_creation": [RandomSolutionsCreation],
     "evaluation": [SequentialEvaluation],
     "termination": [TerminationByEvaluations],
-    "selection": [TournamentSelection, RandomSelection],
-    "variation": [CrossoverAndMutationVariation],
+    "selection": [TournamentSelection, RandomSelection, MOEADSelection],
+    "variation": [CrossoverAndMutationVariation, DifferentialEvolutionCrossoverVariation],
     "replacement": [
         RankingAndDensityEstimatorReplacement,
         RankingAndCrowdingDistanceReplacement,
         SMSEMOAReplacement,
+        MOEADReplacement,
     ],
     "crossover": [
         SBXCrossover,

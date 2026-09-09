@@ -137,6 +137,91 @@ overridden the same way as `build_nsgaii()`'s, and `archive=` is supported ident
 [External archives](#external-archives) below) -- both factories share the same
 `EvolutionaryAlgorithm` template, so nothing archive-specific needed to change.
 
+## Building MOEA/D
+
+`build_moead()` (classic, any crossover) and `build_moead_de()` (differential evolution) build on
+the exact same `EvolutionaryAlgorithm` template as `build_nsgaii()`/`build_smsemoa()` -- no
+modification needed there. What MOEA/D actually needs that NSGA-II/SMS-EMOA don't: `Selection`,
+`Variation` and `Replacement` all need to agree, every iteration, on *which subproblem* is being
+processed and whether this iteration's mating pool and replacement scan are scoped to that
+subproblem's neighborhood or the whole population -- neither concept exists in the generic
+`select()`/`variate()`/`replace()` signatures, nor should it (it's specific to MOEA/D, not a general
+evolutionary-algorithm concern). `catalogue/ea/moead.py`'s `MOEADContext` is a small object
+constructed once per run and passed by reference into `MOEADSelection`, `MOEADReplacement` and (for
+the DE variant) `DifferentialEvolutionCrossoverVariation`, each of which reads it without the
+template needing to know it exists -- mirroring how jMetal Java's own component-based MOEA/D
+(`MOEADBuilder`/`MOEADDEBuilder` in `jmetal-component`) shares a `SequenceGenerator<Integer>` the
+same way:
+
+```python
+from jmetal.component.algorithm.multiobjective.moead import build_moead, build_moead_de
+from jmetal.operator.crossover import SBXCrossover
+from jmetal.operator.mutation import PolynomialMutation
+from jmetal.problem import ZDT1
+
+problem = ZDT1()
+
+# Classic: any crossover, defaults to PenaltyBoundaryIntersection aggregation.
+algorithm = build_moead(
+    problem,
+    population_size=100,
+    crossover=SBXCrossover(probability=1.0, distribution_index=20),
+    mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
+)
+
+# MOEA/D-DE: differential-evolution crossover, defaults to Tschebycheff aggregation.
+algorithm = build_moead_de(
+    problem,
+    population_size=100,
+    mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
+    cr=1.0,
+    f=0.5,
+)
+
+algorithm.run()
+front = algorithm.result()
+```
+
+Both reuse `RandomSolutionsCreation`, `SequentialEvaluation`/`SequentialEvaluationWithArchive` and
+`TerminationByEvaluations` unchanged, and support `archive=` identically to `build_nsgaii()`/
+`build_smsemoa()`. `population_size` doubles as the number of subproblems (one weight vector per
+population slot); for 3+ objectives the weight vectors are read from a file in `weight_files_path`
+(default: this repository's bundled `resources/MOEAD_weights/`) -- 2-objective weight vectors are
+generated analytically and need no file.
+
+**A correction on record.** This page, and `MODERNIZATION.md`, previously carried a note claiming
+MOEA/D "does not fit the component model well," attributed to unverified Java design notes. Direct
+investigation of `jmetal-component` found the opposite -- `MOEADBuilder`/`MOEADDEBuilder` already
+exist there, building the same generic template with no modification -- so the note was corrected
+rather than repeated here.
+
+**A step further on reproducibility.** Every MOEA/D-specific random decision (which subproblem,
+which neighborhood-vs-population scope, mating-pool sampling, the replacement scan) draws
+exclusively from the `rng` passed to `build_moead()`/`build_moead_de()`, never from the global
+`random`/`numpy.random` state -- a deliberate departure from the classic
+`jmetal.algorithm.multiobjective.moead.MOEAD`, which mixes three incompatible random sources (global
+`random`, global *legacy* `numpy.random`, and each operator's own `np.random.Generator`) and can
+therefore never be made reproducible from a single seed. Getting there also meant reaching one level
+deeper than `build_nsgaii()`/`build_smsemoa()` did: `Problem.create_solution()` gained an optional
+`rng` parameter (defaulting to the same global-state behavior as before, so nothing already relying
+on `random.seed()` breaks), and `RandomSolutionsCreation` now forwards its own `rng` into it -- so
+population creation is reproducible from `rng=` too, for all three factories, not just MOEA/D's.
+One caveat remains: `crossover` (classic variant only) and `mutation` are always your own operators,
+constructed outside these factories, so their reproducibility is in your hands the same way it
+already is for `build_nsgaii()`/`build_smsemoa()` -- pass them their own matching `rng` too.
+
+The consequence: no execution-level equivalence test against the classic `MOEAD` is possible for
+`build_moead_de()` the way `test_nsgaii_equivalence.py`/`test_smsemoa_equivalence.py` compare against
+their classic counterparts (see [Verified behavioral equivalence](#verified-behavioral-equivalence)
+below) -- two runs seeded "the same way" draw from genuinely different random number generators, so
+they cannot produce identical fronts. What's verified instead: `test_moead_replacement_structural_equivalence.py`
+checks that `MOEADReplacement`'s replace/keep decisions exactly match the classic algorithm's
+`update_current_subproblem_neighborhood()` given identical inputs (population, offspring, current
+subproblem, scope) -- the logic that matters, isolated from randomness -- plus
+`test_moead_integration.py`'s hypervolume-floor checks for both variants (`build_moead()` has no
+classic SBX-based counterpart in jMetalPy to compare against in the first place -- the existing
+classic `MOEAD` class is already MOEA/D-DE despite its name, and always has been).
+
 ## Reproducibility
 
 No classic jMetalPy algorithm accepts a seed. `EvolutionaryAlgorithm` accepts an optional
@@ -226,6 +311,7 @@ NSGA-II catalogue:
 |---|---|---|
 | `problem` | `Problem[~S]` | required |
 | `number_of_solutions_to_create` | `int` | required |
+| `rng` | `Generator \| None` | None |
 
 ### Evaluation
 
@@ -260,6 +346,15 @@ NSGA-II catalogue:
 | `selection_operator` | `RandomSelection` | required |
 | `mating_pool_size` | `int` | required |
 
+**`MOEADSelection`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `context` | `MOEADContext` | required |
+| `neighbourhood` | `WeightVectorNeighborhood` | required |
+| `number_of_parents` | `int` | required |
+| `selection_operator` | `NaryRandomSolutionSelection \| None` | None |
+
 ### Variation
 
 **`CrossoverAndMutationVariation`**
@@ -268,6 +363,14 @@ NSGA-II catalogue:
 |---|---|---|
 | `offspring_population_size` | `int` | required |
 | `crossover` | `Crossover` | required |
+| `mutation` | `Mutation` | required |
+
+**`DifferentialEvolutionCrossoverVariation`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `context` | `MOEADContext` | required |
+| `crossover` | `DifferentialEvolutionCrossover` | required |
 | `mutation` | `Mutation` | required |
 
 ### Replacement
@@ -292,6 +395,15 @@ NSGA-II catalogue:
 | Parameter | Type | Default |
 |---|---|---|
 | `ranking` | `Ranking` | None |
+
+**`MOEADReplacement`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `context` | `MOEADContext` | required |
+| `neighbourhood` | `WeightVectorNeighborhood` | required |
+| `aggregation_function` | `AggregationFunction` | required |
+| `max_number_of_replaced_solutions` | `int` | required |
 
 ### Crossover (`jmetal.operator.crossover`)
 
@@ -422,12 +534,18 @@ signature changes) -- it is not kept in sync automatically.
 
 ## Verified behavioral equivalence
 
-`build_nsgaii(...)` and the classic `NSGAII(...)` produce **identical** final populations on ZDT1
-and DTLZ2 given the same seed -- both reuse the exact same operator classes and
-`Problem.create_solution()`, so identical random state produces identical results. This is checked
-by a dedicated test (`tests/component/algorithm/multiobjective/test_nsgaii_equivalence.py`) and is
-the acceptance criterion for this architecture: adopting components changes *how* an algorithm is
-assembled, not *what* it computes.
+`build_nsgaii(...)`/`build_smsemoa(...)` and their classic `NSGAII(...)`/`SMSEMOA(...)` counterparts
+produce **identical** final populations on ZDT1 and DTLZ2 given the same seed -- both reuse the exact
+same operator classes and `Problem.create_solution()`, so identical random state produces identical
+results. This is checked by dedicated tests
+(`tests/component/algorithm/multiobjective/test_nsgaii_equivalence.py`,
+`test_smsemoa_equivalence.py`) and is the acceptance criterion for this architecture: adopting
+components changes *how* an algorithm is assembled, not *what* it computes.
+
+MOEA/D is the exception: `build_moead()`/`build_moead_de()` deliberately draw all their own
+randomness from a single `rng`, never the classic `MOEAD`'s mix of global `random`/legacy
+`numpy.random`/per-operator generators, so no seed makes their fronts bit-identical to the classic
+algorithm's. See [Building MOEA/D](#building-moead) above for what's verified in its place.
 
 ## Package layout
 
@@ -437,7 +555,9 @@ src/jmetal/component/
 │   ├── algorithm_state.py              # AlgorithmState
 │   ├── evolutionary_algorithm.py       # EvolutionaryAlgorithm
 │   └── multiobjective/
-│       └── nsgaii.py                   # build_nsgaii()
+│       ├── nsgaii.py                   # build_nsgaii()
+│       ├── smsemoa.py                  # build_smsemoa()
+│       └── moead.py                    # build_moead(), build_moead_de()
 └── catalogue/
     ├── common/
     │   ├── solutions_creation.py
@@ -446,8 +566,9 @@ src/jmetal/component/
     └── ea/
         ├── selection.py
         ├── variation.py
-        └── replacement.py
+        ├── replacement.py
+        └── moead.py                    # MOEADContext and MOEA/D's Selection/Variation/Replacement
 ```
 
-This currently covers NSGA-II only. Further MOEAs (SPEA2, SMS-EMOA, MOCell) reusing the same
-catalogue, and a PSO template and catalogue, are planned -- see `MODERNIZATION.md`.
+This covers NSGA-II, SMS-EMOA and MOEA/D. Further MOEAs (SPEA2, MOCell) reusing the same catalogue,
+and a PSO template and catalogue, are planned -- see `MODERNIZATION.md`.
