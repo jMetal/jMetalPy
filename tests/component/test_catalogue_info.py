@@ -17,7 +17,11 @@ class TestDescribeComponent:
     def test_lists_every_constructor_parameter_except_self(self):
         info = describe_component(RandomSolutionsCreation)
 
-        assert [p.name for p in info.parameters] == ["problem", "number_of_solutions_to_create"]
+        assert [p.name for p in info.parameters] == [
+            "problem",
+            "number_of_solutions_to_create",
+            "rng",
+        ]
 
     def test_a_required_parameter_has_no_default(self):
         info = describe_component(RandomSolutionsCreation)

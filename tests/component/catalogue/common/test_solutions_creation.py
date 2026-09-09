@@ -1,5 +1,7 @@
 """Tests for the SolutionsCreation component."""
 
+import numpy as np
+
 from jmetal.component.catalogue.common.solutions_creation import (
     RandomSolutionsCreation,
     SolutionsCreation,
@@ -36,3 +38,23 @@ class TestRandomSolutionsCreation:
                 return []
 
         assert isinstance(FixedSolutionsCreation(), SolutionsCreation)
+
+    def test_rng_produces_a_deterministic_population_for_a_fixed_seed(self):
+        problem = Sphere(number_of_variables=5)
+        creation_a = RandomSolutionsCreation(
+            problem, number_of_solutions_to_create=10, rng=np.random.default_rng(42)
+        )
+        creation_b = RandomSolutionsCreation(
+            problem, number_of_solutions_to_create=10, rng=np.random.default_rng(42)
+        )
+
+        population_a = creation_a.create()
+        population_b = creation_b.create()
+
+        assert [s.variables for s in population_a] == [s.variables for s in population_b]
+
+    def test_without_rng_defaults_to_none(self):
+        problem = Sphere(number_of_variables=5)
+        creation = RandomSolutionsCreation(problem, number_of_solutions_to_create=1)
+
+        assert creation.rng is None

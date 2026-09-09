@@ -146,6 +146,14 @@ class RngAwareSelection(StubSelection):
         self.rng: np.random.Generator | None = None
 
 
+class RngAwareSolutionsCreation(StubSolutionsCreation):
+    """A solutions_creation component that declares an rng slot but doesn't have one yet."""
+
+    def __init__(self, population_size: int):
+        super().__init__(population_size)
+        self.rng: np.random.Generator | None = None
+
+
 class TestRngThreading:
     def test_defaults_to_a_fresh_generator_when_none_is_given(self):
         algorithm = build_algorithm()
@@ -210,6 +218,31 @@ class TestRngThreading:
         algorithm = build_algorithm()
 
         assert not hasattr(algorithm.solutions_creation, "rng")
+
+    def test_does_not_thread_its_rng_into_solutions_creation_even_when_it_declares_one(self):
+        # Deliberate exception to the general auto-threading rule: unlike every other
+        # component here, RandomSolutionsCreation's rng=None means "keep drawing from
+        # the global random/numpy.random state" (matching Problem.create_solution()'s
+        # pre-existing, unparameterized behavior) -- not "give me any generator you
+        # have handy". Auto-threading would silently break that contract for every
+        # build_nsgaii()/build_smsemoa() call that doesn't pass rng= explicitly, which
+        # test_nsgaii_equivalence.py/test_smsemoa_equivalence.py depend on. Population
+        # creation only becomes rng-reproducible when a factory forwards its own rng
+        # parameter into RandomSolutionsCreation at construction time.
+        solutions_creation = RngAwareSolutionsCreation(4)
+
+        algorithm = EvolutionaryAlgorithm(
+            name="StubEA",
+            solutions_creation=solutions_creation,
+            evaluation=StubEvaluation(problem=object()),
+            termination=StubTermination(max_evaluations=4),
+            selection=StubSelection(),
+            variation=StubVariation(4),
+            replacement=StubReplacement(),
+            rng=np.random.default_rng(3),
+        )
+
+        assert algorithm.solutions_creation.rng is None
 
 
 class StubArchive:

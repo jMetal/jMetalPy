@@ -93,9 +93,23 @@ class EvolutionaryAlgorithm(Generic[S]):
         explicit `rng` before being handed to this template is not overridden here;
         wire it through `build_nsgaii()` (or an equivalent factory) instead if it
         should share this algorithm's generator.
+
+        `solutions_creation` is deliberately excluded from this list. Every other
+        RNG-aware component here falls back to a *fresh* `np.random.default_rng()`
+        when its own `rng` is `None`, so handing it this algorithm's generator instead
+        is a side-grade, not a behavior change. `RandomSolutionsCreation` (via
+        `Problem.create_solution()`) is different: its `rng=None` deliberately keeps
+        drawing from the global `random`/`numpy.random` state, matching
+        `create_solution()`'s pre-existing, unparameterized behavior -- auto-threading
+        this algorithm's `rng` into it here would silently switch every unseeded
+        `build_nsgaii()`/`build_smsemoa()` call onto a different random source for
+        population creation, breaking the equivalence tests that seed the global
+        `random` module and expect `create_solution()` to still consume it. Population
+        creation only becomes `rng`-reproducible when a factory explicitly forwards
+        its own `rng` parameter into `RandomSolutionsCreation` at construction time
+        (see `build_nsgaii()`/`build_smsemoa()`/`build_moead()`).
         """
         for component in (
-            self.solutions_creation,
             self.evaluation,
             self.termination,
             self.selection,

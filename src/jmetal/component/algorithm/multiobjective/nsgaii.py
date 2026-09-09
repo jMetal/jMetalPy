@@ -106,7 +106,7 @@ def build_nsgaii(
 
     return EvolutionaryAlgorithm(
         name="NSGAII",
-        solutions_creation=RandomSolutionsCreation(problem, population_size),
+        solutions_creation=RandomSolutionsCreation(problem, population_size, rng=rng),
         evaluation=evaluation,
         termination=termination,
         selection=selection,

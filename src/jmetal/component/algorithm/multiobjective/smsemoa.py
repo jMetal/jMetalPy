@@ -91,7 +91,7 @@ def build_smsemoa(
 
     return EvolutionaryAlgorithm(
         name="SMSEMOA",
-        solutions_creation=RandomSolutionsCreation(problem, population_size),
+        solutions_creation=RandomSolutionsCreation(problem, population_size, rng=rng),
         evaluation=evaluation,
         termination=termination,
         selection=selection,

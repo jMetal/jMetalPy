@@ -2,6 +2,8 @@
 
 from typing import Generic, Protocol, TypeVar, runtime_checkable
 
+import numpy as np
+
 from jmetal.core.problem import Problem
 
 S = TypeVar("S")
@@ -31,17 +33,30 @@ class RandomSolutionsCreation(Generic[S]):
     Args:
         problem: The problem whose `create_solution()` generates each solution.
         number_of_solutions_to_create: How many solutions to create.
+        rng: Optional random generator, forwarded to `problem.create_solution()`. Left
+            as a plain `self.rng` attribute (not resolved to a default here) so that
+            `EvolutionaryAlgorithm._thread_rng_into_components()` can share the
+            algorithm's own generator with it when none is given explicitly.
     """
 
-    def __init__(self, problem: Problem[S], number_of_solutions_to_create: int):
+    def __init__(
+        self,
+        problem: Problem[S],
+        number_of_solutions_to_create: int,
+        rng: np.random.Generator | None = None,
+    ):
         self.problem = problem
         self.number_of_solutions_to_create = number_of_solutions_to_create
+        self.rng = rng
 
     def create(self) -> list[S]:
         """Create the population.
 
         Returns:
             A list of `number_of_solutions_to_create` solutions, each produced by
-            `problem.create_solution()`.
+            `problem.create_solution(rng=self.rng)`.
         """
-        return [self.problem.create_solution() for _ in range(self.number_of_solutions_to_create)]
+        return [
+            self.problem.create_solution(rng=self.rng)
+            for _ in range(self.number_of_solutions_to_create)
+        ]
