@@ -24,7 +24,7 @@ from jmetal.component.catalogue.ea.replacement import (
     RankingAndDensityEstimatorReplacement,
     SMSEMOAReplacement,
 )
-from jmetal.component.catalogue.ea.selection import TournamentSelection
+from jmetal.component.catalogue.ea.selection import RandomSelection, TournamentSelection
 from jmetal.component.catalogue.ea.variation import CrossoverAndMutationVariation
 from jmetal.operator.crossover import (
     BLXAlphaBetaCrossover,
@@ -50,7 +50,7 @@ CATALOGUE: dict[str, list[type]] = {
     "solutions_creation": [RandomSolutionsCreation],
     "evaluation": [SequentialEvaluation],
     "termination": [TerminationByEvaluations],
-    "selection": [TournamentSelection],
+    "selection": [TournamentSelection, RandomSelection],
     "variation": [CrossoverAndMutationVariation],
     "replacement": [
         RankingAndDensityEstimatorReplacement,

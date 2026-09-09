@@ -99,6 +99,42 @@ keyword argument, and every existing observer in `jmetal.util.observer`
 `"PROBLEM"`/`"EVALUATIONS"`/`"SOLUTIONS"`/`"COMPUTING_TIME"`-keyed mapping the classic algorithms
 already notify with.
 
+## Building SMS-EMOA
+
+SMS-EMOA is very similar to NSGA-II: `build_smsemoa()` follows the exact same factory-function
+pattern and reuses four of the six components unchanged (`RandomSolutionsCreation`,
+`SequentialEvaluation`, `TerminationByEvaluations`, `CrossoverAndMutationVariation`). It only
+differs in mating selection -- `RandomSelection` rather than tournament, since SMS-EMOA relies on
+its replacement strategy alone to drive convergence -- and in replacement -- `SMSEMOAReplacement`,
+which ranks the merged population, keeps every front but the last whole, and prunes the last front
+by hypervolume contribution rather than crowding distance:
+
+```python
+from jmetal.component.algorithm.multiobjective.smsemoa import build_smsemoa
+from jmetal.operator.crossover import SBXCrossover
+from jmetal.operator.mutation import PolynomialMutation
+from jmetal.problem import ZDT1
+
+problem = ZDT1()
+algorithm = build_smsemoa(
+    problem,
+    population_size=100,
+    crossover=SBXCrossover(probability=1.0, distribution_index=20),
+    mutation=PolynomialMutation(probability=1.0 / problem.number_of_variables(), distribution_index=20),
+)
+
+algorithm.run()
+front = algorithm.result()
+```
+
+Unlike `build_nsgaii()`, there is no `offspring_population_size` parameter: SMS-EMOA is
+steady-state by definition (Beume et al., 2007) and always produces exactly one offspring per
+generation, matching `jmetal.algorithm.multiobjective.smsemoa.SMSEMOA`, which hardcodes the same
+value. Every other default -- `selection`, `variation`, `replacement`, `termination` -- can be
+overridden the same way as `build_nsgaii()`'s, and `archive=` is supported identically (see
+[External archives](#external-archives) below) -- both factories share the same
+`EvolutionaryAlgorithm` template, so nothing archive-specific needed to change.
+
 ## Reproducibility
 
 No classic jMetalPy algorithm accepts a seed. `EvolutionaryAlgorithm` accepts an optional
@@ -215,6 +251,13 @@ NSGA-II catalogue:
 | `selection_operator` | `TournamentSelection` | required |
 | `mating_pool_size` | `int` | required |
 
+**`RandomSelection`**
+
+| Parameter | Type | Default |
+|---|---|---|
+| `selection_operator` | `RandomSelection` | required |
+| `mating_pool_size` | `int` | required |
+
 ### Variation
 
 **`CrossoverAndMutationVariation`**
@@ -246,7 +289,7 @@ NSGA-II catalogue:
 
 | Parameter | Type | Default |
 |---|---|---|
-| `reference_point` | `~S` | required |
+| `ranking` | `Ranking` | None |
 
 ### Crossover (`jmetal.operator.crossover`)
 

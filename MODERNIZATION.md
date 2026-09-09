@@ -260,7 +260,8 @@ src/jmetal/component/
 │   ├── evolutionary_algorithm.py       # EvolutionaryAlgorithm template, a direct translation of
 │   │                                    # algorithm/EvolutionaryAlgorithm.java's run()
 │   └── multiobjective/
-│       └── nsgaii.py                   # build_nsgaii() (Phase 2 adds spea2.py, smsemoa.py, mocell.py)
+│       ├── nsgaii.py                   # build_nsgaii()
+│       └── smsemoa.py                  # build_smsemoa() (Phase 2 adds spea2.py, mocell.py)
 └── catalogue/
     ├── common/
     │   ├── solutions_creation.py       # Protocol SolutionsCreation + RandomSolutionsCreation
@@ -376,9 +377,31 @@ run and pickle correctly; the full suite (925 tests) and lint are green.
 ### Phase 2 — widen the catalogue (remaining MOEAs)
 
 - [ ] `feat(component): add build_spea2()`
-- [ ] `feat(component): add build_smsemoa()`
+- [x] `fix(operator): implement the full multi-front SMS-EMOA replacement algorithm` — `SMSEMOAReplacement.replace()` only pruned front 0 with a fixed constructor-time reference point; now keeps every front but the last whole and prunes the last by hypervolume contribution, with a reference point recomputed per call, matching the classic `SMSEMOA`
+- [x] `feat(component): add the RandomSelection selection component` — `catalogue/ea/selection.py`, SMS-EMOA's default mating selection
+- [x] `feat(component): add build_smsemoa()` — factory function in `algorithm/multiobjective/smsemoa.py`, no `offspring_population_size` parameter (SMS-EMOA is steady-state by definition, always 1)
+- [x] `test(component): assert build_smsemoa matches the classic SMSEMOA for a fixed seed` — identical fronts on ZDT1 and DTLZ2, verified passing
+- [x] `docs: document build_smsemoa() in the component architecture page`
 - [ ] `feat(component): add build_mocell()`
 - [ ] `feat(component): add build_genetic_algorithm()` — secondary, single-objective; only if time remains after the three above
+
+**SMS-EMOA complete.** SMS-EMOA reuses `RandomSolutionsCreation`, `SequentialEvaluation`,
+`TerminationByEvaluations` and `CrossoverAndMutationVariation` unchanged from NSGA-II — only
+selection and replacement needed new/fixed code. `SMSEMOAReplacement`
+(`src/jmetal/operator/replacement.py`) turned out to be a real, unnoticed bug rather than a reusable
+component: it only ever pruned front 0 of the ranked merged population, so a dominated solution in a
+later front could survive while a non-dominated one from front 0 was discarded, and its reference
+point was fixed at construction time instead of tracking the population. It was unused in production
+(only its own tests exercised it), so fixed in place rather than duplicated. The corrected version
+generalizes the classic `SMSEMOA.replacement()`'s single-excess-solution truncation (keep every
+front but the last, sort the last front by hypervolume contribution descending, keep as many as
+still fit) to any number of excess solutions. Getting this bit-for-bit equivalent to the classic
+algorithm surfaced a subtlety beyond set-membership: `RandomSelection` picks mating-pool members by
+list index, so the *order* of the replaced population matters, not just its contents — an earlier
+iterative-removal draft that preserved original front order (rather than re-sorting by hypervolume
+contribution after truncation, like the classic implementation does) produced a different-but-valid
+population that silently diverged from the classic algorithm after ~25 generations. Verified with
+the same equivalence-test methodology as Phase 1 (`test_smsemoa_equivalence.py`, ZDT1 and DTLZ2).
 
 ### Phase 3 — PSO (out of scope for now, not started until NSGA-II is validated)
 
