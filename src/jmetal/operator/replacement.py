@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from typing import Generic, TypeVar
 
+import numpy as np
+
 from jmetal.util.density_estimator import (
     CrowdingDistanceDensityEstimator,
     DensityEstimator,
@@ -306,78 +308,85 @@ class RankingAndCrowdingDistanceReplacement(Replacement[S]):
 class SMSEMOAReplacement(Replacement[S]):
     """Replacement operator for the SMS-EMOA (S-Metric Selection Evolutionary Multiobjective Algorithm).
 
-    This replacement operator is specifically designed for the SMS-EMOA algorithm. It works by:
-    1. Combining the parent and offspring populations
-    2. Performing non-dominated sorting to identify the first front
-    3. Removing the solution with the smallest hypervolume contribution from the first front
+    This replacement operator combines the parent and offspring populations, ranks them
+    using non-dominated sorting, keeps every front except the last one whole, and prunes
+    the last front down to size by sorting it by hypervolume contribution and dropping the
+    worst-contributing solutions -- the same logic as
+    `jmetal.algorithm.multiobjective.smsemoa.SMSEMOA.replacement`, generalized from
+    "exactly one excess solution" (true when `offspring_population_size=1`, SMS-EMOA's
+    usual steady-state configuration) to any number of excess solutions.
 
     The hypervolume contribution of a solution is the hypervolume that would be lost if that
-    solution was removed from the front. This helps maintain a good spread of solutions
-    along the Pareto front.
+    solution was removed from the front. Pruning by it, front by front, is what keeps a good
+    spread of solutions along the Pareto front.
+
+    The reference point is not fixed at construction time: it is recomputed on every
+    `replace()` call as the merged population's worst objective values plus an offset of
+    1.0, matching the classic `SMSEMOA`'s formula.
 
     Args:
-        reference_point: The reference point used for hypervolume calculation. This point
-                       should be dominated by all solutions in the population.
+        ranking: The ranking strategy to use (default: `FastNonDominatedRanking`).
 
     Example:
         >>> from jmetal.operator import SMSEMOAReplacement
-        >>> from jmetal.core.solution import FloatSolution
         >>>
-        >>> # Create a replacement operator with a reference point
-        >>> reference_point = FloatSolution([], [], 2)  # 2 objectives
-        >>> reference_point.objectives = [1.1, 1.1]  # Slightly worse than any solution
-        >>> replacement = SMSEMOAReplacement(reference_point)
-        >>>
-        >>> # Apply replacement to combine parent and offspring populations
+        >>> replacement = SMSEMOAReplacement()
         >>> new_population = replacement.replace(parents, offspring)
     """
 
-    def __init__(self, reference_point: S):
+    def __init__(self, ranking: Ranking = None):
         """Initialize the SMS-EMOA replacement operator.
 
         Args:
-            reference_point: The reference point for hypervolume calculation.
+            ranking: The ranking strategy to use. Defaults to `FastNonDominatedRanking`.
         """
-        self.reference_point = reference_point
+        self.ranking = ranking if ranking is not None else FastNonDominatedRanking()
 
     def replace(self, solution_list: list[S], offspring_list: list[S]) -> list[S]:
         """Replace solutions in the population with offspring solutions.
 
-        This method combines the parent and offspring populations, performs non-dominated
-        sorting, and removes the solution with the smallest hypervolume contribution
-        from the first front.
+        This method combines the parent and offspring populations, ranks them using
+        non-dominated sorting, keeps every front but the last whole, and -- if the last
+        front doesn't fit entirely -- sorts it by hypervolume contribution (descending)
+        and keeps only as many of its best-contributing solutions as needed to reach the
+        size of `solution_list`. Contributions are computed once, over the whole
+        overflowing front, exactly as `jmetal.algorithm.multiobjective.smsemoa.SMSEMOA`'s
+        own replacement does for its single-excess-solution case -- this is that same
+        computation generalized to however many solutions are in excess.
 
         Args:
             solution_list: The parent population (list of solutions).
             offspring_list: The offspring population (list of solutions).
 
         Returns:
-            A new population with the same size as solution_list containing the
+            A new population of the same size as solution_list containing the
             best solutions from the combined population.
-
-        Note:
-            The size of the returned population will be equal to the size of
-            solution_list, not the combined size of both populations.
         """
-        # Merge populations
-        population = solution_list + offspring_list
+        joint_population = solution_list + offspring_list
+        self.ranking.compute_ranking(joint_population)
 
-        # Compute non-dominated ranking
-        ranking: FastNonDominatedRanking[S] = FastNonDominatedRanking()
-        ranking.compute_ranking(population)
-        first_front = ranking.get_subfront(0)
+        num_subfronts = self.ranking.get_number_of_subfronts()
+        result: list[S] = []
+        for i in range(num_subfronts - 1):
+            result.extend(self.ranking.get_subfront(i))
 
-        # Compute hypervolume contributions for first front
+        last_front = list(self.ranking.get_subfront(num_subfronts - 1))
+        target_size = len(solution_list)
+
+        if len(result) + len(last_front) <= target_size:
+            result.extend(last_front)
+            return result
+
+        reference_point = (
+            np.max([s.objectives for s in joint_population], axis=0) + 1.0
+        ).tolist()
         hv_estimator: HypervolumeContributionDensityEstimator[S] = (
-            HypervolumeContributionDensityEstimator(reference_point=self.reference_point)
+            HypervolumeContributionDensityEstimator(reference_point=reference_point)
         )
-        hv_estimator.compute_density_estimator(first_front)
+        hv_estimator.compute_density_estimator(last_front)
+        last_front.sort(key=lambda s: s.attributes["hv_contribution"], reverse=True)
 
-        # Find solution with minimum hypervolume contribution
-        min_hv_solution = min(first_front, key=lambda s: s.attributes["hv_contribution"])
+        remaining_slots = target_size - len(result)
+        result.extend(last_front[:remaining_slots])
 
-        # Remove the solution with minimum contribution from population
-        population.remove(min_hv_solution)
-
-        # Return truncated population
-        return population
+        return result

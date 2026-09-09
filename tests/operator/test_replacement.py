@@ -11,10 +11,7 @@ from jmetal.operator.replacement import (
     Replacement,
     SMSEMOAReplacement,
 )
-from jmetal.util.density_estimator import (
-    CrowdingDistanceDensityEstimator,
-    HypervolumeContributionDensityEstimator,
-)
+from jmetal.util.density_estimator import CrowdingDistanceDensityEstimator
 from jmetal.util.ranking import FastNonDominatedRanking
 
 
@@ -28,7 +25,7 @@ class TestReplacement:
                 FastNonDominatedRanking(), CrowdingDistanceDensityEstimator()
             ),
             RankingAndCrowdingDistanceReplacement(),
-            SMSEMOAReplacement(reference_point=[6, 6]),
+            SMSEMOAReplacement(),
         ],
     )
     def test_every_concrete_replacement_is_an_instance_of_replacement(self, replacement):
@@ -47,17 +44,12 @@ class TestSMSEMOAReplacement:
     @pytest.fixture
     def replacement_2d(self):
         """Create a 2D SMS-EMOA replacement operator."""
-        return SMSEMOAReplacement(reference_point=[6, 6])
+        return SMSEMOAReplacement()
 
     @pytest.fixture
     def replacement_3d(self):
         """Create a 3D SMS-EMOA replacement operator."""
-        return SMSEMOAReplacement(reference_point=[10, 10, 10])
-
-    @pytest.fixture
-    def hv_estimator_2d(self):
-        """Create a 2D hypervolume contribution estimator."""
-        return HypervolumeContributionDensityEstimator(reference_point=[6, 6])
+        return SMSEMOAReplacement()
 
     @pytest.fixture
     def custom_float_solution_factory(self) -> Callable[[list[float]], FloatSolution]:
@@ -75,29 +67,53 @@ class TestSMSEMOAReplacement:
 
         return _create_float_solution
 
-    def test_removes_min_hv_solution(
-        self, replacement_2d, custom_float_solution_factory, hv_estimator_2d
+    def test_prunes_the_dominated_solution_from_the_last_front_not_the_first(
+        self, replacement_2d, custom_float_solution_factory
     ):
-        """Test that the solution with minimum hypervolume contribution is removed."""
-        # Given: A set of solutions and an offspring
+        """[4, 4] is dominated by [4, 2] (front 0 = the other four points, front 1 = [4, 4]
+
+        alone) so it must be the one pruned -- regardless of which point in front 0 has
+        the smallest hypervolume contribution. This is the behavior the pre-fix
+        implementation got wrong: it only ever looked at front 0, so it could remove a
+        non-dominated point while leaving the dominated [4, 4] in the result.
+        """
         solutions = [
             custom_float_solution_factory(objectives=[5, 1]),
             custom_float_solution_factory(objectives=[1, 5]),
             custom_float_solution_factory(objectives=[4, 2]),
             custom_float_solution_factory(objectives=[4, 4]),
         ]
+        dominated = solutions[3]
         offspring = [custom_float_solution_factory(objectives=[5, 1])]
 
-        # When: Applying the replacement
         result = replacement_2d.replace(solutions, offspring)
 
-        # Then: The result should have the correct length and remove the worst solution
         assert len(result) == len(solutions) + len(offspring) - 1
+        assert dominated not in result
+        assert all(s in result for s in solutions[:3] + offspring)
 
-        # And: The remaining solutions should have higher or equal hypervolume contribution
-        hv_estimator_2d.compute_density_estimator([s for s in solutions + offspring if s in result])
-        hv_values = [s.attributes["hv_contribution"] for s in result]
-        assert all(hv >= min(hv_values) for hv in hv_values)
+    def test_iteratively_prunes_the_last_front_when_several_solutions_are_excess(
+        self, replacement_2d, custom_float_solution_factory
+    ):
+        """When more than one solution overflows the target size (offspring_population_size
+
+        > 1), every excess solution comes from the single mutually non-dominated front, so
+        the iterative removal loop -- not just a single removal -- must run.
+        """
+        solutions = [
+            custom_float_solution_factory(objectives=[1, 5]),
+            custom_float_solution_factory(objectives=[2, 4]),
+            custom_float_solution_factory(objectives=[3, 3]),
+        ]
+        offspring = [
+            custom_float_solution_factory(objectives=[4, 2]),
+            custom_float_solution_factory(objectives=[5, 1]),
+        ]
+
+        result = replacement_2d.replace(solutions, offspring)
+
+        assert len(result) == len(solutions)
+        assert all(s in solutions + offspring for s in result)
 
     @pytest.mark.parametrize("n_identical", [2, 3, 5])
     def test_handles_identical_solutions(
