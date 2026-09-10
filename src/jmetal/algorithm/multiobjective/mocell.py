@@ -36,14 +36,7 @@ class MOCell(GeneticAlgorithm[S, R]):
         archive: BoundedArchive,
         mutation: Mutation,
         crossover: Crossover,
-        selection: Selection = BinaryTournamentSelection(
-            MultiComparator(
-                [
-                    FastNonDominatedRanking.get_comparator(),
-                    CrowdingDistanceDensityEstimator.get_comparator(),
-                ]
-            )
-        ),
+        selection: Selection | None = None,
         termination_criterion: TerminationCriterion = store.default_termination_criteria,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
@@ -58,6 +51,16 @@ class MOCell(GeneticAlgorithm[S, R]):
         :param crossover: Crossover operator (see :py:mod:`jmetal.operator.crossover`).
         :param selection: Selection operator (see :py:mod:`jmetal.operator.selection`).
         """
+        if selection is None:
+            selection = BinaryTournamentSelection(
+                MultiComparator(
+                    [
+                        FastNonDominatedRanking.get_comparator(),
+                        CrowdingDistanceDensityEstimator.get_comparator(),
+                    ]
+                )
+            )
+
         super().__init__(
             problem=problem,
             population_size=population_size,

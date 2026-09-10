@@ -44,14 +44,7 @@ class NSGAII(GeneticAlgorithm[S, R]):
         offspring_population_size: int,
         mutation: Mutation,
         crossover: Crossover,
-        selection: Selection = BinaryTournamentSelection(
-            MultiComparator(
-                [
-                    FastNonDominatedRanking.get_comparator(),
-                    CrowdingDistanceDensityEstimator.get_comparator(),
-                ]
-            )
-        ),
+        selection: Selection | None = None,
         termination_criterion: TerminationCriterion = store.default_termination_criteria,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
@@ -75,6 +68,16 @@ class NSGAII(GeneticAlgorithm[S, R]):
         :param mutation: Mutation operator (see :py:mod:`jmetal.operator.mutation`).
         :param crossover: Crossover operator (see :py:mod:`jmetal.operator.crossover`).
         """
+        if selection is None:
+            selection = BinaryTournamentSelection(
+                MultiComparator(
+                    [
+                        FastNonDominatedRanking.get_comparator(),
+                        CrowdingDistanceDensityEstimator.get_comparator(),
+                    ]
+                )
+            )
+
         super().__init__(
             problem=problem,
             population_size=population_size,
@@ -121,14 +124,7 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
         offspring_population_size: int,
         mutation: Mutation,
         crossover: Crossover,
-        selection: Selection = BinaryTournamentSelection(
-            MultiComparator(
-                [
-                    FastNonDominatedRanking.get_comparator(),
-                    CrowdingDistanceDensityEstimator.get_comparator(),
-                ]
-            )
-        ),
+        selection: Selection | None = None,
         termination_criterion: TerminationCriterion = store.default_termination_criteria,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
@@ -184,17 +180,20 @@ class DistributedNSGAII(Algorithm[S, R]):
         crossover: Crossover,
         number_of_cores: int,
         client,
-        selection: Selection = BinaryTournamentSelection(
-            MultiComparator(
-                [
-                    FastNonDominatedRanking.get_comparator(),
-                    CrowdingDistanceDensityEstimator.get_comparator(),
-                ]
-            )
-        ),
+        selection: Selection | None = None,
         termination_criterion: TerminationCriterion = store.default_termination_criteria,
         dominance_comparator: DominanceComparator = DominanceComparator(),
     ):
+        if selection is None:
+            selection = BinaryTournamentSelection(
+                MultiComparator(
+                    [
+                        FastNonDominatedRanking.get_comparator(),
+                        CrowdingDistanceDensityEstimator.get_comparator(),
+                    ]
+                )
+            )
+
         super().__init__()
         self.problem = problem
         self.population_size = population_size

@@ -33,7 +33,7 @@ class SMSEMOA(GeneticAlgorithm[S, R]):
         population_size: int,
         mutation: Mutation,
         crossover: Crossover,
-        selection: Selection = None,
+        selection: Selection | None = None,
         termination_criterion: TerminationCriterion = store.default_termination_criteria,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,

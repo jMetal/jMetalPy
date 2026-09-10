@@ -31,12 +31,15 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         offspring_population_size: int,
         mutation: Mutation,
         crossover: Crossover,
-        selection: Selection = BinaryTournamentSelection(ObjectiveComparator(0)),
+        selection: Selection | None = None,
         termination_criterion: TerminationCriterion = store.default_termination_criteria,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
         solution_comparator: Comparator = ObjectiveComparator(0),
     ):
+        if selection is None:
+            selection = BinaryTournamentSelection(ObjectiveComparator(0))
+
         super().__init__(
             problem=problem,
             population_size=population_size,

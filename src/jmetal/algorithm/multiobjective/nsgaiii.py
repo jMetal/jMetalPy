@@ -9,9 +9,7 @@ from jmetal.algorithm.multiobjective.nsgaii import NSGAII
 from jmetal.config import store
 from jmetal.core.operator import Crossover, Mutation, Selection
 from jmetal.core.problem import Problem
-from jmetal.operator.selection import BinaryTournamentSelection
-from jmetal.util.comparator import Comparator, MultiComparator
-from jmetal.util.density_estimator import CrowdingDistanceDensityEstimator
+from jmetal.util.comparator import Comparator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
 from jmetal.util.ranking import FastNonDominatedRanking
@@ -244,14 +242,7 @@ class NSGAIII(NSGAII):
         mutation: Mutation,
         crossover: Crossover,
         population_size: int = None,
-        selection: Selection = BinaryTournamentSelection(
-            MultiComparator(
-                [
-                    FastNonDominatedRanking.get_comparator(),
-                    CrowdingDistanceDensityEstimator.get_comparator(),
-                ]
-            )
-        ),
+        selection: Selection | None = None,
         termination_criterion: TerminationCriterion = store.default_termination_criteria,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
