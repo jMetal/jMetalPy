@@ -148,21 +148,34 @@ class Plot:
 
         for i, _ in enumerate(fronts):
             ax = fig.add_subplot(n, n, i + 1, projection="3d")
-            ax.scatter(
-                [s.objectives[0] for s in fronts[i]],
-                [s.objectives[1] for s in fronts[i]],
-                [s.objectives[2] for s in fronts[i]],
-            )
 
-            if labels:
-                ax.set_title(labels[i])
-
+            # Drawn first (background) and styled to recede: reference fronts are
+            # often a dense sampling of the whole true surface (e.g. 10000 points
+            # for DTLZ1/DTLZ2's bundled .pf files) -- with matplotlib's defaults
+            # for both scatters, that dense, opaquely-colored cloud drawn on top
+            # of the sparser obtained front (e.g. 100 points) hid it completely.
             if self.reference_front:
                 ax.scatter(
                     [s.objectives[0] for s in self.reference_front],
                     [s.objectives[1] for s in self.reference_front],
                     [s.objectives[2] for s in self.reference_front],
+                    s=2,
+                    color="lightgray",
+                    alpha=0.3,
                 )
+
+            # Drawn last (foreground) so it stays visible over the reference front.
+            ax.scatter(
+                [s.objectives[0] for s in fronts[i]],
+                [s.objectives[1] for s in fronts[i]],
+                [s.objectives[2] for s in fronts[i]],
+                s=15,
+                color="#236FA4",
+                alpha=1.0,
+            )
+
+            if labels:
+                ax.set_title(labels[i])
 
             if self.reference_point:
                 # todo
