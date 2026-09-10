@@ -8,6 +8,7 @@ import pytest
 from jmetal.core.solution import Solution
 from jmetal.operator.selection import (
     BestSolutionSelection,
+    BinaryTournament2Selection,
     BinaryTournamentSelection,
     DifferentialEvolutionSelection,
     NaryRandomSolutionSelection,
@@ -16,6 +17,7 @@ from jmetal.operator.selection import (
     RouletteWheelSelection,
     TournamentSelection,
 )
+from jmetal.util.comparator import ObjectiveComparator
 
 
 # Dummy solution class for testing
@@ -80,6 +82,14 @@ class TestBinaryTournamentSelection:
         selection = selector.execute(solutions)
 
         assert selection in solutions
+
+    def test_rng_produces_deterministic_selection_for_a_fixed_seed(self, float_solution_factory):
+        solutions = [float_solution_factory([float(i), float(i)]) for i in range(10)]
+
+        selector_a = BinaryTournamentSelection(rng=np.random.default_rng(42))
+        selector_b = BinaryTournamentSelection(rng=np.random.default_rng(42))
+
+        assert selector_a.execute(solutions) is selector_b.execute(solutions)
 
 
 class TestTournamentSelection:
@@ -160,6 +170,14 @@ class TestTournamentSelection:
 
         result = selector.execute(solutions)
         assert result in solutions
+
+    def test_rng_produces_deterministic_selection_for_a_fixed_seed(self, float_solution_factory):
+        solutions = [float_solution_factory([float(i), float(i)]) for i in range(10)]
+
+        selector_a = TournamentSelection(tournament_size=3, rng=np.random.default_rng(42))
+        selector_b = TournamentSelection(tournament_size=3, rng=np.random.default_rng(42))
+
+        assert selector_a.execute(solutions) is selector_b.execute(solutions)
 
 
 class TestBestSolutionSelection:
@@ -249,6 +267,14 @@ class TestRandomSelection:
         selection = selector.execute(solutions)
 
         assert selection in solutions
+
+    def test_rng_produces_deterministic_selection_for_a_fixed_seed(self, float_solution_factory):
+        solutions = [float_solution_factory([float(i), float(i)]) for i in range(10)]
+
+        selector_a = RandomSelection(rng=np.random.default_rng(42))
+        selector_b = RandomSelection(rng=np.random.default_rng(42))
+
+        assert selector_a.execute(solutions) is selector_b.execute(solutions)
 
 
 class TestDifferentialEvolutionSelection:
@@ -346,6 +372,14 @@ class TestDifferentialEvolutionSelection:
 
         assert len(result) == 3
         mock_sample.assert_called_once_with(solutions[1:], 3)  # Should exclude first solution
+
+    def test_rng_produces_deterministic_selection_for_a_fixed_seed(self, float_solution_factory):
+        solutions = [float_solution_factory([float(i), float(i)]) for i in range(10)]
+
+        selector_a = DifferentialEvolutionSelection(rng=np.random.default_rng(42))
+        selector_b = DifferentialEvolutionSelection(rng=np.random.default_rng(42))
+
+        assert selector_a.execute(solutions) == selector_b.execute(solutions)
 
 
 class TestNaryRandomSolutionSelection:
@@ -545,3 +579,31 @@ class TestRouletteWheelSelection:
 
         assert result is solutions[2]
         mock_choice.assert_called_once()
+
+
+class TestBinaryTournament2Selection:
+    """Tests for BinaryTournament2Selection operator."""
+
+    def test_should_raise_exception_for_empty_comparator_list(self):
+        with pytest.raises(ValueError):
+            BinaryTournament2Selection([])
+
+    def test_should_return_a_solution_from_the_front(self, float_solution_factory):
+        solutions = [float_solution_factory([float(i), float(i)]) for i in range(10)]
+        selector = BinaryTournament2Selection([ObjectiveComparator(0)])
+
+        result = selector.execute(solutions)
+
+        assert result in solutions
+
+    def test_rng_produces_deterministic_selection_for_a_fixed_seed(self, float_solution_factory):
+        solutions = [float_solution_factory([float(i), float(i)]) for i in range(10)]
+
+        selector_a = BinaryTournament2Selection(
+            [ObjectiveComparator(0)], rng=np.random.default_rng(42)
+        )
+        selector_b = BinaryTournament2Selection(
+            [ObjectiveComparator(0)], rng=np.random.default_rng(42)
+        )
+
+        assert selector_a.execute(solutions) is selector_b.execute(solutions)

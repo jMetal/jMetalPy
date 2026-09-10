@@ -299,14 +299,16 @@ class CXCrossover(Crossover[PermutationSolution, PermutationSolution]):
         and their application (pp. 224-230).
     """
 
-    def __init__(self, probability: float):
+    def __init__(self, probability: float, rng: np.random.Generator | None = None):
         """Initialize the Cycle Crossover operator.
 
         Args:
             probability: Crossover probability between 0.0 and 1.0.
+            rng: Optional random generator. When None, falls back to a fresh
+                 np.random.default_rng().
         """
         super().__init__(probability=probability)
-        self._rng = np.random.default_rng()
+        self._rng = rng or np.random.default_rng()
 
     def execute(self, parents: list[PermutationSolution]) -> list[PermutationSolution]:
         """Execute the Cycle Crossover operation.
@@ -1037,6 +1039,7 @@ class ArithmeticCrossover(Crossover[FloatSolution, FloatSolution]):
         self,
         probability: float = 0.9,
         repair_operator: Callable[[float, float, float], float] | None = None,
+        rng: np.random.Generator | None = None,
     ):
         if not 0 <= probability <= 1:
             raise ValueError("probability must be in [0, 1]")
@@ -1044,7 +1047,7 @@ class ArithmeticCrossover(Crossover[FloatSolution, FloatSolution]):
         super().__init__(probability=probability)
         # Normalize repair operator to FloatRepairOperator for scalar/vector API
         self.repair_operator = ensure_float_repair(repair_operator)
-        self._rng = np.random.default_rng()
+        self._rng = rng or np.random.default_rng()
 
     def execute(self, parents: list[FloatSolution]) -> list[FloatSolution]:
         Check.that(len(parents) == 2, "Arithmetic Crossover requires exactly two parents")
@@ -1159,6 +1162,7 @@ class UnimodalNormalDistributionCrossover(Crossover[FloatSolution, FloatSolution
         zeta: float = 0.5,
         eta: float = 0.35,
         repair_operator: Callable[[float, float, float], float] | None = None,
+        rng: np.random.Generator | None = None,
     ):
         if not 0 <= probability <= 1:
             raise ValueError("probability must be in [0, 1]")
@@ -1172,7 +1176,7 @@ class UnimodalNormalDistributionCrossover(Crossover[FloatSolution, FloatSolution
         self.eta = eta
         # Normalize repair operator to FloatRepairOperator for scalar/vector API
         self.repair_operator = ensure_float_repair(repair_operator)
-        self._rng = np.random.default_rng()
+        self._rng = rng or np.random.default_rng()
 
     def execute(self, parents: list[FloatSolution]) -> list[FloatSolution]:
         Check.that(len(parents) >= 3, "UNDX requires at least three parents")

@@ -116,6 +116,8 @@ class TournamentSelection(Selection[list[S], S]):
         tournament_size: Number of solutions to participate in each tournament (default: 2).
                         Must be at least 2.
         comparator: Comparator used to compare solutions (default: DominanceComparator).
+        rng: Optional random generator. When None, falls back to the global `random`
+             module (`random.sample`/`random.random`), as before this parameter existed.
 
     Example:
         >>> from jmetal.operator import TournamentSelection
@@ -128,12 +130,18 @@ class TournamentSelection(Selection[list[S], S]):
         >>> winner = selector.execute(population)
     """
 
-    def __init__(self, tournament_size: int = 2, comparator: Comparator = DominanceComparator()):
+    def __init__(
+        self,
+        tournament_size: int = 2,
+        comparator: Comparator = DominanceComparator(),
+        rng: np.random.Generator | None = None,
+    ):
         super().__init__()
         if tournament_size < 2:
             raise ValueError(f"Tournament size must be at least 2, got {tournament_size}")
         self.tournament_size = tournament_size
         self.comparator = comparator
+        self.rng = rng
 
     def execute(self, front: list[S]) -> S:
         """Execute the k-ary tournament selection.
@@ -157,7 +165,10 @@ class TournamentSelection(Selection[list[S], S]):
         effective_size = min(self.tournament_size, len(front))
 
         # Sample k solutions without replacement
-        tournament_indices = random.sample(range(len(front)), effective_size)
+        if self.rng is not None:
+            tournament_indices = self.rng.choice(len(front), size=effective_size, replace=False)
+        else:
+            tournament_indices = random.sample(range(len(front)), effective_size)
         tournament_solutions = [front[i] for i in tournament_indices]
 
         # Find the best solution in the tournament
@@ -168,7 +179,8 @@ class TournamentSelection(Selection[list[S], S]):
             if comparison < 0:  # candidate is better
                 winner = candidate
             elif comparison == 0:  # tie - randomly decide
-                if random.random() < 0.5:
+                tie_break = self.rng.random() if self.rng is not None else random.random()
+                if tie_break < 0.5:
                     winner = candidate
 
         return winner
@@ -190,6 +202,8 @@ class BinaryTournamentSelection(TournamentSelection):
 
     Args:
         comparator: Comparator used to compare solutions (default: DominanceComparator).
+        rng: Optional random generator. When None, falls back to the global `random`
+             module, as before this parameter existed.
 
     Example:
         >>> from jmetal.operator import BinaryTournamentSelection
@@ -205,8 +219,12 @@ class BinaryTournamentSelection(TournamentSelection):
         >>> winner = selector.execute(population)
     """
 
-    def __init__(self, comparator: Comparator = DominanceComparator()):
-        super().__init__(tournament_size=2, comparator=comparator)
+    def __init__(
+        self,
+        comparator: Comparator = DominanceComparator(),
+        rng: np.random.Generator | None = None,
+    ):
+        super().__init__(tournament_size=2, comparator=comparator, rng=rng)
 
     def get_name(self) -> str:
         return "Binary tournament selection"
@@ -366,11 +384,14 @@ class DifferentialEvolutionSelection(Selection[list[S], list[S]]):
     Args:
         index_to_exclude: Optional index of a solution to exclude from selection.
                          This is useful to avoid selecting the same solution as the base vector.
+        rng: Optional random generator. When None, falls back to the global `random`
+             module (`random.sample`), as before this parameter existed.
     """
 
-    def __init__(self, index_to_exclude: int = None):
+    def __init__(self, index_to_exclude: int = None, rng: np.random.Generator | None = None):
         super().__init__()
         self.index_to_exclude = index_to_exclude
+        self.rng = rng
 
     def execute(self, front: list[S]) -> list[S]:
         """Select three distinct solutions for differential evolution.
@@ -406,7 +427,11 @@ class DifferentialEvolutionSelection(Selection[list[S], list[S]]):
             )
 
         # Randomly select 3 distinct solutions from the remaining candidates
-        selected = random.sample(candidates, 3)
+        if self.rng is not None:
+            indexes = self.rng.choice(len(candidates), size=3, replace=False)
+            selected = [candidates[i] for i in indexes]
+        else:
+            selected = random.sample(candidates, 3)
 
         return selected
 
@@ -433,10 +458,15 @@ class RandomSelection(Selection[list[S], S]):
     This selection operator randomly selects a single solution from the provided
     population with uniform probability. It's a simple selection method that
     doesn't consider solution quality.
+
+    Args:
+        rng: Optional random generator. When None, falls back to the global `random`
+             module (`random.choice`), as before this parameter existed.
     """
 
-    def __init__(self):
+    def __init__(self, rng: np.random.Generator | None = None):
         super().__init__()
+        self.rng = rng
 
     def execute(self, front: list[S]) -> S:
         """Randomly select a solution from the front.
@@ -462,6 +492,8 @@ class RandomSelection(Selection[list[S], S]):
         if front and not all(isinstance(solution, front[0].__class__) for solution in front):
             raise ValueError("All elements in the front must be of the same type")
 
+        if self.rng is not None:
+            return front[int(self.rng.integers(0, len(front)))]
         return random.choice(front)
 
     def get_name(self) -> str:
@@ -755,13 +787,18 @@ class BinaryTournament2Selection(Selection[list[S], S]):
 
     Args:
         comparator_list: List of comparators to use in sequence.
+        rng: Optional random generator. When None, falls back to the global `random`
+             module (`random.sample`/`random.randint`), as before this parameter existed.
     """
 
-    def __init__(self, comparator_list: list[Comparator]):
+    def __init__(
+        self, comparator_list: list[Comparator], rng: np.random.Generator | None = None
+    ):
         super().__init__()
         if not comparator_list:
             raise ValueError("The comparator list cannot be empty")
         self.comparator_list = comparator_list
+        self.rng = rng
 
     def execute(self, front: list[S]) -> S:
         """Execute the binary tournament selection with multiple comparators.
@@ -796,7 +833,11 @@ class BinaryTournament2Selection(Selection[list[S], S]):
 
         # If no comparator could decide, choose randomly
         if result is None:
-            idx = random.randint(0, len(front) - 1)
+            idx = (
+                int(self.rng.integers(0, len(front)))
+                if self.rng is not None
+                else random.randint(0, len(front) - 1)
+            )
             result = front[idx]
 
         return result
@@ -812,7 +853,10 @@ class BinaryTournament2Selection(Selection[list[S], S]):
             The winning solution, or None if it's a tie.
         """
         # Sampling without replacement
-        i, j = random.sample(range(0, len(front)), 2)
+        if self.rng is not None:
+            i, j = self.rng.choice(len(front), size=2, replace=False)
+        else:
+            i, j = random.sample(range(0, len(front)), 2)
 
         solution1 = front[i]
         solution2 = front[j]

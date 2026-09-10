@@ -579,6 +579,21 @@ class TestCXCrossover:
             or offspring[1].variables == solution2.variables
         ), "At least one offspring should match one of the parents"
 
+    def test_rng_produces_deterministic_offspring_for_a_fixed_seed(self):
+        solution1 = PermutationSolution(number_of_variables=5, number_of_objectives=1)
+        solution1.variables = [0, 1, 2, 3, 4]
+        solution2 = PermutationSolution(number_of_variables=5, number_of_objectives=1)
+        solution2.variables = [1, 2, 3, 0, 4]
+
+        operator_a = CXCrossover(probability=1.0, rng=np.random.default_rng(42))
+        operator_b = CXCrossover(probability=1.0, rng=np.random.default_rng(42))
+
+        offspring_a = operator_a.execute([solution1, solution2])
+        offspring_b = operator_b.execute([solution1, solution2])
+
+        assert offspring_a[0].variables == offspring_b[0].variables
+        assert offspring_a[1].variables == offspring_b[1].variables
+
 
 class TestBLXAlphaBetaCrossover:
     """Tests for the BLXAlphaBetaCrossover (Blend Alpha-Beta Crossover) operator."""
@@ -834,6 +849,49 @@ class TestBLXAlphaCrossover:
 
 
 # More test classes will be added here for other crossover operators
+
+
+class TestArithmeticCrossover:
+    """Tests for the ArithmeticCrossover operator."""
+
+    def test_rng_produces_deterministic_offspring_for_a_fixed_seed(self):
+        solution1 = FloatSolution([0.0, 0.0], [1.0, 1.0], 1)
+        solution1.variables = [0.2, 0.8]
+        solution2 = FloatSolution([0.0, 0.0], [1.0, 1.0], 1)
+        solution2.variables = [0.8, 0.2]
+
+        operator_a = ArithmeticCrossover(probability=1.0, rng=np.random.default_rng(42))
+        operator_b = ArithmeticCrossover(probability=1.0, rng=np.random.default_rng(42))
+
+        offspring_a = operator_a.execute([solution1, solution2])
+        offspring_b = operator_b.execute([solution1, solution2])
+
+        assert offspring_a[0].variables == offspring_b[0].variables
+        assert offspring_a[1].variables == offspring_b[1].variables
+
+
+class TestUnimodalNormalDistributionCrossover:
+    """Tests for the UnimodalNormalDistributionCrossover (UNDX) operator."""
+
+    def test_rng_produces_deterministic_offspring_for_a_fixed_seed(self):
+        parents = []
+        for values in ([0.2, 0.8], [0.8, 0.2], [0.5, 0.5]):
+            solution = FloatSolution([0.0, 0.0], [1.0, 1.0], 1)
+            solution.variables = values
+            parents.append(solution)
+
+        operator_a = UnimodalNormalDistributionCrossover(
+            probability=1.0, rng=np.random.default_rng(42)
+        )
+        operator_b = UnimodalNormalDistributionCrossover(
+            probability=1.0, rng=np.random.default_rng(42)
+        )
+
+        offspring_a = operator_a.execute(parents)
+        offspring_b = operator_b.execute(parents)
+
+        assert offspring_a[0].variables == offspring_b[0].variables
+        assert offspring_a[1].variables == offspring_b[1].variables
 
 
 class TestCrossoverOperatorsArePicklable:
