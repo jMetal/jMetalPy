@@ -1,6 +1,5 @@
 import copy
 import math
-import random
 from collections.abc import Callable
 
 import numpy as np
@@ -729,14 +728,7 @@ class SPXCrossover(Crossover[BinarySolution, BinarySolution]):
         num_bits = len(bits1)
         if num_bits > 1:
             # Select a random crossover point (1 to num_bits-1 to ensure crossover happens)
-            try:
-                crossover_point = int(self._rng.integers(1, num_bits))
-            except Exception:
-                try:
-                    crossover_point = int(self._rng.randint(1, num_bits))
-                except Exception:
-                    # Fallback to python random if RNG object is unusual
-                    crossover_point = random.randint(1, num_bits - 1)
+            crossover_point = int(self._rng.integers(1, num_bits))
 
             # Create new bit arrays for the offspring
             new_bits1 = np.concatenate([bits1[:crossover_point], bits2[crossover_point:]])
