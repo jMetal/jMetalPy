@@ -92,6 +92,42 @@ class DistanceBasedArchiveTestCase(unittest.TestCase):
 
         self.assertEqual(3, archive.size())  # Should be limited by max size
 
+    def test_repeated_pruning_advances_the_rng_instead_of_replaying_it(self):
+        # Guards against DistanceBasedArchive recreating np.random.default_rng(seed)
+        # from scratch on every prune: with >2 objectives, each prune draws from
+        # the archive's RNG (to pick the seed objective), so the generator's
+        # internal state must advance from one prune to the next rather than
+        # resetting back to the same fixed draw every time.
+        archive = DistanceBasedArchive(maximum_size=3, random_seed=42)
+
+        def add_solutions(offset: int) -> None:
+            for i in range(offset, offset + 4):
+                solution = FloatSolution([], [], 3)
+                solution.objectives = [float(i), float(10 - i), float((i * 3) % 7)]
+                archive.add(solution)
+
+        add_solutions(0)  # triggers at least one prune (4 solutions, max size 3)
+        state_after_first_prune = archive._rng.bit_generator.state
+
+        add_solutions(10)  # triggers further prunes on the same archive/RNG
+        state_after_second_prune = archive._rng.bit_generator.state
+
+        self.assertNotEqual(state_after_first_prune, state_after_second_prune)
+
+    def test_reproducible_across_archives_given_the_same_seed_and_insertions(self):
+        def build_archive() -> DistanceBasedArchive:
+            archive = DistanceBasedArchive(maximum_size=3, random_seed=42)
+            for i in range(8):
+                solution = FloatSolution([], [], 3)
+                solution.objectives = [float(i), float(10 - i), float((i * 3) % 7)]
+                archive.add(solution)
+            return archive
+
+        result_a = [tuple(s.objectives) for s in build_archive().solution_list]
+        result_b = [tuple(s.objectives) for s in build_archive().solution_list]
+
+        self.assertEqual(result_a, result_b)
+
     def test_should_reject_duplicate_solutions(self):
         solution1 = FloatSolution([], [], 2)
         solution1.objectives = [1.0, 2.0]

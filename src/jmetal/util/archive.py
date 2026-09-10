@@ -1014,6 +1014,9 @@ class DistanceBasedArchive(BoundedArchive[S]):
         self.weights = weights
         self.random_seed = random_seed
         self.use_vectorized = use_vectorized
+        # Persistent RNG: created once so the draw sequence advances across
+        # successive prunes instead of being replayed identically on every add().
+        self._rng = np.random.default_rng(random_seed)
         # Deprecation warning: non-vectorized path will be removed in future releases
         if not self.use_vectorized:
             logging.warning(
@@ -1059,10 +1062,8 @@ class DistanceBasedArchive(BoundedArchive[S]):
             # First, add to non-dominated archive (this handles dominance)
             success = self.non_dominated_solution_archive.add(solution)
             if success and self.size() > self.maximum_size:
-                # Prepare RNG from stored seed for reproducibility
-                rng = np.random.default_rng(self.random_seed)
-
-                # Apply distance-based subset selection
+                # Apply distance-based subset selection, reusing the persistent RNG
+                # so its state advances across successive prunes.
                 selected_solutions = distance_based_subset_selection_robust(
                     self.solution_list,
                     self.maximum_size,
@@ -1070,7 +1071,7 @@ class DistanceBasedArchive(BoundedArchive[S]):
                     self.weights,
                     self.random_seed,
                     self.use_vectorized,
-                    rng,
+                    self._rng,
                 )
 
                 # Update solution list with selected solutions
