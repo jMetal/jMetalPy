@@ -1,11 +1,10 @@
 import time
 from typing import TypeVar
 
-from jmetal.config import store
 from jmetal.core.algorithm import Algorithm
 from jmetal.core.problem import Problem
 from jmetal.util.archive import NonDominatedSolutionsArchive
-from jmetal.util.termination_criterion import TerminationCriterion
+from jmetal.util.termination_criterion import StoppingByEvaluations, TerminationCriterion
 
 S = TypeVar("S")
 R = TypeVar("R")
@@ -23,8 +22,11 @@ class RandomSearch(Algorithm[S, R]):
     def __init__(
         self,
         problem: Problem[S],
-        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        termination_criterion: TerminationCriterion | None = None,
     ):
+        if termination_criterion is None:
+            termination_criterion = StoppingByEvaluations(max_evaluations=25000)
+
         super().__init__()
         self.problem = problem
         self.termination_criterion = termination_criterion

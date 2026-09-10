@@ -9,7 +9,7 @@ from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
 from jmetal.core.solution import Solution
 from jmetal.util.comparator import Comparator
-from jmetal.util.termination_criterion import TerminationCriterion
+from jmetal.util.termination_criterion import StoppingByEvaluations, TerminationCriterion
 
 S = TypeVar("S")
 R = TypeVar("R")
@@ -28,9 +28,12 @@ class LocalSearch(Algorithm[S, R]):
         self,
         problem: Problem[S],
         mutation: Mutation,
-        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        termination_criterion: TerminationCriterion | None = None,
         comparator: Comparator = store.default_comparator,
     ):
+        if termination_criterion is None:
+            termination_criterion = StoppingByEvaluations(max_evaluations=25000)
+
         super().__init__()
         self.comparator = comparator
         self.problem = problem
