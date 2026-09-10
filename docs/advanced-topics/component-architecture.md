@@ -10,9 +10,10 @@ planned but not implemented yet.
 
 For a hands-on walkthrough of every configuration described below -- final fronts, quality
 indicator values, and the observer pattern in action -- see the
-[`notebooks/NSGAIIComponentBased.ipynb`](https://github.com/jMetal/jMetalPy/blob/main/notebooks/NSGAIIComponentBased.ipynb)
-and
+[`notebooks/NSGAIIComponentBased.ipynb`](https://github.com/jMetal/jMetalPy/blob/main/notebooks/NSGAIIComponentBased.ipynb),
 [`notebooks/SMSEMOAComponentBased.ipynb`](https://github.com/jMetal/jMetalPy/blob/main/notebooks/SMSEMOAComponentBased.ipynb)
+and
+[`notebooks/MOEADComponentBased.ipynb`](https://github.com/jMetal/jMetalPy/blob/main/notebooks/MOEADComponentBased.ipynb)
 notebooks.
 
 ## Why
