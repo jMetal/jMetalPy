@@ -32,15 +32,18 @@ class RouletteWheelSelection(Selection[list[S], S]):
     values are present, a proper normalization should be applied first.
     """
 
-    def __init__(self, objective_index: int = 0):
+    def __init__(self, objective_index: int = 0, rng: np.random.Generator | None = None):
         """Initialize the roulette wheel selection operator.
 
         Args:
             objective_index: Index of the objective to use for selection (default: 0).
                             Only used if no fitness value is present in the solution attributes.
+            rng: Optional random generator. When None, falls back to the global `random`/
+                 `numpy.random` modules, as before this parameter existed.
         """
         super().__init__()
         self.objective_index = objective_index
+        self.rng = rng
 
     def execute(self, front: list[S]) -> S:
         """Select a solution using roulette wheel selection.
@@ -79,13 +82,18 @@ class RouletteWheelSelection(Selection[list[S], S]):
         # If all values are zero, return a random solution
         total_fitness = np.sum(fitness_values)
         if total_fitness <= 0:
+            if self.rng is not None:
+                return front[int(self.rng.integers(0, len(front)))]
             return random.choice(front)
 
         # Calculate selection probabilities
         probabilities = fitness_values / total_fitness
 
         # Select a solution based on the probabilities
-        selected_index = np.random.choice(len(front), p=probabilities)
+        if self.rng is not None:
+            selected_index = self.rng.choice(len(front), p=probabilities)
+        else:
+            selected_index = np.random.choice(len(front), p=probabilities)
         return front[selected_index]
 
     def get_name(self) -> str:

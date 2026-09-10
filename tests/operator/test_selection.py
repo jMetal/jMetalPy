@@ -13,6 +13,7 @@ from jmetal.operator.selection import (
     NaryRandomSolutionSelection,
     RandomSelection,
     RankingAndCrowdingDistanceSelection,
+    RouletteWheelSelection,
     TournamentSelection,
 )
 
@@ -491,3 +492,56 @@ class TestRankingAndCrowdingDistanceSelection:
         assert any(s in extreme_points for s in result), (
             "At least one extreme point should be selected"
         )
+
+
+class TestRouletteWheelSelection:
+    """Tests for RouletteWheelSelection operator."""
+
+    def test_should_raise_exception_for_empty_front(self):
+        selector = RouletteWheelSelection()
+        with pytest.raises(ValueError):
+            selector.execute([])
+
+    def test_should_raise_exception_for_negative_fitness(self, float_solution_factory):
+        solutions = [float_solution_factory([-1.0, 1.0]), float_solution_factory([1.0, 1.0])]
+        selector = RouletteWheelSelection()
+
+        with pytest.raises(ValueError):
+            selector.execute(solutions)
+
+    def test_should_return_a_solution_from_the_front(self, float_solution_factory):
+        solutions = [float_solution_factory([float(i) + 1, 0.0]) for i in range(5)]
+        selector = RouletteWheelSelection()
+
+        result = selector.execute(solutions)
+
+        assert result in solutions
+
+    def test_rng_produces_deterministic_selection_for_a_fixed_seed(self, float_solution_factory):
+        solutions = [float_solution_factory([float(i) + 1, 0.0]) for i in range(10)]
+
+        selector_a = RouletteWheelSelection(rng=np.random.default_rng(42))
+        selector_b = RouletteWheelSelection(rng=np.random.default_rng(42))
+
+        assert selector_a.execute(solutions) is selector_b.execute(solutions)
+
+    def test_rng_used_for_the_zero_total_fitness_fallback(self, float_solution_factory):
+        solutions = [float_solution_factory([0.0, 0.0]) for _ in range(5)]
+
+        selector_a = RouletteWheelSelection(rng=np.random.default_rng(7))
+        selector_b = RouletteWheelSelection(rng=np.random.default_rng(7))
+
+        assert selector_a.execute(solutions) is selector_b.execute(solutions)
+
+    def test_without_rng_falls_back_to_the_global_numpy_random_module(
+        self, float_solution_factory
+    ):
+        solutions = [float_solution_factory([float(i) + 1, 0.0]) for i in range(5)]
+
+        with patch("numpy.random.choice") as mock_choice:
+            mock_choice.return_value = 2
+            selector = RouletteWheelSelection()
+            result = selector.execute(solutions)
+
+        assert result is solutions[2]
+        mock_choice.assert_called_once()
