@@ -12,7 +12,7 @@ from jmetal.operator.selection import (
 from jmetal.util.comparator import Comparator, DominanceComparator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
-from jmetal.util.termination_criterion import TerminationCriterion
+from jmetal.util.termination_criterion import StoppingByEvaluations, TerminationCriterion
 
 S = TypeVar("S")
 R = list[S]
@@ -25,12 +25,15 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
         population_size: int,
         cr: float,
         f: float,
-        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        termination_criterion: TerminationCriterion | None = None,
         k: float = 0.5,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
         dominance_comparator: Comparator = store.default_comparator,
     ):
+        if termination_criterion is None:
+            termination_criterion = StoppingByEvaluations(max_evaluations=25000)
+
         super().__init__(
             problem=problem,
             population_size=population_size,

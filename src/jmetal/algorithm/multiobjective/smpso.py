@@ -15,7 +15,7 @@ from jmetal.util.archive import ArchiveWithReferencePoint, BoundedArchive
 from jmetal.util.comparator import Comparator, DominanceComparator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
-from jmetal.util.termination_criterion import TerminationCriterion
+from jmetal.util.termination_criterion import StoppingByEvaluations, TerminationCriterion
 
 R = TypeVar("R")
 
@@ -36,7 +36,7 @@ class SMPSO(ParticleSwarmOptimization):
         mutation: Mutation,
         leaders: BoundedArchive | None,
         dominance_comparator: Comparator = DominanceComparator(),
-        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        termination_criterion: TerminationCriterion | None = None,
         swarm_generator: Generator = store.default_generator,
         swarm_evaluator: Evaluator = store.default_evaluator,
     ):
@@ -54,6 +54,9 @@ class SMPSO(ParticleSwarmOptimization):
         :param mutation: Mutation operator (see :py:mod:`jmetal.operator.mutation`).
         :param leaders: Archive for leaders.
         """
+        if termination_criterion is None:
+            termination_criterion = StoppingByEvaluations(max_evaluations=25000)
+
         super().__init__(problem=problem, swarm_size=swarm_size)
         self.swarm_generator = swarm_generator
         self.swarm_evaluator = swarm_evaluator
@@ -237,7 +240,7 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
         swarm_size: int,
         mutation: Mutation,
         leaders: BoundedArchive,
-        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        termination_criterion: TerminationCriterion | None = None,
         swarm_generator: Generator = store.default_generator,
         swarm_evaluator: Evaluator = store.default_evaluator,
     ):

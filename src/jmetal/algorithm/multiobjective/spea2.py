@@ -40,7 +40,7 @@ class SPEA2(GeneticAlgorithm[S, R]):
         offspring_population_size: int,
         mutation: Mutation,
         crossover: Crossover,
-        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        termination_criterion: TerminationCriterion | None = None,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
         dominance_comparator: Comparator = store.default_comparator,
