@@ -55,10 +55,11 @@ class BitFlipMutation(Mutation[BinarySolution]):
         ValueError: If probability is not in range [0.0, 1.0]
     """
 
-    def __init__(self, probability: float):
+    def __init__(self, probability: float, rng: np.random.Generator | None = None):
         if not (0.0 <= probability <= 1.0):
             raise ValueError(f"Probability must be in range [0.0, 1.0], got {probability}")
         super().__init__(probability=probability)
+        self.rng = rng if rng is not None else np.random.default_rng()
 
     def execute(self, solution: BinarySolution) -> BinarySolution:
         """
@@ -92,7 +93,7 @@ class BitFlipMutation(Mutation[BinarySolution]):
 
         try:
             # Generate random numbers for each bit
-            rand_values = np.random.random(solution.number_of_variables)
+            rand_values = self.rng.random(solution.number_of_variables)
 
             # Create a mask of bits to flip
             flip_mask = rand_values < self.probability

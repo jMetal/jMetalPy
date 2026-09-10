@@ -219,17 +219,17 @@ class TestBitFlipMutation:
         solution.bits = np.array([False] * 10)
         mutation_probability = 0.5
 
-        # Patch random to always return 0.1 (so with probability 0.5, all bits should flip)
-        with patch("numpy.random.random") as mock_random:
-            mock_random.return_value = np.array([0.1] * 10)
+        # Inject an rng that always returns 0.1 (so with probability 0.5, all bits should flip)
+        mock_rng = MagicMock()
+        mock_rng.random.return_value = np.array([0.1] * 10)
 
-            # Act
-            mutation = BitFlipMutation(mutation_probability)
-            result = mutation.execute(solution)
+        # Act
+        mutation = BitFlipMutation(mutation_probability, rng=mock_rng)
+        result = mutation.execute(solution)
 
-            # Assert
-            assert result is solution  # Should return the same instance
-            assert np.all(solution.bits == True)  # All bits should be flipped
+        # Assert
+        assert result is solution  # Should return the same instance
+        assert np.all(solution.bits == True)  # All bits should be flipped
 
     def test_should_raises_value_error_when_executing_mutation(self):
         """Test mutation with a solution that has zero variables."""

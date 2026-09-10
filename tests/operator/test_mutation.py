@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import numpy as np
 import pytest
@@ -61,23 +61,19 @@ class TestBitFlipMutation:
         solution.variables = [True, False, True, False]
         original_bits = solution.variables.copy()
 
-        # Create and apply mutation with probability 1.0 (all bits should flip)
-        operator = BitFlipMutation(probability=1.0)
+        # Inject an rng to control which bits flip (all of them here)
+        mock_rng = Mock()
+        mock_rng.random.return_value = np.array([0.0, 0.0, 0.0, 0.0])
+        operator = BitFlipMutation(probability=1.0, rng=mock_rng)
 
-        # Mock random to control which bits flip
-        with patch("numpy.random.random") as mock_random:
-            # Make all bits flip
-            mock_random.return_value = np.array([0.0, 0.0, 0.0, 0.0])
+        mutated = operator.execute(solution)
 
-            # Apply mutation
-            mutated = operator.execute(solution)
+        # Verify mutation
+        assert isinstance(mutated, BinarySolution)
+        assert len(mutated.variables) == len(original_bits)
 
-            # Verify mutation
-            assert isinstance(mutated, BinarySolution)
-            assert len(mutated.variables) == len(original_bits)
-
-            # All bits should have flipped
-            assert all(not orig == mut for orig, mut in zip(original_bits, mutated.variables))
+        # All bits should have flipped
+        assert all(not orig == mut for orig, mut in zip(original_bits, mutated.variables))
 
     def test_should_not_mutate_with_zero_probability(self):
         # Create a binary solution with known bits
@@ -85,16 +81,39 @@ class TestBitFlipMutation:
         solution.variables = [True, False, True, False]
         original_bits = solution.variables.copy()
 
-        # Create and apply mutation with zero probability
-        operator = BitFlipMutation(probability=0.0)
+        # Inject an rng that would flip every bit if probability allowed it
+        mock_rng = Mock()
+        mock_rng.random.return_value = np.array([0.0, 0.0, 0.0, 0.0])
+        operator = BitFlipMutation(probability=0.0, rng=mock_rng)
 
-        # Mock random to ensure no bits flip even if random returns 0
-        with patch("numpy.random.random") as mock_random:
-            mock_random.return_value = np.array([0.0, 0.0, 0.0, 0.0])
-            mutated = operator.execute(solution)
+        mutated = operator.execute(solution)
 
-            # Verify no mutation occurred
-            assert mutated.variables == original_bits
+        # Verify no mutation occurred
+        assert mutated.variables == original_bits
+
+    def test_rng_produces_deterministic_mutation_for_a_fixed_seed(self):
+        solution = BinarySolution(number_of_variables=20, number_of_objectives=1)
+        solution.variables = [True] * 20
+
+        operator_a = BitFlipMutation(probability=0.5, rng=np.random.default_rng(42))
+        operator_b = BitFlipMutation(probability=0.5, rng=np.random.default_rng(42))
+
+        mutated_a = operator_a.execute(solution.__copy__())
+        mutated_b = operator_b.execute(solution.__copy__())
+
+        assert mutated_a.variables == mutated_b.variables
+
+    def test_without_rng_falls_back_to_a_fresh_default_generator(self):
+        # Guards that omitting rng still produces a usable, self-contained operator
+        # instead of erroring or silently reusing global numpy state across instances.
+        solution = BinarySolution(number_of_variables=4, number_of_objectives=1)
+        solution.variables = [True, False, True, False]
+
+        operator = BitFlipMutation(probability=1.0)
+        mutated = operator.execute(solution)
+
+        assert isinstance(mutated, BinarySolution)
+        assert isinstance(operator.rng, np.random.Generator)
 
 
 class TestIntegerPolynomialMutation:
