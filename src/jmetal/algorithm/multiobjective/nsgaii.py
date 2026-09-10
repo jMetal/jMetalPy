@@ -22,7 +22,7 @@ from jmetal.util.comparator import Comparator, DominanceComparator, MultiCompara
 from jmetal.util.density_estimator import CrowdingDistanceDensityEstimator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.ranking import FastNonDominatedRanking
-from jmetal.util.termination_criterion import TerminationCriterion
+from jmetal.util.termination_criterion import StoppingByEvaluations, TerminationCriterion
 
 S = TypeVar("S")
 R = TypeVar("R")
@@ -45,7 +45,7 @@ class NSGAII(GeneticAlgorithm[S, R]):
         mutation: Mutation,
         crossover: Crossover,
         selection: Selection | None = None,
-        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        termination_criterion: TerminationCriterion | None = None,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
         dominance_comparator: Comparator = store.default_comparator,
@@ -125,7 +125,7 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
         mutation: Mutation,
         crossover: Crossover,
         selection: Selection | None = None,
-        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        termination_criterion: TerminationCriterion | None = None,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
         dominance_comparator: DominanceComparator = DominanceComparator(),
@@ -181,7 +181,7 @@ class DistributedNSGAII(Algorithm[S, R]):
         number_of_cores: int,
         client,
         selection: Selection | None = None,
-        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        termination_criterion: TerminationCriterion | None = None,
         dominance_comparator: DominanceComparator = DominanceComparator(),
     ):
         if selection is None:
@@ -193,6 +193,8 @@ class DistributedNSGAII(Algorithm[S, R]):
                     ]
                 )
             )
+        if termination_criterion is None:
+            termination_criterion = StoppingByEvaluations(max_evaluations=25000)
 
         super().__init__()
         self.problem = problem
