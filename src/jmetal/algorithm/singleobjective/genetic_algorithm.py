@@ -10,7 +10,7 @@ from jmetal.operator.selection import BinaryTournamentSelection
 from jmetal.util.comparator import Comparator, ObjectiveComparator
 from jmetal.util.evaluator import Evaluator
 from jmetal.util.generator import Generator
-from jmetal.util.termination_criterion import TerminationCriterion
+from jmetal.util.termination_criterion import StoppingByEvaluations, TerminationCriterion
 
 S = TypeVar("S")
 R = TypeVar("R")
@@ -32,13 +32,15 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         mutation: Mutation,
         crossover: Crossover,
         selection: Selection | None = None,
-        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        termination_criterion: TerminationCriterion | None = None,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
         solution_comparator: Comparator = ObjectiveComparator(0),
     ):
         if selection is None:
             selection = BinaryTournamentSelection(ObjectiveComparator(0))
+        if termination_criterion is None:
+            termination_criterion = StoppingByEvaluations(max_evaluations=25000)
 
         super().__init__(
             problem=problem,

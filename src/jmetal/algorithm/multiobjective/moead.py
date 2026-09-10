@@ -44,7 +44,7 @@ class MOEAD(GeneticAlgorithm):
         max_number_of_replaced_solutions: int,
         neighbor_size: int,
         weight_files_path: str,
-        termination_criterion: TerminationCriterion = store.default_termination_criteria,
+        termination_criterion: TerminationCriterion | None = None,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
     ):
@@ -181,7 +181,7 @@ class MOEAD_DRA(MOEAD):
         max_number_of_replaced_solutions,
         neighbor_size,
         weight_files_path,
-        termination_criterion=store.default_termination_criteria,
+        termination_criterion=None,
         population_generator=store.default_generator,
         population_evaluator=store.default_evaluator,
     ):
@@ -301,7 +301,7 @@ class MOEADIEpsilon(MOEAD):
         max_number_of_replaced_solutions: int,
         neighbor_size: int,
         weight_files_path: str,
-        termination_criterion: TerminationCriterion = StoppingByEvaluations(300000),
+        termination_criterion: TerminationCriterion | None = None,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
     ):
@@ -310,6 +310,9 @@ class MOEADIEpsilon(MOEAD):
         :param neighbourhood_selection_probability: Probability of mating with a solution in the neighborhood rather
                than the entire population (Delta in Zhang & Li paper).
         """
+        if termination_criterion is None:
+            termination_criterion = StoppingByEvaluations(300000)
+
         super().__init__(
             problem=problem,
             population_size=population_size,
