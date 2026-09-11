@@ -124,10 +124,11 @@ class SMPSO(ParticleSwarmOptimization):
             best_particle = copy(swarm[i].attributes["local_best"])
             best_global = self.select_global_best()
 
-            r1 = round(random.uniform(self.r1_min, self.r1_max), 1)
-            r2 = round(random.uniform(self.r2_min, self.r2_max), 1)
-            c1 = round(random.uniform(self.c1_min, self.c1_max), 1)
-            c2 = round(random.uniform(self.c2_min, self.c2_max), 1)
+            uniform = self.rng.uniform if self.rng is not None else random.uniform
+            r1 = round(uniform(self.r1_min, self.r1_max), 1)
+            r2 = round(uniform(self.r2_min, self.r2_max), 1)
+            c1 = round(uniform(self.c1_min, self.c1_max), 1)
+            c2 = round(uniform(self.c2_min, self.c2_max), 1)
             wmax = self.max_weight
             wmin = self.min_weight
 
@@ -186,7 +187,11 @@ class SMPSO(ParticleSwarmOptimization):
         leaders = self.leaders.solution_list
 
         if len(leaders) > 2:
-            particles = random.sample(leaders, 2)
+            if self.rng is not None:
+                indexes = self.rng.choice(len(leaders), size=2, replace=False)
+                particles = [leaders[i] for i in indexes]
+            else:
+                particles = random.sample(leaders, 2)
 
             if self.leaders.comparator.compare(particles[0], particles[1]) < 1:
                 best_global = copy(particles[0])
@@ -354,14 +359,22 @@ class SMPSORP(SMPSO):
         selected_swarm_index = 0
 
         while not selected:
-            selected_swarm_index = random.randint(0, len(self.leaders) - 1)
+            selected_swarm_index = (
+                int(self.rng.integers(0, len(self.leaders)))
+                if self.rng is not None
+                else random.randint(0, len(self.leaders) - 1)
+            )
             if len(self.leaders[selected_swarm_index].solution_list) != 0:
                 selected = True
 
         leaders = self.leaders[selected_swarm_index].solution_list
 
         if len(leaders) > 2:
-            particles = random.sample(leaders, 2)
+            if self.rng is not None:
+                indexes = self.rng.choice(len(leaders), size=2, replace=False)
+                particles = [leaders[i] for i in indexes]
+            else:
+                particles = random.sample(leaders, 2)
 
             if (
                 self.leaders[selected_swarm_index].comparator.compare(particles[0], particles[1])

@@ -119,11 +119,12 @@ class OMOPSO(ParticleSwarmOptimization):
             best_particle = copy(swarm[i].attributes["local_best"])
             best_global = self.select_global_best()
 
-            r1 = round(random.uniform(self.r1_min, self.r1_max), 1)
-            r2 = round(random.uniform(self.r2_min, self.r2_max), 1)
-            c1 = round(random.uniform(self.c1_min, self.c1_max), 1)
-            c2 = round(random.uniform(self.c2_min, self.c2_max), 1)
-            w = round(random.uniform(self.weight_min, self.weight_max), 1)
+            uniform = self.rng.uniform if self.rng is not None else random.uniform
+            r1 = round(uniform(self.r1_min, self.r1_max), 1)
+            r2 = round(uniform(self.r2_min, self.r2_max), 1)
+            c1 = round(uniform(self.c1_min, self.c1_max), 1)
+            c2 = round(uniform(self.c2_min, self.c2_max), 1)
+            w = round(uniform(self.weight_min, self.weight_max), 1)
 
             # Direct access to _variables for better performance
             particle_vars = swarm[i]._variables
@@ -179,7 +180,11 @@ class OMOPSO(ParticleSwarmOptimization):
         leaders = self.leaders.solution_list
 
         if len(leaders) > 2:
-            particles = random.sample(leaders, 2)
+            if self.rng is not None:
+                indexes = self.rng.choice(len(leaders), size=2, replace=False)
+                particles = [leaders[i] for i in indexes]
+            else:
+                particles = random.sample(leaders, 2)
 
             if self.leaders.comparator.compare(particles[0], particles[1]) < 1:
                 best_global = copy(particles[0])
