@@ -9,11 +9,12 @@ description = "Python version of the jMetal framework"
 readme = "README.md"
 authors = [
     {name = "Antonio J. Nebro", email = "ajnebro@uma.es"},
-    {name = "Antonio Benítez", email = "antonio.b@uma.es"}
+    {name = "Cristóbal Barba", email = "cbarba@uma.es"}
 ]
 
 maintainers = [
     {name = "Antonio J. Nebro", email = "ajnebro@uma.es"},
+    {name = "Cristóbal Barba", email = "cbarba@uma.es"}
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
