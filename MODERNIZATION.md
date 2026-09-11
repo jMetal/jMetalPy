@@ -159,8 +159,8 @@ wire `saes` into `pyproject.toml` before then, since PyPI still only has the old
 - [x] `chore: untrack generated result artifacts and ignore them` — `results/` (194 MB, 80 files, confirmed unreferenced by any source/test/example/doc before removing). Kept on disk, just untracked; `.gitignore` now has `/results/`.
 - [x] `chore: untrack notebook checkpoints and experiment output artifacts` — `notebooks/.ipynb_checkpoints/` (4 files) plus `examples/experiment/{boxplot,latex}/` and 3 more top-level generated files found while checking (`QualityIndicatorSummary.csv`, `cdplot.eps`, `posterior.eps`) — 286 files, ~5.3 MB total. Confirmed only `.py` scripts remain tracked in `examples/experiment/`.
 - [x] `chore: drop stale tuning entries from .gitignore` — `db.sqlite3`, `optuna/optuna_nsgaii.db`, `*_tuned_config.json`, `validation_results/`, `tuning_output/`, `*.prof`; confirmed nothing in the current codebase references any of them.
-- [ ] `ci: publish the documentation from a gh-pages branch` — **deliberately deferred, not forgotten.** GitHub Pages currently serves the built HTML committed directly in `docs/` on `main` (no `gh-pages` branch, no Actions deploy). Untracking that HTML without first switching Pages' source in the repo's GitHub Settings (a change only Antonio can make) would 404 the live site. Asked; decided to leave both this and the next item alone for now rather than do the workflow half now and the untracking later.
-- [ ] `chore: untrack the built HTML site from docs/` — 311 files, 27 MB — see above, blocked on the same Pages-source decision
+- [x] `ci: publish the documentation from a gh-pages branch` — resolved by the MkDocs migration below (item "promote the MkDocs staging tree to docs/" and its `gh-deploy` job): `origin/gh-pages` exists and is current (confirmed 2026-09-11 via `git fetch origin gh-pages`; its latest commit deploys the same commit just pushed to `main`). Settings → Pages is confirmed switched to serve from it.
+- [x] `chore: untrack the built HTML site from docs/` — resolved the same way: `docs/` on `main` is MkDocs Markdown source, not built HTML (confirmed empty `find docs -iname '*.html'`).
 
 ### Packaging and metadata
 
@@ -242,7 +242,7 @@ entirely, not kept as a fallback.
 - [x] `docs: update CONTRIBUTING.md/README references from .rst to the new structure`
 - [x] `docs: promote the MkDocs staging tree to docs/` — replaced the old Sphinx-built HTML at `docs/` root with the migrated Markdown source; resolves the L0 "untrack the built HTML site from docs/" item too
 - [x] `ci: deploy via mkdocs gh-deploy to a gh-pages branch` — build job unchanged, new deploy job gated to pushes on `main`
-- [ ] **Manual step pending (user, one-time):** after the first successful push to `main` creates the `gh-pages` branch, switch the repo's Pages source in Settings → Pages to "Deploy from a branch" / `gh-pages`
+- [x] **Manual step (user, one-time):** switch the repo's Pages source in Settings → Pages to "Deploy from a branch" / `gh-pages` — confirmed done 2026-09-11.
 
 ---
 
@@ -376,7 +376,12 @@ run and pickle correctly; the full suite (925 tests) and lint are green.
 
 ### Phase 2 — widen the catalogue (remaining MOEAs)
 
-- [ ] `feat(component): add build_spea2()`
+**Scope decision (2026-09):** the component package ships for 2.0 with exactly three algorithms —
+NSGA-II, MOEA/D (classic and DE), and SMS-EMOA. `build_spea2()`, `build_mocell()`, and
+`build_genetic_algorithm()` are out of scope for this release, not merely deferred; removed from
+this checklist rather than left as pending boxes. Phase 3 (PSO) is out of scope for the same reason
+— see its section below.
+
 - [x] `fix(operator): implement the full multi-front SMS-EMOA replacement algorithm` — `SMSEMOAReplacement.replace()` only pruned front 0 with a fixed constructor-time reference point; now keeps every front but the last whole and prunes the last by hypervolume contribution, with a reference point recomputed per call, matching the classic `SMSEMOA`
 - [x] `feat(component): add the RandomSelection selection component` — `catalogue/ea/selection.py`, SMS-EMOA's default mating selection
 - [x] `feat(component): add build_smsemoa()` — factory function in `algorithm/multiobjective/smsemoa.py`, no `offspring_population_size` parameter (SMS-EMOA is steady-state by definition, always 1)
@@ -395,8 +400,6 @@ run and pickle correctly; the full suite (925 tests) and lint are green.
 - [x] `test(component): assert MOEADReplacement matches the classic replacement logic given identical inputs` — structural equivalence, not full-run (see below)
 - [x] `test(component): reach expected hypervolume floors with build_moead and build_moead_de` — ZDT1 and DTLZ2, both variants
 - [x] `docs: document build_moead()/build_moead_de() in the component architecture page`
-- [ ] `feat(component): add build_mocell()`
-- [ ] `feat(component): add build_genetic_algorithm()` — secondary, single-objective; only if time remains after the three above
 
 **SMS-EMOA complete.** SMS-EMOA reuses `RandomSolutionsCreation`, `SequentialEvaluation`,
 `TerminationByEvaluations` and `CrossoverAndMutationVariation` unchanged from NSGA-II — only
@@ -490,11 +493,11 @@ fixed to per-instance `np.random.default_rng()`, see the note above). The instan
 for components) would be a real, low-risk improvement — just project-wide in scope rather than
 MOEA/D-specific, so left for a dedicated pass.
 
-### Phase 3 — PSO (out of scope for now, not started until NSGA-II is validated)
+### Phase 3 — PSO (out of scope for 2.0)
 
-- [ ] `feat(component): add the PSO catalogue`
-- [ ] `feat(component): add the ParticleSwarmOptimization template`
-- [ ] `feat(component): add build_smpso()`
+Per the Phase 2 scope decision above, the component package ships for 2.0 with NSGA-II, MOEA/D and
+SMS-EMOA only. The PSO catalogue, its `ParticleSwarmOptimization` template, and `build_smpso()`
+are not planned for this release.
 
 **Correction (2026-09):** this section previously claimed "MOEA/D does not fit the component model
 well — Java jMetal's own docs admit needing complex, tightly-coupled components for it." Fresh
