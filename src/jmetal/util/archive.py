@@ -499,12 +499,14 @@ class ArchiveWithReferencePoint(BoundedArchive[S]):
         reference_point: list[float],
         comparator: Comparator[S],
         density_estimator: DensityEstimator,
+        rng: np.random.Generator | None = None,
     ):
         super().__init__(maximum_size, comparator, density_estimator)
         self.__reference_point = reference_point
         self.__comparator = comparator
         self.__density_estimator = density_estimator
         self.lock = Lock()
+        self.rng = rng
 
     def add(self, solution: S) -> bool:
         with self.lock:
@@ -514,7 +516,8 @@ class ArchiveWithReferencePoint(BoundedArchive[S]):
                 if len(self.solution_list) == 0:
                     result = True
                 else:
-                    if random.uniform(0.0, 1.0) < 0.05:
+                    draw = self.rng.random() if self.rng is not None else random.uniform(0.0, 1.0)
+                    if draw < 0.05:
                         result = True
                         dominated_solution = solution
                     else:
@@ -581,12 +584,18 @@ class ArchiveWithReferencePoint(BoundedArchive[S]):
 
 
 class CrowdingDistanceArchiveWithReferencePoint(ArchiveWithReferencePoint[S]):
-    def __init__(self, maximum_size: int, reference_point: list[float]):
+    def __init__(
+        self,
+        maximum_size: int,
+        reference_point: list[float],
+        rng: np.random.Generator | None = None,
+    ):
         super().__init__(
             maximum_size=maximum_size,
             reference_point=reference_point,
             comparator=SolutionAttributeComparator("crowding_distance", lowest_is_best=False),
             density_estimator=CrowdingDistanceDensityEstimator(),
+            rng=rng,
         )
 
 

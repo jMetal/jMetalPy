@@ -1,10 +1,13 @@
 import unittest
 
+import numpy as np
+
 from jmetal.core.solution import FloatSolution
 from jmetal.util.archive import (
     Archive,
     BoundedArchive,
     CrowdingDistanceArchive,
+    CrowdingDistanceArchiveWithReferencePoint,
     NonDominatedSolutionsArchive,
 )
 
@@ -435,6 +438,38 @@ class CrowdingDistanceArchiveTestCases(unittest.TestCase):
 
         self.assertEqual(1, archive.size())
         self.assertEqual(float("inf"), solution1.attributes["crowding_distance"])
+
+
+class ArchiveWithReferencePointRngTestCases(unittest.TestCase):
+    """Guards the tie-break coin flip (previously always `random.uniform` global) in
+    ArchiveWithReferencePoint.add(), exercised via its concrete
+    CrowdingDistanceArchiveWithReferencePoint subclass.
+    """
+
+    @staticmethod
+    def _build(seed):
+        return CrowdingDistanceArchiveWithReferencePoint(
+            maximum_size=3, reference_point=[0.0, 0.0], rng=np.random.default_rng(seed)
+        )
+
+    @staticmethod
+    def _dominated_solutions_near_the_reference_point(n):
+        solutions = []
+        for i in range(n):
+            solution = FloatSolution([0.0, 0.0], [1.0, 1.0], 2)
+            solution.objectives = [0.5 + 0.001 * i, 0.5 + 0.001 * i]
+            solutions.append(solution)
+        return solutions
+
+    def test_rng_produces_deterministic_tie_break_outcomes_for_a_fixed_seed(self):
+        solutions = self._dominated_solutions_near_the_reference_point(20)
+
+        archive_a = self._build(42)
+        archive_b = self._build(42)
+        results_a = [archive_a.add(s) for s in solutions]
+        results_b = [archive_b.add(s) for s in solutions]
+
+        self.assertEqual(results_a, results_b)
 
 
 if __name__ == "__main__":
