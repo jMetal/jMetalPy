@@ -84,7 +84,7 @@ class MOEAD(GeneticAlgorithm):
         for solution in self.solutions:
             self.fitness_function.update(solution.objectives)
 
-        self.permutation = Permutation(self.population_size)
+        self.permutation = Permutation(self.population_size, rng=self.rng)
 
         observable_data = self.observable_data()
         self.observable.notify_all(**observable_data)
@@ -150,12 +150,12 @@ class MOEAD(GeneticAlgorithm):
             # neighbors.tolist() already produces a new Python list; no deepcopy needed
             permuted_array = neighbors.tolist()
         else:
-            permuted_array = Permutation(self.population_size).get_permutation()
+            permuted_array = Permutation(self.population_size, rng=self.rng).get_permutation()
 
         return permuted_array
 
     def choose_neighbor_type(self):
-        rnd = random.random()
+        rnd = self.rng.random() if self.rng is not None else random.random()
 
         if rnd < self.neighbourhood_selection_probability:
             neighbor_type = "NEIGHBOR"
@@ -279,10 +279,12 @@ class MOEAD_DRA(MOEAD):
         candidate = [i for i in range(self.problem.number_of_objectives(), self.population_size)]
 
         while len(selected) < int(self.population_size / 5.0):
-            best_idd = int(random.random() * len(candidate))
+            draw = self.rng.random() if self.rng is not None else random.random()
+            best_idd = int(draw * len(candidate))
             best_sub = candidate[best_idd]
             for i in range(1, depth):
-                i2 = int(random.random() * len(candidate))
+                draw = self.rng.random() if self.rng is not None else random.random()
+                i2 = int(draw * len(candidate))
                 s2 = candidate[i2]
                 if self.utility[s2] > self.utility[best_sub]:
                     best_idd = i2
@@ -451,17 +453,24 @@ class MOEADIEpsilon(MOEAD):
 
 
 class Permutation:
-    def __init__(self, length: int):
+    def __init__(self, length: int, rng: np.random.Generator | None = None):
         self.counter = 0
         self.length = length
-        self.permutation = np.random.permutation(length)
+        self.rng = rng
+        self.permutation = (
+            self.rng.permutation(length) if self.rng is not None else np.random.permutation(length)
+        )
 
     def get_next_value(self):
         next_value = self.permutation[self.counter]
         self.counter += 1
 
         if self.counter == self.length:
-            self.permutation = np.random.permutation(self.length)
+            self.permutation = (
+                self.rng.permutation(self.length)
+                if self.rng is not None
+                else np.random.permutation(self.length)
+            )
             self.counter = 0
 
         return next_value
