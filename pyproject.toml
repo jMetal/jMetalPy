@@ -27,14 +27,14 @@ classifiers = [
 ]
 requires-python = ">=3.11"
 dependencies = [
-    "tqdm",
-    "numpy>=2.2.5",
-    "pandas>=2.2.3",
-    "plotly>=5.22.0",
-    "matplotlib>=3.0.2",
-    "scipy>=1.15.3",
-    "statsmodels>=0.9.0",
-    "moocore>=0.1.9"
+    "tqdm>=4.70.1",
+    "numpy>=2.5.3",
+    "pandas>=3.0.5",
+    "plotly>=7.0.0",
+    "matplotlib>=3.11.1",
+    "scipy>=1.18.1",
+    "statsmodels>=0.15.0",
+    "moocore>=0.3.2"
 ]
 
 [project.scripts]
@@ -52,93 +52,93 @@ markers = [
 
 [project.optional-dependencies]
 core = [
-    "tqdm",
-    "numpy>=2.2.5",
-    "pandas>=2.2.3",
-    "plotly>=5.22.0",
-    "matplotlib>=3.0.2",
-    "scipy>=1.15.3",
-    "statsmodels>=0.9.0",
-    "moocore>=0.1.9",
+    "tqdm>=4.70.1",
+    "numpy>=2.5.3",
+    "pandas>=3.0.5",
+    "plotly>=7.0.0",
+    "matplotlib>=3.11.1",
+    "scipy>=1.18.1",
+    "statsmodels>=0.15.0",
+    "moocore>=0.3.2",
 ]
 
 docs = [
-    "tqdm",
-    "numpy>=2.2.5",
-    "pandas>=2.2.3",
-    "plotly>=5.22.0",
-    "matplotlib>=3.0.2",
-    "scipy>=1.15.3",
-    "statsmodels>=0.9.0",
-    "mkdocs>=1.6.0",
-    "mkdocs-material>=9.5.0",
-    "mkdocstrings[python]>=0.25.0"
+    "tqdm>=4.70.1",
+    "numpy>=2.5.3",
+    "pandas>=3.0.5",
+    "plotly>=7.0.0",
+    "matplotlib>=3.11.1",
+    "scipy>=1.18.1",
+    "statsmodels>=0.15.0",
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.7.7",
+    "mkdocstrings[python]>=1.0.6"
 ]
 
 distributed = [
-    "tqdm",
-    "numpy>=2.2.5",
-    "pandas>=2.2.3",
-    "plotly>=5.22.0",
-    "matplotlib>=3.0.2",
-    "scipy>=1.15.3",
-    "statsmodels>=0.9.0",
-    "dask[complete]>=2024.3.0",
-    "distributed>=2024.3.0",
-    "pyspark>=3.4.0"
+    "tqdm>=4.70.1",
+    "numpy>=2.5.3",
+    "pandas>=3.0.5",
+    "plotly>=7.0.0",
+    "matplotlib>=3.11.1",
+    "scipy>=1.18.1",
+    "statsmodels>=0.15.0",
+    "dask[complete]>=2026.8.0",
+    "distributed>=2026.8.0",
+    "pyspark>=4.2.0"
 ]
 
 test = [
-    "tqdm",
-    "numpy>=2.2.5",
-    "pandas>=2.2.3",
-    "plotly>=5.22.0",
-    "matplotlib>=3.0.2",
-    "scipy>=1.15.3",
-    "statsmodels>=0.9.0",
-    "mockito",
-    "moocore>=0.1.9",
-    "pytest>=7.0",
-    "pytest-cov>=4.0"
+    "tqdm>=4.70.1",
+    "numpy>=2.5.3",
+    "pandas>=3.0.5",
+    "plotly>=7.0.0",
+    "matplotlib>=3.11.1",
+    "scipy>=1.18.1",
+    "statsmodels>=0.15.0",
+    "mockito>=2.0.4",
+    "moocore>=0.3.2",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0"
 ]
 
 notebooks = [
-    "jupyter",
-    "nbconvert>=7.0",
-    "ipykernel>=6.0"
+    "jupyter>=1.1.1",
+    "nbconvert>=7.17.1",
+    "ipykernel>=7.3.0"
 ]
 
 complete = [
-    "tqdm",
-    "numpy>=2.2.5",
-    "pandas>=2.2.3",
-    "plotly>=5.22.0",
-    "matplotlib>=3.0.2",
-    "scipy>=1.15.3",
-    "statsmodels>=0.9.0",
-    "mkdocs>=1.6.0",
-    "mkdocs-material>=9.5.0",
-    "mkdocstrings[python]>=0.25.0",
-    "dask[complete]>=2024.3.0",
-    "distributed>=2024.3.0",
-    "pyspark>=3.4.0"
+    "tqdm>=4.70.1",
+    "numpy>=2.5.3",
+    "pandas>=3.0.5",
+    "plotly>=7.0.0",
+    "matplotlib>=3.11.1",
+    "scipy>=1.18.1",
+    "statsmodels>=0.15.0",
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.7.7",
+    "mkdocstrings[python]>=1.0.6",
+    "dask[complete]>=2026.8.0",
+    "distributed>=2026.8.0",
+    "pyspark>=4.2.0"
 ]
 
 dev = [
-    "tqdm",
-    "numpy>=2.2.5",
-    "pandas>=2.2.3",
-    "plotly>=5.22.0",
-    "matplotlib>=3.0.2",
-    "scipy>=1.15.3",
-    "statsmodels>=0.9.0",
-    "mockito",
-    "moocore>=0.1.9",
-    "pytest>=7.0",
-    "pytest-cov>=4.0",
-    "ruff>=0.6.0",
-    "build>=1.2.0",
-    "twine>=5.0.0"
+    "tqdm>=4.70.1",
+    "numpy>=2.5.3",
+    "pandas>=3.0.5",
+    "plotly>=7.0.0",
+    "matplotlib>=3.11.1",
+    "scipy>=1.18.1",
+    "statsmodels>=0.15.0",
+    "mockito>=2.0.4",
+    "moocore>=0.3.2",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.16.7",
+    "build>=1.6.1",
+    "twine>=7.0.0"
 ]
 
 [tool.ruff]
