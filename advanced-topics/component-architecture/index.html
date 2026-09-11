@@ -1,0 +1,3394 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Python framework for multi-objective optimization with metaheuristics">
+      
+      
+      
+        <link rel="canonical" href="https://jmetal.github.io/jMetalPy/advanced-topics/component-architecture/">
+      
+      
+        <link rel="prev" href="../advanced-selection-strategies/">
+      
+      
+        <link rel="next" href="../../api/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/jmetalpy.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Component-Based Architecture - jMetalPy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#component-based-architecture" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="jMetalPy" class="md-header__button md-logo" aria-label="jMetalPy" data-md-component="logo">
+      
+  <img src="../../assets/jmetalpy.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            jMetalPy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Component-Based Architecture
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/jMetal/jMetalPy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jMetal/jMetalPy
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../getting-started/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tutorials/problem/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  User Guide
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Advanced Topics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../contributing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Contributing
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  About
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="jMetalPy" class="md-nav__button md-logo" aria-label="jMetalPy" data-md-component="logo">
+      
+  <img src="../../assets/jmetalpy.png" alt="logo">
+
+    </a>
+    jMetalPy
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/jMetal/jMetalPy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jMetal/jMetalPy
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/problem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Defining Problems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/observer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/evaluator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/experiment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Experiments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/statistics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/quality_indicators_cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quality Indicator CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algorithms
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Algorithms
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithms/singleobjective/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Single-objective
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2_2" id="__nav_3_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-objective
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Multi-objective
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithms/multiobjective/gde3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GDE3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithms/multiobjective/hype/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HYPE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithms/multiobjective/ibea/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IBEA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithms/multiobjective/mocell/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MOCell
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithms/multiobjective/moead/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MOEA/D
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithms/multiobjective/nsgaii/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NSGA-II
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithms/multiobjective/nsgaiii/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NSGA-III
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithms/multiobjective/omopso/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OMOPSO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithms/multiobjective/smpso/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SMPSO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../algorithms/multiobjective/spea2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SPEA2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Topics
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../distance-based-archive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Distance-Based Archive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../custom-archives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Archives
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced-selection-strategies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Selection Strategies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Component-Based Architecture
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Component-Based Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-six-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The six components
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-evolutionaryalgorithm-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The EvolutionaryAlgorithm template
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building-nsga-ii" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building NSGA-II
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building-sms-emoa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building SMS-EMOA
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building-moead" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building MOEA/D
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reproducibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reproducibility
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#external-archives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        External archives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discovering-whats-available-the-catalogue-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discovering what's available: the catalogue reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Discovering what&#39;s available: the catalogue reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#solutionscreation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SolutionsCreation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evaluation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#termination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Termination
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replacement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replacement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#crossover-jmetaloperatorcrossover" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Crossover (jmetal.operator.crossover)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mutation-jmetaloperatormutation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mutation (jmetal.operator.mutation)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verified-behavioral-equivalence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verified behavioral equivalence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#package-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Package layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../api/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/operators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/algorithms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/problems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/util/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Utilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-six-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The six components
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-evolutionaryalgorithm-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The EvolutionaryAlgorithm template
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building-nsga-ii" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building NSGA-II
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building-sms-emoa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building SMS-EMOA
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building-moead" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building MOEA/D
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reproducibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reproducibility
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#external-archives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        External archives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discovering-whats-available-the-catalogue-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discovering what's available: the catalogue reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Discovering what&#39;s available: the catalogue reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#solutionscreation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SolutionsCreation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evaluation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#termination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Termination
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replacement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replacement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#crossover-jmetaloperatorcrossover" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Crossover (jmetal.operator.crossover)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mutation-jmetaloperatormutation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mutation (jmetal.operator.mutation)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verified-behavioral-equivalence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verified behavioral equivalence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#package-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Package layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/jMetal/jMetalPy/edit/main/docs/advanced-topics/component-architecture.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="component-based-architecture">Component-Based Architecture<a class="headerlink" href="#component-based-architecture" title="Permanent link">&para;</a></h1>
+<p><code>jmetal.component</code> assembles algorithms from small, independently testable components instead of
+defining them by subclassing. It mirrors jMetal Java's <code>jmetal-component</code> module and lives
+alongside <code>jmetal.algorithm</code>, which keeps working unchanged -- nothing here replaces the classic
+algorithms, and no existing example, notebook, or user code is affected.</p>
+<p>This page currently covers evolutionary algorithms (EA/MOEA). A PSO template and catalogue are
+planned but not implemented yet.</p>
+<p>For a hands-on walkthrough of every configuration described below -- final fronts, quality
+indicator values, and the observer pattern in action -- see the
+<a href="https://github.com/jMetal/jMetalPy/blob/main/notebooks/NSGAIIComponentBased.ipynb"><code>notebooks/NSGAIIComponentBased.ipynb</code></a>,
+<a href="https://github.com/jMetal/jMetalPy/blob/main/notebooks/SMSEMOAComponentBased.ipynb"><code>notebooks/SMSEMOAComponentBased.ipynb</code></a>
+and
+<a href="https://github.com/jMetal/jMetalPy/blob/main/notebooks/MOEADComponentBased.ipynb"><code>notebooks/MOEADComponentBased.ipynb</code></a>
+notebooks.</p>
+<h2 id="why">Why<a class="headerlink" href="#why" title="Permanent link">&para;</a></h2>
+<p>The classic algorithms hard-wire their steps as methods on a class hierarchy: <code>GeneticAlgorithm</code>
+defines <code>create_initial_solutions()</code>, <code>evaluate()</code>, <code>selection()</code>, <code>reproduction()</code>, and
+<code>NSGAII.replacement()</code> overrides the base class's replacement step. Swapping one step for another
+means subclassing. A component-based algorithm instead takes six collaborators as constructor
+arguments, so any of them can be swapped independently without touching the algorithm's control
+flow at all.</p>
+<h2 id="the-six-components">The six components<a class="headerlink" href="#the-six-components" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Responsibility</th>
+<th>Protocol method(s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SolutionsCreation</code></td>
+<td>Creates the initial population</td>
+<td><code>create() -&gt; list[S]</code></td>
+</tr>
+<tr>
+<td><code>Evaluation</code></td>
+<td>Evaluates a population against a problem</td>
+<td><code>evaluate(list[S]) -&gt; list[S]</code>, <code>computed_evaluations() -&gt; int</code></td>
+</tr>
+<tr>
+<td><code>Termination</code></td>
+<td>Decides when to stop</td>
+<td><code>is_met(status: Mapping) -&gt; bool</code></td>
+</tr>
+<tr>
+<td><code>Selection</code></td>
+<td>Builds a mating pool from the population</td>
+<td><code>select(list[S]) -&gt; list[S]</code></td>
+</tr>
+<tr>
+<td><code>Variation</code></td>
+<td>Turns a mating pool into offspring</td>
+<td><code>variate(...) -&gt; list[S]</code>, <code>mating_pool_size() -&gt; int</code>, <code>offspring_population_size() -&gt; int</code></td>
+</tr>
+<tr>
+<td><code>Replacement</code></td>
+<td>Selects survivors from parents and offspring</td>
+<td><code>replace(current, offspring) -&gt; list[S]</code></td>
+</tr>
+</tbody>
+</table>
+<p>Each is a <a href="https://docs.python.org/3/library/typing.html#typing.Protocol"><code>typing.Protocol</code></a>
+(except <code>Replacement</code>, an <code>ABC</code> -- see below):
+structural typing means any object exposing the right method already satisfies the contract, with
+no need to inherit from anything. A bare function wrapped in a small object, a <code>lambda</code>, or an
+existing class all work.</p>
+<p><code>Replacement</code> is the one exception: the three replacement strategies that already existed in
+<code>jmetal.operator.replacement</code> (<code>RankingAndDensityEstimatorReplacement</code>,
+<code>RankingAndCrowdingDistanceReplacement</code>, <code>SMSEMOAReplacement</code>) only shared their <code>replace()</code> method
+by convention, with no common base to type against. <code>jmetal.operator.replacement.Replacement</code> is a
+minimal <code>ABC</code> that fixes that, and <code>jmetal.component.catalogue.ea.replacement</code> re-exports it
+directly -- no adapter needed, since the existing classes already match the shape the component
+model expects.</p>
+<h2 id="the-evolutionaryalgorithm-template">The <code>EvolutionaryAlgorithm</code> template<a class="headerlink" href="#the-evolutionaryalgorithm-template" title="Permanent link">&para;</a></h2>
+<p><code>jmetal.component.algorithm.evolutionary_algorithm.EvolutionaryAlgorithm</code> is a direct translation
+of jMetal Java's <code>EvolutionaryAlgorithm</code> template. Its <code>run()</code> is exactly:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">population</span> <span class="o">=</span> <span class="n">solutions_creation</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">population</span> <span class="o">=</span> <span class="n">evaluation</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">population</span><span class="p">)</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">while</span> <span class="ow">not</span> <span class="n">termination</span><span class="o">.</span><span class="n">is_met</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">mating_population</span> <span class="o">=</span> <span class="n">selection</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">population</span><span class="p">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">offspring_population</span> <span class="o">=</span> <span class="n">variation</span><span class="o">.</span><span class="n">variate</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">mating_population</span><span class="p">)</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">offspring_population</span> <span class="o">=</span> <span class="n">evaluation</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">offspring_population</span><span class="p">)</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">population</span> <span class="o">=</span> <span class="n">replacement</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">offspring_population</span><span class="p">)</span>
+</code></pre></div>
+<p>Unlike <code>jmetal.core.algorithm.Algorithm</code>, it does not inherit from <code>threading.Thread</code>: nothing in
+jMetalPy calls <code>start()</code>/<code>join()</code> on an algorithm, so the template skips that coupling instead of
+carrying it for no benefit.</p>
+<h2 id="building-nsga-ii">Building NSGA-II<a class="headerlink" href="#building-nsga-ii" title="Permanent link">&para;</a></h2>
+<p><code>build_nsgaii()</code> is a factory <em>function</em>, not a chainable builder class. jMetal Java's
+<code>NSGAIIBuilder</code> uses <code>.setX().build()</code> because Java has no keyword arguments; Python already does,
+so a function with keyword-only overrides gives the same flexibility without an intermediate
+mutable object:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.component.algorithm.multiobjective.nsgaii</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_nsgaii</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.operator.crossover</span><span class="w"> </span><span class="kn">import</span> <span class="n">SBXCrossover</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.operator.mutation</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolynomialMutation</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZDT1</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">problem</span> <span class="o">=</span> <span class="n">ZDT1</span><span class="p">()</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">algorithm</span> <span class="o">=</span> <span class="n">build_nsgaii</span><span class="p">(</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">problem</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="n">population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="n">offspring_population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    <span class="n">crossover</span><span class="o">=</span><span class="n">SBXCrossover</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    <span class="n">mutation</span><span class="o">=</span><span class="n">PolynomialMutation</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">problem</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">(),</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="p">)</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="n">front</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+</code></pre></div>
+<p>Every default -- <code>selection</code>, <code>variation</code>, <code>replacement</code>, <code>termination</code> -- can be overridden with a
+keyword argument, and every existing observer in <code>jmetal.util.observer</code>
+(<code>ProgressBarObserver</code>, <code>VisualizerObserver</code>, <code>WriteFrontToFileObserver</code>, ...) works against
+<code>algorithm.observable</code> unchanged, since <code>AlgorithmState.as_dict()</code> produces the same
+<code>"PROBLEM"</code>/<code>"EVALUATIONS"</code>/<code>"SOLUTIONS"</code>/<code>"COMPUTING_TIME"</code>-keyed mapping the classic algorithms
+already notify with.</p>
+<h2 id="building-sms-emoa">Building SMS-EMOA<a class="headerlink" href="#building-sms-emoa" title="Permanent link">&para;</a></h2>
+<p>SMS-EMOA is very similar to NSGA-II: <code>build_smsemoa()</code> follows the exact same factory-function
+pattern and reuses four of the six components unchanged (<code>RandomSolutionsCreation</code>,
+<code>SequentialEvaluation</code>, <code>TerminationByEvaluations</code>, <code>CrossoverAndMutationVariation</code>). It only
+differs in mating selection -- <code>RandomSelection</code> rather than tournament, since SMS-EMOA relies on
+its replacement strategy alone to drive convergence -- and in replacement -- <code>SMSEMOAReplacement</code>,
+which ranks the merged population, keeps every front but the last whole, and prunes the last front
+by hypervolume contribution rather than crowding distance:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.component.algorithm.multiobjective.smsemoa</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_smsemoa</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.operator.crossover</span><span class="w"> </span><span class="kn">import</span> <span class="n">SBXCrossover</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.operator.mutation</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolynomialMutation</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZDT1</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">problem</span> <span class="o">=</span> <span class="n">ZDT1</span><span class="p">()</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">algorithm</span> <span class="o">=</span> <span class="n">build_smsemoa</span><span class="p">(</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="n">problem</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="n">population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="n">crossover</span><span class="o">=</span><span class="n">SBXCrossover</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="n">mutation</span><span class="o">=</span><span class="n">PolynomialMutation</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">problem</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">(),</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="p">)</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="n">front</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+</code></pre></div>
+<p>Unlike <code>build_nsgaii()</code>, there is no <code>offspring_population_size</code> parameter: SMS-EMOA is
+steady-state by definition (Beume et al., 2007) and always produces exactly one offspring per
+generation, matching <code>jmetal.algorithm.multiobjective.smsemoa.SMSEMOA</code>, which hardcodes the same
+value. Every other default -- <code>selection</code>, <code>variation</code>, <code>replacement</code>, <code>termination</code> -- can be
+overridden the same way as <code>build_nsgaii()</code>'s, and <code>archive=</code> is supported identically (see
+<a href="#external-archives">External archives</a> below) -- both factories share the same
+<code>EvolutionaryAlgorithm</code> template, so nothing archive-specific needed to change.</p>
+<h2 id="building-moead">Building MOEA/D<a class="headerlink" href="#building-moead" title="Permanent link">&para;</a></h2>
+<p><code>build_moead()</code> (classic, any crossover) and <code>build_moead_de()</code> (differential evolution) build on
+the exact same <code>EvolutionaryAlgorithm</code> template as <code>build_nsgaii()</code>/<code>build_smsemoa()</code> -- no
+modification needed there. What MOEA/D actually needs that NSGA-II/SMS-EMOA don't: <code>Selection</code>,
+<code>Variation</code> and <code>Replacement</code> all need to agree, every iteration, on <em>which subproblem</em> is being
+processed and whether this iteration's mating pool and replacement scan are scoped to that
+subproblem's neighborhood or the whole population -- neither concept exists in the generic
+<code>select()</code>/<code>variate()</code>/<code>replace()</code> signatures, nor should it (it's specific to MOEA/D, not a general
+evolutionary-algorithm concern). <code>catalogue/ea/moead.py</code>'s <code>MOEADContext</code> is a small object
+constructed once per run and passed by reference into <code>MOEADSelection</code>, <code>MOEADReplacement</code> and (for
+the DE variant) <code>DifferentialEvolutionCrossoverVariation</code>, each of which reads it without the
+template needing to know it exists -- mirroring how jMetal Java's own component-based MOEA/D
+(<code>MOEADBuilder</code>/<code>MOEADDEBuilder</code> in <code>jmetal-component</code>) shares a <code>SequenceGenerator&lt;Integer&gt;</code> the
+same way:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.component.algorithm.multiobjective.moead</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_moead</span><span class="p">,</span> <span class="n">build_moead_de</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.operator.crossover</span><span class="w"> </span><span class="kn">import</span> <span class="n">SBXCrossover</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.operator.mutation</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolynomialMutation</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.problem</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZDT1</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">problem</span> <span class="o">=</span> <span class="n">ZDT1</span><span class="p">()</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="c1"># Classic: any crossover, defaults to PenaltyBoundaryIntersection aggregation.</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">algorithm</span> <span class="o">=</span> <span class="n">build_moead</span><span class="p">(</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="n">problem</span><span class="p">,</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="n">population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="n">crossover</span><span class="o">=</span><span class="n">SBXCrossover</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="n">mutation</span><span class="o">=</span><span class="n">PolynomialMutation</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">problem</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">(),</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="p">)</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="c1"># MOEA/D-DE: differential-evolution crossover, defaults to Tschebycheff aggregation.</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="n">algorithm</span> <span class="o">=</span> <span class="n">build_moead_de</span><span class="p">(</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    <span class="n">problem</span><span class="p">,</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    <span class="n">population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>    <span class="n">mutation</span><span class="o">=</span><span class="n">PolynomialMutation</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">problem</span><span class="o">.</span><span class="n">number_of_variables</span><span class="p">(),</span> <span class="n">distribution_index</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>    <span class="n">cr</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>    <span class="n">f</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="p">)</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="n">front</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+</code></pre></div>
+<p>Both reuse <code>RandomSolutionsCreation</code>, <code>SequentialEvaluation</code>/<code>SequentialEvaluationWithArchive</code> and
+<code>TerminationByEvaluations</code> unchanged, and support <code>archive=</code> identically to <code>build_nsgaii()</code>/
+<code>build_smsemoa()</code>. <code>population_size</code> doubles as the number of subproblems (one weight vector per
+population slot); for 3+ objectives the weight vectors are read from a file in <code>weight_files_path</code>
+(default: this repository's bundled <code>resources/MOEAD_weights/</code>) -- 2-objective weight vectors are
+generated analytically and need no file.</p>
+<p><strong>A correction on record.</strong> This page previously carried a note claiming MOEA/D "does not fit the
+component model well," attributed to unverified Java design notes. Direct
+investigation of <code>jmetal-component</code> found the opposite -- <code>MOEADBuilder</code>/<code>MOEADDEBuilder</code> already
+exist there, building the same generic template with no modification -- so the note was corrected
+rather than repeated here.</p>
+<p><strong>A step further on reproducibility.</strong> Every MOEA/D-specific random decision (which subproblem,
+which neighborhood-vs-population scope, mating-pool sampling, the replacement scan) draws
+exclusively from the <code>rng</code> passed to <code>build_moead()</code>/<code>build_moead_de()</code>, never from the global
+<code>random</code>/<code>numpy.random</code> state -- a deliberate departure from the classic
+<code>jmetal.algorithm.multiobjective.moead.MOEAD</code>, which mixes three incompatible random sources (global
+<code>random</code>, global <em>legacy</em> <code>numpy.random</code>, and each operator's own <code>np.random.Generator</code>) and can
+therefore never be made reproducible from a single seed. Getting there also meant reaching one level
+deeper than <code>build_nsgaii()</code>/<code>build_smsemoa()</code> did: <code>Problem.create_solution()</code> gained an optional
+<code>rng</code> parameter (defaulting to the same global-state behavior as before, so nothing already relying
+on <code>random.seed()</code> breaks), and <code>RandomSolutionsCreation</code> now forwards its own <code>rng</code> into it -- so
+population creation is reproducible from <code>rng=</code> too, for all three factories, not just MOEA/D's.
+One caveat remains: <code>crossover</code> (classic variant only) and <code>mutation</code> are always your own operators,
+constructed outside these factories, so their reproducibility is in your hands the same way it
+already is for <code>build_nsgaii()</code>/<code>build_smsemoa()</code> -- pass them their own matching <code>rng</code> too.</p>
+<p>The consequence: no execution-level equivalence test against the classic <code>MOEAD</code> is possible for
+<code>build_moead_de()</code> the way <code>test_nsgaii_equivalence.py</code>/<code>test_smsemoa_equivalence.py</code> compare against
+their classic counterparts (see <a href="#verified-behavioral-equivalence">Verified behavioral equivalence</a>
+below) -- two runs seeded "the same way" draw from genuinely different random number generators, so
+they cannot produce identical fronts. What's verified instead: <code>test_moead_replacement_structural_equivalence.py</code>
+checks that <code>MOEADReplacement</code>'s replace/keep decisions exactly match the classic algorithm's
+<code>update_current_subproblem_neighborhood()</code> given identical inputs (population, offspring, current
+subproblem, scope) -- the logic that matters, isolated from randomness -- plus
+<code>test_moead_integration.py</code>'s hypervolume-floor checks for both variants (<code>build_moead()</code> has no
+classic SBX-based counterpart in jMetalPy to compare against in the first place -- the existing
+classic <code>MOEAD</code> class is already MOEA/D-DE despite its name, and always has been).</p>
+<h2 id="reproducibility">Reproducibility<a class="headerlink" href="#reproducibility" title="Permanent link">&para;</a></h2>
+<p>No classic jMetalPy algorithm accepts a seed. <code>EvolutionaryAlgorithm</code> accepts an optional
+<code>rng: np.random.Generator</code>, shared with any component that already declares a plain <code>rng</code>
+attribute:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">algorithm</span> <span class="o">=</span> <span class="n">build_nsgaii</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">42</span><span class="p">))</span>
+</code></pre></div>
+<p>Every operator and <code>Problem.create_solution()</code> now accepts an optional explicit <code>rng</code>, falling back
+to the global <code>random</code>/<code>numpy.random</code> state when none is given (the historical default, kept for
+backward compatibility). Component-based algorithms built with an <code>rng</code> threaded through every
+operator and <code>create_solution()</code> are fully reproducible from a single seed.</p>
+<h2 id="external-archives">External archives<a class="headerlink" href="#external-archives" title="Permanent link">&para;</a></h2>
+<p>An external archive collects solutions independently of the population: every evaluated solution
+is copied into it, regardless of what the population/replacement strategy keeps or discards. This
+mirrors jMetal Java's <code>SequentialEvaluationWithArchive</code> + <code>EvolutionaryAlgorithmWithArchive</code> pair,
+but as a plain constructor parameter rather than a subclass:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.util.archive</span><span class="w"> </span><span class="kn">import</span> <span class="n">CrowdingDistanceArchive</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">algorithm</span> <span class="o">=</span> <span class="n">build_nsgaii</span><span class="p">(</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">problem</span><span class="p">,</span> <span class="n">population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">offspring_population_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="n">crossover</span><span class="o">=</span><span class="n">crossover</span><span class="p">,</span> <span class="n">mutation</span><span class="o">=</span><span class="n">mutation</span><span class="p">,</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="n">archive</span><span class="o">=</span><span class="n">CrowdingDistanceArchive</span><span class="p">(</span><span class="n">maximum_size</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>  <span class="c1"># bounded</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="p">)</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="n">algorithm</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="n">front</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>  <span class="c1"># returns the archive's contents, not the final population</span>
+</code></pre></div>
+<p>Any <code>jmetal.util.archive.Archive</code> works, bounded (<code>CrowdingDistanceArchive</code>, <code>DistanceBasedArchive</code>,
+...) or unbounded (<code>NonDominatedSolutionsArchive</code>). The population still drives
+selection/replacement as usual -- the archive is a pure addition, useful in particular for
+multi-modal problems like ZDT4, where it guards against the population converging on a local
+Pareto front. See <code>examples/component/nsgaii_crowding_distance_archive_zdt4.py</code> and
+<code>examples/component/nsgaii_unbounded_archive_dtlz2.py</code>.</p>
+<p><strong><code>result()</code>'s size.</strong> An unbounded archive can accumulate far more solutions than the population
+size -- into the thousands over a full run. <code>result()</code> accounts for this: if the archive holds more
+solutions than the population size, it reduces it to exactly that many via
+<code>distance_based_subset_selection_robust</code> before returning, rather than handing back the whole
+(potentially huge) archive. This mirrors jMetal Java's <code>BestSolutionsArchive</code>, which wraps an
+otherwise-unbounded archive the same way. A bounded archive (<code>CrowdingDistanceArchive</code>, ...) never
+exceeds the population size to begin with, so this is a no-op for it -- <code>result()</code> returns its
+contents directly.</p>
+<p><code>SequentialEvaluationWithArchive</code> feeds the archive a whole generation at a time via
+<code>Archive.add_batch()</code> rather than one solution at a time. For <code>NonDominatedSolutionsArchive</code>, whose
+<code>add()</code> is O(n) per call, this replaces many individual insertions with a single
+<code>moocore.is_nondominated()</code> call per generation -- on the DTLZ2 example above (an unbounded archive
+growing into the thousands over 40000 evaluations), this took the run from ~43s to ~1.4s.</p>
+<h2 id="discovering-whats-available-the-catalogue-reference">Discovering what's available: the catalogue reference<a class="headerlink" href="#discovering-whats-available-the-catalogue-reference" title="Permanent link">&para;</a></h2>
+<p>Before this architecture existed, answering "what can I configure in NSGA-II?" meant reading Java
+source by hand. <code>jmetal.component.catalogue_info.describe_catalogue()</code> answers it from the running
+code instead: which component slots exist, which implementations are available for each, and each
+implementation's control parameters (name, type, default). It deliberately stops there -- no ranges
+or distributions to <em>explore</em> those parameters, which is an automatic-configuration concern kept out
+of scope for now.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">jmetal.component.catalogue_info</span><span class="w"> </span><span class="kn">import</span> <span class="n">describe_catalogue</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">for</span> <span class="n">slot</span><span class="p">,</span> <span class="n">implementations</span> <span class="ow">in</span> <span class="n">describe_catalogue</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">slot</span><span class="p">)</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="k">for</span> <span class="n">implementation</span> <span class="ow">in</span> <span class="n">implementations</span><span class="p">:</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">" "</span><span class="p">,</span> <span class="n">implementation</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">implementation</span><span class="o">.</span><span class="n">parameters</span><span class="p">])</span>
+</code></pre></div>
+<p>Everything below is derived from the real classes via <code>inspect</code>, not hand-maintained, so it cannot
+drift out of sync with the code the way a separate parameter list could. Current output for the
+NSGA-II catalogue:</p>
+<h3 id="solutionscreation">SolutionsCreation<a class="headerlink" href="#solutionscreation" title="Permanent link">&para;</a></h3>
+<p><strong><code>RandomSolutionsCreation</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>problem</code></td>
+<td><code>Problem[~S]</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>number_of_solutions_to_create</code></td>
+<td><code>int</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>rng</code></td>
+<td><code>Generator \| None</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h3 id="evaluation">Evaluation<a class="headerlink" href="#evaluation" title="Permanent link">&para;</a></h3>
+<p><strong><code>SequentialEvaluation</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>problem</code></td>
+<td><code>Problem[~S]</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>evaluator</code></td>
+<td><code>Optional[Evaluator[~S]]</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h3 id="termination">Termination<a class="headerlink" href="#termination" title="Permanent link">&para;</a></h3>
+<p><strong><code>TerminationByEvaluations</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>max_evaluations</code></td>
+<td><code>int</code></td>
+<td>required</td>
+</tr>
+</tbody>
+</table>
+<h3 id="selection">Selection<a class="headerlink" href="#selection" title="Permanent link">&para;</a></h3>
+<p><strong><code>TournamentSelection</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>selection_operator</code></td>
+<td><code>TournamentSelection</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>mating_pool_size</code></td>
+<td><code>int</code></td>
+<td>required</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>RandomSelection</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>selection_operator</code></td>
+<td><code>RandomSelection</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>mating_pool_size</code></td>
+<td><code>int</code></td>
+<td>required</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>MOEADSelection</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>context</code></td>
+<td><code>MOEADContext</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>neighbourhood</code></td>
+<td><code>WeightVectorNeighborhood</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>number_of_parents</code></td>
+<td><code>int</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>selection_operator</code></td>
+<td><code>NaryRandomSolutionSelection \| None</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h3 id="variation">Variation<a class="headerlink" href="#variation" title="Permanent link">&para;</a></h3>
+<p><strong><code>CrossoverAndMutationVariation</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>offspring_population_size</code></td>
+<td><code>int</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>crossover</code></td>
+<td><code>Crossover</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>mutation</code></td>
+<td><code>Mutation</code></td>
+<td>required</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>DifferentialEvolutionCrossoverVariation</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>context</code></td>
+<td><code>MOEADContext</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>crossover</code></td>
+<td><code>DifferentialEvolutionCrossover</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>mutation</code></td>
+<td><code>Mutation</code></td>
+<td>required</td>
+</tr>
+</tbody>
+</table>
+<h3 id="replacement">Replacement<a class="headerlink" href="#replacement" title="Permanent link">&para;</a></h3>
+<p><strong><code>RankingAndDensityEstimatorReplacement</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ranking</code></td>
+<td><code>Ranking</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>density_estimator</code></td>
+<td><code>DensityEstimator</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>removal_policy</code></td>
+<td><code>RemovalPolicyType</code></td>
+<td>RemovalPolicyType.ONE_SHOT</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>RankingAndCrowdingDistanceReplacement</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ranking</code></td>
+<td><code>Ranking</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>density_estimator</code></td>
+<td><code>DensityEstimator</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>SMSEMOAReplacement</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ranking</code></td>
+<td><code>Ranking</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>MOEADReplacement</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>context</code></td>
+<td><code>MOEADContext</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>neighbourhood</code></td>
+<td><code>WeightVectorNeighborhood</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>aggregation_function</code></td>
+<td><code>AggregationFunction</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>max_number_of_replaced_solutions</code></td>
+<td><code>int</code></td>
+<td>required</td>
+</tr>
+</tbody>
+</table>
+<h3 id="crossover-jmetaloperatorcrossover">Crossover (<code>jmetal.operator.crossover</code>)<a class="headerlink" href="#crossover-jmetaloperatorcrossover" title="Permanent link">&para;</a></h3>
+<p><strong><code>SBXCrossover</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>probability</code></td>
+<td><code>float</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>distribution_index</code></td>
+<td><code>float</code></td>
+<td>20.0</td>
+</tr>
+<tr>
+<td><code>repair_operator</code></td>
+<td><code>Callable[[float, float, float], float] \| FloatRepairOperator \| None</code></td>
+<td>ClampFloatRepair()</td>
+</tr>
+<tr>
+<td><code>rng</code></td>
+<td><code>Generator \| None</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>IntegerSBXCrossover</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>probability</code></td>
+<td><code>float</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>distribution_index</code></td>
+<td><code>float</code></td>
+<td>20.0</td>
+</tr>
+<tr>
+<td><code>rng</code></td>
+<td><code>Generator \| None</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>BLXAlphaCrossover</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>probability</code></td>
+<td><code>float</code></td>
+<td>0.9</td>
+</tr>
+<tr>
+<td><code>alpha</code></td>
+<td><code>float</code></td>
+<td>0.5</td>
+</tr>
+<tr>
+<td><code>repair_operator</code></td>
+<td><code>Callable[[float, float, float], float] \| None</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>rng</code></td>
+<td><code>Generator \| None</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>BLXAlphaBetaCrossover</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>probability</code></td>
+<td><code>float</code></td>
+<td>0.9</td>
+</tr>
+<tr>
+<td><code>alpha</code></td>
+<td><code>float</code></td>
+<td>0.5</td>
+</tr>
+<tr>
+<td><code>beta</code></td>
+<td><code>float</code></td>
+<td>0.5</td>
+</tr>
+<tr>
+<td><code>repair_operator</code></td>
+<td><code>Callable[[float, float, float], float] \| None</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>rng</code></td>
+<td><code>Generator \| None</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>PMXCrossover</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>probability</code></td>
+<td><code>float</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>rng</code></td>
+<td><code>Generator \| None</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>CXCrossover</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>probability</code></td>
+<td><code>float</code></td>
+<td>required</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>SPXCrossover</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>probability</code></td>
+<td><code>float</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>rng</code></td>
+<td><code>Generator \| None</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>DifferentialEvolutionCrossover</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CR</code></td>
+<td><code>float</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>F</code></td>
+<td><code>float</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>K</code></td>
+<td><code>float</code></td>
+<td>0.5</td>
+</tr>
+<tr>
+<td><code>rng</code></td>
+<td><code>Generator \| None</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mutation-jmetaloperatormutation">Mutation (<code>jmetal.operator.mutation</code>)<a class="headerlink" href="#mutation-jmetaloperatormutation" title="Permanent link">&para;</a></h3>
+<p><strong><code>PolynomialMutation</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>probability</code></td>
+<td><code>float</code></td>
+<td>0.01</td>
+</tr>
+<tr>
+<td><code>distribution_index</code></td>
+<td><code>float</code></td>
+<td>20.0</td>
+</tr>
+<tr>
+<td><code>repair_operator</code></td>
+<td><code>Callable[[float, float, float], float] \| None</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>rng</code></td>
+<td><code>Generator \| None</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>IntegerPolynomialMutation</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>probability</code></td>
+<td><code>float</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>distribution_index</code></td>
+<td><code>float</code></td>
+<td>20.0</td>
+</tr>
+<tr>
+<td><code>repair_operator</code></td>
+<td><code>Callable[[float, int, int], int] \| None</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>rng</code></td>
+<td><code>Generator \| None</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>BitFlipMutation</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>probability</code></td>
+<td><code>float</code></td>
+<td>required</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>PermutationSwapMutation</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>probability</code></td>
+<td><code>float</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>rng</code></td>
+<td><code>Generator \| None</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>ScrambleMutation</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>probability</code></td>
+<td><code>float</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>rng</code></td>
+<td><code>Generator \| None</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>SimpleRandomMutation</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>probability</code></td>
+<td><code>float</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>rng</code></td>
+<td><code>Generator \| None</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>UniformMutation</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>probability</code></td>
+<td><code>float</code></td>
+<td>required</td>
+</tr>
+<tr>
+<td><code>perturbation</code></td>
+<td><code>float</code></td>
+<td>0.5</td>
+</tr>
+<tr>
+<td><code>repair_operator</code></td>
+<td><code>Callable[[float, float, float], float] \| None</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>rng</code></td>
+<td><code>Generator \| None</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p>This table is generated from <code>describe_catalogue()</code>'s output and should be regenerated whenever
+<code>jmetal.component.catalogue_info.CATALOGUE</code> changes (a new component lands, or a constructor
+signature changes) -- it is not kept in sync automatically.</p>
+<h2 id="verified-behavioral-equivalence">Verified behavioral equivalence<a class="headerlink" href="#verified-behavioral-equivalence" title="Permanent link">&para;</a></h2>
+<p><code>build_nsgaii(...)</code>/<code>build_smsemoa(...)</code> and their classic <code>NSGAII(...)</code>/<code>SMSEMOA(...)</code> counterparts
+produce <strong>identical</strong> final populations on ZDT1 and DTLZ2 given the same seed -- both reuse the exact
+same operator classes and <code>Problem.create_solution()</code>, so identical random state produces identical
+results. This is checked by dedicated tests
+(<code>tests/component/algorithm/multiobjective/test_nsgaii_equivalence.py</code>,
+<code>test_smsemoa_equivalence.py</code>) and is the acceptance criterion for this architecture: adopting
+components changes <em>how</em> an algorithm is assembled, not <em>what</em> it computes.</p>
+<p>MOEA/D is the exception: <code>build_moead()</code>/<code>build_moead_de()</code> deliberately draw all their own
+randomness from a single <code>rng</code>, never the classic <code>MOEAD</code>'s mix of global <code>random</code>/legacy
+<code>numpy.random</code>/per-operator generators, so no seed makes their fronts bit-identical to the classic
+algorithm's. See <a href="#building-moead">Building MOEA/D</a> above for what's verified in its place.</p>
+<h2 id="package-layout">Package layout<a class="headerlink" href="#package-layout" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>src/jmetal/component/
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>├── algorithm/
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>│   ├── algorithm_state.py              # AlgorithmState
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>│   ├── evolutionary_algorithm.py       # EvolutionaryAlgorithm
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>│   └── multiobjective/
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>│       ├── nsgaii.py                   # build_nsgaii()
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>│       ├── smsemoa.py                  # build_smsemoa()
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>│       └── moead.py                    # build_moead(), build_moead_de()
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>└── catalogue/
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>    ├── common/
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    │   ├── solutions_creation.py
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>    │   ├── evaluation.py
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>    │   └── termination.py
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>    └── ea/
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>        ├── selection.py
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>        ├── variation.py
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>        ├── replacement.py
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>        └── moead.py                    # MOEADContext and MOEA/D's Selection/Variation/Replacement
+</code></pre></div>
+<p>This covers NSGA-II, SMS-EMOA and MOEA/D -- the full scope of the component package for this
+release. Further MOEAs (SPEA2, MOCell) and a PSO template/catalogue are out of scope for now.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "content.code.copy", "content.action.edit", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+      
+    
+  </body>
+</html>
