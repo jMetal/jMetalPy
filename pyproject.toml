@@ -28,11 +28,11 @@ classifiers = [
 requires-python = ">=3.11"
 dependencies = [
     "tqdm>=4.70.1",
-    "numpy>=2.5.3",
+    "numpy>=2.4.6",
     "pandas>=3.0.5",
     "plotly>=7.0.0",
     "matplotlib>=3.11.1",
-    "scipy>=1.18.1",
+    "scipy>=1.17.1",
     "statsmodels>=0.15.0",
     "moocore>=0.3.2"
 ]
@@ -53,22 +53,22 @@ markers = [
 [project.optional-dependencies]
 core = [
     "tqdm>=4.70.1",
-    "numpy>=2.5.3",
+    "numpy>=2.4.6",
     "pandas>=3.0.5",
     "plotly>=7.0.0",
     "matplotlib>=3.11.1",
-    "scipy>=1.18.1",
+    "scipy>=1.17.1",
     "statsmodels>=0.15.0",
     "moocore>=0.3.2",
 ]
 
 docs = [
     "tqdm>=4.70.1",
-    "numpy>=2.5.3",
+    "numpy>=2.4.6",
     "pandas>=3.0.5",
     "plotly>=7.0.0",
     "matplotlib>=3.11.1",
-    "scipy>=1.18.1",
+    "scipy>=1.17.1",
     "statsmodels>=0.15.0",
     "mkdocs>=1.6.1",
     "mkdocs-material>=9.7.7",
@@ -77,11 +77,11 @@ docs = [
 
 distributed = [
     "tqdm>=4.70.1",
-    "numpy>=2.5.3",
+    "numpy>=2.4.6",
     "pandas>=3.0.5",
     "plotly>=7.0.0",
     "matplotlib>=3.11.1",
-    "scipy>=1.18.1",
+    "scipy>=1.17.1",
     "statsmodels>=0.15.0",
     "dask[complete]>=2026.8.0",
     "distributed>=2026.8.0",
@@ -90,11 +90,11 @@ distributed = [
 
 test = [
     "tqdm>=4.70.1",
-    "numpy>=2.5.3",
+    "numpy>=2.4.6",
     "pandas>=3.0.5",
     "plotly>=7.0.0",
     "matplotlib>=3.11.1",
-    "scipy>=1.18.1",
+    "scipy>=1.17.1",
     "statsmodels>=0.15.0",
     "mockito>=2.0.4",
     "moocore>=0.3.2",
@@ -110,11 +110,11 @@ notebooks = [
 
 complete = [
     "tqdm>=4.70.1",
-    "numpy>=2.5.3",
+    "numpy>=2.4.6",
     "pandas>=3.0.5",
     "plotly>=7.0.0",
     "matplotlib>=3.11.1",
-    "scipy>=1.18.1",
+    "scipy>=1.17.1",
     "statsmodels>=0.15.0",
     "mkdocs>=1.6.1",
     "mkdocs-material>=9.7.7",
@@ -126,11 +126,11 @@ complete = [
 
 dev = [
     "tqdm>=4.70.1",
-    "numpy>=2.5.3",
+    "numpy>=2.4.6",
     "pandas>=3.0.5",
     "plotly>=7.0.0",
     "matplotlib>=3.11.1",
-    "scipy>=1.18.1",
+    "scipy>=1.17.1",
     "statsmodels>=0.15.0",
     "mockito>=2.0.4",
     "moocore>=0.3.2",
