@@ -148,7 +148,14 @@ def get_nadir_point(extreme_points, ideal_point, worst_point, worst_of_front, wo
     return nadir_point
 
 
-def niching(pop: list[S], n_remaining: int, niche_count, niche_of_individuals, dist_to_niche):
+def niching(
+    pop: list[S],
+    n_remaining: int,
+    niche_count,
+    niche_of_individuals,
+    dist_to_niche,
+    rng: np.random.Generator | None = None,
+):
     survivors: list[int] = []
 
     # boolean array of elements that are considered for each iteration
@@ -167,14 +174,22 @@ def niching(pop: list[S], n_remaining: int, niche_count, niche_of_individuals, d
 
         # all niches with the minimum niche count (truncate if randomly select more niches than remaining individuals)
         next_niches = next_niches_list[np.where(next_niche_count == min_niche_count)[0]]
-        next_niches = next_niches[np.random.permutation(len(next_niches))[:n_select]]
+        permutation = (
+            rng.permutation(len(next_niches))
+            if rng is not None
+            else np.random.permutation(len(next_niches))
+        )
+        next_niches = next_niches[permutation[:n_select]]
 
         for next_niche in next_niches:
             # indices of individuals that are considered and assign to next_niche
             next_ind = np.where(np.logical_and(niche_of_individuals == next_niche, mask))[0]
 
             # shuffle to break random_search tie (equal perp. dist) or select randomly
-            np.random.shuffle(next_ind)
+            if rng is not None:
+                rng.shuffle(next_ind)
+            else:
+                np.random.shuffle(next_ind)
 
             if niche_count[next_niche] == 0:
                 next_ind = next_ind[np.argmin(dist_to_niche[next_ind])]
@@ -358,6 +373,7 @@ class NSGAIII(NSGAII):
                 niche_count=niche_count,
                 niche_of_individuals=niche_of_individuals[last_front],
                 dist_to_niche=dist_to_niche[last_front],
+                rng=self.rng,
             )
 
             survivors_idx = np.concatenate((until_last_front, last_front[S_idx].tolist()))
