@@ -89,7 +89,9 @@ class IBEA(GeneticAlgorithm[S, R]):
         return self.compute_fitness_values(evaluated, self.kappa)
 
     def create_initial_solutions(self) -> list[S]:
-        return [self.population_generator.new(self.problem) for _ in range(self.population_size)]
+        return [
+            self.population_generator.new(self.problem, self.rng) for _ in range(self.population_size)
+        ]
 
     def replacement(self, population: list[S], offspring_population: list[S]) -> list[list[S]]:
         join_population = population + offspring_population

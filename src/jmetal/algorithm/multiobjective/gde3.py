@@ -43,7 +43,7 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
         )
         self.dominance_comparator = dominance_comparator
         self.selection_operator: DifferentialEvolutionSelection = DifferentialEvolutionSelection()
-        self.crossover_operator = DifferentialEvolutionCrossover(cr, f, k)
+        self.crossover_operator = DifferentialEvolutionCrossover(cr, f, k, rng=rng)
 
         self.population_generator = population_generator
         self.population_evaluator = population_evaluator

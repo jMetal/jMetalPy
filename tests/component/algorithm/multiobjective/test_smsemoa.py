@@ -1,5 +1,7 @@
 """Tests for build_smsemoa()."""
 
+import random
+
 import numpy as np
 
 from jmetal.component.algorithm.evolutionary_algorithm import EvolutionaryAlgorithm
@@ -64,6 +66,37 @@ class TestBuildSMSEMOA:
         algorithm = _build(rng=rng)
 
         assert algorithm.rng is rng
+
+    def test_a_run_is_fully_reproducible_from_a_single_seed(self):
+        # crossover/mutation are constructed outside build_smsemoa(), so they need
+        # their own explicit rng too -- same requirement as build_nsgaii()/build_moead_de().
+        # Unlike build_moead()/build_moead_de(), initial population creation goes
+        # through the global random module (solutions_creation is deliberately
+        # excluded from rng auto-threading -- see EvolutionaryAlgorithm's docstring),
+        # so random.seed() is also needed right before run().
+        def run_once():
+            problem = ZDT1()
+            crossover = SBXCrossover(
+                probability=1.0, distribution_index=20, rng=np.random.default_rng(7)
+            )
+            mutation = PolynomialMutation(
+                probability=1.0 / problem.number_of_variables(),
+                distribution_index=20,
+                rng=np.random.default_rng(7),
+            )
+            algorithm = build_smsemoa(
+                problem,
+                20,
+                crossover,
+                mutation,
+                termination=TerminationByEvaluations(max_evaluations=200),
+                rng=np.random.default_rng(7),
+            )
+            random.seed(7)
+            algorithm.run()
+            return sorted(tuple(s.variables) for s in algorithm.result())
+
+        assert run_once() == run_once()
 
 
 class TestBuildSMSEMOAWithAnExternalArchive:

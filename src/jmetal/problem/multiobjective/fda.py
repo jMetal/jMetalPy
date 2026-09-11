@@ -48,17 +48,19 @@ class FDA1(FDA):
     def __init__(self, number_of_variables: int = 100):
         """:param number_of_variables: Number of decision variables of the problem."""
         super().__init__()
-        self.number_of_variables = number_of_variables
-        self.number_of_objectives = 2
-        self.number_of_constraints = 0
-
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
 
-        self.lower_bound = self.number_of_variables * [-1.0]
-        self.upper_bound = self.number_of_variables * [1.0]
+        self.lower_bound = number_of_variables * [-1.0]
+        self.upper_bound = number_of_variables * [1.0]
         self.lower_bound[0] = 0.0
         self.upper_bound[0] = 1.0
+
+    def number_of_objectives(self) -> int:
+        return len(self.obj_directions)
+
+    def number_of_constraints(self) -> int:
+        return 0
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         g = self.__eval_g(solution)
@@ -78,7 +80,7 @@ class FDA1(FDA):
     def __eval_h(self, f: float, g: float) -> float:
         return 1.0 - sqrt(f / g)
 
-    def get_name(self):
+    def name(self):
         return "FDA1"
 
 
@@ -91,17 +93,19 @@ class FDA2(FDA):
     def __init__(self, number_of_variables: int = 31):
         """:param number_of_variables: Number of decision variables of the problem."""
         super().__init__()
-        self.number_of_variables = number_of_variables
-        self.number_of_objectives = 2
-        self.number_of_constraints = 0
-
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
 
-        self.lower_bound = self.number_of_variables * [-1.0]
-        self.upper_bound = self.number_of_variables * [1.0]
+        self.lower_bound = number_of_variables * [-1.0]
+        self.upper_bound = number_of_variables * [1.0]
         self.lower_bound[0] = 0.0
         self.upper_bound[0] = 1.0
+
+    def number_of_objectives(self) -> int:
+        return len(self.obj_directions)
+
+    def number_of_constraints(self) -> int:
+        return 0
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         g = self.__eval_g(solution, 1, len(solution.variables))
@@ -122,7 +126,7 @@ class FDA2(FDA):
         ht = 0.2 + 4.8 * pow(self.time, 2.0)
         return 1.0 - pow(f / g, ht)
 
-    def get_name(self):
+    def name(self):
         return "FDA2"
 
 
@@ -135,9 +139,6 @@ class FDA3(FDA):
     def __init__(self, number_of_variables: int = 30):
         """:param number_of_variables: Number of decision variables of the problem."""
         super().__init__()
-        self.number_of_variables = number_of_variables
-        self.number_of_objectives = 2
-        self.number_of_constraints = 0
         self.limitInfI = 0
         self.limitSupI = 1
         self.limitInfII = 1
@@ -145,10 +146,16 @@ class FDA3(FDA):
         self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)"]
 
-        self.lower_bound = self.number_of_variables * [-1.0]
-        self.upper_bound = self.number_of_variables * [1.0]
+        self.lower_bound = number_of_variables * [-1.0]
+        self.upper_bound = number_of_variables * [1.0]
         self.lower_bound[0] = 0.0
         self.upper_bound[0] = 1.0
+
+    def number_of_objectives(self) -> int:
+        return len(self.obj_directions)
+
+    def number_of_constraints(self) -> int:
+        return 0
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         g = self.__eval_g(solution, self.limitInfII)
@@ -178,7 +185,7 @@ class FDA3(FDA):
         h = 1.0 - sqrt(f / g)
         return h
 
-    def get_name(self):
+    def name(self):
         return "FDA3"
 
 
@@ -193,15 +200,17 @@ class FDA4(FDA):
     def __init__(self, number_of_variables: int = 12):
         """:param number_of_variables: Number of decision variables of the problem."""
         super().__init__()
-        self.number_of_variables = number_of_variables
-        self.number_of_objectives = 3
-        self.number_of_constraints = 0
-
-        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)", "f(z)"]
 
-        self.lower_bound = self.number_of_variables * [0.0]
-        self.upper_bound = self.number_of_variables * [1.0]
+        self.lower_bound = number_of_variables * [0.0]
+        self.upper_bound = number_of_variables * [1.0]
+
+    def number_of_objectives(self) -> int:
+        return len(self.obj_directions)
+
+    def number_of_constraints(self) -> int:
+        return 0
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         g = self.__eval_g(solution, self.M - 1)
@@ -237,7 +246,7 @@ class FDA4(FDA):
 
         return fm
 
-    def get_name(self):
+    def name(self):
         return "FDA4"
 
 
@@ -252,15 +261,17 @@ class FDA5(FDA):
     def __init__(self, number_of_variables: int = 12):
         """:param number_of_variables: Number of decision variables of the problem."""
         super().__init__()
-        self.number_of_variables = number_of_variables
-        self.number_of_objectives = 3
-        self.number_of_constraints = 0
-
-        self.obj_directions = [self.MINIMIZE, self.MINIMIZE]
+        self.obj_directions = [self.MINIMIZE, self.MINIMIZE, self.MINIMIZE]
         self.obj_labels = ["f(x)", "f(y)", "f(z)"]
 
-        self.lower_bound = self.number_of_variables * [0.0]
-        self.upper_bound = self.number_of_variables * [1.0]
+        self.lower_bound = number_of_variables * [0.0]
+        self.upper_bound = number_of_variables * [1.0]
+
+    def number_of_objectives(self) -> int:
+        return len(self.obj_directions)
+
+    def number_of_constraints(self) -> int:
+        return 0
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
         g = self.__eval_g(solution, self.M - 1)
@@ -300,5 +311,5 @@ class FDA5(FDA):
 
         return fm * mult
 
-    def get_name(self):
+    def name(self):
         return "FDA5"
