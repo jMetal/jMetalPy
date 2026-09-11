@@ -28,6 +28,13 @@
     in parallel.
   * Fixed `Algorithm` not being picklable across process boundaries in some cases.
   * Fixed the GDE3 ZDT1 basic example hanging forever.
+  * Fixed `IBEA.create_initial_solutions()` not forwarding its `rng` to the population
+    generator, and `GDE3` not forwarding its `rng` to its internal
+    `DifferentialEvolutionCrossover`, both of which silently broke single-seed
+    reproducibility for those two algorithms.
+  * Fixed the FDA1-FDA5 dynamic problems (`jmetal.problem.multiobjective.fda`), which
+    predated the current `Problem` interface and could not be instantiated; FDA4 and
+    FDA5 also declared only 2 objective directions for their 3 objectives.
   * Migrated the documentation from Sphinx to MkDocs.
 * [1.9.0]
   * Add RE benchmark
