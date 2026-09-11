@@ -5,15 +5,14 @@ from typing import TypeVar
 import numpy as np
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
-from jmetal.config import store
 from jmetal.core.operator import Crossover, Mutation, Selection
 from jmetal.core.problem import Problem
 from jmetal.operator.selection import BinaryTournamentSelection
 from jmetal.util.archive import BoundedArchive
-from jmetal.util.comparator import Comparator, MultiComparator
+from jmetal.util.comparator import Comparator, DominanceComparator, MultiComparator
 from jmetal.util.density_estimator import CrowdingDistanceDensityEstimator, DensityEstimator
-from jmetal.util.evaluator import Evaluator
-from jmetal.util.generator import Generator
+from jmetal.util.evaluator import Evaluator, SequentialEvaluator
+from jmetal.util.generator import Generator, RandomGenerator
 from jmetal.util.neighborhood import Neighborhood
 from jmetal.util.ranking import FastNonDominatedRanking, Ranking
 from jmetal.util.termination_criterion import TerminationCriterion
@@ -40,9 +39,9 @@ class MOCell(GeneticAlgorithm[S, R]):
         crossover: Crossover,
         selection: Selection | None = None,
         termination_criterion: TerminationCriterion | None = None,
-        population_generator: Generator = store.default_generator,
-        population_evaluator: Evaluator = store.default_evaluator,
-        dominance_comparator: Comparator = store.default_comparator,
+        population_generator: Generator = RandomGenerator(),
+        population_evaluator: Evaluator = SequentialEvaluator(),
+        dominance_comparator: Comparator = DominanceComparator(),
         rng: np.random.Generator | None = None,
     ):
         """

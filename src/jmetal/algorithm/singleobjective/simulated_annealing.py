@@ -5,12 +5,11 @@ from typing import TypeVar
 
 import numpy
 
-from jmetal.config import store
 from jmetal.core.algorithm import Algorithm, thread_rng_into_operators
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
 from jmetal.core.solution import Solution
-from jmetal.util.generator import Generator
+from jmetal.util.generator import Generator, RandomGenerator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar("S")
@@ -31,7 +30,7 @@ class SimulatedAnnealing(Algorithm[S, R]):
         problem: Problem[S],
         mutation: Mutation,
         termination_criterion: TerminationCriterion,
-        solution_generator: Generator = store.default_generator,
+        solution_generator: Generator = RandomGenerator(),
         rng: numpy.random.Generator | None = None,
     ):
         super().__init__()

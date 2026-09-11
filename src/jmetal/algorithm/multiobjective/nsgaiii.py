@@ -6,12 +6,11 @@ from numpy.linalg import LinAlgError
 from scipy import special
 
 from jmetal.algorithm.multiobjective.nsgaii import NSGAII
-from jmetal.config import store
 from jmetal.core.operator import Crossover, Mutation, Selection
 from jmetal.core.problem import Problem
-from jmetal.util.comparator import Comparator
-from jmetal.util.evaluator import Evaluator
-from jmetal.util.generator import Generator
+from jmetal.util.comparator import Comparator, DominanceComparator
+from jmetal.util.evaluator import Evaluator, SequentialEvaluator
+from jmetal.util.generator import Generator, RandomGenerator
 from jmetal.util.ranking import FastNonDominatedRanking
 from jmetal.util.termination_criterion import TerminationCriterion
 
@@ -259,9 +258,9 @@ class NSGAIII(NSGAII):
         population_size: int = None,
         selection: Selection | None = None,
         termination_criterion: TerminationCriterion | None = None,
-        population_generator: Generator = store.default_generator,
-        population_evaluator: Evaluator = store.default_evaluator,
-        dominance_comparator: Comparator = store.default_comparator,
+        population_generator: Generator = RandomGenerator(),
+        population_evaluator: Evaluator = SequentialEvaluator(),
+        dominance_comparator: Comparator = DominanceComparator(),
         rng: np.random.Generator | None = None,
     ):
         self.reference_directions = reference_directions.compute()

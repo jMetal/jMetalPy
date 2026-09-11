@@ -4,15 +4,14 @@ from typing import TypeVar
 
 import numpy
 
-from jmetal.config import store
 from jmetal.core.algorithm import ParticleSwarmOptimization, thread_rng_into_operators
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.mutation import NonUniformMutation, UniformMutation
 from jmetal.util.archive import BoundedArchive, NonDominatedSolutionsArchive
 from jmetal.util.comparator import DominanceComparator, EpsilonDominanceComparator
-from jmetal.util.evaluator import Evaluator
-from jmetal.util.generator import Generator
+from jmetal.util.evaluator import Evaluator, SequentialEvaluator
+from jmetal.util.generator import Generator, RandomGenerator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 R = TypeVar("R")
@@ -36,8 +35,8 @@ class OMOPSO(ParticleSwarmOptimization):
         leaders: BoundedArchive | None,
         epsilon: float,
         termination_criterion: TerminationCriterion,
-        swarm_generator: Generator = store.default_generator,
-        swarm_evaluator: Evaluator = store.default_evaluator,
+        swarm_generator: Generator = RandomGenerator(),
+        swarm_evaluator: Evaluator = SequentialEvaluator(),
         rng: numpy.random.Generator | None = None,
     ):
         """This class implements the OMOPSO algorithm as described in

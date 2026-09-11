@@ -11,7 +11,6 @@ except ImportError:
     pass
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
-from jmetal.config import store
 from jmetal.core.algorithm import Algorithm, DynamicAlgorithm, thread_rng_into_operators
 from jmetal.core.operator import Crossover, Mutation, Selection
 from jmetal.core.problem import DynamicProblem, Problem
@@ -22,7 +21,8 @@ from jmetal.operator.replacement import (
 from jmetal.operator.selection import BinaryTournamentSelection
 from jmetal.util.comparator import Comparator, DominanceComparator, MultiComparator
 from jmetal.util.density_estimator import CrowdingDistanceDensityEstimator
-from jmetal.util.evaluator import Evaluator
+from jmetal.util.evaluator import Evaluator, SequentialEvaluator
+from jmetal.util.generator import RandomGenerator
 from jmetal.util.ranking import FastNonDominatedRanking
 from jmetal.util.termination_criterion import StoppingByEvaluations, TerminationCriterion
 
@@ -48,9 +48,9 @@ class NSGAII(GeneticAlgorithm[S, R]):
         crossover: Crossover,
         selection: Selection | None = None,
         termination_criterion: TerminationCriterion | None = None,
-        population_generator: Generator = store.default_generator,
-        population_evaluator: Evaluator = store.default_evaluator,
-        dominance_comparator: Comparator = store.default_comparator,
+        population_generator: Generator = RandomGenerator(),
+        population_evaluator: Evaluator = SequentialEvaluator(),
+        dominance_comparator: Comparator = DominanceComparator(),
         rng: np.random.Generator | None = None,
     ):
         """
@@ -130,8 +130,8 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
         crossover: Crossover,
         selection: Selection | None = None,
         termination_criterion: TerminationCriterion | None = None,
-        population_generator: Generator = store.default_generator,
-        population_evaluator: Evaluator = store.default_evaluator,
+        population_generator: Generator = RandomGenerator(),
+        population_evaluator: Evaluator = SequentialEvaluator(),
         dominance_comparator: DominanceComparator = DominanceComparator(),
         rng: np.random.Generator | None = None,
     ):

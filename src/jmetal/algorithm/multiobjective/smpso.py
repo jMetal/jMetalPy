@@ -6,7 +6,6 @@ from typing import TypeVar
 
 import numpy
 
-from jmetal.config import store
 from jmetal.core.algorithm import (
     DynamicAlgorithm,
     ParticleSwarmOptimization,
@@ -17,8 +16,8 @@ from jmetal.core.problem import DynamicProblem, FloatProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.util.archive import ArchiveWithReferencePoint, BoundedArchive
 from jmetal.util.comparator import Comparator, DominanceComparator
-from jmetal.util.evaluator import Evaluator
-from jmetal.util.generator import Generator
+from jmetal.util.evaluator import Evaluator, SequentialEvaluator
+from jmetal.util.generator import Generator, RandomGenerator
 from jmetal.util.termination_criterion import StoppingByEvaluations, TerminationCriterion
 
 R = TypeVar("R")
@@ -41,8 +40,8 @@ class SMPSO(ParticleSwarmOptimization):
         leaders: BoundedArchive | None,
         dominance_comparator: Comparator = DominanceComparator(),
         termination_criterion: TerminationCriterion | None = None,
-        swarm_generator: Generator = store.default_generator,
-        swarm_evaluator: Evaluator = store.default_evaluator,
+        swarm_generator: Generator = RandomGenerator(),
+        swarm_evaluator: Evaluator = SequentialEvaluator(),
         rng: numpy.random.Generator | None = None,
     ):
         """This class implements the SMPSO algorithm as described in
@@ -256,8 +255,8 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
         mutation: Mutation,
         leaders: BoundedArchive,
         termination_criterion: TerminationCriterion | None = None,
-        swarm_generator: Generator = store.default_generator,
-        swarm_evaluator: Evaluator = store.default_evaluator,
+        swarm_generator: Generator = RandomGenerator(),
+        swarm_evaluator: Evaluator = SequentialEvaluator(),
         rng: numpy.random.Generator | None = None,
     ):
         super().__init__(
@@ -315,8 +314,8 @@ class SMPSORP(SMPSO):
         reference_points: list[list[float]],
         leaders: list[ArchiveWithReferencePoint],
         termination_criterion: TerminationCriterion,
-        swarm_generator: Generator = store.default_generator,
-        swarm_evaluator: Evaluator = store.default_evaluator,
+        swarm_generator: Generator = RandomGenerator(),
+        swarm_evaluator: Evaluator = SequentialEvaluator(),
         rng: numpy.random.Generator | None = None,
     ):
         """This class implements the SMPSORP algorithm.

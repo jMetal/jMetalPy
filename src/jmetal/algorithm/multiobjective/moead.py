@@ -7,7 +7,6 @@ from typing import TypeVar
 import numpy as np
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
-from jmetal.config import store
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
 from jmetal.core.solution import Solution
@@ -20,7 +19,8 @@ from jmetal.util.constraint_handling import (
     overall_constraint_violation_degree,
 )
 from jmetal.util.density_estimator import CrowdingDistanceDensityEstimator
-from jmetal.util.evaluator import Evaluator
+from jmetal.util.evaluator import Evaluator, SequentialEvaluator
+from jmetal.util.generator import RandomGenerator
 from jmetal.util.neighborhood import WeightVectorNeighborhood
 from jmetal.util.ranking import FastNonDominatedRanking
 from jmetal.util.termination_criterion import (
@@ -45,8 +45,8 @@ class MOEAD(GeneticAlgorithm):
         neighbor_size: int,
         weight_files_path: str,
         termination_criterion: TerminationCriterion | None = None,
-        population_generator: Generator = store.default_generator,
-        population_evaluator: Evaluator = store.default_evaluator,
+        population_generator: Generator = RandomGenerator(),
+        population_evaluator: Evaluator = SequentialEvaluator(),
         rng: np.random.Generator | None = None,
     ):
         """
@@ -184,8 +184,8 @@ class MOEAD_DRA(MOEAD):
         neighbor_size,
         weight_files_path,
         termination_criterion=None,
-        population_generator=store.default_generator,
-        population_evaluator=store.default_evaluator,
+        population_generator=RandomGenerator(),
+        population_evaluator=SequentialEvaluator(),
         rng: np.random.Generator | None = None,
     ):
         super().__init__(
@@ -308,8 +308,8 @@ class MOEADIEpsilon(MOEAD):
         neighbor_size: int,
         weight_files_path: str,
         termination_criterion: TerminationCriterion | None = None,
-        population_generator: Generator = store.default_generator,
-        population_evaluator: Evaluator = store.default_evaluator,
+        population_generator: Generator = RandomGenerator(),
+        population_evaluator: Evaluator = SequentialEvaluator(),
         rng: np.random.Generator | None = None,
     ):
         """

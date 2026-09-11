@@ -2,7 +2,6 @@ from typing import TypeVar
 
 import numpy as np
 
-from jmetal.config import store
 from jmetal.core.algorithm import DynamicAlgorithm, EvolutionaryAlgorithm, thread_rng_into_operators
 from jmetal.core.problem import DynamicProblem, Problem
 from jmetal.core.solution import FloatSolution
@@ -12,8 +11,8 @@ from jmetal.operator.selection import (
     RankingAndCrowdingDistanceSelection,
 )
 from jmetal.util.comparator import Comparator, DominanceComparator
-from jmetal.util.evaluator import Evaluator
-from jmetal.util.generator import Generator
+from jmetal.util.evaluator import Evaluator, SequentialEvaluator
+from jmetal.util.generator import Generator, RandomGenerator
 from jmetal.util.termination_criterion import StoppingByEvaluations, TerminationCriterion
 
 S = TypeVar("S")
@@ -29,9 +28,9 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
         f: float,
         termination_criterion: TerminationCriterion | None = None,
         k: float = 0.5,
-        population_generator: Generator = store.default_generator,
-        population_evaluator: Evaluator = store.default_evaluator,
-        dominance_comparator: Comparator = store.default_comparator,
+        population_generator: Generator = RandomGenerator(),
+        population_evaluator: Evaluator = SequentialEvaluator(),
+        dominance_comparator: Comparator = DominanceComparator(),
         rng: np.random.Generator | None = None,
     ):
         if termination_criterion is None:
@@ -127,8 +126,8 @@ class DynamicGDE3(GDE3, DynamicAlgorithm):
         f: float,
         termination_criterion: TerminationCriterion,
         k: float = 0.5,
-        population_generator: Generator = store.default_generator,
-        population_evaluator: Evaluator = store.default_evaluator,
+        population_generator: Generator = RandomGenerator(),
+        population_evaluator: Evaluator = SequentialEvaluator(),
         dominance_comparator: Comparator = DominanceComparator(),
         rng: np.random.Generator | None = None,
     ):

@@ -3,14 +3,13 @@ from typing import TypeVar
 import numpy as np
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
-from jmetal.config import store
 from jmetal.core.operator import Crossover, Mutation
 from jmetal.core.problem import Problem
 from jmetal.core.quality_indicator import EpsilonIndicator
 from jmetal.operator.selection import BinaryTournamentSelection
 from jmetal.util.comparator import SolutionAttributeComparator
-from jmetal.util.evaluator import Evaluator
-from jmetal.util.generator import Generator
+from jmetal.util.evaluator import Evaluator, SequentialEvaluator
+from jmetal.util.generator import Generator, RandomGenerator
 from jmetal.util.termination_criterion import TerminationCriterion
 
 S = TypeVar("S")
@@ -27,8 +26,8 @@ class IBEA(GeneticAlgorithm[S, R]):
         crossover: Crossover,
         kappa: float,
         termination_criterion: TerminationCriterion | None = None,
-        population_generator: Generator = store.default_generator,
-        population_evaluator: Evaluator = store.default_evaluator,
+        population_generator: Generator = RandomGenerator(),
+        population_evaluator: Evaluator = SequentialEvaluator(),
         rng: np.random.Generator | None = None,
     ):
         """Epsilon IBEA implementation as described in

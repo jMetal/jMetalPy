@@ -4,14 +4,13 @@ from typing import TypeVar
 
 import numpy as np
 
-from jmetal.config import store
 from jmetal.core.algorithm import EvolutionaryAlgorithm, thread_rng_into_operators
 from jmetal.core.operator import Crossover, Mutation, Selection
 from jmetal.core.problem import Problem
 from jmetal.operator.selection import BinaryTournamentSelection
 from jmetal.util.comparator import Comparator, ObjectiveComparator
-from jmetal.util.evaluator import Evaluator
-from jmetal.util.generator import Generator
+from jmetal.util.evaluator import Evaluator, SequentialEvaluator
+from jmetal.util.generator import Generator, RandomGenerator
 from jmetal.util.termination_criterion import StoppingByEvaluations, TerminationCriterion
 
 S = TypeVar("S")
@@ -35,8 +34,8 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         crossover: Crossover,
         selection: Selection | None = None,
         termination_criterion: TerminationCriterion | None = None,
-        population_generator: Generator = store.default_generator,
-        population_evaluator: Evaluator = store.default_evaluator,
+        population_generator: Generator = RandomGenerator(),
+        population_evaluator: Evaluator = SequentialEvaluator(),
         solution_comparator: Comparator = ObjectiveComparator(0),
         rng: np.random.Generator | None = None,
     ):

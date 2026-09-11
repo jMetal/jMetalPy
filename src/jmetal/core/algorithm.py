@@ -13,11 +13,11 @@ from typing import Generic, Protocol, TypeVar, runtime_checkable
 
 import numpy as np
 
-from jmetal.config import store
 from jmetal.core.observer import Observable
 from jmetal.core.problem import Problem
 from jmetal.core.solution import FloatSolution
 from jmetal.logger import get_logger
+from jmetal.util.observable import DefaultObservable
 
 # Initialize module logger
 logger = get_logger(__name__)
@@ -107,7 +107,7 @@ class Algorithm(Generic[S, R], ABC):
         self.evaluations = 0
         self.start_computing_time = 0
         self.total_computing_time = 0
-        self.observable = store.default_observable
+        self.observable = DefaultObservable()
 
     @abstractmethod
     def create_initial_solutions(self) -> list[S]:

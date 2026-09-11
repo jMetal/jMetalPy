@@ -5,12 +5,11 @@ from typing import TypeVar
 
 import numpy as np
 
-from jmetal.config import store
 from jmetal.core.algorithm import Algorithm, thread_rng_into_operators
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
 from jmetal.core.solution import Solution
-from jmetal.util.comparator import Comparator
+from jmetal.util.comparator import Comparator, DominanceComparator
 from jmetal.util.termination_criterion import StoppingByEvaluations, TerminationCriterion
 
 S = TypeVar("S")
@@ -31,7 +30,7 @@ class LocalSearch(Algorithm[S, R]):
         problem: Problem[S],
         mutation: Mutation,
         termination_criterion: TerminationCriterion | None = None,
-        comparator: Comparator = store.default_comparator,
+        comparator: Comparator = DominanceComparator(),
         rng: np.random.Generator | None = None,
     ):
         if termination_criterion is None:
