@@ -1227,7 +1227,15 @@ class RE91(FloatProblem):
     plus 4 random variables for a total of 11 variables.
     """
 
-    def __init__(self):
+    def __init__(self, rng: np.random.Generator | None = None):
+        """
+        Args:
+            rng: Optional random generator used to draw this problem's own random
+                 variables (x7-x10) inside evaluate(). When None, falls back to an
+                 unseeded random.Random() instance, as before this parameter existed
+                 -- note that instance is independent of the global `random` module,
+                 so evaluate() was never reproducible via `random.seed()` either way.
+        """
         super().__init__()
 
         self.obj_directions = [self.MINIMIZE] * 9
@@ -1244,6 +1252,7 @@ class RE91(FloatProblem):
         # Initialize random number generator
         import random
 
+        self.rng = rng
         self.random = random.Random()
 
     def number_of_objectives(self) -> int:
@@ -1263,10 +1272,11 @@ class RE91(FloatProblem):
         x = solution.variables.copy()
 
         # Set random variables (indices 7-10)
-        x[7] = 0.006 * self.random.gauss(0, 1) + 0.345  # x7
-        x[8] = 0.006 * self.random.gauss(0, 1) + 0.192  # x8
-        x[9] = 10 * self.random.gauss(0, 1)  # x9
-        x[10] = 10 * self.random.gauss(0, 1)  # x10
+        gauss = self.rng.normal if self.rng is not None else self.random.gauss
+        x[7] = 0.006 * gauss(0, 1) + 0.345  # x7
+        x[8] = 0.006 * gauss(0, 1) + 0.192  # x8
+        x[9] = 10 * gauss(0, 1)  # x9
+        x[10] = 10 * gauss(0, 1)  # x10
 
         # Calculate the nine objectives
         solution.objectives[0] = (
