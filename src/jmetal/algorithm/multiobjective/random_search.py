@@ -1,6 +1,8 @@
 import time
 from typing import TypeVar
 
+import numpy as np
+
 from jmetal.core.algorithm import Algorithm
 from jmetal.core.problem import Problem
 from jmetal.util.archive import NonDominatedSolutionsArchive
@@ -23,6 +25,7 @@ class RandomSearch(Algorithm[S, R]):
         self,
         problem: Problem[S],
         termination_criterion: TerminationCriterion | None = None,
+        rng: np.random.Generator | None = None,
     ):
         if termination_criterion is None:
             termination_criterion = StoppingByEvaluations(max_evaluations=25000)
@@ -31,6 +34,7 @@ class RandomSearch(Algorithm[S, R]):
         self.problem = problem
         self.termination_criterion = termination_criterion
         self.observable.register(termination_criterion)
+        self.rng = rng
 
         self.archive: NonDominatedSolutionsArchive[S] = NonDominatedSolutionsArchive()
 
@@ -44,7 +48,7 @@ class RandomSearch(Algorithm[S, R]):
         }
 
     def create_initial_solutions(self) -> list[S]:
-        return [self.problem.create_solution()]
+        return [self.problem.create_solution(self.rng)]
 
     def evaluate(self, solution_list: list[S]) -> list[S]:
         return [self.problem.evaluate(solution_list[0])]
@@ -59,7 +63,7 @@ class RandomSearch(Algorithm[S, R]):
         return self.termination_criterion.is_met
 
     def step(self) -> None:
-        new_solution = self.problem.create_solution()
+        new_solution = self.problem.create_solution(self.rng)
         self.problem.evaluate(new_solution)
         self.archive.add(new_solution)
 

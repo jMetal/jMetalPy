@@ -1,7 +1,9 @@
 from copy import copy
 from typing import TypeVar
 
-from jmetal.core.algorithm import EvolutionaryAlgorithm
+import numpy as np
+
+from jmetal.core.algorithm import EvolutionaryAlgorithm, thread_rng_into_operators
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
 from jmetal.util.constraint_handling import overall_constraint_violation_degree
@@ -32,6 +34,7 @@ class EvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         termination_criterion: TerminationCriterion,
         population_generator: Generator = RandomGenerator(),
         population_evaluator: Evaluator = SequentialEvaluator(),
+        rng: np.random.Generator | None = None,
     ):
         super().__init__(
             problem=problem, population_size=mu, offspring_population_size=lambda_
@@ -48,8 +51,14 @@ class EvolutionStrategy(EvolutionaryAlgorithm[S, R]):
         self.termination_criterion = termination_criterion
         self.observable.register(termination_criterion)
 
+        self.rng = rng
+        thread_rng_into_operators(self.rng, self.mutation_operator)
+
     def create_initial_solutions(self) -> list[S]:
-        return [self.population_generator.new(self.problem) for _ in range(self.population_size)]
+        return [
+            self.population_generator.new(self.problem, self.rng)
+            for _ in range(self.population_size)
+        ]
 
     def evaluate(self, solution_list: list[S]):
         return self.population_evaluator.evaluate(solution_list, self.problem)

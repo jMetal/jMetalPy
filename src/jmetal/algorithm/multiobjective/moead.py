@@ -47,6 +47,7 @@ class MOEAD(GeneticAlgorithm):
         termination_criterion: TerminationCriterion | None = None,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
+        rng: np.random.Generator | None = None,
     ):
         """
         :param max_number_of_replaced_solutions: (eta in Zhang & Li paper).
@@ -63,6 +64,7 @@ class MOEAD(GeneticAlgorithm):
             population_evaluator=population_evaluator,
             population_generator=population_generator,
             termination_criterion=termination_criterion,
+            rng=rng,
         )
         self.max_number_of_replaced_solutions = max_number_of_replaced_solutions
         self.fitness_function = aggregation_function
@@ -184,6 +186,7 @@ class MOEAD_DRA(MOEAD):
         termination_criterion=None,
         population_generator=store.default_generator,
         population_evaluator=store.default_evaluator,
+        rng: np.random.Generator | None = None,
     ):
         super().__init__(
             problem,
@@ -198,6 +201,7 @@ class MOEAD_DRA(MOEAD):
             termination_criterion=termination_criterion,
             population_generator=population_generator,
             population_evaluator=population_evaluator,
+            rng=rng,
         )
 
         self.saved_values = []
@@ -304,6 +308,7 @@ class MOEADIEpsilon(MOEAD):
         termination_criterion: TerminationCriterion | None = None,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
+        rng: np.random.Generator | None = None,
     ):
         """
         :param max_number_of_replaced_solutions: (eta in Zhang & Li paper).
@@ -326,6 +331,7 @@ class MOEADIEpsilon(MOEAD):
             population_evaluator=population_evaluator,
             population_generator=population_generator,
             termination_criterion=termination_criterion,
+            rng=rng,
         )
         self.constraints: list[float] = []
         self.epsilon_k = 0

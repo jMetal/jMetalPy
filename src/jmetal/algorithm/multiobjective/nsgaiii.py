@@ -247,6 +247,7 @@ class NSGAIII(NSGAII):
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
         dominance_comparator: Comparator = store.default_comparator,
+        rng: np.random.Generator | None = None,
     ):
         self.reference_directions = reference_directions.compute()
 
@@ -268,6 +269,7 @@ class NSGAIII(NSGAII):
             population_evaluator=population_evaluator,
             population_generator=population_generator,
             dominance_comparator=dominance_comparator,
+            rng=rng,
         )
 
         self.extreme_points = None

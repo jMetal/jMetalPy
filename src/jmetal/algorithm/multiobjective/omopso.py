@@ -5,7 +5,7 @@ from typing import TypeVar
 import numpy
 
 from jmetal.config import store
-from jmetal.core.algorithm import ParticleSwarmOptimization
+from jmetal.core.algorithm import ParticleSwarmOptimization, thread_rng_into_operators
 from jmetal.core.problem import FloatProblem
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.mutation import NonUniformMutation, UniformMutation
@@ -38,6 +38,7 @@ class OMOPSO(ParticleSwarmOptimization):
         termination_criterion: TerminationCriterion,
         swarm_generator: Generator = store.default_generator,
         swarm_evaluator: Evaluator = store.default_evaluator,
+        rng: numpy.random.Generator | None = None,
     ):
         """This class implements the OMOPSO algorithm as described in
 
@@ -60,6 +61,9 @@ class OMOPSO(ParticleSwarmOptimization):
 
         self.uniform_mutation = uniform_mutation
         self.non_uniform_mutation = non_uniform_mutation
+
+        self.rng = rng
+        thread_rng_into_operators(self.rng, self.uniform_mutation, self.non_uniform_mutation)
 
         self.leaders = leaders
 
@@ -86,7 +90,9 @@ class OMOPSO(ParticleSwarmOptimization):
         self.speed = numpy.zeros((self.swarm_size, self.problem.number_of_variables()), dtype=float)
 
     def create_initial_solutions(self) -> list[FloatSolution]:
-        return [self.swarm_generator.new(self.problem) for _ in range(self.swarm_size)]
+        return [
+            self.swarm_generator.new(self.problem, self.rng) for _ in range(self.swarm_size)
+        ]
 
     def evaluate(self, solution_list: list[FloatSolution]):
         return self.swarm_evaluator.evaluate(solution_list, self.problem)

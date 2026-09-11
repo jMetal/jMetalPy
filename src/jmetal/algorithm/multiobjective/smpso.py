@@ -7,7 +7,11 @@ from typing import TypeVar
 import numpy
 
 from jmetal.config import store
-from jmetal.core.algorithm import DynamicAlgorithm, ParticleSwarmOptimization
+from jmetal.core.algorithm import (
+    DynamicAlgorithm,
+    ParticleSwarmOptimization,
+    thread_rng_into_operators,
+)
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import DynamicProblem, FloatProblem
 from jmetal.core.solution import FloatSolution
@@ -39,6 +43,7 @@ class SMPSO(ParticleSwarmOptimization):
         termination_criterion: TerminationCriterion | None = None,
         swarm_generator: Generator = store.default_generator,
         swarm_evaluator: Evaluator = store.default_evaluator,
+        rng: numpy.random.Generator | None = None,
     ):
         """This class implements the SMPSO algorithm as described in
 
@@ -65,6 +70,9 @@ class SMPSO(ParticleSwarmOptimization):
         self.mutation_operator = mutation
         self.leaders = leaders
 
+        self.rng = rng
+        thread_rng_into_operators(self.rng, self.mutation_operator)
+
         self.c1_min = 1.5
         self.c1_max = 2.5
         self.c2_min = 1.5
@@ -87,7 +95,9 @@ class SMPSO(ParticleSwarmOptimization):
         )
 
     def create_initial_solutions(self) -> list[FloatSolution]:
-        return [self.swarm_generator.new(self.problem) for _ in range(self.swarm_size)]
+        return [
+            self.swarm_generator.new(self.problem, self.rng) for _ in range(self.swarm_size)
+        ]
 
     def evaluate(self, solution_list: list[FloatSolution]):
         return self.swarm_evaluator.evaluate(solution_list, self.problem)
@@ -243,6 +253,7 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
         termination_criterion: TerminationCriterion | None = None,
         swarm_generator: Generator = store.default_generator,
         swarm_evaluator: Evaluator = store.default_evaluator,
+        rng: numpy.random.Generator | None = None,
     ):
         super().__init__(
             problem=problem,
@@ -252,6 +263,7 @@ class DynamicSMPSO(SMPSO, DynamicAlgorithm):
             termination_criterion=termination_criterion,
             swarm_generator=swarm_generator,
             swarm_evaluator=swarm_evaluator,
+            rng=rng,
         )
         self.completed_iterations = 0
 
@@ -300,6 +312,7 @@ class SMPSORP(SMPSO):
         termination_criterion: TerminationCriterion,
         swarm_generator: Generator = store.default_generator,
         swarm_evaluator: Evaluator = store.default_evaluator,
+        rng: numpy.random.Generator | None = None,
     ):
         """This class implements the SMPSORP algorithm.
 
@@ -317,6 +330,7 @@ class SMPSORP(SMPSO):
             swarm_generator=swarm_generator,
             swarm_evaluator=swarm_evaluator,
             termination_criterion=termination_criterion,
+            rng=rng,
         )
         self.leaders = leaders
         self.reference_points = reference_points

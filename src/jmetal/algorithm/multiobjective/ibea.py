@@ -29,6 +29,7 @@ class IBEA(GeneticAlgorithm[S, R]):
         termination_criterion: TerminationCriterion | None = None,
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
+        rng: np.random.Generator | None = None,
     ):
         """Epsilon IBEA implementation as described in
 
@@ -65,6 +66,7 @@ class IBEA(GeneticAlgorithm[S, R]):
             termination_criterion=termination_criterion,
             population_evaluator=population_evaluator,
             population_generator=population_generator,
+            rng=rng,
         )
 
     def compute_fitness_values(self, population: list[S], kappa: float) -> list[S]:

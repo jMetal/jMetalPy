@@ -6,7 +6,7 @@ from typing import TypeVar
 import numpy
 
 from jmetal.config import store
-from jmetal.core.algorithm import Algorithm
+from jmetal.core.algorithm import Algorithm, thread_rng_into_operators
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
 from jmetal.core.solution import Solution
@@ -32,6 +32,7 @@ class SimulatedAnnealing(Algorithm[S, R]):
         mutation: Mutation,
         termination_criterion: TerminationCriterion,
         solution_generator: Generator = store.default_generator,
+        rng: numpy.random.Generator | None = None,
     ):
         super().__init__()
         self.problem = problem
@@ -44,8 +45,11 @@ class SimulatedAnnealing(Algorithm[S, R]):
         self.alpha = 0.95
         self.counter = 0
 
+        self.rng = rng
+        thread_rng_into_operators(self.rng, self.mutation)
+
     def create_initial_solutions(self) -> list[S]:
-        return [self.solution_generator.new(self.problem)]
+        return [self.solution_generator.new(self.problem, self.rng)]
 
     def evaluate(self, solutions: list[S]) -> list[S]:
         return [self.problem.evaluate(solutions[0])]
@@ -66,7 +70,8 @@ class SimulatedAnnealing(Algorithm[S, R]):
             self.solutions[0].objectives[0], mutated_solution.objectives[0], self.temperature
         )
 
-        if acceptance_probability > random.random():
+        draw = self.rng.random() if self.rng is not None else random.random()
+        if acceptance_probability > draw:
             self.solutions[0] = mutated_solution
 
         self.temperature *= self.alpha

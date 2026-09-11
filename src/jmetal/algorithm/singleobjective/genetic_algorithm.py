@@ -2,8 +2,10 @@ import math
 from functools import cmp_to_key
 from typing import TypeVar
 
+import numpy as np
+
 from jmetal.config import store
-from jmetal.core.algorithm import EvolutionaryAlgorithm
+from jmetal.core.algorithm import EvolutionaryAlgorithm, thread_rng_into_operators
 from jmetal.core.operator import Crossover, Mutation, Selection
 from jmetal.core.problem import Problem
 from jmetal.operator.selection import BinaryTournamentSelection
@@ -36,6 +38,7 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
         solution_comparator: Comparator = ObjectiveComparator(0),
+        rng: np.random.Generator | None = None,
     ):
         if selection is None:
             selection = BinaryTournamentSelection(ObjectiveComparator(0))
@@ -63,8 +66,16 @@ class GeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
             self.offspring_population_size / self.crossover_operator.get_number_of_children()
         )
 
+        self.rng = rng
+        thread_rng_into_operators(
+            self.rng, self.selection_operator, self.crossover_operator, self.mutation_operator
+        )
+
     def create_initial_solutions(self) -> list[S]:
-        return [self.population_generator.new(self.problem) for _ in range(self.population_size)]
+        return [
+            self.population_generator.new(self.problem, self.rng)
+            for _ in range(self.population_size)
+        ]
 
     def evaluate(self, population: list[S]):
         return self.population_evaluator.evaluate(population, self.problem)

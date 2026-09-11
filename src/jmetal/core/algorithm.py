@@ -11,6 +11,8 @@ import time
 from abc import ABC, abstractmethod
 from typing import Generic, Protocol, TypeVar, runtime_checkable
 
+import numpy as np
+
 from jmetal.config import store
 from jmetal.core.observer import Observable
 from jmetal.core.problem import Problem
@@ -23,6 +25,28 @@ logger = get_logger(__name__)
 # Type variables for generic algorithm implementation
 S = TypeVar("S")  # Type of the solutions
 R = TypeVar("R")  # Type of the result returned by the algorithm
+
+
+def thread_rng_into_operators(rng: np.random.Generator | None, *operators) -> None:
+    """Best-effort propagation of an algorithm's `rng` into its operators.
+
+    Mirrors `jmetal.component.algorithm.evolutionary_algorithm.EvolutionaryAlgorithm.
+    _thread_rng_into_components` for the classic algorithm hierarchy. Does nothing when
+    `rng` is None, so a classic algorithm built without an explicit `rng` keeps its exact
+    prior behavior (operators fall back to their own defaults, population creation keeps
+    consuming the global `random`/`numpy.random` state). When `rng` is given, it is only
+    assigned to operators exposing a `rng`/`_rng` attribute that is still `None` -- an
+    operator the caller already seeded explicitly is left untouched.
+    """
+    if rng is None:
+        return
+    for operator in operators:
+        if operator is None:
+            continue
+        if hasattr(operator, "rng") and operator.rng is None:
+            operator.rng = rng
+        elif hasattr(operator, "_rng") and operator._rng is None:
+            operator._rng = rng
 
 
 @runtime_checkable

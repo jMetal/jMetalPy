@@ -2,6 +2,8 @@ import time
 from collections.abc import Generator
 from typing import TypeVar
 
+import numpy as np
+
 try:
     import dask
     from distributed import Client, as_completed
@@ -10,7 +12,7 @@ except ImportError:
 
 from jmetal.algorithm.singleobjective.genetic_algorithm import GeneticAlgorithm
 from jmetal.config import store
-from jmetal.core.algorithm import Algorithm, DynamicAlgorithm
+from jmetal.core.algorithm import Algorithm, DynamicAlgorithm, thread_rng_into_operators
 from jmetal.core.operator import Crossover, Mutation, Selection
 from jmetal.core.problem import DynamicProblem, Problem
 from jmetal.operator.replacement import (
@@ -49,6 +51,7 @@ class NSGAII(GeneticAlgorithm[S, R]):
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
         dominance_comparator: Comparator = store.default_comparator,
+        rng: np.random.Generator | None = None,
     ):
         """
         NSGA-II implementation as described in
@@ -88,6 +91,7 @@ class NSGAII(GeneticAlgorithm[S, R]):
             termination_criterion=termination_criterion,
             population_evaluator=population_evaluator,
             population_generator=population_generator,
+            rng=rng,
         )
         self.dominance_comparator = dominance_comparator
 
@@ -129,6 +133,7 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
         dominance_comparator: DominanceComparator = DominanceComparator(),
+        rng: np.random.Generator | None = None,
     ):
         super().__init__(
             problem=problem,
@@ -141,6 +146,7 @@ class DynamicNSGAII(NSGAII[S, R], DynamicAlgorithm):
             population_generator=population_generator,
             termination_criterion=termination_criterion,
             dominance_comparator=dominance_comparator,
+            rng=rng,
         )
         self.completed_iterations = 0
         self.start_computing_time = 0
@@ -183,6 +189,7 @@ class DistributedNSGAII(Algorithm[S, R]):
         selection: Selection | None = None,
         termination_criterion: TerminationCriterion | None = None,
         dominance_comparator: DominanceComparator = DominanceComparator(),
+        rng: np.random.Generator | None = None,
     ):
         if selection is None:
             selection = BinaryTournamentSelection(
@@ -210,8 +217,13 @@ class DistributedNSGAII(Algorithm[S, R]):
         self.number_of_cores = number_of_cores
         self.client = client
 
+        self.rng = rng
+        thread_rng_into_operators(
+            self.rng, self.selection_operator, self.crossover_operator, self.mutation_operator
+        )
+
     def create_initial_solutions(self) -> list[S]:
-        return [self.problem.create_solution() for _ in range(self.number_of_cores)]
+        return [self.problem.create_solution(self.rng) for _ in range(self.number_of_cores)]
 
     def evaluate(self, solutions: list[S]) -> list[S]:
         return self.client.map(self.problem.evaluate, solutions)

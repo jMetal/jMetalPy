@@ -38,6 +38,7 @@ class SMSEMOA(GeneticAlgorithm[S, R]):
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
         dominance_comparator: Comparator = store.default_comparator,
+        rng: np.random.Generator | None = None,
     ):
         """
         SMSEMOA implementation (template based on NSGA-II).
@@ -54,6 +55,7 @@ class SMSEMOA(GeneticAlgorithm[S, R]):
             termination_criterion=termination_criterion,
             population_evaluator=population_evaluator,
             population_generator=population_generator,
+            rng=rng,
         )
         self.dominance_comparator = dominance_comparator
 

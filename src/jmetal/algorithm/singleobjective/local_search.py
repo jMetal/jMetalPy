@@ -3,8 +3,10 @@ import random
 import time
 from typing import TypeVar
 
+import numpy as np
+
 from jmetal.config import store
-from jmetal.core.algorithm import Algorithm
+from jmetal.core.algorithm import Algorithm, thread_rng_into_operators
 from jmetal.core.operator import Mutation
 from jmetal.core.problem import Problem
 from jmetal.core.solution import Solution
@@ -30,6 +32,7 @@ class LocalSearch(Algorithm[S, R]):
         mutation: Mutation,
         termination_criterion: TerminationCriterion | None = None,
         comparator: Comparator = store.default_comparator,
+        rng: np.random.Generator | None = None,
     ):
         if termination_criterion is None:
             termination_criterion = StoppingByEvaluations(max_evaluations=25000)
@@ -41,8 +44,11 @@ class LocalSearch(Algorithm[S, R]):
         self.termination_criterion = termination_criterion
         self.observable.register(termination_criterion)
 
+        self.rng = rng
+        thread_rng_into_operators(self.rng, self.mutation)
+
     def create_initial_solutions(self) -> list[S]:
-        self.solutions.append(self.problem.create_solution())
+        self.solutions.append(self.problem.create_solution(self.rng))
         return self.solutions
 
     def evaluate(self, solutions: list[S]) -> list[S]:
@@ -66,7 +72,8 @@ class LocalSearch(Algorithm[S, R]):
         elif result == 1:
             pass
         else:
-            if random.random() < 0.5:
+            tie_break = self.rng.random() if self.rng is not None else random.random()
+            if tie_break < 0.5:
                 self.solutions[0] = mutated_solution
 
     def update_progress(self) -> None:

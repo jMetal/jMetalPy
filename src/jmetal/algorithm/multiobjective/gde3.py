@@ -1,7 +1,9 @@
 from typing import TypeVar
 
+import numpy as np
+
 from jmetal.config import store
-from jmetal.core.algorithm import DynamicAlgorithm, EvolutionaryAlgorithm
+from jmetal.core.algorithm import DynamicAlgorithm, EvolutionaryAlgorithm, thread_rng_into_operators
 from jmetal.core.problem import DynamicProblem, Problem
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import DifferentialEvolutionCrossover
@@ -30,6 +32,7 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
         dominance_comparator: Comparator = store.default_comparator,
+        rng: np.random.Generator | None = None,
     ):
         if termination_criterion is None:
             termination_criterion = StoppingByEvaluations(max_evaluations=25000)
@@ -48,6 +51,9 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
 
         self.termination_criterion = termination_criterion
         self.observable.register(termination_criterion)
+
+        self.rng = rng
+        thread_rng_into_operators(self.rng, self.selection_operator, self.crossover_operator)
 
     def selection(self, population: list[FloatSolution]) -> list[FloatSolution]:
         mating_pool: list[FloatSolution] = []
@@ -94,7 +100,10 @@ class GDE3(EvolutionaryAlgorithm[FloatSolution, FloatSolution]):
         ).execute(join_population)
 
     def create_initial_solutions(self) -> list[FloatSolution]:
-        return [self.population_generator.new(self.problem) for _ in range(self.population_size)]
+        return [
+            self.population_generator.new(self.problem, self.rng)
+            for _ in range(self.population_size)
+        ]
 
     def evaluate(self, solution_list: list[FloatSolution]) -> list[FloatSolution]:
         return self.population_evaluator.evaluate(solution_list, self.problem)
@@ -121,6 +130,7 @@ class DynamicGDE3(GDE3, DynamicAlgorithm):
         population_generator: Generator = store.default_generator,
         population_evaluator: Evaluator = store.default_evaluator,
         dominance_comparator: Comparator = DominanceComparator(),
+        rng: np.random.Generator | None = None,
     ):
         super().__init__(
             problem,
@@ -132,6 +142,7 @@ class DynamicGDE3(GDE3, DynamicAlgorithm):
             population_generator,
             population_evaluator,
             dominance_comparator,
+            rng,
         )
 
         self.completed_iterations = 0
