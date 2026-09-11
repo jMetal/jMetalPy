@@ -23,11 +23,11 @@ def _build_nsgaii(max_evaluations: int = 40) -> NSGAII:
 
 
 class TestAlgorithmPickling:
-    """Algorithm no longer inherits from threading.Thread (see MODERNIZATION.md's
-    Phase 1b), so pickling needs no special-casing -- it's a plain object now. This
-    guards against a regression (e.g. reintroducing Thread, or another unpicklable
-    dependency) since jmetal.lab.experiment.Experiment sends whole algorithm
-    instances across a process boundary via ProcessPoolExecutor.
+    """Algorithm no longer inherits from threading.Thread, so pickling needs no
+    special-casing -- it's a plain object now. This guards against a regression (e.g.
+    reintroducing Thread, or another unpicklable dependency) since
+    jmetal.lab.experiment.Experiment sends whole algorithm instances across a
+    process boundary via ProcessPoolExecutor.
     """
 
     def test_should_pickle_an_unstarted_algorithm(self):

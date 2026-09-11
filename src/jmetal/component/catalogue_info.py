@@ -4,8 +4,7 @@ Answers three questions without reading source code by hand: which component
 slots exist, which implementations are available for each, and what control
 parameters (name, type, default) each implementation takes. Deliberately stops
 there -- it does not describe *ranges* or *distributions* to explore those
-parameters, which is an automatic-configuration concern kept out of scope for now
-(see MODERNIZATION.md's L1 notes).
+parameters, which is an automatic-configuration concern kept out of scope for now.
 
 Everything here is derived from the real classes via `inspect`, not from a
 hand-maintained description, so it cannot drift out of sync with the code the way
@@ -89,7 +88,7 @@ Deliberately an explicit registry, not a module scan: which classes count as
 "the" implementations of a slot is an editorial decision (e.g. `crossover` lists
 jmetal.operator's curated public crossover operators, not every class in that
 module), and an explicit list keeps that decision visible and easy to extend when
-a new component lands (see MODERNIZATION.md's Phase 2).
+a new component lands.
 """
 
 _QUALIFIED_NAME = re.compile(r"(?:[a-zA-Z_][a-zA-Z0-9_]*\.)+")

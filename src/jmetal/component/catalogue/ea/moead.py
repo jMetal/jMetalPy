@@ -23,10 +23,10 @@ members, which permutation to scan during replacement -- is drawn exclusively fr
 deliberate departure from the classic `jmetal.algorithm.multiobjective.moead.MOEAD`,
 which mixes three incompatible random sources (global `random`, global legacy
 `numpy.random`, and each operator's own `np.random.Generator`) and can therefore never
-be made fully reproducible from a single seed. See `MODERNIZATION.md` for the trade-off
-this implies: no execution-level equivalence test against the classic algorithm is
-possible, only a structural one (`MOEADReplacement` given identical inputs) plus
-quality-indicator-floor integration tests.
+be made fully reproducible from a single seed. The trade-off this implies: no
+execution-level equivalence test against the classic algorithm is possible, only a
+structural one (`MOEADReplacement` given identical inputs) plus quality-indicator-floor
+integration tests.
 """
 
 import copy

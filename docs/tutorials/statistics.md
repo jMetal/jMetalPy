@@ -10,7 +10,7 @@ functions expect as input.
 !!! note
     This module may be superseded by [SAES](https://github.com/jMetal/SAES), a dedicated
     statistical-analysis package under the same jMetal organization, once it becomes installable
-    alongside jMetalPy. See `MODERNIZATION.md` for the current status of that decision.
+    alongside jMetalPy -- currently blocked on a SAES release with a relaxed numpy pin.
 
 ## API
 

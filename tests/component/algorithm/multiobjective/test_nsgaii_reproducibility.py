@@ -1,8 +1,6 @@
 """Acceptance test for Phase 1: component-based NSGA-II runs are reproducible.
 
-No classic jMetalPy algorithm accepts a seed today, so two runs of the same
-configuration are not guaranteed to match (see MODERNIZATION.md's L1 notes). A
-component-based algorithm, built from RNG-aware operators plus a reseeded global
+A component-based algorithm, built from RNG-aware operators plus a reseeded global
 `random` state, must produce identical results run to run -- including when
 evaluation is parallelized across processes, since MultiprocessEvaluator preserves
 input order (it evaluates via Pool.map, not the unordered variant).

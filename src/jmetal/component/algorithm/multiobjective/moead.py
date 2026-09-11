@@ -132,7 +132,7 @@ def build_moead(
             to `crossover`/`mutation` (both are your own operators, constructed
             outside this factory, so their reproducibility is in your hands the same
             way it already is for `build_nsgaii()`/`build_smsemoa()`) reproduces an
-            entire run bit-for-bit from a single seed (see `MODERNIZATION.md`).
+            entire run bit-for-bit from a single seed.
         archive: An optional external archive, identical in effect to
             `build_nsgaii()`'s/`build_smsemoa()`'s.
 

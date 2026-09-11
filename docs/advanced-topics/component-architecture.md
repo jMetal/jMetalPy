@@ -190,8 +190,8 @@ population slot); for 3+ objectives the weight vectors are read from a file in `
 (default: this repository's bundled `resources/MOEAD_weights/`) -- 2-objective weight vectors are
 generated analytically and need no file.
 
-**A correction on record.** This page, and `MODERNIZATION.md`, previously carried a note claiming
-MOEA/D "does not fit the component model well," attributed to unverified Java design notes. Direct
+**A correction on record.** This page previously carried a note claiming MOEA/D "does not fit the
+component model well," attributed to unverified Java design notes. Direct
 investigation of `jmetal-component` found the opposite -- `MOEADBuilder`/`MOEADDEBuilder` already
 exist there, building the same generic template with no modification -- so the note was corrected
 rather than repeated here.
@@ -235,11 +235,10 @@ import numpy as np
 algorithm = build_nsgaii(..., rng=np.random.default_rng(42))
 ```
 
-Not every operator is RNG-aware yet -- `SBXCrossover` and `PolynomialMutation` already accept an
-explicit `rng`, but `TournamentSelection` and `Problem.create_solution()` still draw from Python's
-global `random` module. Component-based algorithms are reproducible today when built with
-RNG-aware operators and a reseeded global `random` state; migrating the remaining operators to the
-injectable-`rng` pattern is ongoing, tracked in `MODERNIZATION.md`.
+Every operator and `Problem.create_solution()` now accepts an optional explicit `rng`, falling back
+to the global `random`/`numpy.random` state when none is given (the historical default, kept for
+backward compatibility). Component-based algorithms built with an `rng` threaded through every
+operator and `create_solution()` are fully reproducible from a single seed.
 
 ## External archives
 
@@ -571,5 +570,5 @@ src/jmetal/component/
         └── moead.py                    # MOEADContext and MOEA/D's Selection/Variation/Replacement
 ```
 
-This covers NSGA-II, SMS-EMOA and MOEA/D. Further MOEAs (SPEA2, MOCell) reusing the same catalogue,
-and a PSO template and catalogue, are planned -- see `MODERNIZATION.md`.
+This covers NSGA-II, SMS-EMOA and MOEA/D -- the full scope of the component package for this
+release. Further MOEAs (SPEA2, MOCell) and a PSO template/catalogue are out of scope for now.

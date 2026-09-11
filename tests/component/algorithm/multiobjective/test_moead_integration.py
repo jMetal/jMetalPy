@@ -6,7 +6,7 @@ Thresholds were calibrated by running each configuration across ~10 seeds and se
 the floor comfortably below the lowest observed value, not at the edge -- same
 methodology as the NSGA-II/SMS-EMOA integration tests. rng= makes every run here
 reproducible from the single fixed seed used, with no random.seed()/np.random.seed()
-involved (see MODERNIZATION.md).
+involved.
 """
 
 import numpy as np

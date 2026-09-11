@@ -3,8 +3,8 @@
 Not a full-run equivalence test (like test_nsgaii_equivalence.py/
 test_smsemoa_equivalence.py): build_moead()/build_moead_de() deliberately draw all
 MOEA/D-specific randomness from a single shared rng, never the classic algorithm's mix
-of global random and global legacy numpy.random (see MODERNIZATION.md), so two runs
-seeded "the same way" can never produce bit-identical fronts. What *can* be verified,
+of global random and global legacy numpy.random, so two runs seeded "the same way"
+can never produce bit-identical fronts. What *can* be verified,
 and is verified here, is that MOEADReplacement's decision logic -- given exactly the
 same inputs (population, offspring, current subproblem, neighborhood scope) -- makes
 exactly the same replace/keep decisions as

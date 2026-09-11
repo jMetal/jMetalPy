@@ -86,10 +86,9 @@ class EvolutionaryAlgorithm(Generic[S]):
     def _thread_rng_into_components(self) -> None:
         """Share this algorithm's rng with every component that accepts one.
 
-        Not every component is RNG-aware yet -- operators are being migrated to the
-        injectable-rng pattern incrementally (see MODERNIZATION.md's L1 notes) -- so
-        this only assigns `rng` on components that already expose it as a plain
-        attribute, leaving the rest untouched. A component built with its own
+        Not every component is guaranteed to be RNG-aware -- this only assigns `rng`
+        on components that already expose it as a plain attribute, leaving the rest
+        untouched. A component built with its own
         explicit `rng` before being handed to this template is not overridden here;
         wire it through `build_nsgaii()` (or an equivalent factory) instead if it
         should share this algorithm's generator.

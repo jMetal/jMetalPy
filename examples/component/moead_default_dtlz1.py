@@ -17,7 +17,7 @@ in resources/MOEAD_weights/ (W3D_91.dat), same size the classic (non-component)
 MOEA/D example uses (examples/multiobjective/moead/moead_dtlz1.py) -- except that
 example is actually MOEA/D-DE (jMetalPy's classic, non-component MOEAD class is
 DE-based despite its name; see moead_de_default_dtlz1.py for the directly
-corresponding component-based variant, and MODERNIZATION.md for the full story).
+corresponding component-based variant).
 DTLZ1's Pareto front is a flat hyperplane reachable through 11^k - 1 local optima.
 """
 
