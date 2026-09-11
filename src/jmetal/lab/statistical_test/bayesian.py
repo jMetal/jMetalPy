@@ -9,6 +9,7 @@ def bayesian_sign_test(
     prior_place="rope",
     sample_size=50000,
     return_sample=False,
+    rng: np.random.Generator | None = None,
 ):
     """Bayesian version of the sign test.
 
@@ -18,12 +19,16 @@ def bayesian_sign_test(
     :param prior_place: string {left, rope, right}. Default 'left'. Place of the pseudo-observation z_0.
     :param sample_size: integer. Default 10000. Total number of random_search samples generated
     :param return_sample: boolean. Default False. If true, also return the samples drawn from the Dirichlet process.
+    :param rng: Optional random generator for reproducible results. When None, a fresh
+        np.random.default_rng() is used (i.e. results vary between calls, as before this
+        parameter existed).
 
     :return: List of posterior probabilities:
         [Pr(algorith_1 < algorithm_2),
         Pr(algorithm_1 equiv algorithm_2),
         Pr(algorithm_1 > algorithm_2)]
     """
+    rng = rng if rng is not None else np.random.default_rng()
 
     # Initial Checking
     if type(data) == pd.DataFrame:
@@ -58,7 +63,7 @@ def bayesian_sign_test(
     alpha = np.array([Nleft, Nequiv, Nright], dtype=float) + 1e-6
     alpha[["left", "rope", "right"].index(prior_place)] += prior_strength
     # Simulate dirichlet process
-    Dprocess = np.random.dirichlet(alpha, sample_size)
+    Dprocess = rng.dirichlet(alpha, sample_size)
 
     # Compute posterior probabilities
     winner_id = np.argmax(Dprocess, axis=1)
@@ -79,6 +84,7 @@ def bayesian_signed_rank_test(
     prior_place="rope",
     sample_size=10000,
     return_sample=False,
+    rng: np.random.Generator | None = None,
 ):
     """Bayesian version of the signed rank test.
 
@@ -88,15 +94,19 @@ def bayesian_signed_rank_test(
     :param prior_place: string {left, rope, right}. Default 'left'. Place of the pseudo-observation z_0.
     :param sample_size: integer. Default 10000. Total number of random_search samples generated
     :param return_sample: boolean. Default False. If true, also return the samples drawn from the Dirichlet process.
+    :param rng: Optional random generator for reproducible results. When None, a fresh
+        np.random.default_rng() is used (i.e. results vary between calls, as before this
+        parameter existed).
 
     :return: List of posterior probabilities:
         [Pr(algorith_1 < algorithm_2), Pr(algorithm_1 equiv algorithm_2), Pr(algorithm_1 > algorithm_2)]
     """
+    rng = rng if rng is not None else np.random.default_rng()
 
     def weights(n, s):
         alpha = np.ones(n + 1)
         alpha[0] = s
-        return np.random.dirichlet(alpha, 1)[0]
+        return rng.dirichlet(alpha, 1)[0]
 
     # Initial Checking
     if type(data) == pd.DataFrame:
