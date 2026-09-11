@@ -39,7 +39,7 @@ from jmetal.algorithm.singleobjective.simulated_annealing import SimulatedAnneal
 from jmetal.core.solution import FloatSolution
 from jmetal.operator.crossover import DifferentialEvolutionCrossover, SBXCrossover
 from jmetal.operator.mutation import PolynomialMutation
-from jmetal.problem import Sphere, ZDT1
+from jmetal.problem import ZDT1, Sphere
 from jmetal.util.aggregation_function import WeightedSum
 from jmetal.util.archive import CrowdingDistanceArchive
 from jmetal.util.neighborhood import C9
