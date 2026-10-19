@@ -96,12 +96,11 @@ class Knapsack(BinaryProblem):
             number_of_objectives=self.number_of_objectives(),
         )
 
-        # The BinarySolution initializes with empty variables, we need to set the bits
-        # The bits will be stored in variables[0] as a numpy array
+        # Initialize the flat bit vector through its storage setter.
         if rng is not None:
-            new_solution.variables[0] = rng.choice([True, False], size=self.number_of_bits)
+            new_solution.bits = rng.choice([True, False], size=self.number_of_bits)
         else:
-            new_solution.variables[0] = np.random.choice([True, False], size=self.number_of_bits)
+            new_solution.bits = np.random.choice([True, False], size=self.number_of_bits)
         return new_solution
 
     def name(self):

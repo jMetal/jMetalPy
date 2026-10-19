@@ -234,11 +234,9 @@ class ZDT5(BinaryProblem):
 
         # Initialize with random bits
         if rng is not None:
-            for i in range(self.total_number_of_bits):
-                solution.variables[i] = rng.random() < 0.5
+            solution.variables = [rng.random() < 0.5 for _ in range(self.total_number_of_bits)]
         else:
-            for i in range(self.total_number_of_bits):
-                solution.variables[i] = random.random() < 0.5
+            solution.variables = [random.random() < 0.5 for _ in range(self.total_number_of_bits)]
 
         return solution
 
