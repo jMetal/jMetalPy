@@ -1,4 +1,8 @@
 import unittest
+from unittest import mock
+
+import numpy as np
+import pytest
 
 from jmetal.problem.multiobjective.zdt import ZDT1, ZDT2, ZDT3, ZDT4, ZDT5, ZDT6
 
@@ -245,6 +249,27 @@ class ZDT5TestCases(unittest.TestCase):
     def test_should_get_name_return_the_right_name(self):
         problem = ZDT5()
         self.assertEqual("ZDT5", problem.name())
+
+
+class TestZDT5Initialization:
+    """Regression tests for storing scalar samples as binary values."""
+
+    @pytest.mark.parametrize("use_generator", [True, False])
+    def test_should_store_bits_using_the_existing_threshold(self, use_generator: bool) -> None:
+        """A draw equal to 0.5 remains false for both random sources."""
+        draws: list[float] = [0.0, 0.49, 0.5, 0.99] * 20
+        expected: list[bool] = [True, True, False, False] * 20
+        rng = mock.Mock(spec=np.random.Generator)
+        rng.random.side_effect = draws
+        with mock.patch(
+            "jmetal.problem.multiobjective.zdt.random.random", side_effect=draws
+        ) as global_random:
+            solution = ZDT5().create_solution(rng if use_generator else None)
+
+        assert solution.variables == expected
+        selected = rng.random if use_generator else global_random
+        assert selected.call_args_list == [mock.call()] * len(draws)
+        (global_random if use_generator else rng.random).assert_not_called()
 
 
 if __name__ == "__main__":
