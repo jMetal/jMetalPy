@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Knapsack and ZDT5 now initialize solutions with their sampled random bits
+  instead of leaving all bits false. Knapsack also supports an empty bit vector.
+
 * [Current]
   * Added the multi-objective TSP problem
   * Added the Average Hausdorff Distance (AHD) quality indicator.
