@@ -26,6 +26,34 @@ algorithm = NSGAII(
 
 ::: jmetal.util.evaluator.SequentialEvaluator
 
+## Cached evaluations
+
+`EvaluatorWithCache` wraps any evaluator and avoids evaluating the same decision variables more
+than once. It is useful when each evaluation calls an expensive simulator. Cache misses are passed
+to the wrapped evaluator, so the same wrapper works with sequential and parallel evaluators:
+
+```python
+from jmetal.util.evaluator import EvaluatorWithCache, MultiprocessEvaluator
+
+evaluator = EvaluatorWithCache(MultiprocessEvaluator(processes=8))
+
+algorithm = NSGAII(
+   problem=problem,
+   population_size=100,
+   offspring_population_size=100,
+   ...
+   population_evaluator=evaluator,
+)
+```
+
+The wrapper restores both objective and constraint values for cached solutions. The algorithm's
+evaluation counter still advances by the population size, including cache hits, so use a time-based
+termination criterion when comparing the simulator work saved by caching.
+
+### API
+
+::: jmetal.util.evaluator.EvaluatorWithCache
+
 ## Parallel
 
 Solutions can also be evaluated in parallel, using threads or processes:
