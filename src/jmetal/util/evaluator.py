@@ -1,6 +1,7 @@
 import copy
 import functools
 from abc import ABC, abstractmethod
+from collections.abc import Hashable
 from concurrent.futures import ThreadPoolExecutor
 from multiprocessing.pool import Pool, ThreadPool
 from typing import Generic, TypeVar
@@ -16,6 +17,7 @@ except ImportError:
     pass
 
 from jmetal.core.problem import Problem
+from jmetal.core.solution import Solution
 from jmetal.util.archive import Archive
 
 S = TypeVar("S")
@@ -29,6 +31,91 @@ class Evaluator(Generic[S], ABC):
     @staticmethod
     def evaluate_solution(solution: S, problem: Problem) -> None:
         problem.evaluate(solution)
+
+
+class EvaluatorWithCache(Evaluator[S]):
+    """Cache evaluations while delegating cache misses to another evaluator.
+
+    The cache key is built from a solution's type and decision variables. Objective and
+    constraint values are copied into the cache, so later mutations of an evaluated solution do
+    not alter cached results. A cache is scoped to one problem instance and is cleared when the
+    evaluator is used with a different problem.
+
+    Args:
+        base_evaluator: Evaluator used for solutions that are not already cached.
+    """
+
+    def __init__(self, base_evaluator: Evaluator[S]) -> None:
+        self.base_evaluator = base_evaluator
+        self.cache: dict[Hashable, tuple[tuple[float, ...], tuple[float, ...]]] = {}
+        self._problem: Problem | None = None
+
+    def evaluate(self, solution_list: list[S], problem: Problem) -> list[S]:
+        if problem is not self._problem:
+            self.cache.clear()
+            self._problem = problem
+
+        pending_solutions: dict[Hashable, list[S]] = {}
+        for solution in solution_list:
+            key = self._solution_key(solution)
+            cached_values = self.cache.get(key)
+            if cached_values is None:
+                pending_solutions.setdefault(key, []).append(solution)
+            else:
+                self._restore_values(solution, cached_values)
+
+        representatives = [solutions[0] for solutions in pending_solutions.values()]
+        if not representatives:
+            return solution_list
+
+        evaluated_solutions = self.base_evaluator.evaluate(representatives, problem)
+        if len(evaluated_solutions) != len(representatives):
+            raise ValueError("The base evaluator must return one solution per input solution")
+
+        for (key, equivalent_solutions), evaluated_solution in zip(
+            pending_solutions.items(), evaluated_solutions, strict=True
+        ):
+            cached_values = (
+                tuple(evaluated_solution.objectives),
+                tuple(evaluated_solution.constraints),
+            )
+            self.cache[key] = cached_values
+            for solution in equivalent_solutions:
+                self._restore_values(solution, cached_values)
+
+        return solution_list
+
+    @classmethod
+    def _solution_key(cls, solution: S) -> Hashable:
+        return (type(solution), *(cls._to_hashable(value) for value in solution.variables))
+
+    @classmethod
+    def _to_hashable(cls, value: object) -> Hashable:
+        if isinstance(value, Solution):
+            return (
+                type(value),
+                *(cls._to_hashable(variable) for variable in value.variables),
+            )
+        if isinstance(value, dict):
+            return frozenset(
+                (cls._to_hashable(key), cls._to_hashable(item)) for key, item in value.items()
+            )
+        if isinstance(value, (list, tuple)):
+            return tuple(cls._to_hashable(item) for item in value)
+        if isinstance(value, set):
+            return frozenset(cls._to_hashable(item) for item in value)
+        if isinstance(value, Hashable):
+            return value
+
+        raise TypeError(f"Solution variable of type {type(value).__name__} is not hashable")
+
+    @staticmethod
+    def _restore_values(
+        solution: S, cached_values: tuple[tuple[float, ...], tuple[float, ...]]
+    ) -> None:
+        objectives, constraints = cached_values
+        solution.objectives = list(objectives)
+        solution.constraints = list(constraints)
 
 
 class SequentialEvaluator(Evaluator[S]):
