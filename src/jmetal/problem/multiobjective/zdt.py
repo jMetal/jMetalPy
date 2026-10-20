@@ -223,8 +223,13 @@ class ZDT5(BinaryProblem):
         return 1.0
 
     def create_solution(self, rng: np.random.Generator | None = None) -> BinarySolution:
-        """
-        Create a new random solution.
+        """Create a solution containing the sampled random bits.
+
+        Args:
+            rng: Random generator. Uses Python's global random generator when omitted.
+
+        Returns:
+            A binary solution whose bits are true for scalar draws below 0.5.
         """
         solution = BinarySolution(
             number_of_variables=self.total_number_of_bits,
@@ -234,11 +239,9 @@ class ZDT5(BinaryProblem):
 
         # Initialize with random bits
         if rng is not None:
-            for i in range(self.total_number_of_bits):
-                solution.variables[i] = rng.random() < 0.5
+            solution.variables = [rng.random() < 0.5 for _ in range(self.total_number_of_bits)]
         else:
-            for i in range(self.total_number_of_bits):
-                solution.variables[i] = random.random() < 0.5
+            solution.variables = [random.random() < 0.5 for _ in range(self.total_number_of_bits)]
 
         return solution
 

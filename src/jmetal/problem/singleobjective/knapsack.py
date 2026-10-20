@@ -91,17 +91,24 @@ class Knapsack(BinaryProblem):
         return solution
 
     def create_solution(self, rng: np.random.Generator | None = None) -> BinarySolution:
+        """Create a solution containing the sampled random bits.
+
+        Args:
+            rng: Random generator. Uses NumPy's global generator when omitted.
+
+        Returns:
+            A binary solution with one sampled bit per item, or no bits for zero items.
+        """
         new_solution = BinarySolution(
             number_of_variables=self.number_of_bits,
             number_of_objectives=self.number_of_objectives(),
         )
 
-        # The BinarySolution initializes with empty variables, we need to set the bits
-        # The bits will be stored in variables[0] as a numpy array
+        # Initialize the flat bit vector through its storage setter.
         if rng is not None:
-            new_solution.variables[0] = rng.choice([True, False], size=self.number_of_bits)
+            new_solution.bits = rng.choice([True, False], size=self.number_of_bits)
         else:
-            new_solution.variables[0] = np.random.choice([True, False], size=self.number_of_bits)
+            new_solution.bits = np.random.choice([True, False], size=self.number_of_bits)
         return new_solution
 
     def name(self):

@@ -1,6 +1,9 @@
 import unittest
 from unittest import mock
 
+import numpy as np
+import pytest
+
 from jmetal.problem.singleobjective.knapsack import Knapsack
 
 
@@ -58,3 +61,32 @@ class KnapsackTestCases(unittest.TestCase):
     def test_should_get_name_return_the_right_name(self):
         problem = Knapsack()
         self.assertEqual("Knapsack", problem.name())
+
+
+class TestKnapsackInitialization:
+    """Regression tests for storing sampled bits during initialization."""
+
+    @pytest.mark.parametrize("use_generator", [True, False])
+    def test_should_store_sampled_bits(self, use_generator: bool) -> None:
+        """Both random sources must populate the returned solution's storage."""
+        expected: np.ndarray = np.array([True, False, False, True, True])
+        rng = mock.Mock(spec=np.random.Generator)
+        rng.choice.return_value = expected
+        with mock.patch(
+            "jmetal.problem.singleobjective.knapsack.np.random.choice", return_value=expected
+        ) as global_choice:
+            solution = Knapsack(5).create_solution(rng if use_generator else None)
+
+        np.testing.assert_array_equal(solution.bits, expected)
+        selected = rng.choice if use_generator else global_choice
+        selected.assert_called_once_with([True, False], size=5)
+        (global_choice if use_generator else rng.choice).assert_not_called()
+
+    @pytest.mark.parametrize("use_generator", [True, False])
+    def test_should_initialize_zero_items(self, use_generator: bool) -> None:
+        """Zero items produce an empty vector for either random source."""
+        rng = np.random.default_rng(42) if use_generator else None
+
+        solution = Knapsack(0).create_solution(rng)
+
+        assert solution.bits.size == 0
