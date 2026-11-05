@@ -9,7 +9,20 @@ from jmetal.util.archive import (
     CrowdingDistanceArchive,
     CrowdingDistanceArchiveWithReferencePoint,
     NonDominatedSolutionsArchive,
+    VectorizedNonDominatedSolutionsArchive,
 )
+from jmetal.util.comparator import Comparator, DominanceComparator
+
+
+class _NonDefaultComparator(Comparator):
+    """Pareto dominance that is not a `DominanceComparator` instance, so archives cannot
+    take their default-comparator fast paths."""
+
+    def __init__(self):
+        self._dominance = DominanceComparator()
+
+    def compare(self, solution1, solution2) -> int:
+        return self._dominance.compare(solution1, solution2)
 
 
 class ArchiveTestCases(unittest.TestCase):
@@ -59,8 +72,12 @@ class BoundedArchiveTestCases(unittest.TestCase):
 
 
 class NonDominatedSolutionListArchiveTestCases(unittest.TestCase):
+    """Behavior shared by every non-dominated archive; subclasses set `archive_class`."""
+
+    archive_class = NonDominatedSolutionsArchive
+
     def setUp(self):
-        self.archive = NonDominatedSolutionsArchive()
+        self.archive = self.archive_class()
 
     def test_should_constructor_create_a_non_null_object(self):
         self.assertIsNotNone(self.archive)
@@ -142,7 +159,7 @@ class NonDominatedSolutionListArchiveTestCases(unittest.TestCase):
 
     def test_should_add_high_dimensional_solutions(self):
         """Test behavior with solutions having more than 2 objectives. Only one solution should remain due to dominance logic."""
-        archive = NonDominatedSolutionsArchive()
+        archive = self.archive_class()
         s1 = FloatSolution([0.0], [1.0], 5)
         s1.objectives = [0.0, 1.0, 2.0, 3.0, 4.0]
         s2 = FloatSolution([0.0], [1.0], 5)
@@ -162,7 +179,7 @@ class NonDominatedSolutionListArchiveTestCases(unittest.TestCase):
 
     def test_should_add_with_numerical_tolerance(self):
         """Test adding nearly identical solutions (numerical tolerance). Only one should be kept if they are equal within tolerance."""
-        archive = NonDominatedSolutionsArchive(objective_tolerance=1e-5)
+        archive = self.archive_class(objective_tolerance=1e-5)
         s1 = FloatSolution([0.0], [1.0], 2)
         s1.objectives = [1.000000, 2.000000]
         s2 = FloatSolution([0.0], [1.0], 2)
@@ -226,7 +243,7 @@ class NonDominatedSolutionListArchiveTestCases(unittest.TestCase):
                 result.append(solution)
             return result
 
-        one_at_a_time_archive = NonDominatedSolutionsArchive()
+        one_at_a_time_archive = self.archive_class()
         for solution in make_solutions():
             one_at_a_time_archive.add(solution)
 
@@ -243,7 +260,7 @@ class NonDominatedSolutionListArchiveTestCases(unittest.TestCase):
             def compare(self, solution1, solution2) -> int:
                 return 0
 
-        archive = NonDominatedSolutionsArchive(dominance_comparator=AlwaysEqualComparator())
+        archive = self.archive_class(dominance_comparator=AlwaysEqualComparator())
         solution1 = FloatSolution([0.0], [1.0], 2)
         solution1.objectives = [1.0, 1.0]
         solution2 = FloatSolution([0.0], [1.0], 2)
@@ -256,6 +273,53 @@ class NonDominatedSolutionListArchiveTestCases(unittest.TestCase):
         archive.add_batch([solution1, solution2])
 
         self.assertEqual(2, archive.size())
+
+    def test_should_reject_duplicates_with_a_custom_dominance_comparator(self):
+        archive = self.archive_class(dominance_comparator=_NonDefaultComparator())
+        solution1 = FloatSolution([0.0], [1.0], 3)
+        solution1.objectives = [1.0, 2.0, 3.0]
+        solution2 = FloatSolution([0.0], [1.0], 3)
+        solution2.objectives = [1.0, 2.0, 3.0]
+
+        self.assertTrue(archive.add(solution1))
+        self.assertFalse(archive.add(solution2))
+        self.assertEqual(1, archive.size())
+
+    def test_should_keep_working_after_solution_list_is_modified_externally(self):
+        for number_of_objectives in (2, 3):
+            archive = self.archive_class()
+            solutions = []
+            for k in range(4):
+                solution = FloatSolution([0.0], [1.0], number_of_objectives)
+                solution.objectives = [float(k), float(3 - k)] + [1.0] * (number_of_objectives - 2)
+                solutions.append(solution)
+                archive.add(solution)
+
+            archive.solution_list.pop(0)  # what BoundedArchive does
+            candidate = FloatSolution([0.0], [1.0], number_of_objectives)
+            candidate.objectives = [0.0, 3.0] + [1.0] * (number_of_objectives - 2)
+
+            self.assertTrue(archive.add(candidate))
+            self.assertEqual(4, archive.size())
+
+    def test_should_add_after_add_batch_keep_the_front_consistent(self):
+        def make(f1, f2):
+            solution = FloatSolution([0.0], [1.0], 2)
+            solution.objectives = [f1, f2]
+            return solution
+
+        self.archive.add_batch([make(0.9, 0.1), make(0.1, 0.9), make(0.5, 0.5)])
+
+        self.assertFalse(self.archive.add(make(0.6, 0.6)))  # dominated by (0.5, 0.5)
+        self.assertTrue(self.archive.add(make(0.3, 0.3)))  # dominates (0.5, 0.5)
+        self.assertEqual(
+            {(0.1, 0.9), (0.3, 0.3), (0.9, 0.1)},
+            {tuple(s.objectives) for s in self.archive.solution_list},
+        )
+
+
+class VectorizedNonDominatedSolutionListArchiveTestCases(NonDominatedSolutionListArchiveTestCases):
+    archive_class = VectorizedNonDominatedSolutionsArchive
 
 
 class CrowdingDistanceArchiveTestCases(unittest.TestCase):
