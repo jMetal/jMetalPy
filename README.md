@@ -129,7 +129,7 @@ The current release of jMetalPy (v1.10.0) contains the following components:
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md).
+See [CHANGELOG.md](https://github.com/jMetal/jMetalPy/blob/main/CHANGELOG.md).
 
 ## License
 
