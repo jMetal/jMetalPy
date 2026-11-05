@@ -111,7 +111,7 @@ If you use AI assistants (e.g., Copilot, Codex) while working on this project, p
 
 
 ## Features
-The current release of jMetalPy (v1.9.0) contains the following components:
+The current release of jMetalPy (v1.10.0) contains the following components:
 
 * Algorithms: local search, genetic algorithm, evolution strategy, simulated annealing, random search, NSGA-II, NSGA-III, SMPSO, OMOPSO, MOEA/D, SMS-EMOA, MOEA/D-DRA, MOEA/D-IEpsilon, GDE3, SPEA2, HYPE, IBEA, MOCell. Preference articulation-based algorithms (G-NSGA-II, G-GDE3, G-SPEA2, SMPSO/RP); Dynamic versions of NSGA-II, SMPSO, and GDE3.
 * Parallel computing based on Apache Spark and Dask.

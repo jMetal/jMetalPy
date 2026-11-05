@@ -14,7 +14,8 @@ authors:
 repository-code: "https://github.com/jMetal/jMetalPy"
 url: "https://github.com/jMetal/jMetalPy"
 license: MIT
-version: 1.9.0
+version: 1.10.0
+date-released: 2026-11-05
 preferred-citation:
   type: article
   title: "jMetalPy: A Python framework for multi-objective optimization with metaheuristics"

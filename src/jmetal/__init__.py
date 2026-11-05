@@ -4,4 +4,4 @@ from jmetal.logger import configure_logging
 configure_logging()
 
 __all__ = ["core", "algorithm", "operator", "problem"]
-__version__ = "1.9.0"
+__version__ = "1.10.0"
