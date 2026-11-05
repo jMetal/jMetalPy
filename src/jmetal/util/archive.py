@@ -240,14 +240,19 @@ class NonDominatedSolutionsArchive(Archive[S]):
         )
 
 
-class VectorizedNonDominatedSolutionsArchive(Archive[S]):
-    """
-    Vectorized version of NonDominatedSolutionsArchive which keeps a NumPy
-    backing array of objectives to accelerate dominance and duplicate checks.
+class VectorizedNonDominatedSolutionsArchive(NonDominatedSolutionsArchive[S]):
+    """Faster `NonDominatedSolutionsArchive` for the default Pareto dominance.
 
-    This class preserves the public API of the original archive but will
-    fallback to the original (python-level) behavior when a custom comparator
-    is provided or when objective dimensions mismatch.
+    It has the same contract as its base class (only mutually non-dominated
+    solutions, no duplicates within `objective_tolerance`) but keeps a NumPy copy
+    of the objectives so dominance and duplicate checks run vectorized. For two
+    objectives it also keeps `solution_list` sorted by the first objective, which
+    makes insertion a binary search. The base class's `add` is used whenever the
+    fast path does not apply: a custom comparator or mismatching dimensions.
+
+    It accepts and rejects exactly the same solutions as the base class. The only
+    difference callers must not rely on is the order of `solution_list`: sorted by
+    the first objective when there are two objectives, insertion order otherwise.
     """
 
     def __init__(
@@ -255,230 +260,117 @@ class VectorizedNonDominatedSolutionsArchive(Archive[S]):
         dominance_comparator: Comparator = DominanceComparator(),
         objective_tolerance: float = 1e-10,
     ):
-        super().__init__()
-        self.comparator = dominance_comparator
-        self.objective_tolerance = objective_tolerance
-        # NumPy backing store for objectives; kept in sync with solution_list
-        self._objectives = None  # type: Optional[np.ndarray]
+        super().__init__(dominance_comparator, objective_tolerance)
+        # NumPy copy of the objectives; kept in sync with solution_list
+        self._objectives: np.ndarray | None = None
 
-    def _rebuild_objectives(self):
+    def _rebuild_objectives(self) -> None:
         if not self.solution_list:
             self._objectives = None
         else:
             self._objectives = np.asarray([s.objectives for s in self.solution_list], dtype=float)
 
+    def _sync_objectives(self) -> None:
+        """Rebuild the cache if `solution_list` was modified from outside this class."""
+        cached_size = 0 if self._objectives is None else self._objectives.shape[0]
+        if cached_size != len(self.solution_list):
+            self._rebuild_objectives()
+
+    def _add_with_base_class(self, solution: S) -> bool:
+        added = super().add(solution)
+        self._rebuild_objectives()
+        return added
+
     def add(self, solution: S) -> bool:
-        # If a custom comparator is used, fall back to python implementation
         if not isinstance(self.comparator, DominanceComparator):
-            # Use original algorithmic logic to preserve semantics
-            # Reuse NonDominatedSolutionsArchive behavior inline to keep self.solution_list
-            if not self.solution_list:
-                self.solution_list.append(solution)
-                self._rebuild_objectives()
-                return True
+            return self._add_with_base_class(solution)
 
-            remaining_solutions = []
-            for current_solution in self.solution_list:
-                dominance_flag = self.comparator.compare(solution, current_solution)
-                if dominance_flag == 1:
-                    return False
-                elif dominance_flag == 0:
-                    # No dominance relationship -> check duplicates
-                    if self._objectives is None:
-                        if self._objectives is None:
-                            # fallback duplicate check using objectives lists
-                            if self._objectives is None and len(solution.objectives) == len(
-                                current_solution.objectives
-                            ):
-                                if all(
-                                    abs(a - b) <= self.objective_tolerance
-                                    for a, b in zip(
-                                        solution.objectives, current_solution.objectives
-                                    )
-                                ):
-                                    return False
-                    # keep current
-                    remaining_solutions.append(current_solution)
+        self._sync_objectives()
+        new_obj = np.asarray(solution.objectives, dtype=float)
 
-            # update
-            self.solution_list.clear()
-            self.solution_list.extend(remaining_solutions)
+        if self._objectives is None:
             self.solution_list.append(solution)
             self._rebuild_objectives()
             return True
-
-        # Vectorized path (fast)
-        new_obj = np.asarray(solution.objectives, dtype=float)
-        # Ultra-optimized path for 2-objective problems
+        if self._objectives.shape[1] != new_obj.shape[0]:
+            return self._add_with_base_class(solution)
         if new_obj.shape[0] == 2:
             return self._add_two_objective(solution)
-        if self._objectives is None or self._objectives.size == 0:
-            # empty archive
-            self.solution_list.append(solution)
+        return self._add_vectorized(solution, new_obj)
+
+    def add_batch(self, solutions: list[S]) -> None:
+        super().add_batch(solutions)
+        self._rebuild_objectives()
+        if self._objectives is not None and self._objectives.shape[1] == 2:
+            # the two-objective insertion path requires the list to be sorted
+            self.solution_list.sort(key=lambda s: (s.objectives[0], s.objectives[1]))
             self._rebuild_objectives()
-            return True
 
-        # dimension mismatch -> fallback to python route
-        if self._objectives.shape[1] != new_obj.shape[0]:
-            # rebuild using python algorithm
-            return self._fallback_to_python_add(solution)
-
-        tol = float(self.objective_tolerance)
-
+    def _add_vectorized(self, solution: S, new_obj: np.ndarray) -> bool:
         existing = self._objectives  # shape (n, m)
 
-        # duplicates: all close within tolerance
-        duplicates = np.all(np.abs(existing - new_obj) <= tol, axis=1)
-        if np.any(duplicates):
+        existing_dominates_new = np.all(existing <= new_obj, axis=1) & np.any(
+            existing < new_obj, axis=1
+        )
+        new_dominates_existing = np.all(new_obj <= existing, axis=1) & np.any(
+            new_obj < existing, axis=1
+        )
+        within_tolerance = np.all(np.abs(existing - new_obj) <= self.objective_tolerance, axis=1)
+        # as in the base class, closeness only counts between non-comparable solutions
+        duplicates = within_tolerance & ~existing_dominates_new & ~new_dominates_existing
+        if np.any(existing_dominates_new) or np.any(duplicates):
             return False
 
-        # existing dominates new: existing <= new (+tol) and existing < new (-tol) for at least one
-        existing_le_new = np.all(existing <= new_obj + tol, axis=1)
-        existing_lt_new = np.any(existing < new_obj - tol, axis=1)
-        existing_dominates_new = existing_le_new & existing_lt_new
-        if np.any(existing_dominates_new):
-            return False
-
-        # new dominates existing: new <= existing (+tol) and new < existing (-tol) for at least one
-        new_le_existing = np.all(new_obj <= existing + tol, axis=1)
-        new_lt_existing = np.any(new_obj < existing - tol, axis=1)
-        new_dominates_existing = new_le_existing & new_lt_existing
-
-        # Keep those not dominated by new
         keep_mask = ~new_dominates_existing
-
-        # Filter solution_list and objectives
         if np.all(keep_mask):
-            # nothing removed, just append
             self.solution_list.append(solution)
             self._objectives = np.vstack([existing, new_obj])
         else:
-            # remove dominated existing solutions
-            new_solutions = [s for k, s in zip(keep_mask, self.solution_list) if k]
-            new_objectives = existing[keep_mask]
-            new_solutions.append(solution)
-            self.solution_list[:] = new_solutions
-            self._objectives = np.vstack([new_objectives, new_obj])
+            kept = [s for k, s in zip(keep_mask, self.solution_list) if k]
+            kept.append(solution)
+            self.solution_list[:] = kept
+            self._objectives = np.vstack([existing[keep_mask], new_obj])
 
         return True
 
-    def _fallback_to_python_add(self, solution: S) -> bool:
-        # Use same logic as original NonDominatedSolutionsArchive.add
-        if not self.solution_list:
-            self.solution_list.append(solution)
-            self._rebuild_objectives()
-            return True
-
-        remaining_solutions = []
-        for current_solution in self.solution_list:
-            dominance_flag = self.comparator.compare(solution, current_solution)
-            if dominance_flag == 1:
-                return False
-            elif dominance_flag == 0:
-                if self._objectives is not None:
-                    # use elementwise check
-                    idx = self.solution_list.index(current_solution)
-                    if np.all(
-                        np.abs(self._objectives[idx] - np.asarray(solution.objectives, dtype=float))
-                        <= self.objective_tolerance
-                    ):
-                        return False
-                else:
-                    if all(
-                        abs(a - b) <= self.objective_tolerance
-                        for a, b in zip(solution.objectives, current_solution.objectives)
-                    ):
-                        return False
-                remaining_solutions.append(current_solution)
-
-        self.solution_list.clear()
-        self.solution_list.extend(remaining_solutions)
-        self.solution_list.append(solution)
-        self._rebuild_objectives()
-        return True
+    def _is_within_tolerance(self, first: np.ndarray, second: np.ndarray) -> bool:
+        return bool(np.all(np.abs(first - second) <= self.objective_tolerance))
 
     def _add_two_objective(self, solution: S) -> bool:
-        """
-        Ultra-optimized insertion for the 2-objective Pareto front.
+        """Insertion specialised for two objectives, with the same semantics as the base class.
 
-        Maintains `self.solution_list` sorted by objective0 ascending and
-        ensures the sequence of objective1 values is strictly decreasing
-        (for minimization). Insertion and dominance checks are O(log n)
-        for the binary search plus O(k) for removals of dominated successors
-        (usually small).
+        The archive is a front sorted by the first objective (strictly increasing)
+        with the second one strictly decreasing, so the only solutions that can
+        interact with the new one are its neighbors: a binary search finds the
+        insertion point, the dominated successors form a contiguous run, and
+        near-duplicates can only be the closest kept neighbors.
         """
         new_obj = np.asarray(solution.objectives, dtype=float)
-        tol = float(self.objective_tolerance)
-
-        # empty archive
-        if self._objectives is None or self._objectives.size == 0:
-            self.solution_list.append(solution)
-            self._rebuild_objectives()
-            return True
-
-        # dimension mismatch -> fallback
-        if self._objectives.shape[1] != 2:
-            return self._fallback_to_python_add(solution)
-
+        x, y = new_obj
         existing = self._objectives  # shape (n, 2)
-
-        # fast duplicate check near insert position
-        obj0s = existing[:, 0]
-        insert_pos = int(np.searchsorted(obj0s, new_obj[0], side="right"))
-
-        # check immediate neighbors for duplicates
-        for j in (insert_pos - 1, insert_pos):
-            if 0 <= j < existing.shape[0]:
-                if np.all(np.abs(existing[j] - new_obj) <= tol):
-                    return False
-
-        # check predecessor dominance (only rightmost predecessor can dominate)
-        if insert_pos > 0:
-            pred = existing[insert_pos - 1]
-            if pred[0] <= new_obj[0] + tol and pred[1] <= new_obj[1] + tol:
-                # predecessor dominates new -> reject
-                return False
-
-        # Remove dominated successors: successors with obj1 >= new_obj[1] - tol
         n = existing.shape[0]
-        j = insert_pos
-        remove_count = 0
-        while j < n and existing[j, 1] >= new_obj[1] - tol:
-            remove_count += 1
-            j += 1
+        pos = int(np.searchsorted(existing[:, 0], x, side="left"))
 
-        # Also remove predecessors that have equal (or nearly equal) obj0 and worse obj1
-        left_remove = 0
-        l = insert_pos - 1
-        while l >= 0 and existing[l, 0] >= new_obj[0] - tol and existing[l, 1] >= new_obj[1] - tol:
-            left_remove += 1
-            l -= 1
+        # a predecessor (smaller f1 than every other one) or an equal-f0 successor dominates/equals new
+        if pos > 0 and existing[pos - 1, 1] <= y:
+            return False
+        if pos < n and existing[pos, 0] == x and existing[pos, 1] <= y:
+            return False
 
-        if remove_count == 0 and left_remove == 0:
-            # simple insert
-            self.solution_list.insert(insert_pos, solution)
-            self._objectives = np.insert(existing, insert_pos, new_obj, axis=0)
-            return True
+        # successors with f1 >= y are dominated by the new solution
+        end = pos
+        while end < n and existing[end, 1] >= y:
+            end += 1
 
-        # remove the dominated successors and rebuild arrays
-        keep_mask = np.ones(n, dtype=bool)
-        start = max(0, insert_pos - left_remove)
-        end = insert_pos + remove_count
-        keep_mask[start:end] = False
-        new_solutions = [s for k, s in zip(keep_mask, self.solution_list) if k]
+        neighbors = [existing[j] for j in (pos - 1, end) if 0 <= j < n]
+        if any(self._is_within_tolerance(neighbor, new_obj) for neighbor in neighbors):
+            return False
 
-        # find new insertion position among kept solutions
-        kept_obj0s = (
-            np.array([s.objectives[0] for s in new_solutions]) if new_solutions else np.array([])
+        del self.solution_list[pos:end]
+        self.solution_list.insert(pos, solution)
+        self._objectives = np.insert(
+            np.delete(existing, slice(pos, end), axis=0), pos, new_obj, axis=0
         )
-        pos = (
-            int(np.searchsorted(kept_obj0s, new_obj[0], side="right")) if kept_obj0s.size > 0 else 0
-        )
-        new_solutions.insert(pos, solution)
-
-        # update internal lists
-        self.solution_list[:] = new_solutions
-        self._objectives = np.asarray([s.objectives for s in self.solution_list], dtype=float)
         return True
 
 
