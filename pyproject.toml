@@ -38,6 +38,12 @@ dependencies = [
     "moocore>=0.1.9"
 ]
 
+[project.urls]
+Homepage = "https://github.com/jMetal/jMetalPy"
+Documentation = "https://jmetal.github.io/jMetalPy"
+Changelog = "https://github.com/jMetal/jMetalPy/blob/main/CHANGELOG.md"
+Source = "https://github.com/jMetal/jMetalPy"
+
 [project.scripts]
 jmetalpy-quality-indicator = "jmetal.util.quality_indicator_cli:main"
 
