@@ -1,4 +1,4 @@
-![jMetalPy](docs/assets/jmetalpy.png)
+![jMetalPy](https://raw.githubusercontent.com/jMetal/jMetalPy/main/docs/assets/jmetalpy.png)
 
 [![Lint](https://github.com/jMetal/jMetalPy/actions/workflows/lint.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/lint.yml)
 [![Test](https://github.com/jMetal/jMetalPy/actions/workflows/test.yml/badge.svg)](https://github.com/jMetal/jMetalPy/actions/workflows/test.yml)
@@ -102,12 +102,12 @@ plot_front = Plot(title='Pareto front approximation', axis_labels=['x', 'y'])
 plot_front.plot(front, label='NSGAII-ZDT1', filename='NSGAII-ZDT1', format='png')
 ```
 
-<img src=docs/assets/NSGAII-ZDT1.png width=450 alt="Pareto front approximation">
+<img src=https://raw.githubusercontent.com/jMetal/jMetalPy/main/docs/assets/NSGAII-ZDT1.png width=450 alt="Pareto front approximation">
 
 
 ## Agents
 
-If you use AI assistants (e.g., Copilot, Codex) while working on this project, please follow the guidelines in [AGENTS.md](AGENTS.md).
+If you use AI assistants (e.g., Copilot, Codex) while working on this project, please follow the guidelines in [AGENTS.md](https://github.com/jMetal/jMetalPy/blob/main/AGENTS.md).
 
 
 ## Features
@@ -123,9 +123,9 @@ The current release of jMetalPy (v1.10.0) contains the following components:
 * Experiment class for performing studies either alone or alongside [jMetal](https://github.com/jMetal/jMetal).
 * Pairwise and multiple hypothesis testing for statistical analysis, including several frequentist and Bayesian testing methods, critical distance plots and posterior diagrams.
 
-| ![Scatter plot 2D](docs/assets/2D.gif) | ![Scatter plot 3D](docs/assets/3D.gif) |
+| ![Scatter plot 2D](https://raw.githubusercontent.com/jMetal/jMetalPy/main/docs/assets/2D.gif) | ![Scatter plot 3D](https://raw.githubusercontent.com/jMetal/jMetalPy/main/docs/assets/3D.gif) |
 |-------------- | ----------------  |
-| ![Parallel coordinates](docs/assets/p-c.gif) | ![Interactive chord plot](docs/assets/chordplot.gif) |
+| ![Parallel coordinates](https://raw.githubusercontent.com/jMetal/jMetalPy/main/docs/assets/p-c.gif) | ![Interactive chord plot](https://raw.githubusercontent.com/jMetal/jMetalPy/main/docs/assets/chordplot.gif) |
 
 ## Changelog
 
@@ -133,4 +133,4 @@ See [CHANGELOG.md](https://github.com/jMetal/jMetalPy/blob/main/CHANGELOG.md).
 
 ## License
 
-This project is licensed under the terms of the MIT - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the terms of the MIT - see the [LICENSE](https://github.com/jMetal/jMetalPy/blob/main/LICENSE) file for details.
