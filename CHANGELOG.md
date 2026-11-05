@@ -1,13 +1,14 @@
 # Changelog
 
-## Unreleased
-
-### Fixed
-
-- Knapsack and ZDT5 now initialize solutions with their sampled random bits
-  instead of leaving all bits false. Knapsack also supports an empty bit vector.
-
-* [Current]
+* [1.10.0] (2026-11-05)
+  * Fixed Knapsack and ZDT5 initializing solutions with all bits false instead of their
+    sampled random bits. Knapsack also supports an empty bit vector.
+  * Fixed `VectorizedNonDominatedSolutionsArchive`: it now extends
+    `NonDominatedSolutionsArchive` and accepts/rejects the same solutions. Previously it
+    accepted duplicates with a custom dominance comparator, could use stale cached objectives
+    when `solution_list` was modified externally, and applied `objective_tolerance` to
+    dominance checks, which depended on insertion order. The order of its `solution_list`
+    is unspecified.
   * Added the multi-objective TSP problem
   * Added the Average Hausdorff Distance (AHD) quality indicator.
   * Added the ZDT benchmark problems. Contributed by Nicolás Rodríguez Uribe.
