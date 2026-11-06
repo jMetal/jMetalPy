@@ -10,8 +10,8 @@ readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [
-    {name = "Antonio J. Nebro", email = "ajnebro@uma.es"},
-    {name = "Cristóbal Barba", email = "cbarba@uma.es"}
+    {name = "Cristóbal Barba", email = "cbarba@uma.es"},
+    {name = "Antonio J. Nebro", email = "ajnebro@uma.es"}
 ]
 
 maintainers = [
