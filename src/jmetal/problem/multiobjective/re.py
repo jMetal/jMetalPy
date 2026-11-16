@@ -1,4 +1,5 @@
 import math
+import random
 from collections.abc import Sequence
 from math import sqrt
 
@@ -1262,10 +1263,21 @@ class RE91(FloatProblem):
         return 0
 
     def create_solution(self, rng: np.random.Generator | None = None) -> FloatSolution:
-        solution = super().create_solution(rng)
-        # Initialize the random variables (indices 7-10) with 0.0, they'll be set in evaluate
-        for i in range(7, 11):
-            solution.variables[i] = 0.0
+        # Only the 7 decision variables are sampled: the random variables (indices 7-10)
+        # have infinite bounds, so sampling them would give NaN (random.uniform) or raise
+        # OverflowError (Generator.uniform). They are initialized to 0.0 and drawn in
+        # evaluate(). The whole list is assigned because FloatSolution.variables returns
+        # a copy, so item assignment on it has no effect.
+        uniform = rng.uniform if rng is not None else random.uniform
+        solution = FloatSolution(
+            self.lower_bound,
+            self.upper_bound,
+            self.number_of_objectives(),
+            self.number_of_constraints(),
+        )
+        solution.variables = [
+            uniform(self.lower_bound[i], self.upper_bound[i]) for i in range(7)
+        ] + [0.0] * 4
         return solution
 
     def evaluate(self, solution: FloatSolution) -> FloatSolution:
