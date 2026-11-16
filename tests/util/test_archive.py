@@ -538,3 +538,39 @@ class ArchiveWithReferencePointRngTestCases(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class AddBatchDuplicatesTestCases(unittest.TestCase):
+    """add_batch() must reject the same (near-)duplicates as add()."""
+
+    @staticmethod
+    def _solution(*objectives):
+        solution = FloatSolution([0.0], [1.0], len(objectives))
+        solution.objectives = list(objectives)
+        return solution
+
+    def _objectives(self):
+        return [(1.0, 2.0), (1.0, 2.0), (1.0 + 1e-12, 2.0 - 1e-12), (0.5, 3.0)]
+
+    def test_should_add_batch_keep_the_same_solutions_as_add(self):
+        for archive_class in (NonDominatedSolutionsArchive, VectorizedNonDominatedSolutionsArchive):
+            with self.subTest(archive_class=archive_class.__name__):
+                one_by_one = archive_class()
+                for objectives in self._objectives():
+                    one_by_one.add(self._solution(*objectives))
+                batched = archive_class()
+                batched.add_batch([self._solution(*o) for o in self._objectives()])
+
+                self.assertEqual(
+                    sorted(s.objectives for s in one_by_one.solution_list),
+                    sorted(s.objectives for s in batched.solution_list),
+                )
+
+    def test_should_add_batch_prefer_solutions_already_in_the_archive(self):
+        archive = NonDominatedSolutionsArchive()
+        existing = self._solution(1.0, 2.0)
+        archive.add(existing)
+        archive.add_batch([self._solution(1.0, 2.0)])
+
+        self.assertEqual(1, archive.size())
+        self.assertIs(existing, archive.get(0))
