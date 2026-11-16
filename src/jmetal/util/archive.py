@@ -233,13 +233,25 @@ class NonDominatedSolutionsArchive(Archive[S]):
 
         combined = self.solution_list + list(solutions)
         objectives = np.array([solution.objectives for solution in combined], dtype=float)
-        keep = moocore.is_nondominated(objectives)
+        keep = moocore.is_nondominated(objectives, keep_weakly=True)
+
+        # Drop near-duplicates (within objective_tolerance) as add() does, keeping the
+        # first occurrence so solutions already in the archive win over new ones.
+        kept_indices: list[int] = []
+        for index in np.flatnonzero(keep):
+            if kept_indices and np.any(
+                np.all(
+                    np.abs(objectives[kept_indices] - objectives[index])
+                    <= self.objective_tolerance,
+                    axis=1,
+                )
+            ):
+                continue
+            kept_indices.append(int(index))
 
         # IMPORTANT: Modify list in-place to maintain references from BoundedArchive
         self.solution_list.clear()
-        self.solution_list.extend(
-            solution for solution, is_kept in zip(combined, keep, strict=True) if is_kept
-        )
+        self.solution_list.extend(combined[index] for index in kept_indices)
 
 
 class VectorizedNonDominatedSolutionsArchive(NonDominatedSolutionsArchive[S]):
