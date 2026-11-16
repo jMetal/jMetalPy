@@ -49,3 +49,25 @@ class TestRE91:
         problem.evaluate(solution)
 
         assert len(solution.objectives) == 9
+
+    def test_should_create_solution_initialize_the_random_variables_to_zero(self):
+        problem = RE91()
+
+        solution = problem.create_solution()
+
+        assert solution.variables[7:] == [0.0, 0.0, 0.0, 0.0]
+        assert all(
+            lower <= value <= upper
+            for value, lower, upper in zip(
+                solution.variables[:7], problem.lower_bound[:7], problem.upper_bound[:7]
+            )
+        )
+
+    def test_should_create_solution_with_rng_be_reproducible(self):
+        problem = RE91()
+
+        solution_a = problem.create_solution(np.random.default_rng(3))
+        solution_b = problem.create_solution(np.random.default_rng(3))
+
+        assert solution_a.variables == solution_b.variables
+        assert solution_a.variables[7:] == [0.0, 0.0, 0.0, 0.0]
