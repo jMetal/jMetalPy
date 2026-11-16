@@ -225,7 +225,9 @@ class NonDominatedSolutionsArchive(Archive[S]):
         if not solutions:
             return
 
-        if not isinstance(self.comparator, DominanceComparator):
+        # Exact type check: subclasses such as GDominanceComparator change the
+        # dominance relation, which moocore.is_nondominated does not know about.
+        if type(self.comparator) is not DominanceComparator:
             super().add_batch(solutions)
             return
 
@@ -282,7 +284,8 @@ class VectorizedNonDominatedSolutionsArchive(NonDominatedSolutionsArchive[S]):
         return added
 
     def add(self, solution: S) -> bool:
-        if not isinstance(self.comparator, DominanceComparator):
+        # Exact type check: see NonDominatedSolutionsArchive.add_batch
+        if type(self.comparator) is not DominanceComparator:
             return self._add_with_base_class(solution)
 
         self._sync_objectives()
