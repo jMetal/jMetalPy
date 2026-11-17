@@ -395,7 +395,8 @@ class VectorizedNonDominatedSolutionsArchive(NonDominatedSolutionsArchive[S]):
 
     def add_batch(self, solutions: list[S]) -> None:
         super().add_batch(solutions)
-        if isinstance(self.comparator, DominanceComparator):
+        # Exact type check: see NonDominatedSolutionsArchive.add_batch
+        if type(self.comparator) is DominanceComparator:
             self._prepare_fast_path()
         else:
             self._objectives = None
