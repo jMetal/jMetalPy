@@ -78,3 +78,18 @@ def test_two_objective_duplicates_and_dominance():
     # dominated candidate
     d = make_solution(0.6, 0.6)
     assert vec.add(d) is False
+
+
+def test_should_preserve_results_when_switching_to_vectorized_insertion():
+    points = [(index / 255, 1 - index / 255) for index in range(256)]
+    points.extend([(0.25, 0.25), (0.9, 0.9)])
+    archives = [NonDominatedSolutionsArchive(), VectorizedNonDominatedSolutionsArchive()]
+
+    for archive in archives:
+        for point in points:
+            archive.add(make_solution(*point))
+
+    expected = {tuple(solution.objectives) for solution in archives[0].solution_list}
+    actual = {tuple(solution.objectives) for solution in archives[1].solution_list}
+
+    assert actual == expected
