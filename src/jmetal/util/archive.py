@@ -316,7 +316,13 @@ class VectorizedNonDominatedSolutionsArchive(NonDominatedSolutionsArchive[S]):
     It accepts and rejects exactly the same solutions as the base class. The only
     difference callers must not rely on is the order of `solution_list`: sorted by
     the first objective when there are two objectives, insertion order otherwise.
+
+    Small archives use the base implementation because the fixed cost of NumPy
+    array operations outweighs vectorization until the archive grows larger.
     """
+
+    _MIN_VECTORIZED_SIZE = 128
+    _MIN_VECTORIZED_SIZE_2D = 32
 
     def __init__(
         self,
@@ -333,15 +339,37 @@ class VectorizedNonDominatedSolutionsArchive(NonDominatedSolutionsArchive[S]):
         else:
             self._objectives = np.asarray([s.objectives for s in self.solution_list], dtype=float)
 
+    def _prepare_fast_path(self) -> None:
+        if not self.solution_list:
+            self._objectives = None
+            return
+
+        number_of_objectives = len(self.solution_list[0].objectives)
+        minimum_size = (
+            self._MIN_VECTORIZED_SIZE_2D if number_of_objectives == 2 else self._MIN_VECTORIZED_SIZE
+        )
+        if len(self.solution_list) <= minimum_size:
+            self._objectives = None
+            return
+
+        dimensions = {len(solution.objectives) for solution in self.solution_list}
+        if len(dimensions) != 1:
+            self._objectives = None
+            return
+
+        if dimensions == {2}:
+            self.solution_list.sort(key=lambda solution: tuple(solution.objectives))
+        self._rebuild_objectives()
+
     def _sync_objectives(self) -> None:
         """Rebuild the cache if `solution_list` was modified from outside this class."""
         cached_size = 0 if self._objectives is None else self._objectives.shape[0]
         if cached_size != len(self.solution_list):
-            self._rebuild_objectives()
+            self._prepare_fast_path()
 
     def _add_with_base_class(self, solution: S) -> bool:
         added = super().add(solution)
-        self._rebuild_objectives()
+        self._objectives = None
         return added
 
     def add(self, solution: S) -> bool:
@@ -350,12 +378,15 @@ class VectorizedNonDominatedSolutionsArchive(NonDominatedSolutionsArchive[S]):
             return self._add_with_base_class(solution)
 
         self._sync_objectives()
+        if self._objectives is None:
+            added = super().add(solution)
+            if added and len(solution.objectives) == 2:
+                self.solution_list.sort(key=lambda item: tuple(item.objectives))
+            self._prepare_fast_path()
+            return added
+
         new_obj = np.asarray(solution.objectives, dtype=float)
 
-        if self._objectives is None:
-            self.solution_list.append(solution)
-            self._rebuild_objectives()
-            return True
         if self._objectives.shape[1] != new_obj.shape[0]:
             return self._add_with_base_class(solution)
         if new_obj.shape[0] == 2:
@@ -364,11 +395,10 @@ class VectorizedNonDominatedSolutionsArchive(NonDominatedSolutionsArchive[S]):
 
     def add_batch(self, solutions: list[S]) -> None:
         super().add_batch(solutions)
-        self._rebuild_objectives()
-        if self._objectives is not None and self._objectives.shape[1] == 2:
-            # the two-objective insertion path requires the list to be sorted
-            self.solution_list.sort(key=lambda s: (s.objectives[0], s.objectives[1]))
-            self._rebuild_objectives()
+        if isinstance(self.comparator, DominanceComparator):
+            self._prepare_fast_path()
+        else:
+            self._objectives = None
 
     def _add_vectorized(self, solution: S, new_obj: np.ndarray) -> bool:
         existing = self._objectives  # shape (n, m)
