@@ -1,6 +1,7 @@
 import unittest
 
 import numpy as np
+import pytest
 
 from jmetal.core.solution import FloatSolution
 from jmetal.util.archive import (
@@ -536,41 +537,68 @@ class ArchiveWithReferencePointRngTestCases(unittest.TestCase):
         self.assertEqual(results_a, results_b)
 
 
-if __name__ == "__main__":
-    unittest.main()
+def _solution_with_objectives(*objectives: float) -> FloatSolution:
+    solution = FloatSolution([0.0], [1.0], len(objectives))
+    solution.objectives = list(objectives)
+    return solution
 
 
-class AddBatchDuplicatesTestCases(unittest.TestCase):
+ARCHIVE_CLASSES = [NonDominatedSolutionsArchive, VectorizedNonDominatedSolutionsArchive]
+
+
+class TestAddBatchDuplicates:
     """add_batch() must reject the same (near-)duplicates as add()."""
 
-    @staticmethod
-    def _solution(*objectives):
-        solution = FloatSolution([0.0], [1.0], len(objectives))
-        solution.objectives = list(objectives)
-        return solution
+    @pytest.mark.parametrize("archive_class", ARCHIVE_CLASSES)
+    @pytest.mark.parametrize(
+        "objectives",
+        [
+            pytest.param(
+                [(1.0, 2.0), (1.0, 2.0), (1.0 + 1e-12, 2.0 - 1e-12), (0.5, 3.0)],
+                id="exact-and-near-duplicates",
+            ),
+            pytest.param(
+                [(1.0, 2.0), (1.0 + 8e-11, 2.0 - 8e-11), (1.0 + 1.6e-10, 2.0 - 1.6e-10)],
+                id="chain-of-near-duplicates",
+            ),
+            pytest.param(
+                [
+                    (0.0, 1.0, 0.5),
+                    (0.0, 0.5, 1.0),
+                    (0.0, 0.5 + 1e-12, 1.0 - 1e-12),
+                    (1.0, 0.0, 0.5),
+                ],
+                id="three-objectives-sharing-a-coordinate",
+            ),
+            pytest.param(
+                [(0.25, 0.25), (0.5, 0.0), (0.0, 0.5), (0.25 + 1e-12, 0.25 - 1e-12)],
+                id="linear-front",
+            ),
+        ],
+    )
+    def test_should_keep_the_same_solutions_as_add(self, archive_class, objectives):
+        one_by_one = archive_class()
+        batched = archive_class()
 
-    def _objectives(self):
-        return [(1.0, 2.0), (1.0, 2.0), (1.0 + 1e-12, 2.0 - 1e-12), (0.5, 3.0)]
+        for values in objectives:
+            one_by_one.add(_solution_with_objectives(*values))
+        batched.add_batch([_solution_with_objectives(*values) for values in objectives])
 
-    def test_should_add_batch_keep_the_same_solutions_as_add(self):
-        for archive_class in (NonDominatedSolutionsArchive, VectorizedNonDominatedSolutionsArchive):
-            with self.subTest(archive_class=archive_class.__name__):
-                one_by_one = archive_class()
-                for objectives in self._objectives():
-                    one_by_one.add(self._solution(*objectives))
-                batched = archive_class()
-                batched.add_batch([self._solution(*o) for o in self._objectives()])
+        assert sorted(s.objectives for s in batched.solution_list) == sorted(
+            s.objectives for s in one_by_one.solution_list
+        )
 
-                self.assertEqual(
-                    sorted(s.objectives for s in one_by_one.solution_list),
-                    sorted(s.objectives for s in batched.solution_list),
-                )
-
-    def test_should_add_batch_prefer_solutions_already_in_the_archive(self):
-        archive = NonDominatedSolutionsArchive()
-        existing = self._solution(1.0, 2.0)
+    @pytest.mark.parametrize("archive_class", ARCHIVE_CLASSES)
+    def test_should_prefer_solutions_already_in_the_archive(self, archive_class):
+        archive = archive_class()
+        existing = _solution_with_objectives(1.0, 2.0)
         archive.add(existing)
-        archive.add_batch([self._solution(1.0, 2.0)])
 
-        self.assertEqual(1, archive.size())
-        self.assertIs(existing, archive.get(0))
+        archive.add_batch([_solution_with_objectives(1.0, 2.0)])
+
+        assert archive.size() == 1
+        assert archive.get(0) is existing
+
+
+if __name__ == "__main__":
+    unittest.main()
