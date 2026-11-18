@@ -225,19 +225,82 @@ class NonDominatedSolutionsArchive(Archive[S]):
         if not solutions:
             return
 
-        if not isinstance(self.comparator, DominanceComparator):
+        # Exact type check: subclasses such as GDominanceComparator change the
+        # dominance relation, which moocore.is_nondominated does not know about.
+        if type(self.comparator) is not DominanceComparator:
             super().add_batch(solutions)
             return
 
         combined = self.solution_list + list(solutions)
         objectives = np.array([solution.objectives for solution in combined], dtype=float)
-        keep = moocore.is_nondominated(objectives)
+        keep = moocore.is_nondominated(objectives, keep_weakly=True)
+        kept_indices = self._drop_near_duplicates(objectives, np.flatnonzero(keep))
 
         # IMPORTANT: Modify list in-place to maintain references from BoundedArchive
         self.solution_list.clear()
-        self.solution_list.extend(
-            solution for solution, is_kept in zip(combined, keep, strict=True) if is_kept
-        )
+        self.solution_list.extend(combined[index] for index in kept_indices)
+
+    def _drop_near_duplicates(self, objectives: np.ndarray, candidates: np.ndarray) -> np.ndarray:
+        """Drop candidates within `objective_tolerance` of an earlier kept candidate.
+
+        Gives the same result as checking each candidate, in index order, against
+        every candidate kept so far (what repeated `add()` calls do), so solutions
+        already in the archive win over new ones. That check is quadratic, so it
+        only runs inside the small groups of candidates that can possibly be
+        near-duplicates of each other.
+
+        Args:
+            objectives: Objective matrix, one row per solution.
+            candidates: Ascending row indices of the solutions to filter.
+
+        Returns:
+            Ascending row indices of the kept solutions.
+        """
+        # Exact duplicates first: np.unique reports the first (lowest-index) occurrence.
+        _, first_occurrences = np.unique(objectives[candidates], axis=0, return_index=True)
+        candidates = candidates[np.sort(first_occurrences)]
+        if len(candidates) < 2 or self.objective_tolerance <= 0:
+            return candidates
+
+        # Two rows within tolerance on every objective have projections within
+        # `threshold`, so after sorting by projection any such pair falls inside one
+        # run of consecutive gaps <= threshold. Generic (non-uniform) weights keep
+        # distinct points off the same projection, e.g. on linear fronts.
+        rows = objectives[candidates]
+        weights = 1.0 + np.sqrt(np.arange(2, rows.shape[1] + 2)) % 1.0
+        projection = rows @ weights
+        # Slack for rounding in the dot product so the filter never misses a pair.
+        largest_magnitude = float((np.abs(rows) @ weights).max())
+        rounding_slack = 4 * rows.shape[1] * np.finfo(float).eps * largest_magnitude
+        threshold = self.objective_tolerance * weights.sum() + rounding_slack
+
+        order = np.argsort(projection, kind="stable")
+        close_to_next = np.diff(projection[order]) <= threshold
+        if not close_to_next.any():
+            return candidates
+
+        dropped = np.zeros(len(candidates), dtype=bool)
+        # A run of True in close_to_next[start:end] spans sorted positions start..end.
+        edges = np.diff(np.concatenate(([0], close_to_next.astype(int), [0])))
+        run_starts = np.flatnonzero(edges == 1)
+        run_ends = np.flatnonzero(edges == -1)
+        for start, end in zip(run_starts, run_ends, strict=True):
+            self._mark_near_duplicates(rows, np.sort(order[start : end + 1]), dropped)
+
+        return candidates[~dropped]
+
+    def _mark_near_duplicates(
+        self, rows: np.ndarray, group: np.ndarray, dropped: np.ndarray
+    ) -> None:
+        """Mark, in index order, group members within tolerance of an earlier kept one."""
+        kept: list[int] = []
+        for position in group:
+            if kept and np.any(
+                np.all(np.abs(rows[kept] - rows[position]) <= self.objective_tolerance, axis=1)
+            ):
+                dropped[position] = True
+            else:
+                kept.append(int(position))
 
 
 class VectorizedNonDominatedSolutionsArchive(NonDominatedSolutionsArchive[S]):
@@ -310,7 +373,8 @@ class VectorizedNonDominatedSolutionsArchive(NonDominatedSolutionsArchive[S]):
         return added
 
     def add(self, solution: S) -> bool:
-        if not isinstance(self.comparator, DominanceComparator):
+        # Exact type check: see NonDominatedSolutionsArchive.add_batch
+        if type(self.comparator) is not DominanceComparator:
             return self._add_with_base_class(solution)
 
         self._sync_objectives()
@@ -331,7 +395,8 @@ class VectorizedNonDominatedSolutionsArchive(NonDominatedSolutionsArchive[S]):
 
     def add_batch(self, solutions: list[S]) -> None:
         super().add_batch(solutions)
-        if isinstance(self.comparator, DominanceComparator):
+        # Exact type check: see NonDominatedSolutionsArchive.add_batch
+        if type(self.comparator) is DominanceComparator:
             self._prepare_fast_path()
         else:
             self._objectives = None

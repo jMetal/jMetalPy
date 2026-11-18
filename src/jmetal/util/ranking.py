@@ -74,8 +74,10 @@ class FastNonDominatedRanking(Ranking[list[S]]):
         # DominanceComparator to avoid Python-level loops and many calls
         # to the comparator. Fallback to the original nested loops when
         # a custom comparator is provided or when solutions have
-        # heterogeneous objective lengths.
-        can_vectorize = isinstance(self.comparator, DominanceComparator)
+        # heterogeneous objective lengths. An exact type check (not isinstance) is
+        # required: subclasses such as GDominanceComparator change the dominance
+        # relation, which the vectorized code below does not reproduce.
+        can_vectorize = type(self.comparator) is DominanceComparator
         if can_vectorize:
             try:
                 objectives = np.asarray([s.objectives for s in solutions], dtype=float)
